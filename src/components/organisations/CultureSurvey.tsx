@@ -102,19 +102,21 @@ export function CultureSurvey() {
       <div className="mx-auto max-w-4xl px-8">
         <p className="eyebrow !text-hero-foreground">{t("organisations.survey.eyebrow")}</p>
         <h2 className="mt-3 display-lg">{t("organisations.survey.title")}</h2>
-        <p className="mt-4 text-sm leading-relaxed text-hero-foreground/80">
+        <p className="mt-4 text-base leading-relaxed text-hero-foreground/90">
           {t("organisations.survey.lede")}
         </p>
 
         <div
-          className={"mt-10 rounded-2xl border border-border/70 bg-card p-6 md:p-10 " + CARD_SHADOW}
+          className={
+            "mt-10 rounded-2xl border border-accent/40 bg-card p-6 shadow-lg md:p-10 " + CARD_SHADOW
+          }
         >
           {step === "pressure" ? (
             <div>
               <h3 className="text-lg font-semibold tracking-tight">
                 {t("organisations.survey.pressure.question")}
               </h3>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="mt-2 text-sm text-foreground/70">
                 {t("organisations.survey.pressure.hint")}
               </p>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -127,8 +129,8 @@ export function CultureSurvey() {
                     className={
                       "rounded-xl border px-5 py-4 text-left text-sm font-semibold transition " +
                       (pressure === p.id
-                        ? "border-primary bg-primary/5 text-primary"
-                        : "border-border hover:bg-muted")
+                        ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/30"
+                        : "border-foreground/20 text-foreground/90 hover:border-primary/50 hover:bg-muted")
                     }
                   >
                     {p.label}
@@ -136,7 +138,7 @@ export function CultureSurvey() {
                 ))}
               </div>
               {selectedInsight ? (
-                <p className="mt-6 rounded-xl bg-accent/10 p-5 text-sm leading-relaxed">
+                <p className="mt-6 rounded-xl border border-accent/50 bg-accent/15 p-5 text-sm leading-relaxed text-foreground/90">
                   {selectedInsight}
                 </p>
               ) : null}
@@ -153,7 +155,7 @@ export function CultureSurvey() {
 
           {step === "questions" && question ? (
             <div>
-              <div className="flex items-center justify-between gap-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <div className="flex items-center justify-between gap-4 text-xs font-semibold uppercase tracking-wider text-foreground/70">
                 <span>
                   {t("organisations.survey.progress")
                     .replace("{n}", String(current + 1))
@@ -167,7 +169,7 @@ export function CultureSurvey() {
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-label={t("organisations.survey.eyebrow")}
-                className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted"
+                className="mt-3 h-2 w-full overflow-hidden rounded-full bg-foreground/10"
               >
                 <div
                   className="h-full rounded-full bg-accent transition-all"
@@ -192,13 +194,17 @@ export function CultureSurvey() {
                       onClick={() => answer(value)}
                       className={
                         "flex min-h-[56px] items-center gap-4 rounded-xl border px-5 py-3 text-left transition " +
-                        (selected ? "border-primary bg-primary/5" : "border-border hover:bg-muted")
+                        (selected
+                          ? "border-primary bg-primary/10 ring-2 ring-primary/30"
+                          : "border-foreground/20 hover:border-primary/50 hover:bg-muted")
                       }
                     >
-                      <span className="btn-mono text-xs font-bold text-accent">{value}</span>
+                      <span className="btn-mono text-xs font-bold text-primary">{value}</span>
                       <span>
-                        <span className="block text-sm font-semibold">{option?.label}</span>
-                        <span className="block text-xs text-muted-foreground">{option?.desc}</span>
+                        <span className="block text-sm font-semibold text-foreground">
+                          {option?.label}
+                        </span>
+                        <span className="block text-xs text-foreground/70">{option?.desc}</span>
                       </span>
                     </button>
                   );
@@ -208,7 +214,7 @@ export function CultureSurvey() {
                 <button
                   type="button"
                   onClick={() => (current === 0 ? setStep("pressure") : setCurrent((c) => c - 1))}
-                  className="inline-flex h-10 items-center rounded-full border border-border px-5 text-sm font-semibold transition hover:bg-muted"
+                  className="inline-flex h-10 items-center rounded-full border border-foreground/25 px-5 text-sm font-semibold text-foreground/90 transition hover:border-primary/50 hover:bg-muted"
                 >
                   ← {t("organisations.survey.back")}
                 </button>
@@ -236,12 +242,12 @@ export function CultureSurvey() {
                   {t(`organisations.survey.bands.${band}.title`)}
                 </span>
               </div>
-              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-foreground/80">
                 {t(`organisations.survey.bands.${band}.desc`)}
               </p>
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
                 {DIMENSIONS.map((d) => (
-                  <div key={d} className="rounded-xl border border-border/70 p-5">
+                  <div key={d} className="rounded-xl border border-foreground/20 p-5">
                     <div className="flex items-center justify-between text-sm font-semibold">
                       <span>{t(`organisations.survey.dimensions.${d}`)}</span>
                       <span className="text-primary">{scores[d]}%</span>
@@ -252,7 +258,7 @@ export function CultureSurvey() {
                       aria-valuemin={0}
                       aria-valuemax={100}
                       aria-label={t(`organisations.survey.dimensions.${d}`)}
-                      className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted"
+                      className="mt-3 h-2 w-full overflow-hidden rounded-full bg-foreground/10"
                     >
                       <div
                         className="h-full rounded-full bg-accent"
@@ -266,12 +272,12 @@ export function CultureSurvey() {
               <form
                 id="organisation-contact"
                 onSubmit={send}
-                className="mt-10 border-t border-border/70 pt-8"
+                className="mt-10 border-t border-foreground/20 pt-8"
               >
                 <h3 className="text-lg font-semibold tracking-tight">
                   {t("organisations.survey.form.title")}
                 </h3>
-                <p className="mt-2 text-sm text-muted-foreground">
+                <p className="mt-2 text-sm text-foreground/70">
                   {t("organisations.survey.form.lede")}
                 </p>
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -281,7 +287,7 @@ export function CultureSurvey() {
                       value={form.contactName}
                       onChange={(e) => setForm({ ...form, contactName: e.target.value })}
                       maxLength={120}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-border bg-background px-4 text-sm outline-none focus:border-primary"
+                      className="mt-1.5 h-11 w-full rounded-xl border border-foreground/25 bg-background px-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
                     />
                   </label>
                   <label className="text-sm font-medium">
@@ -292,7 +298,7 @@ export function CultureSurvey() {
                       value={form.contactEmail}
                       onChange={(e) => setForm({ ...form, contactEmail: e.target.value })}
                       maxLength={255}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-border bg-background px-4 text-sm outline-none focus:border-primary"
+                      className="mt-1.5 h-11 w-full rounded-xl border border-foreground/25 bg-background px-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
                     />
                   </label>
                   <label className="text-sm font-medium sm:col-span-2">
@@ -301,7 +307,7 @@ export function CultureSurvey() {
                       value={form.contactOrganisation}
                       onChange={(e) => setForm({ ...form, contactOrganisation: e.target.value })}
                       maxLength={160}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-border bg-background px-4 text-sm outline-none focus:border-primary"
+                      className="mt-1.5 h-11 w-full rounded-xl border border-foreground/25 bg-background px-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
                     />
                   </label>
                   <label className="text-sm font-medium sm:col-span-2">
@@ -311,7 +317,7 @@ export function CultureSurvey() {
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
                       maxLength={2000}
                       rows={4}
-                      className="mt-1.5 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary"
+                      className="mt-1.5 w-full rounded-xl border border-foreground/25 bg-background px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
                     />
                   </label>
                 </div>
@@ -324,7 +330,7 @@ export function CultureSurvey() {
                   onChange={(e) => setForm({ ...form, website: e.target.value })}
                   className="hidden"
                 />
-                <label className="mt-5 flex items-start gap-3 text-sm text-muted-foreground">
+                <label className="mt-5 flex items-start gap-3 text-sm text-foreground/80">
                   <input
                     type="checkbox"
                     checked={form.consent}
@@ -355,7 +361,7 @@ export function CultureSurvey() {
               <h3 className="mt-4 text-xl font-semibold tracking-tight">
                 {t("organisations.survey.thanks.title")}
               </h3>
-              <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
+              <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-foreground/80">
                 {t("organisations.survey.thanks.desc")}
               </p>
             </div>
