@@ -70,8 +70,12 @@ when one exists.
 - The generated MCP routes set `trustForwardedHost`, and the email preview
   route authenticates the platform with the shared `LOVABLE_API_KEY`. Both are
   platform-owned behaviour behind the edge proxy.
-- 86 migrations are never squashed: repeated grant/policy reassertions are
-  defensive, and no baseline tooling is available on this platform.
+- The migration files are never squashed: repeated grant/policy reassertions are
+  defensive, and the platform ledger keys off the applied files. Instead of
+  squashing, `bun run baseline:write` derives a replayable schema snapshot into
+  `supabase/baseline/`, `baseline:verify` proves it rebuilds an empty Postgres,
+  and `baseline:check` fails on drift. The baseline is documentation and
+  disaster recovery, not the source of truth, and holds no data.
 - CSP is report-only in `src/server.ts` until a clean report pass justifies
   enforcement.
 
