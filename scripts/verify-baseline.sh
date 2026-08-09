@@ -12,12 +12,14 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Postgres refuses to start as root; re-exec once as an unprivileged helper user.
+# Postgres refuses to run as root; drop to an unprivileged uid and re-exec once.
 if [[ "${EUID}" -eq 0 && -z "${BASELINE_VERIFY_DEMOTED:-}" ]]; then
-  HELPER="${BASELINE_VERIFY_USER:-pgverify}"
-  id -u "$HELPER" >/dev/null 2>&1 || useradd -M -s /bin/bash "$HELPER"
-  exec su "$HELPER" -s /bin/bash -c \
-    "BASELINE_VERIFY_DEMOTED=1 PGBIN='${PGBIN:-}' TMPDIR=/tmp bash '${BASH_SOURCE[0]}'"
+  command -v setpriv >/dev/null || { echo "Run as a non-root user (postgres refuses root)." >&2; exit 1; }
+  UID_ALT="${BASELINE_VERIFY_UID:-1000}"
+  SCRATCH="$(mktemp -d)"; chmod 777 "$SCRATCH"
+  exec setpriv --reuid="$UID_ALT" --regid="$UID_ALT" --clear-groups \
+    env BASELINE_VERIFY_DEMOTED=1 PGBIN="${PGBIN:-}" HOME="$SCRATCH" TMPDIR="$SCRATCH" \
+    bash "${BASH_SOURCE[0]}"
 fi
 
 BASELINE="$(ls "$ROOT"/supabase/baseline/*_baseline.sql 2>/dev/null | tail -1 || true)"
