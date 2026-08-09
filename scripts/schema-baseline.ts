@@ -181,8 +181,12 @@ const QUERIES: { title: string; sql: string }[] = [
                                when 'w' then 'update' when 'd' then 'delete' else 'all' end,
                  coalesce((select string_agg(quote_ident(r.rolname), ', ' order by r.rolname)
                              from pg_roles r where r.oid = any(p.polroles)), 'public'),
-                 coalesce(format(' using (%s)', nullif(pg_get_expr(p.polqual, p.polrelid), '')), ''),
-                 coalesce(format(' with check (%s)', nullif(pg_get_expr(p.polwithcheck, p.polrelid), '')), ''))
+                 -- format() renders NULL as an empty string, so the optional
+                 -- clauses are built with case, not coalesce.
+                 case when p.polqual is null then ''
+                      else format(' using (%s)', pg_get_expr(p.polqual, p.polrelid)) end,
+                 case when p.polwithcheck is null then ''
+                      else format(' with check (%s)', pg_get_expr(p.polwithcheck, p.polrelid)) end)
           from pg_policy p
           join pg_class c on c.oid = p.polrelid
           join pg_namespace n on n.oid = c.relnamespace
@@ -247,8 +251,12 @@ const QUERIES: { title: string; sql: string }[] = [
                                when 'w' then 'update' when 'd' then 'delete' else 'all' end,
                  coalesce((select string_agg(quote_ident(r.rolname), ', ' order by r.rolname)
                              from pg_roles r where r.oid = any(p.polroles)), 'public'),
-                 coalesce(format(' using (%s)', nullif(pg_get_expr(p.polqual, p.polrelid), '')), ''),
-                 coalesce(format(' with check (%s)', nullif(pg_get_expr(p.polwithcheck, p.polrelid), '')), ''))
+                 -- format() renders NULL as an empty string, so the optional
+                 -- clauses are built with case, not coalesce.
+                 case when p.polqual is null then ''
+                      else format(' using (%s)', pg_get_expr(p.polqual, p.polrelid)) end,
+                 case when p.polwithcheck is null then ''
+                      else format(' with check (%s)', pg_get_expr(p.polwithcheck, p.polrelid)) end)
           from pg_policy p
           where p.polrelid = 'storage.objects'::regclass
           order by p.polname`,

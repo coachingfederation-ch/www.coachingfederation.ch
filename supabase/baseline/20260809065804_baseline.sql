@@ -25,7 +25,7 @@ set client_min_messages = warning;
 set check_function_bodies = false;
 set search_path = public, extensions;
 
--- generated at 2026-08-09T06:57:33.229Z
+-- generated at 2026-08-09T06:58:04.816Z
 
 -- ---------------------------------------------------------------------------
 -- Extensions (6)
@@ -2095,15 +2095,15 @@ alter table public.user_roles enable row level security;
 -- Policies (131)
 -- ---------------------------------------------------------------------------
 
-create policy "rate limits are staff-readable" on public.api_rate_limits as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check ();
+create policy "rate limits are staff-readable" on public.api_rate_limits as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "staff read linkedin posts" on public.article_linkedin_posts as permissive for select to authenticated using ((private.has_role(auth.uid(), 'admin'::app_role) OR private.has_role(auth.uid(), 'editor'::app_role) OR private.has_role(auth.uid(), 'publisher'::app_role))) with check ();
+create policy "staff read linkedin posts" on public.article_linkedin_posts as permissive for select to authenticated using ((private.has_role(auth.uid(), 'admin'::app_role) OR private.has_role(auth.uid(), 'editor'::app_role) OR private.has_role(auth.uid(), 'publisher'::app_role)));
 
 create policy "translations author or editor delete" on public.article_translations as permissive for delete to authenticated using ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
    FROM articles a
-  WHERE ((a.id = article_translations.article_id) AND (a.author_id = auth.uid())))))) with check ();
+  WHERE ((a.id = article_translations.article_id) AND (a.author_id = auth.uid()))))));
 
-create policy "translations author or editor insert" on public.article_translations as permissive for insert to authenticated using () with check ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
+create policy "translations author or editor insert" on public.article_translations as permissive for insert to authenticated with check ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
    FROM articles a
   WHERE ((a.id = article_translations.article_id) AND (a.author_id = auth.uid()))))));
 
@@ -2111,7 +2111,7 @@ create policy "translations author or editor read" on public.article_translation
    FROM articles a
   WHERE ((a.id = article_translations.article_id) AND (a.author_id = auth.uid())))) OR (EXISTS ( SELECT 1
    FROM articles a
-  WHERE ((a.id = article_translations.article_id) AND (a.status = 'published'::article_status)))))) with check ();
+  WHERE ((a.id = article_translations.article_id) AND (a.status = 'published'::article_status))))));
 
 create policy "translations author or editor update" on public.article_translations as permissive for update to authenticated using ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
    FROM articles a
@@ -2121,97 +2121,97 @@ create policy "translations author or editor update" on public.article_translati
 
 create policy "translations public read published" on public.article_translations as permissive for select to anon using ((EXISTS ( SELECT 1
    FROM articles a
-  WHERE ((a.id = article_translations.article_id) AND (a.status = 'published'::article_status))))) with check ();
+  WHERE ((a.id = article_translations.article_id) AND (a.status = 'published'::article_status)))));
 
 create policy "editors manage all articles" on public.articles as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "public read published articles" on public.articles as permissive for select to anon, authenticated using ((status = 'published'::article_status)) with check ();
+create policy "public read published articles" on public.articles as permissive for select to anon, authenticated using ((status = 'published'::article_status));
 
 create policy "categories editors write" on public.categories as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "categories public read" on public.categories as permissive for select to anon, authenticated using (true) with check ();
+create policy "categories public read" on public.categories as permissive for select to anon, authenticated using (true);
 
-create policy "cf_availability_labels anon read active" on public.cf_availability_labels as permissive for select to anon using (is_active) with check ();
+create policy "cf_availability_labels anon read active" on public.cf_availability_labels as permissive for select to anon using (is_active);
 
-create policy "cf_availability_labels authenticated read" on public.cf_availability_labels as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid()))) with check ();
+create policy "cf_availability_labels authenticated read" on public.cf_availability_labels as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid())));
 
 create policy "cf_availability_labels editors write" on public.cf_availability_labels as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "cf_client_types anon read active" on public.cf_client_types as permissive for select to anon using (is_active) with check ();
+create policy "cf_client_types anon read active" on public.cf_client_types as permissive for select to anon using (is_active);
 
-create policy "cf_client_types authenticated read" on public.cf_client_types as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid()))) with check ();
+create policy "cf_client_types authenticated read" on public.cf_client_types as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid())));
 
 create policy "cf_client_types editors write" on public.cf_client_types as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "cf_credentials anon read active" on public.cf_credentials as permissive for select to anon using (is_active) with check ();
+create policy "cf_credentials anon read active" on public.cf_credentials as permissive for select to anon using (is_active);
 
-create policy "cf_credentials authenticated read" on public.cf_credentials as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid()))) with check ();
+create policy "cf_credentials authenticated read" on public.cf_credentials as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid())));
 
 create policy "cf_credentials editors write" on public.cf_credentials as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "cf_event_categories anon read active" on public.cf_event_categories as permissive for select to anon using (is_active) with check ();
+create policy "cf_event_categories anon read active" on public.cf_event_categories as permissive for select to anon using (is_active);
 
-create policy "cf_event_categories authenticated read" on public.cf_event_categories as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid()))) with check ();
+create policy "cf_event_categories authenticated read" on public.cf_event_categories as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid())));
 
 create policy "cf_event_categories editors write" on public.cf_event_categories as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "cf_experience_bands anon read active" on public.cf_experience_bands as permissive for select to anon using (is_active) with check ();
+create policy "cf_experience_bands anon read active" on public.cf_experience_bands as permissive for select to anon using (is_active);
 
-create policy "cf_experience_bands authenticated read" on public.cf_experience_bands as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid()))) with check ();
+create policy "cf_experience_bands authenticated read" on public.cf_experience_bands as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid())));
 
 create policy "cf_experience_bands editors write" on public.cf_experience_bands as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "cf_formats anon read active" on public.cf_formats as permissive for select to anon using (is_active) with check ();
+create policy "cf_formats anon read active" on public.cf_formats as permissive for select to anon using (is_active);
 
-create policy "cf_formats authenticated read" on public.cf_formats as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid()))) with check ();
+create policy "cf_formats authenticated read" on public.cf_formats as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid())));
 
 create policy "cf_formats editors write" on public.cf_formats as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "cf_languages anon read active" on public.cf_languages as permissive for select to anon using (is_active) with check ();
+create policy "cf_languages anon read active" on public.cf_languages as permissive for select to anon using (is_active);
 
-create policy "cf_languages authenticated read" on public.cf_languages as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid()))) with check ();
+create policy "cf_languages authenticated read" on public.cf_languages as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid())));
 
 create policy "cf_languages editors write" on public.cf_languages as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "cf_regions anon read active" on public.cf_regions as permissive for select to anon using (is_active) with check ();
+create policy "cf_regions anon read active" on public.cf_regions as permissive for select to anon using (is_active);
 
-create policy "cf_regions authenticated read" on public.cf_regions as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid()))) with check ();
+create policy "cf_regions authenticated read" on public.cf_regions as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid())));
 
 create policy "cf_regions editors write" on public.cf_regions as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "cf_specialisations anon read active" on public.cf_specialisations as permissive for select to anon using (is_active) with check ();
+create policy "cf_specialisations anon read active" on public.cf_specialisations as permissive for select to anon using (is_active);
 
-create policy "cf_specialisations authenticated read" on public.cf_specialisations as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid()))) with check ();
+create policy "cf_specialisations authenticated read" on public.cf_specialisations as permissive for select to authenticated using ((is_active OR private.is_editor(auth.uid())));
 
 create policy "cf_specialisations editors write" on public.cf_specialisations as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
 create policy "coach_finder_config editors write" on public.coach_finder_config as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "coach_finder_config public read" on public.coach_finder_config as permissive for select to anon, authenticated using (true) with check ();
+create policy "coach_finder_config public read" on public.coach_finder_config as permissive for select to anon, authenticated using (true);
 
-create policy "Editors can read deck downloads" on public.deck_download_leads as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Editors can read deck downloads" on public.deck_download_leads as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
-create policy "Public can record a deck download" on public.deck_download_leads as permissive for insert to anon, authenticated using () with check (((locale = ANY (ARRAY['en'::text, 'de'::text, 'fr'::text, 'it'::text])) AND (source = 'for-organisations'::text) AND ((email IS NULL) OR ((length(email) <= 255) AND (email ~~ '%_@_%'::text)))));
+create policy "Public can record a deck download" on public.deck_download_leads as permissive for insert to anon, authenticated with check (((locale = ANY (ARRAY['en'::text, 'de'::text, 'fr'::text, 'it'::text])) AND (source = 'for-organisations'::text) AND ((email IS NULL) OR ((length(email) <= 255) AND (email ~~ '%_@_%'::text)))));
 
 create policy "Admins manage pulse items" on public.europe_pulse as permissive for all to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "Admins read all pulse items" on public.europe_pulse as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check ();
+create policy "Admins read all pulse items" on public.europe_pulse as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "Anyone can read published pulse items" on public.europe_pulse as permissive for select to anon, authenticated using ((status = 'published'::pulse_item_status)) with check ();
+create policy "Anyone can read published pulse items" on public.europe_pulse as permissive for select to anon, authenticated using ((status = 'published'::pulse_item_status));
 
 create policy "Admins manage chapters" on public.europe_pulse_chapters as permissive for all to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "Admins read all chapters" on public.europe_pulse_chapters as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check ();
+create policy "Admins read all chapters" on public.europe_pulse_chapters as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "Anyone can read active chapters" on public.europe_pulse_chapters as permissive for select to anon, authenticated using (is_active) with check ();
+create policy "Anyone can read active chapters" on public.europe_pulse_chapters as permissive for select to anon, authenticated using (is_active);
 
-create policy "Admins read pulse config" on public.europe_pulse_config as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check ();
+create policy "Admins read pulse config" on public.europe_pulse_config as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role));
 
 create policy "Admins update pulse config" on public.europe_pulse_config as permissive for update to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "Admins read raw scans" on public.europe_pulse_raw as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check ();
+create policy "Admins read raw scans" on public.europe_pulse_raw as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "Admins read runs" on public.europe_pulse_runs as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check ();
+create policy "Admins read runs" on public.europe_pulse_runs as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role));
 
 create policy "editors manage event hosts" on public.event_hosts as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
@@ -2225,25 +2225,25 @@ create policy "public read event hosts" on public.event_hosts as permissive for 
    FROM events e
   WHERE ((e.id = event_hosts.event_id) AND (e.status = 'published'::event_status)))) AND (EXISTS ( SELECT 1
    FROM member_directory_profiles p
-  WHERE ((p.id = event_hosts.profile_id) AND (p.visibility = 'published'::member_visibility)))))) with check ();
+  WHERE ((p.id = event_hosts.profile_id) AND (p.visibility = 'published'::member_visibility))))));
 
 create policy "cancel own registrations" on public.event_registrations as permissive for update to authenticated using ((user_id = auth.uid())) with check ((user_id = auth.uid()));
 
-create policy "guests submit registrations" on public.event_registrations as permissive for insert to anon using () with check (((user_id IS NULL) AND (status = 'confirmed'::event_registration_status)));
+create policy "guests submit registrations" on public.event_registrations as permissive for insert to anon with check (((user_id IS NULL) AND (status = 'confirmed'::event_registration_status)));
 
-create policy "managers read event registrations" on public.event_registrations as permissive for select to authenticated using (private.event_is_managed_by(event_id, auth.uid())) with check ();
+create policy "managers read event registrations" on public.event_registrations as permissive for select to authenticated using (private.event_is_managed_by(event_id, auth.uid()));
 
 create policy "managers update event registrations" on public.event_registrations as permissive for update to authenticated using (private.event_is_managed_by(event_id, auth.uid())) with check (private.event_is_managed_by(event_id, auth.uid()));
 
-create policy "read own registrations" on public.event_registrations as permissive for select to authenticated using ((user_id = auth.uid())) with check ();
+create policy "read own registrations" on public.event_registrations as permissive for select to authenticated using ((user_id = auth.uid()));
 
-create policy "signed-in submit own registrations" on public.event_registrations as permissive for insert to authenticated using () with check (((user_id = auth.uid()) AND (status = 'confirmed'::event_registration_status)));
+create policy "signed-in submit own registrations" on public.event_registrations as permissive for insert to authenticated with check (((user_id = auth.uid()) AND (status = 'confirmed'::event_registration_status)));
 
 create policy "event translations manager delete" on public.event_translations as permissive for delete to authenticated using ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
    FROM events e
-  WHERE ((e.id = event_translations.event_id) AND (e.organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role)))))) with check ();
+  WHERE ((e.id = event_translations.event_id) AND (e.organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role))))));
 
-create policy "event translations manager insert" on public.event_translations as permissive for insert to authenticated using () with check ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
+create policy "event translations manager insert" on public.event_translations as permissive for insert to authenticated with check ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
    FROM events e
   WHERE ((e.id = event_translations.event_id) AND (e.organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role))))));
 
@@ -2251,7 +2251,7 @@ create policy "event translations manager read" on public.event_translations as 
    FROM events e
   WHERE ((e.id = event_translations.event_id) AND (e.organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role)))) OR (EXISTS ( SELECT 1
    FROM events e
-  WHERE ((e.id = event_translations.event_id) AND (e.status = 'published'::event_status)))))) with check ();
+  WHERE ((e.id = event_translations.event_id) AND (e.status = 'published'::event_status))))));
 
 create policy "event translations manager update" on public.event_translations as permissive for update to authenticated using ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
    FROM events e
@@ -2261,123 +2261,123 @@ create policy "event translations manager update" on public.event_translations a
 
 create policy "event translations public read published" on public.event_translations as permissive for select to anon using ((EXISTS ( SELECT 1
    FROM events e
-  WHERE ((e.id = event_translations.event_id) AND (e.status = 'published'::event_status))))) with check ();
+  WHERE ((e.id = event_translations.event_id) AND (e.status = 'published'::event_status)))));
 
 create policy "editors manage all events" on public.events as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "organizers delete own events" on public.events as permissive for delete to authenticated using (((organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role))) with check ();
+create policy "organizers delete own events" on public.events as permissive for delete to authenticated using (((organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role)));
 
-create policy "organizers insert own events" on public.events as permissive for insert to authenticated using () with check (((organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role)));
+create policy "organizers insert own events" on public.events as permissive for insert to authenticated with check (((organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role)));
 
-create policy "organizers read own events" on public.events as permissive for select to authenticated using (((organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role))) with check ();
+create policy "organizers read own events" on public.events as permissive for select to authenticated using (((organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role)));
 
 create policy "organizers update own events" on public.events as permissive for update to authenticated using (((organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role))) with check (((organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role)));
 
-create policy "public read published events" on public.events as permissive for select to anon, authenticated using ((status = 'published'::event_status)) with check ();
+create policy "public read published events" on public.events as permissive for select to anon, authenticated using ((status = 'published'::event_status));
 
 create policy "governance editors write" on public.governance_documents as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "governance public read published" on public.governance_documents as permissive for select to anon, authenticated using (is_published) with check ();
+create policy "governance public read published" on public.governance_documents as permissive for select to anon, authenticated using (is_published);
 
 create policy "Admins can update integration config" on public.integration_config as permissive for update to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "Staff can read integration config" on public.integration_config as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Staff can read integration config" on public.integration_config as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
 create policy "admins update linkedin config" on public.linkedin_config as permissive for update to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "staff read linkedin config" on public.linkedin_config as permissive for select to authenticated using ((private.has_role(auth.uid(), 'admin'::app_role) OR private.has_role(auth.uid(), 'editor'::app_role) OR private.has_role(auth.uid(), 'publisher'::app_role))) with check ();
+create policy "staff read linkedin config" on public.linkedin_config as permissive for select to authenticated using ((private.has_role(auth.uid(), 'admin'::app_role) OR private.has_role(auth.uid(), 'editor'::app_role) OR private.has_role(auth.uid(), 'publisher'::app_role)));
 
-create policy "Admins can read archive snapshots" on public.member_archive_snapshots as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check ();
+create policy "Admins can read archive snapshots" on public.member_archive_snapshots as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "Public can read published directory profiles" on public.member_directory_profiles as permissive for select to anon using ((visibility = 'published'::member_visibility)) with check ();
+create policy "Public can read published directory profiles" on public.member_directory_profiles as permissive for select to anon using ((visibility = 'published'::member_visibility));
 
-create policy "Signed-in visitors read published directory profiles" on public.member_directory_profiles as permissive for select to authenticated using ((visibility = 'published'::member_visibility)) with check ();
+create policy "Signed-in visitors read published directory profiles" on public.member_directory_profiles as permissive for select to authenticated using ((visibility = 'published'::member_visibility));
 
-create policy "Staff can read directory profiles" on public.member_directory_profiles as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Staff can read directory profiles" on public.member_directory_profiles as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
-create policy "Admins can read email log" on public.member_email_log as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check ();
+create policy "Admins can read email log" on public.member_email_log as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "Staff can read import snapshots" on public.member_import_snapshots as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Staff can read import snapshots" on public.member_import_snapshots as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
-create policy "Staff can read lifecycle queue" on public.member_lifecycle_queue as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Staff can read lifecycle queue" on public.member_lifecycle_queue as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
 create policy "Public can read client types of published profiles" on public.member_profile_client_types as permissive for select to anon using ((EXISTS ( SELECT 1
    FROM member_directory_profiles p
-  WHERE ((p.id = member_profile_client_types.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
+  WHERE ((p.id = member_profile_client_types.profile_id) AND (p.visibility = 'published'::member_visibility)))));
 
 create policy "Signed-in visitors read client types of published profiles" on public.member_profile_client_types as permissive for select to authenticated using ((EXISTS ( SELECT 1
    FROM member_directory_profiles p
-  WHERE ((p.id = member_profile_client_types.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
+  WHERE ((p.id = member_profile_client_types.profile_id) AND (p.visibility = 'published'::member_visibility)))));
 
-create policy "Staff can read profile client types" on public.member_profile_client_types as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Staff can read profile client types" on public.member_profile_client_types as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
 create policy "Public can read formats of published profiles" on public.member_profile_formats as permissive for select to anon using ((EXISTS ( SELECT 1
    FROM member_directory_profiles p
-  WHERE ((p.id = member_profile_formats.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
+  WHERE ((p.id = member_profile_formats.profile_id) AND (p.visibility = 'published'::member_visibility)))));
 
 create policy "Signed-in visitors read formats of published profiles" on public.member_profile_formats as permissive for select to authenticated using ((EXISTS ( SELECT 1
    FROM member_directory_profiles p
-  WHERE ((p.id = member_profile_formats.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
+  WHERE ((p.id = member_profile_formats.profile_id) AND (p.visibility = 'published'::member_visibility)))));
 
-create policy "Staff can read profile formats" on public.member_profile_formats as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Staff can read profile formats" on public.member_profile_formats as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
 create policy "Public can read languages of published profiles" on public.member_profile_languages as permissive for select to anon using ((EXISTS ( SELECT 1
    FROM member_directory_profiles p
-  WHERE ((p.id = member_profile_languages.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
+  WHERE ((p.id = member_profile_languages.profile_id) AND (p.visibility = 'published'::member_visibility)))));
 
 create policy "Signed-in visitors read languages of published profiles" on public.member_profile_languages as permissive for select to authenticated using ((EXISTS ( SELECT 1
    FROM member_directory_profiles p
-  WHERE ((p.id = member_profile_languages.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
+  WHERE ((p.id = member_profile_languages.profile_id) AND (p.visibility = 'published'::member_visibility)))));
 
-create policy "Staff can read profile languages" on public.member_profile_languages as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Staff can read profile languages" on public.member_profile_languages as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
-create policy "Admins can read claim links" on public.member_profile_links as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check ();
+create policy "Admins can read claim links" on public.member_profile_links as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role));
 
 create policy "Public can read regions of published profiles" on public.member_profile_regions as permissive for select to anon using ((EXISTS ( SELECT 1
    FROM member_directory_profiles p
-  WHERE ((p.id = member_profile_regions.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
+  WHERE ((p.id = member_profile_regions.profile_id) AND (p.visibility = 'published'::member_visibility)))));
 
 create policy "Signed-in visitors read regions of published profiles" on public.member_profile_regions as permissive for select to authenticated using ((EXISTS ( SELECT 1
    FROM member_directory_profiles p
-  WHERE ((p.id = member_profile_regions.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
+  WHERE ((p.id = member_profile_regions.profile_id) AND (p.visibility = 'published'::member_visibility)))));
 
-create policy "Staff can read profile regions" on public.member_profile_regions as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Staff can read profile regions" on public.member_profile_regions as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
 create policy "Public can read specialisations of published profiles" on public.member_profile_specialisations as permissive for select to anon using ((EXISTS ( SELECT 1
    FROM member_directory_profiles p
-  WHERE ((p.id = member_profile_specialisations.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
+  WHERE ((p.id = member_profile_specialisations.profile_id) AND (p.visibility = 'published'::member_visibility)))));
 
 create policy "Signed-in visitors read specialisations of published profiles" on public.member_profile_specialisations as permissive for select to authenticated using ((EXISTS ( SELECT 1
    FROM member_directory_profiles p
-  WHERE ((p.id = member_profile_specialisations.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
+  WHERE ((p.id = member_profile_specialisations.profile_id) AND (p.visibility = 'published'::member_visibility)))));
 
-create policy "Staff can read profile specialisations" on public.member_profile_specialisations as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Staff can read profile specialisations" on public.member_profile_specialisations as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
 create policy "Members manage their own profile translations" on public.member_profile_translations as permissive for all to authenticated using (private.member_owns_profile(profile_id)) with check (private.member_owns_profile(profile_id));
 
-create policy "Public can read published profile translations" on public.member_profile_translations as permissive for select to anon using (is_ready) with check ();
+create policy "Public can read published profile translations" on public.member_profile_translations as permissive for select to anon using (is_ready);
 
-create policy "Signed-in visitors read published profile translations" on public.member_profile_translations as permissive for select to authenticated using (is_ready) with check ();
+create policy "Signed-in visitors read published profile translations" on public.member_profile_translations as permissive for select to authenticated using (is_ready);
 
-create policy "Staff can read profile translations" on public.member_profile_translations as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Staff can read profile translations" on public.member_profile_translations as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
 create policy "Members manage their own profile links" on public.member_profile_websites as permissive for all to authenticated using (private.member_owns_profile(profile_id)) with check (private.member_owns_profile(profile_id));
 
 create policy "Staff manage all profile links" on public.member_profile_websites as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
-create policy "Staff can read sync events" on public.member_sync_events as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Staff can read sync events" on public.member_sync_events as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
-create policy "Staff can read sync runs" on public.member_sync_runs as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Staff can read sync runs" on public.member_sync_runs as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
 create policy "Public can read directory-listed members" on public.members as permissive for select to anon using ((member_is_active(activity_state) AND member_has_directory_credential(credential_slug, credential_expires_on) AND (EXISTS ( SELECT 1
    FROM member_directory_profiles p
-  WHERE ((p.member_id = members.id) AND (p.visibility = 'published'::member_visibility)))))) with check ();
+  WHERE ((p.member_id = members.id) AND (p.visibility = 'published'::member_visibility))))));
 
 create policy "Signed-in visitors read directory-listed members" on public.members as permissive for select to authenticated using ((member_is_active(activity_state) AND member_has_directory_credential(credential_slug, credential_expires_on) AND (EXISTS ( SELECT 1
    FROM member_directory_profiles p
-  WHERE ((p.member_id = members.id) AND (p.visibility = 'published'::member_visibility)))))) with check ();
+  WHERE ((p.member_id = members.id) AND (p.visibility = 'published'::member_visibility))))));
 
-create policy "Staff can read members" on public.members as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Staff can read members" on public.members as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
 create policy "Admins manage assignments" on public.op_assignments as permissive for all to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check (private.has_role(auth.uid(), 'admin'::app_role));
 
@@ -2385,49 +2385,49 @@ create policy "Public can read assignments" on public.op_assignments as permissi
    FROM op_projects p
   WHERE ((p.id = op_assignments.project_id) AND p.is_active))) AND (EXISTS ( SELECT 1
    FROM op_project_roles r
-  WHERE ((r.id = op_assignments.role_id) AND r.is_active))))) with check ();
+  WHERE ((r.id = op_assignments.role_id) AND r.is_active)))));
 
 create policy "Admins manage project regions" on public.op_project_regions as permissive for all to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check (private.has_role(auth.uid(), 'admin'::app_role));
 
 create policy "Public can read project regions" on public.op_project_regions as permissive for select to anon, authenticated using ((EXISTS ( SELECT 1
    FROM op_projects p
-  WHERE ((p.id = op_project_regions.project_id) AND p.is_active)))) with check ();
+  WHERE ((p.id = op_project_regions.project_id) AND p.is_active))));
 
 create policy "Admins manage project roles" on public.op_project_roles as permissive for all to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check (private.has_role(auth.uid(), 'admin'::app_role));
 
 create policy "Public can read project roles" on public.op_project_roles as permissive for select to anon, authenticated using ((is_active AND (EXISTS ( SELECT 1
    FROM op_projects p
-  WHERE ((p.id = op_project_roles.project_id) AND p.is_active))))) with check ();
+  WHERE ((p.id = op_project_roles.project_id) AND p.is_active)))));
 
 create policy "Admins manage projects" on public.op_projects as permissive for all to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "Visitors read active projects" on public.op_projects as permissive for select to anon, authenticated using (is_active) with check ();
+create policy "Visitors read active projects" on public.op_projects as permissive for select to anon, authenticated using (is_active);
 
-create policy "Anyone can submit a valid survey response" on public.organisation_survey_responses as permissive for insert to anon, authenticated using () with check (((locale = ANY (ARRAY['en'::text, 'de'::text, 'fr'::text, 'it'::text])) AND (source = 'for-organisations'::text) AND ((total_score IS NULL) OR ((total_score >= 0) AND (total_score <= 100))) AND ((primary_pressure IS NULL) OR (length(primary_pressure) <= 64)) AND ((maturity_band IS NULL) OR (length(maturity_band) <= 32)) AND ((contact_name IS NULL) OR (length(contact_name) <= 120)) AND ((contact_email IS NULL) OR (length(contact_email) <= 255)) AND ((contact_organisation IS NULL) OR (length(contact_organisation) <= 160)) AND ((message IS NULL) OR (length(message) <= 2000)) AND (length((answers)::text) <= 4000) AND (length((dimension_scores)::text) <= 2000)));
+create policy "Anyone can submit a valid survey response" on public.organisation_survey_responses as permissive for insert to anon, authenticated with check (((locale = ANY (ARRAY['en'::text, 'de'::text, 'fr'::text, 'it'::text])) AND (source = 'for-organisations'::text) AND ((total_score IS NULL) OR ((total_score >= 0) AND (total_score <= 100))) AND ((primary_pressure IS NULL) OR (length(primary_pressure) <= 64)) AND ((maturity_band IS NULL) OR (length(maturity_band) <= 32)) AND ((contact_name IS NULL) OR (length(contact_name) <= 120)) AND ((contact_email IS NULL) OR (length(contact_email) <= 255)) AND ((contact_organisation IS NULL) OR (length(contact_organisation) <= 160)) AND ((message IS NULL) OR (length(message) <= 2000)) AND (length((answers)::text) <= 4000) AND (length((dimension_scores)::text) <= 2000)));
 
-create policy "Editors and admins can read survey responses" on public.organisation_survey_responses as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
+create policy "Editors and admins can read survey responses" on public.organisation_survey_responses as permissive for select to authenticated using (private.is_editor(auth.uid()));
 
 create policy "profiles authenticated read scoped" on public.profiles as permissive for select to authenticated using (((auth.uid() = id) OR private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
    FROM articles a
-  WHERE ((a.author_id = profiles.id) AND (a.status = 'published'::article_status)))))) with check ();
+  WHERE ((a.author_id = profiles.id) AND (a.status = 'published'::article_status))))));
 
-create policy "profiles insert own" on public.profiles as permissive for insert to authenticated using () with check ((auth.uid() = id));
+create policy "profiles insert own" on public.profiles as permissive for insert to authenticated with check ((auth.uid() = id));
 
 create policy "profiles public read published authors" on public.profiles as permissive for select to anon using ((EXISTS ( SELECT 1
    FROM articles a
-  WHERE ((a.author_id = profiles.id) AND (a.status = 'published'::article_status))))) with check ();
+  WHERE ((a.author_id = profiles.id) AND (a.status = 'published'::article_status)))));
 
 create policy "profiles update own" on public.profiles as permissive for update to authenticated using ((auth.uid() = id)) with check ((auth.uid() = id));
 
-create policy "admins read role grants" on public.role_grants as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check ();
+create policy "admins read role grants" on public.role_grants as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "admins grant managed roles" on public.user_roles as permissive for insert to authenticated using () with check ((private.has_role(auth.uid(), 'admin'::app_role) AND (role = ANY (ARRAY['editor'::app_role, 'organizer'::app_role, 'publisher'::app_role])) AND private.has_role(user_id, 'member'::app_role)));
+create policy "admins grant managed roles" on public.user_roles as permissive for insert to authenticated with check ((private.has_role(auth.uid(), 'admin'::app_role) AND (role = ANY (ARRAY['editor'::app_role, 'organizer'::app_role, 'publisher'::app_role])) AND private.has_role(user_id, 'member'::app_role)));
 
-create policy "admins read all roles" on public.user_roles as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check ();
+create policy "admins read all roles" on public.user_roles as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role));
 
-create policy "admins revoke managed roles" on public.user_roles as permissive for delete to authenticated using ((private.has_role(auth.uid(), 'admin'::app_role) AND (role = ANY (ARRAY['editor'::app_role, 'organizer'::app_role, 'publisher'::app_role])))) with check ();
+create policy "admins revoke managed roles" on public.user_roles as permissive for delete to authenticated using ((private.has_role(auth.uid(), 'admin'::app_role) AND (role = ANY (ARRAY['editor'::app_role, 'organizer'::app_role, 'publisher'::app_role]))));
 
-create policy "users read own roles" on public.user_roles as permissive for select to authenticated using ((auth.uid() = user_id)) with check ();
+create policy "users read own roles" on public.user_roles as permissive for select to authenticated using ((auth.uid() = user_id));
 
 -- ---------------------------------------------------------------------------
 -- Schema and function grants (4)
@@ -2813,17 +2813,17 @@ insert into storage.buckets (id, name, public) values ('member-profile-images', 
 
 create policy "Article images readable when published" on storage.objects as permissive for select to anon, authenticated using (((bucket_id = 'article-images'::text) AND (EXISTS ( SELECT 1
    FROM articles a
-  WHERE (((a.id)::text = (storage.foldername(objects.name))[1]) AND (a.status = 'published'::article_status)))))) with check ();
+  WHERE (((a.id)::text = (storage.foldername(objects.name))[1]) AND (a.status = 'published'::article_status))))));
 
 create policy "Authors and editors can read their article images" on storage.objects as permissive for select to authenticated using (((bucket_id = 'article-images'::text) AND ((EXISTS ( SELECT 1
    FROM user_roles ur
   WHERE ((ur.user_id = auth.uid()) AND (ur.role = ANY (ARRAY['admin'::app_role, 'editor'::app_role]))))) OR (EXISTS ( SELECT 1
    FROM articles a
-  WHERE (((a.id)::text = (storage.foldername(objects.name))[1]) AND (a.author_id = auth.uid()))))))) with check ();
+  WHERE (((a.id)::text = (storage.foldername(objects.name))[1]) AND (a.author_id = auth.uid())))))));
 
 create policy "Authors can delete images for their own articles" on storage.objects as permissive for delete to authenticated using (((bucket_id = 'article-images'::text) AND (EXISTS ( SELECT 1
    FROM articles a
-  WHERE ((a.author_id = auth.uid()) AND ((a.id)::text = (storage.foldername(objects.name))[1])))))) with check ();
+  WHERE ((a.author_id = auth.uid()) AND ((a.id)::text = (storage.foldername(objects.name))[1]))))));
 
 create policy "Authors can update images for their own articles" on storage.objects as permissive for update to authenticated using (((bucket_id = 'article-images'::text) AND (EXISTS ( SELECT 1
    FROM articles a
@@ -2831,7 +2831,7 @@ create policy "Authors can update images for their own articles" on storage.obje
    FROM articles a
   WHERE ((a.author_id = auth.uid()) AND ((a.id)::text = (storage.foldername(objects.name))[1]))))));
 
-create policy "Authors can upload images for their own articles" on storage.objects as permissive for insert to authenticated using () with check (((bucket_id = 'article-images'::text) AND (EXISTS ( SELECT 1
+create policy "Authors can upload images for their own articles" on storage.objects as permissive for insert to authenticated with check (((bucket_id = 'article-images'::text) AND (EXISTS ( SELECT 1
    FROM articles a
   WHERE ((a.author_id = auth.uid()) AND ((a.id)::text = (storage.foldername(objects.name))[1]))))));
 
