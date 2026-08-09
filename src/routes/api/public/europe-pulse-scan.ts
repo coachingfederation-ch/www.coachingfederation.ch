@@ -8,17 +8,18 @@ import { createFileRoute } from "@tanstack/react-router";
 /**
  * Weekly Europe Pulse scan endpoint, called by pg_cron via pg_net.
  *
- * Auth is the same server-only cron token pattern as the member sync: a shared
- * secret in `x-cron-token`, never the publishable key (which ships to every
- * browser and would let anyone burn Firecrawl and AI credits).
+ * Auth is the same server-only cron token pattern as the member sync: a secret
+ * in `x-cron-token`, never the publishable key (which ships to every browser
+ * and would let anyone burn Firecrawl and AI credits). This endpoint prefers
+ * its own `EUROPE_PULSE_CRON_TOKEN` when one is configured, so leaking it
+ * cannot also trigger a member sync.
  */
 export const Route = createFileRoute("/api/public/europe-pulse-scan")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const expected = process.env.MEMBER_SYNC_CRON_TOKEN;
-        const provided = request.headers.get("x-cron-token");
-        if (!expected || !provided || provided !== expected) {
+        const { isAuthorisedCronRequest } = await import("@/lib/cron-auth.server");
+        if (!isAuthorisedCronRequest(request, "EUROPE_PULSE_CRON_TOKEN")) {
           // Never log the token itself — only that a call was rejected.
           console.warn("[europe-pulse] unauthorised request rejected");
           return new Response("Unauthorized", { status: 401 });
