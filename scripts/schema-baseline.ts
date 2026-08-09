@@ -281,8 +281,13 @@ function build(): { sql: string; counts: Record<string, number> } {
 }
 
 function ledgerVersion(): string {
-  const [version] = psql("select max(version) from supabase_migrations.schema_migrations");
-  return version ?? "unknown";
+  // Readable by the migration role only; unprivileged runs still produce a baseline.
+  try {
+    const [version] = psql("select max(version) from supabase_migrations.schema_migrations");
+    return version ?? "unknown";
+  } catch {
+    return "unreadable";
+  }
 }
 
 function existingBaseline(): { file: string; sql: string } | null {
