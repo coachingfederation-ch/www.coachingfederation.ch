@@ -20,8 +20,9 @@
 
 set statement_timeout = 0;
 set client_min_messages = warning;
+set search_path = public, extensions;
 
--- generated at 2026-08-09T06:54:26.910Z
+-- generated at 2026-08-09T06:55:19.674Z
 
 -- ---------------------------------------------------------------------------
 -- Extensions (6)
