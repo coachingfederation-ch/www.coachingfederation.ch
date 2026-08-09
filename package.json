@@ -10,7 +10,10 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "translate": "bun run scripts/translate.ts"
+    "translate": "bun run scripts/translate.ts",
+    "baseline:write": "bun run scripts/schema-baseline.ts --write",
+    "baseline:check": "bun run scripts/schema-baseline.ts --check",
+    "baseline:verify": "bash scripts/verify-baseline.sh"
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^3.0.23",
