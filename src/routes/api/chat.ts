@@ -66,7 +66,41 @@ export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const body = (await request.json()) as { messages?: unknown; locale?: unknown };
+        const { checkRateLimit, clientIp, rateLimitResponse } = await import(
+          "@/lib/rate-limit.server"
+        );
+
+        // The gateway call costs money and needs no account, so the endpoint is
+        // capped per caller. Signed-in members get the wider allowance.
+        const userId = await resolveUserId(request);
+        const subject = userId ? `user:${userId}` : `ip:${clientIp(request)}`;
+        const verdict = await checkRateLimit(
+          "chat",
+          subject,
+          userId
+            ? [
+                { windowSeconds: 300, max: 30 },
+                { windowSeconds: 86_400, max: 200 },
+              ]
+            : [
+                { windowSeconds: 300, max: 12 },
+                { windowSeconds: 86_400, max: 60 },
+              ],
+        );
+        if (!verdict.allowed) {
+          return rateLimitResponse(verdict, "Too many messages. Please try again shortly.");
+        }
+
+        const raw = await request.text();
+        // ~64 KB is far more than a rolling chat window needs.
+        if (raw.length > 64_000) return new Response("Message too large", { status: 413 });
+
+        let body: { messages?: unknown; locale?: unknown };
+        try {
+          body = JSON.parse(raw) as { messages?: unknown; locale?: unknown };
+        } catch {
+          return new Response("Invalid JSON body", { status: 400 });
+        }
         if (!Array.isArray(body.messages)) {
           return new Response("Messages are required", { status: 400 });
         }
@@ -90,7 +124,6 @@ export const Route = createFileRoute("/api/chat")({
           import("@/lib/assistant/tools.server"),
         ]);
 
-        const userId = await resolveUserId(request);
         const initialRunId = getLovableAiGatewayRunId(request);
         const gateway = createLovableAiGatewayProvider(apiKey, initialRunId);
 
@@ -99,7 +132,9 @@ export const Route = createFileRoute("/api/chat")({
           system: systemPrompt(locale, Boolean(userId)),
           messages: await convertToModelMessages(messages),
           tools: buildAssistantTools({ locale, userId }),
-          stopWhen: stepCountIs(50),
+          // A genuine answer never needs dozens of tool round-trips; the low cap
+          // bounds what one request can spend.
+          stopWhen: stepCountIs(8),
           onError: ({ error }) => {
             console.error("[assistant]", error);
           },
