@@ -66,9 +66,8 @@ export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const { checkRateLimit, clientIp, rateLimitResponse } = await import(
-          "@/lib/rate-limit.server"
-        );
+        const { checkRateLimit, clientIp, rateLimitResponse } =
+          await import("@/lib/rate-limit.server");
 
         // The gateway call costs money and needs no account, so the endpoint is
         // capped per caller. Signed-in members get the wider allowance.
