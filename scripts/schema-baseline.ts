@@ -34,7 +34,12 @@ function psql(sql: string): string[] {
     "--no-psqlrc", "-v", "ON_ERROR_STOP=1", "-c", sql,
   ];
   if (process.env["PGURL"]) args.unshift(process.env["PGURL"]!);
-  const out = execFileSync("psql", args, { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  const out = execFileSync("psql", args, {
+    encoding: "utf8",
+    maxBuffer: 64 * 1024 * 1024,
+    // Captured, not inherited: optional queries may fail without alarming output.
+    stdio: ["ignore", "pipe", "pipe"],
+  });
   return out
     .split("\u001e")
     .map((row) => row.trim())
@@ -267,6 +272,7 @@ const HEADER = `-- =============================================================
 
 set statement_timeout = 0;
 set client_min_messages = warning;
+set search_path = public, extensions;
 `;
 
 function build(): { sql: string; counts: Record<string, number> } {
