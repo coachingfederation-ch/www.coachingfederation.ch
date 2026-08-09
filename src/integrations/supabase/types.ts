@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      api_rate_limits: {
+        Row: {
+          bucket: string
+          hit_at: string
+          id: string
+          subject: string
+        }
+        Insert: {
+          bucket: string
+          hit_at?: string
+          id?: string
+          subject: string
+        }
+        Update: {
+          bucket?: string
+          hit_at?: string
+          id?: string
+          subject?: string
+        }
+        Relationships: []
+      }
       article_linkedin_posts: {
         Row: {
           article_id: string

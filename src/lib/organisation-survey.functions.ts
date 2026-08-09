@@ -33,6 +33,16 @@ export const submitOrganisationSurvey = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     if (data.website) return { ok: true as const };
 
+    const { checkRateLimit, clientIp } = await import("./rate-limit.server");
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const request = getRequest();
+    // The table takes anonymous inserts, so one host cannot flood it.
+    const verdict = await checkRateLimit("organisation-survey", `ip:${clientIp(request)}`, [
+      { windowSeconds: 3_600, max: 8 },
+      { windowSeconds: 86_400, max: 30 },
+    ]);
+    if (!verdict.allowed) return { ok: true as const };
+
     const { publicSupabaseClient } = await import("./supabase-public.server");
     const supabase = publicSupabaseClient();
 

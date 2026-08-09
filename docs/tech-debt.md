@@ -52,11 +52,28 @@ repeated rather than abstracted, but a fifth translatable entity would justify
 extracting the shared panel and the `manually_edited` / `is_ready` state
 machine.
 
-## Email transport is a stub
+## Rate limiting is ad-hoc
 
-`member-email.server.ts` logs and drops. The call sites and the log table are
-in place, so wiring a provider is contained to that module — but until it is
-done, any feature that assumes a member can be reached by email is incomplete.
+`rate-limit.server.ts` counts hits in the `api_rate_limits` table over a
+sliding window and fails open on any database error. It is deliberate but
+coarse: a row per request, opportunistic cleanup, and per-IP subjects that a
+distributed caller can spread across. It covers the assistant, the claim form
+and the two anonymous ingestion forms. A platform primitive should replace it
+when one exists.
+
+## Accepted security risks
+
+- `.env` / `.env.development` are tracked and contain only publishable values
+  (Supabase URL and publishable key, project id, analytics id). They are
+  platform-generated and required at build time; no confidential value belongs
+  in them.
+- The generated MCP routes set `trustForwardedHost`, and the email preview
+  route authenticates the platform with the shared `LOVABLE_API_KEY`. Both are
+  platform-owned behaviour behind the edge proxy.
+- 86 migrations are never squashed: repeated grant/policy reassertions are
+  defensive, and no baseline tooling is available on this platform.
+- CSP is report-only in `src/server.ts` until a clean report pass justifies
+  enforcement.
 
 ## i18n dictionary drift
 
