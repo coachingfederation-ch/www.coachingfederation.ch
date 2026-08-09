@@ -4,11 +4,11 @@ A derived, replayable snapshot of the database structure. **Not** a backup and
 **not** the source of truth — the migration files in `../migrations/` remain
 authoritative and are never squashed.
 
-| Command                  | What it does                                                     |
-| ------------------------ | ---------------------------------------------------------------- |
-| `bun run baseline:write` | Regenerates `<stamp>_baseline.sql` + `MANIFEST.json` from the DB |
-| `bun run baseline:check` | Regenerates and diffs; non-zero exit on drift                     |
-| `bun run baseline:verify`| Replays the newest baseline onto a scratch Postgres               |
+| Command                   | What it does                                                     |
+| ------------------------- | ---------------------------------------------------------------- |
+| `bun run baseline:write`  | Regenerates `<stamp>_baseline.sql` + `MANIFEST.json` from the DB |
+| `bun run baseline:check`  | Regenerates and diffs; non-zero exit on drift                    |
+| `bun run baseline:verify` | Replays the newest baseline onto a scratch Postgres              |
 
 All three read `PG*` (or `PGURL`) and issue SELECTs only. `baseline:verify`
 needs local `initdb`/`postgres`/`psql` binaries; point `PGBIN` at them if they

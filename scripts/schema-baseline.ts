@@ -30,8 +30,18 @@ function psql(sql: string): string[] {
   // Statements span many lines, so rows are separated by an explicit record
   // separator rather than by newlines.
   const args = [
-    "-X", "-A", "-t", "-F", "\u001f", "-R", "\u001e",
-    "--no-psqlrc", "-v", "ON_ERROR_STOP=1", "-c", sql,
+    "-X",
+    "-A",
+    "-t",
+    "-F",
+    "\u001f",
+    "-R",
+    "\u001e",
+    "--no-psqlrc",
+    "-v",
+    "ON_ERROR_STOP=1",
+    "-c",
+    sql,
   ];
   if (process.env["PGURL"]) args.unshift(process.env["PGURL"]!);
   const out = execFileSync("psql", args, {
@@ -304,7 +314,14 @@ function build(): { sql: string; counts: Record<string, number> } {
     parts.push(rows.join("\n\n"));
     parts.push("");
   }
-  return { sql: parts.join("\n").replace(/\n{3,}/g, "\n\n").trimEnd() + "\n", counts };
+  return {
+    sql:
+      parts
+        .join("\n")
+        .replace(/\n{3,}/g, "\n\n")
+        .trimEnd() + "\n",
+    counts,
+  };
 }
 
 function ledgerVersion(): string {
@@ -345,7 +362,12 @@ if (mode === "--write") {
   writeFileSync(
     MANIFEST,
     JSON.stringify(
-      { file: name, generated_at: new Date().toISOString(), migration_ledger_version: version, counts },
+      {
+        file: name,
+        generated_at: new Date().toISOString(),
+        migration_ledger_version: version,
+        counts,
+      },
       null,
       2,
     ) + "\n",
