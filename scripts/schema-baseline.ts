@@ -25,6 +25,9 @@ const MANIFEST = join(OUT_DIR, "MANIFEST.json");
 const PREREQUISITE_ROLES = ["anon", "authenticated", "service_role"];
 /** Schemas the baseline owns. Supabase-managed schemas are prerequisites. */
 const OWNED_SCHEMAS = ["public", "private"];
+/** psql field/record separators: control chars that never occur in SQL text. */
+const FIELD_SEP = "\u001f";
+const RECORD_SEP = "\u001e";
 
 function psql(sql: string): string[] {
   // Statements span many lines, so rows are separated by an explicit record
@@ -51,7 +54,7 @@ function psql(sql: string): string[] {
     stdio: ["ignore", "pipe", "pipe"],
   });
   return out
-    .split("\u001e")
+    .split(RECORD_SEP)
     .map((row) => row.trim())
     .filter((row) => row.length > 0);
 }
