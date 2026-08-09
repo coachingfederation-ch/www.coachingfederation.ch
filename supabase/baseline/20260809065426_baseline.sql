@@ -21,7 +21,7 @@
 set statement_timeout = 0;
 set client_min_messages = warning;
 
--- generated at 2026-08-09T06:54:00.867Z
+-- generated at 2026-08-09T06:54:26.910Z
 
 -- ---------------------------------------------------------------------------
 -- Extensions (6)
@@ -82,2367 +82,1277 @@ create type public.pulse_run_status as enum ('running', 'succeeded', 'failed');
 create type public.sync_run_status as enum ('running', 'succeeded', 'failed', 'aborted');
 
 -- ---------------------------------------------------------------------------
--- Functions (548)
+-- Functions (30)
 -- ---------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION private.directory_contact_email(_profile_id uuid)
-
  RETURNS text
-
  LANGUAGE sql
-
  STABLE SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
   SELECT m.email
-
   FROM public.member_directory_profiles p
-
   JOIN public.members m ON m.id = p.member_id
-
   WHERE p.id = _profile_id
-
     AND p.contact_email_public
-
     AND p.visibility = 'published'
-
     AND public.member_is_active(m.activity_state)
-
     AND public.member_has_directory_credential(m.credential_slug, m.credential_expires_on)
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION private.event_confirmed_count(_event_id uuid)
-
  RETURNS integer
-
  LANGUAGE sql
-
  STABLE SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
   SELECT count(*)::int
-
   FROM public.event_registrations r
-
   WHERE r.event_id = _event_id AND r.status = 'confirmed'
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION private.event_is_managed_by(_event_id uuid, _user_id uuid)
-
  RETURNS boolean
-
  LANGUAGE sql
-
  STABLE SECURITY DEFINER
-
  SET search_path TO 'public', 'private'
-
 AS $function$
-
   SELECT private.is_editor(_user_id)
-
       OR EXISTS (
-
         SELECT 1 FROM public.events e
-
         WHERE e.id = _event_id
-
           AND e.organizer_id = _user_id
-
           AND private.has_role(_user_id, 'organizer')
-
       )
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION private.has_role(_user_id uuid, _role app_role)
-
  RETURNS boolean
-
  LANGUAGE sql
-
  STABLE SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
   select exists (select 1 from public.user_roles where user_id = _user_id and role = _role)
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION private.is_article_publisher(_user_id uuid)
-
  RETURNS boolean
-
  LANGUAGE sql
-
  STABLE SECURITY DEFINER
-
  SET search_path TO 'public', 'private'
-
 AS $function$
-
   SELECT private.has_role(_user_id, 'publisher')
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION private.is_editor(_user_id uuid)
-
  RETURNS boolean
-
  LANGUAGE sql
-
  STABLE SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
   select private.has_role(_user_id, 'admin') or private.has_role(_user_id, 'editor')
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION private.is_staff(_user_id uuid)
-
  RETURNS boolean
-
  LANGUAGE sql
-
  STABLE SECURITY DEFINER
-
  SET search_path TO 'public', 'private'
-
 AS $function$
-
   select private.has_role(_user_id, 'admin')
-
       or private.has_role(_user_id, 'editor')
-
       or private.has_role(_user_id, 'organizer')
-
       or private.has_role(_user_id, 'publisher')
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION private.member_owns_profile(_profile_id uuid)
-
  RETURNS boolean
-
  LANGUAGE sql
-
  STABLE SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
   SELECT EXISTS (
-
     SELECT 1
-
     FROM public.member_directory_profiles p
-
     JOIN public.members m ON m.id = p.member_id
-
     WHERE p.id = _profile_id
-
       AND m.auth_user_id = auth.uid()
-
   )
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION private.member_owns_storage_folder(_folder text)
-
  RETURNS boolean
-
  LANGUAGE sql
-
  STABLE SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
   SELECT EXISTS (
-
     SELECT 1 FROM public.members m
-
     WHERE m.auth_user_id = auth.uid()
-
       AND m.id::text = _folder
-
   )
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION private.team_contact_email(_profile_id uuid)
-
  RETURNS text
-
  LANGUAGE sql
-
  STABLE SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
   SELECT m.email
-
   FROM public.member_directory_profiles p
-
   JOIN public.members m ON m.id = p.member_id
-
   WHERE p.id = _profile_id
-
     AND p.contact_email_public
-
     AND EXISTS (SELECT 1 FROM public.op_assignments a WHERE a.member_id = m.id)
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION private.team_directory_rows()
-
  RETURNS TABLE(profile_id uuid, member_id uuid, full_name text, profile_image_path text, team_bio text, primary_locale text, linkedin_url text, contact_email text, public_coach_profile_id uuid, translations jsonb, assignments jsonb, primary_sort_order integer)
-
  LANGUAGE sql
-
  STABLE SECURITY DEFINER
-
  SET search_path TO 'public', 'private'
-
 AS $function$
-
   SELECT p.id AS profile_id,
-
          m.id AS member_id,
-
          m.full_name,
-
          p.profile_image_path,
-
          p.team_bio,
-
          p.primary_locale,
-
          p.linkedin_url,
-
          private.team_contact_email(p.id) AS contact_email,
-
          CASE
-
            WHEN p.visibility = 'published'::member_visibility
-
                 AND public.member_is_active(m.activity_state)
-
                 AND public.member_has_directory_credential(m.credential_slug, m.credential_expires_on)
-
            THEN p.id
-
            ELSE NULL::uuid
-
          END AS public_coach_profile_id,
-
          COALESCE((
-
            SELECT jsonb_object_agg(t.locale, jsonb_build_object('team_bio', t.team_bio))
-
            FROM public.member_profile_translations t
-
            WHERE t.profile_id = p.id AND t.is_ready
-
          ), '{}'::jsonb) AS translations,
-
          COALESCE((
-
            SELECT jsonb_agg(jsonb_build_object(
-
              'project_slug', pr.slug,
-
              'project_name', pr.name,
-
              'project_name_de', pr.name_de,
-
              'project_name_fr', pr.name_fr,
-
              'project_name_it', pr.name_it,
-
              'project_sort_order', pr.sort_order,
-
              'role_name', rl.name,
-
              'role_name_de', rl.name_de,
-
              'role_name_fr', rl.name_fr,
-
              'role_name_it', rl.name_it,
-
              'sort_order', a.sort_order
-
            ) ORDER BY a.sort_order, pr.sort_order)
-
            FROM public.op_assignments a
-
            JOIN public.op_projects pr ON pr.id = a.project_id AND pr.is_active
-
            JOIN public.op_project_roles rl ON rl.id = a.role_id
-
            WHERE a.member_id = m.id
-
          ), '[]'::jsonb) AS assignments,
-
          COALESCE((
-
            SELECT min(a.sort_order)
-
            FROM public.op_assignments a
-
            JOIN public.op_projects pr ON pr.id = a.project_id AND pr.is_active
-
            WHERE a.member_id = m.id
-
          ), 0) AS primary_sort_order
-
   FROM public.member_directory_profiles p
-
   JOIN public.members m ON m.id = p.member_id
-
   WHERE public.member_is_active(m.activity_state)
-
     AND EXISTS (
-
       SELECT 1
-
       FROM public.op_assignments a
-
       JOIN public.op_projects pr ON pr.id = a.project_id AND pr.is_active
-
       WHERE a.member_id = m.id
-
     );
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.handle_new_user()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
 DECLARE
-
   full_name text := COALESCE(
-
     NEW.raw_user_meta_data ->> 'full_name',
-
     NEW.raw_user_meta_data ->> 'name',
-
     ''
-
   );
-
 BEGIN
-
   INSERT INTO public.profiles (id, first_name, last_name)
-
   VALUES (
-
     NEW.id,
-
     COALESCE(
-
       NULLIF(NEW.raw_user_meta_data ->> 'first_name', ''),
-
       NULLIF(split_part(full_name, ' ', 1), ''),
-
       ''
-
     ),
-
     COALESCE(
-
       NULLIF(NEW.raw_user_meta_data ->> 'last_name', ''),
-
       NULLIF(substr(full_name, NULLIF(strpos(full_name, ' '), 0) + 1), ''),
-
       ''
-
     )
-
   )
-
   ON CONFLICT (id) DO NOTHING;
-
   RETURN NEW;
-
 END;
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.member_has_directory_credential(_credential_slug text, _credential_expires_on date)
-
  RETURNS boolean
-
  LANGUAGE sql
-
  STABLE
-
  SET search_path TO 'public'
-
 AS $function$
-
   SELECT upper(coalesce(_credential_slug, '')) IN ('ACC', 'PCC', 'MCC')
-
      AND (_credential_expires_on IS NULL OR _credential_expires_on >= current_date)
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.member_is_active(_activity_state member_activity_state)
-
  RETURNS boolean
-
  LANGUAGE sql
-
  IMMUTABLE
-
  SET search_path TO 'public'
-
 AS $function$
-
   SELECT _activity_state = 'active'
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.member_is_directory_eligible(_member_id uuid)
-
  RETURNS boolean
-
  LANGUAGE sql
-
  STABLE SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
   SELECT public.member_is_active(m.activity_state)
-
      AND public.member_has_directory_credential(m.credential_slug, m.credential_expires_on)
-
   FROM public.members m
-
   WHERE m.id = _member_id
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_articles_content_updated_at()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SET search_path TO 'public'
-
 AS $function$
-
 BEGIN
-
   IF NEW.title IS DISTINCT FROM OLD.title
-
      OR NEW.excerpt IS DISTINCT FROM OLD.excerpt
-
      OR NEW.content IS DISTINCT FROM OLD.content THEN
-
     NEW.content_updated_at = now();
-
   END IF;
-
   RETURN NEW;
-
 END; $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_articles_publish_guard()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
 DECLARE
-
   uid uuid := auth.uid();
-
   is_admin boolean := private.has_role(auth.uid(), 'admin');
-
 BEGIN
-
   IF NEW.status IN ('published', 'scheduled')
-
      AND NEW.status IS DISTINCT FROM OLD.status THEN
-
     IF NOT is_admin AND NOT private.is_article_publisher(uid) THEN
-
       RAISE EXCEPTION 'only a Communication & Marketing publisher may publish an article';
-
     END IF;
-
     IF NOT is_admin AND NEW.created_by IS NOT NULL AND NEW.created_by = uid THEN
-
       RAISE EXCEPTION 'the creator of an article cannot publish it; another publisher must review it';
-
     END IF;
-
   END IF;
-
   RETURN NEW;
-
 END;
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_articles_single_featured()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
 BEGIN
-
   IF NEW.is_featured THEN
-
     UPDATE public.articles
-
       SET is_featured = false
-
       WHERE is_featured = true
-
         AND id <> NEW.id;
-
   END IF;
-
   RETURN NEW;
-
 END;
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_articles_touch_updated_at()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SET search_path TO 'public'
-
 AS $function$
-
 begin
-
   new.updated_at = now();
-
   return new;
-
 end;
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_directory_profile_eligibility_guard()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SET search_path TO 'public'
-
 AS $function$
-
 BEGIN
-
   IF NEW.visibility = 'published'
-
      AND NOT coalesce(public.member_is_directory_eligible(NEW.member_id), false) THEN
-
     RAISE EXCEPTION 'member % is not directory-eligible (requires active membership and a valid ACC, PCC or MCC credential)', NEW.member_id;
-
   END IF;
-
   RETURN NEW;
-
 END;
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_event_registration_guard()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
 DECLARE
-
   ev public.events%ROWTYPE;
-
   taken integer;
-
 BEGIN
-
   NEW.email = lower(btrim(NEW.email));
-
   NEW.updated_at = now();
 
   -- Cancelling never needs the gate.
-
   IF NEW.status = 'cancelled' THEN
-
     RETURN NEW;
-
   END IF;
-
   IF TG_OP = 'UPDATE' AND OLD.status = 'confirmed' AND NEW.status = 'confirmed' THEN
-
     RETURN NEW;
-
   END IF;
 
   -- FOR UPDATE serialises concurrent RSVPs on the same event, so the last
-
   -- seat cannot be handed out twice.
-
   SELECT * INTO ev FROM public.events WHERE id = NEW.event_id FOR UPDATE;
-
   IF NOT FOUND THEN
-
     RAISE EXCEPTION 'event not found';
-
   END IF;
 
   IF ev.status <> 'published' THEN
-
     RAISE EXCEPTION 'event is not open for registration';
-
   END IF;
-
   IF ev.registration_mode = 'none' THEN
-
     RAISE EXCEPTION 'this event does not take registrations';
-
   END IF;
-
   IF ev.registration_opens_at IS NOT NULL AND now() < ev.registration_opens_at THEN
-
     RAISE EXCEPTION 'registration has not opened yet';
-
   END IF;
-
   IF ev.registration_closes_at IS NOT NULL AND now() > ev.registration_closes_at THEN
-
     RAISE EXCEPTION 'registration has closed';
-
   END IF;
-
   IF ev.registration_closes_at IS NULL AND now() > coalesce(ev.ends_at, ev.starts_at) THEN
-
     RAISE EXCEPTION 'registration has closed';
-
   END IF;
-
   IF NEW.user_id IS NULL AND NOT ev.guest_registration_allowed THEN
-
     RAISE EXCEPTION 'this event requires an account to register';
-
   END IF;
 
   IF ev.capacity IS NOT NULL THEN
-
     SELECT count(*) INTO taken
-
     FROM public.event_registrations r
-
     WHERE r.event_id = NEW.event_id
-
       AND r.status = 'confirmed'
-
       AND (TG_OP = 'INSERT' OR r.id <> NEW.id);
-
     IF taken >= ev.capacity THEN
-
       RAISE EXCEPTION 'event is full';
-
     END IF;
-
   END IF;
 
   RETURN NEW;
-
 END; $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_events_publish_guard()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SET search_path TO 'public'
-
 AS $function$
-
 BEGIN
-
   IF NEW.status = 'published' THEN
-
     IF coalesce(btrim(NEW.title), '') = '' THEN
-
       RAISE EXCEPTION 'a published event needs a title';
-
     END IF;
-
     IF coalesce(btrim(NEW.slug), '') = '' THEN
-
       RAISE EXCEPTION 'a published event needs a slug';
-
     END IF;
-
     IF NEW.starts_at IS NULL THEN
-
       RAISE EXCEPTION 'a published event needs a start time';
-
     END IF;
-
     NEW.published_at = coalesce(NEW.published_at, now());
-
   END IF;
-
   IF NEW.ends_at IS NOT NULL AND NEW.ends_at < NEW.starts_at THEN
-
     RAISE EXCEPTION 'an event cannot end before it starts';
-
   END IF;
-
   IF NEW.registration_closes_at IS NOT NULL
-
      AND NEW.registration_opens_at IS NOT NULL
-
      AND NEW.registration_closes_at < NEW.registration_opens_at THEN
-
     RAISE EXCEPTION 'registration cannot close before it opens';
-
   END IF;
-
   RETURN NEW;
-
 END; $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_events_touch_updated_at()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SET search_path TO 'public'
-
 AS $function$
-
 BEGIN
-
   NEW.updated_at = now();
-
   IF TG_OP = 'UPDATE' AND (
-
        NEW.title IS DISTINCT FROM OLD.title
-
     OR NEW.summary IS DISTINCT FROM OLD.summary
-
     OR NEW.description IS DISTINCT FROM OLD.description
-
   ) THEN
-
     NEW.content_updated_at = now();
-
   END IF;
-
   RETURN NEW;
-
 END; $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_integration_config_guard()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SET search_path TO 'public'
-
 AS $function$
-
 BEGIN
-
   NEW.updated_at = now();
-
   -- TEST mode can never send member email or open account claim.
-
   IF NEW.mode = 'test' THEN
-
     NEW.emails_suppressed = true;
-
     NEW.account_claim_enabled = false;
-
   END IF;
-
   -- Claim only opens after a recorded LIVE cutover.
-
   IF NEW.account_claim_enabled AND (NEW.mode <> 'live' OR NEW.cutover_completed_at IS NULL) THEN
-
     RAISE EXCEPTION 'account_claim_enabled requires live mode and a completed cutover';
-
   END IF;
-
   -- Mode is a one-way door.
-
   IF TG_OP = 'UPDATE' AND OLD.mode = 'live' AND NEW.mode = 'test' THEN
-
     RAISE EXCEPTION 'cannot revert integration mode from live to test';
-
   END IF;
-
   RETURN NEW;
-
 END; $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_member_profile_content_updated_at()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SET search_path TO 'public'
-
 AS $function$
-
 BEGIN
-
   IF NEW.tagline IS DISTINCT FROM OLD.tagline
-
      OR NEW.description IS DISTINCT FROM OLD.description
-
      OR NEW.approach IS DISTINCT FROM OLD.approach
-
      OR NEW.qualifications IS DISTINCT FROM OLD.qualifications
-
      OR NEW.fees_note IS DISTINCT FROM OLD.fees_note
-
      OR NEW.session_length_note IS DISTINCT FROM OLD.session_length_note
-
      OR NEW.availability_note IS DISTINCT FROM OLD.availability_note
-
      OR NEW.response_time_note IS DISTINCT FROM OLD.response_time_note
-
      OR NEW.testimonial_quote IS DISTINCT FROM OLD.testimonial_quote
-
      OR NEW.testimonial_attribution IS DISTINCT FROM OLD.testimonial_attribution
-
      OR NEW.team_bio IS DISTINCT FROM OLD.team_bio
-
      OR NEW.primary_locale IS DISTINCT FROM OLD.primary_locale THEN
-
     NEW.content_updated_at = now();
-
   END IF;
-
   RETURN NEW;
-
 END;
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_op_projects_content_updated_at()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SET search_path TO 'public'
-
 AS $function$
-
 BEGIN
-
   IF NEW.name IS DISTINCT FROM OLD.name
-
      OR NEW.description IS DISTINCT FROM OLD.description
-
      OR NEW.cadence_note IS DISTINCT FROM OLD.cadence_note THEN
-
     NEW.content_updated_at = now();
-
   END IF;
-
   RETURN NEW;
-
 END;
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_op_projects_single_featured_community()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
 BEGIN
-
   IF NEW.is_featured_community AND NOT NEW.is_community THEN
-
     NEW.is_featured_community = false;
-
   END IF;
-
   IF NEW.is_featured_community THEN
-
     UPDATE public.op_projects
-
       SET is_featured_community = false
-
       WHERE is_featured_community = true
-
         AND id <> NEW.id;
-
   END IF;
-
   RETURN NEW;
-
 END;
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_profiles_touch_updated_at()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SET search_path TO 'public'
-
 AS $function$
-
 BEGIN NEW.updated_at = now(); RETURN NEW; END; $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_touch_updated_at()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SET search_path TO 'public'
-
 AS $function$
-
 BEGIN
-
   NEW.updated_at = now();
-
   RETURN NEW;
-
 END;
-
 $function$
-
 ;
 
 CREATE OR REPLACE FUNCTION public.tg_user_roles_audit()
-
  RETURNS trigger
-
  LANGUAGE plpgsql
-
  SECURITY DEFINER
-
  SET search_path TO 'public'
-
 AS $function$
-
 BEGIN
-
   IF TG_OP = 'INSERT' THEN
-
     INSERT INTO public.role_grants (user_id, role, action, actor_user_id)
-
     VALUES (NEW.user_id, NEW.role, 'granted', auth.uid());
-
     RETURN NEW;
-
   ELSE
-
     INSERT INTO public.role_grants (user_id, role, action, actor_user_id)
-
     VALUES (OLD.user_id, OLD.role, 'revoked', auth.uid());
-
     RETURN OLD;
-
   END IF;
-
 END;
-
 $function$
-
 ;
 
 -- ---------------------------------------------------------------------------
--- Tables (630)
+-- Tables (53)
 -- ---------------------------------------------------------------------------
 
 create table if not exists private.app_config (
-
   key text not null,
-
   value text not null,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.api_rate_limits (
-
   bucket text not null,
-
   subject text not null,
-
   hit_at timestamp with time zone not null default now(),
-
   id uuid not null default gen_random_uuid());
 
 create table if not exists public.article_linkedin_posts (
-
   id uuid not null default gen_random_uuid(),
-
   article_id uuid not null,
-
   status linkedin_post_status not null default 'pending'::linkedin_post_status,
-
   linkedin_post_urn text,
-
   linkedin_post_url text,
-
   posted_at timestamp with time zone,
-
   commentary text not null default ''::text,
-
   image_mode text not null default 'feature'::text,
-
   error_message text,
-
   created_by uuid,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now(),
-
   mark_layout jsonb);
 
 create table if not exists public.article_translations (
-
   id uuid not null default gen_random_uuid(),
-
   article_id uuid not null,
-
   locale text not null,
-
   title text not null default ''::text,
-
   excerpt text not null default ''::text,
-
   content text not null default ''::text,
-
   manually_edited boolean not null default false,
-
   source_updated_at timestamp with time zone not null default now(),
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.articles (
-
   id uuid not null default gen_random_uuid(),
-
   author_id uuid not null,
-
   language article_lang not null,
-
   title text not null default ''::text,
-
   excerpt text not null default ''::text,
-
   content text not null default ''::text,
-
   status article_status not null default 'draft'::article_status,
-
   scheduled_at timestamp with time zone,
-
   published_at timestamp with time zone,
-
   first_published_at timestamp with time zone,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now(),
-
   featured_image_url text,
-
   category text,
-
   is_featured boolean not null default false,
-
   category_id uuid,
-
   content_updated_at timestamp with time zone not null default now(),
-
   image_credit_name text,
-
   image_credit_url text,
-
   image_source text,
-
   created_by uuid);
 
 create table if not exists public.categories (
-
   id uuid not null default gen_random_uuid(),
-
   slug text not null,
-
   name text not null,
-
   name_de text,
-
   name_fr text,
-
   name_it text,
-
   sort_order integer not null default 0,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.cf_availability_labels (
-
   id uuid not null default gen_random_uuid(),
-
   slug text not null,
-
   name text not null,
-
   name_de text,
-
   name_fr text,
-
   name_it text,
-
   sort_order integer not null default 0,
-
   is_active boolean not null default true,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.cf_client_types (
-
   id uuid not null default gen_random_uuid(),
-
   slug text not null,
-
   name text not null,
-
   name_de text,
-
   name_fr text,
-
   name_it text,
-
   sort_order integer not null default 0,
-
   is_active boolean not null default true,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.cf_credentials (
-
   id uuid not null default gen_random_uuid(),
-
   slug text not null,
-
   name text not null,
-
   name_de text,
-
   name_fr text,
-
   name_it text,
-
   sort_order integer not null default 0,
-
   is_active boolean not null default true,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.cf_event_categories (
-
   id uuid not null default gen_random_uuid(),
-
   slug text not null,
-
   name text not null,
-
   name_de text,
-
   name_fr text,
-
   name_it text,
-
   sort_order integer not null default 0,
-
   is_active boolean not null default true,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.cf_experience_bands (
-
   id uuid not null default gen_random_uuid(),
-
   slug text not null,
-
   name text not null,
-
   name_de text,
-
   name_fr text,
-
   name_it text,
-
   sort_order integer not null default 0,
-
   is_active boolean not null default true,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.cf_formats (
-
   id uuid not null default gen_random_uuid(),
-
   slug text not null,
-
   name text not null,
-
   name_de text,
-
   name_fr text,
-
   name_it text,
-
   sort_order integer not null default 0,
-
   is_active boolean not null default true,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.cf_languages (
-
   id uuid not null default gen_random_uuid(),
-
   slug text not null,
-
   name text not null,
-
   name_de text,
-
   name_fr text,
-
   name_it text,
-
   sort_order integer not null default 0,
-
   is_active boolean not null default true,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.cf_regions (
-
   id uuid not null default gen_random_uuid(),
-
   slug text not null,
-
   name text not null,
-
   name_de text,
-
   name_fr text,
-
   name_it text,
-
   sort_order integer not null default 0,
-
   is_active boolean not null default true,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.cf_specialisations (
-
   id uuid not null default gen_random_uuid(),
-
   slug text not null,
-
   name text not null,
-
   name_de text,
-
   name_fr text,
-
   name_it text,
-
   sort_order integer not null default 0,
-
   is_active boolean not null default true,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.coach_finder_config (
-
   id boolean not null default true,
-
   coaching_enabled boolean not null default true,
-
   mentoring_enabled boolean not null default false,
-
   supervision_enabled boolean not null default false,
-
   coaching_label text not null default 'Find a coach'::text,
-
   mentoring_label text not null default 'Find a mentor'::text,
-
   supervision_label text not null default 'Find a supervisor'::text,
-
   default_sort text not null default 'name'::text,
-
   page_size integer not null default 24,
-
   feed_drop_threshold_pct integer not null default 30,
-
   snapshot_retention_months integer not null default 24,
-
   csv_export_row_cap integer not null default 5000,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.deck_download_leads (
-
   id uuid not null default gen_random_uuid(),
-
   email text,
-
   locale text not null default 'en'::text,
-
   source text not null default 'for-organisations'::text,
-
   consent boolean not null default false,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.europe_pulse (
-
   id uuid not null default gen_random_uuid(),
-
   run_id uuid,
-
   week_of date not null,
-
   chapter text not null,
-
   country text not null,
-
   country_code text not null,
-
   type pulse_item_type not null default 'news'::pulse_item_type,
-
   title_en text not null,
-
   title_de text,
-
   title_fr text,
-
   title_it text,
-
   description_en text,
-
   description_de text,
-
   description_fr text,
-
   description_it text,
-
   url text not null,
-
   event_date date,
-
   status pulse_item_status not null default 'published'::pulse_item_status,
-
   sort_rank integer not null default 0,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.europe_pulse_chapters (
-
   id uuid not null default gen_random_uuid(),
-
   chapter text not null,
-
   country text not null,
-
   country_code text not null,
-
   base_url text not null,
-
   is_active boolean not null default true,
-
   sort_order integer not null default 0,
-
   last_status text,
-
   last_scanned_at timestamp with time zone,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now(),
-
   consecutive_failures integer not null default 0);
 
 create table if not exists public.europe_pulse_config (
-
   id boolean not null default true,
-
   publish_mode pulse_publish_mode not null default 'automatic'::pulse_publish_mode,
-
   item_cap integer not null default 30,
-
   max_per_chapter integer not null default 2,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.europe_pulse_raw (
-
   id uuid not null default gen_random_uuid(),
-
   run_id uuid not null,
-
   chapter_id uuid,
-
   chapter text not null,
-
   country text not null,
-
   source_urls text[] not null default '{}'::text[],
-
   status text not null default 'ok'::text,
-
   error_message text,
-
   extracted_items jsonb not null default '[]'::jsonb,
-
   scan_date timestamp with time zone not null default now(),
-
   failure_kind text);
 
 create table if not exists public.europe_pulse_runs (
-
   id uuid not null default gen_random_uuid(),
-
   week_of date not null,
-
   status pulse_run_status not null default 'running'::pulse_run_status,
-
   trigger_source text not null default 'manual'::text,
-
   triggered_by uuid,
-
   chapters_total integer not null default 0,
-
   chapters_ok integer not null default 0,
-
   chapters_failed integer not null default 0,
-
   raw_items integer not null default 0,
-
   curated_items integer not null default 0,
-
   error_message text,
-
   started_at timestamp with time zone not null default now(),
-
   finished_at timestamp with time zone,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.event_hosts (
-
   id uuid not null default gen_random_uuid(),
-
   event_id uuid not null,
-
   profile_id uuid not null,
-
   sort_order integer not null default 0,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.event_registrations (
-
   id uuid not null default gen_random_uuid(),
-
   event_id uuid not null,
-
   user_id uuid,
-
   email text not null,
-
   full_name text not null,
-
   status event_registration_status not null default 'confirmed'::event_registration_status,
-
   notes text,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.event_translations (
-
   id uuid not null default gen_random_uuid(),
-
   event_id uuid not null,
-
   locale text not null,
-
   title text not null,
-
   summary text,
-
   description text,
-
   manually_edited boolean not null default false,
-
   source_updated_at timestamp with time zone not null default now(),
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.events (
-
   id uuid not null default gen_random_uuid(),
-
   slug text not null,
-
   title text not null,
-
   summary text,
-
   description text,
-
   language article_lang not null default 'en'::article_lang,
-
   image_url text,
-
   image_credit_name text,
-
   image_credit_url text,
-
   starts_at timestamp with time zone not null,
-
   ends_at timestamp with time zone,
-
   timezone text not null default 'Europe/Zurich'::text,
-
   location_mode event_location_mode not null default 'in_person'::event_location_mode,
-
   venue_name text,
-
   city text,
-
   online_url text,
-
   status event_status not null default 'draft'::event_status,
-
   published_at timestamp with time zone,
-
   is_featured boolean not null default false,
-
   registration_mode event_registration_mode not null default 'rsvp'::event_registration_mode,
-
   capacity integer,
-
   registration_opens_at timestamp with time zone,
-
   registration_closes_at timestamp with time zone,
-
   guest_registration_allowed boolean not null default true,
-
   organizer_id uuid,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now(),
-
   content_updated_at timestamp with time zone not null default now(),
-
   category_id uuid,
-
   region_id uuid,
-
   community_id uuid,
-
   series_id uuid,
-
   recurrence jsonb,
-
   map_location text);
 
 create table if not exists public.governance_documents (
-
   id uuid not null default gen_random_uuid(),
-
   title text not null,
-
   description text,
-
   category text not null default 'other'::text,
-
   year integer,
-
   language article_lang not null default 'en'::article_lang,
-
   file_path text,
-
   external_url text,
-
   file_size_bytes bigint,
-
   mime_type text,
-
   is_published boolean not null default false,
-
   sort_order integer not null default 0,
-
   document_date date,
-
   created_by uuid,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.integration_config (
-
   id boolean not null default true,
-
   mode integration_mode not null default 'test'::integration_mode,
-
   soap_endpoint_key text not null default 'test'::text,
-
   emails_suppressed boolean not null default true,
-
   email_redirect_to text,
-
   account_claim_enabled boolean not null default false,
-
   cutover_in_progress boolean not null default false,
-
   cutover_completed_at timestamp with time zone,
-
   cutover_completed_by uuid,
-
   last_successful_sync_at timestamp with time zone,
-
   last_failed_sync_at timestamp with time zone,
-
   last_sync_error text,
-
   last_sync_run_id uuid,
-
   feed_drop_threshold_pct integer not null default 30,
-
   grace_period_days integer not null default 60,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.linkedin_config (
-
   id boolean not null default true,
-
   organization_urn text,
-
   organization_name text,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.member_archive_snapshots (
-
   id uuid not null default gen_random_uuid(),
-
   label text not null,
-
   reason text not null default 'test_to_live_cutover'::text,
-
   taken_by uuid,
-
   table_counts jsonb not null default '{}'::jsonb,
-
   payload jsonb not null,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.member_directory_profiles (
-
   id uuid not null default gen_random_uuid(),
-
   member_id uuid not null,
-
   visibility member_visibility not null default 'draft'::member_visibility,
-
   tagline text,
-
   description text,
-
   website_url text,
-
   linkedin_url text,
-
   profile_image_path text,
-
   availability_slug text,
-
   coaching_available boolean not null default true,
-
   mentor_accredited boolean not null default false,
-
   mentoring_available boolean not null default false,
-
   supervision_accredited boolean not null default false,
-
   supervision_available boolean not null default false,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now(),
-
   booking_url text,
-
   contact_email_public boolean not null default false,
-
   response_time_note text,
-
   approach text,
-
   qualifications text,
-
   experience_band text,
-
   session_length_note text,
-
   fees_note text,
-
   availability_note text,
-
   testimonial_quote text,
-
   testimonial_attribution text,
-
   primary_locale text not null default 'en'::text,
-
   content_updated_at timestamp with time zone not null default now(),
-
   team_bio text);
 
 create table if not exists public.member_email_log (
-
   id uuid not null default gen_random_uuid(),
-
   member_id uuid,
-
   intended_recipient text not null,
-
   actual_recipient text,
-
   template_key text not null,
-
   status text not null,
-
   mode integration_mode not null,
-
   error_message text,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.member_import_snapshots (
-
   id uuid not null default gen_random_uuid(),
-
   sync_run_id uuid not null,
-
   member_id uuid,
-
   cst_recno text not null,
-
   normalized_payload jsonb not null,
-
   changed_fields text[] not null default '{}'::text[],
-
   created_at timestamp with time zone not null default now(),
-
   change_kind text not null default 'updated'::text);
 
 create table if not exists public.member_lifecycle_queue (
-
   id uuid not null default gen_random_uuid(),
-
   member_id uuid not null,
-
   entered_grace_at timestamp with time zone not null default now(),
-
   scheduled_deletion_at timestamp with time zone not null,
-
   notified_at timestamp with time zone,
-
   resolved_at timestamp with time zone,
-
   resolution text,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.member_profile_client_types (
-
   profile_id uuid not null,
-
   client_type_id uuid not null,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.member_profile_formats (
-
   profile_id uuid not null,
-
   format_id uuid not null,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.member_profile_languages (
-
   profile_id uuid not null,
-
   language_id uuid not null,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.member_profile_links (
-
   id uuid not null default gen_random_uuid(),
-
   member_id uuid not null,
-
   email text not null,
-
   status text not null default 'pending'::text,
-
   requested_at timestamp with time zone not null default now(),
-
   completed_at timestamp with time zone,
-
   expires_at timestamp with time zone,
-
   created_at timestamp with time zone not null default now(),
-
   token_hash text,
-
   consumed_at timestamp with time zone,
-
   attempts integer not null default 0,
-
   last_attempt_at timestamp with time zone);
 
 create table if not exists public.member_profile_regions (
-
   profile_id uuid not null,
-
   region_id uuid not null,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.member_profile_specialisations (
-
   profile_id uuid not null,
-
   specialisation_id uuid not null,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.member_profile_translations (
-
   id uuid not null default gen_random_uuid(),
-
   profile_id uuid not null,
-
   locale text not null,
-
   tagline text,
-
   description text,
-
   approach text,
-
   qualifications text,
-
   fees_note text,
-
   session_length_note text,
-
   availability_note text,
-
   response_time_note text,
-
   testimonial_quote text,
-
   testimonial_attribution text,
-
   manually_edited boolean not null default false,
-
   is_ready boolean not null default false,
-
   source_updated_at timestamp with time zone not null default now(),
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now(),
-
   team_bio text);
 
 create table if not exists public.member_profile_websites (
-
   id uuid not null default gen_random_uuid(),
-
   profile_id uuid not null,
-
   link_type text not null default 'website'::text,
-
   label text,
-
   url text not null,
-
   sort_order integer not null default 0,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.member_sync_events (
-
   id uuid not null default gen_random_uuid(),
-
   sync_run_id uuid,
-
   member_id uuid,
-
   cst_recno text,
-
   event_type text not null,
-
   severity text not null default 'info'::text,
-
   message text,
-
   actor_user_id uuid,
-
   details jsonb not null default '{}'::jsonb,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.member_sync_runs (
-
   id uuid not null default gen_random_uuid(),
-
   mode integration_mode not null,
-
   status sync_run_status not null default 'running'::sync_run_status,
-
   triggered_by uuid,
-
   trigger_source text not null default 'cron'::text,
-
   started_at timestamp with time zone not null default now(),
-
   finished_at timestamp with time zone,
-
   feed_member_count integer,
-
   created_count integer not null default 0,
-
   updated_count integer not null default 0,
-
   deactivated_count integer not null default 0,
-
   error_message text,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.members (
-
   id uuid not null default gen_random_uuid(),
-
   cst_recno text not null,
-
   first_name text,
-
   last_name text,
-
   full_name text,
-
   email text,
-
   phone text,
-
   city text,
-
   country text,
-
   organisation text,
-
   credential_slug text,
-
   member_type text,
-
   membership_join_date date,
-
   membership_expiration_date date,
-
   activity_state member_activity_state not null default 'active'::member_activity_state,
-
   inactive_since timestamp with time zone,
-
   scheduled_deletion_at timestamp with time zone,
-
   anonymized_at timestamp with time zone,
-
   auth_user_id uuid,
-
   last_synced_at timestamp with time zone,
-
   last_sync_run_id uuid,
-
   diagnostics jsonb not null default '{}'::jsonb,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now(),
-
   credential_awarded_on date,
-
   credential_expires_on date);
 
 create table if not exists public.op_assignments (
-
   id uuid not null default gen_random_uuid(),
-
   member_id uuid not null,
-
   project_id uuid not null,
-
   role_id uuid not null,
-
   sort_order integer not null default 0,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.op_project_regions (
-
   project_id uuid not null,
-
   region_id uuid not null,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.op_project_roles (
-
   id uuid not null default gen_random_uuid(),
-
   project_id uuid not null,
-
   slug text not null,
-
   name text not null,
-
   name_de text,
-
   name_fr text,
-
   name_it text,
-
   sort_order integer not null default 0,
-
   is_active boolean not null default true,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.op_projects (
-
   id uuid not null default gen_random_uuid(),
-
   slug text not null,
-
   name text not null,
-
   name_de text,
-
   name_fr text,
-
   name_it text,
-
   sort_order integer not null default 0,
-
   is_active boolean not null default true,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now(),
-
   is_community boolean not null default false,
-
   is_featured_community boolean not null default false,
-
   description text,
-
   description_de text,
-
   description_fr text,
-
   description_it text,
-
   cadence_note text,
-
   cadence_note_de text,
-
   cadence_note_fr text,
-
   cadence_note_it text,
-
   contact_email text,
-
   signup_url text,
-
   language_slugs text[] not null default '{}'::text[],
-
   content_updated_at timestamp with time zone not null default now(),
-
-  public_contact_email text default
-
+  public_contact_email text default 
 CASE
-
     WHEN is_community THEN contact_email
-
     ELSE NULL::text
-
 END);
 
 create table if not exists public.organisation_survey_responses (
-
   id uuid not null default gen_random_uuid(),
-
   locale text not null default 'en'::text,
-
   primary_pressure text,
-
   answers jsonb not null default '{}'::jsonb,
-
   dimension_scores jsonb not null default '{}'::jsonb,
-
   total_score integer,
-
   maturity_band text,
-
   contact_name text,
-
   contact_email text,
-
   contact_organisation text,
-
   message text,
-
   consent boolean not null default false,
-
   source text not null default 'for-organisations'::text,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.profiles (
-
   id uuid not null,
-
   first_name text not null default ''::text,
-
   last_name text not null default ''::text,
-
   created_at timestamp with time zone not null default now(),
-
   updated_at timestamp with time zone not null default now());
 
 create table if not exists public.role_grants (
-
   id uuid not null default gen_random_uuid(),
-
   user_id uuid not null,
-
   role app_role not null,
-
   action text not null,
-
   actor_user_id uuid,
-
   created_at timestamp with time zone not null default now());
 
 create table if not exists public.user_roles (
-
   id uuid not null default gen_random_uuid(),
-
   user_id uuid not null,
-
   role app_role not null,
-
   created_at timestamp with time zone not null default now());
 
 -- ---------------------------------------------------------------------------
@@ -2812,331 +1722,173 @@ CREATE INDEX op_project_regions_region_idx ON public.op_project_regions USING bt
 CREATE INDEX role_grants_user_id_created_at_idx ON public.role_grants USING btree (user_id, created_at DESC);
 
 -- ---------------------------------------------------------------------------
--- Views (162)
+-- Views (4)
 -- ---------------------------------------------------------------------------
 
 create or replace view public.coach_directory_public with (security_invoker=on) as
-
  SELECT p.id AS profile_id,
-
     m.id AS member_id,
-
     m.full_name,
-
     m.city,
-
     m.country,
-
     m.organisation,
-
     upper(m.credential_slug) AS credential_slug,
-
     m.credential_awarded_on,
-
     p.tagline,
-
     p.description,
-
     p.website_url,
-
     p.linkedin_url,
-
     p.profile_image_path,
-
     p.availability_slug,
-
     p.coaching_available,
-
     p.mentor_accredited,
-
     p.mentoring_available,
-
     p.supervision_accredited,
-
     p.supervision_available,
-
     p.booking_url,
-
     p.response_time_note,
-
     p.approach,
-
     p.qualifications,
-
     p.experience_band,
-
     p.session_length_note,
-
     p.fees_note,
-
     p.availability_note,
-
     p.testimonial_quote,
-
     p.testimonial_attribution,
-
     p.primary_locale,
-
     COALESCE(( SELECT jsonb_object_agg(t.locale, jsonb_build_object('tagline', t.tagline, 'description', t.description, 'approach', t.approach, 'qualifications', t.qualifications, 'fees_note', t.fees_note, 'session_length_note', t.session_length_note, 'availability_note', t.availability_note, 'response_time_note', t.response_time_note, 'testimonial_quote', t.testimonial_quote, 'testimonial_attribution', t.testimonial_attribution)) AS jsonb_object_agg
-
            FROM member_profile_translations t
-
           WHERE t.profile_id = p.id AND t.is_ready), '{}'::jsonb) AS translations,
-
     private.directory_contact_email(p.id) AS contact_email,
-
     array_remove(ARRAY[
-
         CASE
-
             WHEN p.coaching_available THEN 'coaching'::text
-
             ELSE NULL::text
-
         END,
-
         CASE
-
             WHEN p.mentoring_available THEN 'mentoring'::text
-
             ELSE NULL::text
-
         END,
-
         CASE
-
             WHEN p.supervision_available THEN 'supervision'::text
-
             ELSE NULL::text
-
         END], NULL::text) AS services,
-
     COALESCE(( SELECT array_agg(r.slug ORDER BY r.sort_order) AS array_agg
-
            FROM member_profile_regions mpr
-
              JOIN cf_regions r ON r.id = mpr.region_id
-
           WHERE mpr.profile_id = p.id), '{}'::text[]) AS region_slugs,
-
     COALESCE(( SELECT array_agg(l.slug ORDER BY l.sort_order) AS array_agg
-
            FROM member_profile_languages mpl
-
              JOIN cf_languages l ON l.id = mpl.language_id
-
           WHERE mpl.profile_id = p.id), '{}'::text[]) AS language_slugs,
-
     COALESCE(( SELECT array_agg(s.slug ORDER BY s.sort_order) AS array_agg
-
            FROM member_profile_specialisations mps
-
              JOIN cf_specialisations s ON s.id = mps.specialisation_id
-
           WHERE mps.profile_id = p.id), '{}'::text[]) AS specialisation_slugs,
-
     COALESCE(( SELECT array_agg(f.slug ORDER BY f.sort_order) AS array_agg
-
            FROM member_profile_formats mpf
-
              JOIN cf_formats f ON f.id = mpf.format_id
-
           WHERE mpf.profile_id = p.id), '{}'::text[]) AS format_slugs,
-
     COALESCE(( SELECT array_agg(ct.slug ORDER BY ct.sort_order) AS array_agg
-
            FROM member_profile_client_types mpc
-
              JOIN cf_client_types ct ON ct.id = mpc.client_type_id
-
           WHERE mpc.profile_id = p.id), '{}'::text[]) AS client_type_slugs,
-
     true AS is_active_member,
-
     true AS has_directory_credential,
-
     true AS is_directory_eligible,
-
     true AS is_directory_visible,
-
     p.updated_at
-
    FROM member_directory_profiles p
-
      JOIN members m ON m.id = p.member_id
-
   WHERE p.visibility = 'published'::member_visibility AND member_is_active(m.activity_state) AND member_has_directory_credential(m.credential_slug, m.credential_expires_on);
 
 create or replace view public.events_public with (security_invoker=on) as
-
  SELECT e.id,
-
     e.slug,
-
     e.title,
-
     e.summary,
-
     e.description,
-
     e.language,
-
     e.image_url,
-
     e.image_credit_name,
-
     e.image_credit_url,
-
     e.starts_at,
-
     e.ends_at,
-
     e.timezone,
-
     e.location_mode,
-
     e.venue_name,
-
     e.city,
-
     e.online_url,
-
     e.is_featured,
-
     e.registration_mode,
-
     e.capacity,
-
     e.guest_registration_allowed,
-
     e.registration_opens_at,
-
     e.registration_closes_at,
-
     private.event_confirmed_count(e.id) AS registration_count,
-
         CASE
-
             WHEN e.capacity IS NULL THEN NULL::integer
-
             ELSE GREATEST(e.capacity - private.event_confirmed_count(e.id), 0)
-
         END AS seats_remaining,
-
     e.capacity IS NOT NULL AND private.event_confirmed_count(e.id) >= e.capacity AS is_full,
-
     e.registration_mode = 'rsvp'::event_registration_mode AND (e.registration_opens_at IS NULL OR now() >= e.registration_opens_at) AND
-
         CASE
-
             WHEN e.registration_closes_at IS NOT NULL THEN now() <= e.registration_closes_at
-
             ELSE now() <= COALESCE(e.ends_at, e.starts_at)
-
         END AND (e.capacity IS NULL OR private.event_confirmed_count(e.id) < e.capacity) AS registration_open,
-
     c.slug AS category_slug,
-
     c.name AS category_name,
-
     r.slug AS region_slug,
-
     r.name AS region_name,
-
     e.published_at,
-
     e.updated_at,
-
     e.map_location,
-
     com.id AS community_id,
-
     com.slug AS community_slug,
-
     com.name AS community_name
-
    FROM events e
-
      LEFT JOIN cf_event_categories c ON c.id = e.category_id
-
      LEFT JOIN cf_regions r ON r.id = e.region_id
-
      LEFT JOIN op_projects com ON com.id = e.community_id AND com.is_community
-
   WHERE e.status = 'published'::event_status;
 
 create or replace view public.team_directory_public with (security_invoker=on) as
-
  SELECT profile_id,
-
     member_id,
-
     full_name,
-
     profile_image_path,
-
     team_bio,
-
     primary_locale,
-
     linkedin_url,
-
     contact_email,
-
     public_coach_profile_id,
-
     translations,
-
     assignments,
-
     primary_sort_order
-
    FROM private.team_directory_rows() team_directory_rows(profile_id, member_id, full_name, profile_image_path, team_bio, primary_locale, linkedin_url, contact_email, public_coach_profile_id, translations, assignments, primary_sort_order);
 
 create or replace view public.team_projects_public with (security_invoker=on) as
-
  SELECT id,
-
     slug,
-
     name,
-
     name_de,
-
     name_fr,
-
     name_it,
-
     sort_order,
-
     is_community,
-
     is_featured_community,
-
     description,
-
     description_de,
-
     description_fr,
-
     description_it,
-
     cadence_note,
-
     cadence_note_de,
-
     cadence_note_fr,
-
     cadence_note_it,
-
     public_contact_email AS contact_email,
-
     signup_url,
-
     language_slugs
-
    FROM op_projects
-
   WHERE is_active;
 
 -- ---------------------------------------------------------------------------
@@ -3336,7 +2088,7 @@ alter table public.role_grants enable row level security;
 alter table public.user_roles enable row level security;
 
 -- ---------------------------------------------------------------------------
--- Policies (203)
+-- Policies (131)
 -- ---------------------------------------------------------------------------
 
 create policy "rate limits are staff-readable" on public.api_rate_limits as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check ();
@@ -3344,41 +2096,27 @@ create policy "rate limits are staff-readable" on public.api_rate_limits as perm
 create policy "staff read linkedin posts" on public.article_linkedin_posts as permissive for select to authenticated using ((private.has_role(auth.uid(), 'admin'::app_role) OR private.has_role(auth.uid(), 'editor'::app_role) OR private.has_role(auth.uid(), 'publisher'::app_role))) with check ();
 
 create policy "translations author or editor delete" on public.article_translations as permissive for delete to authenticated using ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE ((a.id = article_translations.article_id) AND (a.author_id = auth.uid())))))) with check ();
 
 create policy "translations author or editor insert" on public.article_translations as permissive for insert to authenticated using () with check ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE ((a.id = article_translations.article_id) AND (a.author_id = auth.uid()))))));
 
 create policy "translations author or editor read" on public.article_translations as permissive for select to authenticated using ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE ((a.id = article_translations.article_id) AND (a.author_id = auth.uid())))) OR (EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE ((a.id = article_translations.article_id) AND (a.status = 'published'::article_status)))))) with check ();
 
 create policy "translations author or editor update" on public.article_translations as permissive for update to authenticated using ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE ((a.id = article_translations.article_id) AND (a.author_id = auth.uid())))))) with check ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE ((a.id = article_translations.article_id) AND (a.author_id = auth.uid()))))));
 
 create policy "translations public read published" on public.article_translations as permissive for select to anon using ((EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE ((a.id = article_translations.article_id) AND (a.status = 'published'::article_status))))) with check ();
 
 create policy "editors manage all articles" on public.articles as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
@@ -3474,23 +2212,15 @@ create policy "Admins read runs" on public.europe_pulse_runs as permissive for s
 create policy "editors manage event hosts" on public.event_hosts as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
 
 create policy "organizers manage hosts of own events" on public.event_hosts as permissive for all to authenticated using ((EXISTS ( SELECT 1
-
    FROM events e
-
   WHERE ((e.id = event_hosts.event_id) AND (e.organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role))))) with check ((EXISTS ( SELECT 1
-
    FROM events e
-
   WHERE ((e.id = event_hosts.event_id) AND (e.organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role)))));
 
 create policy "public read event hosts" on public.event_hosts as permissive for select to anon, authenticated using (((EXISTS ( SELECT 1
-
    FROM events e
-
   WHERE ((e.id = event_hosts.event_id) AND (e.status = 'published'::event_status)))) AND (EXISTS ( SELECT 1
-
    FROM member_directory_profiles p
-
   WHERE ((p.id = event_hosts.profile_id) AND (p.visibility = 'published'::member_visibility)))))) with check ();
 
 create policy "cancel own registrations" on public.event_registrations as permissive for update to authenticated using ((user_id = auth.uid())) with check ((user_id = auth.uid()));
@@ -3506,41 +2236,27 @@ create policy "read own registrations" on public.event_registrations as permissi
 create policy "signed-in submit own registrations" on public.event_registrations as permissive for insert to authenticated using () with check (((user_id = auth.uid()) AND (status = 'confirmed'::event_registration_status)));
 
 create policy "event translations manager delete" on public.event_translations as permissive for delete to authenticated using ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
-
    FROM events e
-
   WHERE ((e.id = event_translations.event_id) AND (e.organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role)))))) with check ();
 
 create policy "event translations manager insert" on public.event_translations as permissive for insert to authenticated using () with check ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
-
    FROM events e
-
   WHERE ((e.id = event_translations.event_id) AND (e.organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role))))));
 
 create policy "event translations manager read" on public.event_translations as permissive for select to authenticated using ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
-
    FROM events e
-
   WHERE ((e.id = event_translations.event_id) AND (e.organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role)))) OR (EXISTS ( SELECT 1
-
    FROM events e
-
   WHERE ((e.id = event_translations.event_id) AND (e.status = 'published'::event_status)))))) with check ();
 
 create policy "event translations manager update" on public.event_translations as permissive for update to authenticated using ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
-
    FROM events e
-
   WHERE ((e.id = event_translations.event_id) AND (e.organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role)))))) with check ((private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
-
    FROM events e
-
   WHERE ((e.id = event_translations.event_id) AND (e.organizer_id = auth.uid()) AND private.has_role(auth.uid(), 'organizer'::app_role))))));
 
 create policy "event translations public read published" on public.event_translations as permissive for select to anon using ((EXISTS ( SELECT 1
-
    FROM events e
-
   WHERE ((e.id = event_translations.event_id) AND (e.status = 'published'::event_status))))) with check ();
 
 create policy "editors manage all events" on public.events as permissive for all to authenticated using (private.is_editor(auth.uid())) with check (private.is_editor(auth.uid()));
@@ -3582,43 +2298,31 @@ create policy "Staff can read import snapshots" on public.member_import_snapshot
 create policy "Staff can read lifecycle queue" on public.member_lifecycle_queue as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
 
 create policy "Public can read client types of published profiles" on public.member_profile_client_types as permissive for select to anon using ((EXISTS ( SELECT 1
-
    FROM member_directory_profiles p
-
   WHERE ((p.id = member_profile_client_types.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
 
 create policy "Signed-in visitors read client types of published profiles" on public.member_profile_client_types as permissive for select to authenticated using ((EXISTS ( SELECT 1
-
    FROM member_directory_profiles p
-
   WHERE ((p.id = member_profile_client_types.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
 
 create policy "Staff can read profile client types" on public.member_profile_client_types as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
 
 create policy "Public can read formats of published profiles" on public.member_profile_formats as permissive for select to anon using ((EXISTS ( SELECT 1
-
    FROM member_directory_profiles p
-
   WHERE ((p.id = member_profile_formats.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
 
 create policy "Signed-in visitors read formats of published profiles" on public.member_profile_formats as permissive for select to authenticated using ((EXISTS ( SELECT 1
-
    FROM member_directory_profiles p
-
   WHERE ((p.id = member_profile_formats.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
 
 create policy "Staff can read profile formats" on public.member_profile_formats as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
 
 create policy "Public can read languages of published profiles" on public.member_profile_languages as permissive for select to anon using ((EXISTS ( SELECT 1
-
    FROM member_directory_profiles p
-
   WHERE ((p.id = member_profile_languages.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
 
 create policy "Signed-in visitors read languages of published profiles" on public.member_profile_languages as permissive for select to authenticated using ((EXISTS ( SELECT 1
-
    FROM member_directory_profiles p
-
   WHERE ((p.id = member_profile_languages.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
 
 create policy "Staff can read profile languages" on public.member_profile_languages as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
@@ -3626,29 +2330,21 @@ create policy "Staff can read profile languages" on public.member_profile_langua
 create policy "Admins can read claim links" on public.member_profile_links as permissive for select to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check ();
 
 create policy "Public can read regions of published profiles" on public.member_profile_regions as permissive for select to anon using ((EXISTS ( SELECT 1
-
    FROM member_directory_profiles p
-
   WHERE ((p.id = member_profile_regions.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
 
 create policy "Signed-in visitors read regions of published profiles" on public.member_profile_regions as permissive for select to authenticated using ((EXISTS ( SELECT 1
-
    FROM member_directory_profiles p
-
   WHERE ((p.id = member_profile_regions.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
 
 create policy "Staff can read profile regions" on public.member_profile_regions as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
 
 create policy "Public can read specialisations of published profiles" on public.member_profile_specialisations as permissive for select to anon using ((EXISTS ( SELECT 1
-
    FROM member_directory_profiles p
-
   WHERE ((p.id = member_profile_specialisations.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
 
 create policy "Signed-in visitors read specialisations of published profiles" on public.member_profile_specialisations as permissive for select to authenticated using ((EXISTS ( SELECT 1
-
    FROM member_directory_profiles p
-
   WHERE ((p.id = member_profile_specialisations.profile_id) AND (p.visibility = 'published'::member_visibility))))) with check ();
 
 create policy "Staff can read profile specialisations" on public.member_profile_specialisations as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
@@ -3670,15 +2366,11 @@ create policy "Staff can read sync events" on public.member_sync_events as permi
 create policy "Staff can read sync runs" on public.member_sync_runs as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
 
 create policy "Public can read directory-listed members" on public.members as permissive for select to anon using ((member_is_active(activity_state) AND member_has_directory_credential(credential_slug, credential_expires_on) AND (EXISTS ( SELECT 1
-
    FROM member_directory_profiles p
-
   WHERE ((p.member_id = members.id) AND (p.visibility = 'published'::member_visibility)))))) with check ();
 
 create policy "Signed-in visitors read directory-listed members" on public.members as permissive for select to authenticated using ((member_is_active(activity_state) AND member_has_directory_credential(credential_slug, credential_expires_on) AND (EXISTS ( SELECT 1
-
    FROM member_directory_profiles p
-
   WHERE ((p.member_id = members.id) AND (p.visibility = 'published'::member_visibility)))))) with check ();
 
 create policy "Staff can read members" on public.members as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
@@ -3686,29 +2378,21 @@ create policy "Staff can read members" on public.members as permissive for selec
 create policy "Admins manage assignments" on public.op_assignments as permissive for all to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check (private.has_role(auth.uid(), 'admin'::app_role));
 
 create policy "Public can read assignments" on public.op_assignments as permissive for select to anon, authenticated using (((EXISTS ( SELECT 1
-
    FROM op_projects p
-
   WHERE ((p.id = op_assignments.project_id) AND p.is_active))) AND (EXISTS ( SELECT 1
-
    FROM op_project_roles r
-
   WHERE ((r.id = op_assignments.role_id) AND r.is_active))))) with check ();
 
 create policy "Admins manage project regions" on public.op_project_regions as permissive for all to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check (private.has_role(auth.uid(), 'admin'::app_role));
 
 create policy "Public can read project regions" on public.op_project_regions as permissive for select to anon, authenticated using ((EXISTS ( SELECT 1
-
    FROM op_projects p
-
   WHERE ((p.id = op_project_regions.project_id) AND p.is_active)))) with check ();
 
 create policy "Admins manage project roles" on public.op_project_roles as permissive for all to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check (private.has_role(auth.uid(), 'admin'::app_role));
 
 create policy "Public can read project roles" on public.op_project_roles as permissive for select to anon, authenticated using ((is_active AND (EXISTS ( SELECT 1
-
    FROM op_projects p
-
   WHERE ((p.id = op_project_roles.project_id) AND p.is_active))))) with check ();
 
 create policy "Admins manage projects" on public.op_projects as permissive for all to authenticated using (private.has_role(auth.uid(), 'admin'::app_role)) with check (private.has_role(auth.uid(), 'admin'::app_role));
@@ -3720,17 +2404,13 @@ create policy "Anyone can submit a valid survey response" on public.organisation
 create policy "Editors and admins can read survey responses" on public.organisation_survey_responses as permissive for select to authenticated using (private.is_editor(auth.uid())) with check ();
 
 create policy "profiles authenticated read scoped" on public.profiles as permissive for select to authenticated using (((auth.uid() = id) OR private.is_editor(auth.uid()) OR (EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE ((a.author_id = profiles.id) AND (a.status = 'published'::article_status)))))) with check ();
 
 create policy "profiles insert own" on public.profiles as permissive for insert to authenticated using () with check ((auth.uid() = id));
 
 create policy "profiles public read published authors" on public.profiles as permissive for select to anon using ((EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE ((a.author_id = profiles.id) AND (a.status = 'published'::article_status))))) with check ();
 
 create policy "profiles update own" on public.profiles as permissive for update to authenticated using ((auth.uid() = id)) with check ((auth.uid() = id));
@@ -4124,57 +2804,39 @@ insert into storage.buckets (id, name, public) values ('governance-documents', '
 insert into storage.buckets (id, name, public) values ('member-profile-images', 'member-profile-images', 'f') on conflict (id) do nothing;
 
 -- ---------------------------------------------------------------------------
--- Storage policies (26)
+-- Storage policies (8)
 -- ---------------------------------------------------------------------------
 
 create policy "Article images readable when published" on storage.objects as permissive for select to anon, authenticated using (((bucket_id = 'article-images'::text) AND (EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE (((a.id)::text = (storage.foldername(objects.name))[1]) AND (a.status = 'published'::article_status)))))) with check ();
 
 create policy "Authors and editors can read their article images" on storage.objects as permissive for select to authenticated using (((bucket_id = 'article-images'::text) AND ((EXISTS ( SELECT 1
-
    FROM user_roles ur
-
   WHERE ((ur.user_id = auth.uid()) AND (ur.role = ANY (ARRAY['admin'::app_role, 'editor'::app_role]))))) OR (EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE (((a.id)::text = (storage.foldername(objects.name))[1]) AND (a.author_id = auth.uid()))))))) with check ();
 
 create policy "Authors can delete images for their own articles" on storage.objects as permissive for delete to authenticated using (((bucket_id = 'article-images'::text) AND (EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE ((a.author_id = auth.uid()) AND ((a.id)::text = (storage.foldername(objects.name))[1])))))) with check ();
 
 create policy "Authors can update images for their own articles" on storage.objects as permissive for update to authenticated using (((bucket_id = 'article-images'::text) AND (EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE ((a.author_id = auth.uid()) AND ((a.id)::text = (storage.foldername(objects.name))[1])))))) with check (((bucket_id = 'article-images'::text) AND (EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE ((a.author_id = auth.uid()) AND ((a.id)::text = (storage.foldername(objects.name))[1]))))));
 
 create policy "Authors can upload images for their own articles" on storage.objects as permissive for insert to authenticated using () with check (((bucket_id = 'article-images'::text) AND (EXISTS ( SELECT 1
-
    FROM articles a
-
   WHERE ((a.author_id = auth.uid()) AND ((a.id)::text = (storage.foldername(objects.name))[1]))))));
 
 create policy "Members manage their own profile image" on storage.objects as permissive for all to authenticated using (((bucket_id = 'member-profile-images'::text) AND private.member_owns_storage_folder((storage.foldername(name))[1]))) with check (((bucket_id = 'member-profile-images'::text) AND private.member_owns_storage_folder((storage.foldername(name))[1])));
 
 create policy "Staff manage member profile images" on storage.objects as permissive for all to authenticated using (((bucket_id = 'member-profile-images'::text) AND (EXISTS ( SELECT 1
-
    FROM user_roles ur
-
   WHERE ((ur.user_id = auth.uid()) AND (ur.role = ANY (ARRAY['admin'::app_role, 'editor'::app_role]))))))) with check (((bucket_id = 'member-profile-images'::text) AND (EXISTS ( SELECT 1
-
    FROM user_roles ur
-
   WHERE ((ur.user_id = auth.uid()) AND (ur.role = ANY (ARRAY['admin'::app_role, 'editor'::app_role])))))));
 
 create policy "governance documents editors manage" on storage.objects as permissive for all to authenticated using (((bucket_id = 'governance-documents'::text) AND private.is_editor(auth.uid()))) with check (((bucket_id = 'governance-documents'::text) AND private.is_editor(auth.uid())));
