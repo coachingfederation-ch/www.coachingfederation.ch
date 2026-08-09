@@ -237,6 +237,19 @@ The public site is untouched throughout. This is a data event on `new.` only.
    bundle out of the database**. It is written into the same database that is
    about to be purged, so it is not a backup until it is stored somewhere else,
    durable and access-controlled. Do not proceed without it.
+3a. Generate the schema baseline while the schema is final and no LIVE member
+    data exists yet — this is the only moment where "the shape of the database"
+    and "nothing personal in it" are true at the same time:
+
+    ```
+    bun run baseline:write    # writes supabase/baseline/<stamp>_baseline.sql
+    bun run baseline:verify   # replays it onto a scratch Postgres, must print OK
+    ```
+
+    Commit both the SQL file and `MANIFEST.json`. The baseline is a derived
+    recovery and documentation artifact: schema, RLS, grants and storage
+    buckets, no rows. The migration history under `supabase/migrations/` stays
+    authoritative and is not squashed or moved.
 4. Execute the cutover. `runCutover` performs, in order: preflight → archive →
    freeze → purge → switch `mode` to `live` → first LIVE import → validate →
    record `cutover_completed_at`. Capture the full step log.
@@ -244,6 +257,9 @@ The public site is untouched throughout. This is a data event on `new.` only.
    against the ICF portal, staff accounts land correctly, CMS content intact,
    `emails_suppressed` still true and `account_claim_enabled` still false.
    Smoke-test `/find-a-coach` in all four locales.
+6. Run `bun run baseline:check` after the cutover completes. It must report no
+    drift: the cutover moves data, never schema. Drift here means something
+    changed the structure mid-flight and needs explaining before Gate 2.
 
 Every TEST binding is gone afterwards. The admin test account is staff-only
 again and re-claims through the live flow like any other member.
@@ -255,6 +271,7 @@ again and re-claims through the live flow like any other member.
 | Cutover step log clean, `cutover_completed_at` recorded |        |
 | Member counts verified, credentialed ceiling recorded   |        |
 | Archive bundle stored off-database                      |        |
+| Schema baseline committed, replay verified, no drift    |        |
 | One nightly sync completed successfully against LIVE    |        |
 | Bubble member area confirmed read-only and silent       |        |
 
