@@ -272,6 +272,9 @@ const HEADER = `-- =============================================================
 
 set statement_timeout = 0;
 set client_min_messages = warning;
+-- Functions are emitted before the tables and views they reference (pg_dump does
+-- the same), so body validation must be off during replay.
+set check_function_bodies = false;
 set search_path = public, extensions;
 `;
 

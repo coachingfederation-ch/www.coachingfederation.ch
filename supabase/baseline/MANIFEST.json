@@ -1,6 +1,6 @@
 {
-  "file": "20260809065519_baseline.sql",
-  "generated_at": "2026-08-09T06:55:19.675Z",
+  "file": "20260809065639_baseline.sql",
+  "generated_at": "2026-08-09T06:56:39.714Z",
   "migration_ledger_version": "unreadable",
   "counts": {
     "Extensions": 6,
