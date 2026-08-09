@@ -21,9 +21,8 @@ export const Route = createFileRoute("/api/public/member-sync")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const expected = process.env.MEMBER_SYNC_CRON_TOKEN;
-        const provided = request.headers.get("x-cron-token");
-        if (!expected || !provided || provided !== expected) {
+        const { isAuthorisedCronRequest } = await import("@/lib/cron-auth.server");
+        if (!isAuthorisedCronRequest(request)) {
           // Never log the token itself — only that a call was rejected.
           console.warn("[member-sync] unauthorised request rejected");
           return new Response("Unauthorized", { status: 401 });
