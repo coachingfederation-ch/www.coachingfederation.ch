@@ -25,7 +25,7 @@ set client_min_messages = warning;
 set check_function_bodies = false;
 set search_path = public, extensions;
 
--- generated at 2026-08-09T06:56:39.713Z
+-- generated at 2026-08-09T06:57:14.790Z
 
 -- ---------------------------------------------------------------------------
 -- Extensions (6)
@@ -1315,11 +1315,11 @@ create table if not exists public.op_projects (
   signup_url text,
   language_slugs text[] not null default '{}'::text[],
   content_updated_at timestamp with time zone not null default now(),
-  public_contact_email text default 
+  public_contact_email text generated always as (
 CASE
     WHEN is_community THEN contact_email
     ELSE NULL::text
-END);
+END) stored);
 
 create table if not exists public.organisation_survey_responses (
   id uuid not null default gen_random_uuid(),
