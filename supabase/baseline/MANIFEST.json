@@ -1,0 +1,25 @@
+{
+  "file": "20260809065400_baseline.sql",
+  "generated_at": "2026-08-09T06:54:00.868Z",
+  "migration_ledger_version": "unreadable",
+  "counts": {
+    "Extensions": 6,
+    "Schemas": 1,
+    "Enum types": 16,
+    "Functions": 548,
+    "Tables": 630,
+    "Primary keys and unique constraints": 77,
+    "Check constraints": 19,
+    "Foreign keys": 43,
+    "Indexes": 36,
+    "Views": 162,
+    "Triggers": 42,
+    "Row level security": 52,
+    "Policies": 203,
+    "Schema and function grants": 4,
+    "Table grants": 164,
+    "Column grants": 10,
+    "Storage buckets": 3,
+    "Storage policies": 26
+  }
+}
