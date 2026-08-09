@@ -122,13 +122,13 @@ export const requestMemberClaim = createServerFn({ method: "POST" })
   .inputValidator((input) => z.object({ email: z.string().email().max(320) }).parse(input))
   .handler(async ({ data }) => {
     const { getRequestUrl } = await import("@tanstack/react-start/server");
-    const { getRequestHeaders } = await import("@tanstack/react-start/server");
     const { attemptMemberClaim } = await import("./member-claim.server");
     const { checkRateLimit, clientIp } = await import("./rate-limit.server");
 
     // Per-IP cap on top of the per-address cap in the state machine, so the
     // form cannot be walked through a list of addresses from one host.
-    const request = new Request("https://local/", { headers: getRequestHeaders() as HeadersInit });
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const request = getRequest();
     const verdict = await checkRateLimit("member-claim", `ip:${clientIp(request)}`, [
       { windowSeconds: 3_600, max: 10 },
       { windowSeconds: 86_400, max: 30 },
