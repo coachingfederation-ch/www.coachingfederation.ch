@@ -25,7 +25,7 @@ set client_min_messages = warning;
 set check_function_bodies = false;
 set search_path = public, extensions;
 
--- generated at 2026-08-09T06:57:14.790Z
+-- generated at 2026-08-09T06:57:33.229Z
 
 -- ---------------------------------------------------------------------------
 -- Extensions (6)
