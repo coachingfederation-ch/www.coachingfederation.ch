@@ -58,7 +58,7 @@ function psql(sql: string): string[] {
 
 /** One query returning ready-made SQL statements, one per row. */
 function statements(sql: string): string[] {
-  return psql(sql).map((s) => s.replace(/\u001f/g, ""));
+  return psql(sql).map((s) => s.split(FIELD_SEP).join(""));
 }
 
 const schemaList = OWNED_SCHEMAS.map((s) => `'${s}'`).join(",");
