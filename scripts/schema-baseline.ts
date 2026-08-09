@@ -27,13 +27,18 @@ const PREREQUISITE_ROLES = ["anon", "authenticated", "service_role"];
 const OWNED_SCHEMAS = ["public", "private"];
 
 function psql(sql: string): string[] {
-  const args = ["-X", "-A", "-t", "-F", "\u001f", "--no-psqlrc", "-v", "ON_ERROR_STOP=1", "-c", sql];
+  // Statements span many lines, so rows are separated by an explicit record
+  // separator rather than by newlines.
+  const args = [
+    "-X", "-A", "-t", "-F", "\u001f", "-R", "\u001e",
+    "--no-psqlrc", "-v", "ON_ERROR_STOP=1", "-c", sql,
+  ];
   if (process.env["PGURL"]) args.unshift(process.env["PGURL"]!);
   const out = execFileSync("psql", args, { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
   return out
-    .split("\n")
-    .map((line) => line.replace(/\s+$/, ""))
-    .filter((line) => line.length > 0);
+    .split("\u001e")
+    .map((row) => row.trim())
+    .filter((row) => row.length > 0);
 }
 
 /** One query returning ready-made SQL statements, one per row. */
