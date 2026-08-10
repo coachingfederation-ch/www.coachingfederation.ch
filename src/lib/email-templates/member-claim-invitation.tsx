@@ -149,10 +149,16 @@ function copyFor(locale?: string) {
   return COPY[(locale as ClaimLocale) in COPY ? (locale as ClaimLocale) : "en"];
 }
 
-/** Build a fully-qualified asset URL from the baseUrl and asset pointer. */
+/**
+ * Build a fully-qualified asset URL. Email clients and the dashboard preview
+ * cannot resolve root-relative paths, so we always fall back to the public
+ * site origin when the caller does not pass one.
+ */
+const DEFAULT_ASSET_BASE = "https://new.coachingfederation.ch";
+
 function assetUrl(path: string, baseUrl?: string) {
-  if (!baseUrl) return path;
-  const root = baseUrl.replace(/\/$/, "");
+  if (/^https?:\/\//i.test(path)) return path;
+  const root = (baseUrl || DEFAULT_ASSET_BASE).replace(/\/$/, "");
   return `${root}${path}`;
 }
 
@@ -287,7 +293,7 @@ export const template = {
   displayName: "Member claim invitation",
   previewData: {
     claimUrl: "https://coachingfederation.ch/claim/exampletoken",
-    baseUrl: "https://coachingfederation.ch",
+    baseUrl: DEFAULT_ASSET_BASE,
     firstName: "Anna",
     expiresInDays: 7,
     locale: "en",
