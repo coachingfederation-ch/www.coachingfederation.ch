@@ -154,7 +154,7 @@ function copyFor(locale?: string) {
  * cannot resolve root-relative paths, so we always fall back to the public
  * site origin when the caller does not pass one.
  */
-const DEFAULT_ASSET_BASE = "https://new.coachingfederation.ch";
+const DEFAULT_ASSET_BASE = SITE_URL;
 
 function assetUrl(path: string, baseUrl?: string) {
   if (/^https?:\/\//i.test(path)) return path;
