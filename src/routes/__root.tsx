@@ -88,32 +88,32 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "The Swiss Chapter of ICF - The Global Coaching Association" },
+      { title: "The Switzerland Chapter of ICF | Find a credentialed coach" },
       {
         name: "description",
         content:
-          "The Switzerland Chapter of ICF is the Swiss chapter of the International Coaching Federation. Find a credentialed coach, develop leaders, and join a coaching community across Zürich, Romandie and Ticino.",
+          "Find a credentialed coach in Switzerland, develop leaders in your organisation, and join the coaching community across Zürich, Romandie and Ticino.",
       },
       { name: "author", content: "The Switzerland Chapter of ICF" },
       {
         property: "og:title",
-        content: "The Swiss Chapter of ICF - The Global Coaching Association",
+        content: "The Switzerland Chapter of ICF | Find a credentialed coach",
       },
       {
         property: "og:description",
         content:
-          "The Switzerland Chapter of ICF is the Swiss chapter of the International Coaching Federation. Find a credentialed coach, develop leaders, and join a coaching community across Zürich, Romandie and Ticino.",
+          "Find a credentialed coach in Switzerland, develop leaders in your organisation, and join the coaching community across Zürich, Romandie and Ticino.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "The Swiss Chapter of ICF - The Global Coaching Association",
+        content: "The Switzerland Chapter of ICF | Find a credentialed coach",
       },
       {
         name: "twitter:description",
         content:
-          "The Switzerland Chapter of ICF is the Swiss chapter of the International Coaching Federation. Find a credentialed coach, develop leaders, and join a coaching community across Zürich, Romandie and Ticino.",
+          "Find a credentialed coach in Switzerland, develop leaders in your organisation, and join the coaching community across Zürich, Romandie and Ticino.",
       },
       {
         property: "og:image",
