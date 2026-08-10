@@ -18,6 +18,7 @@ import {
   Text,
 } from "@react-email/components";
 import logoNegativeAsset from "@/assets/icf-horizontal-negative.png.asset.json";
+import { SITE_URL } from "@/i18n/config";
 import logoWhiteAsset from "@/assets/icf-horizontal-white.png.asset.json";
 import type { TemplateEntry } from "./registry";
 
@@ -85,9 +86,11 @@ const COPY: Record<ClaimLocale, Record<string, string>> = {
       "Sich auf unserer Community-Plattform ICF Engage zurechtzufinden und Engagement-Möglichkeiten im Chapter zu entdecken",
     cta: "Passwort setzen",
     expiry: "Dieser Link funktioniert einmal und läuft in {days} Tagen ab.",
-    fallback: "Falls die Schaltfläche nicht funktioniert, kopieren Sie diese Adresse in Ihren Browser:",
+    fallback:
+      "Falls die Schaltfläche nicht funktioniert, kopieren Sie diese Adresse in Ihren Browser:",
     help: "Probleme bei der Anmeldung? Schreiben Sie uns an office@coachingfederation.ch – wir helfen Ihnen gerne.",
-    closing: "Wir freuen uns darauf, Sie bei unseren Veranstaltungen und in der Community zu sehen.",
+    closing:
+      "Wir freuen uns darauf, Sie bei unseren Veranstaltungen und in der Community zu sehen.",
     signoff: "Mit freundlichen Grüßen,\nThe Switzerland Chapter of ICF",
     ignore: "Wenn Sie diese E-Mail nicht erwartet haben, können Sie sie ignorieren.",
   },
@@ -154,7 +157,7 @@ function copyFor(locale?: string) {
  * cannot resolve root-relative paths, so we always fall back to the public
  * site origin when the caller does not pass one.
  */
-const DEFAULT_ASSET_BASE = "https://new.coachingfederation.ch";
+const DEFAULT_ASSET_BASE = SITE_URL;
 
 function assetUrl(path: string, baseUrl?: string) {
   if (/^https?:\/\//i.test(path)) return path;
@@ -171,11 +174,7 @@ const BrushUnderline = () => (
     xmlns="http://www.w3.org/2000/svg"
     style={{ display: "block" }}
   >
-    <path
-      d="M0,8 Q100,2 200,8 T400,6 L400,12 L0,12 Z"
-      fill="#5778FA"
-      fillOpacity="0.35"
-    />
+    <path d="M0,8 Q100,2 200,8 T400,6 L400,12 L0,12 Z" fill="#5778FA" fillOpacity="0.35" />
   </svg>
 );
 
@@ -221,9 +220,7 @@ const Email = ({
               <BrushUnderline />
             </div>
 
-            <Text style={lede}>
-              {isResend ? c["resendIntro"] : c["intro"]}
-            </Text>
+            <Text style={lede}>{isResend ? c["resendIntro"] : c["intro"]}</Text>
             <Text style={accountReady}>{c["accountReady"]}</Text>
 
             <div style={benefits}>

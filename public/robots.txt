@@ -1,4 +1,7 @@
+# Migration window: new.coachingfederation.ch is a staging host while the
+# public site still runs on Bubble. Remove this disallow in Phase D, when the
+# apex switches over, and restore the Sitemap line below.
 User-agent: *
-Allow: /
+Disallow: /
 
-Sitemap: https://demo-coachingfederation-ch.lovable.app/sitemap.xml
+# Sitemap: https://coachingfederation.ch/sitemap.xml

@@ -25,7 +25,14 @@ export const LOCALE_HTML_LANG: Record<Locale, string> = {
 /** Display order for the language switcher. */
 export const LOCALE_ORDER: Locale[] = ["de", "fr", "it", "en"];
 
-export const SITE_URL = "https://demo-coachingfederation-ch.lovable.app";
+/**
+ * Canonical public origin. Environment-driven so the migration window
+ * (`new.`) and the final apex need no code change — set `VITE_SITE_URL`.
+ * Feeds the sitemap, canonical/hreflang/og:url and every claim link.
+ */
+export const SITE_URL = (
+  import.meta.env?.VITE_SITE_URL || "https://new.coachingfederation.ch"
+).replace(/\/$/, "");
 
 export function isLocale(value: unknown): value is Locale {
   return typeof value === "string" && (LOCALES as readonly string[]).includes(value);

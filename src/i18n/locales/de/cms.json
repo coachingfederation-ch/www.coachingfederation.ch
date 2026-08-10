@@ -439,7 +439,18 @@
     "runMore": "Mehr anzeigen",
     "runTruncated": "Es werden nur die ersten 1000 Zeilen angezeigt.",
     "runDuration": "Dauer",
-    "runTrigger": "Auslöser"
+    "runTrigger": "Auslöser",
+    "gatesTitle": "Freigabeschalter",
+    "gatesBody": "Die beiden Schalter, die Mitglieder-E-Mails und die Kontoübernahme öffnen. Die Datenbank verweigert beides im Testmodus; die Kontoübernahme setzt zusätzlich einen abgeschlossenen Cutover voraus.",
+    "gateEmailOpen": "Mitglieder-E-Mails versenden",
+    "gateEmailClose": "Mitglieder-E-Mails unterdrücken",
+    "gateEmailOpenConfirm": "Mitglieder-E-Mails wirklich versenden? Jede Einladung und Mitteilung geht an die echte Adresse des Mitglieds.",
+    "gateClaimOpen": "Kontoübernahme öffnen",
+    "gateClaimClose": "Kontoübernahme schliessen",
+    "gateClaimOpenConfirm": "Kontoübernahme für alle Mitglieder öffnen? Sie können dann ihren ICF-Datensatz mit einem Login verbinden.",
+    "gateReasonTest": "Im Testmodus gesperrt.",
+    "gateReasonNoCutover": "Gesperrt, bis der Cutover abgeschlossen ist.",
+    "gateReasonFrozen": "Gesperrt, solange der Cutover läuft."
   },
   "member": {
     "title": "Mein Coach-Profil",

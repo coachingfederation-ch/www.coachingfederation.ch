@@ -133,24 +133,29 @@ invisible.
 
 ### Code — still required
 
-- [ ] **`SITE_URL` in `src/i18n/config.ts`** is still
-      `https://demo-coachingfederation-ch.lovable.app`. It feeds the sitemap,
-      canonical tags, hreflang **and every claim link**, so it must point at
-      `https://new.coachingfederation.ch` for the window and at the apex in
-      Phase D. This is now the highest-priority code item: invitations sent
-      before it changes carry links to the preview host. Verify `claimUrl()`
-      resolves against it after the change.
-- [ ] **`noindex` posture on `new.`** for the whole window. `public/robots.txt`
-      today is `User-agent: * / Allow: /` and advertises the preview sitemap,
-      so the migration host is fully crawlable. Needs `X-Robots-Tag` or a
-      site-wide meta, a disallow in `robots.txt`, and the sitemap URL corrected.
-      Do not submit the sitemap to Search Console until Phase D. Remove all of
-      it in Phase D as one deliberate step.
-- [ ] **Gate toggles.** `/integration` exposes mode, sync, cutover, rehearsal
-      and `email_redirect_to`, and renders `emails_suppressed` and
-      `account_claim_enabled` as **read-only status text only**. Either add two
-      guarded admin toggles, or write the exact service-role SQL into the
-      runbook in advance and have it reviewed.
+- [x] **`SITE_URL` in `src/i18n/config.ts`** is now environment-driven:
+      `VITE_SITE_URL`, falling back to `https://new.coachingfederation.ch`.
+      It feeds the sitemap, canonical tags, hreflang, the email template asset
+      base **and every claim link**. Phase D is an environment-variable change
+      to the apex, not a code change. Verified: `/sitemap.xml` emits `new.`
+      URLs.
+- [x] **`noindex` posture on `new.`** — `public/robots.txt` is now
+      `User-agent: * / Disallow: /`, with the sitemap directive commented out
+      and pointing at the apex for Phase D. Do not submit the sitemap to Search
+      Console until Phase D, where removing this file's disallow is one
+      deliberate step.
+- [x] **Gate toggles.** `/integration` now has a **Release gates** card with
+      guarded controls for `emails_suppressed` and `account_claim_enabled`.
+      Each shows a readable reason when blocked (test mode, cutover not
+      completed, cutover in progress) rather than failing on click. The
+      database trigger `tg_integration_config_guard` remains the enforcement
+      point; the UI only mirrors it. No service-role SQL is needed.
+
+      Note on the Lovable Emails project switch: it is **not** a substitute for
+      `emails_suppressed`. It is a whole-project kill switch that also strips
+      branding from auth emails, is not recorded in `member_email_log`, and
+      cannot redirect to a test inbox. Use `emails_suppressed` as the gate;
+      the project switch may be left off until Phase C as a second, outer lock.
 
 ### Blocked on external configuration
 
@@ -165,24 +170,35 @@ invisible.
       but have never been exercised against the LIVE endpoint, and the cutover
       preflight only checks that they _exist_. Execute a real LIVE
       `authenticate()` call and confirm a token comes back before Gate 1.
-- [ ] **Auth allowlists.** Add `new.`, the apex **and** `www` to the Supabase
-      Site URL / redirect allowlist and to the Google OAuth authorised origins
-      now, so Phase D needs no auth change under time pressure.
+- [ ] **Auth allowlists.** Console work, no code. In Cloud → Users → Auth
+      Settings → URL configuration, set the Site URL to
+      `https://new.coachingfederation.ch` and add to the redirect allow-list:
+      `https://new.coachingfederation.ch/**`,
+      `https://coachingfederation.ch/**`, `https://www.coachingfederation.ch/**`,
+      keeping the existing Lovable preview entry. Return URLs that are not on
+      this list are dropped and the user silently lands on the app origin.
+      Google OAuth origins need nothing while the managed Google credentials
+      are in use; if the chapter ever switches to its own client ID, add the
+      same three origins as authorised JavaScript origins and the Cloud
+      callback URL as an authorised redirect URI. Doing this now makes Phase D
+      a DNS change only.
 
 ### Recommended next actions (before Gate 1)
 
 In priority order, with the reason each earns its place:
 
-1. **`SITE_URL` and the `noindex` posture.** Everything member-facing hangs off
-   `SITE_URL`, and the migration host is currently indexable. Cheap, and both
-   failures are embarrassing in public.
+1. ~~**`SITE_URL` and the `noindex` posture.**~~ Done — `SITE_URL` is
+   environment-driven and points at `new.`, and `robots.txt` disallows the
+   migration host for the whole window.
 2. **A real LIVE `authenticate()` call.** The only Gate 1 item whose outcome is
    genuinely unknown. Discovering a credential problem during the freeze is the
    expensive version of this discovery.
-3. **Auth allowlists and Google OAuth origins** for `new.`, the apex and `www`.
-   Trivial now; time-pressured in Phase D.
-4. **The two gate toggles**, or reviewed service-role SQL in the runbook. The
-   flags that open email and claiming should not be improvised at 22:00.
+3. **Auth allowlists** for `new.`, the apex and `www` — the exact console steps
+   are written out under "Blocked on external configuration" above. Trivial
+   now; time-pressured in Phase D. Google OAuth origins need no action while
+   the managed credentials are in use.
+4. ~~**The two gate toggles.**~~ Done — guarded controls on `/integration`,
+   mirroring the database trigger's rules.
 5. **One end-to-end send on production infrastructure** through
    `email_redirect_to`, confirmed against the email delivery logs. A verified
    domain is not the same as a delivered invitation; the first proof of
@@ -237,61 +253,62 @@ Record each number; they are the baseline every later count is checked against.
 
 ## Gate 1 — go / no-go for cutover
 
-| Check                                                                     | Signed |
-| ------------------------------------------------------------------------- | ------ |
-| LIVE credentials present **and a real LIVE authenticate call succeeded**  |        |
-| Feed audit complete; all four counts recorded                             |        |
-| ICF confirmed lapsed members are marked, not omitted                      |        |
-| `new.` live, `noindex`, SSL verified                                      | partly — host live and SSL verified; `noindex` still open |
-| Email sending domain verified                                             | ✅ `notify.coachingfederation.ch` |
+| Check                                                                     | Signed                                                                          |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| LIVE credentials present **and a real LIVE authenticate call succeeded**  |                                                                                 |
+| Feed audit complete; all four counts recorded                             |                                                                                 |
+| ICF confirmed lapsed members are marked, not omitted                      |                                                                                 |
+| `new.` live, `noindex`, SSL verified                                      | ✅ host live, SSL verified, `robots.txt` disallows all                          |
+| Email sending domain verified                                             | ✅ `notify.coachingfederation.ch`                                               |
 | Email transport wired, deployed, verified through `email_redirect_to`     | ✅ wired and deployed; end-to-end send through `email_redirect_to` still to run |
-| `SITE_URL`, robots, auth allowlists and OAuth origins updated, redeployed |        |
-| Claim flow verified end to end via a staff-issued link                    |        |
-| Privacy policy live on `new.`                                             |        |
-| Cron job state known and correct                                          |        |
-| Containment owner named and available                                     |        |
+| `SITE_URL`, robots, auth allowlists and OAuth origins updated, redeployed | partly — `SITE_URL` and robots done; auth allow-list still to set               |
+| Claim flow verified end to end via a staff-issued link                    |                                                                                 |
+| Privacy policy live on `new.`                                             |                                                                                 |
+| Cron job state known and correct                                          |                                                                                 |
+| Containment owner named and available                                     |                                                                                 |
 
 ## Phase B — Cutover (irreversible)
 
 The public site is untouched throughout. This is a data event on `new.` only.
 
-1. Run the non-mutating rehearsal at `/integration` against LIVE credentials
-   and read every returned line: what would be purged, which bindings released,
-   how many auth users deleted. Surprising numbers are a stop signal.
-2. Freeze the Bubble member area to read-only — signups, claim, password reset
-   and all outbound transactional mail off — while leaving its coach finder and
-   public pages readable. Members must not be maintaining two profiles. Freeze
-   CMS publishing on both sides and confirm no nightly sync is due to fire.
-3. Take the archive snapshot (`member_archive_snapshots`) and **download the
-   bundle out of the database**. It is written into the same database that is
-   about to be purged, so it is not a backup until it is stored somewhere else,
-   durable and access-controlled. Do not proceed without it.
-3a. Generate the schema baseline while the schema is final and no LIVE member
+1.  Run the non-mutating rehearsal at `/integration` against LIVE credentials
+    and read every returned line: what would be purged, which bindings released,
+    how many auth users deleted. Surprising numbers are a stop signal.
+2.  Freeze the Bubble member area to read-only — signups, claim, password reset
+    and all outbound transactional mail off — while leaving its coach finder and
+    public pages readable. Members must not be maintaining two profiles. Freeze
+    CMS publishing on both sides and confirm no nightly sync is due to fire.
+3.  Take the archive snapshot (`member_archive_snapshots`) and **download the
+    bundle out of the database**. It is written into the same database that is
+    about to be purged, so it is not a backup until it is stored somewhere else,
+    durable and access-controlled. Do not proceed without it.
+    3a. Generate the schema baseline while the schema is final and no LIVE member
     data exists yet — this is the only moment where "the shape of the database"
     and "nothing personal in it" are true at the same time:
 
-    ```
-    bun run baseline:write    # writes supabase/baseline/<stamp>_baseline.sql
-    bun run baseline:verify   # replays it onto a scratch Postgres, must print OK
-    ```
+        ```
+        bun run baseline:write    # writes supabase/baseline/<stamp>_baseline.sql
+        bun run baseline:verify   # replays it onto a scratch Postgres, must print OK
+        ```
 
-    Commit both the SQL file and `MANIFEST.json`. The baseline is a derived
-    recovery and documentation artifact: schema, RLS, grants and storage
-    buckets, no rows. The migration history under `supabase/migrations/` stays
-    authoritative and is not squashed or moved.
+        Commit both the SQL file and `MANIFEST.json`. The baseline is a derived
+        recovery and documentation artifact: schema, RLS, grants and storage
+        buckets, no rows. The migration history under `supabase/migrations/` stays
+        authoritative and is not squashed or moved.
 
-    A baseline already exists in `supabase/baseline/` from a pre-cutover dry
-    run. It proves the generator and the replay work; it is **not** the cutover
-    artifact. Regenerate at the freeze point so the committed snapshot matches
-    the schema actually shipped.
-4. Execute the cutover. `runCutover` performs, in order: preflight → archive →
-   freeze → purge → switch `mode` to `live` → first LIVE import → validate →
-   record `cutover_completed_at`. Capture the full step log.
-5. Verify: imported count matches the feed audit, spot-check five members
-   against the ICF portal, staff accounts land correctly, CMS content intact,
-   `emails_suppressed` still true and `account_claim_enabled` still false.
-   Smoke-test `/find-a-coach` in all four locales.
-6. Run `bun run baseline:check` after the cutover completes. It must report no
+        A baseline already exists in `supabase/baseline/` from a pre-cutover dry
+        run. It proves the generator and the replay work; it is **not** the cutover
+        artifact. Regenerate at the freeze point so the committed snapshot matches
+        the schema actually shipped.
+
+4.  Execute the cutover. `runCutover` performs, in order: preflight → archive →
+    freeze → purge → switch `mode` to `live` → first LIVE import → validate →
+    record `cutover_completed_at`. Capture the full step log.
+5.  Verify: imported count matches the feed audit, spot-check five members
+    against the ICF portal, staff accounts land correctly, CMS content intact,
+    `emails_suppressed` still true and `account_claim_enabled` still false.
+    Smoke-test `/find-a-coach` in all four locales.
+6.  Run `bun run baseline:check` after the cutover completes. It must report no
     drift: the cutover moves data, never schema. Drift here means something
     changed the structure mid-flight and needs explaining before Gate 2.
 
@@ -357,9 +374,10 @@ waves.
 
 A small, well-rehearsed change rather than the whole migration.
 
-- [ ] Remove `noindex` — headers, meta and `robots.txt`
-- [ ] `SITE_URL` changed to the apex; redeploy; verify canonical and hreflang
-      in page source
+- [ ] Remove `noindex` — restore `Allow: /` and the `Sitemap:` line in
+      `public/robots.txt`
+- [ ] `VITE_SITE_URL` changed to the apex; redeploy; verify canonical and
+      hreflang in page source
 - [ ] Connect the apex and `www` in Lovable, make primary, switch public DNS
 - [ ] Verify HTTPS, certificates, and the apex ↔ `www` canonical redirect
 - [ ] **Keep `new.coachingfederation.ch` alive as a permanent 301 to the

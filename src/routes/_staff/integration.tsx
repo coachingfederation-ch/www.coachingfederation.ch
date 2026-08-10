@@ -46,6 +46,127 @@ function formatDate(value: string | null) {
   return value ? new Date(value).toLocaleString() : "—";
 }
 
+/**
+ * The two release gates. The database trigger `tg_integration_config_guard`
+ * is the real enforcement point (TEST mode can never send member email or open
+ * claiming); this card mirrors those rules so a blocked gate shows a readable
+ * reason instead of failing on click.
+ */
+function GatesCard({
+  config,
+  busy,
+  act,
+  t,
+}: {
+  config: IntegrationConfig;
+  busy: boolean;
+  act: (key: string, fn: () => Promise<string>) => Promise<void>;
+  t: (key: string) => string;
+}) {
+  const isLive = config.mode === "live";
+  const emailReason = !isLive
+    ? t("integration.gateReasonTest")
+    : config.cutover_in_progress
+      ? t("integration.gateReasonFrozen")
+      : null;
+  const claimReason = !isLive
+    ? t("integration.gateReasonTest")
+    : !config.cutover_completed_at
+      ? t("integration.gateReasonNoCutover")
+      : config.cutover_in_progress
+        ? t("integration.gateReasonFrozen")
+        : null;
+
+  const toggle = (key: string, values: Partial<IntegrationConfig>) =>
+    void act(key, async () => {
+      await updateIntegrationConfig(values);
+      return t("integration.saved");
+    });
+
+  return (
+    <section className={CARD}>
+      <h2 className="text-sm font-bold">{t("integration.gatesTitle")}</h2>
+      <p className="mt-1 text-xs text-muted-foreground">{t("integration.gatesBody")}</p>
+
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <div className="rounded-xl border border-border p-4">
+          <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            {t("integration.emails")}
+          </p>
+          <p className="mt-1 text-sm font-semibold">
+            {config.emails_suppressed
+              ? config.email_redirect_to
+                ? t("integration.emailsRedirected") + " " + config.email_redirect_to
+                : t("integration.emailsSuppressed")
+              : t("integration.emailsLive")}
+          </p>
+          {config.emails_suppressed ? (
+            <>
+              <button
+                className={BTN + " mt-3"}
+                disabled={busy || emailReason !== null}
+                onClick={() => {
+                  if (!window.confirm(t("integration.gateEmailOpenConfirm"))) return;
+                  toggle("gate-email", { emails_suppressed: false });
+                }}
+              >
+                {t("integration.gateEmailOpen")}
+              </button>
+              {emailReason ? (
+                <p className="mt-2 text-xs text-muted-foreground">{emailReason}</p>
+              ) : null}
+            </>
+          ) : (
+            <button
+              className="mt-3 rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+              disabled={busy}
+              onClick={() => toggle("gate-email", { emails_suppressed: true })}
+            >
+              {t("integration.gateEmailClose")}
+            </button>
+          )}
+        </div>
+
+        <div className="rounded-xl border border-border p-4">
+          <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            {t("integration.claim")}
+          </p>
+          <p className="mt-1 text-sm font-semibold">
+            {config.account_claim_enabled
+              ? t("integration.claimOpen")
+              : t("integration.claimClosed")}
+          </p>
+          {config.account_claim_enabled ? (
+            <button
+              className="mt-3 rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+              disabled={busy}
+              onClick={() => toggle("gate-claim", { account_claim_enabled: false })}
+            >
+              {t("integration.gateClaimClose")}
+            </button>
+          ) : (
+            <>
+              <button
+                className={BTN + " mt-3"}
+                disabled={busy || claimReason !== null}
+                onClick={() => {
+                  if (!window.confirm(t("integration.gateClaimOpenConfirm"))) return;
+                  toggle("gate-claim", { account_claim_enabled: true });
+                }}
+              >
+                {t("integration.gateClaimOpen")}
+              </button>
+              {claimReason ? (
+                <p className="mt-2 text-xs text-muted-foreground">{claimReason}</p>
+              ) : null}
+            </>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function IntegrationPage() {
   const { t } = useCms();
   const [config, setConfig] = useState<IntegrationConfig | null>(null);
@@ -173,6 +294,8 @@ function IntegrationPage() {
                 />
               </label>
             </section>
+
+            <GatesCard config={config} busy={busy !== null} act={act} t={t} />
 
             <section className={CARD}>
               <h2 className="text-sm font-bold">{t("integration.actions")}</h2>

@@ -439,7 +439,18 @@
     "runMore": "Afficher plus",
     "runTruncated": "Seules les 1000 premières lignes sont affichées.",
     "runDuration": "Durée",
-    "runTrigger": "Déclencheur"
+    "runTrigger": "Déclencheur",
+    "gatesTitle": "Verrous de mise en service",
+    "gatesBody": "Les deux interrupteurs qui ouvrent les e-mails aux membres et la revendication de compte. La base de données refuse les deux en mode test ; la revendication exige en plus une bascule terminée.",
+    "gateEmailOpen": "Envoyer les e-mails aux membres",
+    "gateEmailClose": "Suspendre les e-mails aux membres",
+    "gateEmailOpenConfirm": "Envoyer réellement les e-mails aux membres ? Chaque invitation et notification ira à leur adresse personnelle.",
+    "gateClaimOpen": "Ouvrir la revendication de compte",
+    "gateClaimClose": "Fermer la revendication de compte",
+    "gateClaimOpenConfirm": "Ouvrir la revendication de compte à tous les membres ? Ils pourront lier leur fiche ICF à un identifiant.",
+    "gateReasonTest": "Bloqué en mode test.",
+    "gateReasonNoCutover": "Bloqué tant que la bascule n'est pas terminée.",
+    "gateReasonFrozen": "Bloqué pendant la bascule."
   },
   "member": {
     "title": "Mon profil de coach",
