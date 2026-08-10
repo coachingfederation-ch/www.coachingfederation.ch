@@ -253,61 +253,62 @@ Record each number; they are the baseline every later count is checked against.
 
 ## Gate 1 — go / no-go for cutover
 
-| Check                                                                     | Signed |
-| ------------------------------------------------------------------------- | ------ |
-| LIVE credentials present **and a real LIVE authenticate call succeeded**  |        |
-| Feed audit complete; all four counts recorded                             |        |
-| ICF confirmed lapsed members are marked, not omitted                      |        |
-| `new.` live, `noindex`, SSL verified                                      | ✅ host live, SSL verified, `robots.txt` disallows all |
-| Email sending domain verified                                             | ✅ `notify.coachingfederation.ch` |
+| Check                                                                     | Signed                                                                          |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| LIVE credentials present **and a real LIVE authenticate call succeeded**  |                                                                                 |
+| Feed audit complete; all four counts recorded                             |                                                                                 |
+| ICF confirmed lapsed members are marked, not omitted                      |                                                                                 |
+| `new.` live, `noindex`, SSL verified                                      | ✅ host live, SSL verified, `robots.txt` disallows all                          |
+| Email sending domain verified                                             | ✅ `notify.coachingfederation.ch`                                               |
 | Email transport wired, deployed, verified through `email_redirect_to`     | ✅ wired and deployed; end-to-end send through `email_redirect_to` still to run |
-| `SITE_URL`, robots, auth allowlists and OAuth origins updated, redeployed | partly — `SITE_URL` and robots done; auth allow-list still to set |
-| Claim flow verified end to end via a staff-issued link                    |        |
-| Privacy policy live on `new.`                                             |        |
-| Cron job state known and correct                                          |        |
-| Containment owner named and available                                     |        |
+| `SITE_URL`, robots, auth allowlists and OAuth origins updated, redeployed | partly — `SITE_URL` and robots done; auth allow-list still to set               |
+| Claim flow verified end to end via a staff-issued link                    |                                                                                 |
+| Privacy policy live on `new.`                                             |                                                                                 |
+| Cron job state known and correct                                          |                                                                                 |
+| Containment owner named and available                                     |                                                                                 |
 
 ## Phase B — Cutover (irreversible)
 
 The public site is untouched throughout. This is a data event on `new.` only.
 
-1. Run the non-mutating rehearsal at `/integration` against LIVE credentials
-   and read every returned line: what would be purged, which bindings released,
-   how many auth users deleted. Surprising numbers are a stop signal.
-2. Freeze the Bubble member area to read-only — signups, claim, password reset
-   and all outbound transactional mail off — while leaving its coach finder and
-   public pages readable. Members must not be maintaining two profiles. Freeze
-   CMS publishing on both sides and confirm no nightly sync is due to fire.
-3. Take the archive snapshot (`member_archive_snapshots`) and **download the
-   bundle out of the database**. It is written into the same database that is
-   about to be purged, so it is not a backup until it is stored somewhere else,
-   durable and access-controlled. Do not proceed without it.
-3a. Generate the schema baseline while the schema is final and no LIVE member
+1.  Run the non-mutating rehearsal at `/integration` against LIVE credentials
+    and read every returned line: what would be purged, which bindings released,
+    how many auth users deleted. Surprising numbers are a stop signal.
+2.  Freeze the Bubble member area to read-only — signups, claim, password reset
+    and all outbound transactional mail off — while leaving its coach finder and
+    public pages readable. Members must not be maintaining two profiles. Freeze
+    CMS publishing on both sides and confirm no nightly sync is due to fire.
+3.  Take the archive snapshot (`member_archive_snapshots`) and **download the
+    bundle out of the database**. It is written into the same database that is
+    about to be purged, so it is not a backup until it is stored somewhere else,
+    durable and access-controlled. Do not proceed without it.
+    3a. Generate the schema baseline while the schema is final and no LIVE member
     data exists yet — this is the only moment where "the shape of the database"
     and "nothing personal in it" are true at the same time:
 
-    ```
-    bun run baseline:write    # writes supabase/baseline/<stamp>_baseline.sql
-    bun run baseline:verify   # replays it onto a scratch Postgres, must print OK
-    ```
+        ```
+        bun run baseline:write    # writes supabase/baseline/<stamp>_baseline.sql
+        bun run baseline:verify   # replays it onto a scratch Postgres, must print OK
+        ```
 
-    Commit both the SQL file and `MANIFEST.json`. The baseline is a derived
-    recovery and documentation artifact: schema, RLS, grants and storage
-    buckets, no rows. The migration history under `supabase/migrations/` stays
-    authoritative and is not squashed or moved.
+        Commit both the SQL file and `MANIFEST.json`. The baseline is a derived
+        recovery and documentation artifact: schema, RLS, grants and storage
+        buckets, no rows. The migration history under `supabase/migrations/` stays
+        authoritative and is not squashed or moved.
 
-    A baseline already exists in `supabase/baseline/` from a pre-cutover dry
-    run. It proves the generator and the replay work; it is **not** the cutover
-    artifact. Regenerate at the freeze point so the committed snapshot matches
-    the schema actually shipped.
-4. Execute the cutover. `runCutover` performs, in order: preflight → archive →
-   freeze → purge → switch `mode` to `live` → first LIVE import → validate →
-   record `cutover_completed_at`. Capture the full step log.
-5. Verify: imported count matches the feed audit, spot-check five members
-   against the ICF portal, staff accounts land correctly, CMS content intact,
-   `emails_suppressed` still true and `account_claim_enabled` still false.
-   Smoke-test `/find-a-coach` in all four locales.
-6. Run `bun run baseline:check` after the cutover completes. It must report no
+        A baseline already exists in `supabase/baseline/` from a pre-cutover dry
+        run. It proves the generator and the replay work; it is **not** the cutover
+        artifact. Regenerate at the freeze point so the committed snapshot matches
+        the schema actually shipped.
+
+4.  Execute the cutover. `runCutover` performs, in order: preflight → archive →
+    freeze → purge → switch `mode` to `live` → first LIVE import → validate →
+    record `cutover_completed_at`. Capture the full step log.
+5.  Verify: imported count matches the feed audit, spot-check five members
+    against the ICF portal, staff accounts land correctly, CMS content intact,
+    `emails_suppressed` still true and `account_claim_enabled` still false.
+    Smoke-test `/find-a-coach` in all four locales.
+6.  Run `bun run baseline:check` after the cutover completes. It must report no
     drift: the cutover moves data, never schema. Drift here means something
     changed the structure mid-flight and needs explaining before Gate 2.
 
