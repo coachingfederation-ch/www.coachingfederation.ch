@@ -133,24 +133,29 @@ invisible.
 
 ### Code — still required
 
-- [ ] **`SITE_URL` in `src/i18n/config.ts`** is still
-      `https://demo-coachingfederation-ch.lovable.app`. It feeds the sitemap,
-      canonical tags, hreflang **and every claim link**, so it must point at
-      `https://new.coachingfederation.ch` for the window and at the apex in
-      Phase D. This is now the highest-priority code item: invitations sent
-      before it changes carry links to the preview host. Verify `claimUrl()`
-      resolves against it after the change.
-- [ ] **`noindex` posture on `new.`** for the whole window. `public/robots.txt`
-      today is `User-agent: * / Allow: /` and advertises the preview sitemap,
-      so the migration host is fully crawlable. Needs `X-Robots-Tag` or a
-      site-wide meta, a disallow in `robots.txt`, and the sitemap URL corrected.
-      Do not submit the sitemap to Search Console until Phase D. Remove all of
-      it in Phase D as one deliberate step.
-- [ ] **Gate toggles.** `/integration` exposes mode, sync, cutover, rehearsal
-      and `email_redirect_to`, and renders `emails_suppressed` and
-      `account_claim_enabled` as **read-only status text only**. Either add two
-      guarded admin toggles, or write the exact service-role SQL into the
-      runbook in advance and have it reviewed.
+- [x] **`SITE_URL` in `src/i18n/config.ts`** is now environment-driven:
+      `VITE_SITE_URL`, falling back to `https://new.coachingfederation.ch`.
+      It feeds the sitemap, canonical tags, hreflang, the email template asset
+      base **and every claim link**. Phase D is an environment-variable change
+      to the apex, not a code change. Verified: `/sitemap.xml` emits `new.`
+      URLs.
+- [x] **`noindex` posture on `new.`** — `public/robots.txt` is now
+      `User-agent: * / Disallow: /`, with the sitemap directive commented out
+      and pointing at the apex for Phase D. Do not submit the sitemap to Search
+      Console until Phase D, where removing this file's disallow is one
+      deliberate step.
+- [x] **Gate toggles.** `/integration` now has a **Release gates** card with
+      guarded controls for `emails_suppressed` and `account_claim_enabled`.
+      Each shows a readable reason when blocked (test mode, cutover not
+      completed, cutover in progress) rather than failing on click. The
+      database trigger `tg_integration_config_guard` remains the enforcement
+      point; the UI only mirrors it. No service-role SQL is needed.
+
+      Note on the Lovable Emails project switch: it is **not** a substitute for
+      `emails_suppressed`. It is a whole-project kill switch that also strips
+      branding from auth emails, is not recorded in `member_email_log`, and
+      cannot redirect to a test inbox. Use `emails_suppressed` as the gate;
+      the project switch may be left off until Phase C as a second, outer lock.
 
 ### Blocked on external configuration
 
@@ -165,9 +170,18 @@ invisible.
       but have never been exercised against the LIVE endpoint, and the cutover
       preflight only checks that they _exist_. Execute a real LIVE
       `authenticate()` call and confirm a token comes back before Gate 1.
-- [ ] **Auth allowlists.** Add `new.`, the apex **and** `www` to the Supabase
-      Site URL / redirect allowlist and to the Google OAuth authorised origins
-      now, so Phase D needs no auth change under time pressure.
+- [ ] **Auth allowlists.** Console work, no code. In Cloud → Users → Auth
+      Settings → URL configuration, set the Site URL to
+      `https://new.coachingfederation.ch` and add to the redirect allow-list:
+      `https://new.coachingfederation.ch/**`,
+      `https://coachingfederation.ch/**`, `https://www.coachingfederation.ch/**`,
+      keeping the existing Lovable preview entry. Return URLs that are not on
+      this list are dropped and the user silently lands on the app origin.
+      Google OAuth origins need nothing while the managed Google credentials
+      are in use; if the chapter ever switches to its own client ID, add the
+      same three origins as authorised JavaScript origins and the Cloud
+      callback URL as an authorised redirect URI. Doing this now makes Phase D
+      a DNS change only.
 
 ### Recommended next actions (before Gate 1)
 
