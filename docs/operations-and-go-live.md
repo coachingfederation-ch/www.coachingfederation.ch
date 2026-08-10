@@ -373,9 +373,10 @@ waves.
 
 A small, well-rehearsed change rather than the whole migration.
 
-- [ ] Remove `noindex` — headers, meta and `robots.txt`
-- [ ] `SITE_URL` changed to the apex; redeploy; verify canonical and hreflang
-      in page source
+- [ ] Remove `noindex` — restore `Allow: /` and the `Sitemap:` line in
+      `public/robots.txt`
+- [ ] `VITE_SITE_URL` changed to the apex; redeploy; verify canonical and
+      hreflang in page source
 - [ ] Connect the apex and `www` in Lovable, make primary, switch public DNS
 - [ ] Verify HTTPS, certificates, and the apex ↔ `www` canonical redirect
 - [ ] **Keep `new.coachingfederation.ch` alive as a permanent 301 to the
