@@ -17,7 +17,8 @@ import {
   Section,
   Text,
 } from "@react-email/components";
-import logoAsset from "@/assets/icf-switzerland-charter-chapter.png.asset.json";
+import logoNegativeAsset from "@/assets/icf-horizontal-negative.png.asset.json";
+import logoWhiteAsset from "@/assets/icf-horizontal-white.png.asset.json";
 import type { TemplateEntry } from "./registry";
 
 /**
@@ -148,11 +149,11 @@ function copyFor(locale?: string) {
   return COPY[(locale as ClaimLocale) in COPY ? (locale as ClaimLocale) : "en"];
 }
 
-/** Build a fully-qualified logo URL from the baseUrl and asset pointer. */
-function logoUrl(baseUrl?: string) {
-  if (!baseUrl) return logoAsset.url;
+/** Build a fully-qualified asset URL from the baseUrl and asset pointer. */
+function assetUrl(path: string, baseUrl?: string) {
+  if (!baseUrl) return path;
   const root = baseUrl.replace(/\/$/, "");
-  return `${root}${logoAsset.url}`;
+  return `${root}${path}`;
 }
 
 const BrushUnderline = () => (
@@ -184,7 +185,8 @@ const Email = ({
   const heading = firstName
     ? (c["heading"] as string).replace("{firstName}", firstName)
     : (c["headingNoName"] as string);
-  const logo = logoUrl(baseUrl);
+  const logo = assetUrl(logoNegativeAsset.url, baseUrl);
+  const logoWhite = assetUrl(logoWhiteAsset.url, baseUrl);
 
   return (
     <Html lang={locale} dir="ltr">
@@ -198,8 +200,8 @@ const Email = ({
               <Img
                 src={logo}
                 alt="The Switzerland Chapter of ICF"
-                width={160}
-                height={146}
+                width={210}
+                height={79}
                 style={logoStyle}
               />
               <span style={bannerTag}>Member Invitation</span>
@@ -259,6 +261,13 @@ const Email = ({
 
           {/* Footer */}
           <Section style={footer}>
+            <Img
+              src={logoWhite}
+              alt="The Switzerland Chapter of ICF"
+              width={150}
+              height={56}
+              style={footerLogoStyle}
+            />
             <Text style={footerText}>
               © {new Date().getFullYear()} The Switzerland Chapter of ICF
             </Text>
@@ -443,4 +452,11 @@ const footerText = {
   color: "#ffffff",
   opacity: 0.6,
   margin: 0,
+};
+
+const footerLogoStyle = {
+  display: "block",
+  margin: "0 auto 12px",
+  outline: "none",
+  border: "none",
 };
