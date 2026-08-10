@@ -124,37 +124,43 @@ invisible.
 - [x] Insights CMS with translations and scheduling
 - [x] Claim flow, built end to end and gated off
 - [x] Accessibility pass (WCAG 2.2 AA on public routes)
+- [x] **Email transport wired.** `member-email.server.ts` sends through the
+      registered React Email templates via the managed send helper, gated by
+      `emails_suppressed` / `email_redirect_to` and refusing test-shaped
+      addresses. The member claim invitation template is live and branded.
+      Emails without a registered template are still logged as `no_transport`
+      and dropped — that is deliberate: they are intent records, not sends.
 
 ### Code — still required
 
-- [ ] **Wire the email transport.** `member-email.server.ts` currently logs
-      `no_transport` and returns "not sent" — the provider call has never been
-      written. Until it exists no claim invitation can be delivered, which
-      blocks members getting into their profiles. Contained to one module; the
-      call sites and `member_email_log` already exist.
-- [ ] **`SITE_URL` in `src/i18n/config.ts`** is hardcoded to the Lovable
-      preview host. It feeds the sitemap, canonical tags and hreflang, so it
-      must point at `https://new.coachingfederation.ch` for the window and at
-      the apex in Phase D. Verify `claimUrl()` resolves against it — a claim
-      link pointing at the preview host is a dead link.
-- [ ] **`noindex` posture on `new.`** for the whole window: `X-Robots-Tag` or a
-      site-wide meta, plus a disallow in `public/robots.txt`. Do not submit the
-      sitemap to Search Console until Phase D. Remove all of it in Phase D as
-      one deliberate step.
+- [ ] **`SITE_URL` in `src/i18n/config.ts`** is still
+      `https://demo-coachingfederation-ch.lovable.app`. It feeds the sitemap,
+      canonical tags, hreflang **and every claim link**, so it must point at
+      `https://new.coachingfederation.ch` for the window and at the apex in
+      Phase D. This is now the highest-priority code item: invitations sent
+      before it changes carry links to the preview host. Verify `claimUrl()`
+      resolves against it after the change.
+- [ ] **`noindex` posture on `new.`** for the whole window. `public/robots.txt`
+      today is `User-agent: * / Allow: /` and advertises the preview sitemap,
+      so the migration host is fully crawlable. Needs `X-Robots-Tag` or a
+      site-wide meta, a disallow in `robots.txt`, and the sitemap URL corrected.
+      Do not submit the sitemap to Search Console until Phase D. Remove all of
+      it in Phase D as one deliberate step.
 - [ ] **Gate toggles.** `/integration` exposes mode, sync, cutover, rehearsal
-      and `email_redirect_to`, but **not** `emails_suppressed` or
-      `account_claim_enabled`. Either add two guarded admin toggles, or write
-      the exact service-role SQL into the runbook in advance and have it
-      reviewed.
+      and `email_redirect_to`, and renders `emails_suppressed` and
+      `account_claim_enabled` as **read-only status text only**. Either add two
+      guarded admin toggles, or write the exact service-role SQL into the
+      runbook in advance and have it reviewed.
 
 ### Blocked on external configuration
 
-- [ ] **Email sending domain.** Lovable-managed, via NS delegation of a
-      subdomain, and verification can take up to 72 hours. **Start this first:
-      it is the long pole.** Confirm no conflicting MX or SPF records survive
-      from the Bubble setup.
-- [ ] **`new.coachingfederation.ch`** created in DNS, connected in Lovable,
-      primary, SSL verified. The apex and `www` keep pointing at Bubble.
+- [x] **Email sending domain.** `notify.coachingfederation.ch` is verified and
+      sending, NS-delegated to Lovable's nameservers. No conflicting MX or SPF
+      records from the Bubble setup apply to the delegated subdomain. Note the
+      delegation: no third-party email service can verify records on this
+      subdomain while it stands.
+- [x] **`new.coachingfederation.ch`** created in DNS, connected in Lovable,
+      primary, serving over HTTPS. The apex and `www` keep pointing at Bubble.
 - [ ] **LIVE ICF credentials.** The four `ICF_SOAP_LIVE_*` variables are stored
       but have never been exercised against the LIVE endpoint, and the cutover
       preflight only checks that they _exist_. Execute a real LIVE
@@ -162,6 +168,29 @@ invisible.
 - [ ] **Auth allowlists.** Add `new.`, the apex **and** `www` to the Supabase
       Site URL / redirect allowlist and to the Google OAuth authorised origins
       now, so Phase D needs no auth change under time pressure.
+
+### Recommended next actions (before Gate 1)
+
+In priority order, with the reason each earns its place:
+
+1. **`SITE_URL` and the `noindex` posture.** Everything member-facing hangs off
+   `SITE_URL`, and the migration host is currently indexable. Cheap, and both
+   failures are embarrassing in public.
+2. **A real LIVE `authenticate()` call.** The only Gate 1 item whose outcome is
+   genuinely unknown. Discovering a credential problem during the freeze is the
+   expensive version of this discovery.
+3. **Auth allowlists and Google OAuth origins** for `new.`, the apex and `www`.
+   Trivial now; time-pressured in Phase D.
+4. **The two gate toggles**, or reviewed service-role SQL in the runbook. The
+   flags that open email and claiming should not be improvised at 22:00.
+5. **One end-to-end send on production infrastructure** through
+   `email_redirect_to`, confirmed against the email delivery logs. A verified
+   domain is not the same as a delivered invitation; the first proof of
+   delivery should not be wave one.
+6. **Cron token rotation plan**, plus inspecting the actual job command text for
+   the `x-cron-token` header.
+7. **The LIVE feed audit numbers.** Read-only, gatherable today, and every
+   later count is checked against them.
 
 ### LIVE feed audit (read-only, before Gate 1)
 
@@ -213,9 +242,9 @@ Record each number; they are the baseline every later count is checked against.
 | LIVE credentials present **and a real LIVE authenticate call succeeded**  |        |
 | Feed audit complete; all four counts recorded                             |        |
 | ICF confirmed lapsed members are marked, not omitted                      |        |
-| `new.` live, `noindex`, SSL verified                                      |        |
-| Email sending domain verified                                             |        |
-| Email transport wired, deployed, verified through `email_redirect_to`     |        |
+| `new.` live, `noindex`, SSL verified                                      | partly — host live and SSL verified; `noindex` still open |
+| Email sending domain verified                                             | ✅ `notify.coachingfederation.ch` |
+| Email transport wired, deployed, verified through `email_redirect_to`     | ✅ wired and deployed; end-to-end send through `email_redirect_to` still to run |
 | `SITE_URL`, robots, auth allowlists and OAuth origins updated, redeployed |        |
 | Claim flow verified end to end via a staff-issued link                    |        |
 | Privacy policy live on `new.`                                             |        |
@@ -250,6 +279,11 @@ The public site is untouched throughout. This is a data event on `new.` only.
     recovery and documentation artifact: schema, RLS, grants and storage
     buckets, no rows. The migration history under `supabase/migrations/` stays
     authoritative and is not squashed or moved.
+
+    A baseline already exists in `supabase/baseline/` from a pre-cutover dry
+    run. It proves the generator and the replay work; it is **not** the cutover
+    artifact. Regenerate at the freeze point so the committed snapshot matches
+    the schema actually shipped.
 4. Execute the cutover. `runCutover` performs, in order: preflight → archive →
    freeze → purge → switch `mode` to `live` → first LIVE import → validate →
    record `cutover_completed_at`. Capture the full step log.
