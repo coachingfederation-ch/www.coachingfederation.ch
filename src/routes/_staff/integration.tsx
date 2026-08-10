@@ -174,6 +174,8 @@ function IntegrationPage() {
               </label>
             </section>
 
+            <GatesCard config={config} busy={busy !== null} act={act} t={t} />
+
             <section className={CARD}>
               <h2 className="text-sm font-bold">{t("integration.actions")}</h2>
               <div className="mt-3 flex flex-wrap gap-2">
