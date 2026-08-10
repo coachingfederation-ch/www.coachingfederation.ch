@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "The Switzerland Chapter of ICF | Coaching professionale",
-    "description": "The Switzerland Chapter of ICF connette coach credenziati, organizzazioni e la comunità di coaching in tutta la Svizzera tedesca, francese e italiana."
+    "title": "The Switzerland Chapter of ICF | Trova un coach credenziato",
+    "description": "Trova un coach credenziato in Svizzera, sviluppa i tuoi leader e unisciti alla comunità del coaching a Zurigo, in Romandia e in Ticino."
   },
   "hero": {
     "eyebrow": "The Switzerland Chapter of ICF",
@@ -141,19 +141,28 @@
         "date": "Gio 17 Set 2026",
         "city": "Zürich",
         "title": "Coaching Perspectives Conference 2026",
-        "tags": ["EN · DE", "Leadership"]
+        "tags": [
+          "EN · DE",
+          "Leadership"
+        ]
       },
       {
         "date": "Mar 6 Ott 2026",
         "city": "Online",
         "title": "AI & Coaching: What Stays Human?",
-        "tags": ["EN", "Webinar"]
+        "tags": [
+          "EN",
+          "Webinar"
+        ]
       },
       {
         "date": "Gio 12 Nov 2026",
         "city": "Lausanne",
         "title": "Soirée Coaching: Bâtir une culture de coaching",
-        "tags": ["FR", "Networking"]
+        "tags": [
+          "FR",
+          "Networking"
+        ]
       }
     ]
   },
@@ -161,7 +170,13 @@
     "eyebrow": "Ricerca e partnership",
     "title": "Connettere ricerca, pratica e leadership.",
     "subtitle": "Collaboriamo con università, enti professionali, ricercatori e partner aziendali per rafforzare il coaching in tutta la Svizzera.",
-    "partners": ["ETH Zürich", "HEC Lausanne", "USI Lugano", "SwissRe", "Nestlé"]
+    "partners": [
+      "ETH Zürich",
+      "HEC Lausanne",
+      "USI Lugano",
+      "SwissRe",
+      "Nestlé"
+    ]
   },
   "join": {
     "eyebrow": "Unisciti a The Switzerland Chapter of ICF",
