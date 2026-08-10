@@ -439,7 +439,18 @@
     "runMore": "Mostra altro",
     "runTruncated": "Vengono mostrate solo le prime 1000 righe.",
     "runDuration": "Durata",
-    "runTrigger": "Origine"
+    "runTrigger": "Origine",
+    "gatesTitle": "Interruttori di rilascio",
+    "gatesBody": "I due interruttori che aprono le e-mail ai soci e la rivendicazione dell'account. Il database li rifiuta entrambi in modalità test; la rivendicazione richiede inoltre un cutover completato.",
+    "gateEmailOpen": "Invia le e-mail ai soci",
+    "gateEmailClose": "Sospendi le e-mail ai soci",
+    "gateEmailOpenConfirm": "Inviare davvero le e-mail ai soci? Ogni invito e avviso arriverà al loro indirizzo reale.",
+    "gateClaimOpen": "Apri la rivendicazione account",
+    "gateClaimClose": "Chiudi la rivendicazione account",
+    "gateClaimOpenConfirm": "Aprire la rivendicazione account a tutti i soci? Potranno collegare la loro scheda ICF a un accesso.",
+    "gateReasonTest": "Bloccato in modalità test.",
+    "gateReasonNoCutover": "Bloccato finché il cutover non è completato.",
+    "gateReasonFrozen": "Bloccato mentre il cutover è in corso."
   },
   "member": {
     "title": "Il mio profilo coach",

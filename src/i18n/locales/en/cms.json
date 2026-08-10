@@ -439,7 +439,18 @@
     "runMore": "Show more",
     "runTruncated": "Only the first 1000 rows are shown.",
     "runDuration": "Duration",
-    "runTrigger": "Trigger"
+    "runTrigger": "Trigger",
+    "gatesTitle": "Release gates",
+    "gatesBody": "The two switches that open member email and account claiming. The database refuses both in test mode, and claiming also requires a completed cutover.",
+    "gateEmailOpen": "Start sending member email",
+    "gateEmailClose": "Suppress member email",
+    "gateEmailOpenConfirm": "Send member email for real? Every claim invitation and notice will go to the member's own address.",
+    "gateClaimOpen": "Open account claiming",
+    "gateClaimClose": "Close account claiming",
+    "gateClaimOpenConfirm": "Open account claiming for all members? They will be able to bind their ICF record to a login.",
+    "gateReasonTest": "Blocked in test mode.",
+    "gateReasonNoCutover": "Blocked until the cutover is completed.",
+    "gateReasonFrozen": "Blocked while the cutover is in progress."
   },
   "member": {
     "title": "My coach profile",
