@@ -18,6 +18,7 @@ import {
   Text,
 } from "@react-email/components";
 import logoNegativeAsset from "@/assets/icf-horizontal-negative.png.asset.json";
+import { SITE_URL } from "@/i18n/config";
 import logoWhiteAsset from "@/assets/icf-horizontal-white.png.asset.json";
 import type { TemplateEntry } from "./registry";
 
