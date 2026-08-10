@@ -187,16 +187,18 @@ invisible.
 
 In priority order, with the reason each earns its place:
 
-1. **`SITE_URL` and the `noindex` posture.** Everything member-facing hangs off
-   `SITE_URL`, and the migration host is currently indexable. Cheap, and both
-   failures are embarrassing in public.
+1. ~~**`SITE_URL` and the `noindex` posture.**~~ Done — `SITE_URL` is
+   environment-driven and points at `new.`, and `robots.txt` disallows the
+   migration host for the whole window.
 2. **A real LIVE `authenticate()` call.** The only Gate 1 item whose outcome is
    genuinely unknown. Discovering a credential problem during the freeze is the
    expensive version of this discovery.
-3. **Auth allowlists and Google OAuth origins** for `new.`, the apex and `www`.
-   Trivial now; time-pressured in Phase D.
-4. **The two gate toggles**, or reviewed service-role SQL in the runbook. The
-   flags that open email and claiming should not be improvised at 22:00.
+3. **Auth allowlists** for `new.`, the apex and `www` — the exact console steps
+   are written out under "Blocked on external configuration" above. Trivial
+   now; time-pressured in Phase D. Google OAuth origins need no action while
+   the managed credentials are in use.
+4. ~~**The two gate toggles.**~~ Done — guarded controls on `/integration`,
+   mirroring the database trigger's rules.
 5. **One end-to-end send on production infrastructure** through
    `email_redirect_to`, confirmed against the email delivery logs. A verified
    domain is not the same as a delivered invitation; the first proof of
@@ -256,10 +258,10 @@ Record each number; they are the baseline every later count is checked against.
 | LIVE credentials present **and a real LIVE authenticate call succeeded**  |        |
 | Feed audit complete; all four counts recorded                             |        |
 | ICF confirmed lapsed members are marked, not omitted                      |        |
-| `new.` live, `noindex`, SSL verified                                      | partly — host live and SSL verified; `noindex` still open |
+| `new.` live, `noindex`, SSL verified                                      | ✅ host live, SSL verified, `robots.txt` disallows all |
 | Email sending domain verified                                             | ✅ `notify.coachingfederation.ch` |
 | Email transport wired, deployed, verified through `email_redirect_to`     | ✅ wired and deployed; end-to-end send through `email_redirect_to` still to run |
-| `SITE_URL`, robots, auth allowlists and OAuth origins updated, redeployed |        |
+| `SITE_URL`, robots, auth allowlists and OAuth origins updated, redeployed | partly — `SITE_URL` and robots done; auth allow-list still to set |
 | Claim flow verified end to end via a staff-issued link                    |        |
 | Privacy policy live on `new.`                                             |        |
 | Cron job state known and correct                                          |        |
