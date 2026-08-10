@@ -46,6 +46,7 @@ export async function deliverClaimInvitation(args: {
       name: "member-claim-invitation",
       data: {
         claimUrl: url,
+        baseUrl: args.baseUrl,
         firstName: args.firstName ?? undefined,
         expiresInDays: TOKEN_TTL_DAYS,
         isResend: args.isResend,
