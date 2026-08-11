@@ -4,6 +4,8 @@
  * src/routes/insights.$id.tsx and the locale-prefixed equivalent.
  */
 import { Mark } from "@/components/marks";
+import { HeroMarks } from "@/components/HeroMarks";
+import { HERO_ARTICLE_PLACEMENT, sanitizeHeroMarks } from "@/lib/hero-design";
 import { Markdown } from "@/components/markdown";
 import { SiteHeaderBar, SiteFooter } from "@/components/site-chrome";
 import {
@@ -59,6 +61,11 @@ export default function InsightDetailPage({ article }: { article: DetailArticle 
   const { t, locale } = useI18n();
   useTrackView("Insight View", article.id, { article_id: article.id });
   const tile = tileFor(article.id);
+  // A hand-placed cover arrangement replaces the automatic fallback mark.
+  const placedMarks = sanitizeHeroMarks(
+    "article",
+    (article as { hero_marks?: unknown }).hero_marks,
+  );
   const category = articleCategoryLabel(article as PublicArticle, locale);
   const byline = authorName(article.author) ?? t("insights.byline");
   // Canonical, locale-aware URL so readers share their own language edition.
@@ -91,7 +98,7 @@ export default function InsightDetailPage({ article }: { article: DetailArticle 
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{article.excerpt}</p>
         ) : null}
 
-        <div className="mt-10 overflow-hidden rounded-2xl border border-border/70">
+        <div className="relative mt-10 overflow-hidden rounded-2xl border border-border/70">
           {article.featured_image_url ? (
             <img
               src={article.featured_image_url}
@@ -102,9 +109,12 @@ export default function InsightDetailPage({ article }: { article: DetailArticle 
             <div
               className={"grid aspect-[16/9] w-full place-items-center " + tile.bg + " " + tile.fg}
             >
-              <Mark name={tile.mark} className="h-1/2 w-1/2" />
+              {placedMarks ? null : <Mark name={tile.mark} className="h-1/2 w-1/2" />}
             </div>
           )}
+          {placedMarks ? (
+            <HeroMarks marks={placedMarks} placement={HERO_ARTICLE_PLACEMENT} />
+          ) : null}
         </div>
         {article.featured_image_url && article.image_credit_name ? (
           <p className="mt-2 text-xs text-muted-foreground">

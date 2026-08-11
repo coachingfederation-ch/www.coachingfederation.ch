@@ -14,6 +14,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import type { ArticleRow, CategoryRow, ProfileRow } from "./articles";
+import type { PlacedMark } from "./mark-placement";
+import type { Json } from "@/integrations/supabase/types";
 
 /**
  * Only `.from()` is ever used here, so the handlers can hand us either the
@@ -106,10 +108,14 @@ export type ArticleContentPatch = {
   image_credit_name: string | null;
   image_credit_url: string | null;
   image_source: string | null;
+  hero_marks: PlacedMark[] | null;
 };
 
 export async function saveArticleContent(client: Client, id: string, patch: ArticleContentPatch) {
-  const { error } = await client.from("articles").update(patch).eq("id", id);
+  const { error } = await client
+    .from("articles")
+    .update({ ...patch, hero_marks: patch.hero_marks as unknown as Json })
+    .eq("id", id);
   if (error) throw error;
   return { ok: true as const };
 }

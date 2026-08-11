@@ -4,6 +4,7 @@
  */
 import type { MarkName } from "@/components/marks";
 import type { Locale } from "@/i18n/config";
+import type { PlacedMark } from "./mark-placement";
 
 export const ARTICLE_CATEGORIES = [
   "Leadership",
@@ -54,6 +55,8 @@ export interface ArticleRow {
   image_credit_name: string | null;
   image_credit_url: string | null;
   image_source: string | null;
+  /** Hand-placed hero brush marks (percentage geometry), null when unset. */
+  hero_marks: PlacedMark[] | null;
   is_featured: boolean;
   updated_at: string;
 }

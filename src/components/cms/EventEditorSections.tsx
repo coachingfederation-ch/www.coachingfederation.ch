@@ -8,6 +8,8 @@ import { ImagePlus, X } from "lucide-react";
 import { EventTranslationsPanel } from "@/components/cms/EventTranslationsPanel";
 import { EventHostsPanel } from "@/components/cms/EventHostsPanel";
 import { RichTextEditor } from "@/components/cms/RichTextField";
+import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
+import { sanitizeHeroMarks } from "@/lib/hero-design";
 import type { getManagedEvent, listEventRegistrations } from "@/lib/events-admin.functions";
 import {
   DEFAULT_RULE,
@@ -373,63 +375,73 @@ export function EventContentSection({
         </div>
       </Section>
 
-      <Section title={t("events.section.image")}>
-        <div>
-          <Field label={t("events.fieldImageUrl")}>
-            <input
-              className={inputClass}
-              placeholder="https://…"
-              value={event.image_url ?? ""}
-              onChange={(e) =>
-                // A hand-pasted URL drops any Unsplash credit that no longer applies.
-                patch({
-                  image_url: e.target.value,
-                  image_credit_name: null,
-                  image_credit_url: null,
-                })
-              }
-            />
-          </Field>
-          <p className="mt-1 text-xs text-muted-foreground">{t("events.imageHint")}</p>
-          <div className="mt-2 flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setPickerOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
-            >
-              <ImagePlus className="h-3.5 w-3.5" />
-              {t("events.chooseUnsplash")}
-            </button>
-            {event.image_url ? (
+      <Section title={t("hero.section")}>
+        <HeroDesignSection
+          kind="event"
+          imageUrl={event.image_url}
+          title={event.title}
+          summary={event.summary}
+          marks={sanitizeHeroMarks("event", event.hero_marks) ?? []}
+          onChange={(next) => patch({ hero_marks: next })}
+          t={t}
+        >
+          <div>
+            <Field label={t("events.fieldImageUrl")}>
+              <input
+                className={inputClass}
+                placeholder="https://…"
+                value={event.image_url ?? ""}
+                onChange={(e) =>
+                  // A hand-pasted URL drops any Unsplash credit that no longer applies.
+                  patch({
+                    image_url: e.target.value,
+                    image_credit_name: null,
+                    image_credit_url: null,
+                  })
+                }
+              />
+            </Field>
+            <p className="mt-1 text-xs text-muted-foreground">{t("events.imageHint")}</p>
+            <div className="mt-2 flex flex-wrap items-center gap-3">
               <button
                 type="button"
-                onClick={() =>
-                  patch({ image_url: null, image_credit_name: null, image_credit_url: null })
-                }
-                className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary"
+                onClick={() => setPickerOpen(true)}
+                className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
               >
-                <X className="h-3.5 w-3.5" />
-                {t("events.removeImage")}
+                <ImagePlus className="h-3.5 w-3.5" />
+                {t("events.chooseUnsplash")}
               </button>
-            ) : null}
-          </div>
-          {event.image_url ? (
-            <div className="mt-3">
-              <img
-                src={event.image_url}
-                alt=""
-                className="h-32 w-full max-w-xs rounded-xl border border-border object-cover"
-              />
-              {event.image_credit_name ? (
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {t("events.imageCredit")} {event.image_credit_name}
-                </p>
+              {event.image_url ? (
+                <button
+                  type="button"
+                  onClick={() =>
+                    patch({ image_url: null, image_credit_name: null, image_credit_url: null })
+                  }
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary"
+                >
+                  <X className="h-3.5 w-3.5" />
+                  {t("events.removeImage")}
+                </button>
               ) : null}
             </div>
-          ) : (
-            <p className="mt-3 text-xs text-muted-foreground">{t("events.imageFallback")}</p>
-          )}
-        </div>
+            {event.image_url ? (
+              <div className="mt-3">
+                <img
+                  src={event.image_url}
+                  alt=""
+                  className="h-32 w-full max-w-xs rounded-xl border border-border object-cover"
+                />
+                {event.image_credit_name ? (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {t("events.imageCredit")} {event.image_credit_name}
+                  </p>
+                ) : null}
+              </div>
+            ) : (
+              <p className="mt-3 text-xs text-muted-foreground">{t("events.imageFallback")}</p>
+            )}
+          </div>
+        </HeroDesignSection>
       </Section>
     </>
   );

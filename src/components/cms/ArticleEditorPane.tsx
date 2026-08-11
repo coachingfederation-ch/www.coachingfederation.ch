@@ -6,6 +6,8 @@
 import { Image as ImageIcon, Upload, X } from "lucide-react";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import { UnsplashPicker } from "@/components/cms/UnsplashPicker";
+import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
+import { sanitizeHeroMarks } from "@/lib/hero-design";
 import type { ArticleLang, ArticleRow } from "@/lib/articles";
 
 type Lang = ArticleLang;
@@ -109,81 +111,91 @@ export function ArticleEditorPane({
         className="mt-4 w-full max-w-2xl resize-none border-none bg-transparent text-lg text-muted-foreground outline-none placeholder:text-muted-foreground/60"
       />
 
-      <div className="mt-6 space-y-3">
-        {article.featured_image_url ? (
-          <div className="relative overflow-hidden rounded-2xl border border-border">
-            <img
-              src={article.featured_image_url}
-              alt="Featured"
-              className="h-64 w-full object-cover"
+      <HeroDesignSection
+        kind="article"
+        imageUrl={article.featured_image_url}
+        title={article.title}
+        summary={article.excerpt}
+        marks={sanitizeHeroMarks("article", article.hero_marks) ?? []}
+        onChange={(next) => update({ hero_marks: next })}
+        t={t}
+      >
+        <div className="mt-6 space-y-3">
+          {article.featured_image_url ? (
+            <div className="relative overflow-hidden rounded-2xl border border-border">
+              <img
+                src={article.featured_image_url}
+                alt="Featured"
+                className="h-64 w-full object-cover"
+              />
+              <button
+                onClick={() => update({ featured_image_url: null })}
+                aria-label={t("editor.removeImage")}
+                className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-card/90 text-foreground shadow-[var(--shadow-soft)] hover:bg-card"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          ) : (
+            <label className="flex h-64 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-secondary/40 text-muted-foreground hover:bg-secondary/60">
+              <ImageIcon className="h-8 w-8" />
+              <span className="text-sm font-medium">
+                {uploading ? t("editor.uploading") : t("editor.uploadImage")}
+              </span>
+              <span className="text-xs">{t("editor.uploadHint")}</span>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                disabled={uploading}
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) void uploadImage(f);
+                  e.target.value = "";
+                }}
+              />
+            </label>
+          )}
+          {article.image_credit_name ? (
+            <p className="text-xs text-muted-foreground">
+              {t("unsplash.creditPrefix")}{" "}
+              <a
+                href={article.image_credit_url ?? "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2"
+              >
+                {article.image_credit_name}
+              </a>{" "}
+              {t("unsplash.creditSuffix")}
+            </p>
+          ) : null}
+          <div className="flex items-center gap-2">
+            <Upload className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <input
+              value={article.featured_image_url ?? ""}
+              onChange={(e) =>
+                update({
+                  featured_image_url: e.target.value || null,
+                  image_source: e.target.value ? "url" : null,
+                  image_credit_name: null,
+                  image_credit_url: null,
+                })
+              }
+              placeholder={t("editor.orPasteUrl")}
+              className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/20"
             />
             <button
-              onClick={() => update({ featured_image_url: null })}
-              aria-label={t("editor.removeImage")}
-              className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-card/90 text-foreground shadow-[var(--shadow-soft)] hover:bg-card"
+              type="button"
+              onClick={() => setUnsplashOpen(true)}
+              className="shrink-0 whitespace-nowrap rounded-full border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-secondary"
             >
-              <X className="h-4 w-4" />
+              {t("unsplash.button")}
             </button>
           </div>
-        ) : (
-          <label className="flex h-64 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-secondary/40 text-muted-foreground hover:bg-secondary/60">
-            <ImageIcon className="h-8 w-8" />
-            <span className="text-sm font-medium">
-              {uploading ? t("editor.uploading") : t("editor.uploadImage")}
-            </span>
-            <span className="text-xs">{t("editor.uploadHint")}</span>
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              disabled={uploading}
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) void uploadImage(f);
-                e.target.value = "";
-              }}
-            />
-          </label>
-        )}
-        {article.image_credit_name ? (
-          <p className="text-xs text-muted-foreground">
-            {t("unsplash.creditPrefix")}{" "}
-            <a
-              href={article.image_credit_url ?? "#"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-2"
-            >
-              {article.image_credit_name}
-            </a>{" "}
-            {t("unsplash.creditSuffix")}
-          </p>
-        ) : null}
-        <div className="flex items-center gap-2">
-          <Upload className="h-4 w-4 shrink-0 text-muted-foreground" />
-          <input
-            value={article.featured_image_url ?? ""}
-            onChange={(e) =>
-              update({
-                featured_image_url: e.target.value || null,
-                image_source: e.target.value ? "url" : null,
-                image_credit_name: null,
-                image_credit_url: null,
-              })
-            }
-            placeholder={t("editor.orPasteUrl")}
-            className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/20"
-          />
-          <button
-            type="button"
-            onClick={() => setUnsplashOpen(true)}
-            className="shrink-0 whitespace-nowrap rounded-full border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-secondary"
-          >
-            {t("unsplash.button")}
-          </button>
+          {uploadError ? <p className="text-xs text-destructive">{uploadError}</p> : null}
         </div>
-        {uploadError ? <p className="text-xs text-destructive">{uploadError}</p> : null}
-      </div>
+      </HeroDesignSection>
       <UnsplashPicker
         open={unsplashOpen}
         onOpenChange={setUnsplashOpen}
