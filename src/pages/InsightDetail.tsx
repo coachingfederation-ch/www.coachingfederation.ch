@@ -4,6 +4,8 @@
  * src/routes/insights.$id.tsx and the locale-prefixed equivalent.
  */
 import { Mark } from "@/components/marks";
+import { HeroMarks } from "@/components/HeroMarks";
+import { HERO_ARTICLE_PLACEMENT, sanitizeHeroMarks } from "@/lib/hero-design";
 import { Markdown } from "@/components/markdown";
 import { SiteHeaderBar, SiteFooter } from "@/components/site-chrome";
 import {
@@ -59,6 +61,8 @@ export default function InsightDetailPage({ article }: { article: DetailArticle 
   const { t, locale } = useI18n();
   useTrackView("Insight View", article.id, { article_id: article.id });
   const tile = tileFor(article.id);
+  // A hand-placed cover arrangement replaces the automatic fallback mark.
+  const placedMarks = sanitizeHeroMarks("article", (article as { hero_marks?: unknown }).hero_marks);
   const category = articleCategoryLabel(article as PublicArticle, locale);
   const byline = authorName(article.author) ?? t("insights.byline");
   // Canonical, locale-aware URL so readers share their own language edition.
