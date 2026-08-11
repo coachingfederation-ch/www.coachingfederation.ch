@@ -699,6 +699,21 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     >
       <p className="eyebrow">{t("events.detail.rsvpEyebrow")}</p>
       {body()}
+      <PaymentOverlay
+        open={state.kind === "paying"}
+        onClose={() =>
+          setState((current) =>
+            current.kind === "paying"
+              ? { kind: "held", clientSecret: current.clientSecret }
+              : current,
+          )
+        }
+        title={t("events.detail.tickets.paymentTitle")}
+        closeLabel={t("events.detail.tickets.paymentClose")}
+        eventTitle={event.title ?? ""}
+        summary={selected ? `${selected.name} · ${priceOf(selected)}` : null}
+        options={checkoutOptions}
+      />
     </aside>
   );
 }
