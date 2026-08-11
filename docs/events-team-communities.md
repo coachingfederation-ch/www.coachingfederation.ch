@@ -13,13 +13,13 @@ Staff manage events at `/manage/events`; the public sees `/events` and
 - Publishing is guarded in the database (`tg_events_publish_guard`): a published
   event must have a title, a slug and a start time, and cannot end before it
   starts.
-- Registration is **free RSVP only**. `tg_event_registration_guard` is the whole
-  policy — it locks the event row, re-counts confirmed seats and refuses when
-  the event is unpublished, closed, full, or requires an account. Capacity is
-  therefore safe under concurrent RSVPs; do not re-implement the check in
-  TypeScript.
-- Payments are deliberately out of scope. Adding them means a new registration
-  status and a payment record, not a change to the RSVP guard.
+- `tg_event_registration_guard` is the whole seat policy — it locks the event
+  row, re-counts confirmed seats and refuses when the event is unpublished,
+  closed, full, or requires an account. Capacity is therefore safe under
+  concurrent registrations; do not re-implement the check in TypeScript.
+- Registration modes, ticket tiers, member pricing, Stripe checkout,
+  confirmation emails and the staff cancellation/refund flow are documented in
+  `events-and-ticketing.md`.
 - Event copy is translated per locale in `event_translations`, with the same
   `manually_edited` protection as articles.
 
