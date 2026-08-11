@@ -1,0 +1,589 @@
+/**
+ * Event registration: ticket tiers, member pricing, custom questions and
+ * Stripe Checkout.
+ *
+ * The panel is deliberately advisory. Entitlement, price, capacity and the
+ * registration window are all decided server-side; what happens here is
+ * showing the visitor what the server will do and why. An event with no tiers
+ * behaves exactly as it did before ticketing existed.
+ */
+import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
+import { LocaleLink, useI18n } from "@/i18n";
+import { localizePath } from "@/i18n/config";
+import { supabase } from "@/integrations/supabase/client";
+import { CARD_SHADOW } from "@/components/site-chrome";
+import { isPastEvent, type PublicEvent } from "@/lib/events";
+import { trackGoal } from "@/lib/plausible";
+import {
+  cancelMyRegistration,
+  getMyRegistration,
+  submitGuestRegistration,
+  submitMemberRegistration,
+} from "@/lib/events.functions";
+import { getEventTicketing, getMyMembershipState, confirmCheckoutSession } from "@/lib/tickets.functions";
+import {
+  formatPrice,
+  memberTier as findMemberTier,
+  nonMemberTier as findNonMemberTier,
+  selectableTiers,
+  type MembershipState,
+  type PublicTier,
+} from "@/lib/tickets";
+import { getStripe, getStripeEnvironment, paymentsConfigured } from "@/lib/stripe";
+
+type Reason =
+  | "full"
+  | "closed"
+  | "duplicate"
+  | "tier_required"
+  | "tier_unavailable"
+  | "answers"
+  | "payment"
+  | "error";
+
+type FormState =
+  | { kind: "idle" }
+  | { kind: "saving" }
+  | { kind: "done" }
+  | { kind: "paying"; clientSecret: string }
+  | { kind: "error"; reason: Reason };
+
+type ReturnState = "paid" | "pending" | "failed" | null;
+
+const inputClass = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm";
+
+/** Draft answers survive the sign-in round trip, so nothing typed is lost. */
+function draftKey(eventId: string) {
+  return `icf.event-rsvp.${eventId}`;
+}
+
+export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
+  const { t, locale } = useI18n();
+  const eventId = event.id!;
+  const slug = event.slug ?? "";
+  const past = isPastEvent(event);
+
+  const session = useQuery({
+    queryKey: ["auth-user-id"],
+    queryFn: async () => (await supabase.auth.getSession()).data.session?.access_token ?? null,
+    staleTime: 5 * 60_000,
+  });
+  const signedIn = Boolean(session.data);
+
+  const mine = useQuery({
+    queryKey: ["my-event-registration", eventId],
+    queryFn: () => getMyRegistration({ data: { eventId } }),
+    enabled: signedIn && session.isFetched,
+    retry: false,
+  });
+
+  const ticketing = useQuery({
+    queryKey: ["event-ticketing", eventId, locale],
+    queryFn: () => getEventTicketing({ data: { eventId, locale } }),
+    staleTime: 30_000,
+  });
+
+  const membershipQuery = useQuery({
+    queryKey: ["my-membership-state"],
+    queryFn: () => getMyMembershipState(),
+    enabled: signedIn && session.isFetched,
+    retry: false,
+    staleTime: 5 * 60_000,
+  });
+  const membership: MembershipState = signedIn
+    ? ((membershipQuery.data as MembershipState | undefined) ?? "not_member")
+    : "signed_out";
+  const membershipResolving = signedIn && membershipQuery.isPending;
+
+  const tiers = useMemo(() => ticketing.data?.tiers ?? [], [ticketing.data]);
+  const fields = ticketing.data?.fields ?? [];
+  const hasTiers = tiers.length > 0;
+  const allowed = useMemo(() => selectableTiers(tiers, membership), [tiers, membership]);
+  const memberTier = findMemberTier(tiers);
+  const standardTier = findNonMemberTier(tiers);
+  const allSoldOut = hasTiers && tiers.every((tier) => tier.isSoldOut);
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [notes, setNotes] = useState("");
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [tierId, setTierId] = useState<string | null>(null);
+  const [state, setState] = useState<FormState>({ kind: "idle" });
+  const [returned, setReturned] = useState<ReturnState>(null);
+
+  // Restore a draft left behind by a sign-in detour.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const raw = window.sessionStorage.getItem(draftKey(eventId));
+    if (!raw) return;
+    try {
+      const draft = JSON.parse(raw) as {
+        fullName?: string;
+        email?: string;
+        notes?: string;
+        answers?: Record<string, string>;
+      };
+      setFullName(draft.fullName ?? "");
+      setEmail(draft.email ?? "");
+      setNotes(draft.notes ?? "");
+      setAnswers(draft.answers ?? {});
+    } catch {
+      window.sessionStorage.removeItem(draftKey(eventId));
+    }
+  }, [eventId]);
+
+  // Membership can change the applicable tier (sign-in, or a sold-out member
+  // tier), so follow the server's default until the visitor picks explicitly.
+  useEffect(() => {
+    const preferred = ticketing.data?.defaultTierId ?? null;
+    setTierId((current) => {
+      if (current && allowed.some((tier) => tier.id === current && !tier.isSoldOut)) return current;
+      if (membership === "member") {
+        const member = tiers.find((tier) => tier.segment === "member" && !tier.isSoldOut);
+        if (member) return member.id;
+      }
+      const open = allowed.find((tier) => !tier.isSoldOut);
+      return open?.id ?? preferred;
+    });
+  }, [allowed, membership, tiers, ticketing.data]);
+
+  // Stripe sends the visitor back here; reconcile before showing an outcome.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("checkout") !== "return") return;
+    const sessionId = params.get("session_id");
+    params.delete("checkout");
+    params.delete("session_id");
+    const query = params.toString();
+    window.history.replaceState({}, "", window.location.pathname + (query ? `?${query}` : ""));
+    if (!sessionId) {
+      setReturned("failed");
+      return;
+    }
+    void confirmCheckoutSession({
+      data: { sessionId, environment: getStripeEnvironment() },
+    }).then((result) => {
+      setReturned(result.status);
+      if (result.status === "paid") {
+        trackGoal("Event Registration Paid", { event_slug: slug });
+        void mine.refetch();
+      }
+    });
+    // Runs once per mount: the return parameters are consumed immediately.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const selected: PublicTier | null = tierId
+    ? (tiers.find((tier) => tier.id === tierId) ?? null)
+    : null;
+  const freeLabel = t("events.detail.tickets.free");
+  const priceOf = (tier: PublicTier) =>
+    formatPrice(tier.priceCents, tier.currency, locale, freeLabel);
+
+  const saving =
+    memberTier && standardTier && standardTier.priceCents > memberTier.priceCents
+      ? formatPrice(
+          standardTier.priceCents - memberTier.priceCents,
+          memberTier.currency,
+          locale,
+          freeLabel,
+        )
+      : null;
+
+  const rsvpMode = event.registration_mode === "rsvp";
+  const guestsBlocked = !signedIn && event.guest_registration_allowed === false;
+  const needsPayment = Boolean(selected && selected.priceCents > 0);
+  const paymentsBroken = needsPayment && !paymentsConfigured();
+
+  const signInHref = `/auth?next=${encodeURIComponent(localizePath(`/events/${slug}`, locale))}`;
+
+  const persistDraft = () => {
+    if (typeof window === "undefined") return;
+    window.sessionStorage.setItem(
+      draftKey(eventId),
+      JSON.stringify({ fullName, email, notes, answers }),
+    );
+  };
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setState({ kind: "saving" });
+    const payload = {
+      eventId,
+      slug,
+      locale,
+      fullName,
+      email,
+      notes: notes || null,
+      tierId,
+      answers,
+      environment: paymentsConfigured() ? getStripeEnvironment() : ("sandbox" as const),
+    };
+    const result = signedIn
+      ? await submitMemberRegistration({ data: payload })
+      : await submitGuestRegistration({ data: payload });
+
+    if (!result.ok) {
+      setState({ kind: "error", reason: result.reason });
+      void ticketing.refetch();
+      return;
+    }
+    if (typeof window !== "undefined") window.sessionStorage.removeItem(draftKey(eventId));
+    if (result.kind === "paid") {
+      setState({ kind: "paying", clientSecret: result.clientSecret });
+      return;
+    }
+    setState({ kind: "done" });
+    trackGoal("Event Registration", { event_slug: slug, member: membership === "member" });
+    if (signedIn) void mine.refetch();
+    void ticketing.refetch();
+  };
+
+  const cancel = async () => {
+    const id = mine.data?.id;
+    if (!id) return;
+    await cancelMyRegistration({ data: { registrationId: id } });
+    setState({ kind: "idle" });
+    void mine.refetch();
+    void ticketing.refetch();
+  };
+
+  const checkoutOptions = useMemo(
+    () =>
+      state.kind === "paying"
+        ? { fetchClientSecret: async () => state.clientSecret }
+        : { fetchClientSecret: async () => "" },
+    [state],
+  );
+
+  const notice = (text: string, tone: "info" | "good" | "warn" = "info") => (
+    <p
+      className={
+        "mt-4 rounded-xl px-3 py-2 text-xs leading-relaxed " +
+        (tone === "good"
+          ? "bg-teal-soft text-teal-foreground"
+          : tone === "warn"
+            ? "bg-warn-soft text-[color:var(--warn)]"
+            : "bg-secondary text-muted-foreground")
+      }
+    >
+      {text}
+    </p>
+  );
+
+  const body = () => {
+    if (!rsvpMode) {
+      return (
+        <p className="mt-4 text-sm text-muted-foreground">{t("events.detail.noRegistration")}</p>
+      );
+    }
+    if (past) return <p className="mt-4 text-sm text-muted-foreground">{t("events.detail.pastEvent")}</p>;
+    if (returned === "paid")
+      return (
+        <p className="mt-4 text-sm font-semibold text-teal-foreground">
+          {t("events.detail.tickets.returnPaid")}
+        </p>
+      );
+    if (returned === "pending")
+      return notice(t("events.detail.tickets.returnPending"), "warn");
+    if (mine.data) {
+      const pending = mine.data.payment_status === "pending";
+      return (
+        <div className="mt-4">
+          <p className="text-sm font-semibold text-teal-foreground">
+            {pending ? t("events.detail.tickets.pendingPayment") : t("events.detail.youAreIn")}
+          </p>
+          <button
+            onClick={() => void cancel()}
+            className="mt-4 rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-secondary"
+          >
+            {t("events.detail.cancel")}
+          </button>
+        </div>
+      );
+    }
+    if (state.kind === "done")
+      return (
+        <p className="mt-4 text-sm font-semibold text-teal-foreground">
+          {t("events.detail.confirmed")}
+        </p>
+      );
+    if (state.kind === "paying") {
+      return (
+        <div className="mt-4">
+          <p className="text-sm font-semibold">{t("events.detail.tickets.paymentTitle")}</p>
+          <div className="mt-3 overflow-hidden rounded-xl border border-border/70">
+            <EmbeddedCheckoutProvider stripe={getStripe()} options={checkoutOptions}>
+              <EmbeddedCheckout />
+            </EmbeddedCheckoutProvider>
+          </div>
+        </div>
+      );
+    }
+    if (event.is_full || allSoldOut)
+      return (
+        <p className="mt-4 text-sm text-muted-foreground">
+          {allSoldOut ? t("events.detail.tickets.allSoldOut") : t("events.detail.full")}
+        </p>
+      );
+    if (!event.registration_open)
+      return <p className="mt-4 text-sm text-muted-foreground">{t("events.detail.closed")}</p>;
+    if (guestsBlocked)
+      return (
+        <div className="mt-4">
+          <p className="text-sm text-muted-foreground">{t("events.detail.membersOnly")}</p>
+          <a
+            href={signInHref}
+            onClick={persistDraft}
+            className="mt-4 inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground"
+          >
+            {t("events.detail.signIn")}
+          </a>
+        </div>
+      );
+
+    return (
+      <form onSubmit={submit} className="mt-4 space-y-3">
+        {ticketing.isPending ? (
+          <p className="text-sm text-muted-foreground">{t("events.detail.tickets.loading")}</p>
+        ) : hasTiers ? (
+          <fieldset>
+            <legend className="text-xs font-semibold">{t("events.detail.tickets.choose")}</legend>
+            <div className="mt-2 space-y-2">
+              {tiers.map((tier) => {
+                const locked = tier.segment === "member" && membership !== "member";
+                const disabled = tier.isSoldOut || locked;
+                return (
+                  <label
+                    key={tier.id}
+                    className={
+                      "flex cursor-pointer items-start gap-3 rounded-xl border p-3 text-sm transition " +
+                      (tierId === tier.id
+                        ? "border-primary bg-primary/5"
+                        : "border-border/70 hover:border-primary/50") +
+                      (disabled ? " cursor-not-allowed opacity-60" : "")
+                    }
+                  >
+                    <input
+                      type="radio"
+                      name="ticket-tier"
+                      className="mt-1"
+                      value={tier.id}
+                      checked={tierId === tier.id}
+                      disabled={disabled}
+                      onChange={() => setTierId(tier.id)}
+                    />
+                    <span className="min-w-0 flex-1">
+                      <span className="flex items-baseline justify-between gap-2">
+                        <span className="font-semibold">{tier.name}</span>
+                        <span className="shrink-0 font-semibold">{priceOf(tier)}</span>
+                      </span>
+                      {tier.description ? (
+                        <span className="mt-1 block text-xs text-muted-foreground">
+                          {tier.description}
+                        </span>
+                      ) : null}
+                      <span className="mt-1 flex flex-wrap gap-2 text-[11px] font-semibold text-muted-foreground">
+                        {tier.segment === "member" ? (
+                          <span>{t("events.detail.tickets.memberBadge")}</span>
+                        ) : tier.segment === "non_member" ? (
+                          <span>{t("events.detail.tickets.nonMemberBadge")}</span>
+                        ) : null}
+                        {tier.isSoldOut ? (
+                          <span className="text-[color:var(--warn)]">
+                            {t("events.detail.tickets.soldOut")}
+                          </span>
+                        ) : tier.seatsRemaining !== null ? (
+                          <span>
+                            {t("events.detail.tickets.seatsLeft").replace(
+                              "{n}",
+                              String(tier.seatsRemaining),
+                            )}
+                          </span>
+                        ) : null}
+                      </span>
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          </fieldset>
+        ) : null}
+
+        {hasTiers && membershipResolving
+          ? notice(t("events.detail.tickets.membershipChecking"))
+          : null}
+        {hasTiers && memberTier && membership === "member" && !memberTier.isSoldOut
+          ? notice(
+              t("events.detail.tickets.memberApplied") +
+                (saving ? " " + t("events.detail.tickets.memberSaving").replace("{amount}", saving) : ""),
+              "good",
+            )
+          : null}
+        {hasTiers && memberTier && membership === "member" && memberTier.isSoldOut
+          ? notice(t("events.detail.tickets.memberSoldOut"), "warn")
+          : null}
+        {hasTiers && memberTier && membership === "signed_out" ? (
+          <p className="mt-4 rounded-xl bg-secondary px-3 py-2 text-xs leading-relaxed text-muted-foreground">
+            {t("events.detail.tickets.signedOutPrompt")}{" "}
+            <a
+              href={signInHref}
+              onClick={persistDraft}
+              className="font-semibold text-primary hover:underline"
+            >
+              {t("events.detail.signIn")}
+            </a>
+          </p>
+        ) : null}
+        {hasTiers && memberTier && membership === "not_member"
+          ? notice(t("events.detail.tickets.notMember"))
+          : null}
+
+        <label className="block text-xs font-semibold" htmlFor="rsvp-name">
+          {t("events.detail.fieldName")}
+        </label>
+        <input
+          id="rsvp-name"
+          required
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
+          className={inputClass}
+        />
+        <label className="block text-xs font-semibold" htmlFor="rsvp-email">
+          {t("events.detail.fieldEmail")}
+        </label>
+        <input
+          id="rsvp-email"
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className={inputClass}
+        />
+
+        {fields.map((field) => {
+          const id = `rsvp-field-${field.id}`;
+          const value = answers[field.key] ?? "";
+          const update = (next: string) =>
+            setAnswers((prev) => ({ ...prev, [field.key]: next }));
+          if (field.type === "checkbox") {
+            return (
+              <label key={field.id} className="flex items-start gap-2 text-xs font-semibold">
+                <input
+                  type="checkbox"
+                  className="mt-0.5"
+                  required={field.required}
+                  checked={value === "true"}
+                  onChange={(e) => update(e.target.checked ? "true" : "false")}
+                />
+                <span>{field.label}</span>
+              </label>
+            );
+          }
+          return (
+            <div key={field.id}>
+              <label className="block text-xs font-semibold" htmlFor={id}>
+                {field.label}
+              </label>
+              {field.type === "single_choice" ? (
+                <select
+                  id={id}
+                  required={field.required}
+                  value={value}
+                  onChange={(e) => update(e.target.value)}
+                  className={inputClass}
+                >
+                  <option value="" />
+                  {field.options.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              ) : field.type === "long_text" ? (
+                <textarea
+                  id={id}
+                  rows={3}
+                  required={field.required}
+                  value={value}
+                  onChange={(e) => update(e.target.value)}
+                  className={inputClass}
+                />
+              ) : (
+                <input
+                  id={id}
+                  required={field.required}
+                  value={value}
+                  onChange={(e) => update(e.target.value)}
+                  className={inputClass}
+                />
+              )}
+            </div>
+          );
+        })}
+
+        <label className="block text-xs font-semibold" htmlFor="rsvp-notes">
+          {t("events.detail.fieldNotes")}
+        </label>
+        <textarea
+          id="rsvp-notes"
+          rows={3}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          className={inputClass}
+        />
+
+        {selected ? (
+          <p className="text-sm font-semibold">
+            {selected.priceCents > 0
+              ? t("events.detail.tickets.total").replace("{amount}", priceOf(selected))
+              : t("events.detail.tickets.totalFree")}
+          </p>
+        ) : null}
+
+        <button
+          type="submit"
+          disabled={
+            state.kind === "saving" ||
+            paymentsBroken ||
+            (hasTiers && (!selected || selected.isSoldOut))
+          }
+          className="w-full rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+        >
+          {state.kind === "saving"
+            ? t("events.detail.saving")
+            : needsPayment
+              ? t("events.detail.tickets.payAndRegister")
+              : t("events.detail.rsvp")}
+        </button>
+        {paymentsBroken ? notice(t("events.detail.tickets.paymentsUnavailable"), "warn") : null}
+        {state.kind === "error" ? (
+          <p className="text-sm text-destructive">{t(`events.detail.error.${state.reason}`)}</p>
+        ) : null}
+        {returned === "failed" ? notice(t("events.detail.tickets.returnFailed"), "warn") : null}
+        <p className="text-[11px] leading-relaxed text-muted-foreground">
+          {t("events.detail.privacy")}
+        </p>
+      </form>
+    );
+  };
+
+  return (
+    <aside
+      className={
+        "h-fit rounded-2xl border border-border/70 bg-card p-6 lg:sticky lg:top-8 " + CARD_SHADOW
+      }
+    >
+      <p className="eyebrow">{t("events.detail.rsvpEyebrow")}</p>
+      {body()}
+      {mine.data ? null : (
+        <LocaleLink to="/events" className="sr-only">
+          {t("events.detail.backToEvents")}
+        </LocaleLink>
+      )}
+    </aside>
+  );
+}
