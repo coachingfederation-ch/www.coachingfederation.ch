@@ -91,7 +91,7 @@ export default function InsightDetailPage({ article }: { article: DetailArticle 
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{article.excerpt}</p>
         ) : null}
 
-        <div className="mt-10 overflow-hidden rounded-2xl border border-border/70">
+        <div className="relative mt-10 overflow-hidden rounded-2xl border border-border/70">
           {article.featured_image_url ? (
             <img
               src={article.featured_image_url}
@@ -102,9 +102,12 @@ export default function InsightDetailPage({ article }: { article: DetailArticle 
             <div
               className={"grid aspect-[16/9] w-full place-items-center " + tile.bg + " " + tile.fg}
             >
-              <Mark name={tile.mark} className="h-1/2 w-1/2" />
+              {placedMarks ? null : <Mark name={tile.mark} className="h-1/2 w-1/2" />}
             </div>
           )}
+          {placedMarks ? (
+            <HeroMarks marks={placedMarks} placement={HERO_ARTICLE_PLACEMENT} />
+          ) : null}
         </div>
         {article.featured_image_url && article.image_credit_name ? (
           <p className="mt-2 text-xs text-muted-foreground">
