@@ -81,6 +81,7 @@ import { Route as ApiPublicEuropePulseScanRouteImport } from './routes/api/publi
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
+import { Route as ApiPublicCalendarRegistrationIdDoticsRouteImport } from './routes/api/public/calendar.$registrationId[.]ics'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
@@ -447,6 +448,12 @@ const StaffManageEventsIdRoute = StaffManageEventsIdRouteImport.update({
   path: '/manage/events/$id',
   getParentRoute: () => StaffRouteRoute,
 } as any)
+const ApiPublicCalendarRegistrationIdDoticsRoute =
+  ApiPublicCalendarRegistrationIdDoticsRouteImport.update({
+    id: '/api/public/calendar/$registrationId.ics',
+    path: '/api/public/calendar/$registrationId.ics',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -530,6 +537,7 @@ export interface FileRoutesByFullPath {
   '/articles/': typeof StaffArticlesIndexRoute
   '/members/': typeof StaffMembersIndexRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
+  '/api/public/calendar/$registrationId.ics': typeof ApiPublicCalendarRegistrationIdDoticsRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events/': typeof StaffManageEventsIndexRoute
@@ -600,6 +608,7 @@ export interface FileRoutesByTo {
   '/articles': typeof StaffArticlesIndexRoute
   '/members': typeof StaffMembersIndexRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
+  '/api/public/calendar/$registrationId.ics': typeof ApiPublicCalendarRegistrationIdDoticsRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events': typeof StaffManageEventsIndexRoute
@@ -677,6 +686,7 @@ export interface FileRoutesById {
   '/_staff/articles/': typeof StaffArticlesIndexRoute
   '/_staff/members/': typeof StaffMembersIndexRoute
   '/_staff/manage/events/$id': typeof StaffManageEventsIdRoute
+  '/api/public/calendar/$registrationId.ics': typeof ApiPublicCalendarRegistrationIdDoticsRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/_staff/manage/events/': typeof StaffManageEventsIndexRoute
@@ -753,6 +763,7 @@ export interface FileRouteTypes {
     | '/articles/'
     | '/members/'
     | '/manage/events/$id'
+    | '/api/public/calendar/$registrationId.ics'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
     | '/manage/events/'
@@ -823,6 +834,7 @@ export interface FileRouteTypes {
     | '/articles'
     | '/members'
     | '/manage/events/$id'
+    | '/api/public/calendar/$registrationId.ics'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
     | '/manage/events'
@@ -899,6 +911,7 @@ export interface FileRouteTypes {
     | '/_staff/articles/'
     | '/_staff/members/'
     | '/_staff/manage/events/$id'
+    | '/api/public/calendar/$registrationId.ics'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
     | '/_staff/manage/events/'
@@ -938,6 +951,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicEuropePulseScanRoute: typeof ApiPublicEuropePulseScanRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
+  ApiPublicCalendarRegistrationIdDoticsRoute: typeof ApiPublicCalendarRegistrationIdDoticsRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
@@ -1448,6 +1462,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageEventsIdRouteImport
       parentRoute: typeof StaffRouteRoute
     }
+    '/api/public/calendar/$registrationId.ics': {
+      id: '/api/public/calendar/$registrationId.ics'
+      path: '/api/public/calendar/$registrationId.ics'
+      fullPath: '/api/public/calendar/$registrationId.ics'
+      preLoaderRoute: typeof ApiPublicCalendarRegistrationIdDoticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -1646,6 +1667,8 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicEuropePulseScanRoute: ApiPublicEuropePulseScanRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,
+  ApiPublicCalendarRegistrationIdDoticsRoute:
+    ApiPublicCalendarRegistrationIdDoticsRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
