@@ -106,8 +106,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const accountMembership: MembershipState = signedIn
     ? ((membershipQuery.data as MembershipState | undefined) ?? "not_member")
     : "signed_out";
-  const membership: MembershipState =
-    memberIdState === "confirmed" ? "member" : accountMembership;
+  const membership: MembershipState = memberIdState === "confirmed" ? "member" : accountMembership;
   const membershipResolving = signedIn && membershipQuery.isPending;
 
   const applyMemberId = async () => {
