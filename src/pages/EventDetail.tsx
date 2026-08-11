@@ -184,10 +184,14 @@ export default function EventDetailPage({
               />
             </>
           ) : null}
-          <Mark
-            name={marks.corner}
-            className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 text-mark-yellow/10 md:h-72 md:w-72"
-          />
+          {placedMarks ? (
+            <HeroMarks marks={placedMarks} placement={HERO_EVENT_PLACEMENT} opacity={0.85} />
+          ) : (
+            <Mark
+              name={marks.corner}
+              className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 text-mark-yellow/10 md:h-72 md:w-72"
+            />
+          )}
           <div
             className={
               "relative mx-auto max-w-5xl px-8 pt-4 " + (event.image_url ? "pb-24" : "pb-16")
@@ -203,10 +207,12 @@ export default function EventDetailPage({
               <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-5xl">
                 {event.title}
               </h1>
-              <Mark
-                name={marks.underline}
-                className="-mt-1 block h-5 w-44 text-mark-yellow md:w-64"
-              />
+              {placedMarks ? null : (
+                <Mark
+                  name={marks.underline}
+                  className="-mt-1 block h-5 w-44 text-mark-yellow md:w-64"
+                />
+              )}
             </div>
             {event.summary ? (
               <p className="mt-5 max-w-2xl text-lg leading-relaxed text-hero-foreground/85">
