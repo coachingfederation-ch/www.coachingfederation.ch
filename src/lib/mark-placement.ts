@@ -12,7 +12,7 @@ import type { MarkName } from "@/components/marks";
 export const MARK_COLORS = ["#2B379B", "#5778FA", "#EFCB30"] as const;
 export type MarkColor = (typeof MARK_COLORS)[number];
 
-/** Seven brushes, each with a distinct visual role. */
+/** Eight brushes, each with a distinct visual role. */
 export const BRUSH_PALETTE: { id: string; name: MarkName; label: string }[] = [
   { id: "circle", name: "circular2", label: "Circle sweep" },
   { id: "arrow", name: "arrow2", label: "Arrow" },
@@ -20,6 +20,7 @@ export const BRUSH_PALETTE: { id: string; name: MarkName; label: string }[] = [
   { id: "star", name: "star1", label: "Star" },
   { id: "highlight", name: "highlight2", label: "Highlight bar" },
   { id: "line", name: "line1", label: "Single line" },
+  { id: "straight-line", name: "line2", label: "Straight single line" },
   { id: "double-line", name: "line4", label: "Double line" },
 ];
 
