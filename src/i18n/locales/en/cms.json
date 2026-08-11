@@ -995,5 +995,17 @@
     "markOverlap": "A mark overlaps the headline area.",
     "markRemove": "Remove mark",
     "markColour": "Mark colour"
+  },
+  "hero": {
+    "section": "Hero design",
+    "previewLabel": "Hero preview",
+    "palette": "Brushes",
+    "limit": "marks",
+    "overlap": "A mark overlaps the headline.",
+    "remove": "Remove mark",
+    "colour": "Mark colour",
+    "hint": "Click a brush to add it, then drag to move and use the corner handle to resize.",
+    "clear": "Clear marks",
+    "untitled": "Untitled"
   }
 }

@@ -7,12 +7,7 @@
  */
 import type { MarkName } from "@/components/marks";
 import { LINKEDIN_CARD_HEIGHT, LINKEDIN_CARD_WIDTH } from "./linkedin";
-import {
-  createPlacement,
-  MARK_COLORS,
-  type MarkColor,
-  type PlacedMark,
-} from "./mark-placement";
+import { createPlacement, MARK_COLORS, type MarkColor, type PlacedMark } from "./mark-placement";
 
 export { BRUSH_PALETTE, MARK_COLORS } from "./mark-placement";
 export type { MarkColor, PlacedMark } from "./mark-placement";

@@ -995,5 +995,17 @@
     "markOverlap": "Un tracé recouvre la zone du titre.",
     "markRemove": "Supprimer le tracé",
     "markColour": "Couleur du tracé"
+  },
+  "hero": {
+    "section": "Design du hero",
+    "previewLabel": "Aperçu du hero",
+    "palette": "Pinceaux",
+    "limit": "marques",
+    "overlap": "Une marque chevauche le titre.",
+    "remove": "Supprimer la marque",
+    "colour": "Couleur de la marque",
+    "hint": "Cliquez sur un pinceau pour l’ajouter, glissez pour déplacer, poignée d’angle pour redimensionner.",
+    "clear": "Effacer les marques",
+    "untitled": "Sans titre"
   }
 }

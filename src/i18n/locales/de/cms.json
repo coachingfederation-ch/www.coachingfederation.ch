@@ -995,5 +995,17 @@
     "markOverlap": "Ein Zeichen überlagert den Titelbereich.",
     "markRemove": "Zeichen entfernen",
     "markColour": "Farbe des Zeichens"
+  },
+  "hero": {
+    "section": "Hero-Design",
+    "previewLabel": "Hero-Vorschau",
+    "palette": "Pinsel",
+    "limit": "Marks",
+    "overlap": "Ein Mark überlappt die Überschrift.",
+    "remove": "Mark entfernen",
+    "colour": "Mark-Farbe",
+    "hint": "Pinsel anklicken zum Hinzufügen, ziehen zum Verschieben, Eckpunkt zum Skalieren.",
+    "clear": "Marks entfernen",
+    "untitled": "Ohne Titel"
   }
 }

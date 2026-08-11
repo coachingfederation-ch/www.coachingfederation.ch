@@ -995,5 +995,17 @@
     "markOverlap": "Un segno si sovrappone all'area del titolo.",
     "markRemove": "Rimuovi segno",
     "markColour": "Colore del segno"
+  },
+  "hero": {
+    "section": "Design dell’hero",
+    "previewLabel": "Anteprima hero",
+    "palette": "Pennelli",
+    "limit": "segni",
+    "overlap": "Un segno si sovrappone al titolo.",
+    "remove": "Rimuovi segno",
+    "colour": "Colore del segno",
+    "hint": "Clicca un pennello per aggiungerlo, trascina per spostare, maniglia d’angolo per ridimensionare.",
+    "clear": "Rimuovi segni",
+    "untitled": "Senza titolo"
   }
 }
