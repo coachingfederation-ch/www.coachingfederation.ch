@@ -64,7 +64,8 @@
       "tier_required": "Scegli un biglietto.",
       "tier_unavailable": "Questo biglietto non è disponibile per te.",
       "answers": "Rispondi a tutte le domande obbligatorie.",
-      "payment": "Non è stato possibile avviare il pagamento. Riprova."
+      "payment": "Non è stato possibile avviare il pagamento. Riprova.",
+      "members_only": "Questo evento è riservato ai soci ICF attivi."
     },
     "notFoundTitle": "Evento non trovato",
     "notFoundBody": "Questo evento potrebbe essere stato rimosso oppure il link non è corretto.",
@@ -105,7 +106,8 @@
       "memberIdChecking": "Verifica in corso…",
       "memberIdConfirmed": "Iscrizione confermata — tariffa soci applicata.",
       "memberIdFailed": "Non è stato possibile confermare questo numero socio. Verificalo e riprova."
-    }
+    },
+    "membersOnlyPrompt": "I soci possono iscriversi a questo evento. Accedi con il tuo account collegato oppure inserisci il tuo numero socio ICF."
   },
   "filters": {
     "when": "Periodo",

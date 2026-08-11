@@ -64,7 +64,8 @@
       "tier_required": "Please choose a ticket.",
       "tier_unavailable": "That ticket isn't available for you.",
       "answers": "Please answer all required questions.",
-      "payment": "We couldn't start the payment. Please try again."
+      "payment": "We couldn't start the payment. Please try again.",
+      "members_only": "This event is open to active ICF members only."
     },
     "notFoundTitle": "Event not found",
     "notFoundBody": "This event may have been unpublished or the link is incorrect.",
@@ -105,7 +106,8 @@
       "memberIdChecking": "Checking…",
       "memberIdConfirmed": "Membership confirmed — member pricing applied.",
       "memberIdFailed": "We couldn't confirm this member ID. Please check it and try again."
-    }
+    },
+    "membersOnlyPrompt": "Members can register for this event. Sign in with your linked account, or enter your ICF member ID."
   },
   "filters": {
     "when": "When",

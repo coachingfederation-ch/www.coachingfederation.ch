@@ -788,8 +788,10 @@
       "hybrid": "Ibrido"
     },
     "regMode": {
-      "rsvp": "RSVP",
-      "none": "Nessuna iscrizione"
+      "rsvp": "Iscrizione (pubblica)",
+      "none": "Nessuna iscrizione",
+      "rsvpMembers": "Iscrizione (soci)",
+      "rsvpTickets": "Iscrizione (biglietto)"
     },
     "attendees": "Partecipanti",
     "confirmedSuffix": "confermati",
@@ -883,7 +885,8 @@
       "saveError": "Impossibile salvare i biglietti.",
       "loadError": "Impossibile caricare i biglietti.",
       "translateError": "Non è stato possibile tradurre automaticamente i nomi delle tariffe."
-    }
+    },
+    "fieldAllowNonMembers": "Consenti iscrizione senza affiliazione"
   },
   "eventTranslations": {
     "title": "Traduzioni",

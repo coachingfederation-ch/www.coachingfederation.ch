@@ -64,7 +64,8 @@
       "tier_required": "Veuillez choisir un billet.",
       "tier_unavailable": "Ce billet n'est pas disponible pour vous.",
       "answers": "Merci de répondre à toutes les questions obligatoires.",
-      "payment": "Impossible de démarrer le paiement. Veuillez réessayer."
+      "payment": "Impossible de démarrer le paiement. Veuillez réessayer.",
+      "members_only": "Cet événement est réservé aux membres ICF actifs."
     },
     "notFoundTitle": "Événement introuvable",
     "notFoundBody": "Cet événement a peut-être été dépublié ou le lien est incorrect.",
@@ -105,7 +106,8 @@
       "memberIdChecking": "Vérification…",
       "memberIdConfirmed": "Adhésion confirmée — tarif membre appliqué.",
       "memberIdFailed": "Nous n'avons pas pu confirmer ce numéro de membre. Veuillez le vérifier et réessayer."
-    }
+    },
+    "membersOnlyPrompt": "Les membres peuvent s'inscrire à cet événement. Connectez-vous avec votre compte lié ou saisissez votre numéro de membre ICF."
   },
   "filters": {
     "when": "Période",

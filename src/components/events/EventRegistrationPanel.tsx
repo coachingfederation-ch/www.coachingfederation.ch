@@ -43,6 +43,7 @@ type Reason =
   | "full"
   | "closed"
   | "duplicate"
+  | "members_only"
   | "tier_required"
   | "tier_unavailable"
   | "answers"
@@ -218,9 +219,17 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const selected: PublicTier | null = tierId
-    ? (tiers.find((tier) => tier.id === tierId) ?? null)
-    : null;
+  // Four registration modes: no registration, public RSVP, members-only RSVP
+  // (with an optional "allow without a membership" flag) and ticketed RSVP.
+  const mode = event.registration_mode ?? "none";
+  const rsvpMode = mode !== "none";
+  const ticketMode = mode === "rsvp_tickets";
+  const membersOnly = mode === "rsvp_members" && event.guest_registration_allowed === false;
+
+  // A tier only applies on a ticketed event, even if tiers linger from an
+  // earlier configuration.
+  const selected: PublicTier | null =
+    ticketMode && tierId ? (tiers.find((tier) => tier.id === tierId) ?? null) : null;
   const freeLabel = t("events.detail.tickets.free");
   const priceOf = (tier: PublicTier) =>
     formatPrice(tier.priceCents, tier.currency, locale, freeLabel);
@@ -235,8 +244,8 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
         )
       : null;
 
-  const rsvpMode = event.registration_mode === "rsvp";
-  const guestsBlocked = !signedIn && event.guest_registration_allowed === false;
+  const showTiers = ticketMode && hasTiers;
+  const membersGate = membersOnly && membership !== "member";
   const needsPayment = Boolean(selected && selected.priceCents > 0);
   const paymentsBroken = needsPayment && !paymentsConfigured();
 
@@ -260,7 +269,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
       fullName,
       email,
       notes: notes || null,
-      tierId,
+      tierId: ticketMode ? tierId : null,
       memberId: memberIdState === "confirmed" ? memberId.trim() : null,
       answers,
       environment: paymentsConfigured() ? getStripeEnvironment() : ("sandbox" as const),
@@ -317,6 +326,57 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     </p>
   );
 
+  /** Sign-in prompt plus ICF member id entry, shared by the members-only gate
+   *  and the member-pricing hint on ticketed events. */
+  const memberIdBlock = (prompt: string, withSignInLink = true) => (
+    <div className="mt-4 rounded-xl bg-secondary px-3 py-3">
+      <p className="text-xs leading-relaxed text-muted-foreground">
+        {prompt}{" "}
+        {withSignInLink && !signedIn ? (
+          <a
+            href={signInHref}
+            onClick={persistDraft}
+            className="font-semibold text-primary hover:underline"
+          >
+            {t("events.detail.signIn")}
+          </a>
+        ) : null}
+      </p>
+      <label className="mt-3 block text-xs font-semibold" htmlFor="rsvp-member-id">
+        {t("events.detail.tickets.memberIdLabel")}
+      </label>
+      <div className="mt-1 flex gap-2">
+        <input
+          id="rsvp-member-id"
+          value={memberId}
+          inputMode="numeric"
+          autoComplete="off"
+          placeholder={t("events.detail.tickets.memberIdPlaceholder")}
+          onChange={(e) => {
+            setMemberId(e.target.value);
+            setMemberIdState("idle");
+          }}
+          className={inputClass}
+        />
+        <button
+          type="button"
+          onClick={() => void applyMemberId()}
+          disabled={!memberId.trim() || memberIdState === "checking"}
+          className="shrink-0 rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-background disabled:opacity-50"
+        >
+          {memberIdState === "checking"
+            ? t("events.detail.tickets.memberIdChecking")
+            : t("events.detail.tickets.memberIdApply")}
+        </button>
+      </div>
+      {memberIdState === "failed" ? (
+        <p className="mt-2 text-xs text-[color:var(--warn)]">
+          {t("events.detail.tickets.memberIdFailed")}
+        </p>
+      ) : null}
+    </div>
+  );
+
   const body = () => {
     if (!rsvpMode) {
       return (
@@ -366,33 +426,45 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
         </div>
       );
     }
-    if (event.is_full || allSoldOut)
+    if (event.is_full || (ticketMode && allSoldOut))
       return (
         <p className="mt-4 text-sm text-muted-foreground">
-          {allSoldOut ? t("events.detail.tickets.allSoldOut") : t("events.detail.full")}
+          {ticketMode && allSoldOut
+            ? t("events.detail.tickets.allSoldOut")
+            : t("events.detail.full")}
         </p>
       );
     if (!event.registration_open)
       return <p className="mt-4 text-sm text-muted-foreground">{t("events.detail.closed")}</p>;
-    if (guestsBlocked)
+    // Members-only: the form stays locked until membership is confirmed, either
+    // by signing in with a linked account or by verifying an ICF member id.
+    if (membersGate)
       return (
         <div className="mt-4">
           <p className="text-sm text-muted-foreground">{t("events.detail.membersOnly")}</p>
-          <a
-            href={signInHref}
-            onClick={persistDraft}
-            className="mt-4 inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground"
-          >
-            {t("events.detail.signIn")}
-          </a>
+          {!signedIn ? (
+            <a
+              href={signInHref}
+              onClick={persistDraft}
+              className="mt-4 inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground"
+            >
+              {t("events.detail.signIn")}
+            </a>
+          ) : null}
+          {memberIdBlock(
+            accountMembership === "not_member"
+              ? t("events.detail.tickets.notMember")
+              : t("events.detail.membersOnlyPrompt"),
+            false,
+          )}
         </div>
       );
 
     return (
       <form onSubmit={submit} className="mt-4 space-y-3">
-        {ticketing.isPending ? (
+        {ticketMode && ticketing.isPending ? (
           <p className="text-sm text-muted-foreground">{t("events.detail.tickets.loading")}</p>
-        ) : hasTiers ? (
+        ) : showTiers ? (
           <fieldset>
             <legend className="text-xs font-semibold">{t("events.detail.tickets.choose")}</legend>
             <div className="mt-2 space-y-2">
@@ -456,10 +528,10 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
           </fieldset>
         ) : null}
 
-        {hasTiers && membershipResolving
+        {showTiers && membershipResolving
           ? notice(t("events.detail.tickets.membershipChecking"))
           : null}
-        {hasTiers && memberTier && accountMembership === "member" && !memberTier.isSoldOut
+        {showTiers && memberTier && accountMembership === "member" && !memberTier.isSoldOut
           ? notice(
               t("events.detail.tickets.memberApplied") +
                 (saving
@@ -468,60 +540,17 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
               "good",
             )
           : null}
-        {hasTiers && memberTier && membership === "member" && memberTier.isSoldOut
+        {showTiers && memberTier && membership === "member" && memberTier.isSoldOut
           ? notice(t("events.detail.tickets.memberSoldOut"), "warn")
           : null}
-        {hasTiers && memberTier && membership !== "member" ? (
-          <div className="mt-4 rounded-xl bg-secondary px-3 py-3">
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              {accountMembership === "not_member"
+        {showTiers && memberTier && membership !== "member"
+          ? memberIdBlock(
+              accountMembership === "not_member"
                 ? t("events.detail.tickets.notMember")
-                : t("events.detail.tickets.signedOutPrompt")}{" "}
-              {!signedIn ? (
-                <a
-                  href={signInHref}
-                  onClick={persistDraft}
-                  className="font-semibold text-primary hover:underline"
-                >
-                  {t("events.detail.signIn")}
-                </a>
-              ) : null}
-            </p>
-            <label className="mt-3 block text-xs font-semibold" htmlFor="rsvp-member-id">
-              {t("events.detail.tickets.memberIdLabel")}
-            </label>
-            <div className="mt-1 flex gap-2">
-              <input
-                id="rsvp-member-id"
-                value={memberId}
-                inputMode="numeric"
-                autoComplete="off"
-                placeholder={t("events.detail.tickets.memberIdPlaceholder")}
-                onChange={(e) => {
-                  setMemberId(e.target.value);
-                  setMemberIdState("idle");
-                }}
-                className={inputClass}
-              />
-              <button
-                type="button"
-                onClick={() => void applyMemberId()}
-                disabled={!memberId.trim() || memberIdState === "checking"}
-                className="shrink-0 rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-background disabled:opacity-50"
-              >
-                {memberIdState === "checking"
-                  ? t("events.detail.tickets.memberIdChecking")
-                  : t("events.detail.tickets.memberIdApply")}
-              </button>
-            </div>
-            {memberIdState === "failed" ? (
-              <p className="mt-2 text-xs text-[color:var(--warn)]">
-                {t("events.detail.tickets.memberIdFailed")}
-              </p>
-            ) : null}
-          </div>
-        ) : null}
-        {hasTiers && memberTier && memberIdState === "confirmed"
+                : t("events.detail.tickets.signedOutPrompt"),
+            )
+          : null}
+        {showTiers && memberTier && memberIdState === "confirmed"
           ? notice(t("events.detail.tickets.memberIdConfirmed"), "good")
           : null}
 
@@ -631,7 +660,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
           disabled={
             state.kind === "saving" ||
             paymentsBroken ||
-            (hasTiers && (!selected || selected.isSoldOut))
+            (showTiers && (!selected || selected.isSoldOut))
           }
           className="w-full rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
         >

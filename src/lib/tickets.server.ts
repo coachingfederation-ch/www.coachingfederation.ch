@@ -311,6 +311,7 @@ export type RegistrationOutcome =
         | "full"
         | "closed"
         | "duplicate"
+        | "members_only"
         | "tier_required"
         | "tier_unavailable"
         | "answers"
@@ -322,6 +323,7 @@ export type RegistrationOutcome =
 function failureReason(error: { code?: string; message?: string }): RegistrationOutcome {
   if (error.code === "23505") return { ok: false, reason: "duplicate" };
   const message = (error.message ?? "").toLowerCase();
+  if (message.includes("active members only")) return { ok: false, reason: "members_only" };
   if (message.includes("tier is full")) return { ok: false, reason: "full" };
   if (message.includes("tier")) return { ok: false, reason: "tier_unavailable" };
   if (message.includes("full") || message.includes("capacity"))
@@ -350,8 +352,26 @@ export async function submitRegistration(
 ): Promise<RegistrationOutcome> {
   await releaseExpiredHolds(input.eventId);
 
+  // The event's registration mode decides what is asked for and who may
+  // register; the matching database trigger enforces the same rules.
+  const { data: eventRow } = await supabaseAdmin
+    .from("events")
+    .select("registration_mode, guest_registration_allowed")
+    .eq("id", input.eventId)
+    .maybeSingle();
+  if (!eventRow) return { ok: false, reason: "error" };
+  const mode = eventRow.registration_mode;
+  if (mode === "none") return { ok: false, reason: "closed" };
+  const membersOnly = mode === "rsvp_members" && !eventRow.guest_registration_allowed;
+
   const membership = await resolveMembership(userId, input.memberId, rateSubject);
-  const resolved = await resolveChargedTier(input.eventId, input.tierId, membership);
+  if (membersOnly && membership !== "member") return { ok: false, reason: "members_only" };
+
+  // Ticket tiers are only offered on ticketed events; other modes register free.
+  const resolved =
+    mode === "rsvp_tickets"
+      ? await resolveChargedTier(input.eventId, input.tierId, membership)
+      : { tier: null };
   if ("error" in resolved) return { ok: false, reason: resolved.error };
 
   const answers = await validateAnswers(input.eventId, input.answers);
@@ -361,7 +381,10 @@ export async function submitRegistration(
   const paid = Boolean(tier && tier.price_cents > 0);
   const holdExpiresAt = paid ? new Date(Date.now() + HOLD_MINUTES * 60_000).toISOString() : null;
 
-  const { data: inserted, error } = await client
+  // A members-only registration is written through the trusted server client,
+  // because membership may rest on a member number the database cannot verify.
+  const writer = membersOnly ? supabaseAdmin : client;
+  const { data: inserted, error } = await writer
     .from("event_registrations")
     .insert({
       event_id: input.eventId,
