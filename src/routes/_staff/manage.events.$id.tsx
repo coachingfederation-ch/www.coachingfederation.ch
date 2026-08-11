@@ -248,7 +248,13 @@ function EventEditor() {
           t={t}
         />
 
+        {/* Ticket tiers only exist for ticketed events. */}
+        {event.registration_mode === "rsvp_tickets" ? (
+          <EventTicketsSection eventId={event.id} t={t} />
+        ) : null}
+
         <UnsplashPicker
+
           open={pickerOpen}
           onOpenChange={setPickerOpen}
           onPick={(pick: UnsplashPick) =>
