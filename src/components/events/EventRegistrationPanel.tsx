@@ -549,7 +549,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
                             ? t("events.detail.tickets.notMember")
                             : t("events.detail.tickets.signedOutPrompt"),
                           true,
-                          "border-t border-border/70 px-3 pb-3",
+                          "border-t border-border/70 px-3 py-3",
                         )
                       : null}
                   </div>
@@ -573,13 +573,6 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
           : null}
         {showTiers && memberTier && membership === "member" && memberTier.isSoldOut
           ? notice(t("events.detail.tickets.memberSoldOut"), "warn")
-          : null}
-        {showTiers && memberTier && membership !== "member"
-          ? memberIdBlock(
-              accountMembership === "not_member"
-                ? t("events.detail.tickets.notMember")
-                : t("events.detail.tickets.signedOutPrompt"),
-            )
           : null}
         {showTiers && memberTier && memberIdState === "confirmed"
           ? notice(t("events.detail.tickets.memberIdConfirmed"), "good")
