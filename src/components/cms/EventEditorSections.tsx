@@ -539,7 +539,7 @@ export function EventHostsSection({
   );
 }
 
-/** Publishing section: registration settings, save/status controls, attendees. */
+/** Publishing section: registration settings, optional ticket tiers, save/status controls, attendees. */
 export function EventPublishingSection({
   event,
   patch,
@@ -549,6 +549,7 @@ export function EventPublishingSection({
   registrations,
   confirmed,
   setRegistrationStatusAndReload,
+  ticketsSection,
   t,
 }: {
   event: Managed;
@@ -559,6 +560,7 @@ export function EventPublishingSection({
   registrations: Registration[];
   confirmed: number;
   setRegistrationStatusAndReload: (r: Registration) => void | Promise<void>;
+  ticketsSection?: React.ReactNode;
   t: (k: string) => string;
 }) {
   return (
@@ -582,17 +584,22 @@ export function EventPublishingSection({
                 patch({ registration_mode: e.target.value as Managed["registration_mode"] })
               }
             >
-              <option value="rsvp">{t("events.regMode.rsvp")}</option>
               <option value="none">{t("events.regMode.none")}</option>
+              <option value="rsvp">{t("events.regMode.rsvp")}</option>
+              <option value="rsvp_members">{t("events.regMode.rsvpMembers")}</option>
+              <option value="rsvp_tickets">{t("events.regMode.rsvpTickets")}</option>
             </select>
           </Field>
-          <Field label={t("events.fieldGuests")}>
-            <input
-              type="checkbox"
-              checked={event.guest_registration_allowed}
-              onChange={(e) => patch({ guest_registration_allowed: e.target.checked })}
-            />
-          </Field>
+          {/* The membership flag only means anything on a members-only RSVP. */}
+          {event.registration_mode === "rsvp_members" ? (
+            <Field label={t("events.fieldAllowNonMembers")}>
+              <input
+                type="checkbox"
+                checked={event.guest_registration_allowed}
+                onChange={(e) => patch({ guest_registration_allowed: e.target.checked })}
+              />
+            </Field>
+          ) : null}
           <Field label={t("events.fieldRegOpens")}>
             <input
               type="datetime-local"
@@ -611,6 +618,8 @@ export function EventPublishingSection({
           </Field>
         </div>
       </Section>
+
+      {ticketsSection}
 
       <div className="mt-8 flex flex-wrap items-center gap-3">
         <button
@@ -656,13 +665,14 @@ export function EventPublishingSection({
               <th className="px-4 py-3 font-semibold">{t("events.colName")}</th>
               <th className="px-4 py-3 font-semibold">{t("events.colEmail")}</th>
               <th className="px-4 py-3 font-semibold">{t("events.colStatus")}</th>
+              <th className="px-4 py-3 font-semibold">{t("events.colPayment")}</th>
               <th className="px-4 py-3" />
             </tr>
           </thead>
           <tbody>
             {registrations.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-4 py-6 text-muted-foreground">
+                <td colSpan={5} className="px-4 py-6 text-muted-foreground">
                   {t("events.noAttendees")}
                 </td>
               </tr>
@@ -672,6 +682,12 @@ export function EventPublishingSection({
                   <td className="px-4 py-3 font-medium">{r.full_name}</td>
                   <td className="px-4 py-3 text-muted-foreground">{r.email}</td>
                   <td className="px-4 py-3">{t(`events.regStatus.${r.status}`)}</td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    {t(`events.payStatus.${r.payment_status}`)}
+                    {r.amount_cents > 0
+                      ? ` · ${(r.amount_cents / 100).toFixed(2)} ${r.currency}`
+                      : ""}
+                  </td>
                   <td className="px-4 py-3 text-right">
                     <button
                       onClick={() => void setRegistrationStatusAndReload(r)}

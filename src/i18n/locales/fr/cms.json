@@ -788,8 +788,10 @@
       "hybrid": "Hybride"
     },
     "regMode": {
-      "rsvp": "RSVP",
-      "none": "Pas d'inscription"
+      "rsvp": "Inscription (publique)",
+      "none": "Pas d'inscription",
+      "rsvpMembers": "Inscription (membres)",
+      "rsvpTickets": "Inscription (billet)"
     },
     "attendees": "Participants",
     "confirmedSuffix": "confirmé(s)",
@@ -812,7 +814,8 @@
       "when": "Date et heure",
       "location": "Lieu",
       "image": "Image de couverture",
-      "registration": "Inscription"
+      "registration": "Inscription",
+      "tickets": "Billets"
     },
     "hosts": {
       "none": "Aucun hôte sélectionné pour le moment.",
@@ -850,7 +853,40 @@
       "created": "Dates créées :",
       "skipped": "déjà existantes :",
       "badge": "Série"
-    }
+    },
+    "colPayment": "Paiement",
+    "payStatus": {
+      "not_required": "Gratuit",
+      "pending": "En attente",
+      "paid": "Payé",
+      "expired": "Expiré"
+    },
+    "tickets": {
+      "sectionHint": "Catégories de billets dans la devise de l'événement. Les membres obtiennent automatiquement le tarif membre si leur adhésion est active.",
+      "none": "Aucune catégorie — cet événement utilise l'inscription simple.",
+      "name": "Nom de la catégorie",
+      "nameEn": "Nom du tarif EN",
+      "segment": "Public",
+      "segmentMember": "Membres",
+      "segmentNonMember": "Non-membres",
+      "segmentGeneral": "Tout le monde",
+      "price": "Prix",
+      "currency": "Devise",
+      "capacity": "Capacité (vide = illimitée)",
+      "description": "Description",
+      "active": "Active",
+      "sold": "Vendus",
+      "add": "Ajouter une catégorie",
+      "addMember": "Ajouter une catégorie membres",
+      "remove": "Supprimer",
+      "save": "Enregistrer les billets",
+      "translating": "Traduction des noms de tarifs…",
+      "saved": "Billets enregistrés.",
+      "saveError": "Impossible d'enregistrer les billets.",
+      "loadError": "Impossible de charger les billets.",
+      "translateError": "Les noms de tarifs n'ont pas pu être traduits automatiquement."
+    },
+    "fieldAllowNonMembers": "Autoriser l'inscription sans adhésion"
   },
   "eventTranslations": {
     "title": "Traductions",

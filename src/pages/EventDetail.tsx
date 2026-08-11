@@ -1,18 +1,18 @@
 /**
  * Public event detail + RSVP.
  *
- * The form is deliberately thin: capacity, the registration window and the
- * guest policy are all enforced by database triggers, so the UI's job is to
- * show the current state and translate the returned reason code.
+ * The page renders the event; registration — tiers, member pricing, questions
+ * and payment — lives in `EventRegistrationPanel`. Capacity, the registration
+ * window, entitlement and price are all enforced server-side.
  */
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, Clock, Languages, MapPin, Users } from "lucide-react";
-import { SiteFooter, SiteHeaderBar, CARD_SHADOW } from "@/components/site-chrome";
+import { SiteFooter, SiteHeaderBar } from "@/components/site-chrome";
 import { Mark, type MarkName } from "@/components/marks";
 import { RichTextView } from "@/components/rich-text-view";
 import { HeroMarks } from "@/components/HeroMarks";
 import { EventHeroSurface } from "@/components/events/EventHeroSurface";
+import { EventRegistrationPanel } from "@/components/events/EventRegistrationPanel";
 import { HERO_EVENT_PLACEMENT, sanitizeHeroMarks } from "@/lib/hero-design";
 import { LocaleLink, useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,19 +25,8 @@ import {
 } from "@/lib/events";
 import type { EventHost } from "@/lib/event-hosts";
 import { eventMap } from "@/lib/event-map";
-import { trackGoal, useTrackView } from "@/lib/plausible";
-import {
-  cancelMyRegistration,
-  getMyRegistration,
-  submitGuestRegistration,
-  submitMemberRegistration,
-} from "@/lib/events.functions";
-
-type RsvpState =
-  | { kind: "idle" }
-  | { kind: "saving" }
-  | { kind: "done" }
-  | { kind: "error"; reason: "full" | "closed" | "duplicate" | "error" };
+import { useTrackView } from "@/lib/plausible";
+import { getMyRegistration } from "@/lib/events.functions";
 
 /*
  * Decoration for the hero band. The marks are picked from the event slug
@@ -118,47 +107,6 @@ export default function EventDetailPage({
     enabled: signedIn && session.isFetched,
     retry: false,
   });
-
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [notes, setNotes] = useState("");
-  const [state, setState] = useState<RsvpState>({ kind: "idle" });
-
-  const rsvpEnabled =
-    event.registration_mode === "rsvp" &&
-    Boolean(event.registration_open) &&
-    !past &&
-    !event.is_full;
-  const guestsBlocked = !signedIn && event.guest_registration_allowed === false;
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setState({ kind: "saving" });
-    const payload = { eventId: event.id!, fullName, email, notes: notes || null };
-    const result = signedIn
-      ? await submitMemberRegistration({ data: payload })
-      : await submitGuestRegistration({ data: payload });
-    if (result.ok) {
-      setState({ kind: "done" });
-      trackGoal("Event Registration", {
-        event_slug: event.slug ?? "",
-        member: signedIn,
-      });
-      // refetch() ignores `enabled`, so only call it for signed-in visitors —
-      // otherwise the protected server fn runs without a bearer token and 401s.
-      if (signedIn) void mine.refetch();
-    } else {
-      setState({ kind: "error", reason: result.reason });
-    }
-  };
-
-  const cancel = async () => {
-    const id = mine.data?.id;
-    if (!id) return;
-    await cancelMyRegistration({ data: { registrationId: id } });
-    setState({ kind: "idle" });
-    void mine.refetch();
-  };
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -328,101 +276,7 @@ export default function EventDetailPage({
             ) : null}
           </article>
 
-          <aside
-            className={
-              "h-fit rounded-2xl border border-border/70 bg-card p-6 lg:sticky lg:top-8 " +
-              CARD_SHADOW
-            }
-          >
-            <p className="eyebrow">{t("events.detail.rsvpEyebrow")}</p>
-
-            {event.registration_mode !== "rsvp" ? (
-              <p className="mt-4 text-sm text-muted-foreground">
-                {t("events.detail.noRegistration")}
-              </p>
-            ) : past ? (
-              <p className="mt-4 text-sm text-muted-foreground">{t("events.detail.pastEvent")}</p>
-            ) : mine.data ? (
-              <div className="mt-4">
-                <p className="text-sm font-semibold text-teal-foreground">
-                  {t("events.detail.youAreIn")}
-                </p>
-                <button
-                  onClick={() => void cancel()}
-                  className="mt-4 rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-secondary"
-                >
-                  {t("events.detail.cancel")}
-                </button>
-              </div>
-            ) : state.kind === "done" ? (
-              <p className="mt-4 text-sm font-semibold text-teal-foreground">
-                {t("events.detail.confirmed")}
-              </p>
-            ) : event.is_full ? (
-              <p className="mt-4 text-sm text-muted-foreground">{t("events.detail.full")}</p>
-            ) : !event.registration_open ? (
-              <p className="mt-4 text-sm text-muted-foreground">{t("events.detail.closed")}</p>
-            ) : guestsBlocked ? (
-              <div className="mt-4">
-                <p className="text-sm text-muted-foreground">{t("events.detail.membersOnly")}</p>
-                <LocaleLink
-                  to="/auth"
-                  className="mt-4 inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground"
-                >
-                  {t("events.detail.signIn")}
-                </LocaleLink>
-              </div>
-            ) : (
-              <form onSubmit={submit} className="mt-4 space-y-3">
-                <label className="block text-xs font-semibold" htmlFor="rsvp-name">
-                  {t("events.detail.fieldName")}
-                </label>
-                <input
-                  id="rsvp-name"
-                  required
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
-                />
-                <label className="block text-xs font-semibold" htmlFor="rsvp-email">
-                  {t("events.detail.fieldEmail")}
-                </label>
-                <input
-                  id="rsvp-email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
-                />
-                <label className="block text-xs font-semibold" htmlFor="rsvp-notes">
-                  {t("events.detail.fieldNotes")}
-                </label>
-                <textarea
-                  id="rsvp-notes"
-                  rows={3}
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
-                />
-                <button
-                  type="submit"
-                  disabled={state.kind === "saving" || !rsvpEnabled}
-                  className="w-full rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
-                >
-                  {state.kind === "saving" ? t("events.detail.saving") : t("events.detail.rsvp")}
-                </button>
-                {state.kind === "error" ? (
-                  <p className="text-sm text-destructive">
-                    {t(`events.detail.error.${state.reason}`)}
-                  </p>
-                ) : null}
-                <p className="text-[11px] leading-relaxed text-muted-foreground">
-                  {t("events.detail.privacy")}
-                </p>
-              </form>
-            )}
-          </aside>
+          <EventRegistrationPanel event={event} />
         </div>
       </main>
       <SiteFooter />

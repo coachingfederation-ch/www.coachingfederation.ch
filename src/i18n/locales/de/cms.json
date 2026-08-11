@@ -788,8 +788,10 @@
       "hybrid": "Hybrid"
     },
     "regMode": {
-      "rsvp": "Anmeldung (RSVP)",
-      "none": "Keine Anmeldung"
+      "rsvp": "Anmeldung (öffentlich)",
+      "none": "Keine Anmeldung",
+      "rsvpMembers": "Anmeldung (Mitglieder)",
+      "rsvpTickets": "Anmeldung (Ticket)"
     },
     "attendees": "Teilnehmende",
     "confirmedSuffix": "bestätigt",
@@ -812,7 +814,8 @@
       "when": "Datum und Zeit",
       "location": "Ort",
       "image": "Titelbild",
-      "registration": "Anmeldung"
+      "registration": "Anmeldung",
+      "tickets": "Tickets"
     },
     "hosts": {
       "none": "Noch keine Gastgeber ausgewählt.",
@@ -850,7 +853,40 @@
       "created": "Erstellte Termine:",
       "skipped": "bereits vorhanden:",
       "badge": "Serie"
-    }
+    },
+    "colPayment": "Zahlung",
+    "payStatus": {
+      "not_required": "Kostenlos",
+      "pending": "Ausstehend",
+      "paid": "Bezahlt",
+      "expired": "Abgelaufen"
+    },
+    "tickets": {
+      "sectionHint": "Ticketkategorien in der Event-Währung. Mitglieder erhalten den Mitgliederpreis automatisch, wenn ihre Mitgliedschaft aktiv ist.",
+      "none": "Noch keine Kategorien — dieser Event nutzt die einfache Anmeldung.",
+      "name": "Bezeichnung",
+      "nameEn": "Tarifname EN",
+      "segment": "Für wen",
+      "segmentMember": "Mitglieder",
+      "segmentNonMember": "Nichtmitglieder",
+      "segmentGeneral": "Alle",
+      "price": "Preis",
+      "currency": "Währung",
+      "capacity": "Kapazität (leer = unbegrenzt)",
+      "description": "Beschreibung",
+      "active": "Aktiv",
+      "sold": "Verkauft",
+      "add": "Kategorie hinzufügen",
+      "addMember": "Mitglieder-Kategorie hinzufügen",
+      "remove": "Entfernen",
+      "save": "Tickets speichern",
+      "translating": "Tarifnamen werden übersetzt…",
+      "saved": "Tickets gespeichert.",
+      "saveError": "Tickets konnten nicht gespeichert werden.",
+      "loadError": "Tickets konnten nicht geladen werden.",
+      "translateError": "Tarifnamen konnten nicht automatisch übersetzt werden."
+    },
+    "fieldAllowNonMembers": "Anmeldung ohne Mitgliedschaft erlauben"
   },
   "eventTranslations": {
     "title": "Übersetzungen",

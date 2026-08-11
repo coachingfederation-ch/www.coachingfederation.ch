@@ -1006,37 +1006,124 @@ export type Database = {
           },
         ]
       }
-      event_registrations: {
+      event_registration_fields: {
         Row: {
           created_at: string
+          event_id: string
+          field_key: string
+          field_type: string
+          id: string
+          is_active: boolean
+          is_required: boolean
+          label: string
+          label_de: string | null
+          label_fr: string | null
+          label_it: string | null
+          options: string[]
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          field_key: string
+          field_type?: string
+          id?: string
+          is_active?: boolean
+          is_required?: boolean
+          label: string
+          label_de?: string | null
+          label_fr?: string | null
+          label_it?: string | null
+          options?: string[]
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          field_key?: string
+          field_type?: string
+          id?: string
+          is_active?: boolean
+          is_required?: boolean
+          label?: string
+          label_de?: string | null
+          label_fr?: string | null
+          label_it?: string | null
+          options?: string[]
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registration_fields_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_registration_fields_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_registrations: {
+        Row: {
+          amount_cents: number
+          answers: Json
+          created_at: string
+          currency: string
           email: string
           event_id: string
           full_name: string
+          hold_expires_at: string | null
           id: string
           notes: string | null
+          payment_status: Database["public"]["Enums"]["event_payment_status"]
           status: Database["public"]["Enums"]["event_registration_status"]
+          stripe_session_id: string | null
+          tier_id: string | null
           updated_at: string
           user_id: string | null
         }
         Insert: {
+          amount_cents?: number
+          answers?: Json
           created_at?: string
+          currency?: string
           email: string
           event_id: string
           full_name: string
+          hold_expires_at?: string | null
           id?: string
           notes?: string | null
+          payment_status?: Database["public"]["Enums"]["event_payment_status"]
           status?: Database["public"]["Enums"]["event_registration_status"]
+          stripe_session_id?: string | null
+          tier_id?: string | null
           updated_at?: string
           user_id?: string | null
         }
         Update: {
+          amount_cents?: number
+          answers?: Json
           created_at?: string
+          currency?: string
           email?: string
           event_id?: string
           full_name?: string
+          hold_expires_at?: string | null
           id?: string
           notes?: string | null
+          payment_status?: Database["public"]["Enums"]["event_payment_status"]
           status?: Database["public"]["Enums"]["event_registration_status"]
+          stripe_session_id?: string | null
+          tier_id?: string | null
           updated_at?: string
           user_id?: string | null
         }
@@ -1050,6 +1137,98 @@ export type Database = {
           },
           {
             foreignKeyName: "event_registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_registrations_tier_id_fkey"
+            columns: ["tier_id"]
+            isOneToOne: false
+            referencedRelation: "event_ticket_tiers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_registrations_tier_id_fkey"
+            columns: ["tier_id"]
+            isOneToOne: false
+            referencedRelation: "event_ticket_tiers_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_ticket_tiers: {
+        Row: {
+          capacity: number | null
+          created_at: string
+          currency: string
+          description: string | null
+          description_de: string | null
+          description_fr: string | null
+          description_it: string | null
+          event_id: string
+          id: string
+          is_active: boolean
+          name: string
+          name_de: string | null
+          name_fr: string | null
+          name_it: string | null
+          price_cents: number
+          segment: Database["public"]["Enums"]["event_tier_segment"]
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          capacity?: number | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          description_de?: string | null
+          description_fr?: string | null
+          description_it?: string | null
+          event_id: string
+          id?: string
+          is_active?: boolean
+          name: string
+          name_de?: string | null
+          name_fr?: string | null
+          name_it?: string | null
+          price_cents?: number
+          segment?: Database["public"]["Enums"]["event_tier_segment"]
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          capacity?: number | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          description_de?: string | null
+          description_fr?: string | null
+          description_it?: string | null
+          event_id?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          name_de?: string | null
+          name_fr?: string | null
+          name_it?: string | null
+          price_cents?: number
+          segment?: Database["public"]["Enums"]["event_tier_segment"]
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_ticket_tiers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_ticket_tiers_event_id_fkey"
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events_public"
@@ -2740,6 +2919,74 @@ export type Database = {
         }
         Relationships: []
       }
+      event_registration_fields_public: {
+        Row: {
+          event_id: string | null
+          field_key: string | null
+          field_type: string | null
+          id: string | null
+          is_required: boolean | null
+          label: string | null
+          label_de: string | null
+          label_fr: string | null
+          label_it: string | null
+          options: string[] | null
+          sort_order: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registration_fields_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_registration_fields_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_ticket_tiers_public: {
+        Row: {
+          capacity: number | null
+          currency: string | null
+          description: string | null
+          description_de: string | null
+          description_fr: string | null
+          description_it: string | null
+          event_id: string | null
+          id: string | null
+          is_sold_out: boolean | null
+          name: string | null
+          name_de: string | null
+          name_fr: string | null
+          name_it: string | null
+          price_cents: number | null
+          seats_remaining: number | null
+          segment: Database["public"]["Enums"]["event_tier_segment"] | null
+          sort_order: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_ticket_tiers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_ticket_tiers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events_public: {
         Row: {
           capacity: number | null
@@ -2906,9 +3153,11 @@ export type Database = {
         | "unpublished"
         | "review"
       event_location_mode: "in_person" | "online" | "hybrid"
-      event_registration_mode: "none" | "rsvp"
+      event_payment_status: "not_required" | "pending" | "paid" | "expired"
+      event_registration_mode: "none" | "rsvp" | "rsvp_members" | "rsvp_tickets"
       event_registration_status: "confirmed" | "cancelled"
       event_status: "draft" | "published" | "cancelled"
+      event_tier_segment: "member" | "non_member" | "general"
       integration_mode: "test" | "live"
       linkedin_post_status: "pending" | "posted" | "failed"
       member_activity_state: "active" | "inactive" | "grace" | "anonymized"
@@ -3068,9 +3317,11 @@ export const Constants = {
         "review",
       ],
       event_location_mode: ["in_person", "online", "hybrid"],
-      event_registration_mode: ["none", "rsvp"],
+      event_payment_status: ["not_required", "pending", "paid", "expired"],
+      event_registration_mode: ["none", "rsvp", "rsvp_members", "rsvp_tickets"],
       event_registration_status: ["confirmed", "cancelled"],
       event_status: ["draft", "published", "cancelled"],
+      event_tier_segment: ["member", "non_member", "general"],
       integration_mode: ["test", "live"],
       linkedin_post_status: ["pending", "posted", "failed"],
       member_activity_state: ["active", "inactive", "grace", "anonymized"],

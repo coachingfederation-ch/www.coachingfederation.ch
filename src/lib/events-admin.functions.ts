@@ -67,7 +67,7 @@ const eventInput = z.object({
   image_credit_name: z.string().trim().max(200).nullable().optional().or(z.literal("")),
   image_credit_url: z.string().trim().url().max(1000).nullable().optional().or(z.literal("")),
   capacity: z.number().int().positive().max(100000).nullable().optional(),
-  registration_mode: z.enum(["none", "rsvp"]),
+  registration_mode: z.enum(["none", "rsvp", "rsvp_members", "rsvp_tickets"]),
   registration_opens_at: z.string().min(1).nullable().optional(),
   registration_closes_at: z.string().min(1).nullable().optional(),
   guest_registration_allowed: z.boolean(),
@@ -217,11 +217,153 @@ export const listEventRegistrations = createServerFn({ method: "POST" })
     await assertOrganizer(context);
     const { data: rows, error } = await context.supabase
       .from("event_registrations")
-      .select("id, full_name, email, status, notes, created_at, user_id")
+      .select(
+        "id, full_name, email, status, notes, created_at, user_id, tier_id, payment_status, amount_cents, currency, answers",
+      )
       .eq("event_id", data.eventId)
       .order("created_at", { ascending: true });
     if (error) throw new Error(error.message);
     return rows ?? [];
+  });
+
+/**
+ * Ticket tiers.
+ *
+ * Writes go through the caller's own client, so `event_ticket_tiers` RLS
+ * decides who may edit which event's tiers. Sold counts are read from the
+ * registrations themselves, never stored, so they cannot drift.
+ */
+const tierInput = z.object({
+  id: z.string().uuid().nullable().optional(),
+  name: z.string().trim().min(2).max(120),
+  name_de: z.string().trim().max(120).nullable().optional(),
+  name_fr: z.string().trim().max(120).nullable().optional(),
+  name_it: z.string().trim().max(120).nullable().optional(),
+  description: z.string().trim().max(600).nullable().optional(),
+  description_de: z.string().trim().max(600).nullable().optional(),
+  description_fr: z.string().trim().max(600).nullable().optional(),
+  description_it: z.string().trim().max(600).nullable().optional(),
+  price_cents: z.number().int().min(0).max(10_000_000),
+  currency: z.enum(["CHF", "EUR"]).default("CHF"),
+  capacity: z.number().int().positive().max(100000).nullable().optional(),
+  segment: z.enum(["member", "non_member", "general"]),
+  is_active: z.boolean(),
+  sort_order: z.number().int().min(0).max(999),
+});
+
+const TIER_COLUMNS =
+  "id, event_id, name, name_de, name_fr, name_it, description, description_de, description_fr, description_it, price_cents, currency, capacity, segment, is_active, sort_order";
+
+export type ManagedTier = {
+  id: string;
+  event_id: string;
+  name: string;
+  name_de: string | null;
+  name_fr: string | null;
+  name_it: string | null;
+  description: string | null;
+  description_de: string | null;
+  description_fr: string | null;
+  description_it: string | null;
+  price_cents: number;
+  currency: string;
+  capacity: number | null;
+  segment: "member" | "non_member" | "general";
+  is_active: boolean;
+  sort_order: number;
+  sold_count: number;
+};
+
+/** Tiers with their live sold counts, for the event editor. */
+export const listEventTiers = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const [{ data: tiers, error }, { data: regs }] = await Promise.all([
+      context.supabase
+        .from("event_ticket_tiers")
+        .select(TIER_COLUMNS)
+        .eq("event_id", data.eventId)
+        .order("sort_order", { ascending: true }),
+      context.supabase
+        .from("event_registrations")
+        .select("tier_id, status, payment_status")
+        .eq("event_id", data.eventId),
+    ]);
+    if (error) throw new Error(error.message);
+    const sold = new Map<string, number>();
+    for (const row of (regs ?? []) as {
+      tier_id: string | null;
+      status: string;
+      payment_status: string;
+    }[]) {
+      if (!row.tier_id || row.status === "cancelled") continue;
+      if (row.payment_status === "expired") continue;
+      sold.set(row.tier_id, (sold.get(row.tier_id) ?? 0) + 1);
+    }
+    return ((tiers ?? []) as Omit<ManagedTier, "sold_count">[]).map((tier) => ({
+      ...tier,
+      sold_count: sold.get(tier.id) ?? 0,
+    })) as ManagedTier[];
+  });
+
+/** Creates, updates and deletes tiers in one save, mirroring the editor form. */
+export const saveEventTiers = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ eventId: z.string().uuid(), tiers: z.array(tierInput).max(12) }).parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const keep = data.tiers.map((tier) => tier.id).filter(Boolean) as string[];
+
+    const { data: existing } = await context.supabase
+      .from("event_ticket_tiers")
+      .select("id")
+      .eq("event_id", data.eventId);
+    const removable = ((existing ?? []) as { id: string }[])
+      .map((row) => row.id)
+      .filter((id) => !keep.includes(id));
+
+    for (const id of removable) {
+      // A tier that already sold seats is deactivated instead of deleted, so
+      // existing registrations keep their price history.
+      const { count } = await context.supabase
+        .from("event_registrations")
+        .select("id", { count: "exact", head: true })
+        .eq("tier_id", id);
+      if (count && count > 0) {
+        await context.supabase.from("event_ticket_tiers").update({ is_active: false }).eq("id", id);
+      } else {
+        await context.supabase.from("event_ticket_tiers").delete().eq("id", id);
+      }
+    }
+
+    for (const [index, tier] of data.tiers.entries()) {
+      const row = {
+        event_id: data.eventId,
+        name: tier.name,
+        name_de: tier.name_de || null,
+        name_fr: tier.name_fr || null,
+        name_it: tier.name_it || null,
+        description: tier.description || null,
+        description_de: tier.description_de || null,
+        description_fr: tier.description_fr || null,
+        description_it: tier.description_it || null,
+        price_cents: tier.price_cents,
+        currency: tier.currency,
+        capacity: tier.capacity ?? null,
+        segment: tier.segment,
+        is_active: tier.is_active,
+        sort_order: index,
+      };
+      const { error } = tier.id
+        ? await context.supabase.from("event_ticket_tiers").update(row).eq("id", tier.id)
+        : await context.supabase.from("event_ticket_tiers").insert(row);
+      if (error) throw new Error(error.message);
+    }
+    return { ok: true };
   });
 
 export const setRegistrationStatus = createServerFn({ method: "POST" })

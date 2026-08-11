@@ -20,6 +20,7 @@ import {
   type Managed,
   type Registration,
 } from "@/components/cms/EventEditorSections";
+import { EventTicketsSection } from "@/components/cms/EventTicketsSection";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { useCms } from "@/i18n/cms";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
@@ -235,6 +236,7 @@ function EventEditor() {
         <EventLocationSection event={event} patch={patch} t={t} />
 
         <EventPublishingSection
+
           event={event}
           patch={patch}
           saving={saving}
@@ -243,10 +245,16 @@ function EventEditor() {
           registrations={registrations}
           confirmed={confirmed}
           setRegistrationStatusAndReload={setRegistrationStatusAndReload}
+          ticketsSection={
+            event.registration_mode === "rsvp_tickets" ? (
+              <EventTicketsSection eventId={event.id} t={t} />
+            ) : null
+          }
           t={t}
         />
 
         <UnsplashPicker
+
           open={pickerOpen}
           onOpenChange={setPickerOpen}
           onPick={(pick: UnsplashPick) =>
