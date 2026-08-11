@@ -812,7 +812,8 @@
       "when": "Date and time",
       "location": "Location",
       "image": "Cover image",
-      "registration": "Registration"
+      "registration": "Registration",
+      "tickets": "Tickets"
     },
     "hosts": {
       "none": "No hosts selected yet.",
@@ -850,6 +851,35 @@
       "created": "Dates created:",
       "skipped": "already existed:",
       "badge": "Series"
+    },
+    "colPayment": "Payment",
+    "payStatus": {
+      "not_required": "Free",
+      "pending": "Pending",
+      "paid": "Paid",
+      "expired": "Expired"
+    },
+    "tickets": {
+      "sectionHint": "Tiers priced in the event currency. Members are placed on the member tier automatically when their membership is active.",
+      "none": "No tiers yet — this event uses simple RSVP.",
+      "name": "Tier name",
+      "segment": "Who it's for",
+      "segmentMember": "Members",
+      "segmentNonMember": "Non-members",
+      "segmentGeneral": "Everyone",
+      "price": "Price",
+      "currency": "Currency",
+      "capacity": "Capacity (blank = unlimited)",
+      "description": "Description",
+      "active": "Active",
+      "sold": "Sold",
+      "add": "Add tier",
+      "addMember": "Add member tier",
+      "remove": "Remove",
+      "save": "Save tickets",
+      "saved": "Tickets saved.",
+      "saveError": "Tickets could not be saved.",
+      "loadError": "Tickets could not be loaded."
     }
   },
   "eventTranslations": {

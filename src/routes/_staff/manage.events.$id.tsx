@@ -20,6 +20,7 @@ import {
   type Managed,
   type Registration,
 } from "@/components/cms/EventEditorSections";
+import { EventTicketsSection } from "@/components/cms/EventTicketsSection";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { useCms } from "@/i18n/cms";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
@@ -233,6 +234,8 @@ function EventEditor() {
         />
 
         <EventLocationSection event={event} patch={patch} t={t} />
+
+        <EventTicketsSection eventId={event.id} t={t} />
 
         <EventPublishingSection
           event={event}

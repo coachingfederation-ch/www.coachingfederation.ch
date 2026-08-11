@@ -60,7 +60,11 @@
       "full": "Cet événement vient de afficher complet.",
       "closed": "Les inscriptions sont fermées pour cet événement.",
       "duplicate": "Cette adresse e-mail est déjà inscrite.",
-      "error": "Une erreur est survenue. Veuillez réessayer."
+      "error": "Une erreur est survenue. Veuillez réessayer.",
+      "tier_required": "Veuillez choisir un billet.",
+      "tier_unavailable": "Ce billet n'est pas disponible pour vous.",
+      "answers": "Merci de répondre à toutes les questions obligatoires.",
+      "payment": "Impossible de démarrer le paiement. Veuillez réessayer."
     },
     "notFoundTitle": "Événement introuvable",
     "notFoundBody": "Cet événement a peut-être été dépublié ou le lien est incorrect.",
@@ -70,7 +74,32 @@
     "photoCredit": "Photo par {name} sur Unsplash",
     "gettingThere": "Accès",
     "mapTitle": "Carte du lieu de l'événement",
-    "openInMaps": "Ouvrir dans Google Maps"
+    "openInMaps": "Ouvrir dans Google Maps",
+    "tickets": {
+      "choose": "Choisissez votre billet",
+      "free": "Gratuit",
+      "soldOut": "Complet",
+      "seatsLeft": "{n} restants",
+      "memberBadge": "Tarif membre",
+      "nonMemberBadge": "Tarif standard",
+      "memberApplied": "Tarif membre appliqué — votre adhésion ICF est active.",
+      "memberSaving": "Vous économisez {amount} par rapport au tarif standard.",
+      "signedOutPrompt": "Les membres paient moins cher pour cet événement.",
+      "notMember": "Le tarif membre nécessite une adhésion ICF active ; le tarif standard s'applique donc.",
+      "memberSoldOut": "Le contingent membres est épuisé, le tarif standard s'applique.",
+      "allSoldOut": "Tous les billets de cet événement sont épuisés.",
+      "loading": "Chargement des billets…",
+      "membershipChecking": "Vérification de votre adhésion…",
+      "total": "Vous serez débité de {amount}.",
+      "totalFree": "Ce billet est gratuit.",
+      "payAndRegister": "Payer et s'inscrire",
+      "paymentTitle": "Finalisez votre paiement",
+      "paymentsUnavailable": "L'inscription payante est momentanément indisponible. Merci de réessayer plus tard.",
+      "pendingPayment": "Votre paiement est en cours de confirmation.",
+      "returnPaid": "Paiement reçu. Votre place est confirmée.",
+      "returnPending": "Nous attendons la confirmation du paiement. Nous confirmerons votre place par e-mail.",
+      "returnFailed": "Le paiement n'a pas abouti et la place a été libérée. Vous pouvez réessayer."
+    }
   },
   "filters": {
     "when": "Période",

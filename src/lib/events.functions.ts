@@ -40,9 +40,17 @@ function applyTranslation(event: PublicEvent, tr: EventTranslation | undefined) 
 
 const rsvpSchema = z.object({
   eventId: z.string().uuid(),
+  slug: z.string().trim().min(1).max(120),
+  locale: localeSchema,
   fullName: z.string().trim().min(2).max(120),
   email: z.string().trim().email().max(200),
   notes: z.string().trim().max(1000).optional().nullable(),
+  /** Named, never priced, by the client — the server reads the stored price. */
+  tierId: z.string().uuid().optional().nullable(),
+  /** Optional ICF member id for a signed-in account that is not linked yet. */
+  memberId: z.string().trim().max(60).optional().nullable(),
+  answers: z.record(z.string().max(80), z.string().max(2000)).default({}),
+  environment: z.enum(["sandbox", "live"]).default("sandbox"),
 });
 
 type VocabRow = {
@@ -237,57 +245,43 @@ export const getPublicEvent = createServerFn({ method: "GET" })
     return { ...applyTranslation(event, (tr as EventTranslation | null) ?? undefined), hosts };
   });
 
-type RsvpResult = { ok: true } | { ok: false; reason: "full" | "closed" | "duplicate" | "error" };
-
 /**
- * Maps the database guards to a small, stable reason code. The trigger raises
- * with a distinct SQLSTATE per rule so the UI never has to parse prose.
+ * RSVP without an account. Guests are allowed only when the event says so, and
+ * a guest is never a member, so member tiers are refused server-side.
  */
-function rsvpFailure(error: { code?: string; message?: string }): RsvpResult {
-  if (error.code === "23505") return { ok: false, reason: "duplicate" };
-  const message = (error.message ?? "").toLowerCase();
-  if (message.includes("full") || message.includes("capacity"))
-    return { ok: false, reason: "full" };
-  if (
-    message.includes("closed") ||
-    message.includes("not open") ||
-    message.includes("registration")
-  )
-    return { ok: false, reason: "closed" };
-  return { ok: false, reason: "error" };
-}
-
-/** RSVP without an account. Guests are allowed only when the event says so. */
 export const submitGuestRegistration = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => rsvpSchema.parse(input))
-  .handler(async ({ data }): Promise<RsvpResult> => {
+  .handler(async ({ data }) => {
     const { publicSupabaseClient } = await import("./supabase-public.server");
-    const supabase = publicSupabaseClient();
-    const { error } = await supabase.from("event_registrations").insert({
-      event_id: data.eventId,
-      user_id: null,
-      email: data.email,
-      full_name: data.fullName,
-      notes: data.notes ?? null,
-    });
-    if (error) return rsvpFailure(error);
-    return { ok: true };
+    const { submitRegistration } = await import("./tickets.server");
+    return submitRegistration(
+      publicSupabaseClient(),
+      {
+        ...data,
+        notes: data.notes ?? null,
+        tierId: data.tierId ?? null,
+        memberId: null,
+      },
+      null,
+    );
   });
 
-/** RSVP as a signed-in member: the row is owned, so it can be cancelled later. */
+/** RSVP as a signed-in visitor: the row is owned, so it can be cancelled later. */
 export const submitMemberRegistration = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => rsvpSchema.parse(input))
-  .handler(async ({ data, context }): Promise<RsvpResult> => {
-    const { error } = await context.supabase.from("event_registrations").insert({
-      event_id: data.eventId,
-      user_id: context.userId,
-      email: data.email,
-      full_name: data.fullName,
-      notes: data.notes ?? null,
-    });
-    if (error) return rsvpFailure(error);
-    return { ok: true };
+  .handler(async ({ data, context }) => {
+    const { submitRegistration } = await import("./tickets.server");
+    return submitRegistration(
+      context.supabase,
+      {
+        ...data,
+        notes: data.notes ?? null,
+        tierId: data.tierId ?? null,
+        memberId: data.memberId ?? null,
+      },
+      context.userId,
+    );
   });
 
 /** The signed-in visitor's own registration for one event, if any. */
@@ -297,7 +291,7 @@ export const getMyRegistration = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { data: row } = await context.supabase
       .from("event_registrations")
-      .select("id, status, full_name, email, created_at")
+      .select("id, status, full_name, email, created_at, payment_status, amount_cents, currency")
       .eq("event_id", data.eventId)
       .eq("user_id", context.userId)
       .neq("status", "cancelled")
