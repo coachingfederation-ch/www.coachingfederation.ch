@@ -20,6 +20,7 @@ import {
   type Managed,
   type Registration,
 } from "@/components/cms/EventEditorSections";
+import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { useCms } from "@/i18n/cms";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
 import {
@@ -142,6 +143,7 @@ function EventEditor() {
           category_id: event.category_id,
           region_id: event.region_id,
           community_id: event.community_id,
+          hero_marks: sanitizeHeroMarks("event", event.hero_marks),
         },
       });
       setMessage(t("events.saved"));
