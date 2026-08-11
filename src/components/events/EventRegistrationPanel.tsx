@@ -22,7 +22,11 @@ import {
   submitGuestRegistration,
   submitMemberRegistration,
 } from "@/lib/events.functions";
-import { getEventTicketing, getMyMembershipState, confirmCheckoutSession } from "@/lib/tickets.functions";
+import {
+  getEventTicketing,
+  getMyMembershipState,
+  confirmCheckoutSession,
+} from "@/lib/tickets.functions";
 import {
   formatPrice,
   memberTier as findMemberTier,
@@ -280,15 +284,15 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
         <p className="mt-4 text-sm text-muted-foreground">{t("events.detail.noRegistration")}</p>
       );
     }
-    if (past) return <p className="mt-4 text-sm text-muted-foreground">{t("events.detail.pastEvent")}</p>;
+    if (past)
+      return <p className="mt-4 text-sm text-muted-foreground">{t("events.detail.pastEvent")}</p>;
     if (returned === "paid")
       return (
         <p className="mt-4 text-sm font-semibold text-teal-foreground">
           {t("events.detail.tickets.returnPaid")}
         </p>
       );
-    if (returned === "pending")
-      return notice(t("events.detail.tickets.returnPending"), "warn");
+    if (returned === "pending") return notice(t("events.detail.tickets.returnPending"), "warn");
     if (mine.data) {
       const pending = mine.data.payment_status === "pending";
       return (
@@ -419,7 +423,9 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
         {hasTiers && memberTier && membership === "member" && !memberTier.isSoldOut
           ? notice(
               t("events.detail.tickets.memberApplied") +
-                (saving ? " " + t("events.detail.tickets.memberSaving").replace("{amount}", saving) : ""),
+                (saving
+                  ? " " + t("events.detail.tickets.memberSaving").replace("{amount}", saving)
+                  : ""),
               "good",
             )
           : null}
@@ -467,8 +473,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
         {fields.map((field) => {
           const id = `rsvp-field-${field.id}`;
           const value = answers[field.key] ?? "";
-          const update = (next: string) =>
-            setAnswers((prev) => ({ ...prev, [field.key]: next }));
+          const update = (next: string) => setAnswers((prev) => ({ ...prev, [field.key]: next }));
           if (field.type === "checkbox") {
             return (
               <label key={field.id} className="flex items-start gap-2 text-xs font-semibold">

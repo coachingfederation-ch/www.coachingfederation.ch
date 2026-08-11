@@ -312,9 +312,7 @@ export const listEventTiers = createServerFn({ method: "POST" })
 export const saveEventTiers = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
-    z
-      .object({ eventId: z.string().uuid(), tiers: z.array(tierInput).max(12) })
-      .parse(input),
+    z.object({ eventId: z.string().uuid(), tiers: z.array(tierInput).max(12) }).parse(input),
   )
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);

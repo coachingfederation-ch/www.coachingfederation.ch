@@ -161,9 +161,7 @@ export function EventTicketsSection({
                   <select
                     className={inputClass}
                     value={draft.segment}
-                    onChange={(e) =>
-                      update(draft.key, { segment: e.target.value as TierSegment })
-                    }
+                    onChange={(e) => update(draft.key, { segment: e.target.value as TierSegment })}
                   >
                     <option value="member">{t("events.tickets.segmentMember")}</option>
                     <option value="non_member">{t("events.tickets.segmentNonMember")}</option>
@@ -264,9 +262,7 @@ export function EventTicketsSection({
                 </button>
                 <button
                   type="button"
-                  onClick={() =>
-                    setDrafts((prev) => prev.filter((row) => row.key !== draft.key))
-                  }
+                  onClick={() => setDrafts((prev) => prev.filter((row) => row.key !== draft.key))}
                   className="rounded-full border border-border px-3 py-1 font-semibold hover:bg-secondary"
                 >
                   {t("events.tickets.remove")}

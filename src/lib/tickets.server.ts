@@ -351,9 +351,7 @@ export async function submitRegistration(
 
   const tier = resolved.tier;
   const paid = Boolean(tier && tier.price_cents > 0);
-  const holdExpiresAt = paid
-    ? new Date(Date.now() + HOLD_MINUTES * 60_000).toISOString()
-    : null;
+  const holdExpiresAt = paid ? new Date(Date.now() + HOLD_MINUTES * 60_000).toISOString() : null;
 
   const { data: inserted, error } = await client
     .from("event_registrations")
