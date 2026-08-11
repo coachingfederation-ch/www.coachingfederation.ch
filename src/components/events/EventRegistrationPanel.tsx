@@ -26,6 +26,7 @@ import {
   getEventTicketing,
   getMyMembershipState,
   confirmCheckoutSession,
+  verifyMemberId,
 } from "@/lib/tickets.functions";
 import {
   formatPrice,
@@ -96,10 +97,30 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     retry: false,
     staleTime: 5 * 60_000,
   });
-  const membership: MembershipState = signedIn
+  // An ICF member id confirmed by the server unlocks member pricing for this
+  // registration even without an account link. The server re-checks it.
+  const [memberId, setMemberId] = useState("");
+  const [memberIdState, setMemberIdState] = useState<"idle" | "checking" | "confirmed" | "failed">(
+    "idle",
+  );
+  const accountMembership: MembershipState = signedIn
     ? ((membershipQuery.data as MembershipState | undefined) ?? "not_member")
     : "signed_out";
+  const membership: MembershipState =
+    memberIdState === "confirmed" ? "member" : accountMembership;
   const membershipResolving = signedIn && membershipQuery.isPending;
+
+  const applyMemberId = async () => {
+    const candidate = memberId.trim();
+    if (!candidate) return;
+    setMemberIdState("checking");
+    try {
+      const result = await verifyMemberId({ data: { memberId: candidate } });
+      setMemberIdState(result.confirmed ? "confirmed" : "failed");
+    } catch {
+      setMemberIdState("failed");
+    }
+  };
 
   const tiers = useMemo(() => ticketing.data?.tiers ?? [], [ticketing.data]);
   const fields = ticketing.data?.fields ?? [];
@@ -223,6 +244,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
       email,
       notes: notes || null,
       tierId,
+      memberId: memberIdState === "confirmed" ? memberId.trim() : null,
       answers,
       environment: paymentsConfigured() ? getStripeEnvironment() : ("sandbox" as const),
     };
