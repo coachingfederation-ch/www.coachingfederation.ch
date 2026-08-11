@@ -454,20 +454,58 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
         {hasTiers && memberTier && membership === "member" && memberTier.isSoldOut
           ? notice(t("events.detail.tickets.memberSoldOut"), "warn")
           : null}
-        {hasTiers && memberTier && membership === "signed_out" ? (
-          <p className="mt-4 rounded-xl bg-secondary px-3 py-2 text-xs leading-relaxed text-muted-foreground">
-            {t("events.detail.tickets.signedOutPrompt")}{" "}
-            <a
-              href={signInHref}
-              onClick={persistDraft}
-              className="font-semibold text-primary hover:underline"
-            >
-              {t("events.detail.signIn")}
-            </a>
-          </p>
+        {hasTiers && memberTier && membership !== "member" ? (
+          <div className="mt-4 rounded-xl bg-secondary px-3 py-3">
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              {accountMembership === "not_member"
+                ? t("events.detail.tickets.notMember")
+                : t("events.detail.tickets.signedOutPrompt")}{" "}
+              {!signedIn ? (
+                <a
+                  href={signInHref}
+                  onClick={persistDraft}
+                  className="font-semibold text-primary hover:underline"
+                >
+                  {t("events.detail.signIn")}
+                </a>
+              ) : null}
+            </p>
+            <label className="mt-3 block text-xs font-semibold" htmlFor="rsvp-member-id">
+              {t("events.detail.tickets.memberIdLabel")}
+            </label>
+            <div className="mt-1 flex gap-2">
+              <input
+                id="rsvp-member-id"
+                value={memberId}
+                inputMode="numeric"
+                autoComplete="off"
+                placeholder={t("events.detail.tickets.memberIdPlaceholder")}
+                onChange={(e) => {
+                  setMemberId(e.target.value);
+                  setMemberIdState("idle");
+                }}
+                className={inputClass}
+              />
+              <button
+                type="button"
+                onClick={() => void applyMemberId()}
+                disabled={!memberId.trim() || memberIdState === "checking"}
+                className="shrink-0 rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-background disabled:opacity-50"
+              >
+                {memberIdState === "checking"
+                  ? t("events.detail.tickets.memberIdChecking")
+                  : t("events.detail.tickets.memberIdApply")}
+              </button>
+            </div>
+            {memberIdState === "failed" ? (
+              <p className="mt-2 text-xs text-[color:var(--warn)]">
+                {t("events.detail.tickets.memberIdFailed")}
+              </p>
+            ) : null}
+          </div>
         ) : null}
-        {hasTiers && memberTier && membership === "not_member"
-          ? notice(t("events.detail.tickets.notMember"))
+        {hasTiers && memberTier && memberIdState === "confirmed"
+          ? notice(t("events.detail.tickets.memberIdConfirmed"), "good")
           : null}
 
         <label className="block text-xs font-semibold" htmlFor="rsvp-name">
