@@ -8,22 +8,28 @@
 import * as React from "react";
 import {
   Body,
+  Button,
   Container,
   Head,
   Heading,
   Hr,
   Html,
+  Img,
   Link,
   Preview,
   Section,
   Text,
 } from "@react-email/components";
 import type { Locale } from "@/i18n/config";
+import { SITE_URL } from "@/i18n/config";
+import logoNegativeAsset from "@/assets/icf-horizontal-negative.png.asset.json";
+import logoWhiteAsset from "@/assets/icf-horizontal-white.png.asset.json";
 import { CONFIRMATION_COPY, fill } from "./event-confirmation-copy";
 import type { TemplateEntry } from "./registry";
 
 export interface EventConfirmationProps {
   locale?: Locale;
+  baseUrl?: string;
   paid?: boolean;
   attendeeName?: string;
   eventTitle?: string;
@@ -48,14 +54,73 @@ const BLUE = "#2B379B";
 const BONE = "#F8F0E4";
 const MUTED = "#4b4d70";
 
+const DEFAULT_ASSET_BASE = SITE_URL;
+
+function assetUrl(path: string, baseUrl?: string) {
+  if (/^https?:\/\//i.test(path)) return path;
+  const root = (baseUrl || DEFAULT_ASSET_BASE).replace(/\/$/, "");
+  return `${root}${path}`;
+}
+
+/** Same hand-drawn accent the member claim invitation uses under its heading. */
+const BrushUnderline = () => (
+  <svg
+    width="100%"
+    height="12"
+    viewBox="0 0 400 12"
+    preserveAspectRatio="none"
+    xmlns="http://www.w3.org/2000/svg"
+    style={{ display: "block" }}
+  >
+    <path d="M0,8 Q100,2 200,8 T400,6 L400,12 L0,12 Z" fill="#5778FA" fillOpacity="0.35" />
+  </svg>
+);
+
 const main = {
-  backgroundColor: "#ffffff",
+  backgroundColor: BONE,
   fontFamily:
     "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
   color: INK,
+  margin: 0,
+  padding: "24px 0",
 };
-const container = { padding: "28px 24px", maxWidth: "600px" };
-const heading = { fontSize: "22px", lineHeight: "30px", margin: "0 0 12px", color: INK };
+const container = {
+  backgroundColor: BONE,
+  maxWidth: "600px",
+  borderRadius: "4px",
+  overflow: "hidden",
+};
+const banner = {
+  backgroundColor: INK,
+  padding: "24px 32px",
+  borderBottom: "4px solid #5778FA",
+};
+const bannerInner = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+};
+const logoStyle = {
+  display: "block",
+  outline: "none",
+  border: "none",
+  textDecoration: "none",
+};
+const bannerTag = {
+  color: "#5778FA",
+  fontSize: "11px",
+  fontWeight: 700,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase" as const,
+};
+const content = { padding: "40px 32px" };
+const heading = {
+  fontSize: "28px",
+  lineHeight: "1.2",
+  margin: "0 0 8px",
+  color: INK,
+  fontWeight: 700,
+};
 const paragraph = { fontSize: "15px", lineHeight: "24px", margin: "0 0 14px", color: INK };
 const label = {
   fontSize: "12px",
@@ -66,7 +131,12 @@ const label = {
   letterSpacing: "0.06em",
 };
 const value = { fontSize: "15px", lineHeight: "23px", margin: "0 0 12px", color: INK };
-const panel = { backgroundColor: BONE, padding: "18px 20px", borderRadius: "12px" };
+const panel = {
+  backgroundColor: "#ffffff",
+  padding: "20px 24px",
+  borderRadius: "12px",
+  border: "1px solid #e6e3dc",
+};
 const sectionTitle = {
   fontSize: "13px",
   lineHeight: "20px",
@@ -78,6 +148,34 @@ const sectionTitle = {
 const link = { color: BLUE, textDecoration: "underline" };
 const rule = { borderColor: "#e4ddd0", margin: "24px 0" };
 const footer = { fontSize: "13px", lineHeight: "21px", color: MUTED, margin: "0 0 8px" };
+const button = {
+  backgroundColor: "#5778FA",
+  color: "#ffffff",
+  borderRadius: "4px",
+  padding: "16px 32px",
+  fontSize: "16px",
+  fontWeight: 700,
+  textDecoration: "none",
+  textAlign: "center" as const,
+  display: "inline-block",
+};
+const pageFooter = {
+  backgroundColor: INK,
+  padding: "24px 32px",
+  textAlign: "center" as const,
+};
+const pageFooterText = {
+  fontSize: "12px",
+  color: "#ffffff",
+  opacity: 0.6,
+  margin: 0,
+};
+const footerLogoStyle = {
+  display: "block",
+  margin: "0 auto 12px",
+  outline: "none",
+  border: "none",
+};
 
 function Row({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -90,6 +188,7 @@ function Row({ title, children }: { title: string; children: React.ReactNode }) 
 
 const Email = ({
   locale = "en",
+  baseUrl,
   paid = false,
   attendeeName = "",
   eventTitle = "",
@@ -110,6 +209,8 @@ const Email = ({
 }: EventConfirmationProps) => {
   const copy = CONFIRMATION_COPY[locale] ?? CONFIRMATION_COPY.en;
   const [signoffLine, signoffName] = copy.signoff.split("\n");
+  const logo = assetUrl(logoNegativeAsset.url, baseUrl);
+  const logoWhite = assetUrl(logoWhiteAsset.url, baseUrl);
 
   return (
     <Html lang={locale} dir="ltr">
@@ -117,7 +218,24 @@ const Email = ({
       <Preview>{paid ? copy.previewPaid : copy.previewFree}</Preview>
       <Body style={main}>
         <Container style={container}>
+          <Section style={banner}>
+            <div style={bannerInner}>
+              <Img
+                src={logo}
+                alt="The Switzerland Chapter of ICF"
+                width={210}
+                height={79}
+                style={logoStyle}
+              />
+              <span style={bannerTag}>{copy.detailsTitle}</span>
+            </div>
+          </Section>
+
+          <Section style={content}>
           <Heading style={heading}>{paid ? copy.headingPaid : copy.headingFree}</Heading>
+          <div style={{ marginBottom: "24px" }}>
+            <BrushUnderline />
+          </div>
           <Text style={paragraph}>
             {fill(copy.greeting, { name: attendeeName })},
           </Text>
@@ -154,6 +272,12 @@ const Email = ({
                 {copy.viewEvent}
               </Link>
             </Text>
+          </Section>
+
+          <Section style={{ margin: "28px 0 4px" }}>
+            <Button style={button} href={eventUrl}>
+              {copy.viewEvent} →
+            </Button>
           </Section>
 
           {answers.length > 0 ? (
@@ -195,6 +319,20 @@ const Email = ({
           </Text>
           <Text style={footer}>{signoffLine}</Text>
           <Text style={footer}>{signoffName}</Text>
+          </Section>
+
+          <Section style={pageFooter}>
+            <Img
+              src={logoWhite}
+              alt="The Switzerland Chapter of ICF"
+              width={150}
+              height={56}
+              style={footerLogoStyle}
+            />
+            <Text style={pageFooterText}>
+              © {new Date().getFullYear()} The Switzerland Chapter of ICF
+            </Text>
+          </Section>
         </Container>
       </Body>
     </Html>
@@ -212,6 +350,7 @@ export const template = {
   displayName: "Event registration confirmation",
   previewData: {
     locale: "en",
+    baseUrl: DEFAULT_ASSET_BASE,
     paid: true,
     attendeeName: "Anna Muster",
     eventTitle: "Coaching in organisations: an evening in Zürich",
