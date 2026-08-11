@@ -914,7 +914,8 @@
       "pending": "En cours…",
       "refunded": "Remboursé",
       "declined": "Pas de remboursement",
-      "failed": "Échec"
+      "failed": "Échec",
+      "none": "—"
     },
     "cancelDialog": {
       "title": "Annuler cette inscription ?",
@@ -960,7 +961,9 @@
       "saveError": "Le code de réduction n'a pas pu être enregistré.",
       "loadError": "Les codes de réduction n'ont pas pu être chargés.",
       "archivedDone": "Code archivé — il a déjà été utilisé."
-    }
+    },
+    "rowExpand": "Afficher les détails",
+    "rowCollapse": "Masquer les détails"
   },
   "eventTranslations": {
     "title": "Traductions",
