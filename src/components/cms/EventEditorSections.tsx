@@ -560,6 +560,7 @@ export function EventPublishingSection({
   registrations: Registration[];
   confirmed: number;
   setRegistrationStatusAndReload: (r: Registration) => void | Promise<void>;
+  resendConfirmation: (r: Registration) => void | Promise<void>;
   ticketsSection?: React.ReactNode;
   t: (k: string) => string;
 }) {
