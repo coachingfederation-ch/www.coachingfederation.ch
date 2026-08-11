@@ -9,11 +9,11 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 import { LocaleLink, useI18n } from "@/i18n";
 import { localizePath } from "@/i18n/config";
 import { supabase } from "@/integrations/supabase/client";
 import { CARD_SHADOW } from "@/components/site-chrome";
+import { PaymentOverlay } from "@/components/events/PaymentOverlay";
 import { isPastEvent, type PublicEvent } from "@/lib/events";
 import { trackGoal } from "@/lib/plausible";
 import {
@@ -37,7 +37,7 @@ import {
   type MembershipState,
   type PublicTier,
 } from "@/lib/tickets";
-import { getStripe, getStripeEnvironment, paymentsConfigured } from "@/lib/stripe";
+import { getStripeEnvironment, paymentsConfigured } from "@/lib/stripe";
 
 type Reason =
   | "full"
@@ -55,6 +55,9 @@ type FormState =
   | { kind: "saving" }
   | { kind: "done" }
   | { kind: "paying"; clientSecret: string }
+  // The overlay was dismissed: the registration and the Stripe session still
+  // exist, so re-opening resumes the same checkout instead of creating a new one.
+  | { kind: "held"; clientSecret: string }
   | { kind: "error"; reason: Reason };
 
 type ReturnState = "paid" | "pending" | "failed" | null;
@@ -303,12 +306,13 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     void ticketing.refetch();
   };
 
+  // Keyed on the secret itself so the options object is stable for as long as
+  // the provider is mounted — Stripe rejects a changed secret in place.
+  const clientSecret =
+    state.kind === "paying" || state.kind === "held" ? state.clientSecret : null;
   const checkoutOptions = useMemo(
-    () =>
-      state.kind === "paying"
-        ? { fetchClientSecret: async () => state.clientSecret }
-        : { fetchClientSecret: async () => "" },
-    [state],
+    () => ({ fetchClientSecret: async () => clientSecret ?? "" }),
+    [clientSecret],
   );
 
   const notice = (text: string, tone: "info" | "good" | "warn" = "info") => (
@@ -414,15 +418,20 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
           {t("events.detail.confirmed")}
         </p>
       );
-    if (state.kind === "paying") {
+    // While the overlay is open — or after it was dismissed — the panel keeps
+    // the seat visible instead of falling back to an empty form.
+    if (state.kind === "paying" || state.kind === "held") {
       return (
         <div className="mt-4">
           <p className="text-sm font-semibold">{t("events.detail.tickets.paymentTitle")}</p>
-          <div className="mt-3 overflow-hidden rounded-xl border border-border/70">
-            <EmbeddedCheckoutProvider stripe={getStripe()} options={checkoutOptions}>
-              <EmbeddedCheckout />
-            </EmbeddedCheckoutProvider>
-          </div>
+          {notice(t("events.detail.tickets.paymentHeld"))}
+          <button
+            type="button"
+            onClick={() => setState({ kind: "paying", clientSecret: state.clientSecret })}
+            className="mt-4 min-h-11 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+          >
+            {t("events.detail.tickets.paymentResume")}
+          </button>
         </div>
       );
     }
@@ -690,6 +699,21 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     >
       <p className="eyebrow">{t("events.detail.rsvpEyebrow")}</p>
       {body()}
+      <PaymentOverlay
+        open={state.kind === "paying"}
+        onClose={() =>
+          setState((current) =>
+            current.kind === "paying"
+              ? { kind: "held", clientSecret: current.clientSecret }
+              : current,
+          )
+        }
+        title={t("events.detail.tickets.paymentTitle")}
+        closeLabel={t("events.detail.tickets.paymentClose")}
+        eventTitle={event.title ?? ""}
+        summary={selected ? `${selected.name} · ${priceOf(selected)}` : null}
+        options={checkoutOptions}
+      />
     </aside>
   );
 }
