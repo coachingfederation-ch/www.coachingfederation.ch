@@ -863,6 +863,7 @@
       "sectionHint": "Catégories de billets dans la devise de l'événement. Les membres obtiennent automatiquement le tarif membre si leur adhésion est active.",
       "none": "Aucune catégorie — cet événement utilise l'inscription simple.",
       "name": "Nom de la catégorie",
+      "nameEn": "Nom du tarif EN",
       "segment": "Public",
       "segmentMember": "Membres",
       "segmentNonMember": "Non-membres",
@@ -877,9 +878,11 @@
       "addMember": "Ajouter une catégorie membres",
       "remove": "Supprimer",
       "save": "Enregistrer les billets",
+      "translating": "Traduction des noms de tarifs…",
       "saved": "Billets enregistrés.",
       "saveError": "Impossible d'enregistrer les billets.",
-      "loadError": "Impossible de charger les billets."
+      "loadError": "Impossible de charger les billets.",
+      "translateError": "Les noms de tarifs n'ont pas pu être traduits automatiquement."
     }
   },
   "eventTranslations": {

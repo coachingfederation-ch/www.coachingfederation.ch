@@ -8,6 +8,7 @@
 import { useEffect, useState } from "react";
 import { Section, inputClass } from "./EventEditorSections";
 import { listEventTiers, saveEventTiers } from "@/lib/events-admin.functions";
+import { translateTierNames } from "@/lib/tier-translations.functions";
 import type { TierSegment } from "@/lib/tickets";
 
 type Tier = Awaited<ReturnType<typeof listEventTiers>>[number];
@@ -68,7 +69,7 @@ export function EventTicketsSection({
   t: (key: string) => string;
 }) {
   const [drafts, setDrafts] = useState<Draft[]>([]);
-  const [status, setStatus] = useState<"loading" | "ready" | "saving">("loading");
+  const [status, setStatus] = useState<"loading" | "ready" | "saving" | "translating">("loading");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -100,14 +101,42 @@ export function EventTicketsSection({
     });
 
   const save = async () => {
-    setStatus("saving");
     setError(null);
     setMessage(null);
+    let rows = drafts;
+    // Auto-fill missing DE/FR/IT names before saving; they stay editable after.
+    const missing = rows.filter(
+      (d) => d.name.trim() && (!d.name_de.trim() || !d.name_fr.trim() || !d.name_it.trim()),
+    );
+    if (missing.length > 0) {
+      setStatus("translating");
+      try {
+        const translated = await translateTierNames({
+          data: { names: missing.map((d) => d.name.trim()) },
+        });
+        const byKey = new Map(missing.map((d, i) => [d.key, translated[i]!]));
+        rows = rows.map((d) => {
+          const hit = byKey.get(d.key);
+          if (!hit) return d;
+          return {
+            ...d,
+            name_de: d.name_de.trim() || hit.de,
+            name_fr: d.name_fr.trim() || hit.fr,
+            name_it: d.name_it.trim() || hit.it,
+          };
+        });
+        setDrafts(rows);
+      } catch (e) {
+        // Translation is a convenience — never block the save on it.
+        setError(e instanceof Error ? e.message : t("events.tickets.translateError"));
+      }
+    }
+    setStatus("saving");
     try {
       await saveEventTiers({
         data: {
           eventId,
-          tiers: drafts.map((d, index) => ({
+          tiers: rows.map((d, index) => ({
             id: d.id,
             name: d.name.trim(),
             name_de: d.name_de.trim() || null,
@@ -146,7 +175,7 @@ export function EventTicketsSection({
               <div className="grid gap-3 sm:grid-cols-2">
                 <label className="block">
                   <span className="mb-1 block text-xs font-semibold text-muted-foreground">
-                    {t("events.tickets.name")}
+                    {t("events.tickets.nameEn")}
                   </span>
                   <input
                     className={inputClass}
@@ -288,11 +317,15 @@ export function EventTicketsSection({
             </button>
             <button
               type="button"
-              disabled={status === "saving"}
+              disabled={status === "saving" || status === "translating"}
               onClick={() => void save()}
               className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
             >
-              {status === "saving" ? t("events.saving") : t("events.tickets.save")}
+              {status === "translating"
+                ? t("events.tickets.translating")
+                : status === "saving"
+                  ? t("events.saving")
+                  : t("events.tickets.save")}
             </button>
             {message ? <span className="text-xs text-teal-foreground">{message}</span> : null}
             {error ? <span className="text-xs text-destructive">{error}</span> : null}
