@@ -30,6 +30,26 @@ export const getMyMembershipState = createServerFn({ method: "POST" })
   });
 
 /**
+ * Advisory check of an ICF member id typed into the registration form. Public
+ * on purpose — a visitor without an account must be able to claim member
+ * pricing — so it is rate limited per caller and answers only "confirmed or
+ * not", never whether the id exists. The submit path verifies again before any
+ * price is applied.
+ */
+export const verifyMemberId = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) =>
+    z.object({ memberId: z.string().trim().min(1).max(60) }).parse(input),
+  )
+  .handler(async ({ data }): Promise<{ confirmed: boolean }> => {
+    const { clientIp } = await import("./rate-limit.server");
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const { resolveMembership } = await import("./tickets.server");
+    const subject = `ip:${clientIp(getRequest())}`;
+    const state = await resolveMembership(null, data.memberId, subject);
+    return { confirmed: state === "member" };
+  });
+
+/**
  * Reconciles a Stripe Checkout return. The webhook is the authority; this only
  * catches the case where the visitor is back before the event arrives, and it
  * runs the same idempotent `pending -> paid` update.
