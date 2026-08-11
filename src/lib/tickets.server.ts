@@ -432,3 +432,30 @@ export async function submitRegistration(
     return { ok: false, reason: "payment" };
   }
 }
+
+/**
+ * Name and email to prefill a registration form for a signed-in visitor.
+ * Prefers the linked member record; falls back to the account email.
+ */
+export async function loadRegistrationIdentity(
+  userId: string,
+  fallbackEmail: string | null,
+): Promise<{ fullName: string; email: string }> {
+  const { data: member } = await supabaseAdmin
+    .from("members")
+    .select("first_name, last_name, email")
+    .eq("auth_user_id", userId)
+    .maybeSingle();
+
+  const { data: profile } = await supabaseAdmin
+    .from("profiles")
+    .select("full_name")
+    .eq("id", userId)
+    .maybeSingle();
+
+  const memberName = [member?.first_name, member?.last_name].filter(Boolean).join(" ").trim();
+  return {
+    fullName: memberName || ((profile?.full_name as string | null) ?? ""),
+    email: member?.email ?? fallbackEmail ?? "",
+  };
+}
