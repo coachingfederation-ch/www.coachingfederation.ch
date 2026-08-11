@@ -402,17 +402,26 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     if (returned === "pending") return notice(t("events.detail.tickets.returnPending"), "warn");
     if (mine.data) {
       const pending = mine.data.payment_status === "pending";
+      // A paid seat is cancelled by the chapter, so the refund decision and
+      // the notification stay in one hand.
+      const paid = mine.data.payment_status === "paid";
       return (
         <div className="mt-4">
           <p className="text-sm font-semibold text-teal-foreground">
             {pending ? t("events.detail.tickets.pendingPayment") : t("events.detail.youAreIn")}
           </p>
-          <button
-            onClick={() => void cancel()}
-            className="mt-4 rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-secondary"
-          >
-            {t("events.detail.cancel")}
-          </button>
+          {paid ? (
+            <p className="mt-3 text-sm text-muted-foreground">
+              {t("events.detail.tickets.cancelPaidNote")}
+            </p>
+          ) : (
+            <button
+              onClick={() => void cancel()}
+              className="mt-4 rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-secondary"
+            >
+              {t("events.detail.cancel")}
+            </button>
+          )}
         </div>
       );
     }

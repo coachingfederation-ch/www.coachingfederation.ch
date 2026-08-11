@@ -108,7 +108,8 @@
       "memberIdApply": "Appliquer",
       "memberIdChecking": "Vérification…",
       "memberIdConfirmed": "Adhésion confirmée — tarif membre appliqué.",
-      "memberIdFailed": "Nous n'avons pas pu confirmer ce numéro de membre. Veuillez le vérifier et réessayer."
+      "memberIdFailed": "Nous n'avons pas pu confirmer ce numéro de membre. Veuillez le vérifier et réessayer.",
+      "cancelPaidNote": "Il s’agit d’un billet payant. Écrivez au secrétariat pour l’annuler — nous confirmerons l’annulation et tout remboursement par e-mail."
     },
     "membersOnlyPrompt": "Les membres peuvent s'inscrire à cet événement. Connectez-vous avec votre compte lié ou saisissez votre numéro de membre ICF."
   },

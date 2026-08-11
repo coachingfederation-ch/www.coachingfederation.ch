@@ -8,6 +8,16 @@ import { ImagePlus, X } from "lucide-react";
 import { EventTranslationsPanel } from "@/components/cms/EventTranslationsPanel";
 import { EventHostsPanel } from "@/components/cms/EventHostsPanel";
 import { RichTextEditor } from "@/components/cms/RichTextField";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
 import { EventHeroPreview } from "@/components/cms/EventHeroPreview";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
@@ -550,6 +560,8 @@ export function EventPublishingSection({
   confirmed,
   setRegistrationStatusAndReload,
   resendConfirmation,
+  cancelAttendee,
+  retryRefund,
   ticketsSection,
   t,
 }: {
@@ -562,6 +574,8 @@ export function EventPublishingSection({
   confirmed: number;
   setRegistrationStatusAndReload: (r: Registration) => void | Promise<void>;
   resendConfirmation: (r: Registration) => void | Promise<void>;
+  cancelAttendee: (r: Registration, refund: boolean | undefined) => void | Promise<void>;
+  retryRefund: (r: Registration) => void | Promise<void>;
   ticketsSection?: React.ReactNode;
   t: (k: string) => string;
 }) {
@@ -570,6 +584,8 @@ export function EventPublishingSection({
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [paymentFilter, setPaymentFilter] = React.useState("all");
   const [confirmationFilter, setConfirmationFilter] = React.useState("all");
+  // The attendee awaiting a cancellation confirmation, if any.
+  const [pendingCancel, setPendingCancel] = React.useState<Registration | null>(null);
 
   const visibleRegistrations = registrations.filter((r) => {
     if (statusFilter !== "all" && r.status !== statusFilter) return false;
@@ -732,13 +748,14 @@ export function EventPublishingSection({
               <th className="whitespace-nowrap px-4 py-3 font-semibold">
                 {t("events.colConfirmation")}
               </th>
+              <th className="whitespace-nowrap px-4 py-3 font-semibold">{t("events.colRefund")}</th>
               <th className="sticky right-0 z-10 bg-secondary/60 px-4 py-3" />
             </tr>
           </thead>
           <tbody>
             {visibleRegistrations.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-6 text-muted-foreground">
+                <td colSpan={7} className="px-4 py-6 text-muted-foreground">
                   {registrations.length === 0
                     ? t("events.noAttendees")
                     : t("events.noMatchingAttendees")}
@@ -773,6 +790,29 @@ export function EventPublishingSection({
                       <span className="mt-0.5 block text-xs">{r.confirmation_error}</span>
                     ) : null}
                   </td>
+                  <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
+                    <span
+                      className={
+                        r.refund_status === "failed" ? "font-semibold text-destructive" : ""
+                      }
+                    >
+                      {t(`events.refundStatus.${r.refund_status ?? "not_applicable"}`)}
+                    </span>
+                    {r.refund_status === "refunded" && r.refund_amount_cents
+                      ? ` · ${(r.refund_amount_cents / 100).toFixed(2)} ${r.currency}`
+                      : ""}
+                    {r.refund_error ? (
+                      <span className="mt-0.5 block text-xs">{r.refund_error}</span>
+                    ) : null}
+                    {r.refund_status === "failed" ? (
+                      <button
+                        onClick={() => void retryRefund(r)}
+                        className="mt-1 block text-xs font-semibold text-primary underline"
+                      >
+                        {t("events.retryRefund")}
+                      </button>
+                    ) : null}
+                  </td>
                   <td className="sticky right-0 z-10 bg-card px-4 py-3 text-right shadow-[-8px_0_12px_-12px_rgba(0,0,0,0.5)]">
                     <div className="flex justify-end gap-2 whitespace-nowrap">
                       {r.status !== "cancelled" ? (
@@ -790,7 +830,11 @@ export function EventPublishingSection({
                         </button>
                       ) : null}
                       <button
-                        onClick={() => void setRegistrationStatusAndReload(r)}
+                        onClick={() =>
+                          r.status === "cancelled"
+                            ? void setRegistrationStatusAndReload(r)
+                            : setPendingCancel(r)
+                        }
                         className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
                       >
                         {r.status === "cancelled" ? t("events.reinstate") : t("events.cancelRsvp")}
@@ -803,6 +847,111 @@ export function EventPublishingSection({
           </tbody>
         </table>
       </div>
+
+      <CancelAttendeeDialog
+        registration={pendingCancel}
+        eventStartsAt={event.starts_at}
+        onClose={() => setPendingCancel(null)}
+        onConfirm={async (r, refund) => {
+          setPendingCancel(null);
+          await cancelAttendee(r, refund);
+        }}
+        t={t}
+      />
     </>
+  );
+}
+
+/**
+ * Cancellation confirmation.
+ *
+ * Cancelling a paid seat moves money and sends mail, so it is never a single
+ * click: the dialog states the refund verdict the server will apply and lets
+ * staff override it deliberately.
+ */
+function CancelAttendeeDialog({
+  registration,
+  eventStartsAt,
+  onClose,
+  onConfirm,
+  t,
+}: {
+  registration: Registration | null;
+  eventStartsAt: string | null;
+  onClose: () => void;
+  onConfirm: (r: Registration, refund: boolean | undefined) => void | Promise<void>;
+  t: (k: string) => string;
+}) {
+  const wasPaid = Boolean(
+    registration && registration.payment_status === "paid" && registration.amount_cents > 0,
+  );
+  // Mirrors REFUND_DEADLINE_HOURS on the server; the server decides, this only
+  // tells staff what will happen.
+  const withinPolicy = eventStartsAt
+    ? new Date(eventStartsAt).getTime() - Date.now() > 48 * 3600_000
+    : true;
+  const [override, setOverride] = React.useState<boolean | null>(null);
+  const [busy, setBusy] = React.useState(false);
+
+  React.useEffect(() => {
+    setOverride(null);
+    setBusy(false);
+  }, [registration?.id]);
+
+  const refund = override ?? withinPolicy;
+
+  return (
+    <AlertDialog open={registration !== null} onOpenChange={(open) => (!open ? onClose() : null)}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{t("events.cancelDialog.title")}</AlertDialogTitle>
+          <AlertDialogDescription>
+            {registration ? (
+              <>
+                {t("events.cancelDialog.intro")} <strong>{registration.full_name}</strong>.{" "}
+                {wasPaid
+                  ? refund
+                    ? t("events.cancelDialog.refundYes")
+                    : t("events.cancelDialog.refundNo")
+                  : t("events.cancelDialog.free")}
+              </>
+            ) : null}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        {wasPaid && registration ? (
+          <label className="flex items-start gap-2 text-sm">
+            <input
+              type="checkbox"
+              className="mt-1"
+              checked={refund}
+              onChange={(e) => setOverride(e.target.checked)}
+            />
+            <span>
+              {t("events.cancelDialog.refundToggle")} (
+              {(registration.amount_cents / 100).toFixed(2)} {registration.currency})
+              <span className="mt-0.5 block text-xs text-muted-foreground">
+                {withinPolicy
+                  ? t("events.cancelDialog.policyOutside")
+                  : t("events.cancelDialog.policyInside")}
+              </span>
+            </span>
+          </label>
+        ) : null}
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={busy}>{t("events.cancelDialog.keep")}</AlertDialogCancel>
+          <AlertDialogAction
+            disabled={busy}
+            onClick={(e) => {
+              e.preventDefault();
+              if (!registration) return;
+              setBusy(true);
+              void onConfirm(registration, wasPaid ? refund : undefined);
+            }}
+          >
+            {busy ? t("events.cancelDialog.working") : t("events.cancelDialog.confirm")}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

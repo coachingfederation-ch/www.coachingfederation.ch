@@ -108,7 +108,8 @@
       "memberIdApply": "Apply",
       "memberIdChecking": "Checking…",
       "memberIdConfirmed": "Membership confirmed — member pricing applied.",
-      "memberIdFailed": "We couldn't confirm this member ID. Please check it and try again."
+      "memberIdFailed": "We couldn't confirm this member ID. Please check it and try again.",
+      "cancelPaidNote": "This is a paid ticket. Write to the chapter office to cancel it — we will confirm the cancellation and any refund by email."
     },
     "membersOnlyPrompt": "Members can register for this event. Sign in with your linked account, or enter your ICF member ID."
   },

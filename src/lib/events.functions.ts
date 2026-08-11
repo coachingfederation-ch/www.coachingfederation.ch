@@ -308,6 +308,17 @@ export const cancelMyRegistration = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ registrationId: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
+    // A paid seat involves a refund decision, so it is cancelled by the
+    // chapter, never silently by the attendee.
+    const { data: existing } = await context.supabase
+      .from("event_registrations")
+      .select("payment_status")
+      .eq("id", data.registrationId)
+      .eq("user_id", context.userId)
+      .maybeSingle();
+    if (existing?.payment_status === "paid") {
+      throw new Error("PAID_CANCEL_REQUIRES_STAFF");
+    }
     const { error } = await context.supabase
       .from("event_registrations")
       .update({ status: "cancelled" })

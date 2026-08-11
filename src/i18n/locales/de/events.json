@@ -108,7 +108,8 @@
       "memberIdApply": "Anwenden",
       "memberIdChecking": "Wird geprüft…",
       "memberIdConfirmed": "Mitgliedschaft bestätigt — Mitgliederpreis angewendet.",
-      "memberIdFailed": "Wir konnten diese Mitgliedsnummer nicht bestätigen. Bitte prüfen Sie sie und versuchen Sie es erneut."
+      "memberIdFailed": "Wir konnten diese Mitgliedsnummer nicht bestätigen. Bitte prüfen Sie sie und versuchen Sie es erneut.",
+      "cancelPaidNote": "Dies ist ein bezahltes Ticket. Schreiben Sie an die Geschäftsstelle, um es zu stornieren — wir bestätigen Stornierung und allfällige Rückerstattung per E-Mail."
     },
     "membersOnlyPrompt": "Mitglieder können sich für diesen Event anmelden. Melden Sie sich mit Ihrem verknüpften Konto an oder geben Sie Ihre ICF-Mitgliedsnummer ein."
   },
