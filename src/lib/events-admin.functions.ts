@@ -218,12 +218,36 @@ export const listEventRegistrations = createServerFn({ method: "POST" })
     const { data: rows, error } = await context.supabase
       .from("event_registrations")
       .select(
-        "id, full_name, email, status, notes, created_at, user_id, tier_id, payment_status, amount_cents, currency, answers",
+        "id, full_name, email, status, notes, created_at, user_id, tier_id, payment_status, amount_cents, currency, answers, locale, confirmation_status, confirmation_sent_at, confirmation_error",
       )
       .eq("event_id", data.eventId)
       .order("created_at", { ascending: true });
     if (error) throw new Error(error.message);
     return rows ?? [];
+  });
+
+/**
+ * Re-sends an attendee confirmation after a failed or lost delivery. The
+ * calendar entry keeps its identity and gains a higher sequence, so the
+ * attendee's calendar updates the existing entry rather than duplicating it.
+ */
+export const resendEventConfirmation = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ registrationId: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    // The caller must manage this event: RLS decides, not the client.
+    const { data: row, error } = await context.supabase
+      .from("event_registrations")
+      .select("id")
+      .eq("id", data.registrationId)
+      .maybeSingle();
+    if (error || !row) throw new Error("Registration not found");
+
+    const { sendRegistrationConfirmation } = await import("./event-confirmation.server");
+    return sendRegistrationConfirmation(data.registrationId, { force: true });
   });
 
 /**
