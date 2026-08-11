@@ -21,6 +21,7 @@ import {
   type Registration,
 } from "@/components/cms/EventEditorSections";
 import { EventTicketsSection } from "@/components/cms/EventTicketsSection";
+import { EventDiscountCodesSection } from "@/components/cms/EventDiscountCodesSection";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { useCms } from "@/i18n/cms";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
@@ -301,7 +302,10 @@ function EventEditor() {
           retryRefund={retryRefund}
           ticketsSection={
             event.registration_mode === "rsvp_tickets" ? (
-              <EventTicketsSection eventId={event.id} t={t} />
+              <>
+                <EventTicketsSection eventId={event.id} t={t} />
+                <EventDiscountCodesSection eventId={event.id} t={t} />
+              </>
             ) : null
           }
           t={t}
