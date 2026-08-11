@@ -67,14 +67,13 @@ export async function releaseExpiredHolds(eventId: string) {
     .lt("hold_expires_at", new Date().toISOString());
 }
 
-const isActiveMember = (row: {
-  activity_state: string;
-  membership_expiration_date: string | null;
-}) => {
-  if (row.activity_state !== "active") return false;
-  if (!row.membership_expiration_date) return true;
-  return row.membership_expiration_date >= new Date().toISOString().slice(0, 10);
-};
+/**
+ * Entitlement rests on `activity_state`, the same signal the public directory
+ * uses (`member_is_active`). The feed's `membership_expiration_date` is not a
+ * reliable entitlement date — the vast majority of active records carry a past
+ * one — so it is not used to deny a member the sync still reports as active.
+ */
+const isActiveMember = (row: { activity_state: string }) => row.activity_state === "active";
 
 /**
  * Membership as the server sees it. The account link (`members.auth_user_id`)
@@ -86,32 +85,40 @@ const isActiveMember = (row: {
 export async function resolveMembership(
   userId: string | null,
   memberIdInput?: string | null,
+  /** Rate-limit identity for anonymous callers, e.g. `ip:1.2.3.4`. */
+  rateSubject?: string | null,
 ): Promise<MembershipState> {
-  if (!userId) return "signed_out";
+  const candidateId = (memberIdInput ?? "").trim();
 
-  const { data: linked } = await supabaseAdmin
-    .from("members")
-    .select("id, activity_state, membership_expiration_date")
-    .eq("auth_user_id", userId)
-    .maybeSingle();
-  if (linked && isActiveMember(linked)) return "member";
+  if (userId) {
+    const { data: linked } = await supabaseAdmin
+      .from("members")
+      .select("id, activity_state")
+      .eq("auth_user_id", userId)
+      .maybeSingle();
+    if (linked && isActiveMember(linked)) return "member";
+  } else if (!candidateId) {
+    return "signed_out";
+  }
 
-  const candidate = (memberIdInput ?? "").trim();
+  const candidate = candidateId;
   if (!candidate) return "not_member";
+  const subject = userId ? `user:${userId}` : (rateSubject ?? "anonymous");
 
   const { checkRateLimit } = await import("./rate-limit.server");
-  const verdict = await checkRateLimit("event-member-id", userId, [
+  const verdict = await checkRateLimit("event-member-id", subject, [
     { windowSeconds: 300, max: 5 },
     { windowSeconds: 86_400, max: 30 },
   ]);
-  if (!verdict.allowed) return "not_member";
+  if (!verdict.allowed) return userId ? "not_member" : "signed_out";
 
   const { data: byMemberId } = await supabaseAdmin
     .from("members")
-    .select("id, activity_state, membership_expiration_date")
+    .select("id, activity_state")
     .eq("cst_recno", candidate)
     .maybeSingle();
-  return byMemberId && isActiveMember(byMemberId) ? "member" : "not_member";
+  if (byMemberId && isActiveMember(byMemberId)) return "member";
+  return userId ? "not_member" : "signed_out";
 }
 
 function toPublicTier(row: TierRow, locale: Locale): PublicTier {
@@ -339,10 +346,11 @@ export async function submitRegistration(
   client: any,
   input: RegistrationInput,
   userId: string | null,
+  rateSubject?: string | null,
 ): Promise<RegistrationOutcome> {
   await releaseExpiredHolds(input.eventId);
 
-  const membership = await resolveMembership(userId, input.memberId);
+  const membership = await resolveMembership(userId, input.memberId, rateSubject);
   const resolved = await resolveChargedTier(input.eventId, input.tierId, membership);
   if ("error" in resolved) return { ok: false, reason: resolved.error };
 
