@@ -277,7 +277,14 @@ export async function finalizePaidRegistration(sessionId: string) {
     .eq("stripe_session_id", sessionId)
     .eq("payment_status", "pending")
     .select("id");
-  return { updated: (data ?? []).length };
+  const rows = data ?? [];
+  // Only the delivery that actually flipped the row sends the confirmation, so
+  // a replayed webhook produces no second email.
+  for (const row of rows) {
+    const { triggerRegistrationConfirmation } = await import("./event-confirmation.server");
+    await triggerRegistrationConfirmation(row.id);
+  }
+  return { updated: rows.length };
 }
 
 /** Releases the seat behind an expired or abandoned checkout session. */
@@ -399,6 +406,9 @@ export async function submitRegistration(
       email: input.email,
       full_name: input.fullName,
       notes: input.notes,
+      // Stored so the confirmation — which may be sent later by the payment
+      // webhook, with no session — is written in the attendee's own language.
+      locale: input.locale,
       tier_id: tier?.id ?? null,
       // The trigger overwrites amount and currency from the stored tier.
       payment_status: paid ? "pending" : "not_required",
@@ -407,7 +417,11 @@ export async function submitRegistration(
     });
   if (error) return failureReason(error);
 
-  if (!paid || !tier) return { ok: true, kind: "free" };
+  if (!paid || !tier) {
+    const { triggerRegistrationConfirmation } = await import("./event-confirmation.server");
+    await triggerRegistrationConfirmation(registrationId);
+    return { ok: true, kind: "free" };
+  }
 
   try {
     const { createStripeClient } = await import("./stripe.server");

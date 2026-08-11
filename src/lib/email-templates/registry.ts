@@ -14,6 +14,7 @@ export interface TemplateEntry {
 }
 
 import { template as memberClaimInvitation } from "./member-claim-invitation";
+import { template as eventRegistrationConfirmation } from "./event-registration-confirmation";
 
 /**
  * Template registry — maps template names to their React Email components.
@@ -25,4 +26,5 @@ import { template as memberClaimInvitation } from "./member-claim-invitation";
  */
 export const TEMPLATES: Record<string, TemplateEntry> = {
   "member-claim-invitation": memberClaimInvitation,
+  "event-registration-confirmation": eventRegistrationConfirmation,
 };

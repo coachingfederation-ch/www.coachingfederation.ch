@@ -886,7 +886,16 @@
       "loadError": "Impossible de charger les billets.",
       "translateError": "Les noms de tarifs n'ont pas pu être traduits automatiquement."
     },
-    "fieldAllowNonMembers": "Autoriser l'inscription sans adhésion"
+    "fieldAllowNonMembers": "Autoriser l'inscription sans adhésion",
+    "colConfirmation": "E-mail de confirmation",
+    "resendConfirmation": "Renvoyer",
+    "resendFailed": "L’e-mail de confirmation n’a pas pu être envoyé. Veuillez réessayer.",
+    "confirmationStatus": {
+      "not_sent": "Non envoyé",
+      "sending": "Envoi en cours…",
+      "sent": "Envoyé",
+      "failed": "Échec"
+    }
   },
   "eventTranslations": {
     "title": "Traductions",

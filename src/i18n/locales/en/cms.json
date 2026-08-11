@@ -886,7 +886,16 @@
       "loadError": "Tickets could not be loaded.",
       "translateError": "Tier names could not be translated automatically."
     },
-    "fieldAllowNonMembers": "Allow registration without a membership"
+    "fieldAllowNonMembers": "Allow registration without a membership",
+    "colConfirmation": "Confirmation email",
+    "resendConfirmation": "Re-send",
+    "resendFailed": "The confirmation email could not be sent. Please try again.",
+    "confirmationStatus": {
+      "not_sent": "Not sent",
+      "sending": "Sending…",
+      "sent": "Sent",
+      "failed": "Failed"
+    }
   },
   "eventTranslations": {
     "title": "Translations",

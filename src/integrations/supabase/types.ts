@@ -1076,6 +1076,10 @@ export type Database = {
         Row: {
           amount_cents: number
           answers: Json
+          confirmation_error: string | null
+          confirmation_sent_at: string | null
+          confirmation_sequence: number
+          confirmation_status: string
           created_at: string
           currency: string
           email: string
@@ -1083,6 +1087,7 @@ export type Database = {
           full_name: string
           hold_expires_at: string | null
           id: string
+          locale: string
           notes: string | null
           payment_status: Database["public"]["Enums"]["event_payment_status"]
           status: Database["public"]["Enums"]["event_registration_status"]
@@ -1094,6 +1099,10 @@ export type Database = {
         Insert: {
           amount_cents?: number
           answers?: Json
+          confirmation_error?: string | null
+          confirmation_sent_at?: string | null
+          confirmation_sequence?: number
+          confirmation_status?: string
           created_at?: string
           currency?: string
           email: string
@@ -1101,6 +1110,7 @@ export type Database = {
           full_name: string
           hold_expires_at?: string | null
           id?: string
+          locale?: string
           notes?: string | null
           payment_status?: Database["public"]["Enums"]["event_payment_status"]
           status?: Database["public"]["Enums"]["event_registration_status"]
@@ -1112,6 +1122,10 @@ export type Database = {
         Update: {
           amount_cents?: number
           answers?: Json
+          confirmation_error?: string | null
+          confirmation_sent_at?: string | null
+          confirmation_sequence?: number
+          confirmation_status?: string
           created_at?: string
           currency?: string
           email?: string
@@ -1119,6 +1133,7 @@ export type Database = {
           full_name?: string
           hold_expires_at?: string | null
           id?: string
+          locale?: string
           notes?: string | null
           payment_status?: Database["public"]["Enums"]["event_payment_status"]
           status?: Database["public"]["Enums"]["event_registration_status"]

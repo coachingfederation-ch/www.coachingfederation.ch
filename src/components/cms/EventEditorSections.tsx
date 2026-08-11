@@ -549,6 +549,7 @@ export function EventPublishingSection({
   registrations,
   confirmed,
   setRegistrationStatusAndReload,
+  resendConfirmation,
   ticketsSection,
   t,
 }: {
@@ -560,6 +561,7 @@ export function EventPublishingSection({
   registrations: Registration[];
   confirmed: number;
   setRegistrationStatusAndReload: (r: Registration) => void | Promise<void>;
+  resendConfirmation: (r: Registration) => void | Promise<void>;
   ticketsSection?: React.ReactNode;
   t: (k: string) => string;
 }) {
@@ -666,13 +668,14 @@ export function EventPublishingSection({
               <th className="px-4 py-3 font-semibold">{t("events.colEmail")}</th>
               <th className="px-4 py-3 font-semibold">{t("events.colStatus")}</th>
               <th className="px-4 py-3 font-semibold">{t("events.colPayment")}</th>
+              <th className="px-4 py-3 font-semibold">{t("events.colConfirmation")}</th>
               <th className="px-4 py-3" />
             </tr>
           </thead>
           <tbody>
             {registrations.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-4 py-6 text-muted-foreground">
+                <td colSpan={6} className="px-4 py-6 text-muted-foreground">
                   {t("events.noAttendees")}
                 </td>
               </tr>
@@ -688,13 +691,38 @@ export function EventPublishingSection({
                       ? ` · ${(r.amount_cents / 100).toFixed(2)} ${r.currency}`
                       : ""}
                   </td>
-                  <td className="px-4 py-3 text-right">
-                    <button
-                      onClick={() => void setRegistrationStatusAndReload(r)}
-                      className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
+                  <td className="px-4 py-3 text-muted-foreground">
+                    <span
+                      className={
+                        r.confirmation_status === "failed" ? "font-semibold text-destructive" : ""
+                      }
                     >
-                      {r.status === "cancelled" ? t("events.reinstate") : t("events.cancelRsvp")}
-                    </button>
+                      {t(`events.confirmationStatus.${r.confirmation_status ?? "not_sent"}`)}
+                    </span>
+                    {r.locale ? (
+                      <span className="ml-1 uppercase">· {r.locale}</span>
+                    ) : null}
+                    {r.confirmation_error ? (
+                      <span className="mt-0.5 block text-xs">{r.confirmation_error}</span>
+                    ) : null}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <div className="flex flex-wrap justify-end gap-2">
+                      {r.status !== "cancelled" && r.payment_status !== "pending" ? (
+                        <button
+                          onClick={() => void resendConfirmation(r)}
+                          className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
+                        >
+                          {t("events.resendConfirmation")}
+                        </button>
+                      ) : null}
+                      <button
+                        onClick={() => void setRegistrationStatusAndReload(r)}
+                        className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
+                      >
+                        {r.status === "cancelled" ? t("events.reinstate") : t("events.cancelRsvp")}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
