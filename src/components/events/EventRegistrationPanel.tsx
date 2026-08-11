@@ -219,9 +219,10 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const selected: PublicTier | null = tierId
-    ? (tiers.find((tier) => tier.id === tierId) ?? null)
-    : null;
+  // A tier only applies on a ticketed event, even if tiers linger from an
+  // earlier configuration.
+  const selected: PublicTier | null =
+    ticketMode && tierId ? (tiers.find((tier) => tier.id === tierId) ?? null) : null;
   const freeLabel = t("events.detail.tickets.free");
   const priceOf = (tier: PublicTier) =>
     formatPrice(tier.priceCents, tier.currency, locale, freeLabel);
@@ -658,7 +659,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
           disabled={
             state.kind === "saving" ||
             paymentsBroken ||
-            (hasTiers && (!selected || selected.isSoldOut))
+            (showTiers && (!selected || selected.isSoldOut))
           }
           className="w-full rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
         >
