@@ -582,17 +582,22 @@ export function EventPublishingSection({
                 patch({ registration_mode: e.target.value as Managed["registration_mode"] })
               }
             >
-              <option value="rsvp">{t("events.regMode.rsvp")}</option>
               <option value="none">{t("events.regMode.none")}</option>
+              <option value="rsvp">{t("events.regMode.rsvp")}</option>
+              <option value="rsvp_members">{t("events.regMode.rsvpMembers")}</option>
+              <option value="rsvp_tickets">{t("events.regMode.rsvpTickets")}</option>
             </select>
           </Field>
-          <Field label={t("events.fieldGuests")}>
-            <input
-              type="checkbox"
-              checked={event.guest_registration_allowed}
-              onChange={(e) => patch({ guest_registration_allowed: e.target.checked })}
-            />
-          </Field>
+          {/* The membership flag only means anything on a members-only RSVP. */}
+          {event.registration_mode === "rsvp_members" ? (
+            <Field label={t("events.fieldAllowNonMembers")}>
+              <input
+                type="checkbox"
+                checked={event.guest_registration_allowed}
+                onChange={(e) => patch({ guest_registration_allowed: e.target.checked })}
+              />
+            </Field>
+          ) : null}
           <Field label={t("events.fieldRegOpens")}>
             <input
               type="datetime-local"
