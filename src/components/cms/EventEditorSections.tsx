@@ -8,6 +8,8 @@ import { ImagePlus, X } from "lucide-react";
 import { EventTranslationsPanel } from "@/components/cms/EventTranslationsPanel";
 import { EventHostsPanel } from "@/components/cms/EventHostsPanel";
 import { RichTextEditor } from "@/components/cms/RichTextField";
+import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
+import { sanitizeHeroMarks } from "@/lib/hero-design";
 import type { getManagedEvent, listEventRegistrations } from "@/lib/events-admin.functions";
 import {
   DEFAULT_RULE,
@@ -373,8 +375,17 @@ export function EventContentSection({
         </div>
       </Section>
 
-      <Section title={t("events.section.image")}>
-        <div>
+      <Section title={t("hero.section")}>
+        <HeroDesignSection
+          kind="event"
+          imageUrl={event.image_url}
+          title={event.title}
+          summary={event.summary}
+          marks={sanitizeHeroMarks("event", event.hero_marks) ?? []}
+          onChange={(next) => patch({ hero_marks: next })}
+          t={t}
+        >
+          <div>
           <Field label={t("events.fieldImageUrl")}>
             <input
               className={inputClass}
@@ -429,7 +440,8 @@ export function EventContentSection({
           ) : (
             <p className="mt-3 text-xs text-muted-foreground">{t("events.imageFallback")}</p>
           )}
-        </div>
+          </div>
+        </HeroDesignSection>
       </Section>
     </>
   );
