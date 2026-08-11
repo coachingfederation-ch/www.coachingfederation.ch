@@ -84,7 +84,9 @@ export function EventHeroPreview({
       meta={meta}
       pills={pills}
       back={
-        <span className="btn-mono !text-hero-foreground/70">← {t("events.detail.backToEvents")}</span>
+        <span className="btn-mono !text-hero-foreground/70">
+          ← {t("events.detail.backToEvents")}
+        </span>
       }
       credit={
         event.image_url && event.image_credit_name ? (
