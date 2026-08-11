@@ -721,16 +721,18 @@ export function EventPublishingSection({
           </select>
         </Field>
       </div>
-      <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card">
-        <table className="w-full text-left text-sm">
+      <div className="mt-3 overflow-x-auto rounded-2xl border border-border bg-card">
+        <table className="w-full min-w-[860px] text-left text-sm">
           <thead className="bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground">
             <tr>
               <th className="px-4 py-3 font-semibold">{t("events.colName")}</th>
               <th className="px-4 py-3 font-semibold">{t("events.colEmail")}</th>
-              <th className="px-4 py-3 font-semibold">{t("events.colStatus")}</th>
-              <th className="px-4 py-3 font-semibold">{t("events.colPayment")}</th>
-              <th className="px-4 py-3 font-semibold">{t("events.colConfirmation")}</th>
-              <th className="px-4 py-3" />
+              <th className="whitespace-nowrap px-4 py-3 font-semibold">{t("events.colStatus")}</th>
+              <th className="whitespace-nowrap px-4 py-3 font-semibold">{t("events.colPayment")}</th>
+              <th className="whitespace-nowrap px-4 py-3 font-semibold">
+                {t("events.colConfirmation")}
+              </th>
+              <th className="sticky right-0 z-10 bg-secondary/60 px-4 py-3" />
             </tr>
           </thead>
           <tbody>
@@ -746,9 +748,11 @@ export function EventPublishingSection({
               visibleRegistrations.map((r) => (
                 <tr key={r.id} className="border-t border-border">
                   <td className="px-4 py-3 font-medium">{r.full_name}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{r.email}</td>
-                  <td className="px-4 py-3">{t(`events.regStatus.${r.status}`)}</td>
-                  <td className="px-4 py-3 text-muted-foreground">
+                  <td className="px-4 py-3 break-all text-muted-foreground">{r.email}</td>
+                  <td className="whitespace-nowrap px-4 py-3">
+                    {t(`events.regStatus.${r.status}`)}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
                     {t(`events.payStatus.${r.payment_status}`)}
                     {r.amount_cents > 0
                       ? ` · ${(r.amount_cents / 100).toFixed(2)} ${r.currency}`
@@ -769,8 +773,8 @@ export function EventPublishingSection({
                       <span className="mt-0.5 block text-xs">{r.confirmation_error}</span>
                     ) : null}
                   </td>
-                  <td className="px-4 py-3 text-right">
-                    <div className="flex flex-wrap justify-end gap-2">
+                  <td className="sticky right-0 z-10 bg-card px-4 py-3 text-right shadow-[-8px_0_12px_-12px_rgba(0,0,0,0.5)]">
+                    <div className="flex justify-end gap-2 whitespace-nowrap">
                       {r.status !== "cancelled" ? (
                         <button
                           onClick={() => void resendConfirmation(r)}
