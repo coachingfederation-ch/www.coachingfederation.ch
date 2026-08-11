@@ -254,7 +254,16 @@ export const submitGuestRegistration = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { publicSupabaseClient } = await import("./supabase-public.server");
     const { submitRegistration } = await import("./tickets.server");
-    return submitRegistration(publicSupabaseClient(), { ...data, notes: data.notes ?? null }, null);
+    return submitRegistration(
+      publicSupabaseClient(),
+      {
+        ...data,
+        notes: data.notes ?? null,
+        tierId: data.tierId ?? null,
+        memberId: null,
+      },
+      null,
+    );
   });
 
 /** RSVP as a signed-in visitor: the row is owned, so it can be cancelled later. */
@@ -265,7 +274,12 @@ export const submitMemberRegistration = createServerFn({ method: "POST" })
     const { submitRegistration } = await import("./tickets.server");
     return submitRegistration(
       context.supabase,
-      { ...data, notes: data.notes ?? null },
+      {
+        ...data,
+        notes: data.notes ?? null,
+        tierId: data.tierId ?? null,
+        memberId: data.memberId ?? null,
+      },
       context.userId,
     );
   });
