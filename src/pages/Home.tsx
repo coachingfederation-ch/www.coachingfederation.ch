@@ -251,7 +251,7 @@ function ForOrganisations() {
           </div>
         </div>
         <img
-          src={leadershipImg}
+          src={leadershipImgAsset.url}
           alt={t("home.organisations.imgAlt")}
           width={1600}
           height={1200}
