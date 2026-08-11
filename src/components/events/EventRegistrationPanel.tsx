@@ -373,25 +373,37 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
         </div>
       );
     }
-    if (event.is_full || allSoldOut)
+    if (event.is_full || (ticketMode && allSoldOut))
       return (
         <p className="mt-4 text-sm text-muted-foreground">
-          {allSoldOut ? t("events.detail.tickets.allSoldOut") : t("events.detail.full")}
+          {ticketMode && allSoldOut
+            ? t("events.detail.tickets.allSoldOut")
+            : t("events.detail.full")}
         </p>
       );
     if (!event.registration_open)
       return <p className="mt-4 text-sm text-muted-foreground">{t("events.detail.closed")}</p>;
-    if (guestsBlocked)
+    // Members-only: the form stays locked until membership is confirmed, either
+    // by signing in with a linked account or by verifying an ICF member id.
+    if (membersGate)
       return (
         <div className="mt-4">
           <p className="text-sm text-muted-foreground">{t("events.detail.membersOnly")}</p>
-          <a
-            href={signInHref}
-            onClick={persistDraft}
-            className="mt-4 inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground"
-          >
-            {t("events.detail.signIn")}
-          </a>
+          {!signedIn ? (
+            <a
+              href={signInHref}
+              onClick={persistDraft}
+              className="mt-4 inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground"
+            >
+              {t("events.detail.signIn")}
+            </a>
+          ) : null}
+          {memberIdBlock(
+            accountMembership === "not_member"
+              ? t("events.detail.tickets.notMember")
+              : t("events.detail.membersOnlyPrompt"),
+            false,
+          )}
         </div>
       );
 
