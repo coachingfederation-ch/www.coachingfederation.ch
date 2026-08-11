@@ -9,6 +9,7 @@ import { EventTranslationsPanel } from "@/components/cms/EventTranslationsPanel"
 import { EventHostsPanel } from "@/components/cms/EventHostsPanel";
 import { RichTextEditor } from "@/components/cms/RichTextField";
 import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
+import { EventHeroPreview } from "@/components/cms/EventHeroPreview";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import type { getManagedEvent, listEventRegistrations } from "@/lib/events-admin.functions";
 import {
@@ -342,13 +343,23 @@ export function EventContentSection({
   event,
   patch,
   setPickerOpen,
+  categories,
+  regions,
   t,
 }: {
   event: Managed;
   patch: Patch;
   setPickerOpen: (open: boolean) => void;
+  categories: VocabRow[];
+  regions: VocabRow[];
   t: (k: string) => string;
 }) {
+  const pills = [
+    categories.find((c) => c.id === event.category_id),
+    regions.find((r) => r.id === event.region_id),
+  ]
+    .filter(Boolean)
+    .map((row) => vocabLabel(row!, event.language));
   return (
     <>
       <Section title={t("events.section.content")}>
@@ -384,6 +395,9 @@ export function EventContentSection({
           marks={sanitizeHeroMarks("event", event.hero_marks) ?? []}
           onChange={(next) => patch({ hero_marks: next })}
           t={t}
+          preview={
+            <EventHeroPreview event={event} pills={pills} untitledLabel={t("hero.untitled")} />
+          }
         >
           <div>
             <Field label={t("events.fieldImageUrl")}>

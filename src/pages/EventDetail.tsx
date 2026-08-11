@@ -12,6 +12,7 @@ import { SiteFooter, SiteHeaderBar, CARD_SHADOW } from "@/components/site-chrome
 import { Mark, type MarkName } from "@/components/marks";
 import { RichTextView } from "@/components/rich-text-view";
 import { HeroMarks } from "@/components/HeroMarks";
+import { EventHeroSurface } from "@/components/events/EventHeroSurface";
 import { HERO_EVENT_PLACEMENT, sanitizeHeroMarks } from "@/lib/hero-design";
 import { LocaleLink, useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
@@ -167,100 +168,60 @@ export default function EventDetailPage({
         </div>
       </header>
       <main id="main">
-        <section className="relative isolate overflow-hidden bg-hero text-hero-foreground">
-          {/*
-           * Cover image as atmosphere: the photo is decorative (the title is
-           * the accessible name of the page), and the Deep Blue wash above it
-           * keeps white text above AA at every width — near-solid on mobile,
-           * where the text spans the full column.
-           */}
-          {event.image_url ? (
-            <>
-              <img
-                src={event.image_url}
-                alt=""
-                aria-hidden
-                className="absolute inset-0 -z-20 h-full w-full object-cover"
-              />
-              <div
-                className="absolute inset-0 -z-10 bg-hero/80 md:bg-gradient-to-r md:from-hero/90 md:via-hero/80 md:to-hero/40"
-                aria-hidden
-              />
-            </>
-          ) : null}
-          {placedMarks ? (
-            <HeroMarks marks={placedMarks} placement={HERO_EVENT_PLACEMENT} opacity={0.85} />
-          ) : (
-            <Mark
-              name={marks.corner}
-              className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 text-mark-yellow/10 md:h-72 md:w-72"
-            />
-          )}
-          <div
-            className={
-              "relative mx-auto max-w-5xl px-8 pt-4 " + (event.image_url ? "pb-24" : "pb-16")
-            }
-          >
+        <EventHeroSurface
+          title={event.title ?? ""}
+          summary={event.summary}
+          imageUrl={event.image_url}
+          meta={[
+            {
+              id: "date",
+              icon: CalendarDays,
+              label: formatEventDate(event.starts_at!, locale, tz),
+            },
+            {
+              id: "time",
+              icon: Clock,
+              label: formatEventTimeRange(event.starts_at!, event.ends_at, locale, tz),
+            },
+            { id: "place", icon: MapPin, label: eventPlace(event, t("events.tag.online")) },
+            {
+              id: "language",
+              icon: Languages,
+              label: t(`common.languageNames.${event.language ?? "en"}`),
+            },
+            ...(event.capacity
+              ? [
+                  {
+                    id: "seats",
+                    icon: Users,
+                    label: t("events.detail.seatsLeft").replace(
+                      "{n}",
+                      String(event.seats_remaining ?? 0),
+                    ),
+                  },
+                ]
+              : []),
+          ]}
+          pills={[event.category_name, event.region_name].filter(Boolean) as string[]}
+          back={
             <LocaleLink
               to="/events"
               className="btn-mono !text-hero-foreground/70 hover:!text-hero-foreground"
             >
               ← {t("events.detail.backToEvents")}
             </LocaleLink>
-            <div className="relative mt-6 max-w-3xl">
-              <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-5xl">
-                {event.title}
-              </h1>
-              {placedMarks ? null : (
-                <Mark
-                  name={marks.underline}
-                  className="-mt-1 block h-5 w-44 text-mark-yellow md:w-64"
-                />
-              )}
-            </div>
-            {event.summary ? (
-              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-hero-foreground/85">
-                {event.summary}
-              </p>
-            ) : null}
-            <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm">
-              <span className="inline-flex items-center gap-2">
-                <CalendarDays className="h-4 w-4" aria-hidden />
-                {formatEventDate(event.starts_at!, locale, tz)}
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <Clock className="h-4 w-4" aria-hidden />
-                {formatEventTimeRange(event.starts_at!, event.ends_at, locale, tz)}
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <MapPin className="h-4 w-4" aria-hidden />
-                {eventPlace(event, t("events.tag.online"))}
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <Languages className="h-4 w-4" aria-hidden />
-                {t(`common.languageNames.${event.language ?? "en"}`)}
-              </span>
-              {event.capacity ? (
-                <span className="inline-flex items-center gap-2">
-                  <Users className="h-4 w-4" aria-hidden />
-                  {t("events.detail.seatsLeft").replace("{n}", String(event.seats_remaining ?? 0))}
-                </span>
-              ) : null}
-            </div>
-            {event.category_name || event.region_name ? (
-              <div className="mt-5 flex flex-wrap gap-2">
-                {[event.category_name, event.region_name].filter(Boolean).map((label) => (
-                  <span
-                    key={label as string}
-                    className="inline-flex items-center rounded-full border border-hero-foreground/30 px-3 py-1 text-xs font-semibold text-hero-foreground/85"
-                  >
-                    {label}
-                  </span>
-                ))}
-              </div>
-            ) : null}
-            {event.image_url && event.image_credit_name ? (
-              <p className="mt-10 text-right text-xs text-hero-foreground/60">
+          }
+          titleUnderline={
+            placedMarks ? null : (
+              <Mark
+                name={marks.underline}
+                className="-mt-1 block h-5 w-44 text-mark-yellow md:w-64"
+              />
+            )
+          }
+          credit={
+            event.image_url && event.image_credit_name ? (
+              <p className="text-xs text-hero-foreground/60">
                 {t("events.detail.photoCredit").replace("{name}", event.image_credit_name)}{" "}
                 {event.image_credit_url ? (
                   <a
@@ -273,9 +234,18 @@ export default function EventDetailPage({
                   </a>
                 ) : null}
               </p>
-            ) : null}
-          </div>
-        </section>
+            ) : null
+          }
+        >
+          {placedMarks ? (
+            <HeroMarks marks={placedMarks} placement={HERO_EVENT_PLACEMENT} opacity={0.85} />
+          ) : (
+            <Mark
+              name={marks.corner}
+              className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 text-mark-yellow/10 md:h-72 md:w-72"
+            />
+          )}
+        </EventHeroSurface>
 
         <div className="mx-auto grid max-w-5xl gap-10 px-8 py-16 lg:grid-cols-[1fr_20rem]">
           <article className="prose-icf max-w-none">

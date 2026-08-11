@@ -217,7 +217,14 @@ function EventEditor() {
           }}
         />
 
-        <EventContentSection event={event} patch={patch} setPickerOpen={setPickerOpen} t={t} />
+        <EventContentSection
+          event={event}
+          patch={patch}
+          setPickerOpen={setPickerOpen}
+          categories={categories}
+          regions={regions}
+          t={t}
+        />
 
         <EventHostsSection
           eventId={event.id}
