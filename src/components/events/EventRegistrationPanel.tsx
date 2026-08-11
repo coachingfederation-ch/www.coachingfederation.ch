@@ -30,6 +30,11 @@ import {
   verifyMemberId,
 } from "@/lib/tickets.functions";
 import {
+  validateDiscountCode,
+  validateDiscountCodeAsMember,
+} from "@/lib/discount-codes.functions";
+import type { DiscountFailure, DiscountPreview } from "@/lib/discount-codes";
+import {
   formatPrice,
   memberTier as findMemberTier,
   nonMemberTier as findNonMemberTier,
@@ -47,6 +52,7 @@ type Reason =
   | "tier_required"
   | "tier_unavailable"
   | "answers"
+  | "discount"
   | "payment"
   | "error";
 
@@ -148,6 +154,14 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const [notes, setNotes] = useState("");
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [tierId, setTierId] = useState<string | null>(null);
+  // One code per registration, always tied to the currently selected tier.
+  const [discountInput, setDiscountInput] = useState("");
+  const [discount, setDiscount] = useState<
+    | { kind: "idle" }
+    | { kind: "checking" }
+    | { kind: "applied"; preview: DiscountPreview }
+    | { kind: "rejected"; reason: DiscountFailure }
+  >({ kind: "idle" });
   const [state, setState] = useState<FormState>({ kind: "idle" });
   const [returned, setReturned] = useState<ReturnState>(null);
 
@@ -249,8 +263,42 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
 
   const showTiers = ticketMode && hasTiers;
   const membersGate = membersOnly && membership !== "member";
-  const needsPayment = Boolean(selected && selected.priceCents > 0);
+  const appliedDiscount = discount.kind === "applied" ? discount.preview : null;
+  const chargedCents = selected
+    ? (appliedDiscount ? appliedDiscount.finalCents : selected.priceCents)
+    : 0;
+  const needsPayment = Boolean(selected && chargedCents > 0);
   const paymentsBroken = needsPayment && !paymentsConfigured();
+
+  // A code is validated against one tier, so any change to the tier or to the
+  // membership evidence drops it and the visitor re-applies deliberately.
+  useEffect(() => {
+    setDiscount({ kind: "idle" });
+  }, [tierId, membership]);
+
+  const applyDiscount = async () => {
+    const code = discountInput.trim();
+    if (!code || !selected) return;
+    setDiscount({ kind: "checking" });
+    const payload = {
+      eventId,
+      tierId: selected.id,
+      code,
+      memberId: memberIdState === "confirmed" ? memberId.trim() : null,
+    };
+    try {
+      const verdict = signedIn
+        ? await validateDiscountCodeAsMember({ data: payload })
+        : await validateDiscountCode({ data: payload });
+      setDiscount(
+        verdict.ok
+          ? { kind: "applied", preview: verdict.preview }
+          : { kind: "rejected", reason: verdict.reason },
+      );
+    } catch {
+      setDiscount({ kind: "rejected", reason: "invalid" });
+    }
+  };
 
   const signInHref = `/auth?next=${encodeURIComponent(localizePath(`/events/${slug}`, locale))}`;
 
@@ -274,6 +322,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
       notes: notes || null,
       tierId: ticketMode ? tierId : null,
       memberId: memberIdState === "confirmed" ? memberId.trim() : null,
+      discountCode: appliedDiscount ? appliedDiscount.code : null,
       answers,
       environment: paymentsConfigured() ? getStripeEnvironment() : ("sandbox" as const),
     };
@@ -677,10 +726,76 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
           className={inputClass}
         />
 
+        {selected && selected.priceCents > 0 ? (
+          <div className="rounded-xl border border-border/70 px-3 py-3">
+            <label className="block text-xs font-semibold" htmlFor="rsvp-discount">
+              {t("events.detail.tickets.discountLabel")}
+            </label>
+            <div className="mt-1 flex gap-2">
+              <input
+                id="rsvp-discount"
+                value={discountInput}
+                autoComplete="off"
+                placeholder={t("events.detail.tickets.discountPlaceholder")}
+                disabled={discount.kind === "applied"}
+                onChange={(e) => {
+                  setDiscountInput(e.target.value);
+                  setDiscount({ kind: "idle" });
+                }}
+                className={inputClass + " disabled:opacity-60"}
+              />
+              {discount.kind === "applied" ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDiscountInput("");
+                    setDiscount({ kind: "idle" });
+                  }}
+                  className="shrink-0 rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-background"
+                >
+                  {t("events.detail.tickets.discountRemove")}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => void applyDiscount()}
+                  disabled={!discountInput.trim() || discount.kind === "checking"}
+                  className="shrink-0 rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-background disabled:opacity-50"
+                >
+                  {discount.kind === "checking"
+                    ? t("events.detail.tickets.discountChecking")
+                    : t("events.detail.tickets.discountApply")}
+                </button>
+              )}
+            </div>
+            {discount.kind === "applied" ? (
+              <p className="mt-2 text-xs font-semibold text-teal-foreground">
+                {t("events.detail.tickets.discountApplied").replace(
+                  "{amount}",
+                  formatPrice(
+                    discount.preview.discountCents,
+                    selected.currency,
+                    locale,
+                    freeLabel,
+                  ),
+                )}
+              </p>
+            ) : null}
+            {discount.kind === "rejected" ? (
+              <p className="mt-2 text-xs text-[color:var(--warn)]">
+                {t(`events.detail.tickets.discountError.${discount.reason}`)}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+
         {selected ? (
           <p className="text-sm font-semibold">
-            {selected.priceCents > 0
-              ? t("events.detail.tickets.total").replace("{amount}", priceOf(selected))
+            {chargedCents > 0
+              ? t("events.detail.tickets.total").replace(
+                  "{amount}",
+                  formatPrice(chargedCents, selected.currency, locale, freeLabel),
+                )
               : t("events.detail.tickets.totalFree")}
           </p>
         ) : null}
@@ -732,7 +847,12 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
         title={t("events.detail.tickets.paymentTitle")}
         closeLabel={t("events.detail.tickets.paymentClose")}
         eventTitle={event.title ?? ""}
-        summary={selected ? `${selected.name} · ${priceOf(selected)}` : null}
+        // The overlay states the amount actually charged, discount included.
+        summary={
+          selected
+            ? `${selected.name} · ${formatPrice(chargedCents, selected.currency, locale, freeLabel)}`
+            : null
+        }
         options={checkoutOptions}
       />
     </aside>

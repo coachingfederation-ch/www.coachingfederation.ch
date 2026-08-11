@@ -305,6 +305,8 @@ export type RegistrationInput = {
   notes: string | null;
   tierId: string | null;
   memberId: string | null;
+  /** Optional discount code typed by the visitor; validated server-side. */
+  discountCode: string | null;
   answers: Record<string, string>;
   environment: "sandbox" | "live";
 };
@@ -322,6 +324,7 @@ export type RegistrationOutcome =
         | "tier_required"
         | "tier_unavailable"
         | "answers"
+        | "discount"
         | "payment"
         | "error";
     };
@@ -334,6 +337,7 @@ function failureReason(error: { code?: string; message?: string }): Registration
   if (message.includes("permission denied") || message.includes("row-level security"))
     return { ok: false, reason: "error" };
   if (message.includes("active members only")) return { ok: false, reason: "members_only" };
+  if (message.includes("discount code")) return { ok: false, reason: "discount" };
   if (message.includes("tier is full")) return { ok: false, reason: "full" };
   if (message.includes("tier")) return { ok: false, reason: "tier_unavailable" };
   if (message.includes("full") || message.includes("capacity"))
@@ -388,12 +392,27 @@ export async function submitRegistration(
   if (!answers.ok) return { ok: false, reason: "answers" };
 
   const tier = resolved.tier;
-  const paid = Boolean(tier && tier.price_cents > 0);
+
+  // A discount only exists on a priced ticket. The verdict here decides the
+  // Stripe amount; the database trigger recomputes the very same figure from
+  // the stored code before the row is accepted.
+  const { resolveDiscount } = await import("./discount-codes.server");
+  const discount =
+    tier && tier.price_cents > 0 && input.discountCode
+      ? await resolveDiscount(input.eventId, input.discountCode, tier, membership)
+      : null;
+  if (discount && !discount.ok) return { ok: false, reason: "discount" };
+  const discountRecord = discount && discount.ok ? discount.record! : null;
+  const chargedCents = discount && discount.ok ? discount.preview.finalCents : (tier?.price_cents ?? 0);
+
+  // A code that brings the ticket to zero finishes on the free path.
+  const paid = Boolean(tier && chargedCents > 0);
   const holdExpiresAt = paid ? new Date(Date.now() + HOLD_MINUTES * 60_000).toISOString() : null;
 
   // A members-only registration is written through the trusted server client,
   // because membership may rest on a member number the database cannot verify.
-  const writer = membersOnly ? supabaseAdmin : client;
+  // The same applies to a member-only discount code.
+  const writer = membersOnly || discountRecord?.member_only ? supabaseAdmin : client;
   // The id is generated here rather than read back: anonymous guests hold an
   // insert-only grant, so a RETURNING clause would fail with a permission error.
   const registrationId = crypto.randomUUID();
@@ -410,6 +429,7 @@ export async function submitRegistration(
       // webhook, with no session — is written in the attendee's own language.
       locale: input.locale,
       tier_id: tier?.id ?? null,
+      discount_code_id: discountRecord?.id ?? null,
       // The trigger overwrites amount and currency from the stored tier.
       payment_status: paid ? "pending" : "not_required",
       hold_expires_at: holdExpiresAt,
@@ -450,7 +470,7 @@ export async function submitRegistration(
           quantity: 1,
           price_data: {
             currency: tier.currency.toLowerCase(),
-            unit_amount: tier.price_cents,
+            unit_amount: chargedCents,
             product: product.id,
           },
         },

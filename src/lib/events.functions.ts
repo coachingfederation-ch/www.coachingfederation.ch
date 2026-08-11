@@ -49,6 +49,8 @@ const rsvpSchema = z.object({
   tierId: z.string().uuid().optional().nullable(),
   /** Optional ICF member id for a signed-in account that is not linked yet. */
   memberId: z.string().trim().max(60).optional().nullable(),
+  /** Optional discount code; the server re-resolves the price behind it. */
+  discountCode: z.string().trim().max(40).optional().nullable(),
   answers: z.record(z.string().max(80), z.string().max(2000)).default({}),
   environment: z.enum(["sandbox", "live"]).default("sandbox"),
 });
@@ -264,6 +266,7 @@ export const submitGuestRegistration = createServerFn({ method: "POST" })
         tierId: data.tierId ?? null,
         // Verified server-side before it can unlock member pricing.
         memberId: data.memberId ?? null,
+        discountCode: data.discountCode ?? null,
       },
       null,
       `ip:${clientIp(getRequest())}`,
@@ -283,6 +286,7 @@ export const submitMemberRegistration = createServerFn({ method: "POST" })
         notes: data.notes ?? null,
         tierId: data.tierId ?? null,
         memberId: data.memberId ?? null,
+        discountCode: data.discountCode ?? null,
       },
       context.userId,
     );
