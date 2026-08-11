@@ -1,18 +1,18 @@
 /**
  * Public event detail + RSVP.
  *
- * The form is deliberately thin: capacity, the registration window and the
- * guest policy are all enforced by database triggers, so the UI's job is to
- * show the current state and translate the returned reason code.
+ * The page renders the event; registration — tiers, member pricing, questions
+ * and payment — lives in `EventRegistrationPanel`. Capacity, the registration
+ * window, entitlement and price are all enforced server-side.
  */
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, Clock, Languages, MapPin, Users } from "lucide-react";
-import { SiteFooter, SiteHeaderBar, CARD_SHADOW } from "@/components/site-chrome";
+import { SiteFooter, SiteHeaderBar } from "@/components/site-chrome";
 import { Mark, type MarkName } from "@/components/marks";
 import { RichTextView } from "@/components/rich-text-view";
 import { HeroMarks } from "@/components/HeroMarks";
 import { EventHeroSurface } from "@/components/events/EventHeroSurface";
+import { EventRegistrationPanel } from "@/components/events/EventRegistrationPanel";
 import { HERO_EVENT_PLACEMENT, sanitizeHeroMarks } from "@/lib/hero-design";
 import { LocaleLink, useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,19 +25,8 @@ import {
 } from "@/lib/events";
 import type { EventHost } from "@/lib/event-hosts";
 import { eventMap } from "@/lib/event-map";
-import { trackGoal, useTrackView } from "@/lib/plausible";
-import {
-  cancelMyRegistration,
-  getMyRegistration,
-  submitGuestRegistration,
-  submitMemberRegistration,
-} from "@/lib/events.functions";
-
-type RsvpState =
-  | { kind: "idle" }
-  | { kind: "saving" }
-  | { kind: "done" }
-  | { kind: "error"; reason: "full" | "closed" | "duplicate" | "error" };
+import { useTrackView } from "@/lib/plausible";
+import { getMyRegistration } from "@/lib/events.functions";
 
 /*
  * Decoration for the hero band. The marks are picked from the event slug
