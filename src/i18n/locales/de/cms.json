@@ -886,7 +886,16 @@
       "loadError": "Tickets konnten nicht geladen werden.",
       "translateError": "Tarifnamen konnten nicht automatisch übersetzt werden."
     },
-    "fieldAllowNonMembers": "Anmeldung ohne Mitgliedschaft erlauben"
+    "fieldAllowNonMembers": "Anmeldung ohne Mitgliedschaft erlauben",
+    "colConfirmation": "Bestätigungs-E-Mail",
+    "resendConfirmation": "Erneut senden",
+    "resendFailed": "Die Bestätigungs-E-Mail konnte nicht gesendet werden. Bitte erneut versuchen.",
+    "confirmationStatus": {
+      "not_sent": "Nicht gesendet",
+      "sending": "Wird gesendet…",
+      "sent": "Gesendet",
+      "failed": "Fehlgeschlagen"
+    }
   },
   "eventTranslations": {
     "title": "Übersetzungen",
