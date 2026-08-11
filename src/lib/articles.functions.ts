@@ -11,6 +11,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertStaff as assertStaffRole } from "./authz";
 import { HERO_MARK_LIMIT } from "./hero-design";
+import type { ArticleContentPatch } from "./articles.server";
 import type { AuthedContext } from "./authz";
 
 /** True when the caller holds the `admin` grant (read through their own RLS). */
@@ -88,7 +89,7 @@ export const saveArticle = createServerFn({ method: "POST" })
     const client = await assertStaff(context);
     const { saveArticleContent } = await import("./articles.server");
     const { id, ...patch } = data;
-    return await saveArticleContent(client, id, patch);
+    return await saveArticleContent(client, id, patch as ArticleContentPatch);
   });
 
 export const changeArticleStatus = createServerFn({ method: "POST" })
