@@ -619,6 +619,8 @@ export function EventPublishingSection({
         </div>
       </Section>
 
+      {ticketsSection}
+
       <div className="mt-8 flex flex-wrap items-center gap-3">
         <button
           onClick={() => void save()}
