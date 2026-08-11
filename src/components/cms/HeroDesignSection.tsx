@@ -66,7 +66,7 @@ export function HeroDesignSection({
           {preview ? (
             <div className="absolute inset-0 overflow-hidden">
               <div
-                className="origin-top-left"
+                className="flex origin-top-left flex-col [&>section]:flex-1"
                 style={{
                   width: placement.width,
                   height: placement.height,
