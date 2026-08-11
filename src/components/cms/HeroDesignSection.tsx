@@ -22,6 +22,7 @@ export function HeroDesignSection({
   marks,
   onChange,
   t,
+  preview,
   children,
 }: {
   kind: HeroKind;
@@ -31,11 +32,17 @@ export function HeroDesignSection({
   marks: PlacedMark[];
   onChange: (next: PlacedMark[]) => void;
   t: (k: string) => string;
+  /**
+   * A true-to-life render of the public surface, laid out at the canvas'
+   * natural width and scaled down here. Falls back to a simple mock.
+   */
+  preview?: React.ReactNode;
   /** Image source controls owned by the host editor. */
   children: React.ReactNode;
 }) {
   const placement = heroPlacement(kind);
   const height = (PREVIEW_WIDTH * placement.height) / placement.width;
+  const scale = PREVIEW_WIDTH / placement.width;
 
   return (
     <div className="space-y-5">
@@ -56,22 +63,37 @@ export function HeroDesignSection({
             colour: t("hero.colour"),
           }}
         >
-          <div className="absolute inset-0 bg-hero text-hero-foreground">
-            {imageUrl ? (
-              <>
-                <img src={imageUrl} alt="" aria-hidden className="h-full w-full object-cover" />
-                <div className="absolute inset-0 bg-hero/70" aria-hidden />
-              </>
-            ) : null}
-            <div className="absolute inset-0 flex flex-col justify-end gap-1 p-5">
-              <p className="max-w-[62%] text-lg font-bold leading-tight text-hero-foreground">
-                {title || t("hero.untitled")}
-              </p>
-              {summary ? (
-                <p className="max-w-[62%] truncate text-xs text-hero-foreground/80">{summary}</p>
-              ) : null}
+          {preview ? (
+            <div className="absolute inset-0 overflow-hidden">
+              <div
+                className="origin-top-left"
+                style={{
+                  width: placement.width,
+                  height: placement.height,
+                  transform: `scale(${scale})`,
+                }}
+              >
+                {preview}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="absolute inset-0 bg-hero text-hero-foreground">
+              {imageUrl ? (
+                <>
+                  <img src={imageUrl} alt="" aria-hidden className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-hero/70" aria-hidden />
+                </>
+              ) : null}
+              <div className="absolute inset-0 flex flex-col justify-end gap-1 p-5">
+                <p className="max-w-[62%] text-lg font-bold leading-tight text-hero-foreground">
+                  {title || t("hero.untitled")}
+                </p>
+                {summary ? (
+                  <p className="max-w-[62%] truncate text-xs text-hero-foreground/80">{summary}</p>
+                ) : null}
+              </div>
+            </div>
+          )}
           <HeroMarks marks={marks} placement={placement} />
         </MarkPlacementCanvas>
         <div className="flex items-center gap-3">
