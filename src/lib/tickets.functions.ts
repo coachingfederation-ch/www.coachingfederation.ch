@@ -29,6 +29,15 @@ export const getMyMembershipState = createServerFn({ method: "POST" })
     return resolveMembership(context.userId);
   });
 
+/** Prefill values for the registration form of a signed-in visitor. */
+export const getMyRegistrationIdentity = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ fullName: string; email: string }> => {
+    const { loadRegistrationIdentity } = await import("./tickets.server");
+    const email = (context.claims as { email?: string } | undefined)?.email ?? null;
+    return loadRegistrationIdentity(context.userId, email);
+  });
+
 /**
  * Advisory check of an ICF member id typed into the registration form. Public
  * on purpose — a visitor without an account must be able to claim member

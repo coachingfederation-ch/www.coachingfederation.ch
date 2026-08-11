@@ -25,6 +25,7 @@ import {
 import {
   getEventTicketing,
   getMyMembershipState,
+  getMyRegistrationIdentity,
   confirmCheckoutSession,
   verifyMemberId,
 } from "@/lib/tickets.functions";
@@ -109,6 +110,15 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const membership: MembershipState = memberIdState === "confirmed" ? "member" : accountMembership;
   const membershipResolving = signedIn && membershipQuery.isPending;
 
+  // Signed-in visitors get their name and email filled in; both stay editable.
+  const identity = useQuery({
+    queryKey: ["my-registration-identity"],
+    queryFn: () => getMyRegistrationIdentity(),
+    enabled: signedIn && session.isFetched,
+    retry: false,
+    staleTime: 5 * 60_000,
+  });
+
   const applyMemberId = async () => {
     const candidate = memberId.trim();
     if (!candidate) return;
@@ -157,6 +167,14 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
       window.sessionStorage.removeItem(draftKey(eventId));
     }
   }, [eventId]);
+
+  // Only fills blanks, so a restored draft or anything already typed wins.
+  useEffect(() => {
+    const data = identity.data;
+    if (!data) return;
+    if (data.fullName) setFullName((current) => current || data.fullName);
+    if (data.email) setEmail((current) => current || data.email);
+  }, [identity.data]);
 
   // Membership can change the applicable tier (sign-in, or a sold-out member
   // tier), so follow the server's default until the visitor picks explicitly.
