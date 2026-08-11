@@ -812,7 +812,8 @@
       "when": "Data e ora",
       "location": "Luogo",
       "image": "Immagine di copertina",
-      "registration": "Iscrizione"
+      "registration": "Iscrizione",
+      "tickets": "Biglietti"
     },
     "hosts": {
       "none": "Nessun relatore selezionato.",
@@ -850,6 +851,35 @@
       "created": "Date create:",
       "skipped": "già esistenti:",
       "badge": "Serie"
+    },
+    "colPayment": "Pagamento",
+    "payStatus": {
+      "not_required": "Gratuito",
+      "pending": "In attesa",
+      "paid": "Pagato",
+      "expired": "Scaduto"
+    },
+    "tickets": {
+      "sectionHint": "Categorie di biglietti nella valuta dell'evento. I membri ottengono automaticamente il prezzo riservato se l'iscrizione è attiva.",
+      "none": "Nessuna categoria — questo evento usa l'iscrizione semplice.",
+      "name": "Nome categoria",
+      "segment": "Per chi",
+      "segmentMember": "Membri",
+      "segmentNonMember": "Non membri",
+      "segmentGeneral": "Tutti",
+      "price": "Prezzo",
+      "currency": "Valuta",
+      "capacity": "Capienza (vuoto = illimitata)",
+      "description": "Descrizione",
+      "active": "Attiva",
+      "sold": "Venduti",
+      "add": "Aggiungi categoria",
+      "addMember": "Aggiungi categoria membri",
+      "remove": "Rimuovi",
+      "save": "Salva biglietti",
+      "saved": "Biglietti salvati.",
+      "saveError": "Impossibile salvare i biglietti.",
+      "loadError": "Impossibile caricare i biglietti."
     }
   },
   "eventTranslations": {
