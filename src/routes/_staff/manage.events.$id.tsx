@@ -235,12 +235,8 @@ function EventEditor() {
 
         <EventLocationSection event={event} patch={patch} t={t} />
 
-        {/* Ticket tiers only exist for ticketed events. */}
-        {event.registration_mode === "rsvp_tickets" ? (
-          <EventTicketsSection eventId={event.id} t={t} />
-        ) : null}
-
         <EventPublishingSection
+
           event={event}
           patch={patch}
           saving={saving}
@@ -252,7 +248,13 @@ function EventEditor() {
           t={t}
         />
 
+        {/* Ticket tiers only exist for ticketed events. */}
+        {event.registration_mode === "rsvp_tickets" ? (
+          <EventTicketsSection eventId={event.id} t={t} />
+        ) : null}
+
         <UnsplashPicker
+
           open={pickerOpen}
           onOpenChange={setPickerOpen}
           onPick={(pick: UnsplashPick) =>
