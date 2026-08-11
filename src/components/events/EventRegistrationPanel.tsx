@@ -442,7 +442,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
         {hasTiers && membershipResolving
           ? notice(t("events.detail.tickets.membershipChecking"))
           : null}
-        {hasTiers && memberTier && membership === "member" && !memberTier.isSoldOut
+        {hasTiers && memberTier && accountMembership === "member" && !memberTier.isSoldOut
           ? notice(
               t("events.detail.tickets.memberApplied") +
                 (saving
