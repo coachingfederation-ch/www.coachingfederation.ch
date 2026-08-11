@@ -443,19 +443,22 @@ export async function loadRegistrationIdentity(
 ): Promise<{ fullName: string; email: string }> {
   const { data: member } = await supabaseAdmin
     .from("members")
-    .select("first_name, last_name, email")
+    .select("first_name, last_name, full_name, email")
     .eq("auth_user_id", userId)
     .maybeSingle();
 
   const { data: profile } = await supabaseAdmin
     .from("profiles")
-    .select("full_name")
+    .select("first_name, last_name")
     .eq("id", userId)
     .maybeSingle();
 
-  const memberName = [member?.first_name, member?.last_name].filter(Boolean).join(" ").trim();
+  const join = (a?: string | null, b?: string | null) => [a, b].filter(Boolean).join(" ").trim();
   return {
-    fullName: memberName || ((profile?.full_name as string | null) ?? ""),
+    fullName:
+      join(member?.first_name, member?.last_name) ||
+      (member?.full_name ?? "") ||
+      join(profile?.first_name, profile?.last_name),
     email: member?.email ?? fallbackEmail ?? "",
   };
 }
