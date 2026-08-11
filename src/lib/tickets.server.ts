@@ -311,6 +311,7 @@ export type RegistrationOutcome =
         | "full"
         | "closed"
         | "duplicate"
+        | "members_only"
         | "tier_required"
         | "tier_unavailable"
         | "answers"
@@ -322,6 +323,7 @@ export type RegistrationOutcome =
 function failureReason(error: { code?: string; message?: string }): RegistrationOutcome {
   if (error.code === "23505") return { ok: false, reason: "duplicate" };
   const message = (error.message ?? "").toLowerCase();
+  if (message.includes("active members only")) return { ok: false, reason: "members_only" };
   if (message.includes("tier is full")) return { ok: false, reason: "full" };
   if (message.includes("tier")) return { ok: false, reason: "tier_unavailable" };
   if (message.includes("full") || message.includes("capacity"))
