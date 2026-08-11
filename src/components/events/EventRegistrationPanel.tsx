@@ -579,11 +579,6 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     >
       <p className="eyebrow">{t("events.detail.rsvpEyebrow")}</p>
       {body()}
-      {mine.data ? null : (
-        <LocaleLink to="/events" className="sr-only">
-          {t("events.detail.backToEvents")}
-        </LocaleLink>
-      )}
     </aside>
   );
 }
