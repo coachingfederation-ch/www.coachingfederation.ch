@@ -17,7 +17,7 @@ access badges) and every row opens a detail view where access rights are actuall
   never their own article — the four-eye rule itself is unchanged.
 - `publisher` counts as staff, so a publisher-only account can reach the Insights CMS to review
   and publish, but cannot create/edit unless they also hold `editor`.
-- The existing Communication & Marketing Publisher assignment (Susan Mackay) is migrated to the
+- The existing Communication & Marketing publisher assignment is migrated to the
   new role, so no one loses publishing ability.
 - The op-structure "Publisher" role stays as an organisational label but no longer grants anything.
 
@@ -27,8 +27,8 @@ Table columns: Name · Email · Link · Access (badges only) · Manage.
 "Manage" opens a slide-over detail panel for that account showing:
 
 ```text
-Natacha Andenmatten
-nandenmatten@b-come.ch · ICF 906401 · claimed 2139a4d…
+Anna Muster
+anna.muster@example.com · ICF 000000 · claimed 0000000…
 Member · active
 
 Access rights
