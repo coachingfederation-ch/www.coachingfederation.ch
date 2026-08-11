@@ -888,6 +888,12 @@
     },
     "fieldAllowNonMembers": "Consenti iscrizione senza affiliazione",
     "colConfirmation": "E-mail di conferma",
+    "filterAll": "Tutte",
+    "filterStatus": "Stato",
+    "filterPayment": "Pagamento",
+    "filterConfirmation": "E-mail di conferma",
+    "noMatchingAttendees": "Nessuna iscrizione corrisponde a questi filtri.",
+    "resendPendingHint": "Disponibile una volta confermato il pagamento.",
     "resendConfirmation": "Invia di nuovo",
     "resendFailed": "Non è stato possibile inviare l’e-mail di conferma. Riprova.",
     "confirmationStatus": {

@@ -888,6 +888,12 @@
     },
     "fieldAllowNonMembers": "Allow registration without a membership",
     "colConfirmation": "Confirmation email",
+    "filterAll": "All",
+    "filterStatus": "Status",
+    "filterPayment": "Payment",
+    "filterConfirmation": "Confirmation email",
+    "noMatchingAttendees": "No registrations match these filters.",
+    "resendPendingHint": "Available once payment is confirmed.",
     "resendConfirmation": "Re-send",
     "resendFailed": "The confirmation email could not be sent. Please try again.",
     "confirmationStatus": {

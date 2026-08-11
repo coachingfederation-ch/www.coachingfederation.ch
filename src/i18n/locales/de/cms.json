@@ -888,6 +888,12 @@
     },
     "fieldAllowNonMembers": "Anmeldung ohne Mitgliedschaft erlauben",
     "colConfirmation": "Bestätigungs-E-Mail",
+    "filterAll": "Alle",
+    "filterStatus": "Status",
+    "filterPayment": "Zahlung",
+    "filterConfirmation": "Bestätigungs-E-Mail",
+    "noMatchingAttendees": "Keine Anmeldungen entsprechen diesen Filtern.",
+    "resendPendingHint": "Verfügbar, sobald die Zahlung bestätigt ist.",
     "resendConfirmation": "Erneut senden",
     "resendFailed": "Die Bestätigungs-E-Mail konnte nicht gesendet werden. Bitte erneut versuchen.",
     "confirmationStatus": {
