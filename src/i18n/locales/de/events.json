@@ -98,7 +98,13 @@
       "pendingPayment": "Deine Zahlung wird noch bestätigt.",
       "returnPaid": "Zahlung erhalten. Dein Platz ist bestätigt.",
       "returnPending": "Wir warten auf den Zahlungseingang. Wir bestätigen deinen Platz per E-Mail.",
-      "returnFailed": "Die Zahlung wurde nicht abgeschlossen, der Platz wurde wieder freigegeben. Du kannst es erneut versuchen."
+      "returnFailed": "Die Zahlung wurde nicht abgeschlossen, der Platz wurde wieder freigegeben. Du kannst es erneut versuchen.",
+      "memberIdLabel": "ICF-Mitgliedsnummer",
+      "memberIdPlaceholder": "z. B. 123456",
+      "memberIdApply": "Anwenden",
+      "memberIdChecking": "Wird geprüft…",
+      "memberIdConfirmed": "Mitgliedschaft bestätigt — Mitgliederpreis angewendet.",
+      "memberIdFailed": "Wir konnten diese Mitgliedsnummer nicht bestätigen. Bitte prüfen Sie sie und versuchen Sie es erneut."
     }
   },
   "filters": {

@@ -98,7 +98,13 @@
       "pendingPayment": "Votre paiement est en cours de confirmation.",
       "returnPaid": "Paiement reçu. Votre place est confirmée.",
       "returnPending": "Nous attendons la confirmation du paiement. Nous confirmerons votre place par e-mail.",
-      "returnFailed": "Le paiement n'a pas abouti et la place a été libérée. Vous pouvez réessayer."
+      "returnFailed": "Le paiement n'a pas abouti et la place a été libérée. Vous pouvez réessayer.",
+      "memberIdLabel": "Numéro de membre ICF",
+      "memberIdPlaceholder": "p. ex. 123456",
+      "memberIdApply": "Appliquer",
+      "memberIdChecking": "Vérification…",
+      "memberIdConfirmed": "Adhésion confirmée — tarif membre appliqué.",
+      "memberIdFailed": "Nous n'avons pas pu confirmer ce numéro de membre. Veuillez le vérifier et réessayer."
     }
   },
   "filters": {

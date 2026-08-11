@@ -98,7 +98,13 @@
       "pendingPayment": "Il tuo pagamento è ancora in fase di conferma.",
       "returnPaid": "Pagamento ricevuto. Il tuo posto è confermato.",
       "returnPending": "Attendiamo la conferma del pagamento. Confermeremo il tuo posto via e-mail.",
-      "returnFailed": "Il pagamento non è stato completato e il posto è stato liberato. Puoi riprovare."
+      "returnFailed": "Il pagamento non è stato completato e il posto è stato liberato. Puoi riprovare.",
+      "memberIdLabel": "Numero socio ICF",
+      "memberIdPlaceholder": "es. 123456",
+      "memberIdApply": "Applica",
+      "memberIdChecking": "Verifica in corso…",
+      "memberIdConfirmed": "Iscrizione confermata — tariffa soci applicata.",
+      "memberIdFailed": "Non è stato possibile confermare questo numero socio. Verificalo e riprova."
     }
   },
   "filters": {

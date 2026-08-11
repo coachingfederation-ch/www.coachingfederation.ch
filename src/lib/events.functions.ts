@@ -254,15 +254,19 @@ export const submitGuestRegistration = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { publicSupabaseClient } = await import("./supabase-public.server");
     const { submitRegistration } = await import("./tickets.server");
+    const { clientIp } = await import("./rate-limit.server");
+    const { getRequest } = await import("@tanstack/react-start/server");
     return submitRegistration(
       publicSupabaseClient(),
       {
         ...data,
         notes: data.notes ?? null,
         tierId: data.tierId ?? null,
-        memberId: null,
+        // Verified server-side before it can unlock member pricing.
+        memberId: data.memberId ?? null,
       },
       null,
+      `ip:${clientIp(getRequest())}`,
     );
   });
 

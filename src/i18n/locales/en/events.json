@@ -98,7 +98,13 @@
       "pendingPayment": "Your payment is still being confirmed.",
       "returnPaid": "Payment received. Your place is confirmed.",
       "returnPending": "We're waiting for your payment to settle. We'll confirm your place by email.",
-      "returnFailed": "That payment wasn't completed, so the seat was released. You can try again."
+      "returnFailed": "That payment wasn't completed, so the seat was released. You can try again.",
+      "memberIdLabel": "ICF member ID",
+      "memberIdPlaceholder": "e.g. 123456",
+      "memberIdApply": "Apply",
+      "memberIdChecking": "Checking…",
+      "memberIdConfirmed": "Membership confirmed — member pricing applied.",
+      "memberIdFailed": "We couldn't confirm this member ID. Please check it and try again."
     }
   },
   "filters": {

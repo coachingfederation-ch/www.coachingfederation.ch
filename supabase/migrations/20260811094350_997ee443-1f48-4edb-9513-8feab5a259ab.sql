@@ -1,0 +1,1 @@
+UPDATE public.events SET guest_registration_allowed = true WHERE slug = 'mentor-coaching-circle-dec-2026';
