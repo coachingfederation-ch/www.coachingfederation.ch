@@ -752,17 +752,15 @@ export function EventPublishingSection({
         <table className="w-full table-fixed text-left text-sm">
           <colgroup>
             <col className="w-10" />
+            <col className="w-[34%]" />
+            <col className="w-[16%]" />
             <col className="w-[22%]" />
-            <col className="w-[30%]" />
-            <col className="w-[14%]" />
-            <col className="w-[18%]" />
             <col />
           </colgroup>
           <thead className="bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground">
             <tr>
               <th className="px-2 py-3" />
               <th className="px-4 py-3 font-semibold">{t("events.colName")}</th>
-              <th className="px-4 py-3 font-semibold">{t("events.colEmail")}</th>
               <th className="whitespace-nowrap px-4 py-3 font-semibold">{t("events.colStatus")}</th>
               <th className="whitespace-nowrap px-4 py-3 font-semibold">
                 {t("events.colPayment")}
@@ -773,7 +771,8 @@ export function EventPublishingSection({
           <tbody>
             {visibleRegistrations.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-6 text-muted-foreground">
+                <td colSpan={5} className="px-4 py-6 text-muted-foreground">
+
                   {registrations.length === 0
                     ? t("events.noAttendees")
                     : t("events.noMatchingAttendees")}
