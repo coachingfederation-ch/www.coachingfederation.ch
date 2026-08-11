@@ -938,16 +938,19 @@ function DetailItem({
   label,
   value,
   note,
+  children,
 }: {
   label: string;
   value: string;
   note?: string | null;
+  children?: React.ReactNode;
 }) {
   return (
     <div className="min-w-0">
       <dt className="text-xs uppercase tracking-wide text-muted-foreground">{label}</dt>
       <dd className="mt-0.5 break-words text-sm">{value}</dd>
       {note ? <dd className="mt-0.5 break-words text-xs text-destructive">{note}</dd> : null}
+      {children ? <dd>{children}</dd> : null}
     </div>
   );
 }
