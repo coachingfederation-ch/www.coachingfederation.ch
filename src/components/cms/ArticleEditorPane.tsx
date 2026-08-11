@@ -6,6 +6,8 @@
 import { Image as ImageIcon, Upload, X } from "lucide-react";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import { UnsplashPicker } from "@/components/cms/UnsplashPicker";
+import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
+import { sanitizeHeroMarks } from "@/lib/hero-design";
 import type { ArticleLang, ArticleRow } from "@/lib/articles";
 
 type Lang = ArticleLang;
@@ -109,7 +111,16 @@ export function ArticleEditorPane({
         className="mt-4 w-full max-w-2xl resize-none border-none bg-transparent text-lg text-muted-foreground outline-none placeholder:text-muted-foreground/60"
       />
 
-      <div className="mt-6 space-y-3">
+      <HeroDesignSection
+        kind="article"
+        imageUrl={article.featured_image_url}
+        title={article.title}
+        summary={article.excerpt}
+        marks={sanitizeHeroMarks("article", article.hero_marks) ?? []}
+        onChange={(next) => update({ hero_marks: next })}
+        t={t}
+      >
+        <div className="mt-6 space-y-3">
         {article.featured_image_url ? (
           <div className="relative overflow-hidden rounded-2xl border border-border">
             <img
@@ -183,7 +194,8 @@ export function ArticleEditorPane({
           </button>
         </div>
         {uploadError ? <p className="text-xs text-destructive">{uploadError}</p> : null}
-      </div>
+        </div>
+      </HeroDesignSection>
       <UnsplashPicker
         open={unsplashOpen}
         onOpenChange={setUnsplashOpen}
