@@ -254,6 +254,26 @@ const tierInput = z.object({
 const TIER_COLUMNS =
   "id, event_id, name, name_de, name_fr, name_it, description, description_de, description_fr, description_it, price_cents, currency, capacity, segment, is_active, sort_order";
 
+export type ManagedTier = {
+  id: string;
+  event_id: string;
+  name: string;
+  name_de: string | null;
+  name_fr: string | null;
+  name_it: string | null;
+  description: string | null;
+  description_de: string | null;
+  description_fr: string | null;
+  description_it: string | null;
+  price_cents: number;
+  currency: string;
+  capacity: number | null;
+  segment: "member" | "non_member" | "general";
+  is_active: boolean;
+  sort_order: number;
+  sold_count: number;
+};
+
 /** Tiers with their live sold counts, for the event editor. */
 export const listEventTiers = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -282,10 +302,10 @@ export const listEventTiers = createServerFn({ method: "POST" })
       if (row.payment_status === "expired") continue;
       sold.set(row.tier_id, (sold.get(row.tier_id) ?? 0) + 1);
     }
-    return ((tiers ?? []) as { id: string }[]).map((tier) => ({
+    return ((tiers ?? []) as Omit<ManagedTier, "sold_count">[]).map((tier) => ({
       ...tier,
       sold_count: sold.get(tier.id) ?? 0,
-    }));
+    })) as ManagedTier[];
   });
 
 /** Creates, updates and deletes tiers in one save, mirroring the editor form. */
