@@ -943,6 +943,25 @@ export function EventPublishingSection({
  * click: the dialog states the refund verdict the server will apply and lets
  * staff override it deliberately.
  */
+/** One label/value pair inside an expanded attendee row. */
+function DetailItem({
+  label,
+  value,
+  note,
+}: {
+  label: string;
+  value: string;
+  note?: string | null;
+}) {
+  return (
+    <div className="min-w-0">
+      <dt className="text-xs uppercase tracking-wide text-muted-foreground">{label}</dt>
+      <dd className="mt-0.5 break-words text-sm">{value}</dd>
+      {note ? <dd className="mt-0.5 break-words text-xs text-destructive">{note}</dd> : null}
+    </div>
+  );
+}
+
 function CancelAttendeeDialog({
   registration,
   eventStartsAt,
