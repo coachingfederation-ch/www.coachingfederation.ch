@@ -815,7 +815,8 @@
       "location": "Luogo",
       "image": "Immagine di copertina",
       "registration": "Iscrizione",
-      "tickets": "Biglietti"
+      "tickets": "Biglietti",
+      "discounts": "Codici sconto"
     },
     "hosts": {
       "none": "Nessun relatore selezionato.",
@@ -927,6 +928,38 @@
       "keep": "Mantieni l’iscrizione",
       "confirm": "Annulla iscrizione",
       "working": "Annullamento…"
+    },
+    "discounts": {
+      "sectionHint": "I codici valgono per una categoria di biglietto al pagamento. Il prezzo finale viene sempre ricalcolato sul server.",
+      "none": "Nessun codice sconto.",
+      "code": "Codice",
+      "type": "Tipo di sconto",
+      "typePercentage": "Percentuale",
+      "typeFixed": "Importo fisso",
+      "valuePercent": "Sconto in percentuale",
+      "valueAmount": "Sconto in CHF",
+      "maxUses": "Utilizzi massimi (vuoto = illimitati)",
+      "startsOn": "Inizio (facoltativo)",
+      "expiresOn": "Scadenza (facoltativo)",
+      "note": "Nota interna (mai visibile al pubblico)",
+      "tiers": "Vale per",
+      "tiersHint": "Non selezionare nulla per applicarlo a tutte le categorie.",
+      "active": "Attivo",
+      "memberOnly": "Solo per membri",
+      "archived": "Archiviato",
+      "used": "Utilizzato",
+      "statusActive": "Attivo",
+      "statusInactive": "Inattivo",
+      "statusArchived": "Archiviato",
+      "add": "Aggiungi codice sconto",
+      "save": "Salva codice",
+      "remove": "Rimuovi",
+      "archive": "Archivia",
+      "saved": "Codice sconto salvato.",
+      "deleted": "Codice sconto eliminato.",
+      "saveError": "Impossibile salvare il codice sconto.",
+      "loadError": "Impossibile caricare i codici sconto.",
+      "archivedDone": "Codice archiviato — è già stato utilizzato."
     }
   },
   "eventTranslations": {

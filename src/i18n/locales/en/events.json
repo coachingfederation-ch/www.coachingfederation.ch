@@ -65,7 +65,8 @@
       "tier_unavailable": "That ticket isn't available for you.",
       "answers": "Please answer all required questions.",
       "payment": "We couldn't start the payment. Please try again.",
-      "members_only": "This event is open to active ICF members only."
+      "members_only": "This event is open to active ICF members only.",
+      "discount": "That discount code can no longer be used. Please remove it and try again."
     },
     "notFoundTitle": "Event not found",
     "notFoundBody": "This event may have been unpublished or the link is incorrect.",
@@ -109,7 +110,21 @@
       "memberIdChecking": "Checking…",
       "memberIdConfirmed": "Membership confirmed — member pricing applied.",
       "memberIdFailed": "We couldn't confirm this member ID. Please check it and try again.",
-      "cancelPaidNote": "This is a paid ticket. Write to the chapter office to cancel it — we will confirm the cancellation and any refund by email."
+      "cancelPaidNote": "This is a paid ticket. Write to the chapter office to cancel it — we will confirm the cancellation and any refund by email.",
+      "discountLabel": "Discount code",
+      "discountPlaceholder": "Enter your code",
+      "discountApply": "Apply",
+      "discountRemove": "Remove",
+      "discountChecking": "Checking…",
+      "discountApplied": "Discount applied — you save {amount}.",
+      "discountError": {
+        "invalid": "We don't recognise that code.",
+        "inactive": "That code isn't available at the moment.",
+        "expired": "That code has expired or isn't active yet.",
+        "exhausted": "That code has been fully used.",
+        "tier": "That code doesn't apply to this ticket.",
+        "member_only": "That code is for active ICF members. Sign in or confirm your member ID first."
+      }
     },
     "membersOnlyPrompt": "Members can register for this event. Sign in with your linked account, or enter your ICF member ID."
   },

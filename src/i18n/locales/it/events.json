@@ -65,7 +65,8 @@
       "tier_unavailable": "Questo biglietto non è disponibile per te.",
       "answers": "Rispondi a tutte le domande obbligatorie.",
       "payment": "Non è stato possibile avviare il pagamento. Riprova.",
-      "members_only": "Questo evento è riservato ai soci ICF attivi."
+      "members_only": "Questo evento è riservato ai soci ICF attivi.",
+      "discount": "Questo codice sconto non è più utilizzabile. Rimuovilo e riprova."
     },
     "notFoundTitle": "Evento non trovato",
     "notFoundBody": "Questo evento potrebbe essere stato rimosso oppure il link non è corretto.",
@@ -109,7 +110,21 @@
       "memberIdChecking": "Verifica in corso…",
       "memberIdConfirmed": "Iscrizione confermata — tariffa soci applicata.",
       "memberIdFailed": "Non è stato possibile confermare questo numero socio. Verificalo e riprova.",
-      "cancelPaidNote": "Questo è un biglietto a pagamento. Scrivi alla segreteria per annullarlo — confermeremo l’annullamento e l’eventuale rimborso via e-mail."
+      "cancelPaidNote": "Questo è un biglietto a pagamento. Scrivi alla segreteria per annullarlo — confermeremo l’annullamento e l’eventuale rimborso via e-mail.",
+      "discountLabel": "Codice sconto",
+      "discountPlaceholder": "Inserisci il codice",
+      "discountApply": "Applica",
+      "discountRemove": "Rimuovi",
+      "discountChecking": "Verifica in corso…",
+      "discountApplied": "Sconto applicato — risparmi {amount}.",
+      "discountError": {
+        "invalid": "Non riconosciamo questo codice.",
+        "inactive": "Questo codice non è disponibile al momento.",
+        "expired": "Questo codice è scaduto o non è ancora attivo.",
+        "exhausted": "Questo codice è già stato utilizzato completamente.",
+        "tier": "Questo codice non vale per questo biglietto.",
+        "member_only": "Questo codice è riservato ai membri ICF attivi. Accedi o conferma il tuo numero di socio."
+      }
     },
     "membersOnlyPrompt": "I soci possono iscriversi a questo evento. Accedi con il tuo account collegato oppure inserisci il tuo numero socio ICF."
   },
