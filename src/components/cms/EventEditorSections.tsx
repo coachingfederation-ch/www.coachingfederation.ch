@@ -804,9 +804,6 @@ export function EventPublishingSection({
                       <td className="truncate px-4 py-3 font-medium" title={r.full_name}>
                         {r.full_name}
                       </td>
-                      <td className="truncate px-4 py-3 text-muted-foreground" title={r.email}>
-                        {r.email}
-                      </td>
                       <td className="whitespace-nowrap px-4 py-3">
                         {t(`events.regStatus.${r.status}`)}
                       </td>
