@@ -209,6 +209,7 @@ export async function sendRegistrationConfirmation(
 
     // Tier name in the attendee's language, when the event sells tickets.
     let tierName: string | null = null;
+    let segment: string | null = null;
     if (registration.tier_id) {
       const { data: tier } = await supabaseAdmin
         .from("event_ticket_tiers")
@@ -216,11 +217,10 @@ export async function sendRegistrationConfirmation(
         .eq("id", registration.tier_id)
         .maybeSingle();
       if (tier) {
-        tierName = localisedText(tier as Record<string, string | null>, "name", locale);
+        tierName = localisedText(tier as unknown as Record<string, string | null>, "name", locale);
+        segment = (tier as { segment?: string | null }).segment ?? null;
       }
-      var tierSegment = (tier as { segment?: string } | null)?.segment ?? null;
     }
-    const segment: string | null = typeof tierSegment === "undefined" ? null : tierSegment;
 
     // The attendee's own answers, labelled in their language.
     const answers: { label: string; value: string }[] = [];
@@ -235,7 +235,7 @@ export async function sendRegistrationConfirmation(
         const raw = submitted[field.field_key];
         if (raw === undefined || raw === "") continue;
         const label =
-          localisedText(field as Record<string, string | null>, "label", locale) ??
+          localisedText(field as unknown as Record<string, string | null>, "label", locale) ??
           field.field_key;
         const value =
           field.field_type === "checkbox" ? (raw === "true" ? copy.yes : copy.no) : raw;
