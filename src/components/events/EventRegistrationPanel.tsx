@@ -43,6 +43,7 @@ type Reason =
   | "full"
   | "closed"
   | "duplicate"
+  | "members_only"
   | "tier_required"
   | "tier_unavailable"
   | "answers"
@@ -235,8 +236,14 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
         )
       : null;
 
-  const rsvpMode = event.registration_mode === "rsvp";
-  const guestsBlocked = !signedIn && event.guest_registration_allowed === false;
+  // Four registration modes: no registration, public RSVP, members-only RSVP
+  // (with an optional "allow without a membership" flag) and ticketed RSVP.
+  const mode = event.registration_mode ?? "none";
+  const rsvpMode = mode !== "none";
+  const ticketMode = mode === "rsvp_tickets";
+  const membersOnly = mode === "rsvp_members" && event.guest_registration_allowed === false;
+  const showTiers = ticketMode && hasTiers;
+  const membersGate = membersOnly && membership !== "member";
   const needsPayment = Boolean(selected && selected.priceCents > 0);
   const paymentsBroken = needsPayment && !paymentsConfigured();
 
