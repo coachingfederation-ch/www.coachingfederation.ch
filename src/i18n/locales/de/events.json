@@ -64,7 +64,8 @@
       "tier_required": "Bitte wähle ein Ticket.",
       "tier_unavailable": "Dieses Ticket steht dir nicht zur Verfügung.",
       "answers": "Bitte beantworte alle Pflichtfragen.",
-      "payment": "Die Zahlung konnte nicht gestartet werden. Bitte versuche es erneut."
+      "payment": "Die Zahlung konnte nicht gestartet werden. Bitte versuche es erneut.",
+      "members_only": "Dieser Event steht nur aktiven ICF-Mitgliedern offen."
     },
     "notFoundTitle": "Event nicht gefunden",
     "notFoundBody": "Dieses Event wurde möglicherweise entfernt oder der Link ist ungültig.",
@@ -105,7 +106,8 @@
       "memberIdChecking": "Wird geprüft…",
       "memberIdConfirmed": "Mitgliedschaft bestätigt — Mitgliederpreis angewendet.",
       "memberIdFailed": "Wir konnten diese Mitgliedsnummer nicht bestätigen. Bitte prüfen Sie sie und versuchen Sie es erneut."
-    }
+    },
+    "membersOnlyPrompt": "Mitglieder können sich für diesen Event anmelden. Melden Sie sich mit Ihrem verknüpften Konto an oder geben Sie Ihre ICF-Mitgliedsnummer ein."
   },
   "filters": {
     "when": "Zeitraum",

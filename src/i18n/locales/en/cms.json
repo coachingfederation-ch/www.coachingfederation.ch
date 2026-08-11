@@ -788,8 +788,10 @@
       "hybrid": "Hybrid"
     },
     "regMode": {
-      "rsvp": "RSVP",
-      "none": "No registration"
+      "rsvp": "RSVP (public)",
+      "none": "No registration",
+      "rsvpMembers": "RSVP (members)",
+      "rsvpTickets": "RSVP (ticket)"
     },
     "attendees": "Attendees",
     "confirmedSuffix": "confirmed",
@@ -883,7 +885,8 @@
       "saveError": "Tickets could not be saved.",
       "loadError": "Tickets could not be loaded.",
       "translateError": "Tier names could not be translated automatically."
-    }
+    },
+    "fieldAllowNonMembers": "Allow registration without a membership"
   },
   "eventTranslations": {
     "title": "Translations",
