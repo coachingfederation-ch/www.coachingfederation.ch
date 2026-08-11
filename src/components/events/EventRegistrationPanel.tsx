@@ -9,11 +9,11 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 import { LocaleLink, useI18n } from "@/i18n";
 import { localizePath } from "@/i18n/config";
 import { supabase } from "@/integrations/supabase/client";
 import { CARD_SHADOW } from "@/components/site-chrome";
+import { PaymentOverlay } from "@/components/events/PaymentOverlay";
 import { isPastEvent, type PublicEvent } from "@/lib/events";
 import { trackGoal } from "@/lib/plausible";
 import {
@@ -37,7 +37,7 @@ import {
   type MembershipState,
   type PublicTier,
 } from "@/lib/tickets";
-import { getStripe, getStripeEnvironment, paymentsConfigured } from "@/lib/stripe";
+import { getStripeEnvironment, paymentsConfigured } from "@/lib/stripe";
 
 type Reason =
   | "full"
@@ -55,6 +55,9 @@ type FormState =
   | { kind: "saving" }
   | { kind: "done" }
   | { kind: "paying"; clientSecret: string }
+  // The overlay was dismissed: the registration and the Stripe session still
+  // exist, so re-opening resumes the same checkout instead of creating a new one.
+  | { kind: "held"; clientSecret: string }
   | { kind: "error"; reason: Reason };
 
 type ReturnState = "paid" | "pending" | "failed" | null;
