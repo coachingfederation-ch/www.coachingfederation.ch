@@ -417,14 +417,13 @@ export async function submitRegistration(
 
     // Managed payments only accept a product that carries an eligible tax code,
     // and an inline product_data tax code is not honoured — so the product is
-    // created first. txcd_20030000 = "Services – general" (event admission).
+    // created first. txcd_10000000 = "Services – general" (event admission).
     const product = await stripe.products.create({
       name: tier.name,
       tax_code: "txcd_20030000",
       metadata: { tierId: tier.id, eventId: input.eventId },
     });
-    console.error("ticket product created", product.id, (product as { tax_code?: unknown }).tax_code);
-
+    
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       ui_mode: "embedded_page",
