@@ -323,6 +323,9 @@ export type RegistrationOutcome =
 function failureReason(error: { code?: string; message?: string }): RegistrationOutcome {
   if (error.code === "23505") return { ok: false, reason: "duplicate" };
   const message = (error.message ?? "").toLowerCase();
+  // Grant/RLS failures mention the table name and must not read as "closed".
+  if (message.includes("permission denied") || message.includes("row-level security"))
+    return { ok: false, reason: "error" };
   if (message.includes("active members only")) return { ok: false, reason: "members_only" };
   if (message.includes("tier is full")) return { ok: false, reason: "full" };
   if (message.includes("tier")) return { ok: false, reason: "tier_unavailable" };
@@ -384,9 +387,13 @@ export async function submitRegistration(
   // A members-only registration is written through the trusted server client,
   // because membership may rest on a member number the database cannot verify.
   const writer = membersOnly ? supabaseAdmin : client;
-  const { data: inserted, error } = await writer
+  // The id is generated here rather than read back: anonymous guests hold an
+  // insert-only grant, so a RETURNING clause would fail with a permission error.
+  const registrationId = crypto.randomUUID();
+  const { error } = await writer
     .from("event_registrations")
     .insert({
+      id: registrationId,
       event_id: input.eventId,
       user_id: userId,
       email: input.email,
@@ -397,11 +404,8 @@ export async function submitRegistration(
       payment_status: paid ? "pending" : "not_required",
       hold_expires_at: holdExpiresAt,
       answers: answers.answers,
-    })
-    .select("id")
-    .maybeSingle();
+    });
   if (error) return failureReason(error);
-  if (!inserted) return { ok: false, reason: "error" };
 
   if (!paid || !tier) return { ok: true, kind: "free" };
 
@@ -410,6 +414,16 @@ export async function submitRegistration(
     const { SITE_URL, localizePath } = await import("@/i18n/config");
     const stripe = createStripeClient(input.environment);
     const returnUrl = `${SITE_URL}${localizePath(`/events/${input.slug}`, input.locale)}?checkout=return&session_id={CHECKOUT_SESSION_ID}`;
+
+    // Managed payments only accept a product that carries an eligible tax code,
+    // and an inline product_data tax code is not honoured — so the product is
+    // created first. txcd_20030000 = "Services – general" (event admission).
+    const product = await stripe.products.create({
+      name: tier.name,
+      tax_code: "txcd_20030000",
+      metadata: { tierId: tier.id, eventId: input.eventId },
+    });
+    console.error("ticket product created", product.id, (product as { tax_code?: unknown }).tax_code);
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -423,13 +437,13 @@ export async function submitRegistration(
           price_data: {
             currency: tier.currency.toLowerCase(),
             unit_amount: tier.price_cents,
-            product_data: { name: tier.name },
+            product: product.id,
           },
         },
       ],
       payment_intent_data: { description: tier.name },
       metadata: {
-        registrationId: inserted.id as string,
+        registrationId: registrationId,
         eventId: input.eventId,
         tierId: tier.id,
         ...(userId ? { userId } : {}),
@@ -441,7 +455,7 @@ export async function submitRegistration(
     await supabaseAdmin
       .from("event_registrations")
       .update({ stripe_session_id: session.id })
-      .eq("id", inserted.id as string);
+      .eq("id", registrationId);
 
     if (!session.client_secret) throw new Error("Stripe returned no client secret");
     return { ok: true, kind: "paid", clientSecret: session.client_secret };
@@ -450,7 +464,7 @@ export async function submitRegistration(
     await supabaseAdmin
       .from("event_registrations")
       .update({ payment_status: "expired", status: "cancelled" })
-      .eq("id", inserted.id as string);
+      .eq("id", registrationId);
     console.error("Stripe checkout creation failed", e);
     return { ok: false, reason: "payment" };
   }
