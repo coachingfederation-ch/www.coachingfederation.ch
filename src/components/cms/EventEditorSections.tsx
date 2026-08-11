@@ -656,13 +656,14 @@ export function EventPublishingSection({
               <th className="px-4 py-3 font-semibold">{t("events.colName")}</th>
               <th className="px-4 py-3 font-semibold">{t("events.colEmail")}</th>
               <th className="px-4 py-3 font-semibold">{t("events.colStatus")}</th>
+              <th className="px-4 py-3 font-semibold">{t("events.colPayment")}</th>
               <th className="px-4 py-3" />
             </tr>
           </thead>
           <tbody>
             {registrations.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-4 py-6 text-muted-foreground">
+                <td colSpan={5} className="px-4 py-6 text-muted-foreground">
                   {t("events.noAttendees")}
                 </td>
               </tr>
@@ -672,6 +673,12 @@ export function EventPublishingSection({
                   <td className="px-4 py-3 font-medium">{r.full_name}</td>
                   <td className="px-4 py-3 text-muted-foreground">{r.email}</td>
                   <td className="px-4 py-3">{t(`events.regStatus.${r.status}`)}</td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    {t(`events.payStatus.${r.payment_status}`)}
+                    {r.amount_cents > 0
+                      ? ` · ${(r.amount_cents / 100).toFixed(2)} ${r.currency}`
+                      : ""}
+                  </td>
                   <td className="px-4 py-3 text-right">
                     <button
                       onClick={() => void setRegistrationStatusAndReload(r)}
