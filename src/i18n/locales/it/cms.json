@@ -914,7 +914,8 @@
       "pending": "In corso…",
       "refunded": "Rimborsato",
       "declined": "Nessun rimborso",
-      "failed": "Non riuscito"
+      "failed": "Non riuscito",
+      "none": "—"
     },
     "cancelDialog": {
       "title": "Annullare questa iscrizione?",
@@ -960,7 +961,9 @@
       "saveError": "Impossibile salvare il codice sconto.",
       "loadError": "Impossibile caricare i codici sconto.",
       "archivedDone": "Codice archiviato — è già stato utilizzato."
-    }
+    },
+    "rowExpand": "Mostra dettagli",
+    "rowCollapse": "Nascondi dettagli"
   },
   "eventTranslations": {
     "title": "Traduzioni",

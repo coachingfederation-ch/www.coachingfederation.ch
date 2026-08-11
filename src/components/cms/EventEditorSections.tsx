@@ -586,6 +586,15 @@ export function EventPublishingSection({
   const [confirmationFilter, setConfirmationFilter] = React.useState("all");
   // The attendee awaiting a cancellation confirmation, if any.
   const [pendingCancel, setPendingCancel] = React.useState<Registration | null>(null);
+  // Rows expanded to their full detail panel. Expansion is the escape valve for
+  // the columns the table has to truncate (long emails, error strings).
+  const [expanded, setExpanded] = React.useState<Set<string>>(new Set());
+  const toggleRow = (id: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (!next.delete(id)) next.add(id);
+      return next;
+    });
 
   const visibleRegistrations = registrations.filter((r) => {
     if (statusFilter !== "all" && r.status !== statusFilter) return false;
@@ -737,10 +746,24 @@ export function EventPublishingSection({
           </select>
         </Field>
       </div>
-      <div className="mt-3 overflow-x-auto rounded-2xl border border-border bg-card">
-        <table className="w-full min-w-[860px] text-left text-sm">
+      {/* The editor column is deliberately narrow for form work, but the
+          attendee table needs room. On wide screens it breaks out of that
+          column and centres itself against the viewport instead. */}
+      <div className="relative left-1/2 mt-3 w-[min(96rem,100vw-2.5rem)] -translate-x-1/2 overflow-x-auto rounded-2xl border border-border bg-card">
+        <table className="w-full min-w-[900px] table-fixed text-left text-sm">
+          <colgroup>
+            <col className="w-10" />
+            <col className="w-[18%]" />
+            <col className="w-[26%]" />
+            <col className="w-[10%]" />
+            <col className="w-[14%]" />
+            <col className="w-[16%]" />
+            <col className="w-[12%]" />
+            <col className="w-[168px]" />
+          </colgroup>
           <thead className="bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground">
             <tr>
+              <th className="px-2 py-3" />
               <th className="px-4 py-3 font-semibold">{t("events.colName")}</th>
               <th className="px-4 py-3 font-semibold">{t("events.colEmail")}</th>
               <th className="whitespace-nowrap px-4 py-3 font-semibold">{t("events.colStatus")}</th>
@@ -757,92 +780,152 @@ export function EventPublishingSection({
           <tbody>
             {visibleRegistrations.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-6 text-muted-foreground">
+                <td colSpan={8} className="px-4 py-6 text-muted-foreground">
                   {registrations.length === 0
                     ? t("events.noAttendees")
                     : t("events.noMatchingAttendees")}
                 </td>
               </tr>
             ) : (
-              visibleRegistrations.map((r) => (
-                <tr key={r.id} className="border-t border-border">
-                  <td className="px-4 py-3 font-medium">{r.full_name}</td>
-                  <td className="px-4 py-3 break-all text-muted-foreground">{r.email}</td>
-                  <td className="whitespace-nowrap px-4 py-3">
-                    {t(`events.regStatus.${r.status}`)}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
-                    {t(`events.payStatus.${r.payment_status}`)}
-                    {r.amount_cents > 0
-                      ? ` · ${(r.amount_cents / 100).toFixed(2)} ${r.currency}`
-                      : ""}
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    <span
-                      className={
-                        r.confirmation_status === "failed" ? "font-semibold text-destructive" : ""
-                      }
-                    >
-                      {t(`events.confirmationStatus.${r.confirmation_status ?? "not_sent"}`)}
-                    </span>
-                    {r.locale ? <span className="ml-1 uppercase">· {r.locale}</span> : null}
-                    {r.confirmation_error ? (
-                      <span className="mt-0.5 block text-xs">{r.confirmation_error}</span>
-                    ) : null}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
-                    <span
-                      className={
-                        r.refund_status === "failed" ? "font-semibold text-destructive" : ""
-                      }
-                    >
-                      {t(`events.refundStatus.${r.refund_status ?? "not_applicable"}`)}
-                    </span>
-                    {r.refund_status === "refunded" && r.refund_amount_cents
-                      ? ` · ${(r.refund_amount_cents / 100).toFixed(2)} ${r.currency}`
-                      : ""}
-                    {r.refund_error ? (
-                      <span className="mt-0.5 block text-xs">{r.refund_error}</span>
-                    ) : null}
-                    {r.refund_status === "failed" ? (
-                      <button
-                        onClick={() => void retryRefund(r)}
-                        className="mt-1 block text-xs font-semibold text-primary underline"
-                      >
-                        {t("events.retryRefund")}
-                      </button>
-                    ) : null}
-                  </td>
-                  <td className="sticky right-0 z-10 bg-card px-4 py-3 text-right shadow-[-8px_0_12px_-12px_rgba(0,0,0,0.5)]">
-                    <div className="flex justify-end gap-2 whitespace-nowrap">
-                      {r.status !== "cancelled" ? (
+              visibleRegistrations.map((r) => {
+                const open = expanded.has(r.id);
+                return (
+                  <React.Fragment key={r.id}>
+                    <tr className="border-t border-border">
+                      <td className="px-2 py-3 align-top">
                         <button
-                          onClick={() => void resendConfirmation(r)}
-                          disabled={r.payment_status === "pending"}
-                          title={
-                            r.payment_status === "pending"
-                              ? t("events.resendPendingHint")
-                              : undefined
-                          }
-                          className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-50"
+                          type="button"
+                          onClick={() => toggleRow(r.id)}
+                          aria-expanded={open}
+                          aria-label={t(open ? "events.rowCollapse" : "events.rowExpand")}
+                          title={t(open ? "events.rowCollapse" : "events.rowExpand")}
+                          className="grid size-7 place-items-center rounded-full border border-border text-xs text-muted-foreground hover:bg-secondary"
                         >
-                          {t("events.resendConfirmation")}
+                          <span
+                            aria-hidden
+                            className={open ? "rotate-90 transition" : "transition"}
+                          >
+                            ›
+                          </span>
                         </button>
-                      ) : null}
-                      <button
-                        onClick={() =>
-                          r.status === "cancelled"
-                            ? void setRegistrationStatusAndReload(r)
-                            : setPendingCancel(r)
-                        }
-                        className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
-                      >
-                        {r.status === "cancelled" ? t("events.reinstate") : t("events.cancelRsvp")}
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+                      </td>
+                      <td className="truncate px-4 py-3 font-medium" title={r.full_name}>
+                        {r.full_name}
+                      </td>
+                      <td className="truncate px-4 py-3 text-muted-foreground" title={r.email}>
+                        {r.email}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3">
+                        {t(`events.regStatus.${r.status}`)}
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground">
+                        {t(`events.payStatus.${r.payment_status}`)}
+                        {r.amount_cents > 0
+                          ? ` · ${(r.amount_cents / 100).toFixed(2)} ${r.currency}`
+                          : ""}
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground">
+                        <span
+                          className={
+                            r.confirmation_status === "failed"
+                              ? "font-semibold text-destructive"
+                              : ""
+                          }
+                        >
+                          {t(`events.confirmationStatus.${r.confirmation_status ?? "not_sent"}`)}
+                        </span>
+                        {r.locale ? <span className="ml-1 uppercase">· {r.locale}</span> : null}
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground">
+                        <span
+                          className={
+                            r.refund_status === "failed" ? "font-semibold text-destructive" : ""
+                          }
+                        >
+                          {t(`events.refundStatus.${r.refund_status ?? "not_applicable"}`)}
+                        </span>
+                        {r.refund_status === "refunded" && r.refund_amount_cents
+                          ? ` · ${(r.refund_amount_cents / 100).toFixed(2)} ${r.currency}`
+                          : ""}
+                        {r.refund_status === "failed" ? (
+                          <button
+                            onClick={() => void retryRefund(r)}
+                            className="mt-1 block text-xs font-semibold text-primary underline"
+                          >
+                            {t("events.retryRefund")}
+                          </button>
+                        ) : null}
+                      </td>
+                      <td className="sticky right-0 z-10 bg-card px-4 py-3 text-right shadow-[-8px_0_12px_-12px_rgba(0,0,0,0.5)]">
+                        <div className="flex justify-end gap-2 whitespace-nowrap">
+                          {r.status !== "cancelled" ? (
+                            <button
+                              onClick={() => void resendConfirmation(r)}
+                              disabled={r.payment_status === "pending"}
+                              title={
+                                r.payment_status === "pending"
+                                  ? t("events.resendPendingHint")
+                                  : undefined
+                              }
+                              className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                              {t("events.resendConfirmation")}
+                            </button>
+                          ) : null}
+                          <button
+                            onClick={() =>
+                              r.status === "cancelled"
+                                ? void setRegistrationStatusAndReload(r)
+                                : setPendingCancel(r)
+                            }
+                            className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
+                          >
+                            {r.status === "cancelled"
+                              ? t("events.reinstate")
+                              : t("events.cancelRsvp")}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    {open ? (
+                      <tr className="border-t border-border/60 bg-secondary/30">
+                        <td colSpan={8} className="px-4 py-4">
+                          <dl className="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
+                            <DetailItem label={t("events.colName")} value={r.full_name} />
+                            <DetailItem label={t("events.colEmail")} value={r.email} />
+                            <DetailItem
+                              label={t("events.colPayment")}
+                              value={`${t(`events.payStatus.${r.payment_status}`)}${
+                                r.amount_cents > 0
+                                  ? ` · ${(r.amount_cents / 100).toFixed(2)} ${r.currency}`
+                                  : ""
+                              }`}
+                            />
+                            <DetailItem
+                              label={t("events.colConfirmation")}
+                              value={t(
+                                `events.confirmationStatus.${r.confirmation_status ?? "not_sent"}`,
+                              )}
+                              note={r.confirmation_error}
+                            />
+                            <DetailItem
+                              label={t("events.colRefund")}
+                              value={t(
+                                `events.refundStatus.${r.refund_status ?? "not_applicable"}`,
+                              )}
+                              note={r.refund_error}
+                            />
+                            <DetailItem
+                              label={t("events.colStatus")}
+                              value={t(`events.regStatus.${r.status}`)}
+                            />
+                          </dl>
+                        </td>
+                      </tr>
+                    ) : null}
+                  </React.Fragment>
+                );
+              })
             )}
           </tbody>
         </table>
@@ -869,6 +952,25 @@ export function EventPublishingSection({
  * click: the dialog states the refund verdict the server will apply and lets
  * staff override it deliberately.
  */
+/** One label/value pair inside an expanded attendee row. */
+function DetailItem({
+  label,
+  value,
+  note,
+}: {
+  label: string;
+  value: string;
+  note?: string | null;
+}) {
+  return (
+    <div className="min-w-0">
+      <dt className="text-xs uppercase tracking-wide text-muted-foreground">{label}</dt>
+      <dd className="mt-0.5 break-words text-sm">{value}</dd>
+      {note ? <dd className="mt-0.5 break-words text-xs text-destructive">{note}</dd> : null}
+    </div>
+  );
+}
+
 function CancelAttendeeDialog({
   registration,
   eventStartsAt,

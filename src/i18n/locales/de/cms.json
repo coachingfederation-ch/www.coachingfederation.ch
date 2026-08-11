@@ -914,7 +914,8 @@
       "pending": "In Bearbeitung…",
       "refunded": "Erstattet",
       "declined": "Keine Erstattung",
-      "failed": "Fehlgeschlagen"
+      "failed": "Fehlgeschlagen",
+      "none": "—"
     },
     "cancelDialog": {
       "title": "Diese Anmeldung stornieren?",
@@ -960,7 +961,9 @@
       "saveError": "Der Rabattcode konnte nicht gespeichert werden.",
       "loadError": "Rabattcodes konnten nicht geladen werden.",
       "archivedDone": "Rabattcode archiviert — er wurde bereits eingelöst."
-    }
+    },
+    "rowExpand": "Details anzeigen",
+    "rowCollapse": "Details ausblenden"
   },
   "eventTranslations": {
     "title": "Übersetzungen",

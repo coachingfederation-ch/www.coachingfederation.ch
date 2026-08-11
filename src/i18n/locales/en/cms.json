@@ -914,7 +914,8 @@
       "pending": "In progress…",
       "refunded": "Refunded",
       "declined": "No refund",
-      "failed": "Failed"
+      "failed": "Failed",
+      "none": "—"
     },
     "cancelDialog": {
       "title": "Cancel this registration?",
@@ -960,7 +961,9 @@
       "saveError": "The discount code could not be saved.",
       "loadError": "Discount codes could not be loaded.",
       "archivedDone": "Discount code archived — it was already used."
-    }
+    },
+    "rowExpand": "Show details",
+    "rowCollapse": "Hide details"
   },
   "eventTranslations": {
     "title": "Translations",
