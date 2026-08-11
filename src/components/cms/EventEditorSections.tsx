@@ -746,20 +746,17 @@ export function EventPublishingSection({
           </select>
         </Field>
       </div>
-      {/* The editor column is deliberately narrow for form work, but the
-          attendee table needs room. On wide screens it breaks out of that
-          column and centres itself against the viewport instead. */}
-      <div className="relative left-1/2 mt-3 w-[min(96rem,100vw-2.5rem)] -translate-x-1/2 overflow-x-auto rounded-2xl border border-border bg-card">
-        <table className="w-full min-w-[900px] table-fixed text-left text-sm">
+      {/* The table stays inside the editor column: the row expander carries the
+          detail that used to force a wider, horizontally scrolling grid. */}
+      <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card">
+        <table className="w-full table-fixed text-left text-sm">
           <colgroup>
             <col className="w-10" />
-            <col className="w-[18%]" />
-            <col className="w-[26%]" />
-            <col className="w-[10%]" />
+            <col className="w-[22%]" />
+            <col className="w-[30%]" />
             <col className="w-[14%]" />
-            <col className="w-[16%]" />
-            <col className="w-[12%]" />
-            <col className="w-[168px]" />
+            <col className="w-[18%]" />
+            <col />
           </colgroup>
           <thead className="bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground">
             <tr>
@@ -770,17 +767,13 @@ export function EventPublishingSection({
               <th className="whitespace-nowrap px-4 py-3 font-semibold">
                 {t("events.colPayment")}
               </th>
-              <th className="whitespace-nowrap px-4 py-3 font-semibold">
-                {t("events.colConfirmation")}
-              </th>
-              <th className="whitespace-nowrap px-4 py-3 font-semibold">{t("events.colRefund")}</th>
-              <th className="sticky right-0 z-10 bg-secondary/60 px-4 py-3" />
+              <th className="px-4 py-3" />
             </tr>
           </thead>
           <tbody>
             {visibleRegistrations.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-4 py-6 text-muted-foreground">
+                <td colSpan={6} className="px-4 py-6 text-muted-foreground">
                   {registrations.length === 0
                     ? t("events.noAttendees")
                     : t("events.noMatchingAttendees")}
@@ -819,45 +812,24 @@ export function EventPublishingSection({
                         {t(`events.regStatus.${r.status}`)}
                       </td>
                       <td className="px-4 py-3 text-muted-foreground">
-                        {t(`events.payStatus.${r.payment_status}`)}
-                        {r.amount_cents > 0
-                          ? ` · ${(r.amount_cents / 100).toFixed(2)} ${r.currency}`
-                          : ""}
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">
-                        <span
-                          className={
-                            r.confirmation_status === "failed"
-                              ? "font-semibold text-destructive"
-                              : ""
-                          }
-                        >
-                          {t(`events.confirmationStatus.${r.confirmation_status ?? "not_sent"}`)}
+                        <span className="block truncate">
+                          {t(`events.payStatus.${r.payment_status}`)}
+                          {r.amount_cents > 0
+                            ? ` · ${(r.amount_cents / 100).toFixed(2)} ${r.currency}`
+                            : ""}
                         </span>
-                        {r.locale ? <span className="ml-1 uppercase">· {r.locale}</span> : null}
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">
-                        <span
-                          className={
-                            r.refund_status === "failed" ? "font-semibold text-destructive" : ""
-                          }
-                        >
-                          {t(`events.refundStatus.${r.refund_status ?? "not_applicable"}`)}
-                        </span>
-                        {r.refund_status === "refunded" && r.refund_amount_cents
-                          ? ` · ${(r.refund_amount_cents / 100).toFixed(2)} ${r.currency}`
-                          : ""}
-                        {r.refund_status === "failed" ? (
-                          <button
-                            onClick={() => void retryRefund(r)}
-                            className="mt-1 block text-xs font-semibold text-primary underline"
-                          >
-                            {t("events.retryRefund")}
-                          </button>
+                        {r.confirmation_status === "failed" || r.refund_status === "failed" ? (
+                          <span className="mt-0.5 block text-xs font-semibold text-destructive">
+                            {t(
+                              r.refund_status === "failed"
+                                ? "events.refundStatus.failed"
+                                : "events.confirmationStatus.failed",
+                            )}
+                          </span>
                         ) : null}
                       </td>
-                      <td className="sticky right-0 z-10 bg-card px-4 py-3 text-right shadow-[-8px_0_12px_-12px_rgba(0,0,0,0.5)]">
-                        <div className="flex justify-end gap-2 whitespace-nowrap">
+                      <td className="px-4 py-3 text-right">
+                        <div className="flex flex-wrap justify-end gap-2">
                           {r.status !== "cancelled" ? (
                             <button
                               onClick={() => void resendConfirmation(r)}
@@ -889,7 +861,7 @@ export function EventPublishingSection({
                     </tr>
                     {open ? (
                       <tr className="border-t border-border/60 bg-secondary/30">
-                        <td colSpan={8} className="px-4 py-4">
+                        <td colSpan={6} className="px-4 py-4">
                           <dl className="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
                             <DetailItem label={t("events.colName")} value={r.full_name} />
                             <DetailItem label={t("events.colEmail")} value={r.email} />
@@ -914,7 +886,16 @@ export function EventPublishingSection({
                                 `events.refundStatus.${r.refund_status ?? "not_applicable"}`,
                               )}
                               note={r.refund_error}
-                            />
+                            >
+                              {r.refund_status === "failed" ? (
+                                <button
+                                  onClick={() => void retryRefund(r)}
+                                  className="mt-1 text-xs font-semibold text-primary underline"
+                                >
+                                  {t("events.retryRefund")}
+                                </button>
+                              ) : null}
+                            </DetailItem>
                             <DetailItem
                               label={t("events.colStatus")}
                               value={t(`events.regStatus.${r.status}`)}
@@ -957,16 +938,19 @@ function DetailItem({
   label,
   value,
   note,
+  children,
 }: {
   label: string;
   value: string;
   note?: string | null;
+  children?: React.ReactNode;
 }) {
   return (
     <div className="min-w-0">
       <dt className="text-xs uppercase tracking-wide text-muted-foreground">{label}</dt>
       <dd className="mt-0.5 break-words text-sm">{value}</dd>
       {note ? <dd className="mt-0.5 break-words text-xs text-destructive">{note}</dd> : null}
+      {children ? <dd>{children}</dd> : null}
     </div>
   );
 }
