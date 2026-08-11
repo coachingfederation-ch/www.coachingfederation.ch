@@ -6,7 +6,12 @@
  * `tg_event_registration_guard` when the registration row is written.
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { discountCentsFor, normalizeCode, type DiscountType, type DiscountVerdict } from "./discount-codes";
+import {
+  discountCentsFor,
+  normalizeCode,
+  type DiscountType,
+  type DiscountVerdict,
+} from "./discount-codes";
 import type { MembershipState } from "./tickets";
 
 export type DiscountRecord = {
@@ -54,7 +59,9 @@ export async function resolveDiscount(
 
   const { data: rows } = await supabaseAdmin
     .from("event_discount_codes")
-    .select("id, code, discount_type, discount_value, member_only, max_uses, tier_ids, is_active, is_archived, starts_at, expires_at")
+    .select(
+      "id, code, discount_type, discount_value, member_only, max_uses, tier_ids, is_active, is_archived, starts_at, expires_at",
+    )
     .eq("event_id", eventId);
 
   const row = (rows ?? []).find((r) => normalizeCode(r.code) === code);
@@ -62,8 +69,10 @@ export async function resolveDiscount(
   if (!row.is_active) return { ok: false, reason: "inactive" };
 
   const now = Date.now();
-  if (row.starts_at && new Date(row.starts_at).getTime() > now) return { ok: false, reason: "expired" };
-  if (row.expires_at && new Date(row.expires_at).getTime() < now) return { ok: false, reason: "expired" };
+  if (row.starts_at && new Date(row.starts_at).getTime() > now)
+    return { ok: false, reason: "expired" };
+  if (row.expires_at && new Date(row.expires_at).getTime() < now)
+    return { ok: false, reason: "expired" };
 
   const tierIds = (row.tier_ids ?? []) as string[];
   if (tierIds.length > 0 && !tierIds.includes(tier.id)) return { ok: false, reason: "tier" };

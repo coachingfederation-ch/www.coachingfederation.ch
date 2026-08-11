@@ -68,8 +68,9 @@ export const validateDiscountCode = createServerFn({ method: "POST" })
 export const validateDiscountCodeAsMember = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => validateInput.parse(input))
-  .handler(async ({ data, context }): Promise<DiscountVerdict> =>
-    verdictFor(data, context.userId, `user:${context.userId}`),
+  .handler(
+    async ({ data, context }): Promise<DiscountVerdict> =>
+      verdictFor(data, context.userId, `user:${context.userId}`),
   );
 
 const CODE_COLUMNS =

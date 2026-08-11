@@ -403,7 +403,8 @@ export async function submitRegistration(
       : null;
   if (discount && !discount.ok) return { ok: false, reason: "discount" };
   const discountRecord = discount && discount.ok ? discount.record! : null;
-  const chargedCents = discount && discount.ok ? discount.preview.finalCents : (tier?.price_cents ?? 0);
+  const chargedCents =
+    discount && discount.ok ? discount.preview.finalCents : (tier?.price_cents ?? 0);
 
   // A code that brings the ticket to zero finishes on the free path.
   const paid = Boolean(tier && chargedCents > 0);
@@ -416,25 +417,23 @@ export async function submitRegistration(
   // The id is generated here rather than read back: anonymous guests hold an
   // insert-only grant, so a RETURNING clause would fail with a permission error.
   const registrationId = crypto.randomUUID();
-  const { error } = await writer
-    .from("event_registrations")
-    .insert({
-      id: registrationId,
-      event_id: input.eventId,
-      user_id: userId,
-      email: input.email,
-      full_name: input.fullName,
-      notes: input.notes,
-      // Stored so the confirmation — which may be sent later by the payment
-      // webhook, with no session — is written in the attendee's own language.
-      locale: input.locale,
-      tier_id: tier?.id ?? null,
-      discount_code_id: discountRecord?.id ?? null,
-      // The trigger overwrites amount and currency from the stored tier.
-      payment_status: paid ? "pending" : "not_required",
-      hold_expires_at: holdExpiresAt,
-      answers: answers.answers,
-    });
+  const { error } = await writer.from("event_registrations").insert({
+    id: registrationId,
+    event_id: input.eventId,
+    user_id: userId,
+    email: input.email,
+    full_name: input.fullName,
+    notes: input.notes,
+    // Stored so the confirmation — which may be sent later by the payment
+    // webhook, with no session — is written in the attendee's own language.
+    locale: input.locale,
+    tier_id: tier?.id ?? null,
+    discount_code_id: discountRecord?.id ?? null,
+    // The trigger overwrites amount and currency from the stored tier.
+    payment_status: paid ? "pending" : "not_required",
+    hold_expires_at: holdExpiresAt,
+    answers: answers.answers,
+  });
   if (error) return failureReason(error);
 
   if (!paid || !tier) {

@@ -29,10 +29,7 @@ import {
   confirmCheckoutSession,
   verifyMemberId,
 } from "@/lib/tickets.functions";
-import {
-  validateDiscountCode,
-  validateDiscountCodeAsMember,
-} from "@/lib/discount-codes.functions";
+import { validateDiscountCode, validateDiscountCodeAsMember } from "@/lib/discount-codes.functions";
 import type { DiscountFailure, DiscountPreview } from "@/lib/discount-codes";
 import {
   formatPrice,
@@ -265,7 +262,9 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const membersGate = membersOnly && membership !== "member";
   const appliedDiscount = discount.kind === "applied" ? discount.preview : null;
   const chargedCents = selected
-    ? (appliedDiscount ? appliedDiscount.finalCents : selected.priceCents)
+    ? appliedDiscount
+      ? appliedDiscount.finalCents
+      : selected.priceCents
     : 0;
   const needsPayment = Boolean(selected && chargedCents > 0);
   const paymentsBroken = needsPayment && !paymentsConfigured();
@@ -772,12 +771,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
               <p className="mt-2 text-xs font-semibold text-teal-foreground">
                 {t("events.detail.tickets.discountApplied").replace(
                   "{amount}",
-                  formatPrice(
-                    discount.preview.discountCents,
-                    selected.currency,
-                    locale,
-                    freeLabel,
-                  ),
+                  formatPrice(discount.preview.discountCents, selected.currency, locale, freeLabel),
                 )}
               </p>
             ) : null}

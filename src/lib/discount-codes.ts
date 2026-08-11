@@ -23,7 +23,9 @@ export type DiscountPreview = {
   finalCents: number;
 };
 
-export type DiscountVerdict = { ok: true; preview: DiscountPreview } | { ok: false; reason: DiscountFailure };
+export type DiscountVerdict =
+  | { ok: true; preview: DiscountPreview }
+  | { ok: false; reason: DiscountFailure };
 
 /** Never below zero, never above the ticket price. Mirrors the SQL guard. */
 export function discountCentsFor(type: DiscountType, value: number, priceCents: number) {
