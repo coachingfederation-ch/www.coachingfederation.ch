@@ -565,6 +565,23 @@ export function EventPublishingSection({
   ticketsSection?: React.ReactNode;
   t: (k: string) => string;
 }) {
+  // Attendee list filters. Local UI state only — the underlying list is
+  // already loaded, so filtering client-side keeps the table responsive.
+  const [statusFilter, setStatusFilter] = React.useState("all");
+  const [paymentFilter, setPaymentFilter] = React.useState("all");
+  const [confirmationFilter, setConfirmationFilter] = React.useState("all");
+
+  const visibleRegistrations = registrations.filter((r) => {
+    if (statusFilter !== "all" && r.status !== statusFilter) return false;
+    if (paymentFilter !== "all" && r.payment_status !== paymentFilter) return false;
+    if (
+      confirmationFilter !== "all" &&
+      (r.confirmation_status ?? "not_sent") !== confirmationFilter
+    )
+      return false;
+    return true;
+  });
+
   return (
     <>
       <Section title={t("events.section.registration")}>
@@ -660,6 +677,50 @@ export function EventPublishingSection({
         {confirmed}
         {event.capacity ? ` / ${event.capacity}` : ""} {t("events.confirmedSuffix")}
       </p>
+      <div className="mt-4 flex flex-wrap items-end gap-3">
+        <Field label={t("events.filterStatus")}>
+          <select
+            className={inputClass}
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">{t("events.filterAll")}</option>
+            {["confirmed", "cancelled"].map((s) => (
+              <option key={s} value={s}>
+                {t(`events.regStatus.${s}`)}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label={t("events.filterPayment")}>
+          <select
+            className={inputClass}
+            value={paymentFilter}
+            onChange={(e) => setPaymentFilter(e.target.value)}
+          >
+            <option value="all">{t("events.filterAll")}</option>
+            {["not_required", "pending", "paid", "expired"].map((s) => (
+              <option key={s} value={s}>
+                {t(`events.payStatus.${s}`)}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label={t("events.filterConfirmation")}>
+          <select
+            className={inputClass}
+            value={confirmationFilter}
+            onChange={(e) => setConfirmationFilter(e.target.value)}
+          >
+            <option value="all">{t("events.filterAll")}</option>
+            {["not_sent", "sending", "sent", "failed"].map((s) => (
+              <option key={s} value={s}>
+                {t(`events.confirmationStatus.${s}`)}
+              </option>
+            ))}
+          </select>
+        </Field>
+      </div>
       <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card">
         <table className="w-full text-left text-sm">
           <thead className="bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground">
@@ -673,14 +734,16 @@ export function EventPublishingSection({
             </tr>
           </thead>
           <tbody>
-            {registrations.length === 0 ? (
+            {visibleRegistrations.length === 0 ? (
               <tr>
                 <td colSpan={6} className="px-4 py-6 text-muted-foreground">
-                  {t("events.noAttendees")}
+                  {registrations.length === 0
+                    ? t("events.noAttendees")
+                    : t("events.noMatchingAttendees")}
                 </td>
               </tr>
             ) : (
-              registrations.map((r) => (
+              visibleRegistrations.map((r) => (
                 <tr key={r.id} className="border-t border-border">
                   <td className="px-4 py-3 font-medium">{r.full_name}</td>
                   <td className="px-4 py-3 text-muted-foreground">{r.email}</td>
@@ -708,10 +771,16 @@ export function EventPublishingSection({
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex flex-wrap justify-end gap-2">
-                      {r.status !== "cancelled" && r.payment_status !== "pending" ? (
+                      {r.status !== "cancelled" ? (
                         <button
                           onClick={() => void resendConfirmation(r)}
-                          className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
+                          disabled={r.payment_status === "pending"}
+                          title={
+                            r.payment_status === "pending"
+                              ? t("events.resendPendingHint")
+                              : undefined
+                          }
+                          className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           {t("events.resendConfirmation")}
                         </button>
