@@ -539,7 +539,7 @@ export function EventHostsSection({
   );
 }
 
-/** Publishing section: registration settings, save/status controls, attendees. */
+/** Publishing section: registration settings, optional ticket tiers, save/status controls, attendees. */
 export function EventPublishingSection({
   event,
   patch,
@@ -549,6 +549,7 @@ export function EventPublishingSection({
   registrations,
   confirmed,
   setRegistrationStatusAndReload,
+  ticketsSection,
   t,
 }: {
   event: Managed;
@@ -559,6 +560,7 @@ export function EventPublishingSection({
   registrations: Registration[];
   confirmed: number;
   setRegistrationStatusAndReload: (r: Registration) => void | Promise<void>;
+  ticketsSection?: React.ReactNode;
   t: (k: string) => string;
 }) {
   return (
@@ -616,6 +618,8 @@ export function EventPublishingSection({
           </Field>
         </div>
       </Section>
+
+      {ticketsSection}
 
       <div className="mt-8 flex flex-wrap items-center gap-3">
         <button

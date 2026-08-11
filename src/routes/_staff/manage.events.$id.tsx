@@ -245,13 +245,13 @@ function EventEditor() {
           registrations={registrations}
           confirmed={confirmed}
           setRegistrationStatusAndReload={setRegistrationStatusAndReload}
+          ticketsSection={
+            event.registration_mode === "rsvp_tickets" ? (
+              <EventTicketsSection eventId={event.id} t={t} />
+            ) : null
+          }
           t={t}
         />
-
-        {/* Ticket tiers only exist for ticketed events. */}
-        {event.registration_mode === "rsvp_tickets" ? (
-          <EventTicketsSection eventId={event.id} t={t} />
-        ) : null}
 
         <UnsplashPicker
 
