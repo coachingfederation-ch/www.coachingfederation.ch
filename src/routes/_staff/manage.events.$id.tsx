@@ -29,6 +29,7 @@ import {
   getManagedEvent,
   listCommunityOptions,
   listEventRegistrations,
+  resendEventConfirmation,
   setEventStatus,
   setRegistrationStatus,
   updateEvent,
@@ -175,6 +176,20 @@ function EventEditor() {
     await load();
   };
 
+  /**
+   * Manual re-send after a failed or lost confirmation. Failures surface as an
+   * error on the page; the registration itself is never touched.
+   */
+  const resendConfirmation = async (r: Registration) => {
+    try {
+      const result = await resendEventConfirmation({ data: { registrationId: r.id } });
+      if (result.status !== "sent") setError(t("events.resendFailed"));
+    } catch {
+      setError(t("events.resendFailed"));
+    }
+    await load();
+  };
+
   const confirmed = registrations.filter((r) => r.status === "confirmed").length;
 
   return (
@@ -245,6 +260,7 @@ function EventEditor() {
           registrations={registrations}
           confirmed={confirmed}
           setRegistrationStatusAndReload={setRegistrationStatusAndReload}
+          resendConfirmation={resendConfirmation}
           ticketsSection={
             event.registration_mode === "rsvp_tickets" ? (
               <EventTicketsSection eventId={event.id} t={t} />
