@@ -9,6 +9,7 @@ import { EventTranslationsPanel } from "@/components/cms/EventTranslationsPanel"
 import { EventHostsPanel } from "@/components/cms/EventHostsPanel";
 import { RichTextEditor } from "@/components/cms/RichTextField";
 import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
+import { EventHeroPreview } from "@/components/cms/EventHeroPreview";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import type { getManagedEvent, listEventRegistrations } from "@/lib/events-admin.functions";
 import {
