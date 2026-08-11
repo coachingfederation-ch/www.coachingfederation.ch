@@ -233,9 +233,7 @@ export const listEventRegistrations = createServerFn({ method: "POST" })
  */
 export const resendEventConfirmation = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) =>
-    z.object({ registrationId: z.string().uuid() }).parse(input),
-  )
+  .inputValidator((input: unknown) => z.object({ registrationId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
     // The caller must manage this event: RLS decides, not the client.
@@ -654,9 +652,7 @@ export const cancelRegistration = createServerFn({ method: "POST" })
 /** Retries a refund that failed, without re-sending the cancellation notice. */
 export const retryRegistrationRefund = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) =>
-    z.object({ registrationId: z.string().uuid() }).parse(input),
-  )
+  .inputValidator((input: unknown) => z.object({ registrationId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
     const { data: row, error } = await context.supabase

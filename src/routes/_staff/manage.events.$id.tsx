@@ -288,7 +288,6 @@ function EventEditor() {
         <EventLocationSection event={event} patch={patch} t={t} />
 
         <EventPublishingSection
-
           event={event}
           patch={patch}
           saving={saving}
@@ -309,7 +308,6 @@ function EventEditor() {
         />
 
         <UnsplashPicker
-
           open={pickerOpen}
           onOpenChange={setPickerOpen}
           onPick={(pick: UnsplashPick) =>

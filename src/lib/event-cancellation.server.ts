@@ -46,9 +46,10 @@ async function claimSend(registrationId: string, force: boolean) {
     .from("event_registrations")
     .update({ cancellation_status: "sending", cancellation_error: null })
     .eq("id", registrationId);
-  const { data } = await (force
-    ? query.in("cancellation_status", ["not_sent", "failed", "sent"])
-    : query.in("cancellation_status", ["not_sent", "failed"])
+  const { data } = await (
+    force
+      ? query.in("cancellation_status", ["not_sent", "failed", "sent"])
+      : query.in("cancellation_status", ["not_sent", "failed"])
   ).select("id");
   return (data ?? []).length > 0;
 }

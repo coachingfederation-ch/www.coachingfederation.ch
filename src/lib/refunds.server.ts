@@ -37,7 +37,9 @@ function environmentOf(row: RefundRow): StripeEnv {
 export async function refundRegistration(registrationId: string): Promise<RefundOutcome> {
   const { data: row } = await supabaseAdmin
     .from("event_registrations")
-    .select("id, amount_cents, payment_status, refund_status, stripe_session_id, payment_environment")
+    .select(
+      "id, amount_cents, payment_status, refund_status, stripe_session_id, payment_environment",
+    )
     .eq("id", registrationId)
     .maybeSingle<RefundRow>();
 

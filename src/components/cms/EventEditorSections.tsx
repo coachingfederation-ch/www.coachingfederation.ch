@@ -744,7 +744,9 @@ export function EventPublishingSection({
               <th className="px-4 py-3 font-semibold">{t("events.colName")}</th>
               <th className="px-4 py-3 font-semibold">{t("events.colEmail")}</th>
               <th className="whitespace-nowrap px-4 py-3 font-semibold">{t("events.colStatus")}</th>
-              <th className="whitespace-nowrap px-4 py-3 font-semibold">{t("events.colPayment")}</th>
+              <th className="whitespace-nowrap px-4 py-3 font-semibold">
+                {t("events.colPayment")}
+              </th>
               <th className="whitespace-nowrap px-4 py-3 font-semibold">
                 {t("events.colConfirmation")}
               </th>
@@ -783,9 +785,7 @@ export function EventPublishingSection({
                     >
                       {t(`events.confirmationStatus.${r.confirmation_status ?? "not_sent"}`)}
                     </span>
-                    {r.locale ? (
-                      <span className="ml-1 uppercase">· {r.locale}</span>
-                    ) : null}
+                    {r.locale ? <span className="ml-1 uppercase">· {r.locale}</span> : null}
                     {r.confirmation_error ? (
                       <span className="mt-0.5 block text-xs">{r.confirmation_error}</span>
                     ) : null}
