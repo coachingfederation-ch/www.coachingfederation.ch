@@ -863,6 +863,7 @@
       "sectionHint": "Categorie di biglietti nella valuta dell'evento. I membri ottengono automaticamente il prezzo riservato se l'iscrizione è attiva.",
       "none": "Nessuna categoria — questo evento usa l'iscrizione semplice.",
       "name": "Nome categoria",
+      "nameEn": "Nome tariffa EN",
       "segment": "Per chi",
       "segmentMember": "Membri",
       "segmentNonMember": "Non membri",
@@ -877,9 +878,11 @@
       "addMember": "Aggiungi categoria membri",
       "remove": "Rimuovi",
       "save": "Salva biglietti",
+      "translating": "Traduzione dei nomi delle tariffe…",
       "saved": "Biglietti salvati.",
       "saveError": "Impossibile salvare i biglietti.",
-      "loadError": "Impossibile caricare i biglietti."
+      "loadError": "Impossibile caricare i biglietti.",
+      "translateError": "Non è stato possibile tradurre automaticamente i nomi delle tariffe."
     }
   },
   "eventTranslations": {

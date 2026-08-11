@@ -863,6 +863,7 @@
       "sectionHint": "Tiers priced in the event currency. Members are placed on the member tier automatically when their membership is active.",
       "none": "No tiers yet — this event uses simple RSVP.",
       "name": "Tier name",
+      "nameEn": "Tier name EN",
       "segment": "Who it's for",
       "segmentMember": "Members",
       "segmentNonMember": "Non-members",
@@ -877,9 +878,11 @@
       "addMember": "Add member tier",
       "remove": "Remove",
       "save": "Save tickets",
+      "translating": "Translating tier names…",
       "saved": "Tickets saved.",
       "saveError": "Tickets could not be saved.",
-      "loadError": "Tickets could not be loaded."
+      "loadError": "Tickets could not be loaded.",
+      "translateError": "Tier names could not be translated automatically."
     }
   },
   "eventTranslations": {
