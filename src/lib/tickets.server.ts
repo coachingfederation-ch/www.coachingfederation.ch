@@ -468,7 +468,9 @@ export async function submitRegistration(
 
     await supabaseAdmin
       .from("event_registrations")
-      .update({ stripe_session_id: session.id })
+      // The environment travels with the row: a later refund must reach the
+      // same Stripe account that took the money.
+      .update({ stripe_session_id: session.id, payment_environment: input.environment })
       .eq("id", registrationId);
 
     if (!session.client_secret) throw new Error("Stripe returned no client secret");

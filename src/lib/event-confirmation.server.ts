@@ -13,7 +13,7 @@ import { buildEventIcs, calendarUid, googleCalendarUrl } from "./event-calendar"
 import { CONFIRMATION_COPY } from "./email-templates/event-confirmation-copy";
 
 /** Address shown as "questions go here" when an event names no organizer. */
-const CHAPTER_CONTACT = "office@coachingfederation.ch";
+export const CHAPTER_CONTACT = "office@coachingfederation.ch";
 
 type RegistrationRow = {
   id: string;
@@ -31,7 +31,7 @@ type RegistrationRow = {
   confirmation_sequence: number;
 };
 
-type EventRow = {
+export type EventRow = {
   id: string;
   slug: string;
   title: string;
@@ -48,7 +48,7 @@ type EventRow = {
   community_id: string | null;
 };
 
-function normaliseLocale(value: string | null | undefined): Locale {
+export function normaliseLocale(value: string | null | undefined): Locale {
   return value === "de" || value === "fr" || value === "it" || value === "en"
     ? value
     : DEFAULT_LOCALE;
@@ -61,7 +61,7 @@ const LOCALE_TAGS: Record<Locale, string> = {
   it: "it-CH",
 };
 
-function formatWhen(event: EventRow, locale: Locale) {
+export function formatWhen(event: EventRow, locale: Locale) {
   const tag = LOCALE_TAGS[locale];
   const start = new Date(event.starts_at);
   const end = event.ends_at ? new Date(event.ends_at) : null;
@@ -86,7 +86,7 @@ function formatWhen(event: EventRow, locale: Locale) {
   return `${dateFmt.format(start)}, ${timeFmt.format(start)} – ${dateFmt.format(end)}, ${timeFmt.format(end)} (${event.timezone})`;
 }
 
-function formatLocation(event: EventRow, locale: Locale): string {
+export function formatLocation(event: EventRow, locale: Locale): string {
   const copy = CONFIRMATION_COPY[locale];
   const place = [event.venue_name, event.city].filter(Boolean).join(", ");
   if (event.location_mode === "online") return copy.locationOnline;
@@ -96,14 +96,14 @@ function formatLocation(event: EventRow, locale: Locale): string {
   return place || copy.locationTba;
 }
 
-function formatAmount(cents: number, currency: string, locale: Locale) {
+export function formatAmount(cents: number, currency: string, locale: Locale) {
   return new Intl.NumberFormat(LOCALE_TAGS[locale], { style: "currency", currency }).format(
     cents / 100,
   );
 }
 
 /** Localised event content, falling back to the source language. */
-async function loadLocalisedEvent(event: EventRow, locale: Locale) {
+export async function loadLocalisedEvent(event: EventRow, locale: Locale) {
   if (event.language === locale) {
     return { title: event.title, summary: event.summary, description: event.description };
   }
@@ -121,7 +121,7 @@ async function loadLocalisedEvent(event: EventRow, locale: Locale) {
 }
 
 /** Plain text from the stored rich text, short enough for a calendar entry. */
-function toPlainText(html: string | null, limit = 900) {
+export function toPlainText(html: string | null, limit = 900) {
   if (!html) return "";
   const text = html
     .replace(/<br\s*\/?>/gi, "\n")

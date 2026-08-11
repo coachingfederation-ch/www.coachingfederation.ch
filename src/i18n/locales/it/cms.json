@@ -901,6 +901,32 @@
       "sending": "Invio in corso…",
       "sent": "Inviata",
       "failed": "Non riuscito"
+    },
+    "colRefund": "Rimborso",
+    "retryRefund": "Riprova",
+    "refundFailed": "Non è stato possibile emettere il rimborso. Il posto è annullato — riprova dalla riga del partecipante.",
+    "refundDone": "Rimborso emesso.",
+    "cancelDone": "Iscrizione annullata e partecipante informato.",
+    "cancelEmailFailed": "L’iscrizione è stata annullata, ma l’e-mail di notifica non è stata inviata.",
+    "refundStatus": {
+      "not_applicable": "—",
+      "pending": "In corso…",
+      "refunded": "Rimborsato",
+      "declined": "Nessun rimborso",
+      "failed": "Non riuscito"
+    },
+    "cancelDialog": {
+      "title": "Annullare questa iscrizione?",
+      "intro": "Il posto verrà liberato e un avviso di annullamento sarà inviato a",
+      "free": "Per questa iscrizione non è stato effettuato alcun pagamento.",
+      "refundYes": "Verrà emesso un rimborso completo.",
+      "refundNo": "Non verrà emesso alcun rimborso.",
+      "refundToggle": "Rimborsa il pagamento",
+      "policyOutside": "Più di 48 ore prima dell’evento: il rimborso è l’impostazione predefinita.",
+      "policyInside": "Meno di 48 ore prima dell’evento: nessun rimborso per impostazione predefinita.",
+      "keep": "Mantieni l’iscrizione",
+      "confirm": "Annulla iscrizione",
+      "working": "Annullamento…"
     }
   },
   "eventTranslations": {

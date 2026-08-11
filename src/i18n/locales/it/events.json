@@ -108,7 +108,8 @@
       "memberIdApply": "Applica",
       "memberIdChecking": "Verifica in corso…",
       "memberIdConfirmed": "Iscrizione confermata — tariffa soci applicata.",
-      "memberIdFailed": "Non è stato possibile confermare questo numero socio. Verificalo e riprova."
+      "memberIdFailed": "Non è stato possibile confermare questo numero socio. Verificalo e riprova.",
+      "cancelPaidNote": "Questo è un biglietto a pagamento. Scrivi alla segreteria per annullarlo — confermeremo l’annullamento e l’eventuale rimborso via e-mail."
     },
     "membersOnlyPrompt": "I soci possono iscriversi a questo evento. Accedi con il tuo account collegato oppure inserisci il tuo numero socio ICF."
   },

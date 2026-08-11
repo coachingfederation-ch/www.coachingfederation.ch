@@ -308,8 +308,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
 
   // Keyed on the secret itself so the options object is stable for as long as
   // the provider is mounted — Stripe rejects a changed secret in place.
-  const clientSecret =
-    state.kind === "paying" || state.kind === "held" ? state.clientSecret : null;
+  const clientSecret = state.kind === "paying" || state.kind === "held" ? state.clientSecret : null;
   const checkoutOptions = useMemo(
     () => ({ fetchClientSecret: async () => clientSecret ?? "" }),
     [clientSecret],
@@ -402,17 +401,26 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     if (returned === "pending") return notice(t("events.detail.tickets.returnPending"), "warn");
     if (mine.data) {
       const pending = mine.data.payment_status === "pending";
+      // A paid seat is cancelled by the chapter, so the refund decision and
+      // the notification stay in one hand.
+      const paid = mine.data.payment_status === "paid";
       return (
         <div className="mt-4">
           <p className="text-sm font-semibold text-teal-foreground">
             {pending ? t("events.detail.tickets.pendingPayment") : t("events.detail.youAreIn")}
           </p>
-          <button
-            onClick={() => void cancel()}
-            className="mt-4 rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-secondary"
-          >
-            {t("events.detail.cancel")}
-          </button>
+          {paid ? (
+            <p className="mt-3 text-sm text-muted-foreground">
+              {t("events.detail.tickets.cancelPaidNote")}
+            </p>
+          ) : (
+            <button
+              onClick={() => void cancel()}
+              className="mt-4 rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-secondary"
+            >
+              {t("events.detail.cancel")}
+            </button>
+          )}
         </div>
       );
     }
@@ -489,9 +497,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
                     key={tier.id}
                     className={
                       "rounded-xl border text-sm transition " +
-                      (tierId === tier.id
-                        ? "border-primary bg-primary/5"
-                        : "border-border/70")
+                      (tierId === tier.id ? "border-primary bg-primary/5" : "border-border/70")
                     }
                   >
                     <label
@@ -500,45 +506,45 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
                         (disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer")
                       }
                     >
-                    <input
-                      type="radio"
-                      name="ticket-tier"
-                      className="mt-1"
-                      value={tier.id}
-                      checked={tierId === tier.id}
-                      disabled={disabled}
-                      onChange={() => setTierId(tier.id)}
-                    />
-                    <span className="min-w-0 flex-1">
-                      <span className="flex items-baseline justify-between gap-2">
-                        <span className="font-semibold">{tier.name}</span>
-                        <span className="shrink-0 font-semibold">{priceOf(tier)}</span>
-                      </span>
-                      {tier.description ? (
-                        <span className="mt-1 block text-xs text-muted-foreground">
-                          {tier.description}
+                      <input
+                        type="radio"
+                        name="ticket-tier"
+                        className="mt-1"
+                        value={tier.id}
+                        checked={tierId === tier.id}
+                        disabled={disabled}
+                        onChange={() => setTierId(tier.id)}
+                      />
+                      <span className="min-w-0 flex-1">
+                        <span className="flex items-baseline justify-between gap-2">
+                          <span className="font-semibold">{tier.name}</span>
+                          <span className="shrink-0 font-semibold">{priceOf(tier)}</span>
                         </span>
-                      ) : null}
-                      <span className="mt-1 flex flex-wrap gap-2 text-[11px] font-semibold text-muted-foreground">
-                        {tier.segment === "member" ? (
-                          <span>{t("events.detail.tickets.memberBadge")}</span>
-                        ) : tier.segment === "non_member" ? (
-                          <span>{t("events.detail.tickets.nonMemberBadge")}</span>
-                        ) : null}
-                        {tier.isSoldOut ? (
-                          <span className="text-[color:var(--warn)]">
-                            {t("events.detail.tickets.soldOut")}
-                          </span>
-                        ) : tier.seatsRemaining !== null ? (
-                          <span>
-                            {t("events.detail.tickets.seatsLeft").replace(
-                              "{n}",
-                              String(tier.seatsRemaining),
-                            )}
+                        {tier.description ? (
+                          <span className="mt-1 block text-xs text-muted-foreground">
+                            {tier.description}
                           </span>
                         ) : null}
+                        <span className="mt-1 flex flex-wrap gap-2 text-[11px] font-semibold text-muted-foreground">
+                          {tier.segment === "member" ? (
+                            <span>{t("events.detail.tickets.memberBadge")}</span>
+                          ) : tier.segment === "non_member" ? (
+                            <span>{t("events.detail.tickets.nonMemberBadge")}</span>
+                          ) : null}
+                          {tier.isSoldOut ? (
+                            <span className="text-[color:var(--warn)]">
+                              {t("events.detail.tickets.soldOut")}
+                            </span>
+                          ) : tier.seatsRemaining !== null ? (
+                            <span>
+                              {t("events.detail.tickets.seatsLeft").replace(
+                                "{n}",
+                                String(tier.seatsRemaining),
+                              )}
+                            </span>
+                          ) : null}
+                        </span>
                       </span>
-                    </span>
                     </label>
                     {/* The member-id unlock lives inside the member tier itself:
                         the ask ("prove membership") and the reward (the member

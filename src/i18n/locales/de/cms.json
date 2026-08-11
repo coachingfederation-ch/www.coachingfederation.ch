@@ -901,6 +901,32 @@
       "sending": "Wird gesendet…",
       "sent": "Gesendet",
       "failed": "Fehlgeschlagen"
+    },
+    "colRefund": "Rückerstattung",
+    "retryRefund": "Erneut versuchen",
+    "refundFailed": "Die Rückerstattung konnte nicht ausgelöst werden. Der Platz ist storniert — versuchen Sie die Rückerstattung in der Teilnehmerzeile erneut.",
+    "refundDone": "Rückerstattung ausgelöst.",
+    "cancelDone": "Anmeldung storniert und teilnehmende Person benachrichtigt.",
+    "cancelEmailFailed": "Die Anmeldung wurde storniert, die Benachrichtigung konnte aber nicht versendet werden.",
+    "refundStatus": {
+      "not_applicable": "—",
+      "pending": "In Bearbeitung…",
+      "refunded": "Erstattet",
+      "declined": "Keine Erstattung",
+      "failed": "Fehlgeschlagen"
+    },
+    "cancelDialog": {
+      "title": "Diese Anmeldung stornieren?",
+      "intro": "Der Platz wird freigegeben und eine Stornobestätigung geht an",
+      "free": "Für diese Anmeldung wurde keine Zahlung geleistet.",
+      "refundYes": "Der volle Betrag wird zurückerstattet.",
+      "refundNo": "Es erfolgt keine Rückerstattung.",
+      "refundToggle": "Zahlung zurückerstatten",
+      "policyOutside": "Mehr als 48 Stunden vor der Veranstaltung: Rückerstattung ist die Vorgabe.",
+      "policyInside": "Weniger als 48 Stunden vor der Veranstaltung: standardmässig keine Rückerstattung.",
+      "keep": "Anmeldung behalten",
+      "confirm": "Anmeldung stornieren",
+      "working": "Wird storniert…"
     }
   },
   "eventTranslations": {

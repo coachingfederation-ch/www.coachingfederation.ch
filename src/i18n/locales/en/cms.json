@@ -901,6 +901,32 @@
       "sending": "Sending…",
       "sent": "Sent",
       "failed": "Failed"
+    },
+    "colRefund": "Refund",
+    "retryRefund": "Retry refund",
+    "refundFailed": "The refund could not be issued. The seat is cancelled — retry the refund from the attendee row.",
+    "refundDone": "Refund issued.",
+    "cancelDone": "Registration cancelled and the attendee notified.",
+    "cancelEmailFailed": "The registration was cancelled, but the notification email could not be sent.",
+    "refundStatus": {
+      "not_applicable": "—",
+      "pending": "In progress…",
+      "refunded": "Refunded",
+      "declined": "No refund",
+      "failed": "Failed"
+    },
+    "cancelDialog": {
+      "title": "Cancel this registration?",
+      "intro": "This releases the seat and sends a cancellation notice to",
+      "free": "No payment was taken for this registration.",
+      "refundYes": "A full refund will be issued.",
+      "refundNo": "No refund will be issued.",
+      "refundToggle": "Refund the payment",
+      "policyOutside": "More than 48 hours before the event: a refund is the default.",
+      "policyInside": "Less than 48 hours before the event: no refund by default.",
+      "keep": "Keep the registration",
+      "confirm": "Cancel registration",
+      "working": "Cancelling…"
     }
   },
   "eventTranslations": {

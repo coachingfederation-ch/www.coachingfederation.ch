@@ -25,11 +25,13 @@ import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { useCms } from "@/i18n/cms";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
 import {
+  cancelRegistration,
   generateEventOccurrences,
   getManagedEvent,
   listCommunityOptions,
   listEventRegistrations,
   resendEventConfirmation,
+  retryRegistrationRefund,
   setEventStatus,
   setRegistrationStatus,
   updateEvent,
@@ -190,6 +192,41 @@ function EventEditor() {
     await load();
   };
 
+  /**
+   * Full cancellation: releases the seat, reverses the payment when the refund
+   * policy (or a staff override) says so, and notifies the attendee. Any
+   * partial failure is surfaced instead of silently swallowed, because money
+   * and mail are involved.
+   */
+  const cancelAttendee = async (r: Registration, refund: boolean | undefined) => {
+    setMessage(null);
+    setError(null);
+    try {
+      const result = await cancelRegistration({
+        data: { registrationId: r.id, ...(refund === undefined ? {} : { refund }) },
+      });
+      if (result.refund.status === "failed") setError(t("events.refundFailed"));
+      else if (result.email.status === "failed") setError(t("events.cancelEmailFailed"));
+      else setMessage(t("events.cancelDone"));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t("events.saveError"));
+    }
+    await load();
+  };
+
+  const retryRefund = async (r: Registration) => {
+    setMessage(null);
+    setError(null);
+    try {
+      const result = await retryRegistrationRefund({ data: { registrationId: r.id } });
+      if (result.status === "failed") setError(t("events.refundFailed"));
+      else setMessage(t("events.refundDone"));
+    } catch {
+      setError(t("events.refundFailed"));
+    }
+    await load();
+  };
+
   const confirmed = registrations.filter((r) => r.status === "confirmed").length;
 
   return (
@@ -251,7 +288,6 @@ function EventEditor() {
         <EventLocationSection event={event} patch={patch} t={t} />
 
         <EventPublishingSection
-
           event={event}
           patch={patch}
           saving={saving}
@@ -261,6 +297,8 @@ function EventEditor() {
           confirmed={confirmed}
           setRegistrationStatusAndReload={setRegistrationStatusAndReload}
           resendConfirmation={resendConfirmation}
+          cancelAttendee={cancelAttendee}
+          retryRefund={retryRefund}
           ticketsSection={
             event.registration_mode === "rsvp_tickets" ? (
               <EventTicketsSection eventId={event.id} t={t} />
@@ -270,7 +308,6 @@ function EventEditor() {
         />
 
         <UnsplashPicker
-
           open={pickerOpen}
           onOpenChange={setPickerOpen}
           onPick={(pick: UnsplashPick) =>

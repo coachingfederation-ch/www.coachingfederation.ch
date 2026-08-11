@@ -218,7 +218,7 @@ export const listEventRegistrations = createServerFn({ method: "POST" })
     const { data: rows, error } = await context.supabase
       .from("event_registrations")
       .select(
-        "id, full_name, email, status, notes, created_at, user_id, tier_id, payment_status, amount_cents, currency, answers, locale, confirmation_status, confirmation_sent_at, confirmation_error",
+        "id, full_name, email, status, notes, created_at, user_id, tier_id, payment_status, amount_cents, currency, answers, locale, confirmation_status, confirmation_sent_at, confirmation_error, cancellation_status, cancellation_error, refund_status, refund_amount_cents, refund_error, refunded_at",
       )
       .eq("event_id", data.eventId)
       .order("created_at", { ascending: true });
@@ -233,9 +233,7 @@ export const listEventRegistrations = createServerFn({ method: "POST" })
  */
 export const resendEventConfirmation = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) =>
-    z.object({ registrationId: z.string().uuid() }).parse(input),
-  )
+  .inputValidator((input: unknown) => z.object({ registrationId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
     // The caller must manage this event: RLS decides, not the client.
@@ -577,4 +575,93 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
     if (markError) throw new Error(markError.message);
 
     return { created: created.length, skipped: dates.length - rows.length };
+  });
+
+/**
+ * Full cancellation of one registration: seat released, payment reversed and
+ * the attendee told — in that order, so an attendee is never told about a
+ * refund that did not happen.
+ *
+ * Refund policy: a paid seat cancelled more than 48 hours before the event
+ * starts is refunded in full; inside that window it is not. Staff may override
+ * either way, because a genuine exception is a human decision, not a rule.
+ */
+export const REFUND_DEADLINE_HOURS = 48;
+
+export const cancelRegistration = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        registrationId: z.string().uuid(),
+        /** Omitted: apply the 48-hour policy. Set: staff overrides it. */
+        refund: z.boolean().optional(),
+      })
+      .parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+
+    // RLS decides whether this staff member manages this event.
+    const { data: row, error } = await context.supabase
+      .from("event_registrations")
+      .select("id, event_id, status, payment_status, amount_cents, refund_status")
+      .eq("id", data.registrationId)
+      .maybeSingle();
+    if (error || !row) throw new Error("Registration not found");
+
+    const { data: event } = await context.supabase
+      .from("events")
+      .select("starts_at")
+      .eq("id", row.event_id)
+      .maybeSingle();
+
+    const wasPaid = row.payment_status === "paid" && (row.amount_cents ?? 0) > 0;
+    const withinPolicy = event?.starts_at
+      ? new Date(event.starts_at).getTime() - Date.now() > REFUND_DEADLINE_HOURS * 3600_000
+      : true;
+    const shouldRefund = wasPaid && (data.refund ?? withinPolicy);
+
+    if (row.status !== "cancelled") {
+      const { error: cancelError } = await context.supabase
+        .from("event_registrations")
+        .update({ status: "cancelled" })
+        .eq("id", data.registrationId);
+      if (cancelError) throw new Error(cancelError.message);
+    }
+
+    let refund: { status: string; error?: string } = { status: "not_applicable" };
+    if (shouldRefund) {
+      const { refundRegistration } = await import("./refunds.server");
+      refund = await refundRegistration(data.registrationId);
+    } else if (wasPaid) {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      await supabaseAdmin
+        .from("event_registrations")
+        .update({ refund_status: "declined" })
+        .eq("id", data.registrationId);
+      refund = { status: "declined" };
+    }
+
+    const { sendCancellationNotice } = await import("./event-cancellation.server");
+    const email = await sendCancellationNotice(data.registrationId, { force: true });
+
+    return { ok: true, refund, email, refunded: shouldRefund };
+  });
+
+/** Retries a refund that failed, without re-sending the cancellation notice. */
+export const retryRegistrationRefund = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ registrationId: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const { data: row, error } = await context.supabase
+      .from("event_registrations")
+      .select("id")
+      .eq("id", data.registrationId)
+      .maybeSingle();
+    if (error || !row) throw new Error("Registration not found");
+
+    const { refundRegistration } = await import("./refunds.server");
+    return refundRegistration(data.registrationId);
   });

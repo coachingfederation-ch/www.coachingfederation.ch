@@ -1076,6 +1076,9 @@ export type Database = {
         Row: {
           amount_cents: number
           answers: Json
+          cancellation_error: string | null
+          cancellation_sent_at: string | null
+          cancellation_status: string
           confirmation_error: string | null
           confirmation_sent_at: string | null
           confirmation_sequence: number
@@ -1089,8 +1092,14 @@ export type Database = {
           id: string
           locale: string
           notes: string | null
+          payment_environment: string | null
           payment_status: Database["public"]["Enums"]["event_payment_status"]
+          refund_amount_cents: number
+          refund_error: string | null
+          refund_status: string
+          refunded_at: string | null
           status: Database["public"]["Enums"]["event_registration_status"]
+          stripe_refund_id: string | null
           stripe_session_id: string | null
           tier_id: string | null
           updated_at: string
@@ -1099,6 +1108,9 @@ export type Database = {
         Insert: {
           amount_cents?: number
           answers?: Json
+          cancellation_error?: string | null
+          cancellation_sent_at?: string | null
+          cancellation_status?: string
           confirmation_error?: string | null
           confirmation_sent_at?: string | null
           confirmation_sequence?: number
@@ -1112,8 +1124,14 @@ export type Database = {
           id?: string
           locale?: string
           notes?: string | null
+          payment_environment?: string | null
           payment_status?: Database["public"]["Enums"]["event_payment_status"]
+          refund_amount_cents?: number
+          refund_error?: string | null
+          refund_status?: string
+          refunded_at?: string | null
           status?: Database["public"]["Enums"]["event_registration_status"]
+          stripe_refund_id?: string | null
           stripe_session_id?: string | null
           tier_id?: string | null
           updated_at?: string
@@ -1122,6 +1140,9 @@ export type Database = {
         Update: {
           amount_cents?: number
           answers?: Json
+          cancellation_error?: string | null
+          cancellation_sent_at?: string | null
+          cancellation_status?: string
           confirmation_error?: string | null
           confirmation_sent_at?: string | null
           confirmation_sequence?: number
@@ -1135,8 +1156,14 @@ export type Database = {
           id?: string
           locale?: string
           notes?: string | null
+          payment_environment?: string | null
           payment_status?: Database["public"]["Enums"]["event_payment_status"]
+          refund_amount_cents?: number
+          refund_error?: string | null
+          refund_status?: string
+          refunded_at?: string | null
           status?: Database["public"]["Enums"]["event_registration_status"]
+          stripe_refund_id?: string | null
           stripe_session_id?: string | null
           tier_id?: string | null
           updated_at?: string
