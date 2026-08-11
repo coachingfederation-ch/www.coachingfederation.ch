@@ -10,7 +10,7 @@ import adPractice from "@/assets/ads/ad-practice.jpg";
 import adRetreats from "@/assets/ads/ad-retreats.jpg";
 import adMentoring from "@/assets/ads/ad-mentoring.jpg";
 import heroImg from "@/assets/hero-coaching.jpg";
-import leadershipImg from "@/assets/leadership-team.jpg";
+import leadershipImgAsset from "@/assets/leadership-team.jpg.asset.json";
 import { Mark, type MarkName } from "@/components/marks";
 import { SiteHeaderBar, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SponsorMarquee, type SponsorItem } from "@/components/home/SponsorMarquee";
