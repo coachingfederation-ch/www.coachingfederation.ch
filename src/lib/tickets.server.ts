@@ -281,3 +281,148 @@ export async function releaseCheckoutSession(sessionId: string) {
     .eq("stripe_session_id", sessionId)
     .eq("payment_status", "pending");
 }
+
+export type RegistrationInput = {
+  eventId: string;
+  slug: string;
+  locale: Locale;
+  fullName: string;
+  email: string;
+  notes: string | null;
+  tierId: string | null;
+  memberId: string | null;
+  answers: Record<string, string>;
+  environment: "sandbox" | "live";
+};
+
+export type RegistrationOutcome =
+  | { ok: true; kind: "free" }
+  | { ok: true; kind: "paid"; clientSecret: string }
+  | {
+      ok: false;
+      reason:
+        | "full"
+        | "closed"
+        | "duplicate"
+        | "tier_required"
+        | "tier_unavailable"
+        | "answers"
+        | "payment"
+        | "error";
+    };
+
+/** Maps the database guards to the stable reason codes the UI translates. */
+function failureReason(error: { code?: string; message?: string }): RegistrationOutcome {
+  if (error.code === "23505") return { ok: false, reason: "duplicate" };
+  const message = (error.message ?? "").toLowerCase();
+  if (message.includes("tier is full")) return { ok: false, reason: "full" };
+  if (message.includes("tier")) return { ok: false, reason: "tier_unavailable" };
+  if (message.includes("full") || message.includes("capacity"))
+    return { ok: false, reason: "full" };
+  if (
+    message.includes("closed") ||
+    message.includes("not open") ||
+    message.includes("registration")
+  )
+    return { ok: false, reason: "closed" };
+  return { ok: false, reason: "error" };
+}
+
+/**
+ * One registration, whichever client the caller owns (anonymous for guests,
+ * the visitor's own RLS-scoped client when signed in). Free tiers finish here;
+ * paid tiers get a 30-minute seat hold and a Stripe Checkout session created
+ * from the stored tier price.
+ */
+export async function submitRegistration(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  client: any,
+  input: RegistrationInput,
+  userId: string | null,
+): Promise<RegistrationOutcome> {
+  await releaseExpiredHolds(input.eventId);
+
+  const membership = await resolveMembership(userId, input.memberId);
+  const resolved = await resolveChargedTier(input.eventId, input.tierId, membership);
+  if ("error" in resolved) return { ok: false, reason: resolved.error };
+
+  const answers = await validateAnswers(input.eventId, input.answers);
+  if (!answers.ok) return { ok: false, reason: "answers" };
+
+  const tier = resolved.tier;
+  const paid = Boolean(tier && tier.price_cents > 0);
+  const holdExpiresAt = paid
+    ? new Date(Date.now() + HOLD_MINUTES * 60_000).toISOString()
+    : null;
+
+  const { data: inserted, error } = await client
+    .from("event_registrations")
+    .insert({
+      event_id: input.eventId,
+      user_id: userId,
+      email: input.email,
+      full_name: input.fullName,
+      notes: input.notes,
+      tier_id: tier?.id ?? null,
+      // The trigger overwrites amount and currency from the stored tier.
+      payment_status: paid ? "pending" : "not_required",
+      hold_expires_at: holdExpiresAt,
+      answers: answers.answers,
+    })
+    .select("id")
+    .maybeSingle();
+  if (error) return failureReason(error);
+  if (!inserted) return { ok: false, reason: "error" };
+
+  if (!paid || !tier) return { ok: true, kind: "free" };
+
+  try {
+    const { createStripeClient } = await import("./stripe.server");
+    const { SITE_URL, localizePath } = await import("@/i18n/config");
+    const stripe = createStripeClient(input.environment);
+    const returnUrl = `${SITE_URL}${localizePath(`/events/${input.slug}`, input.locale)}?checkout=return&session_id={CHECKOUT_SESSION_ID}`;
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      ui_mode: "embedded_page",
+      return_url: returnUrl,
+      customer_email: input.email,
+      expires_at: Math.floor(Date.now() / 1000) + HOLD_MINUTES * 60,
+      line_items: [
+        {
+          quantity: 1,
+          price_data: {
+            currency: tier.currency.toLowerCase(),
+            unit_amount: tier.price_cents,
+            product_data: { name: tier.name },
+          },
+        },
+      ],
+      payment_intent_data: { description: tier.name },
+      metadata: {
+        registrationId: inserted.id as string,
+        eventId: input.eventId,
+        tierId: tier.id,
+        ...(userId ? { userId } : {}),
+      },
+      managed_payments: { enabled: true },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any);
+
+    await supabaseAdmin
+      .from("event_registrations")
+      .update({ stripe_session_id: session.id })
+      .eq("id", inserted.id as string);
+
+    if (!session.client_secret) throw new Error("Stripe returned no client secret");
+    return { ok: true, kind: "paid", clientSecret: session.client_secret };
+  } catch (e) {
+    // The seat must not stay held behind a checkout that never opened.
+    await supabaseAdmin
+      .from("event_registrations")
+      .update({ payment_status: "expired", status: "cancelled" })
+      .eq("id", inserted.id as string);
+    console.error("Stripe checkout creation failed", e);
+    return { ok: false, reason: "payment" };
+  }
+}
