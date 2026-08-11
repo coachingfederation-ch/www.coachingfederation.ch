@@ -481,16 +481,21 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
                 const locked = tier.segment === "member" && membership !== "member";
                 const disabled = tier.isSoldOut || locked;
                 return (
-                  <label
+                  <div
                     key={tier.id}
                     className={
-                      "flex cursor-pointer items-start gap-3 rounded-xl border p-3 text-sm transition " +
+                      "rounded-xl border text-sm transition " +
                       (tierId === tier.id
                         ? "border-primary bg-primary/5"
-                        : "border-border/70 hover:border-primary/50") +
-                      (disabled ? " cursor-not-allowed opacity-60" : "")
+                        : "border-border/70")
                     }
                   >
+                    <label
+                      className={
+                        "flex items-start gap-3 p-3 " +
+                        (disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer")
+                      }
+                    >
                     <input
                       type="radio"
                       name="ticket-tier"
@@ -530,7 +535,20 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
                         ) : null}
                       </span>
                     </span>
-                  </label>
+                    </label>
+                    {/* The member-id unlock lives inside the member tier itself:
+                        the ask ("prove membership") and the reward (the member
+                        price) belong to the same decision. */}
+                    {locked && !tier.isSoldOut
+                      ? memberIdBlock(
+                          accountMembership === "not_member"
+                            ? t("events.detail.tickets.notMember")
+                            : t("events.detail.tickets.signedOutPrompt"),
+                          true,
+                          "border-t border-border/70 px-3 pb-3",
+                        )
+                      : null}
+                  </div>
                 );
               })}
             </div>
