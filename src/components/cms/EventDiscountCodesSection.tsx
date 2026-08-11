@@ -159,7 +159,9 @@ export function EventDiscountCodesSection({
     setMessage(null);
     try {
       const result = await deleteEventDiscountCode({ data: { id: draft.id } });
-      setMessage(result.deleted ? t("events.discounts.deleted") : t("events.discounts.archived"));
+      setMessage(
+        result.deleted ? t("events.discounts.deleted") : t("events.discounts.archivedDone"),
+      );
       await load();
     } catch (e) {
       setError(e instanceof Error ? e.message : t("events.discounts.saveError"));
