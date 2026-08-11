@@ -108,47 +108,6 @@ export default function EventDetailPage({
     retry: false,
   });
 
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [notes, setNotes] = useState("");
-  const [state, setState] = useState<RsvpState>({ kind: "idle" });
-
-  const rsvpEnabled =
-    event.registration_mode === "rsvp" &&
-    Boolean(event.registration_open) &&
-    !past &&
-    !event.is_full;
-  const guestsBlocked = !signedIn && event.guest_registration_allowed === false;
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setState({ kind: "saving" });
-    const payload = { eventId: event.id!, fullName, email, notes: notes || null };
-    const result = signedIn
-      ? await submitMemberRegistration({ data: payload })
-      : await submitGuestRegistration({ data: payload });
-    if (result.ok) {
-      setState({ kind: "done" });
-      trackGoal("Event Registration", {
-        event_slug: event.slug ?? "",
-        member: signedIn,
-      });
-      // refetch() ignores `enabled`, so only call it for signed-in visitors —
-      // otherwise the protected server fn runs without a bearer token and 401s.
-      if (signedIn) void mine.refetch();
-    } else {
-      setState({ kind: "error", reason: result.reason });
-    }
-  };
-
-  const cancel = async () => {
-    const id = mine.data?.id;
-    if (!id) return;
-    await cancelMyRegistration({ data: { registrationId: id } });
-    setState({ kind: "idle" });
-    void mine.refetch();
-  };
-
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <header className="bg-hero text-hero-foreground">
