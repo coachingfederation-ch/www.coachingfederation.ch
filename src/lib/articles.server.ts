@@ -106,6 +106,7 @@ export type ArticleContentPatch = {
   image_credit_name: string | null;
   image_credit_url: string | null;
   image_source: string | null;
+  hero_marks: unknown;
 };
 
 export async function saveArticleContent(client: Client, id: string, patch: ArticleContentPatch) {

@@ -10,6 +10,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertStaff as assertStaffRole } from "./authz";
+import { HERO_MARK_LIMIT } from "./hero-design";
 import type { AuthedContext } from "./authz";
 
 /** True when the caller holds the `admin` grant (read through their own RLS). */
@@ -33,6 +34,16 @@ async function assertStaff(context: AuthedContext) {
 
 const idSchema = z.object({ id: z.string().uuid() });
 
+/** Hand-placed hero brush marks (percentage geometry). */
+const heroMarkSchema = z.object({
+  id: z.string().max(80),
+  name: z.string().max(40),
+  xPct: z.number(),
+  yPct: z.number(),
+  sizePct: z.number(),
+  color: z.string().max(20),
+});
+
 const contentSchema = idSchema.extend({
   title: z.string().max(300),
   excerpt: z.string().max(1000),
@@ -44,6 +55,7 @@ const contentSchema = idSchema.extend({
   image_credit_name: z.string().max(200).nullable(),
   image_credit_url: z.string().max(2000).nullable(),
   image_source: z.string().max(40).nullable(),
+  hero_marks: z.array(heroMarkSchema).max(HERO_MARK_LIMIT).nullable(),
 });
 
 const transitionSchema = z.union([

@@ -150,6 +150,7 @@ export type Database = {
           excerpt: string
           featured_image_url: string | null
           first_published_at: string | null
+          hero_marks: Json | null
           id: string
           image_credit_name: string | null
           image_credit_url: string | null
@@ -173,6 +174,7 @@ export type Database = {
           excerpt?: string
           featured_image_url?: string | null
           first_published_at?: string | null
+          hero_marks?: Json | null
           id?: string
           image_credit_name?: string | null
           image_credit_url?: string | null
@@ -196,6 +198,7 @@ export type Database = {
           excerpt?: string
           featured_image_url?: string | null
           first_published_at?: string | null
+          hero_marks?: Json | null
           id?: string
           image_credit_name?: string | null
           image_credit_url?: string | null
@@ -1119,6 +1122,7 @@ export type Database = {
           description: string | null
           ends_at: string | null
           guest_registration_allowed: boolean
+          hero_marks: Json | null
           id: string
           image_credit_name: string | null
           image_credit_url: string | null
@@ -1155,6 +1159,7 @@ export type Database = {
           description?: string | null
           ends_at?: string | null
           guest_registration_allowed?: boolean
+          hero_marks?: Json | null
           id?: string
           image_credit_name?: string | null
           image_credit_url?: string | null
@@ -1191,6 +1196,7 @@ export type Database = {
           description?: string | null
           ends_at?: string | null
           guest_registration_allowed?: boolean
+          hero_marks?: Json | null
           id?: string
           image_credit_name?: string | null
           image_credit_url?: string | null
@@ -2746,6 +2752,7 @@ export type Database = {
           description: string | null
           ends_at: string | null
           guest_registration_allowed: boolean | null
+          hero_marks: Json | null
           id: string | null
           image_credit_name: string | null
           image_credit_url: string | null

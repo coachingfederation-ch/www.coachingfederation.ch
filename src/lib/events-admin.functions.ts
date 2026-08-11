@@ -11,12 +11,13 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertOrganizer } from "./authz";
 import { MAX_EVENT_HOSTS } from "./event-hosts";
+import { HERO_MARK_LIMIT } from "./hero-design";
 import { expandRecurrence, occurrenceSlug, RECURRENCE_FREQUENCIES } from "./recurrence";
 
 const LIST_COLUMNS =
   "id, series_id, slug, title, summary, language, status, starts_at, ends_at, timezone, location_mode, venue_name, city, capacity, is_featured, category_id, region_id, organizer_id, updated_at";
 
-const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, published_at, content_updated_at`;
+const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, published_at, content_updated_at, hero_marks`;
 
 const recurrenceRule = z.object({
   frequency: z.enum(RECURRENCE_FREQUENCIES),
@@ -28,6 +29,15 @@ const recurrenceRule = z.object({
     .regex(/^\d{4}-\d{2}-\d{2}$/)
     .nullable()
     .optional(),
+});
+
+const heroMarkSchema = z.object({
+  id: z.string().max(80),
+  name: z.string().max(40),
+  xPct: z.number(),
+  yPct: z.number(),
+  sizePct: z.number(),
+  color: z.string().max(20),
 });
 
 const eventInput = z.object({
@@ -67,6 +77,8 @@ const eventInput = z.object({
   // Community events name the local community that runs them; other
   // categories use the region facet instead.
   community_id: z.string().uuid().nullable().optional(),
+  // Hand-placed brush marks for the hero (percentage geometry).
+  hero_marks: z.array(heroMarkSchema).max(HERO_MARK_LIMIT).nullable().optional(),
 });
 
 /** Empty strings from the form mean "unset", not "the empty string". */
@@ -88,6 +100,7 @@ function normalize(input: z.infer<typeof eventInput>) {
     category_id: input.category_id ?? null,
     region_id: input.region_id ?? null,
     community_id: input.community_id ?? null,
+    hero_marks: input.hero_marks ?? null,
     registration_opens_at: blankToNull(input.registration_opens_at),
     registration_closes_at: blankToNull(input.registration_closes_at),
   };

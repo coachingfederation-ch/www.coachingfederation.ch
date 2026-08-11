@@ -54,6 +54,8 @@ export interface ArticleRow {
   image_credit_name: string | null;
   image_credit_url: string | null;
   image_source: string | null;
+  /** Hand-placed hero brush marks (percentage geometry), null when unset. */
+  hero_marks: unknown;
   is_featured: boolean;
   updated_at: string;
 }
