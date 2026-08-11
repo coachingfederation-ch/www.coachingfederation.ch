@@ -332,8 +332,12 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
 
   /** Sign-in prompt plus ICF member id entry, shared by the members-only gate
    *  and the member-pricing hint on ticketed events. */
-  const memberIdBlock = (prompt: string, withSignInLink = true) => (
-    <div className="mt-4 rounded-xl bg-secondary px-3 py-3">
+  const memberIdBlock = (
+    prompt: string,
+    withSignInLink = true,
+    className = "mt-4 rounded-xl bg-secondary px-3 py-3",
+  ) => (
+    <div className={className}>
       <p className="text-xs leading-relaxed text-muted-foreground">
         {prompt}{" "}
         {withSignInLink && !signedIn ? (
