@@ -115,6 +115,7 @@ function EditorPage() {
             image_credit_name: article.image_credit_name,
             image_credit_url: article.image_credit_url,
             image_source: article.image_source,
+            hero_marks: (article.hero_marks as never) ?? null,
           },
         });
         setSaveState("saved");
@@ -137,6 +138,7 @@ function EditorPage() {
     article?.image_credit_name,
     article?.image_credit_url,
     article?.image_source,
+    article?.hero_marks,
   ]);
 
   const update = (patch: Partial<Article>) => setArticle((a) => (a ? { ...a, ...patch } : a));
