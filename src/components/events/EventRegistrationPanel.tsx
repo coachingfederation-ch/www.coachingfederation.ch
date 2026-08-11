@@ -219,6 +219,13 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Four registration modes: no registration, public RSVP, members-only RSVP
+  // (with an optional "allow without a membership" flag) and ticketed RSVP.
+  const mode = event.registration_mode ?? "none";
+  const rsvpMode = mode !== "none";
+  const ticketMode = mode === "rsvp_tickets";
+  const membersOnly = mode === "rsvp_members" && event.guest_registration_allowed === false;
+
   // A tier only applies on a ticketed event, even if tiers linger from an
   // earlier configuration.
   const selected: PublicTier | null =
@@ -237,12 +244,6 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
         )
       : null;
 
-  // Four registration modes: no registration, public RSVP, members-only RSVP
-  // (with an optional "allow without a membership" flag) and ticketed RSVP.
-  const mode = event.registration_mode ?? "none";
-  const rsvpMode = mode !== "none";
-  const ticketMode = mode === "rsvp_tickets";
-  const membersOnly = mode === "rsvp_members" && event.guest_registration_allowed === false;
   const showTiers = ticketMode && hasTiers;
   const membersGate = membersOnly && membership !== "member";
   const needsPayment = Boolean(selected && selected.priceCents > 0);
@@ -268,7 +269,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
       fullName,
       email,
       notes: notes || null,
-      tierId,
+      tierId: ticketMode ? tierId : null,
       memberId: memberIdState === "confirmed" ? memberId.trim() : null,
       answers,
       environment: paymentsConfigured() ? getStripeEnvironment() : ("sandbox" as const),
