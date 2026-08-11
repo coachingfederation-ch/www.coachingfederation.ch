@@ -888,6 +888,12 @@
     },
     "fieldAllowNonMembers": "Autoriser l'inscription sans adhésion",
     "colConfirmation": "E-mail de confirmation",
+    "filterAll": "Toutes",
+    "filterStatus": "Statut",
+    "filterPayment": "Paiement",
+    "filterConfirmation": "E-mail de confirmation",
+    "noMatchingAttendees": "Aucune inscription ne correspond à ces filtres.",
+    "resendPendingHint": "Disponible une fois le paiement confirmé.",
     "resendConfirmation": "Renvoyer",
     "resendFailed": "L’e-mail de confirmation n’a pas pu être envoyé. Veuillez réessayer.",
     "confirmationStatus": {
