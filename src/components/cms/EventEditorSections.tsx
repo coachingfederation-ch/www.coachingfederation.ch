@@ -857,7 +857,7 @@ export function EventPublishingSection({
                     </tr>
                     {open ? (
                       <tr className="border-t border-border/60 bg-secondary/30">
-                        <td colSpan={6} className="px-4 py-4">
+                        <td colSpan={5} className="px-4 py-4">
                           <dl className="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
                             <DetailItem label={t("events.colName")} value={r.full_name} />
                             <DetailItem label={t("events.colEmail")} value={r.email} />
