@@ -18,6 +18,7 @@ export function EventHeroSurface({
   pills,
   back,
   credit,
+  titleUnderline,
   children,
 }: {
   title: string;
@@ -28,6 +29,8 @@ export function EventHeroSurface({
   /** Back-to-events affordance; a real link on the public page. */
   back?: React.ReactNode;
   credit?: React.ReactNode;
+  /** Automatic brush underline, rendered under the title when present. */
+  titleUnderline?: React.ReactNode;
   /** Mark layer (automatic or hand-placed). */
   children?: React.ReactNode;
 }) {
@@ -58,6 +61,7 @@ export function EventHeroSurface({
         {back}
         <div className="relative mt-6 max-w-3xl">
           <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-5xl">{title}</h1>
+          {titleUnderline}
         </div>
         {summary ? (
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-hero-foreground/85">
