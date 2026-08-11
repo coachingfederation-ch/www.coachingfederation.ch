@@ -65,7 +65,8 @@
       "tier_unavailable": "Dieses Ticket steht dir nicht zur Verfügung.",
       "answers": "Bitte beantworte alle Pflichtfragen.",
       "payment": "Die Zahlung konnte nicht gestartet werden. Bitte versuche es erneut.",
-      "members_only": "Dieser Event steht nur aktiven ICF-Mitgliedern offen."
+      "members_only": "Dieser Event steht nur aktiven ICF-Mitgliedern offen.",
+      "discount": "Dieser Rabattcode kann nicht mehr verwendet werden. Bitte entfernen Sie ihn und versuchen Sie es erneut."
     },
     "notFoundTitle": "Event nicht gefunden",
     "notFoundBody": "Dieses Event wurde möglicherweise entfernt oder der Link ist ungültig.",
@@ -109,7 +110,21 @@
       "memberIdChecking": "Wird geprüft…",
       "memberIdConfirmed": "Mitgliedschaft bestätigt — Mitgliederpreis angewendet.",
       "memberIdFailed": "Wir konnten diese Mitgliedsnummer nicht bestätigen. Bitte prüfen Sie sie und versuchen Sie es erneut.",
-      "cancelPaidNote": "Dies ist ein bezahltes Ticket. Schreiben Sie an die Geschäftsstelle, um es zu stornieren — wir bestätigen Stornierung und allfällige Rückerstattung per E-Mail."
+      "cancelPaidNote": "Dies ist ein bezahltes Ticket. Schreiben Sie an die Geschäftsstelle, um es zu stornieren — wir bestätigen Stornierung und allfällige Rückerstattung per E-Mail.",
+      "discountLabel": "Rabattcode",
+      "discountPlaceholder": "Code eingeben",
+      "discountApply": "Anwenden",
+      "discountRemove": "Entfernen",
+      "discountChecking": "Wird geprüft…",
+      "discountApplied": "Rabatt angewendet — Sie sparen {amount}.",
+      "discountError": {
+        "invalid": "Diesen Code kennen wir nicht.",
+        "inactive": "Dieser Code ist derzeit nicht verfügbar.",
+        "expired": "Dieser Code ist abgelaufen oder noch nicht aktiv.",
+        "exhausted": "Dieser Code wurde bereits vollständig eingelöst.",
+        "tier": "Dieser Code gilt nicht für dieses Ticket.",
+        "member_only": "Dieser Code gilt für aktive ICF-Mitglieder. Bitte melden Sie sich an oder bestätigen Sie Ihre Mitgliedsnummer."
+      }
     },
     "membersOnlyPrompt": "Mitglieder können sich für diesen Event anmelden. Melden Sie sich mit Ihrem verknüpften Konto an oder geben Sie Ihre ICF-Mitgliedsnummer ein."
   },

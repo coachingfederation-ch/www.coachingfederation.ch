@@ -65,7 +65,8 @@
       "tier_unavailable": "Ce billet n'est pas disponible pour vous.",
       "answers": "Merci de répondre à toutes les questions obligatoires.",
       "payment": "Impossible de démarrer le paiement. Veuillez réessayer.",
-      "members_only": "Cet événement est réservé aux membres ICF actifs."
+      "members_only": "Cet événement est réservé aux membres ICF actifs.",
+      "discount": "Ce code de réduction n'est plus utilisable. Retirez-le et réessayez."
     },
     "notFoundTitle": "Événement introuvable",
     "notFoundBody": "Cet événement a peut-être été dépublié ou le lien est incorrect.",
@@ -109,7 +110,21 @@
       "memberIdChecking": "Vérification…",
       "memberIdConfirmed": "Adhésion confirmée — tarif membre appliqué.",
       "memberIdFailed": "Nous n'avons pas pu confirmer ce numéro de membre. Veuillez le vérifier et réessayer.",
-      "cancelPaidNote": "Il s’agit d’un billet payant. Écrivez au secrétariat pour l’annuler — nous confirmerons l’annulation et tout remboursement par e-mail."
+      "cancelPaidNote": "Il s’agit d’un billet payant. Écrivez au secrétariat pour l’annuler — nous confirmerons l’annulation et tout remboursement par e-mail.",
+      "discountLabel": "Code de réduction",
+      "discountPlaceholder": "Saisissez votre code",
+      "discountApply": "Appliquer",
+      "discountRemove": "Retirer",
+      "discountChecking": "Vérification…",
+      "discountApplied": "Réduction appliquée — vous économisez {amount}.",
+      "discountError": {
+        "invalid": "Nous ne reconnaissons pas ce code.",
+        "inactive": "Ce code n'est pas disponible pour le moment.",
+        "expired": "Ce code a expiré ou n'est pas encore actif.",
+        "exhausted": "Ce code a déjà été entièrement utilisé.",
+        "tier": "Ce code ne s'applique pas à ce billet.",
+        "member_only": "Ce code est réservé aux membres ICF actifs. Connectez-vous ou confirmez votre numéro de membre."
+      }
     },
     "membersOnlyPrompt": "Les membres peuvent s'inscrire à cet événement. Connectez-vous avec votre compte lié ou saisissez votre numéro de membre ICF."
   },

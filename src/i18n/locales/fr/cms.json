@@ -815,7 +815,8 @@
       "location": "Lieu",
       "image": "Image de couverture",
       "registration": "Inscription",
-      "tickets": "Billets"
+      "tickets": "Billets",
+      "discounts": "Codes de réduction"
     },
     "hosts": {
       "none": "Aucun hôte sélectionné pour le moment.",
@@ -927,6 +928,38 @@
       "keep": "Conserver l’inscription",
       "confirm": "Annuler l’inscription",
       "working": "Annulation…"
+    },
+    "discounts": {
+      "sectionHint": "Les codes s'appliquent à une catégorie de billet au paiement. Le prix final est toujours recalculé côté serveur.",
+      "none": "Aucun code de réduction pour le moment.",
+      "code": "Code",
+      "type": "Type de réduction",
+      "typePercentage": "Pourcentage",
+      "typeFixed": "Montant fixe",
+      "valuePercent": "Réduction en pourcentage",
+      "valueAmount": "Réduction en CHF",
+      "maxUses": "Utilisations maximales (vide = illimité)",
+      "startsOn": "Début (facultatif)",
+      "expiresOn": "Expiration (facultatif)",
+      "note": "Note interne (jamais visible publiquement)",
+      "tiers": "S'applique à",
+      "tiersHint": "Ne rien cocher pour autoriser toutes les catégories de billets.",
+      "active": "Actif",
+      "memberOnly": "Membres uniquement",
+      "archived": "Archivé",
+      "used": "Utilisé",
+      "statusActive": "Actif",
+      "statusInactive": "Inactif",
+      "statusArchived": "Archivé",
+      "add": "Ajouter un code",
+      "save": "Enregistrer le code",
+      "remove": "Supprimer",
+      "archive": "Archiver",
+      "saved": "Code de réduction enregistré.",
+      "deleted": "Code de réduction supprimé.",
+      "saveError": "Le code de réduction n'a pas pu être enregistré.",
+      "loadError": "Les codes de réduction n'ont pas pu être chargés.",
+      "archivedDone": "Code archivé — il a déjà été utilisé."
     }
   },
   "eventTranslations": {

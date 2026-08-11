@@ -815,7 +815,8 @@
       "location": "Location",
       "image": "Cover image",
       "registration": "Registration",
-      "tickets": "Tickets"
+      "tickets": "Tickets",
+      "discounts": "Discount codes"
     },
     "hosts": {
       "none": "No hosts selected yet.",
@@ -927,6 +928,38 @@
       "keep": "Keep the registration",
       "confirm": "Cancel registration",
       "working": "Cancelling…"
+    },
+    "discounts": {
+      "sectionHint": "Codes apply to one ticket tier at checkout. The final price is always recalculated on the server.",
+      "none": "No discount codes yet.",
+      "code": "Code",
+      "type": "Discount type",
+      "typePercentage": "Percentage",
+      "typeFixed": "Fixed amount",
+      "valuePercent": "Percentage off",
+      "valueAmount": "Amount off (CHF)",
+      "maxUses": "Maximum uses (blank = unlimited)",
+      "startsOn": "Starts on (optional)",
+      "expiresOn": "Expires on (optional)",
+      "note": "Internal note (never shown publicly)",
+      "tiers": "Applies to",
+      "tiersHint": "Leave all unchecked to allow every ticket tier.",
+      "active": "Active",
+      "memberOnly": "Members only",
+      "archived": "Archived",
+      "used": "Used",
+      "statusActive": "Active",
+      "statusInactive": "Inactive",
+      "statusArchived": "Archived",
+      "add": "Add discount code",
+      "save": "Save code",
+      "remove": "Remove",
+      "archive": "Archive",
+      "saved": "Discount code saved.",
+      "deleted": "Discount code deleted.",
+      "saveError": "The discount code could not be saved.",
+      "loadError": "Discount codes could not be loaded.",
+      "archivedDone": "Discount code archived — it was already used."
     }
   },
   "eventTranslations": {

@@ -35,6 +35,34 @@ is set or "now" falls inside it (`events_public` view).
 Tier names and descriptions are translated to DE/FR/IT on save
 (`tier-translations.functions.ts`) and stay editable afterwards.
 
+## Discount codes
+
+Organizers manage codes per event in the editor (`EventDiscountCodesSection`).
+A code carries a type (`percentage` or `fixed` CHF), a value, an active flag,
+optional start/expiry dates, an optional maximum number of uses, optional
+applicable tiers, an optional members-only flag and an internal note that is
+never exposed publicly. A code that has already been used is archived instead
+of deleted.
+
+On the public panel the field appears only for a priced tier. Applying it calls
+`validateDiscountCode` (guest, rate limited) or `validateDiscountCodeAsMember`
+(signed in) and shows the new total or a stable reason. Changing the tier or
+the membership evidence drops the code, and only one code applies per
+registration.
+
+Price resolution happens three times and always server-side: the validation
+endpoint for the preview, `submitRegistration` for the Stripe amount, and
+`tg_event_registration_guard`, which recomputes the discount from the stored
+code before the row is accepted and writes the snapshot
+(`discount_code_text`, `discount_type`, `discount_value`,
+`discount_amount_cents`). A discount can never take a price below zero, and a
+ticket reduced to zero finishes on the free path without Stripe.
+
+A use counts as a confirmed registration (free, or paid after settlement) plus
+live 30-minute checkout holds, so a limited code cannot be oversold while
+someone pays and an abandoned checkout consumes nothing. Known limitation: a
+use is **not** returned after a cancellation or refund.
+
 ## Registration flow
 
 ```text

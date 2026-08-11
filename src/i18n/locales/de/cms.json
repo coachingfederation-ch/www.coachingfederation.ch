@@ -815,7 +815,8 @@
       "location": "Ort",
       "image": "Titelbild",
       "registration": "Anmeldung",
-      "tickets": "Tickets"
+      "tickets": "Tickets",
+      "discounts": "Rabattcodes"
     },
     "hosts": {
       "none": "Noch keine Gastgeber ausgewählt.",
@@ -927,6 +928,38 @@
       "keep": "Anmeldung behalten",
       "confirm": "Anmeldung stornieren",
       "working": "Wird storniert…"
+    },
+    "discounts": {
+      "sectionHint": "Codes gelten beim Bezahlen für eine Ticketkategorie. Der Endpreis wird immer auf dem Server neu berechnet.",
+      "none": "Noch keine Rabattcodes.",
+      "code": "Code",
+      "type": "Rabattart",
+      "typePercentage": "Prozentual",
+      "typeFixed": "Fester Betrag",
+      "valuePercent": "Rabatt in Prozent",
+      "valueAmount": "Rabatt in CHF",
+      "maxUses": "Maximale Einlösungen (leer = unbegrenzt)",
+      "startsOn": "Beginnt am (optional)",
+      "expiresOn": "Läuft ab am (optional)",
+      "note": "Interne Notiz (nie öffentlich sichtbar)",
+      "tiers": "Gilt für",
+      "tiersHint": "Nichts auswählen, damit der Code für alle Ticketkategorien gilt.",
+      "active": "Aktiv",
+      "memberOnly": "Nur für Mitglieder",
+      "archived": "Archiviert",
+      "used": "Eingelöst",
+      "statusActive": "Aktiv",
+      "statusInactive": "Inaktiv",
+      "statusArchived": "Archiviert",
+      "add": "Rabattcode hinzufügen",
+      "save": "Code speichern",
+      "remove": "Entfernen",
+      "archive": "Archivieren",
+      "saved": "Rabattcode gespeichert.",
+      "deleted": "Rabattcode gelöscht.",
+      "saveError": "Der Rabattcode konnte nicht gespeichert werden.",
+      "loadError": "Rabattcodes konnten nicht geladen werden.",
+      "archivedDone": "Rabattcode archiviert — er wurde bereits eingelöst."
     }
   },
   "eventTranslations": {

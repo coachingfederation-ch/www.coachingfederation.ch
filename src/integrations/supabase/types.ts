@@ -953,6 +953,78 @@ export type Database = {
         }
         Relationships: []
       }
+      event_discount_codes: {
+        Row: {
+          code: string
+          created_at: string
+          created_by: string | null
+          discount_type: string
+          discount_value: number
+          event_id: string
+          expires_at: string | null
+          id: string
+          internal_note: string | null
+          is_active: boolean
+          is_archived: boolean
+          max_uses: number | null
+          member_only: boolean
+          starts_at: string | null
+          tier_ids: string[]
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          created_by?: string | null
+          discount_type: string
+          discount_value: number
+          event_id: string
+          expires_at?: string | null
+          id?: string
+          internal_note?: string | null
+          is_active?: boolean
+          is_archived?: boolean
+          max_uses?: number | null
+          member_only?: boolean
+          starts_at?: string | null
+          tier_ids?: string[]
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          discount_type?: string
+          discount_value?: number
+          event_id?: string
+          expires_at?: string | null
+          id?: string
+          internal_note?: string | null
+          is_active?: boolean
+          is_archived?: boolean
+          max_uses?: number | null
+          member_only?: boolean
+          starts_at?: string | null
+          tier_ids?: string[]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_discount_codes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_discount_codes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_hosts: {
         Row: {
           created_at: string
@@ -1085,6 +1157,11 @@ export type Database = {
           confirmation_status: string
           created_at: string
           currency: string
+          discount_amount_cents: number
+          discount_code_id: string | null
+          discount_code_text: string | null
+          discount_type: string | null
+          discount_value: number | null
           email: string
           event_id: string
           full_name: string
@@ -1117,6 +1194,11 @@ export type Database = {
           confirmation_status?: string
           created_at?: string
           currency?: string
+          discount_amount_cents?: number
+          discount_code_id?: string | null
+          discount_code_text?: string | null
+          discount_type?: string | null
+          discount_value?: number | null
           email: string
           event_id: string
           full_name: string
@@ -1149,6 +1231,11 @@ export type Database = {
           confirmation_status?: string
           created_at?: string
           currency?: string
+          discount_amount_cents?: number
+          discount_code_id?: string | null
+          discount_code_text?: string | null
+          discount_type?: string | null
+          discount_value?: number | null
           email?: string
           event_id?: string
           full_name?: string
@@ -1170,6 +1257,13 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "event_registrations_discount_code_id_fkey"
+            columns: ["discount_code_id"]
+            isOneToOne: false
+            referencedRelation: "event_discount_codes"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "event_registrations_event_id_fkey"
             columns: ["event_id"]
