@@ -221,7 +221,7 @@ export const listEventRegistrations = createServerFn({ method: "POST" })
     const { data: rows, error } = await context.supabase
       .from("event_registrations")
       .select(
-        "id, full_name, email, status, notes, created_at, user_id, tier_id, payment_status, amount_cents, currency, answers, locale, confirmation_status, confirmation_sent_at, confirmation_error, cancellation_status, cancellation_error, refund_status, refund_amount_cents, refund_error, refunded_at",
+        "id, full_name, email, status, notes, created_at, user_id, tier_id, payment_status, amount_cents, currency, answers, locale, confirmation_status, confirmation_sent_at, confirmation_error, cancellation_status, cancellation_error, refund_status, refund_amount_cents, refund_error, refunded_at, checked_in_at, created_by_staff",
       )
       .eq("event_id", data.eventId)
       .order("created_at", { ascending: true });
