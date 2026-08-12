@@ -680,3 +680,105 @@ export const retryRegistrationRefund = createServerFn({ method: "POST" })
     const { refundRegistration } = await import("./refunds.server");
     return refundRegistration(data.registrationId);
   });
+
+/**
+ * Attendee CSV for one event.
+ *
+ * The event read goes through the caller's own client, so RLS decides whether
+ * this person manages this event; only then does the export read the wider
+ * column set through the trusted client.
+ */
+export const exportEventRegistrations = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const { data: event, error } = await context.supabase
+      .from("events")
+      .select("id")
+      .eq("id", data.eventId)
+      .maybeSingle();
+    if (error || !event) throw new Error("Event not found");
+
+    const { buildRegistrationsCsv } = await import("./registrations-export.server");
+    return buildRegistrationsCsv(data.eventId);
+  });
+
+/**
+ * Staff-created registration.
+ *
+ * Comped seats only: staff may add someone to the list, never take money on
+ * their behalf. The row is written with the trusted client because
+ * `payment_status` and `created_by_staff` are server-owned, and the seat is
+ * marked so the attendee list and the CSV show how it came to exist.
+ */
+export const createStaffRegistration = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        eventId: z.string().uuid(),
+        fullName: z.string().trim().min(2).max(120),
+        email: z.string().trim().email().max(200),
+        tierId: z.string().uuid().nullable().optional(),
+        locale: z.enum(["en", "de", "fr", "it"]).default("en"),
+        notes: z.string().trim().max(500).nullable().optional(),
+        sendConfirmation: z.boolean().default(true),
+      })
+      .parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+
+    const { data: event, error } = await context.supabase
+      .from("events")
+      .select("id, registration_mode")
+      .eq("id", data.eventId)
+      .maybeSingle();
+    if (error || !event) throw new Error("Event not found");
+    if (event.registration_mode === "none") {
+      throw new Error("This event does not take registrations");
+    }
+
+    const email = data.email.toLowerCase();
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: existing } = await supabaseAdmin
+      .from("event_registrations")
+      .select("id, status")
+      .eq("event_id", data.eventId)
+      .eq("email", email)
+      .maybeSingle();
+    if (existing && existing.status === "confirmed") {
+      return { ok: false as const, reason: "already_registered" as const, id: existing.id };
+    }
+
+    const { data: inserted, error: insertError } = await supabaseAdmin
+      .from("event_registrations")
+      .insert({
+        event_id: data.eventId,
+        tier_id: event.registration_mode === "rsvp_tickets" ? (data.tierId ?? null) : null,
+        full_name: data.fullName,
+        email,
+        locale: data.locale,
+        status: "confirmed",
+        // Comped: the guard leaves this alone for a trusted caller, so the
+        // seat is never priced or held for payment.
+        payment_status: "not_required",
+        amount_cents: 0,
+        notes: data.notes ?? null,
+        created_by_staff: true,
+      })
+      .select("id")
+      .single();
+    if (insertError || !inserted) throw new Error(insertError?.message ?? "Could not add attendee");
+
+    let confirmation: { sent: boolean } = { sent: false };
+    if (data.sendConfirmation) {
+      const { sendRegistrationConfirmation } = await import("./event-confirmation.server");
+      const result = await sendRegistrationConfirmation(inserted.id, { force: true });
+      confirmation = { sent: Boolean(result?.sent) };
+    }
+
+    return { ok: true as const, id: inserted.id, confirmation };
+  });
