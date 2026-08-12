@@ -226,20 +226,10 @@ export async function sendRegistrationConfirmation(
     const answers: { label: string; value: string }[] = [];
     const submitted = registration.answers ?? {};
     if (Object.keys(submitted).length > 0) {
-      const { data: fields } = await supabaseAdmin
-        .from("event_registration_fields")
-        .select("field_key, label, label_de, label_fr, label_it, field_type, sort_order")
-        .eq("event_id", eventRow.id)
-        .order("sort_order", { ascending: true });
-      for (const field of fields ?? []) {
-        const raw = submitted[field.field_key];
-        if (raw === undefined || raw === "") continue;
-        const label =
-          localisedText(field as unknown as Record<string, string | null>, "label", locale) ??
-          field.field_key;
-        const value =
-          field.field_type === "checkbox" ? (raw === "true" ? copy.yes : copy.no) : raw;
-        answers.push({ label, value });
+      const { activeRegistrationFormId, labelAnswers } = await import("./event-forms.server");
+      const formId = await activeRegistrationFormId(eventRow.id);
+      if (formId) {
+        answers.push(...(await labelAnswers(formId, submitted, locale, copy.yes, copy.no)));
       }
     }
 
