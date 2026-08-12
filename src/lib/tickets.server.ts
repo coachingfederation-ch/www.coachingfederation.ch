@@ -307,6 +307,8 @@ export type RegistrationInput = {
   memberId: string | null;
   /** Optional discount code typed by the visitor; validated server-side. */
   discountCode: string | null;
+  /** Single-use waitlist invitation token, when the visitor arrived from one. */
+  inviteToken: string | null;
   answers: Record<string, string>;
   environment: "sandbox" | "live";
 };
@@ -393,6 +395,17 @@ export async function submitRegistration(
 
   const tier = resolved.tier;
 
+  // A live waitlist invitation lets this one email past the capacity check.
+  // The email is taken from the invitation, never from the form, so a shared
+  // link cannot seat somebody else.
+  const invite = input.inviteToken
+    ? await (async () => {
+        const { resolveInviteToken } = await import("./waitlist.server");
+        return resolveInviteToken(input.eventId, input.inviteToken!);
+      })()
+    : null;
+  const email = invite ? invite.email : input.email;
+
   // A discount only exists on a priced ticket. The verdict here decides the
   // Stripe amount; the database trigger recomputes the very same figure from
   // the stored code before the row is accepted.
@@ -413,7 +426,8 @@ export async function submitRegistration(
   // A members-only registration is written through the trusted server client,
   // because membership may rest on a member number the database cannot verify.
   // The same applies to a member-only discount code.
-  const writer = membersOnly || discountRecord?.member_only ? supabaseAdmin : client;
+  const writer =
+    membersOnly || discountRecord?.member_only || invite ? supabaseAdmin : client;
   // The id is generated here rather than read back: anonymous guests hold an
   // insert-only grant, so a RETURNING clause would fail with a permission error.
   const registrationId = crypto.randomUUID();
@@ -421,7 +435,7 @@ export async function submitRegistration(
     id: registrationId,
     event_id: input.eventId,
     user_id: userId,
-    email: input.email,
+    email,
     full_name: input.fullName,
     notes: input.notes,
     // Stored so the confirmation — which may be sent later by the payment
@@ -435,6 +449,11 @@ export async function submitRegistration(
     answers: answers.answers,
   });
   if (error) return failureReason(error);
+
+  if (invite) {
+    const { markInviteConverted } = await import("./waitlist.server");
+    await markInviteConverted(invite.entryId, registrationId);
+  }
 
   if (!paid || !tier) {
     const { triggerRegistrationConfirmation } = await import("./event-confirmation.server");
