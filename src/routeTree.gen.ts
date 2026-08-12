@@ -88,6 +88,7 @@ import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/publi
 import { Route as ApiPublicTicketQrTokenRouteImport } from './routes/api/public/ticket-qr.$token'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as StaffManageEventsIdCheckInRouteImport } from './routes/_staff/manage.events.$id_.check-in'
+import { Route as StaffManageEventsIdReportingRouteImport } from './routes/_staff/manage.events.$id_.reporting'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -490,6 +491,12 @@ const StaffManageEventsIdCheckInRoute =
     path: '/manage/events/$id/check-in',
     getParentRoute: () => StaffRouteRoute,
   } as any)
+const StaffManageEventsIdReportingRoute =
+  StaffManageEventsIdReportingRouteImport.update({
+    id: '/manage/events/$id_/reporting',
+    path: '/manage/events/$id/reporting',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -569,6 +576,7 @@ export interface FileRoutesByFullPath {
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events/': typeof StaffManageEventsIndexRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
+  '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -644,6 +652,7 @@ export interface FileRoutesByTo {
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events': typeof StaffManageEventsIndexRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
+  '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -726,6 +735,7 @@ export interface FileRoutesById {
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/_staff/manage/events/': typeof StaffManageEventsIndexRoute
   '/_staff/manage/events/$id_/check-in': typeof StaffManageEventsIdCheckInRoute
+  '/_staff/manage/events/$id_/reporting': typeof StaffManageEventsIdReportingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -807,6 +817,7 @@ export interface FileRouteTypes {
     | '/lovable/email/transactional/preview'
     | '/manage/events/'
     | '/manage/events/$id/check-in'
+    | '/manage/events/$id/reporting'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -882,6 +893,7 @@ export interface FileRouteTypes {
     | '/lovable/email/transactional/preview'
     | '/manage/events'
     | '/manage/events/$id/check-in'
+    | '/manage/events/$id/reporting'
   id:
     | '__root__'
     | '/'
@@ -963,6 +975,7 @@ export interface FileRouteTypes {
     | '/lovable/email/transactional/preview'
     | '/_staff/manage/events/'
     | '/_staff/manage/events/$id_/check-in'
+    | '/_staff/manage/events/$id_/reporting'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1562,6 +1575,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageEventsIdCheckInRouteImport
       parentRoute: typeof StaffRouteRoute
     }
+    '/_staff/manage/events/$id_/reporting': {
+      id: '/_staff/manage/events/$id_/reporting'
+      path: '/manage/events/$id/reporting'
+      fullPath: '/manage/events/$id/reporting'
+      preLoaderRoute: typeof StaffManageEventsIdReportingRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
   }
 }
 
@@ -1667,6 +1687,7 @@ interface StaffRouteRouteChildren {
   StaffManageEventsIdRoute: typeof StaffManageEventsIdRoute
   StaffManageEventsIndexRoute: typeof StaffManageEventsIndexRoute
   StaffManageEventsIdCheckInRoute: typeof StaffManageEventsIdCheckInRoute
+  StaffManageEventsIdReportingRoute: typeof StaffManageEventsIdReportingRoute
 }
 
 const StaffRouteRouteChildren: StaffRouteRouteChildren = {
@@ -1683,6 +1704,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffManageEventsIdRoute: StaffManageEventsIdRoute,
   StaffManageEventsIndexRoute: StaffManageEventsIndexRoute,
   StaffManageEventsIdCheckInRoute: StaffManageEventsIdCheckInRoute,
+  StaffManageEventsIdReportingRoute: StaffManageEventsIdReportingRoute,
 }
 
 const StaffRouteRouteWithChildren = StaffRouteRoute._addFileChildren(
