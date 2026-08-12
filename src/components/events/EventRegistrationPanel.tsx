@@ -141,7 +141,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   };
 
   const tiers = useMemo(() => ticketing.data?.tiers ?? [], [ticketing.data]);
-  const fields = ticketing.data?.fields ?? [];
+  const questions = ticketing.data?.questions ?? [];
   const hasTiers = tiers.length > 0;
   const allowed = useMemo(() => selectableTiers(tiers, membership), [tiers, membership]);
   const memberTier = findMemberTier(tiers);
