@@ -125,7 +125,17 @@ export function ReportFilters({
         </div>
         <button
           type="button"
-          onClick={() => setFilters({ ...filters, tier: "all", status: "all", payment: "all", checkIn: "all", from: "", to: "" })}
+          onClick={() =>
+            setFilters({
+              ...filters,
+              tier: "all",
+              status: "all",
+              payment: "all",
+              checkIn: "all",
+              from: "",
+              to: "",
+            })
+          }
           className="rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-secondary"
         >
           {t("events.reporting.reset")}

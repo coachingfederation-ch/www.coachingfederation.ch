@@ -4,15 +4,7 @@
  */
 import type { ReportKpis } from "@/lib/event-reporting";
 
-function Card({
-  label,
-  value,
-  hint,
-}: {
-  label: string;
-  value: string;
-  hint?: string | null;
-}) {
+function Card({ label, value, hint }: { label: string; value: string; hint?: string | null }) {
   return (
     <div className="rounded-2xl border border-border bg-card p-4">
       <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
@@ -35,7 +27,11 @@ export function ReportKpiGrid({
 
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      <Card label={t("events.reporting.kpiActive")} value={String(kpis.active)} hint={`${t("events.reporting.kpiConfirmed")}: ${kpis.confirmed}`} />
+      <Card
+        label={t("events.reporting.kpiActive")}
+        value={String(kpis.active)}
+        hint={`${t("events.reporting.kpiConfirmed")}: ${kpis.confirmed}`}
+      />
       <Card label={t("events.reporting.kpiPending")} value={String(kpis.pending)} />
       <Card label={t("events.reporting.kpiCancelled")} value={String(kpis.cancelled)} />
       <Card label={t("events.reporting.kpiRefunded")} value={String(kpis.refunded)} />
@@ -51,7 +47,9 @@ export function ReportKpiGrid({
       />
       <Card
         label={t("events.reporting.kpiCheckedIn")}
-        value={kpis.noShows === null ? t("events.reporting.checkInNotStarted") : String(kpis.checkedIn)}
+        value={
+          kpis.noShows === null ? t("events.reporting.checkInNotStarted") : String(kpis.checkedIn)
+        }
         hint={
           kpis.noShows === null
             ? null
