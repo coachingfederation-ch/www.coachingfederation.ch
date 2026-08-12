@@ -960,7 +960,9 @@
       "deleted": "Codice sconto eliminato.",
       "saveError": "Impossibile salvare il codice sconto.",
       "loadError": "Impossibile caricare i codici sconto.",
-      "archivedDone": "Codice archiviato — è già stato utilizzato."
+      "archivedDone": "Codice archiviato — è già stato utilizzato.",
+      "generate": "Genera",
+      "generateHint": "Proposto dal titolo dell'evento e dall'importo dello sconto."
     },
     "rowExpand": "Mostra dettagli",
     "rowCollapse": "Nascondi dettagli"

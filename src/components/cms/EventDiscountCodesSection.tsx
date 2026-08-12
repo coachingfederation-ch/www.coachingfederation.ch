@@ -16,7 +16,7 @@ import {
   saveEventDiscountCode,
   type ManagedDiscountCode,
 } from "@/lib/discount-codes.functions";
-import type { DiscountType } from "@/lib/discount-codes";
+import { suggestDiscountCode, type DiscountType } from "@/lib/discount-codes";
 
 type TierOption = { id: string; name: string };
 
@@ -35,6 +35,8 @@ type Draft = {
   member_only: boolean;
   internal_note: string;
   used_count: number;
+  /** Suggestions never overwrite a code staff typed themselves. */
+  code_touched: boolean;
 };
 
 const toDay = (iso: string | null) => (iso ? new Date(iso).toISOString().slice(0, 10) : "");
@@ -59,6 +61,7 @@ const toDraft = (row: ManagedDiscountCode): Draft => ({
   member_only: row.member_only,
   internal_note: row.internal_note ?? "",
   used_count: row.used_count,
+  code_touched: true,
 });
 
 const emptyDraft = (): Draft => ({
@@ -76,13 +79,18 @@ const emptyDraft = (): Draft => ({
   member_only: false,
   internal_note: "",
   used_count: 0,
+  code_touched: false,
 });
 
 export function EventDiscountCodesSection({
   eventId,
+  eventTitle,
+  eventStartsAt,
   t,
 }: {
   eventId: string;
+  eventTitle: string;
+  eventStartsAt?: string | null;
   t: (key: string) => string;
 }) {
   const [drafts, setDrafts] = useState<Draft[]>([]);
@@ -117,6 +125,24 @@ export function EventDiscountCodesSection({
       tier_ids: draft.tier_ids.includes(tierId)
         ? draft.tier_ids.filter((id) => id !== tierId)
         : [...draft.tier_ids, tierId],
+    });
+
+  const suggestFor = (draft: Draft, others: Draft[]) =>
+    suggestDiscountCode({
+      title: eventTitle,
+      startsAt: eventStartsAt ?? null,
+      type: draft.discount_type,
+      value: Number(draft.value.replace(",", ".") || "0"),
+      existing: others.filter((d) => d.key !== draft.key).map((d) => d.code),
+    });
+
+  const generate = (draft: Draft) =>
+    update(draft.key, { code: suggestFor(draft, drafts), code_touched: true });
+
+  const addDraft = () =>
+    setDrafts((prev) => {
+      const draft = emptyDraft();
+      return [...prev, { ...draft, code: suggestFor(draft, prev) }];
     });
 
   const save = async (draft: Draft) => {
@@ -191,13 +217,28 @@ export function EventDiscountCodesSection({
                   <span className="mb-1 block text-xs font-semibold text-muted-foreground">
                     {t("events.discounts.code")}
                   </span>
-                  <input
-                    className={inputClass}
-                    value={draft.code}
-                    onChange={(e) =>
-                      update(draft.key, { code: e.target.value.toUpperCase().replace(/\s/g, "") })
-                    }
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      className={inputClass}
+                      value={draft.code}
+                      onChange={(e) =>
+                        update(draft.key, {
+                          code: e.target.value.toUpperCase().replace(/\s/g, ""),
+                          code_touched: true,
+                        })
+                      }
+                    />
+                    <button
+                      type="button"
+                      onClick={() => generate(draft)}
+                      className="shrink-0 rounded-full border border-border px-3 py-1 text-xs font-semibold hover:bg-secondary"
+                    >
+                      {t("events.discounts.generate")}
+                    </button>
+                  </div>
+                  <span className="mt-1 block text-[11px] font-normal text-muted-foreground">
+                    {t("events.discounts.generateHint")}
+                  </span>
                 </label>
                 <label className="block">
                   <span className="mb-1 block text-xs font-semibold text-muted-foreground">
@@ -350,7 +391,7 @@ export function EventDiscountCodesSection({
           <div className="flex flex-wrap items-center gap-3">
             <button
               type="button"
-              onClick={() => setDrafts((prev) => [...prev, emptyDraft()])}
+              onClick={addDraft}
               className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
             >
               {t("events.discounts.add")}

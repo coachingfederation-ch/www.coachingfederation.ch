@@ -960,7 +960,9 @@
       "deleted": "Code de réduction supprimé.",
       "saveError": "Le code de réduction n'a pas pu être enregistré.",
       "loadError": "Les codes de réduction n'ont pas pu être chargés.",
-      "archivedDone": "Code archivé — il a déjà été utilisé."
+      "archivedDone": "Code archivé — il a déjà été utilisé.",
+      "generate": "Générer",
+      "generateHint": "Proposé à partir du titre de l'événement et du montant de la remise."
     },
     "rowExpand": "Afficher les détails",
     "rowCollapse": "Masquer les détails"

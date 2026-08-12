@@ -960,7 +960,9 @@
       "deleted": "Discount code deleted.",
       "saveError": "The discount code could not be saved.",
       "loadError": "Discount codes could not be loaded.",
-      "archivedDone": "Discount code archived — it was already used."
+      "archivedDone": "Discount code archived — it was already used.",
+      "generate": "Generate",
+      "generateHint": "Suggested from the event title and the discount amount."
     },
     "rowExpand": "Show details",
     "rowCollapse": "Hide details"

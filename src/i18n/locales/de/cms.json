@@ -960,7 +960,9 @@
       "deleted": "Rabattcode gelöscht.",
       "saveError": "Der Rabattcode konnte nicht gespeichert werden.",
       "loadError": "Rabattcodes konnten nicht geladen werden.",
-      "archivedDone": "Rabattcode archiviert — er wurde bereits eingelöst."
+      "archivedDone": "Rabattcode archiviert — er wurde bereits eingelöst.",
+      "generate": "Erzeugen",
+      "generateHint": "Vorschlag aus Veranstaltungstitel und Rabattbetrag."
     },
     "rowExpand": "Details anzeigen",
     "rowCollapse": "Details ausblenden"
