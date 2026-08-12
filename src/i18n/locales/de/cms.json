@@ -774,7 +774,7 @@
     "fieldCity": "Ort",
     "fieldVenue": "Veranstaltungsort",
     "fieldMapLocation": "Kartenstandort",
-    "fieldMapLocationHint": "Adresse oder Kartenlink (Google Maps, OpenStreetMap) einfügen. Auf der Eventseite wird eine Karte angezeigt.",
+    "fieldMapLocationHint": "Adresse, Google-Maps-Link oder den gesamten „Karte einbetten“-iframe-Code von Google einfügen (Teilen › Karte einbetten › HTML kopieren). Kurze „Link senden“-URLs (maps.app.goo.gl) können nicht eingebettet werden und erscheinen nur als Link.",
     "fieldOnlineUrl": "Online-Link",
     "fieldImageUrl": "Bild-URL",
     "fieldCapacity": "Kapazität (leer lassen für unbegrenzt)",
