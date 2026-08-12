@@ -146,7 +146,8 @@
       "inviteBody": "Sie wurden von der Warteliste eingeladen. Schliessen Sie die Anmeldung unten ab, um den Platz zu übernehmen.",
       "inviteExpires": "Ihre Einladung gilt bis {deadline}.",
       "inviteExpired": "Diese Einladung ist abgelaufen; der Platz ist zurück auf der Warteliste."
-    }
+    },
+    "cceApproved": "Anerkannt für {cc} CC-Einheiten und {rd} RD-Einheiten"
   },
   "filters": {
     "when": "Zeitraum",
