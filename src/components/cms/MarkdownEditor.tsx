@@ -81,9 +81,7 @@ export function MarkdownEditor({
     const sel = selection;
     const hasSelection = !!sel && sel.end > sel.start;
     if (applyMode === "replace") {
-      onChange(
-        hasSelection ? value.slice(0, sel!.start) + text + value.slice(sel!.end) : text,
-      );
+      onChange(hasSelection ? value.slice(0, sel!.start) + text + value.slice(sel!.end) : text);
       return;
     }
     const at = sel ? sel.end : value.length;
@@ -152,12 +150,7 @@ export function MarkdownEditor({
         ))}
       </div>
       {aiOpen ? (
-        <AiAssistPanel
-          value={value}
-          selection={selection}
-          language={language}
-          onApply={applyAi}
-        />
+        <AiAssistPanel value={value} selection={selection} language={language} onApply={applyAi} />
       ) : null}
       <div
         className={
