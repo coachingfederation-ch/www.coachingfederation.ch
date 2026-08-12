@@ -22,6 +22,7 @@ import {
 } from "@/components/cms/EventEditorSections";
 import { EventTicketsSection } from "@/components/cms/EventTicketsSection";
 import { EventDiscountCodesSection } from "@/components/cms/EventDiscountCodesSection";
+import { EventWaitlistSection } from "@/components/cms/EventWaitlistSection";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { useCms } from "@/i18n/cms";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
@@ -301,17 +302,22 @@ function EventEditor() {
           cancelAttendee={cancelAttendee}
           retryRefund={retryRefund}
           ticketsSection={
-            event.registration_mode === "rsvp_tickets" ? (
-              <>
-                <EventTicketsSection eventId={event.id} t={t} />
-                <EventDiscountCodesSection
-                  eventId={event.id}
-                  eventTitle={event.title}
-                  eventStartsAt={event.starts_at}
-                  t={t}
-                />
-              </>
-            ) : null
+            <>
+              {event.registration_mode === "rsvp_tickets" ? (
+                <>
+                  <EventTicketsSection eventId={event.id} t={t} />
+                  <EventDiscountCodesSection
+                    eventId={event.id}
+                    eventTitle={event.title}
+                    eventStartsAt={event.starts_at}
+                    t={t}
+                  />
+                </>
+              ) : null}
+              {event.registration_mode !== "none" ? (
+                <EventWaitlistSection eventId={event.id} t={t} />
+              ) : null}
+            </>
           }
           t={t}
         />
