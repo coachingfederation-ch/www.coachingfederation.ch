@@ -17,7 +17,7 @@ import { expandRecurrence, occurrenceSlug, RECURRENCE_FREQUENCIES } from "./recu
 const LIST_COLUMNS =
   "id, series_id, slug, title, summary, language, status, starts_at, ends_at, timezone, location_mode, venue_name, city, capacity, is_featured, category_id, region_id, organizer_id, updated_at";
 
-const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, published_at, content_updated_at, hero_marks`;
+const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, practical_notes, published_at, content_updated_at, hero_marks`;
 
 const recurrenceRule = z.object({
   frequency: z.enum(RECURRENCE_FREQUENCIES),
@@ -71,6 +71,8 @@ const eventInput = z.object({
   registration_opens_at: z.string().min(1).nullable().optional(),
   registration_closes_at: z.string().min(1).nullable().optional(),
   guest_registration_allowed: z.boolean(),
+  // Door and joining information, repeated in the reminder emails.
+  practical_notes: z.string().trim().max(2000).nullable().optional(),
   is_featured: z.boolean(),
   category_id: z.string().uuid().nullable().optional(),
   region_id: z.string().uuid().nullable().optional(),
@@ -97,6 +99,7 @@ function normalize(input: z.infer<typeof eventInput>) {
     image_credit_name: blankToNull(input.image_credit_name),
     image_credit_url: blankToNull(input.image_credit_url),
     capacity: input.capacity ?? null,
+    practical_notes: blankToNull(input.practical_notes),
     category_id: input.category_id ?? null,
     region_id: input.region_id ?? null,
     community_id: input.community_id ?? null,
@@ -218,7 +221,7 @@ export const listEventRegistrations = createServerFn({ method: "POST" })
     const { data: rows, error } = await context.supabase
       .from("event_registrations")
       .select(
-        "id, full_name, email, status, notes, created_at, user_id, tier_id, payment_status, amount_cents, currency, answers, locale, confirmation_status, confirmation_sent_at, confirmation_error, cancellation_status, cancellation_error, refund_status, refund_amount_cents, refund_error, refunded_at",
+        "id, full_name, email, status, notes, created_at, user_id, tier_id, payment_status, amount_cents, currency, answers, locale, confirmation_status, confirmation_sent_at, confirmation_error, cancellation_status, cancellation_error, refund_status, refund_amount_cents, refund_error, refunded_at, checked_in_at, created_by_staff",
       )
       .eq("event_id", data.eventId)
       .order("created_at", { ascending: true });
@@ -676,4 +679,107 @@ export const retryRegistrationRefund = createServerFn({ method: "POST" })
 
     const { refundRegistration } = await import("./refunds.server");
     return refundRegistration(data.registrationId);
+  });
+
+/**
+ * Attendee CSV for one event.
+ *
+ * The event read goes through the caller's own client, so RLS decides whether
+ * this person manages this event; only then does the export read the wider
+ * column set through the trusted client.
+ */
+export const exportEventRegistrations = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const { data: event, error } = await context.supabase
+      .from("events")
+      .select("id")
+      .eq("id", data.eventId)
+      .maybeSingle();
+    if (error || !event) throw new Error("Event not found");
+
+    const { buildRegistrationsCsv } = await import("./registrations-export.server");
+    return buildRegistrationsCsv(data.eventId);
+  });
+
+/**
+ * Staff-created registration.
+ *
+ * Comped seats only: staff may add someone to the list, never take money on
+ * their behalf. The row is written with the trusted client because
+ * `payment_status` and `created_by_staff` are server-owned, and the seat is
+ * marked so the attendee list and the CSV show how it came to exist.
+ */
+export const createStaffRegistration = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        eventId: z.string().uuid(),
+        fullName: z.string().trim().min(2).max(120),
+        email: z.string().trim().email().max(200),
+        tierId: z.string().uuid().nullable().optional(),
+        locale: z.enum(["en", "de", "fr", "it"]).default("en"),
+        notes: z.string().trim().max(500).nullable().optional(),
+        sendConfirmation: z.boolean().default(true),
+      })
+      .parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+
+    const { data: event, error } = await context.supabase
+      .from("events")
+      .select("id, registration_mode")
+      .eq("id", data.eventId)
+      .maybeSingle();
+    if (error || !event) throw new Error("Event not found");
+    if (event.registration_mode === "none") {
+      throw new Error("This event does not take registrations");
+    }
+
+    const email = data.email.toLowerCase();
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: existing } = await supabaseAdmin
+      .from("event_registrations")
+      .select("id, status")
+      .eq("event_id", data.eventId)
+      .eq("email", email)
+      .maybeSingle();
+    if (existing && existing.status === "confirmed") {
+      return { ok: false as const, reason: "already_registered" as const, id: existing.id };
+    }
+
+    const { data: inserted, error: insertError } = await supabaseAdmin
+      .from("event_registrations")
+      .insert({
+        event_id: data.eventId,
+        tier_id: event.registration_mode === "rsvp_tickets" ? (data.tierId ?? null) : null,
+        full_name: data.fullName,
+        email,
+        locale: data.locale,
+        status: "confirmed",
+        // Comped: the guard leaves this alone for a trusted caller, so the
+        // seat is never priced or held for payment.
+        payment_status: "not_required",
+        amount_cents: 0,
+        notes: data.notes ?? null,
+        // Records which staff member added the seat, for the audit trail.
+        created_by_staff: context.userId,
+      })
+      .select("id")
+      .single();
+    if (insertError || !inserted) throw new Error(insertError?.message ?? "Could not add attendee");
+
+    let confirmation = { sent: false };
+    if (data.sendConfirmation) {
+      const { sendRegistrationConfirmation } = await import("./event-confirmation.server");
+      const result = await sendRegistrationConfirmation(inserted.id, { force: true });
+      confirmation = { sent: result.status === "sent" };
+    }
+
+    return { ok: true as const, id: inserted.id, confirmation };
   });

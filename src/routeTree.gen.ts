@@ -60,6 +60,7 @@ import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as InsightsIdRouteImport } from './routes/insights.$id'
+import { Route as TicketTokenRouteImport } from './routes/ticket.$token'
 import { Route as LocaleCoachProfileIdRouteImport } from './routes/$locale/coach.$profileId'
 import { Route as LocaleCommunitiesIndexRouteImport } from './routes/$locale/communities.index'
 import { Route as LocaleCommunitiesSlugRouteImport } from './routes/$locale/communities.$slug'
@@ -78,12 +79,15 @@ import { Route as StaffManageGovernanceRouteImport } from './routes/_staff/manag
 import { Route as StaffMembersIndexRouteImport } from './routes/_staff/members.index'
 import { Route as StaffMembersIdRouteImport } from './routes/_staff/members.$id'
 import { Route as ApiPublicEuropePulseScanRouteImport } from './routes/api/public/europe-pulse-scan'
+import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public/event-reminders'
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
 import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/calendar.$file'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicTicketQrTokenRouteImport } from './routes/api/public/ticket-qr.$token'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
+import { Route as StaffManageEventsIdCheckInRouteImport } from './routes/_staff/manage.events.$id_.check-in'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -341,6 +345,11 @@ const InsightsIdRoute = InsightsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => InsightsRoute,
 } as any)
+const TicketTokenRoute = TicketTokenRouteImport.update({
+  id: '/ticket/$token',
+  path: '/ticket/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LocaleCoachProfileIdRoute = LocaleCoachProfileIdRouteImport.update({
   id: '/coach/$profileId',
   path: '/coach/$profileId',
@@ -433,6 +442,11 @@ const ApiPublicEuropePulseScanRoute =
     path: '/api/public/europe-pulse-scan',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicEventRemindersRoute = ApiPublicEventRemindersRouteImport.update({
+  id: '/api/public/event-reminders',
+  path: '/api/public/event-reminders',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicMemberSyncRoute = ApiPublicMemberSyncRouteImport.update({
   id: '/api/public/member-sync',
   path: '/api/public/member-sync',
@@ -459,11 +473,22 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicTicketQrTokenRoute = ApiPublicTicketQrTokenRouteImport.update({
+  id: '/api/public/ticket-qr/$token',
+  path: '/api/public/ticket-qr/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
     path: '/lovable/email/transactional/preview',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const StaffManageEventsIdCheckInRoute =
+  StaffManageEventsIdCheckInRouteImport.update({
+    id: '/manage/events/$id_/check-in',
+    path: '/manage/events/$id/check-in',
+    getParentRoute: () => StaffRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -511,6 +536,7 @@ export interface FileRoutesByFullPath {
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/insights/$id': typeof InsightsIdRoute
+  '/ticket/$token': typeof TicketTokenRoute
   '/$locale/': typeof LocaleIndexRoute
   '/claim/': typeof ClaimIndexRoute
   '/communities/': typeof CommunitiesIndexRoute
@@ -529,6 +555,7 @@ export interface FileRoutesByFullPath {
   '/manage/governance': typeof StaffManageGovernanceRoute
   '/members/$id': typeof StaffMembersIdRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
+  '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
@@ -538,8 +565,10 @@ export interface FileRoutesByFullPath {
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events/': typeof StaffManageEventsIndexRoute
+  '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -582,6 +611,7 @@ export interface FileRoutesByTo {
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/insights/$id': typeof InsightsIdRoute
+  '/ticket/$token': typeof TicketTokenRoute
   '/$locale': typeof LocaleIndexRoute
   '/claim': typeof ClaimIndexRoute
   '/communities': typeof CommunitiesIndexRoute
@@ -600,6 +630,7 @@ export interface FileRoutesByTo {
   '/manage/governance': typeof StaffManageGovernanceRoute
   '/members/$id': typeof StaffMembersIdRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
+  '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/$locale/communities': typeof LocaleCommunitiesIndexRoute
   '/$locale/events': typeof LocaleEventsIndexRoute
@@ -609,8 +640,10 @@ export interface FileRoutesByTo {
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events': typeof StaffManageEventsIndexRoute
+  '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -660,6 +693,7 @@ export interface FileRoutesById {
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/insights/$id': typeof InsightsIdRoute
+  '/ticket/$token': typeof TicketTokenRoute
   '/$locale/': typeof LocaleIndexRoute
   '/claim/': typeof ClaimIndexRoute
   '/communities/': typeof CommunitiesIndexRoute
@@ -678,6 +712,7 @@ export interface FileRoutesById {
   '/_staff/manage/governance': typeof StaffManageGovernanceRoute
   '/_staff/members/$id': typeof StaffMembersIdRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
+  '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
@@ -687,8 +722,10 @@ export interface FileRoutesById {
   '/_staff/manage/events/$id': typeof StaffManageEventsIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/_staff/manage/events/': typeof StaffManageEventsIndexRoute
+  '/_staff/manage/events/$id_/check-in': typeof StaffManageEventsIdCheckInRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -737,6 +774,7 @@ export interface FileRouteTypes {
     | '/communities/$slug'
     | '/events/$slug'
     | '/insights/$id'
+    | '/ticket/$token'
     | '/$locale/'
     | '/claim/'
     | '/communities/'
@@ -755,6 +793,7 @@ export interface FileRouteTypes {
     | '/manage/governance'
     | '/members/$id'
     | '/api/public/europe-pulse-scan'
+    | '/api/public/event-reminders'
     | '/api/public/member-sync'
     | '/$locale/communities/'
     | '/$locale/events/'
@@ -764,8 +803,10 @@ export interface FileRouteTypes {
     | '/manage/events/$id'
     | '/api/public/calendar/$file'
     | '/api/public/payments/webhook'
+    | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/manage/events/'
+    | '/manage/events/$id/check-in'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -808,6 +849,7 @@ export interface FileRouteTypes {
     | '/communities/$slug'
     | '/events/$slug'
     | '/insights/$id'
+    | '/ticket/$token'
     | '/$locale'
     | '/claim'
     | '/communities'
@@ -826,6 +868,7 @@ export interface FileRouteTypes {
     | '/manage/governance'
     | '/members/$id'
     | '/api/public/europe-pulse-scan'
+    | '/api/public/event-reminders'
     | '/api/public/member-sync'
     | '/$locale/communities'
     | '/$locale/events'
@@ -835,8 +878,10 @@ export interface FileRouteTypes {
     | '/manage/events/$id'
     | '/api/public/calendar/$file'
     | '/api/public/payments/webhook'
+    | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/manage/events'
+    | '/manage/events/$id/check-in'
   id:
     | '__root__'
     | '/'
@@ -885,6 +930,7 @@ export interface FileRouteTypes {
     | '/communities/$slug'
     | '/events/$slug'
     | '/insights/$id'
+    | '/ticket/$token'
     | '/$locale/'
     | '/claim/'
     | '/communities/'
@@ -903,6 +949,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/governance'
     | '/_staff/members/$id'
     | '/api/public/europe-pulse-scan'
+    | '/api/public/event-reminders'
     | '/api/public/member-sync'
     | '/$locale/communities/'
     | '/$locale/events/'
@@ -912,8 +959,10 @@ export interface FileRouteTypes {
     | '/_staff/manage/events/$id'
     | '/api/public/calendar/$file'
     | '/api/public/payments/webhook'
+    | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/_staff/manage/events/'
+    | '/_staff/manage/events/$id_/check-in'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -943,15 +992,18 @@ export interface RootRouteChildren {
   CoachProfileIdRoute: typeof CoachProfileIdRoute
   CommunitiesSlugRoute: typeof CommunitiesSlugRoute
   EventsSlugRoute: typeof EventsSlugRoute
+  TicketTokenRoute: typeof TicketTokenRoute
   ClaimIndexRoute: typeof ClaimIndexRoute
   CommunitiesIndexRoute: typeof CommunitiesIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicEuropePulseScanRoute: typeof ApiPublicEuropePulseScanRoute
+  ApiPublicEventRemindersRoute: typeof ApiPublicEventRemindersRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
   ApiPublicCalendarFileRoute: typeof ApiPublicCalendarFileRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  ApiPublicTicketQrTokenRoute: typeof ApiPublicTicketQrTokenRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
@@ -1314,6 +1366,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InsightsIdRouteImport
       parentRoute: typeof InsightsRoute
     }
+    '/ticket/$token': {
+      id: '/ticket/$token'
+      path: '/ticket/$token'
+      fullPath: '/ticket/$token'
+      preLoaderRoute: typeof TicketTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$locale/coach/$profileId': {
       id: '/$locale/coach/$profileId'
       path: '/coach/$profileId'
@@ -1440,6 +1499,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicEuropePulseScanRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/event-reminders': {
+      id: '/api/public/event-reminders'
+      path: '/api/public/event-reminders'
+      fullPath: '/api/public/event-reminders'
+      preLoaderRoute: typeof ApiPublicEventRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/member-sync': {
       id: '/api/public/member-sync'
       path: '/api/public/member-sync'
@@ -1475,12 +1541,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/ticket-qr/$token': {
+      id: '/api/public/ticket-qr/$token'
+      path: '/api/public/ticket-qr/$token'
+      fullPath: '/api/public/ticket-qr/$token'
+      preLoaderRoute: typeof ApiPublicTicketQrTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/preview': {
       id: '/lovable/email/transactional/preview'
       path: '/lovable/email/transactional/preview'
       fullPath: '/lovable/email/transactional/preview'
       preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_staff/manage/events/$id_/check-in': {
+      id: '/_staff/manage/events/$id_/check-in'
+      path: '/manage/events/$id/check-in'
+      fullPath: '/manage/events/$id/check-in'
+      preLoaderRoute: typeof StaffManageEventsIdCheckInRouteImport
+      parentRoute: typeof StaffRouteRoute
     }
   }
 }
@@ -1586,6 +1666,7 @@ interface StaffRouteRouteChildren {
   StaffMembersIndexRoute: typeof StaffMembersIndexRoute
   StaffManageEventsIdRoute: typeof StaffManageEventsIdRoute
   StaffManageEventsIndexRoute: typeof StaffManageEventsIndexRoute
+  StaffManageEventsIdCheckInRoute: typeof StaffManageEventsIdCheckInRoute
 }
 
 const StaffRouteRouteChildren: StaffRouteRouteChildren = {
@@ -1601,6 +1682,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffMembersIndexRoute: StaffMembersIndexRoute,
   StaffManageEventsIdRoute: StaffManageEventsIdRoute,
   StaffManageEventsIndexRoute: StaffManageEventsIndexRoute,
+  StaffManageEventsIdCheckInRoute: StaffManageEventsIdCheckInRoute,
 }
 
 const StaffRouteRouteWithChildren = StaffRouteRoute._addFileChildren(
@@ -1659,15 +1741,18 @@ const rootRouteChildren: RootRouteChildren = {
   CoachProfileIdRoute: CoachProfileIdRoute,
   CommunitiesSlugRoute: CommunitiesSlugRoute,
   EventsSlugRoute: EventsSlugRoute,
+  TicketTokenRoute: TicketTokenRoute,
   ClaimIndexRoute: ClaimIndexRoute,
   CommunitiesIndexRoute: CommunitiesIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicEuropePulseScanRoute: ApiPublicEuropePulseScanRoute,
+  ApiPublicEventRemindersRoute: ApiPublicEventRemindersRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,
   ApiPublicCalendarFileRoute: ApiPublicCalendarFileRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  ApiPublicTicketQrTokenRoute: ApiPublicTicketQrTokenRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
