@@ -1148,7 +1148,9 @@ export type Database = {
         Row: {
           amount_cents: number
           answers: Json
+          cancel_token_hash: string | null
           cancellation_error: string | null
+          cancellation_note: string | null
           cancellation_sent_at: string | null
           cancellation_status: string
           confirmation_error: string | null
@@ -1185,7 +1187,9 @@ export type Database = {
         Insert: {
           amount_cents?: number
           answers?: Json
+          cancel_token_hash?: string | null
           cancellation_error?: string | null
+          cancellation_note?: string | null
           cancellation_sent_at?: string | null
           cancellation_status?: string
           confirmation_error?: string | null
@@ -1222,7 +1226,9 @@ export type Database = {
         Update: {
           amount_cents?: number
           answers?: Json
+          cancel_token_hash?: string | null
           cancellation_error?: string | null
+          cancellation_note?: string | null
           cancellation_sent_at?: string | null
           cancellation_status?: string
           confirmation_error?: string | null
@@ -1422,6 +1428,89 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_waitlist_entries: {
+        Row: {
+          converted_registration_id: string | null
+          created_at: string
+          email: string
+          event_id: string
+          full_name: string
+          id: string
+          invite_expires_at: string | null
+          invite_token_hash: string | null
+          invited_at: string | null
+          locale: string
+          note: string | null
+          status: string
+          tier_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          converted_registration_id?: string | null
+          created_at?: string
+          email: string
+          event_id: string
+          full_name: string
+          id?: string
+          invite_expires_at?: string | null
+          invite_token_hash?: string | null
+          invited_at?: string | null
+          locale?: string
+          note?: string | null
+          status?: string
+          tier_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          converted_registration_id?: string | null
+          created_at?: string
+          email?: string
+          event_id?: string
+          full_name?: string
+          id?: string
+          invite_expires_at?: string | null
+          invite_token_hash?: string | null
+          invited_at?: string | null
+          locale?: string
+          note?: string | null
+          status?: string
+          tier_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_waitlist_entries_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_waitlist_entries_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_waitlist_entries_tier_id_fkey"
+            columns: ["tier_id"]
+            isOneToOne: false
+            referencedRelation: "event_ticket_tiers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_waitlist_entries_tier_id_fkey"
+            columns: ["tier_id"]
+            isOneToOne: false
+            referencedRelation: "event_ticket_tiers_public"
             referencedColumns: ["id"]
           },
         ]
