@@ -30,6 +30,8 @@ import {
   verifyMemberId,
 } from "@/lib/tickets.functions";
 import { validateDiscountCode, validateDiscountCodeAsMember } from "@/lib/discount-codes.functions";
+import { checkWaitlistInvite } from "@/lib/waitlist.functions";
+import { EventWaitlistForm } from "@/components/events/EventWaitlistForm";
 import type { DiscountFailure, DiscountPreview } from "@/lib/discount-codes";
 import {
   formatPrice,
@@ -161,6 +163,32 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   >({ kind: "idle" });
   const [state, setState] = useState<FormState>({ kind: "idle" });
   const [returned, setReturned] = useState<ReturnState>(null);
+
+  // A waitlist invitation arrives as ?invite=<token>. The server decides
+  // whether it is still live; this only prefills and unlocks the form.
+  const [inviteToken, setInviteToken] = useState<string | null>(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const token = new URLSearchParams(window.location.search).get("invite");
+    if (token) setInviteToken(token);
+  }, []);
+  const inviteQuery = useQuery({
+    queryKey: ["waitlist-invite", eventId, inviteToken],
+    queryFn: () => checkWaitlistInvite({ data: { eventId, token: inviteToken! } }),
+    enabled: Boolean(inviteToken),
+    retry: false,
+    staleTime: 60_000,
+  });
+  const invite = inviteQuery.data ?? null;
+  const inviteExpired = Boolean(inviteToken) && inviteQuery.isFetched && !invite;
+
+  // The invited person's own details win over anything prefilled.
+  useEffect(() => {
+    if (!invite) return;
+    setFullName((current) => current || invite.fullName);
+    setEmail(invite.email);
+    if (invite.tierId) setTierId(invite.tierId);
+  }, [invite]);
 
   // Restore a draft left behind by a sign-in detour.
   useEffect(() => {
@@ -322,6 +350,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
       tierId: ticketMode ? tierId : null,
       memberId: memberIdState === "confirmed" ? memberId.trim() : null,
       discountCode: appliedDiscount ? appliedDiscount.code : null,
+      inviteToken: invite ? inviteToken : null,
       answers,
       environment: paymentsConfigured() ? getStripeEnvironment() : ("sandbox" as const),
     };
