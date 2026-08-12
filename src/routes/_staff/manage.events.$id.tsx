@@ -304,7 +304,12 @@ function EventEditor() {
             event.registration_mode === "rsvp_tickets" ? (
               <>
                 <EventTicketsSection eventId={event.id} t={t} />
-                <EventDiscountCodesSection eventId={event.id} t={t} />
+                <EventDiscountCodesSection
+                  eventId={event.id}
+                  eventTitle={event.title}
+                  eventStartsAt={event.starts_at}
+                  t={t}
+                />
               </>
             ) : null
           }
