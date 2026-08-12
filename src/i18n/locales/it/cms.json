@@ -1271,5 +1271,144 @@
       "expand": "Amplia",
       "continue": "Continua a scrivere"
     }
+  },
+  "cce": {
+    "section": {
+      "title": "CCE credits",
+      "hint": "Collect everything ICF's official CCE application asks for. Submitting the form stays a manual step by a chapter approver."
+    },
+    "toggle": "Apply for CCE credits",
+    "toggleOffHint": "Turn this on to prepare an ICF Continuing Coach Education credit application for this event.",
+    "saved": "CCE application saved.",
+    "save": "Save CCE application",
+    "statusUpdated": "Status updated.",
+    "markReady": "Mark ready for review",
+    "markRdOnly": "No application needed (RD only)",
+    "markConference": "Handle through the conference process",
+    "openReview": "Open review screen",
+    "missingTitle": "Still missing",
+    "backToEvent": "Back to the event",
+    "copy": "Copy",
+    "copyAll": "Copy everything",
+    "copied": "Copied",
+    "copyFailed": "Could not copy to the clipboard.",
+    "print": "Print",
+    "openOfficial": "Open pre-filled official application",
+    "manualHint": "Only the title and contact details can be pre-filled. Everything marked below has to be typed into the official form by hand — copy each value as you go.",
+    "manualBadge": "Type by hand",
+    "requestChanges": "Send back for more information",
+    "approverOnly": "Only chapter editors and administrators can record a submission or a decision.",
+    "outcomeSaved": "Outcome recorded.",
+    "status": {
+      "label": "Status",
+      "not_requested": "Not requested",
+      "draft": "Draft",
+      "missing_information": "Missing information",
+      "ready_for_review": "Ready for review",
+      "submitted": "Submitted to ICF",
+      "approved": "Approved",
+      "declined": "Declined",
+      "not_required_rd_only": "No application needed (RD only)",
+      "separate_conference_process": "Separate conference process"
+    },
+    "credential": {
+      "ACC": "ACC",
+      "PCC": "PCC",
+      "MCC": "MCC",
+      "none": "No ICF credential"
+    },
+    "delivery": {
+      "in_person": "In person",
+      "teleclass": "Teleclass",
+      "webinar": "Webinar"
+    },
+    "category": {
+      "core_competency": "Core Competencies",
+      "resource_development": "Resource Development",
+      "break": "Break"
+    },
+    "field": {
+      "contactName": "Contact name",
+      "contactEmail": "Contact email",
+      "facilitatorName": "Primary facilitator",
+      "facilitatorCredential": "Facilitator credential",
+      "additionalFacilitators": "Additional facilitators",
+      "deliveryMethod": "Delivery method",
+      "targetAudience": "Target audience",
+      "learningObjectives": "Learning objectives",
+      "completionRequirements": "Completion requirements",
+      "attendanceMonitoring": "How attendance is monitored",
+      "contentRationale": "Why this content fits the category",
+      "ccHours": "Core Competency hours",
+      "rdHours": "Resource Development hours",
+      "totalHours": "Total hours",
+      "breakMinutes": "Break minutes",
+      "supportingUrl": "Supporting material link",
+      "supportingNote": "Supporting material note",
+      "internalNotes": "Internal notes",
+      "schedule": "Schedule"
+    },
+    "schedule": {
+      "title": "Schedule",
+      "hint": "One row per block. Breaks do not count towards instructional time.",
+      "add": "Add row",
+      "remove": "Remove",
+      "start": "From",
+      "end": "To",
+      "duration": "Minutes",
+      "facilitator": "Facilitator",
+      "delivery": "Delivery",
+      "category": "CCE category",
+      "topic": "Topic",
+      "creditTotal": "Instructional hours from the schedule"
+    },
+    "warn": {
+      "multiDay": "This event runs over more than one day. Multi-day programmes go through ICF's separate conference process, not this form.",
+      "rdOnly": "Without Core Competency hours no CCE application is needed — Resource Development hours can be claimed by attendees directly.",
+      "late": "ICF asks for applications at least 14 days before the event. This one is inside that window.",
+      "hoursMismatch": "The hours entered do not match the schedule. Check both before requesting review."
+    },
+    "review": {
+      "title": "CCE application",
+      "empty": "No CCE application has been started for this event yet.",
+      "scheduleHours": "Instructional hours from the schedule"
+    },
+    "outcome": {
+      "title": "Submission and decision",
+      "hint": "Record what happened on ICF's site after you submitted the official form.",
+      "submittedAt": "Submitted on",
+      "reference": "ICF reference",
+      "decision": "Decision",
+      "decisionNone": "No decision yet",
+      "decisionAt": "Decision on",
+      "ccUnits": "Approved CC units",
+      "rdUnits": "Approved RD units",
+      "notes": "Notes",
+      "save": "Save outcome"
+    },
+    "summary": {
+      "eventTitle": "Event title",
+      "eventDate": "Date",
+      "eventTime": "Time",
+      "timezone": "Time zone",
+      "language": "Language",
+      "location": "Location",
+      "deliveryMethod": "Delivery method",
+      "contactName": "Contact name",
+      "contactEmail": "Contact email",
+      "primaryFacilitator": "Primary facilitator",
+      "additionalFacilitators": "Additional facilitators",
+      "targetAudience": "Target audience",
+      "learningObjectives": "Learning objectives",
+      "completionRequirements": "Completion requirements",
+      "attendanceMonitoring": "Attendance monitoring",
+      "coreCompetencyHours": "Core Competency hours",
+      "resourceDevelopmentHours": "Resource Development hours",
+      "totalHours": "Total hours",
+      "breakMinutes": "Break minutes",
+      "contentRationale": "Content rationale",
+      "schedule": "Schedule",
+      "supportingMaterial": "Supporting material"
+    }
   }
 }

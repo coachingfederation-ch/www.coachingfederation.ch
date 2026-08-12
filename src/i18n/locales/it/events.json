@@ -146,7 +146,8 @@
       "inviteBody": "Sei stato invitato dalla lista d'attesa. Completa l'iscrizione qui sotto per prendere il posto.",
       "inviteExpires": "Il tuo invito è valido fino al {deadline}.",
       "inviteExpired": "Questo invito è scaduto e il posto è tornato in lista d'attesa."
-    }
+    },
+    "cceApproved": "Approvato per {cc} unità CC e {rd} unità RD"
   },
   "filters": {
     "when": "Periodo",
