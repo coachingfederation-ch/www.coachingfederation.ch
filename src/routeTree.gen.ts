@@ -58,6 +58,7 @@ import { Route as CommunitiesIndexRouteImport } from './routes/communities.index
 import { Route as CommunitiesSlugRouteImport } from './routes/communities.$slug'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
+import { Route as FormTokenRouteImport } from './routes/form.$token'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as InsightsIdRouteImport } from './routes/insights.$id'
 import { Route as TicketTokenRouteImport } from './routes/ticket.$token'
@@ -90,6 +91,7 @@ import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/l
 import { Route as StaffManageEventsIdCceRouteImport } from './routes/_staff/manage.events.$id_.cce'
 import { Route as StaffManageEventsIdCheckInRouteImport } from './routes/_staff/manage.events.$id_.check-in'
 import { Route as StaffManageEventsIdReportingRouteImport } from './routes/_staff/manage.events.$id_.reporting'
+import { Route as StaffManageEventsIdFormsFormIdRouteImport } from './routes/_staff/manage.events.$id_.forms.$formId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -337,6 +339,11 @@ const EventsSlugRoute = EventsSlugRouteImport.update({
   path: '/events/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FormTokenRoute = FormTokenRouteImport.update({
+  id: '/form/$token',
+  path: '/form/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InsightsIndexRoute = InsightsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -503,6 +510,12 @@ const StaffManageEventsIdReportingRoute =
     path: '/manage/events/$id/reporting',
     getParentRoute: () => StaffRouteRoute,
   } as any)
+const StaffManageEventsIdFormsFormIdRoute =
+  StaffManageEventsIdFormsFormIdRouteImport.update({
+    id: '/manage/events/$id_/forms/$formId',
+    path: '/manage/events/$id/forms/$formId',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -548,6 +561,7 @@ export interface FileRoutesByFullPath {
   '/coach/$profileId': typeof CoachProfileIdRoute
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/form/$token': typeof FormTokenRoute
   '/insights/$id': typeof InsightsIdRoute
   '/ticket/$token': typeof TicketTokenRoute
   '/$locale/': typeof LocaleIndexRoute
@@ -584,6 +598,7 @@ export interface FileRoutesByFullPath {
   '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
+  '/manage/events/$id/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -625,6 +640,7 @@ export interface FileRoutesByTo {
   '/coach/$profileId': typeof CoachProfileIdRoute
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/form/$token': typeof FormTokenRoute
   '/insights/$id': typeof InsightsIdRoute
   '/ticket/$token': typeof TicketTokenRoute
   '/$locale': typeof LocaleIndexRoute
@@ -661,6 +677,7 @@ export interface FileRoutesByTo {
   '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
+  '/manage/events/$id/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -709,6 +726,7 @@ export interface FileRoutesById {
   '/coach/$profileId': typeof CoachProfileIdRoute
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/form/$token': typeof FormTokenRoute
   '/insights/$id': typeof InsightsIdRoute
   '/ticket/$token': typeof TicketTokenRoute
   '/$locale/': typeof LocaleIndexRoute
@@ -745,6 +763,7 @@ export interface FileRoutesById {
   '/_staff/manage/events/$id_/cce': typeof StaffManageEventsIdCceRoute
   '/_staff/manage/events/$id_/check-in': typeof StaffManageEventsIdCheckInRoute
   '/_staff/manage/events/$id_/reporting': typeof StaffManageEventsIdReportingRoute
+  '/_staff/manage/events/$id_/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -792,6 +811,7 @@ export interface FileRouteTypes {
     | '/coach/$profileId'
     | '/communities/$slug'
     | '/events/$slug'
+    | '/form/$token'
     | '/insights/$id'
     | '/ticket/$token'
     | '/$locale/'
@@ -828,6 +848,7 @@ export interface FileRouteTypes {
     | '/manage/events/$id/cce'
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
+    | '/manage/events/$id/forms/$formId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -869,6 +890,7 @@ export interface FileRouteTypes {
     | '/coach/$profileId'
     | '/communities/$slug'
     | '/events/$slug'
+    | '/form/$token'
     | '/insights/$id'
     | '/ticket/$token'
     | '/$locale'
@@ -905,6 +927,7 @@ export interface FileRouteTypes {
     | '/manage/events/$id/cce'
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
+    | '/manage/events/$id/forms/$formId'
   id:
     | '__root__'
     | '/'
@@ -952,6 +975,7 @@ export interface FileRouteTypes {
     | '/coach/$profileId'
     | '/communities/$slug'
     | '/events/$slug'
+    | '/form/$token'
     | '/insights/$id'
     | '/ticket/$token'
     | '/$locale/'
@@ -988,6 +1012,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/events/$id_/cce'
     | '/_staff/manage/events/$id_/check-in'
     | '/_staff/manage/events/$id_/reporting'
+    | '/_staff/manage/events/$id_/forms/$formId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1017,6 +1042,7 @@ export interface RootRouteChildren {
   CoachProfileIdRoute: typeof CoachProfileIdRoute
   CommunitiesSlugRoute: typeof CommunitiesSlugRoute
   EventsSlugRoute: typeof EventsSlugRoute
+  FormTokenRoute: typeof FormTokenRoute
   TicketTokenRoute: typeof TicketTokenRoute
   ClaimIndexRoute: typeof ClaimIndexRoute
   CommunitiesIndexRoute: typeof CommunitiesIndexRoute
@@ -1377,6 +1403,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/form/$token': {
+      id: '/form/$token'
+      path: '/form/$token'
+      fullPath: '/form/$token'
+      preLoaderRoute: typeof FormTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/insights/': {
       id: '/insights/'
       path: '/'
@@ -1601,6 +1634,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageEventsIdReportingRouteImport
       parentRoute: typeof StaffRouteRoute
     }
+    '/_staff/manage/events/$id_/forms/$formId': {
+      id: '/_staff/manage/events/$id_/forms/$formId'
+      path: '/manage/events/$id/forms/$formId'
+      fullPath: '/manage/events/$id/forms/$formId'
+      preLoaderRoute: typeof StaffManageEventsIdFormsFormIdRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
   }
 }
 
@@ -1708,6 +1748,7 @@ interface StaffRouteRouteChildren {
   StaffManageEventsIdCceRoute: typeof StaffManageEventsIdCceRoute
   StaffManageEventsIdCheckInRoute: typeof StaffManageEventsIdCheckInRoute
   StaffManageEventsIdReportingRoute: typeof StaffManageEventsIdReportingRoute
+  StaffManageEventsIdFormsFormIdRoute: typeof StaffManageEventsIdFormsFormIdRoute
 }
 
 const StaffRouteRouteChildren: StaffRouteRouteChildren = {
@@ -1726,6 +1767,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffManageEventsIdCceRoute: StaffManageEventsIdCceRoute,
   StaffManageEventsIdCheckInRoute: StaffManageEventsIdCheckInRoute,
   StaffManageEventsIdReportingRoute: StaffManageEventsIdReportingRoute,
+  StaffManageEventsIdFormsFormIdRoute: StaffManageEventsIdFormsFormIdRoute,
 }
 
 const StaffRouteRouteWithChildren = StaffRouteRoute._addFileChildren(
@@ -1784,6 +1826,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachProfileIdRoute: CoachProfileIdRoute,
   CommunitiesSlugRoute: CommunitiesSlugRoute,
   EventsSlugRoute: EventsSlugRoute,
+  FormTokenRoute: FormTokenRoute,
   TicketTokenRoute: TicketTokenRoute,
   ClaimIndexRoute: ClaimIndexRoute,
   CommunitiesIndexRoute: CommunitiesIndexRoute,

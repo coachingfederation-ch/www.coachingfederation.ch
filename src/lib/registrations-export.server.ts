@@ -6,6 +6,8 @@
  * trusted client to include columns the browser is deliberately not granted.
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { activeRegistrationFormId, loadFormQuestions } from "./event-forms.server";
+import { displayAnswer } from "./event-forms";
 
 const BASE_COLUMNS = [
   "full_name",
@@ -42,7 +44,8 @@ export async function buildRegistrationsCsv(
     .eq("id", eventId)
     .maybeSingle();
 
-  const [{ data: rows }, { data: tiers }, { data: fields }] = await Promise.all([
+  const formId = await activeRegistrationFormId(eventId);
+  const [{ data: rows }, { data: tiers }, questions] = await Promise.all([
     supabaseAdmin
       .from("event_registrations")
       .select(
@@ -51,16 +54,12 @@ export async function buildRegistrationsCsv(
       .eq("event_id", eventId)
       .order("created_at", { ascending: true }),
     supabaseAdmin.from("event_ticket_tiers").select("id, name").eq("event_id", eventId),
-    supabaseAdmin
-      .from("event_registration_fields")
-      .select("field_key, label, sort_order")
-      .eq("event_id", eventId)
-      .order("sort_order", { ascending: true }),
+    formId ? loadFormQuestions(formId) : Promise.resolve([]),
   ]);
 
   const tierNames = new Map(((tiers ?? []) as { id: string; name: string }[]).map((t) => [t.id, t.name]));
-  const questions = (fields ?? []) as { field_key: string; label: string }[];
-  const header = [...BASE_COLUMNS, ...questions.map((f) => f.label)];
+  const asked = questions.filter((q) => q.type !== "heading");
+  const header = [...BASE_COLUMNS, ...asked.map((q) => q.label)];
 
   const lines = ((rows ?? []) as Record<string, any>[]).map((r) => {
     const answers = (r.answers ?? {}) as Record<string, string>;
@@ -80,7 +79,7 @@ export async function buildRegistrationsCsv(
       r.refund_status ?? "",
       r.created_by_staff ? "yes" : "",
       r.notes ?? "",
-      ...questions.map((f) => answers[f.field_key] ?? ""),
+      ...asked.map((q) => displayAnswer(q, answers[q.key] ?? "")),
     ];
     return values.map(cell).join(",");
   });

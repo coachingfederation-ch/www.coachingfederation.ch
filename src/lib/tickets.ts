@@ -6,6 +6,7 @@
  * server already resolved.
  */
 import type { Locale } from "@/i18n/config";
+import type { PublicFormQuestion } from "./event-forms";
 
 export type TierSegment = "member" | "non_member" | "general";
 
@@ -21,23 +22,14 @@ export type PublicTier = {
   sortOrder: number;
 };
 
-export type RegistrationFieldType = "short_text" | "long_text" | "single_choice" | "checkbox";
-
-export type PublicRegistrationField = {
-  id: string;
-  key: string;
-  label: string;
-  type: RegistrationFieldType;
-  options: string[];
-  required: boolean;
-};
-
 /** Why the viewer is (or is not) on member pricing — resolved server-side. */
 export type MembershipState = "member" | "not_member" | "signed_out";
 
 export type EventTicketing = {
   tiers: PublicTier[];
-  fields: PublicRegistrationField[];
+  /** The event's active registration form, when the organizer configured one. */
+  formId: string | null;
+  questions: PublicFormQuestion[];
   membership: MembershipState;
   /** Tier the server will use unless the visitor picks another allowed one. */
   defaultTierId: string | null;

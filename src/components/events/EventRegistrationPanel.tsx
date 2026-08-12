@@ -14,6 +14,7 @@ import { localizePath } from "@/i18n/config";
 import { supabase } from "@/integrations/supabase/client";
 import { CARD_SHADOW } from "@/components/site-chrome";
 import { PaymentOverlay } from "@/components/events/PaymentOverlay";
+import { FormQuestionFields } from "@/components/forms/FormQuestionFields";
 import { isPastEvent, type PublicEvent } from "@/lib/events";
 import { trackGoal } from "@/lib/plausible";
 import {
@@ -141,7 +142,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   };
 
   const tiers = useMemo(() => ticketing.data?.tiers ?? [], [ticketing.data]);
-  const fields = ticketing.data?.fields ?? [];
+  const questions = ticketing.data?.questions ?? [];
   const hasTiers = tiers.length > 0;
   const allowed = useMemo(() => selectableTiers(tiers, membership), [tiers, membership]);
   const memberTier = findMemberTier(tiers);
@@ -720,65 +721,13 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
           className={inputClass}
         />
 
-        {fields.map((field) => {
-          const id = `rsvp-field-${field.id}`;
-          const value = answers[field.key] ?? "";
-          const update = (next: string) => setAnswers((prev) => ({ ...prev, [field.key]: next }));
-          if (field.type === "checkbox") {
-            return (
-              <label key={field.id} className="flex items-start gap-2 text-xs font-semibold">
-                <input
-                  type="checkbox"
-                  className="mt-0.5"
-                  required={field.required}
-                  checked={value === "true"}
-                  onChange={(e) => update(e.target.checked ? "true" : "false")}
-                />
-                <span>{field.label}</span>
-              </label>
-            );
-          }
-          return (
-            <div key={field.id}>
-              <label className="block text-xs font-semibold" htmlFor={id}>
-                {field.label}
-              </label>
-              {field.type === "single_choice" ? (
-                <select
-                  id={id}
-                  required={field.required}
-                  value={value}
-                  onChange={(e) => update(e.target.value)}
-                  className={inputClass}
-                >
-                  <option value="" />
-                  {field.options.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              ) : field.type === "long_text" ? (
-                <textarea
-                  id={id}
-                  rows={3}
-                  required={field.required}
-                  value={value}
-                  onChange={(e) => update(e.target.value)}
-                  className={inputClass}
-                />
-              ) : (
-                <input
-                  id={id}
-                  required={field.required}
-                  value={value}
-                  onChange={(e) => update(e.target.value)}
-                  className={inputClass}
-                />
-              )}
-            </div>
-          );
-        })}
+        <FormQuestionFields
+          questions={questions}
+          answers={answers}
+          onChange={(key, value) => setAnswers((prev) => ({ ...prev, [key]: value }))}
+          idPrefix="rsvp-field"
+          inputClass={inputClass}
+        />
 
         <label className="block text-xs font-semibold" htmlFor="rsvp-notes">
           {t("events.detail.fieldNotes")}
