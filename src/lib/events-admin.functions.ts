@@ -19,6 +19,8 @@ const LIST_COLUMNS =
 
 const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, published_at, content_updated_at, hero_marks`;
 
+const EDIT_COLUMNS_WITH_NOTES = `${EDIT_COLUMNS}, practical_notes`;
+
 const recurrenceRule = z.object({
   frequency: z.enum(RECURRENCE_FREQUENCIES),
   interval: z.number().int().min(1).max(8),
@@ -71,6 +73,8 @@ const eventInput = z.object({
   registration_opens_at: z.string().min(1).nullable().optional(),
   registration_closes_at: z.string().min(1).nullable().optional(),
   guest_registration_allowed: z.boolean(),
+  // Door and joining information, repeated in the reminder emails.
+  practical_notes: z.string().trim().max(2000).nullable().optional(),
   is_featured: z.boolean(),
   category_id: z.string().uuid().nullable().optional(),
   region_id: z.string().uuid().nullable().optional(),
@@ -97,6 +101,7 @@ function normalize(input: z.infer<typeof eventInput>) {
     image_credit_name: blankToNull(input.image_credit_name),
     image_credit_url: blankToNull(input.image_credit_url),
     capacity: input.capacity ?? null,
+    practical_notes: blankToNull(input.practical_notes),
     category_id: input.category_id ?? null,
     region_id: input.region_id ?? null,
     community_id: input.community_id ?? null,
