@@ -84,6 +84,7 @@ import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/mana
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
 import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/calendar.$file'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicTicketQrTokenRouteImport } from './routes/api/public/ticket-qr.$token'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
@@ -465,6 +466,11 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicTicketQrTokenRoute = ApiPublicTicketQrTokenRouteImport.update({
+  id: '/api/public/ticket-qr/$token',
+  path: '/api/public/ticket-qr/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
@@ -545,6 +551,7 @@ export interface FileRoutesByFullPath {
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events/': typeof StaffManageEventsIndexRoute
 }
@@ -617,6 +624,7 @@ export interface FileRoutesByTo {
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events': typeof StaffManageEventsIndexRoute
 }
@@ -696,6 +704,7 @@ export interface FileRoutesById {
   '/_staff/manage/events/$id': typeof StaffManageEventsIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/_staff/manage/events/': typeof StaffManageEventsIndexRoute
 }
@@ -774,6 +783,7 @@ export interface FileRouteTypes {
     | '/manage/events/$id'
     | '/api/public/calendar/$file'
     | '/api/public/payments/webhook'
+    | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/manage/events/'
   fileRoutesByTo: FileRoutesByTo
@@ -846,6 +856,7 @@ export interface FileRouteTypes {
     | '/manage/events/$id'
     | '/api/public/calendar/$file'
     | '/api/public/payments/webhook'
+    | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/manage/events'
   id:
@@ -924,6 +935,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/events/$id'
     | '/api/public/calendar/$file'
     | '/api/public/payments/webhook'
+    | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/_staff/manage/events/'
   fileRoutesById: FileRoutesById
@@ -965,6 +977,7 @@ export interface RootRouteChildren {
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
   ApiPublicCalendarFileRoute: typeof ApiPublicCalendarFileRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  ApiPublicTicketQrTokenRoute: typeof ApiPublicTicketQrTokenRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
@@ -1495,6 +1508,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/ticket-qr/$token': {
+      id: '/api/public/ticket-qr/$token'
+      path: '/api/public/ticket-qr/$token'
+      fullPath: '/api/public/ticket-qr/$token'
+      preLoaderRoute: typeof ApiPublicTicketQrTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/preview': {
       id: '/lovable/email/transactional/preview'
       path: '/lovable/email/transactional/preview'
@@ -1689,6 +1709,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,
   ApiPublicCalendarFileRoute: ApiPublicCalendarFileRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  ApiPublicTicketQrTokenRoute: ApiPublicTicketQrTokenRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
