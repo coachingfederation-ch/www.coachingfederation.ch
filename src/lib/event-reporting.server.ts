@@ -57,9 +57,16 @@ function isActive(r: Row) {
   );
 }
 
-/** Money we actually took. Pending holds and free seats are worth nothing. */
+/**
+ * Money we actually took for a live seat. Pending holds and free seats are
+ * worth nothing, and a cancelled seat is not revenue — unless it was paid and
+ * then refunded, where the gross is kept so the refund nets it out visibly
+ * instead of pushing the net negative.
+ */
 function grossOf(r: Row) {
-  return r.payment_status === "paid" ? (r.amount_cents ?? 0) : 0;
+  if (r.payment_status !== "paid") return 0;
+  if (r.status !== "confirmed" && r.refund_status !== "refunded") return 0;
+  return r.amount_cents ?? 0;
 }
 
 function refundOf(r: Row) {
