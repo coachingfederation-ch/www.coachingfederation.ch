@@ -60,6 +60,7 @@ import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as InsightsIdRouteImport } from './routes/insights.$id'
+import { Route as TicketTokenRouteImport } from './routes/ticket.$token'
 import { Route as LocaleCoachProfileIdRouteImport } from './routes/$locale/coach.$profileId'
 import { Route as LocaleCommunitiesIndexRouteImport } from './routes/$locale/communities.index'
 import { Route as LocaleCommunitiesSlugRouteImport } from './routes/$locale/communities.$slug'
@@ -343,6 +344,11 @@ const InsightsIdRoute = InsightsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => InsightsRoute,
 } as any)
+const TicketTokenRoute = TicketTokenRouteImport.update({
+  id: '/ticket/$token',
+  path: '/ticket/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LocaleCoachProfileIdRoute = LocaleCoachProfileIdRouteImport.update({
   id: '/coach/$profileId',
   path: '/coach/$profileId',
@@ -523,6 +529,7 @@ export interface FileRoutesByFullPath {
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/insights/$id': typeof InsightsIdRoute
+  '/ticket/$token': typeof TicketTokenRoute
   '/$locale/': typeof LocaleIndexRoute
   '/claim/': typeof ClaimIndexRoute
   '/communities/': typeof CommunitiesIndexRoute
@@ -596,6 +603,7 @@ export interface FileRoutesByTo {
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/insights/$id': typeof InsightsIdRoute
+  '/ticket/$token': typeof TicketTokenRoute
   '/$locale': typeof LocaleIndexRoute
   '/claim': typeof ClaimIndexRoute
   '/communities': typeof CommunitiesIndexRoute
@@ -676,6 +684,7 @@ export interface FileRoutesById {
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/insights/$id': typeof InsightsIdRoute
+  '/ticket/$token': typeof TicketTokenRoute
   '/$locale/': typeof LocaleIndexRoute
   '/claim/': typeof ClaimIndexRoute
   '/communities/': typeof CommunitiesIndexRoute
@@ -755,6 +764,7 @@ export interface FileRouteTypes {
     | '/communities/$slug'
     | '/events/$slug'
     | '/insights/$id'
+    | '/ticket/$token'
     | '/$locale/'
     | '/claim/'
     | '/communities/'
@@ -828,6 +838,7 @@ export interface FileRouteTypes {
     | '/communities/$slug'
     | '/events/$slug'
     | '/insights/$id'
+    | '/ticket/$token'
     | '/$locale'
     | '/claim'
     | '/communities'
@@ -907,6 +918,7 @@ export interface FileRouteTypes {
     | '/communities/$slug'
     | '/events/$slug'
     | '/insights/$id'
+    | '/ticket/$token'
     | '/$locale/'
     | '/claim/'
     | '/communities/'
@@ -967,6 +979,7 @@ export interface RootRouteChildren {
   CoachProfileIdRoute: typeof CoachProfileIdRoute
   CommunitiesSlugRoute: typeof CommunitiesSlugRoute
   EventsSlugRoute: typeof EventsSlugRoute
+  TicketTokenRoute: typeof TicketTokenRoute
   ClaimIndexRoute: typeof ClaimIndexRoute
   CommunitiesIndexRoute: typeof CommunitiesIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
@@ -1340,6 +1353,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InsightsIdRouteImport
       parentRoute: typeof InsightsRoute
     }
+    '/ticket/$token': {
+      id: '/ticket/$token'
+      path: '/ticket/$token'
+      fullPath: '/ticket/$token'
+      preLoaderRoute: typeof TicketTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$locale/coach/$profileId': {
       id: '/$locale/coach/$profileId'
       path: '/coach/$profileId'
@@ -1699,6 +1719,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachProfileIdRoute: CoachProfileIdRoute,
   CommunitiesSlugRoute: CommunitiesSlugRoute,
   EventsSlugRoute: EventsSlugRoute,
+  TicketTokenRoute: TicketTokenRoute,
   ClaimIndexRoute: ClaimIndexRoute,
   CommunitiesIndexRoute: CommunitiesIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
