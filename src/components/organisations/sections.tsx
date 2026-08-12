@@ -3,6 +3,7 @@
  * Exports: ProofBar, Differentiators, Initiatives, EventsStrip. Rendered by the organisations landing route.
  */
 import { Mark, type MarkName } from "@/components/marks";
+import { AnimatedStat } from "@/components/organisations/AnimatedStat";
 import { CARD_SHADOW } from "@/components/site-chrome";
 import { LocaleLink, useI18n } from "@/i18n";
 
@@ -15,7 +16,10 @@ export function ProofBar() {
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-8 py-10 md:grid-cols-4">
         {items.map((i) => (
           <div key={i.label} className="px-2">
-            <p className="text-2xl font-bold tracking-tight text-primary md:text-3xl">{i.value}</p>
+            <AnimatedStat
+              value={i.value}
+              className="text-2xl font-bold tracking-tight text-primary md:text-3xl"
+            />
             <p className="mt-1 text-xs leading-snug text-muted-foreground">{i.label}</p>
           </div>
         ))}
