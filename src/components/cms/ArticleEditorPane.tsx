@@ -212,6 +212,7 @@ export function ArticleEditorPane({
       <MarkdownEditor
         textareaRef={bodyRef}
         value={article.content}
+        language={article.language}
         onChange={(next) => update({ content: next })}
         placeholder={t("editor.bodyPlaceholder")}
       />

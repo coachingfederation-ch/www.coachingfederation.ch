@@ -1120,5 +1120,25 @@
     "hint": "Pinsel anklicken zum Hinzufügen, ziehen zum Verschieben, Eckpunkt zum Skalieren.",
     "clear": "Marks entfernen",
     "untitled": "Ohne Titel"
+  },
+  "ai": {
+    "toggle": "KI",
+    "generate": "Erzeugen",
+    "promptPlaceholder": "Sag der KI, was sie schreiben soll, z. B. eine kurze Einleitung über Mentoring…",
+    "resultTitle": "Vorschlag",
+    "replaceSelection": "Auswahl ersetzen",
+    "replaceAll": "Text ersetzen",
+    "insert": "An Cursor einfügen",
+    "regenerate": "Neu erzeugen",
+    "discard": "Verwerfen",
+    "scopeSelection": "Bezieht sich auf deine Auswahl",
+    "scopeWhole": "Bezieht sich auf den ganzen Text",
+    "action": {
+      "improve": "Text verbessern",
+      "grammar": "Grammatik korrigieren",
+      "shorten": "Kürzen",
+      "expand": "Ausbauen",
+      "continue": "Weiterschreiben"
+    }
   }
 }

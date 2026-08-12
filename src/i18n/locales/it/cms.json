@@ -1120,5 +1120,25 @@
     "hint": "Clicca un pennello per aggiungerlo, trascina per spostare, maniglia d’angolo per ridimensionare.",
     "clear": "Rimuovi segni",
     "untitled": "Senza titolo"
+  },
+  "ai": {
+    "toggle": "IA",
+    "generate": "Genera",
+    "promptPlaceholder": "Indica all'IA cosa scrivere, ad es. una breve introduzione sul mentoring…",
+    "resultTitle": "Proposta",
+    "replaceSelection": "Sostituisci la selezione",
+    "replaceAll": "Sostituisci il testo",
+    "insert": "Inserisci al cursore",
+    "regenerate": "Rigenera",
+    "discard": "Scarta",
+    "scopeSelection": "Si applica alla selezione",
+    "scopeWhole": "Si applica a tutto il testo",
+    "action": {
+      "improve": "Migliora il testo",
+      "grammar": "Correggi la grammatica",
+      "shorten": "Accorcia",
+      "expand": "Amplia",
+      "continue": "Continua a scrivere"
+    }
   }
 }
