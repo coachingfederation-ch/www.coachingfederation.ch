@@ -96,6 +96,13 @@ export function EventAttendeeToolbar({
           >
             {t("events.checkIn.open")}
           </Link>
+          <Link
+            to="/manage/events/$id/reporting"
+            params={{ id: eventId }}
+            className="rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-secondary"
+          >
+            {t("events.reporting.open")}
+          </Link>
         </div>
       </div>
 
