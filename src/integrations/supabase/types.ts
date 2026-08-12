@@ -1204,6 +1204,308 @@ export type Database = {
           },
         ]
       }
+      event_form_questions: {
+        Row: {
+          condition_question_id: string | null
+          condition_value: string | null
+          created_at: string
+          form_id: string
+          help_text: string | null
+          help_text_de: string | null
+          help_text_fr: string | null
+          help_text_it: string | null
+          id: string
+          is_required: boolean
+          label: string
+          label_de: string | null
+          label_fr: string | null
+          label_it: string | null
+          options: string[]
+          qtype: string
+          question_key: string
+          rating_max: number
+          scale_high_label: string | null
+          scale_low_label: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          condition_question_id?: string | null
+          condition_value?: string | null
+          created_at?: string
+          form_id: string
+          help_text?: string | null
+          help_text_de?: string | null
+          help_text_fr?: string | null
+          help_text_it?: string | null
+          id?: string
+          is_required?: boolean
+          label: string
+          label_de?: string | null
+          label_fr?: string | null
+          label_it?: string | null
+          options?: string[]
+          qtype?: string
+          question_key: string
+          rating_max?: number
+          scale_high_label?: string | null
+          scale_low_label?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          condition_question_id?: string | null
+          condition_value?: string | null
+          created_at?: string
+          form_id?: string
+          help_text?: string | null
+          help_text_de?: string | null
+          help_text_fr?: string | null
+          help_text_it?: string | null
+          id?: string
+          is_required?: boolean
+          label?: string
+          label_de?: string | null
+          label_fr?: string | null
+          label_it?: string | null
+          options?: string[]
+          qtype?: string
+          question_key?: string
+          rating_max?: number
+          scale_high_label?: string | null
+          scale_low_label?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_form_questions_condition_question_id_fkey"
+            columns: ["condition_question_id"]
+            isOneToOne: false
+            referencedRelation: "event_form_questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_form_questions_condition_question_id_fkey"
+            columns: ["condition_question_id"]
+            isOneToOne: false
+            referencedRelation: "event_form_questions_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_form_questions_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "event_forms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_form_questions_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "event_forms_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_form_recipients: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          email: string
+          form_id: string
+          id: string
+          locale: string
+          registration_id: string
+          reminder_sent_at: string | null
+          send_error: string | null
+          sent_at: string | null
+          status: string
+          token_hash: string | null
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          email: string
+          form_id: string
+          id?: string
+          locale?: string
+          registration_id: string
+          reminder_sent_at?: string | null
+          send_error?: string | null
+          sent_at?: string | null
+          status?: string
+          token_hash?: string | null
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          email?: string
+          form_id?: string
+          id?: string
+          locale?: string
+          registration_id?: string
+          reminder_sent_at?: string | null
+          send_error?: string | null
+          sent_at?: string | null
+          status?: string
+          token_hash?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_form_recipients_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "event_forms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_form_recipients_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "event_forms_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_form_recipients_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "event_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_form_responses: {
+        Row: {
+          answers: Json
+          created_at: string
+          form_id: string
+          id: string
+          recipient_id: string | null
+          registration_id: string
+          submitted_at: string
+        }
+        Insert: {
+          answers?: Json
+          created_at?: string
+          form_id: string
+          id?: string
+          recipient_id?: string | null
+          registration_id: string
+          submitted_at?: string
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          form_id?: string
+          id?: string
+          recipient_id?: string | null
+          registration_id?: string
+          submitted_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_form_responses_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "event_forms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_form_responses_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "event_forms_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_form_responses_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "event_form_recipients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_form_responses_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "event_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_forms: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          intro: string | null
+          intro_de: string | null
+          intro_fr: string | null
+          intro_it: string | null
+          is_active: boolean
+          kind: string
+          name: string
+          thank_you: string | null
+          thank_you_de: string | null
+          thank_you_fr: string | null
+          thank_you_it: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          intro?: string | null
+          intro_de?: string | null
+          intro_fr?: string | null
+          intro_it?: string | null
+          is_active?: boolean
+          kind: string
+          name: string
+          thank_you?: string | null
+          thank_you_de?: string | null
+          thank_you_fr?: string | null
+          thank_you_it?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          intro?: string | null
+          intro_de?: string | null
+          intro_fr?: string | null
+          intro_it?: string | null
+          is_active?: boolean
+          kind?: string
+          name?: string
+          thank_you?: string | null
+          thank_you_de?: string | null
+          thank_you_fr?: string | null
+          thank_you_it?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_forms_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_forms_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_hosts: {
         Row: {
           created_at: string
@@ -1253,72 +1555,6 @@ export type Database = {
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "member_directory_profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      event_registration_fields: {
-        Row: {
-          created_at: string
-          event_id: string
-          field_key: string
-          field_type: string
-          id: string
-          is_active: boolean
-          is_required: boolean
-          label: string
-          label_de: string | null
-          label_fr: string | null
-          label_it: string | null
-          options: string[]
-          sort_order: number
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          event_id: string
-          field_key: string
-          field_type?: string
-          id?: string
-          is_active?: boolean
-          is_required?: boolean
-          label: string
-          label_de?: string | null
-          label_fr?: string | null
-          label_it?: string | null
-          options?: string[]
-          sort_order?: number
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          event_id?: string
-          field_key?: string
-          field_type?: string
-          id?: string
-          is_active?: boolean
-          is_required?: boolean
-          label?: string
-          label_de?: string | null
-          label_fr?: string | null
-          label_it?: string | null
-          options?: string[]
-          sort_order?: number
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "event_registration_fields_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "event_registration_fields_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "events_public"
             referencedColumns: ["id"]
           },
         ]
@@ -3362,11 +3598,16 @@ export type Database = {
         }
         Relationships: []
       }
-      event_registration_fields_public: {
+      event_form_questions_public: {
         Row: {
+          condition_question_id: string | null
+          condition_value: string | null
           event_id: string | null
-          field_key: string | null
-          field_type: string | null
+          form_id: string | null
+          help_text: string | null
+          help_text_de: string | null
+          help_text_fr: string | null
+          help_text_it: string | null
           id: string | null
           is_required: boolean | null
           label: string | null
@@ -3374,18 +3615,78 @@ export type Database = {
           label_fr: string | null
           label_it: string | null
           options: string[] | null
+          qtype: string | null
+          question_key: string | null
+          rating_max: number | null
+          scale_high_label: string | null
+          scale_low_label: string | null
           sort_order: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "event_registration_fields_event_id_fkey"
+            foreignKeyName: "event_form_questions_condition_question_id_fkey"
+            columns: ["condition_question_id"]
+            isOneToOne: false
+            referencedRelation: "event_form_questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_form_questions_condition_question_id_fkey"
+            columns: ["condition_question_id"]
+            isOneToOne: false
+            referencedRelation: "event_form_questions_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_form_questions_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "event_forms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_form_questions_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "event_forms_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_forms_event_id_fkey"
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "event_registration_fields_event_id_fkey"
+            foreignKeyName: "event_forms_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_forms_public: {
+        Row: {
+          event_id: string | null
+          id: string | null
+          kind: string | null
+          thank_you: string | null
+          thank_you_de: string | null
+          thank_you_fr: string | null
+          thank_you_it: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_forms_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_forms_event_id_fkey"
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events_public"

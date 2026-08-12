@@ -24,6 +24,7 @@ import { EventTicketsSection } from "@/components/cms/EventTicketsSection";
 import { EventCceSection } from "@/components/cms/EventCceSection";
 import { EventDiscountCodesSection } from "@/components/cms/EventDiscountCodesSection";
 import { EventWaitlistSection } from "@/components/cms/EventWaitlistSection";
+import { EventFormsSection } from "@/components/cms/EventFormsSection";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { useCms } from "@/i18n/cms";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
@@ -354,6 +355,7 @@ function EventEditor() {
               {event.registration_mode !== "none" ? (
                 <EventWaitlistSection eventId={event.id} t={t} />
               ) : null}
+              <EventFormsSection eventId={event.id} t={t} />
             </>
           }
           t={t}
