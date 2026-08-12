@@ -73,7 +73,7 @@ export const listEventWaitlist = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
-    await assertOrganizer(context.supabase, context.userId);
+    await assertOrganizer(context);
     const { expireLapsedInvites } = await import("./waitlist.server");
     await expireLapsedInvites(data.eventId);
     const { data: rows, error } = await context.supabase
@@ -96,7 +96,7 @@ export const inviteFromWaitlist = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data, context }) => {
-    await assertOrganizer(context.supabase, context.userId);
+    await assertOrganizer(context);
     // The caller's own client proves they may manage this event before the
     // trusted path mints a token.
     const { data: entry, error } = await context.supabase
@@ -115,7 +115,7 @@ export const withdrawWaitlistEntry = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ entryId: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
-    await assertOrganizer(context.supabase, context.userId);
+    await assertOrganizer(context);
     const { error } = await context.supabase
       .from("event_waitlist_entries")
       .update({ status: "withdrawn", invite_token_hash: null })
