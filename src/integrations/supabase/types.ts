@@ -3377,7 +3377,7 @@ export type Database = {
     }
     Functions: {
       check_in_registration: {
-        Args: { _registration_id: string }
+        Args: { _actor: string; _registration_id: string }
         Returns: Json
       }
       member_has_directory_credential: {
@@ -3394,7 +3394,10 @@ export type Database = {
         Args: { _member_id: string }
         Returns: boolean
       }
-      undo_check_in: { Args: { _registration_id: string }; Returns: Json }
+      undo_check_in: {
+        Args: { _actor: string; _registration_id: string }
+        Returns: Json
+      }
     }
     Enums: {
       app_role:
