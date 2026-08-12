@@ -11,6 +11,9 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertEditor, assertOrganizer } from "./authz";
+import type { Database } from "@/integrations/supabase/types";
+
+type ScheduleRowRecord = Database["public"]["Tables"]["event_cce_schedule_rows"]["Row"];
 
 const EVENT_COLUMNS =
   "id, title, slug, summary, description, language, starts_at, ends_at, timezone, location_mode, venue_name, city, online_url, cce_enabled, organizer_id";
@@ -73,7 +76,7 @@ export const getEventCce = createServerFn({ method: "POST" })
       .maybeSingle();
     if (error) throw new Error(error.message);
 
-    let rows: unknown[] = [];
+    let rows: ScheduleRowRecord[] = [];
     if (application) {
       const { data: scheduleRows, error: rowError } = await context.supabase
         .from("event_cce_schedule_rows")
@@ -81,7 +84,7 @@ export const getEventCce = createServerFn({ method: "POST" })
         .eq("application_id", application.id)
         .order("position", { ascending: true });
       if (rowError) throw new Error(rowError.message);
-      rows = scheduleRows ?? [];
+      rows = (scheduleRows ?? []) as ScheduleRowRecord[];
     }
 
     return { event, application: application ?? null, rows };
