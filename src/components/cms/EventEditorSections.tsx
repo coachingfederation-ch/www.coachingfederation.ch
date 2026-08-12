@@ -961,7 +961,11 @@ function CancelAttendeeDialog({
   registration: Registration | null;
   eventStartsAt: string | null;
   onClose: () => void;
-  onConfirm: (r: Registration, refund: boolean | undefined) => void | Promise<void>;
+  onConfirm: (
+    r: Registration,
+    refund: boolean | undefined,
+    note: string | null,
+  ) => void | Promise<void>;
   t: (k: string) => string;
 }) {
   const wasPaid = Boolean(
@@ -973,10 +977,12 @@ function CancelAttendeeDialog({
     ? new Date(eventStartsAt).getTime() - Date.now() > 48 * 3600_000
     : true;
   const [override, setOverride] = React.useState<boolean | null>(null);
+  const [note, setNote] = React.useState("");
   const [busy, setBusy] = React.useState(false);
 
   React.useEffect(() => {
     setOverride(null);
+    setNote("");
     setBusy(false);
   }, [registration?.id]);
 
@@ -1019,6 +1025,17 @@ function CancelAttendeeDialog({
             </span>
           </label>
         ) : null}
+        <label className="block text-sm">
+          <span className="text-xs font-semibold">{t("events.cancelDialog.noteLabel")}</span>
+          <textarea
+            rows={2}
+            maxLength={500}
+            value={note}
+            placeholder={t("events.cancelDialog.notePlaceholder")}
+            onChange={(e) => setNote(e.target.value)}
+            className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+          />
+        </label>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={busy}>{t("events.cancelDialog.keep")}</AlertDialogCancel>
           <AlertDialogAction
@@ -1027,7 +1044,7 @@ function CancelAttendeeDialog({
               e.preventDefault();
               if (!registration) return;
               setBusy(true);
-              void onConfirm(registration, wasPaid ? refund : undefined);
+              void onConfirm(registration, wasPaid ? refund : undefined, note.trim() || null);
             }}
           >
             {busy ? t("events.cancelDialog.working") : t("events.cancelDialog.confirm")}
