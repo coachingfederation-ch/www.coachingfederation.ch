@@ -1153,11 +1153,15 @@ export type Database = {
           cancellation_note: string | null
           cancellation_sent_at: string | null
           cancellation_status: string
+          check_in_token: string | null
+          checked_in_at: string | null
+          checked_in_by: string | null
           confirmation_error: string | null
           confirmation_sent_at: string | null
           confirmation_sequence: number
           confirmation_status: string
           created_at: string
+          created_by_staff: string | null
           currency: string
           discount_amount_cents: number
           discount_code_id: string | null
@@ -1177,6 +1181,8 @@ export type Database = {
           refund_error: string | null
           refund_status: string
           refunded_at: string | null
+          reminder_1d_sent_at: string | null
+          reminder_7d_sent_at: string | null
           status: Database["public"]["Enums"]["event_registration_status"]
           stripe_refund_id: string | null
           stripe_session_id: string | null
@@ -1192,11 +1198,15 @@ export type Database = {
           cancellation_note?: string | null
           cancellation_sent_at?: string | null
           cancellation_status?: string
+          check_in_token?: string | null
+          checked_in_at?: string | null
+          checked_in_by?: string | null
           confirmation_error?: string | null
           confirmation_sent_at?: string | null
           confirmation_sequence?: number
           confirmation_status?: string
           created_at?: string
+          created_by_staff?: string | null
           currency?: string
           discount_amount_cents?: number
           discount_code_id?: string | null
@@ -1216,6 +1226,8 @@ export type Database = {
           refund_error?: string | null
           refund_status?: string
           refunded_at?: string | null
+          reminder_1d_sent_at?: string | null
+          reminder_7d_sent_at?: string | null
           status?: Database["public"]["Enums"]["event_registration_status"]
           stripe_refund_id?: string | null
           stripe_session_id?: string | null
@@ -1231,11 +1243,15 @@ export type Database = {
           cancellation_note?: string | null
           cancellation_sent_at?: string | null
           cancellation_status?: string
+          check_in_token?: string | null
+          checked_in_at?: string | null
+          checked_in_by?: string | null
           confirmation_error?: string | null
           confirmation_sent_at?: string | null
           confirmation_sequence?: number
           confirmation_status?: string
           created_at?: string
+          created_by_staff?: string | null
           currency?: string
           discount_amount_cents?: number
           discount_code_id?: string | null
@@ -1255,6 +1271,8 @@ export type Database = {
           refund_error?: string | null
           refund_status?: string
           refunded_at?: string | null
+          reminder_1d_sent_at?: string | null
+          reminder_7d_sent_at?: string | null
           status?: Database["public"]["Enums"]["event_registration_status"]
           stripe_refund_id?: string | null
           stripe_session_id?: string | null
@@ -1537,6 +1555,10 @@ export type Database = {
           map_location: string | null
           online_url: string | null
           organizer_id: string | null
+          practical_notes: string | null
+          practical_notes_de: string | null
+          practical_notes_fr: string | null
+          practical_notes_it: string | null
           published_at: string | null
           recurrence: Json | null
           region_id: string | null
@@ -1574,6 +1596,10 @@ export type Database = {
           map_location?: string | null
           online_url?: string | null
           organizer_id?: string | null
+          practical_notes?: string | null
+          practical_notes_de?: string | null
+          practical_notes_fr?: string | null
+          practical_notes_it?: string | null
           published_at?: string | null
           recurrence?: Json | null
           region_id?: string | null
@@ -1611,6 +1637,10 @@ export type Database = {
           map_location?: string | null
           online_url?: string | null
           organizer_id?: string | null
+          practical_notes?: string | null
+          practical_notes_de?: string | null
+          practical_notes_fr?: string | null
+          practical_notes_it?: string | null
           published_at?: string | null
           recurrence?: Json | null
           region_id?: string | null
@@ -3346,6 +3376,10 @@ export type Database = {
       }
     }
     Functions: {
+      check_in_registration: {
+        Args: { _registration_id: string }
+        Returns: Json
+      }
       member_has_directory_credential: {
         Args: { _credential_expires_on: string; _credential_slug: string }
         Returns: boolean
@@ -3360,6 +3394,7 @@ export type Database = {
         Args: { _member_id: string }
         Returns: boolean
       }
+      undo_check_in: { Args: { _registration_id: string }; Returns: Json }
     }
     Enums: {
       app_role:
