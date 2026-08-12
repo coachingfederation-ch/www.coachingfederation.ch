@@ -43,7 +43,11 @@ async function claim(registrationId: string, stage: ReminderStage) {
   const column = STAGE_COLUMN[stage];
   const { data } = await supabaseAdmin
     .from("event_registrations")
-    .update({ [column]: new Date().toISOString() })
+    .update(
+      stage === "week"
+        ? { reminder_7d_sent_at: new Date().toISOString() }
+        : { reminder_1d_sent_at: new Date().toISOString() },
+    )
     .eq("id", registrationId)
     .is(column, null)
     .select("id");
@@ -143,7 +147,9 @@ export async function sendReminder(
     // Release the claim so the next run can retry this attendee.
     await supabaseAdmin
       .from("event_registrations")
-      .update({ [STAGE_COLUMN[stage]]: null })
+      .update(
+        stage === "week" ? { reminder_7d_sent_at: null } : { reminder_1d_sent_at: null },
+      )
       .eq("id", registrationId);
     return { status: "failed", reason: message.slice(0, 200) };
   }
