@@ -774,7 +774,7 @@
     "fieldCity": "Ville",
     "fieldVenue": "Lieu",
     "fieldMapLocation": "Emplacement sur la carte",
-    "fieldMapLocationHint": "Collez une adresse ou un lien de carte (Google Maps, OpenStreetMap). Une carte s'affiche sur la page de l'événement.",
+    "fieldMapLocationHint": "Collez une adresse, un lien Google Maps ou tout le code iframe « Intégrer une carte » de Google (Partager › Intégrer une carte › Copier le code HTML). Les URL courtes « Envoyer un lien » (maps.app.goo.gl) ne peuvent pas être intégrées et s’affichent uniquement sous forme de lien.",
     "fieldOnlineUrl": "Lien en ligne",
     "fieldImageUrl": "URL de l'image",
     "fieldCapacity": "Capacité (laisser vide pour illimité)",

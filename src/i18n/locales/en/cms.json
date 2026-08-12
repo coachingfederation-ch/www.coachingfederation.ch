@@ -774,7 +774,7 @@
     "fieldCity": "City",
     "fieldVenue": "Venue",
     "fieldMapLocation": "Map location",
-    "fieldMapLocationHint": "Paste an address or a map link (Google Maps, OpenStreetMap). A map is shown on the event page.",
+    "fieldMapLocationHint": "Paste an address, a Google Maps link, or the whole “Embed a map” iframe snippet from Google (Share › Embed a map › Copy HTML). Short “Send a link” URLs (maps.app.goo.gl) cannot be embedded and will only render as a link.",
     "fieldOnlineUrl": "Online link",
     "fieldImageUrl": "Image URL",
     "fieldCapacity": "Capacity (leave empty for unlimited)",

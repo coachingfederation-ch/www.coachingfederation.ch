@@ -774,7 +774,7 @@
     "fieldCity": "Città",
     "fieldVenue": "Luogo",
     "fieldMapLocation": "Posizione sulla mappa",
-    "fieldMapLocationHint": "Incolla un indirizzo o un link a una mappa (Google Maps, OpenStreetMap). Sulla pagina dell'evento verrà mostrata una mappa.",
+    "fieldMapLocationHint": "Incolla un indirizzo, un link di Google Maps o l’intero codice iframe “Incorpora una mappa” di Google (Condividi › Incorpora una mappa › Copia HTML). Gli URL brevi “Invia un link” (maps.app.goo.gl) non possono essere incorporati e vengono mostrati solo come link.",
     "fieldOnlineUrl": "Link online",
     "fieldImageUrl": "URL dell'immagine",
     "fieldCapacity": "Capienza (lascia vuoto per illimitata)",
