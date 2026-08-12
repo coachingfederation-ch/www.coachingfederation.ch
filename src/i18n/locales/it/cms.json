@@ -1083,7 +1083,17 @@
       "seriesFree": "Gratuito",
       "seriesGross": "Lordo",
       "seriesRefunds": "Rimborsi",
-      "seriesCheckIns": "Check-in"
+      "seriesCheckIns": "Check-in",
+      "colTier": "Categoria",
+      "colPrice": "Prezzo",
+      "colCapacity": "Capienza",
+      "colConfirmed": "Confermate",
+      "colRemaining": "Disponibili",
+      "colSellThrough": "Tasso di vendita",
+      "colGross": "Lordo",
+      "colRefunds": "Rimborsi",
+      "colNet": "Netto",
+      "colCheckIns": "Check-in"
     }
   },
   "eventTranslations": {

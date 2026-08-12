@@ -1083,7 +1083,17 @@
       "seriesFree": "Free",
       "seriesGross": "Gross",
       "seriesRefunds": "Refunds",
-      "seriesCheckIns": "Check-ins"
+      "seriesCheckIns": "Check-ins",
+      "colTier": "Tier",
+      "colPrice": "Price",
+      "colCapacity": "Capacity",
+      "colConfirmed": "Confirmed",
+      "colRemaining": "Remaining",
+      "colSellThrough": "Sell-through",
+      "colGross": "Gross",
+      "colRefunds": "Refunds",
+      "colNet": "Net",
+      "colCheckIns": "Check-ins"
     }
   },
   "eventTranslations": {

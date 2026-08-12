@@ -1083,7 +1083,17 @@
       "seriesFree": "Gratuit",
       "seriesGross": "Brut",
       "seriesRefunds": "Remboursements",
-      "seriesCheckIns": "Enregistrements"
+      "seriesCheckIns": "Enregistrements",
+      "colTier": "Catégorie",
+      "colPrice": "Prix",
+      "colCapacity": "Capacité",
+      "colConfirmed": "Confirmées",
+      "colRemaining": "Restant",
+      "colSellThrough": "Taux de vente",
+      "colGross": "Brut",
+      "colRefunds": "Remboursements",
+      "colNet": "Net",
+      "colCheckIns": "Enregistrements"
     }
   },
   "eventTranslations": {

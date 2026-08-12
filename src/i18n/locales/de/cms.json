@@ -1083,7 +1083,17 @@
       "seriesFree": "Kostenlos",
       "seriesGross": "Brutto",
       "seriesRefunds": "Erstattungen",
-      "seriesCheckIns": "Check-ins"
+      "seriesCheckIns": "Check-ins",
+      "colTier": "Kategorie",
+      "colPrice": "Preis",
+      "colCapacity": "Kapazität",
+      "colConfirmed": "Bestätigt",
+      "colRemaining": "Verfügbar",
+      "colSellThrough": "Auslastung",
+      "colGross": "Brutto",
+      "colRefunds": "Erstattungen",
+      "colNet": "Netto",
+      "colCheckIns": "Check-ins"
     }
   },
   "eventTranslations": {
