@@ -126,7 +126,27 @@
         "member_only": "That code is for active ICF members. Sign in or confirm your member ID first."
       }
     },
-    "membersOnlyPrompt": "Members can register for this event. Sign in with your linked account, or enter your ICF member ID."
+    "membersOnlyPrompt": "Members can register for this event. Sign in with your linked account, or enter your ICF member ID.",
+    "waitlist": {
+      "title": "Join the waitlist",
+      "intro": "This event is full. Leave your details and we will write to you as soon as a place opens up.",
+      "introTier": "This ticket is sold out. Leave your details and we will write to you as soon as a place opens up.",
+      "name": "Your name",
+      "email": "Email",
+      "note": "Anything we should know (optional)",
+      "submit": "Join the waitlist",
+      "saving": "Adding you…",
+      "done": "You are on the waitlist. We will write to you if a place opens up.",
+      "already": "You are already on the waitlist for this event.",
+      "closed": "Registration for this event has closed.",
+      "error": "We could not add you just now. Please try again.",
+      "rateLimited": "Too many attempts. Please try again later.",
+      "privacy": "We use your details only to contact you about this event.",
+      "inviteTitle": "A place is held for you",
+      "inviteBody": "You were invited from the waitlist. Complete your registration below to take the place.",
+      "inviteExpires": "Your invitation is held until {deadline}.",
+      "inviteExpired": "This invitation has expired and the place has gone back to the waitlist."
+    }
   },
   "filters": {
     "when": "When",

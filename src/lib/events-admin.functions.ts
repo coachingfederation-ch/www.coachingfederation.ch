@@ -596,6 +596,8 @@ export const cancelRegistration = createServerFn({ method: "POST" })
         registrationId: z.string().uuid(),
         /** Omitted: apply the 48-hour policy. Set: staff overrides it. */
         refund: z.boolean().optional(),
+        /** Internal reason kept with the row for the audit trail. */
+        note: z.string().trim().max(500).optional().nullable(),
       })
       .parse(input),
   )
@@ -628,6 +630,16 @@ export const cancelRegistration = createServerFn({ method: "POST" })
         .update({ status: "cancelled" })
         .eq("id", data.registrationId);
       if (cancelError) throw new Error(cancelError.message);
+    }
+
+    // The note is server-owned (the row guard rejects it from a normal update),
+    // so it is written through the trusted client after the cancellation.
+    if (data.note) {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      await supabaseAdmin
+        .from("event_registrations")
+        .update({ cancellation_note: data.note })
+        .eq("id", data.registrationId);
     }
 
     let refund: { status: string; error?: string } = { status: "not_applicable" };

@@ -126,7 +126,27 @@
         "member_only": "Ce code est réservé aux membres ICF actifs. Connectez-vous ou confirmez votre numéro de membre."
       }
     },
-    "membersOnlyPrompt": "Les membres peuvent s'inscrire à cet événement. Connectez-vous avec votre compte lié ou saisissez votre numéro de membre ICF."
+    "membersOnlyPrompt": "Les membres peuvent s'inscrire à cet événement. Connectez-vous avec votre compte lié ou saisissez votre numéro de membre ICF.",
+    "waitlist": {
+      "title": "Rejoindre la liste d'attente",
+      "intro": "Cet événement est complet. Laissez vos coordonnées et nous vous écrirons dès qu'une place se libère.",
+      "introTier": "Ce billet est épuisé. Laissez vos coordonnées et nous vous écrirons dès qu'une place se libère.",
+      "name": "Votre nom",
+      "email": "E-mail",
+      "note": "Ce que nous devrions savoir (facultatif)",
+      "submit": "Rejoindre la liste d'attente",
+      "saving": "Enregistrement…",
+      "done": "Vous êtes sur la liste d'attente. Nous vous écrirons si une place se libère.",
+      "already": "Vous êtes déjà sur la liste d'attente pour cet événement.",
+      "closed": "Les inscriptions à cet événement sont closes.",
+      "error": "Nous n'avons pas pu vous ajouter. Merci de réessayer.",
+      "rateLimited": "Trop de tentatives. Merci de réessayer plus tard.",
+      "privacy": "Nous utilisons vos coordonnées uniquement pour vous contacter au sujet de cet événement.",
+      "inviteTitle": "Une place vous est réservée",
+      "inviteBody": "Vous avez été invité·e depuis la liste d'attente. Complétez votre inscription ci-dessous pour prendre la place.",
+      "inviteExpires": "Votre invitation est valable jusqu'au {deadline}.",
+      "inviteExpired": "Cette invitation a expiré et la place est retournée sur la liste d'attente."
+    }
   },
   "filters": {
     "when": "Période",

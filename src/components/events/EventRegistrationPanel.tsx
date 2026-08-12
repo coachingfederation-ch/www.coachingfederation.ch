@@ -30,6 +30,8 @@ import {
   verifyMemberId,
 } from "@/lib/tickets.functions";
 import { validateDiscountCode, validateDiscountCodeAsMember } from "@/lib/discount-codes.functions";
+import { checkWaitlistInvite } from "@/lib/waitlist.functions";
+import { EventWaitlistForm } from "@/components/events/EventWaitlistForm";
 import type { DiscountFailure, DiscountPreview } from "@/lib/discount-codes";
 import {
   formatPrice,
@@ -162,6 +164,32 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const [state, setState] = useState<FormState>({ kind: "idle" });
   const [returned, setReturned] = useState<ReturnState>(null);
 
+  // A waitlist invitation arrives as ?invite=<token>. The server decides
+  // whether it is still live; this only prefills and unlocks the form.
+  const [inviteToken, setInviteToken] = useState<string | null>(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const token = new URLSearchParams(window.location.search).get("invite");
+    if (token) setInviteToken(token);
+  }, []);
+  const inviteQuery = useQuery({
+    queryKey: ["waitlist-invite", eventId, inviteToken],
+    queryFn: () => checkWaitlistInvite({ data: { eventId, token: inviteToken! } }),
+    enabled: Boolean(inviteToken),
+    retry: false,
+    staleTime: 60_000,
+  });
+  const invite = inviteQuery.data ?? null;
+  const inviteExpired = Boolean(inviteToken) && inviteQuery.isFetched && !invite;
+
+  // The invited person's own details win over anything prefilled.
+  useEffect(() => {
+    if (!invite) return;
+    setFullName((current) => current || invite.fullName);
+    setEmail(invite.email);
+    if (invite.tierId) setTierId(invite.tierId);
+  }, [invite]);
+
   // Restore a draft left behind by a sign-in detour.
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -195,6 +223,9 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   // tier), so follow the server's default until the visitor picks explicitly.
   useEffect(() => {
     const preferred = ticketing.data?.defaultTierId ?? null;
+    // An invited person keeps the tier their place was held for, even though
+    // that tier still reads as sold out to everybody else.
+    if (invite?.tierId) return;
     setTierId((current) => {
       if (current && allowed.some((tier) => tier.id === current && !tier.isSoldOut)) return current;
       if (membership === "member") {
@@ -204,7 +235,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
       const open = allowed.find((tier) => !tier.isSoldOut);
       return open?.id ?? preferred;
     });
-  }, [allowed, membership, tiers, ticketing.data]);
+  }, [allowed, membership, tiers, ticketing.data, invite]);
 
   // Stripe sends the visitor back here; reconcile before showing an outcome.
   useEffect(() => {
@@ -322,6 +353,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
       tierId: ticketMode ? tierId : null,
       memberId: memberIdState === "confirmed" ? memberId.trim() : null,
       discountCode: appliedDiscount ? appliedDiscount.code : null,
+      inviteToken: invite ? inviteToken : null,
       answers,
       environment: paymentsConfigured() ? getStripeEnvironment() : ("sandbox" as const),
     };
@@ -495,13 +527,29 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
         </div>
       );
     }
-    if (event.is_full || (ticketMode && allSoldOut))
+    // A live invitation is the one way past a full event, so the check for it
+    // comes before the "sold out" message.
+    if ((event.is_full || (ticketMode && allSoldOut)) && !invite)
       return (
-        <p className="mt-4 text-sm text-muted-foreground">
-          {ticketMode && allSoldOut
-            ? t("events.detail.tickets.allSoldOut")
-            : t("events.detail.full")}
-        </p>
+        <div className="mt-4">
+          <p className="text-sm text-muted-foreground">
+            {ticketMode && allSoldOut
+              ? t("events.detail.tickets.allSoldOut")
+              : t("events.detail.full")}
+          </p>
+          {inviteExpired ? (
+            <p className="mt-3 text-xs text-[color:var(--warn)]">
+              {t("events.detail.waitlist.inviteExpired")}
+            </p>
+          ) : null}
+          <EventWaitlistForm
+            eventId={eventId}
+            tierId={ticketMode && allSoldOut ? (tierId ?? null) : null}
+            soldOutTier={ticketMode && allSoldOut}
+            defaultName={fullName}
+            defaultEmail={email}
+          />
+        </div>
       );
     if (!event.registration_open)
       return <p className="mt-4 text-sm text-muted-foreground">{t("events.detail.closed")}</p>;
@@ -531,6 +579,21 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
 
     return (
       <form onSubmit={submit} className="mt-4 space-y-3">
+        {invite ? (
+          <div className="rounded-xl bg-teal-soft px-3 py-3 text-teal-foreground">
+            <p className="text-sm font-semibold">{t("events.detail.waitlist.inviteTitle")}</p>
+            <p className="mt-1 text-xs leading-relaxed">
+              {t("events.detail.waitlist.inviteBody")}{" "}
+              {t("events.detail.waitlist.inviteExpires").replace(
+                "{deadline}",
+                new Intl.DateTimeFormat(`${locale}-CH`, {
+                  dateStyle: "long",
+                  timeStyle: "short",
+                }).format(new Date(invite.expiresAt)),
+              )}
+            </p>
+          </div>
+        ) : null}
         {ticketMode && ticketing.isPending ? (
           <p className="text-sm text-muted-foreground">{t("events.detail.tickets.loading")}</p>
         ) : showTiers ? (
@@ -539,7 +602,10 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
             <div className="mt-2 space-y-2">
               {tiers.map((tier) => {
                 const locked = tier.segment === "member" && membership !== "member";
-                const disabled = tier.isSoldOut || locked;
+                // The tier an invitation was issued for stays selectable for
+                // that visitor, even while it reads sold out to everybody else.
+                const invited = invite?.tierId === tier.id;
+                const disabled = (tier.isSoldOut && !invited) || locked;
                 return (
                   <div
                     key={tier.id}

@@ -928,7 +928,9 @@
       "policyInside": "Meno di 48 ore prima dell’evento: nessun rimborso per impostazione predefinita.",
       "keep": "Mantieni l’iscrizione",
       "confirm": "Annulla iscrizione",
-      "working": "Annullamento…"
+      "working": "Annullamento…",
+      "noteLabel": "Nota interna (facoltativa)",
+      "notePlaceholder": "Perché questa iscrizione viene annullata?"
     },
     "discounts": {
       "sectionHint": "I codici valgono per una categoria di biglietto al pagamento. Il prezzo finale viene sempre ricalcolato sul server.",
@@ -965,7 +967,32 @@
       "generateHint": "Proposto dal titolo dell'evento e dall'importo dello sconto."
     },
     "rowExpand": "Mostra dettagli",
-    "rowCollapse": "Nascondi dettagli"
+    "rowCollapse": "Nascondi dettagli",
+    "waitlist": {
+      "title": "Lista d'attesa",
+      "hint": "Persone in attesa di un posto. Un invito apre una finestra di 72 ore in cui solo quella persona può iscriversi e invia un'e-mail.",
+      "empty": "Nessuno in lista d'attesa.",
+      "waitingCount": "{n} in attesa",
+      "colName": "Nome",
+      "colEmail": "E-mail",
+      "colStatus": "Stato",
+      "colRequested": "Richiesta",
+      "colDeadline": "Invito valido fino al",
+      "colActions": "Azioni",
+      "invite": "Invita",
+      "reinvite": "Invita di nuovo",
+      "withdraw": "Rimuovi",
+      "invited": "Invito inviato.",
+      "inviteFailed": "Non è stato possibile inviare l'invito.",
+      "withdrawn": "Rimosso dalla lista d'attesa.",
+      "status": {
+        "waiting": "In attesa",
+        "invited": "Invitato",
+        "converted": "Iscritto",
+        "expired": "Scaduto",
+        "withdrawn": "Rimosso"
+      }
+    }
   },
   "eventTranslations": {
     "title": "Traduzioni",

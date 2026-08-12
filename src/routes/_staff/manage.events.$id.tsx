@@ -22,6 +22,7 @@ import {
 } from "@/components/cms/EventEditorSections";
 import { EventTicketsSection } from "@/components/cms/EventTicketsSection";
 import { EventDiscountCodesSection } from "@/components/cms/EventDiscountCodesSection";
+import { EventWaitlistSection } from "@/components/cms/EventWaitlistSection";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { useCms } from "@/i18n/cms";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
@@ -199,12 +200,20 @@ function EventEditor() {
    * partial failure is surfaced instead of silently swallowed, because money
    * and mail are involved.
    */
-  const cancelAttendee = async (r: Registration, refund: boolean | undefined) => {
+  const cancelAttendee = async (
+    r: Registration,
+    refund: boolean | undefined,
+    note: string | null,
+  ) => {
     setMessage(null);
     setError(null);
     try {
       const result = await cancelRegistration({
-        data: { registrationId: r.id, ...(refund === undefined ? {} : { refund }) },
+        data: {
+          registrationId: r.id,
+          ...(refund === undefined ? {} : { refund }),
+          ...(note ? { note } : {}),
+        },
       });
       if (result.refund.status === "failed") setError(t("events.refundFailed"));
       else if (result.email.status === "failed") setError(t("events.cancelEmailFailed"));
@@ -301,17 +310,22 @@ function EventEditor() {
           cancelAttendee={cancelAttendee}
           retryRefund={retryRefund}
           ticketsSection={
-            event.registration_mode === "rsvp_tickets" ? (
-              <>
-                <EventTicketsSection eventId={event.id} t={t} />
-                <EventDiscountCodesSection
-                  eventId={event.id}
-                  eventTitle={event.title}
-                  eventStartsAt={event.starts_at}
-                  t={t}
-                />
-              </>
-            ) : null
+            <>
+              {event.registration_mode === "rsvp_tickets" ? (
+                <>
+                  <EventTicketsSection eventId={event.id} t={t} />
+                  <EventDiscountCodesSection
+                    eventId={event.id}
+                    eventTitle={event.title}
+                    eventStartsAt={event.starts_at}
+                    t={t}
+                  />
+                </>
+              ) : null}
+              {event.registration_mode !== "none" ? (
+                <EventWaitlistSection eventId={event.id} t={t} />
+              ) : null}
+            </>
           }
           t={t}
         />
