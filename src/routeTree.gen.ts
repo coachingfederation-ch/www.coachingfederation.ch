@@ -58,6 +58,7 @@ import { Route as CommunitiesIndexRouteImport } from './routes/communities.index
 import { Route as CommunitiesSlugRouteImport } from './routes/communities.$slug'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
+import { Route as FormTokenRouteImport } from './routes/form.$token'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as InsightsIdRouteImport } from './routes/insights.$id'
 import { Route as TicketTokenRouteImport } from './routes/ticket.$token'
@@ -337,6 +338,11 @@ const EventsSlugRoute = EventsSlugRouteImport.update({
   path: '/events/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FormTokenRoute = FormTokenRouteImport.update({
+  id: '/form/$token',
+  path: '/form/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InsightsIndexRoute = InsightsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -548,6 +554,7 @@ export interface FileRoutesByFullPath {
   '/coach/$profileId': typeof CoachProfileIdRoute
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/form/$token': typeof FormTokenRoute
   '/insights/$id': typeof InsightsIdRoute
   '/ticket/$token': typeof TicketTokenRoute
   '/$locale/': typeof LocaleIndexRoute
@@ -625,6 +632,7 @@ export interface FileRoutesByTo {
   '/coach/$profileId': typeof CoachProfileIdRoute
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/form/$token': typeof FormTokenRoute
   '/insights/$id': typeof InsightsIdRoute
   '/ticket/$token': typeof TicketTokenRoute
   '/$locale': typeof LocaleIndexRoute
@@ -709,6 +717,7 @@ export interface FileRoutesById {
   '/coach/$profileId': typeof CoachProfileIdRoute
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/form/$token': typeof FormTokenRoute
   '/insights/$id': typeof InsightsIdRoute
   '/ticket/$token': typeof TicketTokenRoute
   '/$locale/': typeof LocaleIndexRoute
@@ -792,6 +801,7 @@ export interface FileRouteTypes {
     | '/coach/$profileId'
     | '/communities/$slug'
     | '/events/$slug'
+    | '/form/$token'
     | '/insights/$id'
     | '/ticket/$token'
     | '/$locale/'
@@ -869,6 +879,7 @@ export interface FileRouteTypes {
     | '/coach/$profileId'
     | '/communities/$slug'
     | '/events/$slug'
+    | '/form/$token'
     | '/insights/$id'
     | '/ticket/$token'
     | '/$locale'
@@ -952,6 +963,7 @@ export interface FileRouteTypes {
     | '/coach/$profileId'
     | '/communities/$slug'
     | '/events/$slug'
+    | '/form/$token'
     | '/insights/$id'
     | '/ticket/$token'
     | '/$locale/'
@@ -1017,6 +1029,7 @@ export interface RootRouteChildren {
   CoachProfileIdRoute: typeof CoachProfileIdRoute
   CommunitiesSlugRoute: typeof CommunitiesSlugRoute
   EventsSlugRoute: typeof EventsSlugRoute
+  FormTokenRoute: typeof FormTokenRoute
   TicketTokenRoute: typeof TicketTokenRoute
   ClaimIndexRoute: typeof ClaimIndexRoute
   CommunitiesIndexRoute: typeof CommunitiesIndexRoute
@@ -1375,6 +1388,13 @@ declare module '@tanstack/react-router' {
       path: '/events/$slug'
       fullPath: '/events/$slug'
       preLoaderRoute: typeof EventsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/form/$token': {
+      id: '/form/$token'
+      path: '/form/$token'
+      fullPath: '/form/$token'
+      preLoaderRoute: typeof FormTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insights/': {
@@ -1784,6 +1804,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachProfileIdRoute: CoachProfileIdRoute,
   CommunitiesSlugRoute: CommunitiesSlugRoute,
   EventsSlugRoute: EventsSlugRoute,
+  FormTokenRoute: FormTokenRoute,
   TicketTokenRoute: TicketTokenRoute,
   ClaimIndexRoute: ClaimIndexRoute,
   CommunitiesIndexRoute: CommunitiesIndexRoute,
