@@ -223,6 +223,9 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   // tier), so follow the server's default until the visitor picks explicitly.
   useEffect(() => {
     const preferred = ticketing.data?.defaultTierId ?? null;
+    // An invited person keeps the tier their place was held for, even though
+    // that tier still reads as sold out to everybody else.
+    if (invite?.tierId) return;
     setTierId((current) => {
       if (current && allowed.some((tier) => tier.id === current && !tier.isSoldOut)) return current;
       if (membership === "member") {
@@ -232,7 +235,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
       const open = allowed.find((tier) => !tier.isSoldOut);
       return open?.id ?? preferred;
     });
-  }, [allowed, membership, tiers, ticketing.data]);
+  }, [allowed, membership, tiers, ticketing.data, invite]);
 
   // Stripe sends the visitor back here; reconcile before showing an outcome.
   useEffect(() => {
@@ -524,13 +527,29 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
         </div>
       );
     }
-    if (event.is_full || (ticketMode && allSoldOut))
+    // A live invitation is the one way past a full event, so the check for it
+    // comes before the "sold out" message.
+    if ((event.is_full || (ticketMode && allSoldOut)) && !invite)
       return (
-        <p className="mt-4 text-sm text-muted-foreground">
-          {ticketMode && allSoldOut
-            ? t("events.detail.tickets.allSoldOut")
-            : t("events.detail.full")}
-        </p>
+        <div className="mt-4">
+          <p className="text-sm text-muted-foreground">
+            {ticketMode && allSoldOut
+              ? t("events.detail.tickets.allSoldOut")
+              : t("events.detail.full")}
+          </p>
+          {inviteExpired ? (
+            <p className="mt-3 text-xs text-[color:var(--warn)]">
+              {t("events.detail.waitlist.inviteExpired")}
+            </p>
+          ) : null}
+          <EventWaitlistForm
+            eventId={eventId}
+            tierId={ticketMode && allSoldOut ? (tierId ?? null) : null}
+            soldOutTier={ticketMode && allSoldOut}
+            defaultName={fullName}
+            defaultEmail={email}
+          />
+        </div>
       );
     if (!event.registration_open)
       return <p className="mt-4 text-sm text-muted-foreground">{t("events.detail.closed")}</p>;
