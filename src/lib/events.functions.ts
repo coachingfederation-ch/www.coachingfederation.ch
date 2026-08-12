@@ -51,6 +51,8 @@ const rsvpSchema = z.object({
   memberId: z.string().trim().max(60).optional().nullable(),
   /** Optional discount code; the server re-resolves the price behind it. */
   discountCode: z.string().trim().max(40).optional().nullable(),
+  /** Single-use waitlist invitation token from the emailed link. */
+  inviteToken: z.string().trim().max(128).optional().nullable(),
   answers: z.record(z.string().max(80), z.string().max(2000)).default({}),
   environment: z.enum(["sandbox", "live"]).default("sandbox"),
 });
@@ -267,6 +269,7 @@ export const submitGuestRegistration = createServerFn({ method: "POST" })
         // Verified server-side before it can unlock member pricing.
         memberId: data.memberId ?? null,
         discountCode: data.discountCode ?? null,
+        inviteToken: data.inviteToken ?? null,
       },
       null,
       `ip:${clientIp(getRequest())}`,
@@ -287,6 +290,7 @@ export const submitMemberRegistration = createServerFn({ method: "POST" })
         tierId: data.tierId ?? null,
         memberId: data.memberId ?? null,
         discountCode: data.discountCode ?? null,
+        inviteToken: data.inviteToken ?? null,
       },
       context.userId,
     );
