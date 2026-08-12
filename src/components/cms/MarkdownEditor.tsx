@@ -3,9 +3,10 @@
  * Exports: MarkdownEditor, MarkdownPreview. Consumed by the article editor and translation panels.
  */
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
-import { Pencil, Columns2, Eye } from "lucide-react";
+import { Pencil, Columns2, Eye, Sparkles } from "lucide-react";
 import { Markdown } from "@/components/markdown";
 import { MarkdownToolbar } from "@/components/cms/MarkdownToolbar";
+import { AiAssistPanel } from "@/components/cms/AiAssistPanel";
 import { useCms } from "@/i18n/cms";
 
 export type EditorMode = "write" | "split" | "preview";
@@ -47,17 +48,49 @@ export function MarkdownEditor({
   placeholder,
   rows = 20,
   textareaRef,
+  language = "en",
 }: {
   value: string;
   onChange: (next: string) => void;
   placeholder?: string;
   rows?: number;
   textareaRef?: RefObject<HTMLTextAreaElement | null>;
+  /** Source language of the document, passed to the AI assistant. */
+  language?: string;
 }) {
   const { t } = useCms();
   const fallbackRef = useRef<HTMLTextAreaElement | null>(null);
   const ref = textareaRef ?? fallbackRef;
   const [mode, setMode] = useState<EditorMode>("write");
+  const [aiOpen, setAiOpen] = useState(false);
+  // Mirrors the textarea selection so the panel keeps its scope after focus
+  // moves into the panel's own controls.
+  const [selection, setSelection] = useState<{ start: number; end: number } | null>(null);
+
+  const syncSelection = () => {
+    const el = ref.current;
+    if (!el) return;
+    setSelection(
+      el.selectionEnd > el.selectionStart
+        ? { start: el.selectionStart, end: el.selectionEnd }
+        : { start: el.selectionStart, end: el.selectionStart },
+    );
+  };
+
+  const applyAi = (text: string, applyMode: "replace" | "insert") => {
+    const sel = selection;
+    const hasSelection = !!sel && sel.end > sel.start;
+    if (applyMode === "replace") {
+      onChange(
+        hasSelection ? value.slice(0, sel!.start) + text + value.slice(sel!.end) : text,
+      );
+      return;
+    }
+    const at = sel ? sel.end : value.length;
+    const prefix = value.slice(0, at);
+    const separator = prefix && !prefix.endsWith("\n") ? "\n\n" : "";
+    onChange(prefix + separator + text + value.slice(at));
+  };
 
   useEffect(() => {
     const stored = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
@@ -79,6 +112,25 @@ export function MarkdownEditor({
     <div>
       <MarkdownToolbar textareaRef={ref} value={value} onChange={onChange} />
       <div className="flex items-center justify-end gap-1 border-x border-border bg-secondary/50 px-2 pb-1.5">
+        <button
+          type="button"
+          onClick={() => {
+            syncSelection();
+            setAiOpen((o) => !o);
+          }}
+          title={t("ai.toggle")}
+          aria-label={t("ai.toggle")}
+          aria-pressed={aiOpen}
+          className={
+            "mr-auto inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition " +
+            (aiOpen
+              ? "bg-card text-foreground shadow-[var(--shadow-soft)]"
+              : "text-muted-foreground hover:bg-card/60")
+          }
+        >
+          <Sparkles className="h-3.5 w-3.5" />
+          {t("ai.toggle")}
+        </button>
         {MODES.map(({ key, icon: Icon }) => (
           <button
             key={key}
@@ -99,6 +151,14 @@ export function MarkdownEditor({
           </button>
         ))}
       </div>
+      {aiOpen ? (
+        <AiAssistPanel
+          value={value}
+          selection={selection}
+          language={language}
+          onApply={applyAi}
+        />
+      ) : null}
       <div
         className={
           "grid rounded-b-2xl border border-border bg-card " +
@@ -110,6 +170,9 @@ export function MarkdownEditor({
             ref={ref}
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            onSelect={syncSelection}
+            onKeyUp={syncSelection}
+            onMouseUp={syncSelection}
             placeholder={placeholder}
             rows={rows}
             className={
