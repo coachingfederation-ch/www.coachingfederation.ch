@@ -93,9 +93,9 @@ export function EventCceSection({
         primary_facilitator_name: loaded.primary_facilitator_name || defaultFacilitator,
       });
       setRows(
-        (result.rows as ScheduleDraft[] & { id: string }[]).map((r, index) => ({
+        result.rows.map((r, index) => ({
           key: `row-${index}`,
-          id: r.id ?? null,
+          id: r.id,
           starts_at_text: r.starts_at_text ?? "",
           ends_at_text: r.ends_at_text ?? "",
           duration_minutes: r.duration_minutes ?? 0,
