@@ -928,7 +928,9 @@
       "policyInside": "Less than 48 hours before the event: no refund by default.",
       "keep": "Keep the registration",
       "confirm": "Cancel registration",
-      "working": "Cancelling…"
+      "working": "Cancelling…",
+      "noteLabel": "Internal note (optional)",
+      "notePlaceholder": "Why is this registration being cancelled?"
     },
     "discounts": {
       "sectionHint": "Codes apply to one ticket tier at checkout. The final price is always recalculated on the server.",
@@ -965,7 +967,32 @@
       "generateHint": "Suggested from the event title and the discount amount."
     },
     "rowExpand": "Show details",
-    "rowCollapse": "Hide details"
+    "rowCollapse": "Hide details",
+    "waitlist": {
+      "title": "Waitlist",
+      "hint": "People waiting for a place. Inviting somebody opens a 72-hour window in which only they can register, and sends them an email.",
+      "empty": "Nobody is on the waitlist yet.",
+      "waitingCount": "{n} waiting",
+      "colName": "Name",
+      "colEmail": "Email",
+      "colStatus": "Status",
+      "colRequested": "Requested",
+      "colDeadline": "Invite valid until",
+      "colActions": "Actions",
+      "invite": "Invite",
+      "reinvite": "Invite again",
+      "withdraw": "Remove",
+      "invited": "Invitation sent.",
+      "inviteFailed": "The invitation could not be sent.",
+      "withdrawn": "Removed from the waitlist.",
+      "status": {
+        "waiting": "Waiting",
+        "invited": "Invited",
+        "converted": "Registered",
+        "expired": "Expired",
+        "withdrawn": "Removed"
+      }
+    }
   },
   "eventTranslations": {
     "title": "Translations",

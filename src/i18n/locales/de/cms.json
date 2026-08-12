@@ -928,7 +928,9 @@
       "policyInside": "Weniger als 48 Stunden vor der Veranstaltung: standardmässig keine Rückerstattung.",
       "keep": "Anmeldung behalten",
       "confirm": "Anmeldung stornieren",
-      "working": "Wird storniert…"
+      "working": "Wird storniert…",
+      "noteLabel": "Interne Notiz (optional)",
+      "notePlaceholder": "Weshalb wird diese Anmeldung storniert?"
     },
     "discounts": {
       "sectionHint": "Codes gelten beim Bezahlen für eine Ticketkategorie. Der Endpreis wird immer auf dem Server neu berechnet.",
@@ -965,7 +967,32 @@
       "generateHint": "Vorschlag aus Veranstaltungstitel und Rabattbetrag."
     },
     "rowExpand": "Details anzeigen",
-    "rowCollapse": "Details ausblenden"
+    "rowCollapse": "Details ausblenden",
+    "waitlist": {
+      "title": "Warteliste",
+      "hint": "Personen, die auf einen Platz warten. Eine Einladung öffnet ein 72-Stunden-Fenster, in dem nur diese Person buchen kann, und verschickt eine E-Mail.",
+      "empty": "Noch niemand auf der Warteliste.",
+      "waitingCount": "{n} wartend",
+      "colName": "Name",
+      "colEmail": "E-Mail",
+      "colStatus": "Status",
+      "colRequested": "Angefragt",
+      "colDeadline": "Einladung gültig bis",
+      "colActions": "Aktionen",
+      "invite": "Einladen",
+      "reinvite": "Erneut einladen",
+      "withdraw": "Entfernen",
+      "invited": "Einladung verschickt.",
+      "inviteFailed": "Die Einladung konnte nicht verschickt werden.",
+      "withdrawn": "Von der Warteliste entfernt.",
+      "status": {
+        "waiting": "Wartend",
+        "invited": "Eingeladen",
+        "converted": "Angemeldet",
+        "expired": "Abgelaufen",
+        "withdrawn": "Entfernt"
+      }
+    }
   },
   "eventTranslations": {
     "title": "Übersetzungen",
