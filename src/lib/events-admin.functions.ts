@@ -767,17 +767,18 @@ export const createStaffRegistration = createServerFn({ method: "POST" })
         payment_status: "not_required",
         amount_cents: 0,
         notes: data.notes ?? null,
-        created_by_staff: true,
+        // Records which staff member added the seat, for the audit trail.
+        created_by_staff: context.userId,
       })
       .select("id")
       .single();
     if (insertError || !inserted) throw new Error(insertError?.message ?? "Could not add attendee");
 
-    let confirmation: { sent: boolean } = { sent: false };
+    let confirmation = { sent: false };
     if (data.sendConfirmation) {
       const { sendRegistrationConfirmation } = await import("./event-confirmation.server");
       const result = await sendRegistrationConfirmation(inserted.id, { force: true });
-      confirmation = { sent: Boolean(result?.sent) };
+      confirmation = { sent: result.status === "sent" };
     }
 
     return { ok: true as const, id: inserted.id, confirmation };
