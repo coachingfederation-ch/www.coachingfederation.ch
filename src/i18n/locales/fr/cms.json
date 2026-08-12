@@ -1120,5 +1120,25 @@
     "hint": "Cliquez sur un pinceau pour l’ajouter, glissez pour déplacer, poignée d’angle pour redimensionner.",
     "clear": "Effacer les marques",
     "untitled": "Sans titre"
+  },
+  "ai": {
+    "toggle": "IA",
+    "generate": "Générer",
+    "promptPlaceholder": "Dites à l'IA quoi écrire, p. ex. une courte introduction sur le mentorat…",
+    "resultTitle": "Proposition",
+    "replaceSelection": "Remplacer la sélection",
+    "replaceAll": "Remplacer le texte",
+    "insert": "Insérer au curseur",
+    "regenerate": "Régénérer",
+    "discard": "Abandonner",
+    "scopeSelection": "S'applique à votre sélection",
+    "scopeWhole": "S'applique à tout le texte",
+    "action": {
+      "improve": "Améliorer le texte",
+      "grammar": "Corriger la grammaire",
+      "shorten": "Raccourcir",
+      "expand": "Développer",
+      "continue": "Continuer le texte"
+    }
   }
 }

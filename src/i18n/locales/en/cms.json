@@ -1120,5 +1120,25 @@
     "hint": "Click a brush to add it, then drag to move and use the corner handle to resize.",
     "clear": "Clear marks",
     "untitled": "Untitled"
+  },
+  "ai": {
+    "toggle": "AI",
+    "generate": "Generate",
+    "promptPlaceholder": "Tell the AI what to write, e.g. a short intro about mentoring…",
+    "resultTitle": "Suggestion",
+    "replaceSelection": "Replace selection",
+    "replaceAll": "Replace text",
+    "insert": "Insert at cursor",
+    "regenerate": "Regenerate",
+    "discard": "Discard",
+    "scopeSelection": "Works on your selection",
+    "scopeWhole": "Works on the whole text",
+    "action": {
+      "improve": "Improve writing",
+      "grammar": "Fix grammar",
+      "shorten": "Shorten",
+      "expand": "Expand",
+      "continue": "Continue writing"
+    }
   }
 }
