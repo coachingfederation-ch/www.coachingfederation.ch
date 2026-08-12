@@ -81,9 +81,9 @@ export function eventMap(value: string | null | undefined): EventMap | null {
   // exactly what the iframe needs — never re-derive a query from it.
   const embed = srcFromIframe(raw) ?? (isEmbedUrl(raw) ? raw : null);
   if (embed) {
-    // The pb= payload carries the pin; the "open in Maps" link reuses it via
-    // the human-facing viewer URL Google exposes for the same embed.
-    return { embedSrc: embed, linkHref: embed.replace("/maps/embed?", "/maps?") };
+    // The pb= payload is only meaningful to the embed endpoint, so the
+    // "open in Maps" link points at that same URL rather than a guessed query.
+    return { embedSrc: embed, linkHref: embed };
   }
 
   const query = isUrl(raw) ? queryFromUrl(raw) : raw;
