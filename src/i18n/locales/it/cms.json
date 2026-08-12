@@ -992,6 +992,44 @@
         "expired": "Scaduto",
         "withdrawn": "Rimosso"
       }
+    },
+    "searchAttendees": "Ricerca",
+    "searchAttendeesPlaceholder": "Nome o e-mail",
+    "filterTier": "Biglietto",
+    "filterCheckIn": "Check-in",
+    "exportCsv": "Esporta CSV",
+    "exporting": "Preparazione…",
+    "fieldCapacityShort": "capienza",
+    "staffAdd": {
+      "open": "Aggiungi partecipante",
+      "title": "Aggiungi un partecipante",
+      "hint": "Aggiunge un posto omaggio. Non viene richiesto alcun pagamento.",
+      "tier": "Biglietto",
+      "noTier": "Nessun biglietto",
+      "notes": "Nota interna",
+      "sendConfirmation": "Invia l'e-mail di conferma",
+      "submit": "Aggiungi",
+      "cancel": "Annulla",
+      "alreadyRegistered": "Questo indirizzo e-mail è già iscritto a questo evento."
+    },
+    "checkIn": {
+      "open": "Check-in",
+      "title": "Check-in",
+      "counter": "registrati",
+      "scan": "Scansiona un biglietto",
+      "stop": "Interrompi la scansione",
+      "cameraDenied": "La fotocamera non è disponibile. Cerca per nome o e-mail.",
+      "manual": "Cerca per nome o e-mail",
+      "noMatch": "Nessun partecipante trovato.",
+      "action": "Registra",
+      "undo": "Annulla",
+      "filterIn": "Registrati",
+      "filterOut": "Non registrati",
+      "resultIn": "Registrato",
+      "resultAlready": "Già registrato",
+      "resultIneligible": "Check-in non possibile",
+      "resultWrongEvent": "Biglietto per un altro evento",
+      "resultUnknown": "Biglietto sconosciuto"
     }
   },
   "eventTranslations": {

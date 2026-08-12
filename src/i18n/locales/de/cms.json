@@ -992,6 +992,44 @@
         "expired": "Abgelaufen",
         "withdrawn": "Entfernt"
       }
+    },
+    "searchAttendees": "Suche",
+    "searchAttendeesPlaceholder": "Name oder E-Mail",
+    "filterTier": "Ticket",
+    "filterCheckIn": "Check-in",
+    "exportCsv": "CSV exportieren",
+    "exporting": "Wird vorbereitet…",
+    "fieldCapacityShort": "Kapazität",
+    "staffAdd": {
+      "open": "Teilnehmende hinzufügen",
+      "title": "Teilnehmende hinzufügen",
+      "hint": "Fügt einen kostenfreien Platz hinzu. Es wird keine Zahlung erhoben.",
+      "tier": "Ticket",
+      "noTier": "Kein Ticket",
+      "notes": "Interne Notiz",
+      "sendConfirmation": "Bestätigungs-E-Mail senden",
+      "submit": "Hinzufügen",
+      "cancel": "Abbrechen",
+      "alreadyRegistered": "Diese E-Mail-Adresse ist bereits für diesen Event angemeldet."
+    },
+    "checkIn": {
+      "open": "Check-in",
+      "title": "Check-in",
+      "counter": "eingecheckt",
+      "scan": "Ticket scannen",
+      "stop": "Scannen beenden",
+      "cameraDenied": "Die Kamera ist nicht verfügbar. Bitte nach Name oder E-Mail suchen.",
+      "manual": "Nach Name oder E-Mail suchen",
+      "noMatch": "Keine Person gefunden.",
+      "action": "Einchecken",
+      "undo": "Rückgängig",
+      "filterIn": "Eingecheckt",
+      "filterOut": "Nicht eingecheckt",
+      "resultIn": "Eingecheckt",
+      "resultAlready": "Bereits eingecheckt",
+      "resultIneligible": "Check-in nicht möglich",
+      "resultWrongEvent": "Ticket für einen anderen Event",
+      "resultUnknown": "Unbekanntes Ticket"
     }
   },
   "eventTranslations": {

@@ -992,6 +992,44 @@
         "expired": "Expired",
         "withdrawn": "Removed"
       }
+    },
+    "searchAttendees": "Search",
+    "searchAttendeesPlaceholder": "Name or email",
+    "filterTier": "Ticket",
+    "filterCheckIn": "Check-in",
+    "exportCsv": "Export CSV",
+    "exporting": "Preparing…",
+    "fieldCapacityShort": "capacity",
+    "staffAdd": {
+      "open": "Add attendee",
+      "title": "Add an attendee",
+      "hint": "Adds a comped seat. No payment is taken.",
+      "tier": "Ticket",
+      "noTier": "No ticket",
+      "notes": "Internal note",
+      "sendConfirmation": "Send the confirmation email",
+      "submit": "Add attendee",
+      "cancel": "Cancel",
+      "alreadyRegistered": "This email is already registered for this event."
+    },
+    "checkIn": {
+      "open": "Check-in",
+      "title": "Check-in",
+      "counter": "checked in",
+      "scan": "Scan a ticket",
+      "stop": "Stop scanning",
+      "cameraDenied": "The camera is not available. Search by name or email instead.",
+      "manual": "Search by name or email",
+      "noMatch": "No attendee found.",
+      "action": "Check in",
+      "undo": "Undo",
+      "filterIn": "Checked in",
+      "filterOut": "Not checked in",
+      "resultIn": "Checked in",
+      "resultAlready": "Already checked in",
+      "resultIneligible": "Cannot check in",
+      "resultWrongEvent": "Ticket for another event",
+      "resultUnknown": "Unknown ticket"
     }
   },
   "eventTranslations": {

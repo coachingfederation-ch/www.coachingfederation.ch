@@ -32,6 +32,7 @@ import {
   getManagedEvent,
   listCommunityOptions,
   listEventRegistrations,
+  listEventTiers,
   resendEventConfirmation,
   retryRegistrationRefund,
   setEventStatus,
@@ -78,6 +79,8 @@ function EventEditor() {
   const [categories, setCategories] = useState<VocabRow[]>([]);
   const [regions, setRegions] = useState<VocabRow[]>([]);
   const [communities, setCommunities] = useState<{ id: string; name: string }[]>([]);
+  // Tier names feed the attendee filter and the add-attendee dialog.
+  const [tiers, setTiers] = useState<{ id: string; name: string }[]>([]);
 
   useEffect(() => {
     void Promise.all([
@@ -96,7 +99,17 @@ function EventEditor() {
   const load = async () => {
     const row = await getManagedEvent({ data: { id } });
     setEvent(row as Managed | null);
-    if (row) setRegistrations(await listEventRegistrations({ data: { eventId: id } }));
+    if (row) {
+      setRegistrations(await listEventRegistrations({ data: { eventId: id } }));
+      if (row.registration_mode === "rsvp_tickets") {
+        setTiers(
+          (await listEventTiers({ data: { eventId: id } })).map((tier) => ({
+            id: tier.id,
+            name: tier.name,
+          })),
+        );
+      }
+    }
   };
 
   useEffect(() => {
@@ -309,6 +322,8 @@ function EventEditor() {
           resendConfirmation={resendConfirmation}
           cancelAttendee={cancelAttendee}
           retryRefund={retryRefund}
+          tiers={tiers}
+          reloadRegistrations={() => load().catch(() => setError(t("events.loadError")))}
           ticketsSection={
             <>
               {event.registration_mode === "rsvp_tickets" ? (

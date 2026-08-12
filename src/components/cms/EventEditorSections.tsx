@@ -22,6 +22,14 @@ import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
 import { EventHeroPreview } from "@/components/cms/EventHeroPreview";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import type { getManagedEvent, listEventRegistrations } from "@/lib/events-admin.functions";
+import { exportEventRegistrations } from "@/lib/events-admin.functions";
+import {
+  EventAttendeeToolbar,
+  EMPTY_FILTERS,
+  matchesFilters,
+  type AttendeeFilters,
+} from "@/components/cms/EventAttendeeToolbar";
+import { StaffRegistrationDialog } from "@/components/cms/StaffRegistrationDialog";
 import {
   DEFAULT_RULE,
   expandRecurrence,
@@ -563,6 +571,8 @@ export function EventPublishingSection({
   cancelAttendee,
   retryRefund,
   ticketsSection,
+  tiers,
+  reloadRegistrations,
   t,
 }: {
   event: Managed;
@@ -581,13 +591,15 @@ export function EventPublishingSection({
   ) => void | Promise<void>;
   retryRefund: (r: Registration) => void | Promise<void>;
   ticketsSection?: React.ReactNode;
+  tiers: { id: string; name: string }[];
+  reloadRegistrations: () => void | Promise<void>;
   t: (k: string) => string;
 }) {
-  // Attendee list filters. Local UI state only — the underlying list is
+  // Attendee desk filters. Local UI state only — the underlying list is
   // already loaded, so filtering client-side keeps the table responsive.
-  const [statusFilter, setStatusFilter] = React.useState("all");
-  const [paymentFilter, setPaymentFilter] = React.useState("all");
-  const [confirmationFilter, setConfirmationFilter] = React.useState("all");
+  const [filters, setFilters] = React.useState<AttendeeFilters>(EMPTY_FILTERS);
+  const [addOpen, setAddOpen] = React.useState(false);
+  const [exporting, setExporting] = React.useState(false);
   // The attendee awaiting a cancellation confirmation, if any.
   const [pendingCancel, setPendingCancel] = React.useState<Registration | null>(null);
   // Rows expanded to their full detail panel. Expansion is the escape valve for
@@ -600,16 +612,29 @@ export function EventPublishingSection({
       return next;
     });
 
-  const visibleRegistrations = registrations.filter((r) => {
-    if (statusFilter !== "all" && r.status !== statusFilter) return false;
-    if (paymentFilter !== "all" && r.payment_status !== paymentFilter) return false;
-    if (
-      confirmationFilter !== "all" &&
-      (r.confirmation_status ?? "not_sent") !== confirmationFilter
-    )
-      return false;
-    return true;
-  });
+  const visibleRegistrations = registrations.filter((r) => matchesFilters(r, filters));
+
+  const checkedInCount = registrations.filter(
+    (r) => r.status === "confirmed" && r.checked_in_at,
+  ).length;
+
+  // The CSV is built server-side (authorisation and escaping live there); the
+  // browser only turns the returned text into a download.
+  const exportCsv = async () => {
+    setExporting(true);
+    try {
+      const file = await exportEventRegistrations({ data: { eventId: event.id } });
+      const blob = new Blob([`\uFEFF${file.csv}`], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = file.filename;
+      link.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   return (
     <>
@@ -706,50 +731,27 @@ export function EventPublishingSection({
         {confirmed}
         {event.capacity ? ` / ${event.capacity}` : ""} {t("events.confirmedSuffix")}
       </p>
-      <div className="mt-4 flex flex-wrap items-end gap-3">
-        <Field label={t("events.filterStatus")}>
-          <select
-            className={inputClass}
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option value="all">{t("events.filterAll")}</option>
-            {["confirmed", "cancelled"].map((s) => (
-              <option key={s} value={s}>
-                {t(`events.regStatus.${s}`)}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label={t("events.filterPayment")}>
-          <select
-            className={inputClass}
-            value={paymentFilter}
-            onChange={(e) => setPaymentFilter(e.target.value)}
-          >
-            <option value="all">{t("events.filterAll")}</option>
-            {["not_required", "pending", "paid", "expired"].map((s) => (
-              <option key={s} value={s}>
-                {t(`events.payStatus.${s}`)}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label={t("events.filterConfirmation")}>
-          <select
-            className={inputClass}
-            value={confirmationFilter}
-            onChange={(e) => setConfirmationFilter(e.target.value)}
-          >
-            <option value="all">{t("events.filterAll")}</option>
-            {["not_sent", "sending", "sent", "failed"].map((s) => (
-              <option key={s} value={s}>
-                {t(`events.confirmationStatus.${s}`)}
-              </option>
-            ))}
-          </select>
-        </Field>
-      </div>
+      <EventAttendeeToolbar
+        eventId={event.id}
+        filters={filters}
+        setFilters={setFilters}
+        tiers={tiers}
+        confirmed={confirmed}
+        checkedIn={checkedInCount}
+        capacity={event.capacity}
+        onAdd={() => setAddOpen(true)}
+        onExport={exportCsv}
+        exporting={exporting}
+        t={t}
+      />
+      <StaffRegistrationDialog
+        open={addOpen}
+        onOpenChange={setAddOpen}
+        eventId={event.id}
+        tiers={tiers}
+        onCreated={reloadRegistrations}
+        t={t}
+      />
       {/* The table stays inside the editor column: the row expander carries the
           detail that used to force a wider, horizontally scrolling grid. */}
       <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card">
@@ -776,7 +778,6 @@ export function EventPublishingSection({
             {visibleRegistrations.length === 0 ? (
               <tr>
                 <td colSpan={5} className="px-4 py-6 text-muted-foreground">
-
                   {registrations.length === 0
                     ? t("events.noAttendees")
                     : t("events.noMatchingAttendees")}
@@ -807,6 +808,11 @@ export function EventPublishingSection({
                       </td>
                       <td className="truncate px-4 py-3 font-medium" title={r.full_name}>
                         {r.full_name}
+                        {r.checked_in_at ? (
+                          <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
+                            {t("events.checkIn.resultIn")}
+                          </span>
+                        ) : null}
                       </td>
                       <td className="whitespace-nowrap px-4 py-3">
                         {t(`events.regStatus.${r.status}`)}
