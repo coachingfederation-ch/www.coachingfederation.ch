@@ -992,6 +992,44 @@
         "expired": "Expiré",
         "withdrawn": "Retiré"
       }
+    },
+    "searchAttendees": "Recherche",
+    "searchAttendeesPlaceholder": "Nom ou e-mail",
+    "filterTier": "Billet",
+    "filterCheckIn": "Enregistrement",
+    "exportCsv": "Exporter en CSV",
+    "exporting": "Préparation…",
+    "fieldCapacityShort": "capacité",
+    "staffAdd": {
+      "open": "Ajouter un participant",
+      "title": "Ajouter un participant",
+      "hint": "Ajoute une place offerte. Aucun paiement n'est demandé.",
+      "tier": "Billet",
+      "noTier": "Sans billet",
+      "notes": "Note interne",
+      "sendConfirmation": "Envoyer l'e-mail de confirmation",
+      "submit": "Ajouter",
+      "cancel": "Annuler",
+      "alreadyRegistered": "Cette adresse e-mail est déjà inscrite à cet événement."
+    },
+    "checkIn": {
+      "open": "Enregistrement",
+      "title": "Enregistrement",
+      "counter": "enregistrés",
+      "scan": "Scanner un billet",
+      "stop": "Arrêter le scan",
+      "cameraDenied": "La caméra n'est pas disponible. Cherchez par nom ou e-mail.",
+      "manual": "Chercher par nom ou e-mail",
+      "noMatch": "Aucun participant trouvé.",
+      "action": "Enregistrer",
+      "undo": "Annuler",
+      "filterIn": "Enregistrés",
+      "filterOut": "Non enregistrés",
+      "resultIn": "Enregistré",
+      "resultAlready": "Déjà enregistré",
+      "resultIneligible": "Enregistrement impossible",
+      "resultWrongEvent": "Billet pour un autre événement",
+      "resultUnknown": "Billet inconnu"
     }
   },
   "eventTranslations": {
