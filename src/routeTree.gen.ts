@@ -78,6 +78,7 @@ import { Route as StaffManageGovernanceRouteImport } from './routes/_staff/manag
 import { Route as StaffMembersIndexRouteImport } from './routes/_staff/members.index'
 import { Route as StaffMembersIdRouteImport } from './routes/_staff/members.$id'
 import { Route as ApiPublicEuropePulseScanRouteImport } from './routes/api/public/europe-pulse-scan'
+import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public/event-reminders'
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
@@ -433,6 +434,11 @@ const ApiPublicEuropePulseScanRoute =
     path: '/api/public/europe-pulse-scan',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicEventRemindersRoute = ApiPublicEventRemindersRouteImport.update({
+  id: '/api/public/event-reminders',
+  path: '/api/public/event-reminders',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicMemberSyncRoute = ApiPublicMemberSyncRouteImport.update({
   id: '/api/public/member-sync',
   path: '/api/public/member-sync',
@@ -529,6 +535,7 @@ export interface FileRoutesByFullPath {
   '/manage/governance': typeof StaffManageGovernanceRoute
   '/members/$id': typeof StaffMembersIdRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
+  '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
@@ -600,6 +607,7 @@ export interface FileRoutesByTo {
   '/manage/governance': typeof StaffManageGovernanceRoute
   '/members/$id': typeof StaffMembersIdRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
+  '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/$locale/communities': typeof LocaleCommunitiesIndexRoute
   '/$locale/events': typeof LocaleEventsIndexRoute
@@ -678,6 +686,7 @@ export interface FileRoutesById {
   '/_staff/manage/governance': typeof StaffManageGovernanceRoute
   '/_staff/members/$id': typeof StaffMembersIdRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
+  '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
@@ -755,6 +764,7 @@ export interface FileRouteTypes {
     | '/manage/governance'
     | '/members/$id'
     | '/api/public/europe-pulse-scan'
+    | '/api/public/event-reminders'
     | '/api/public/member-sync'
     | '/$locale/communities/'
     | '/$locale/events/'
@@ -826,6 +836,7 @@ export interface FileRouteTypes {
     | '/manage/governance'
     | '/members/$id'
     | '/api/public/europe-pulse-scan'
+    | '/api/public/event-reminders'
     | '/api/public/member-sync'
     | '/$locale/communities'
     | '/$locale/events'
@@ -903,6 +914,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/governance'
     | '/_staff/members/$id'
     | '/api/public/europe-pulse-scan'
+    | '/api/public/event-reminders'
     | '/api/public/member-sync'
     | '/$locale/communities/'
     | '/$locale/events/'
@@ -949,6 +961,7 @@ export interface RootRouteChildren {
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicEuropePulseScanRoute: typeof ApiPublicEuropePulseScanRoute
+  ApiPublicEventRemindersRoute: typeof ApiPublicEventRemindersRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
   ApiPublicCalendarFileRoute: typeof ApiPublicCalendarFileRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -1440,6 +1453,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicEuropePulseScanRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/event-reminders': {
+      id: '/api/public/event-reminders'
+      path: '/api/public/event-reminders'
+      fullPath: '/api/public/event-reminders'
+      preLoaderRoute: typeof ApiPublicEventRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/member-sync': {
       id: '/api/public/member-sync'
       path: '/api/public/member-sync'
@@ -1665,6 +1685,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicEuropePulseScanRoute: ApiPublicEuropePulseScanRoute,
+  ApiPublicEventRemindersRoute: ApiPublicEventRemindersRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,
   ApiPublicCalendarFileRoute: ApiPublicCalendarFileRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
