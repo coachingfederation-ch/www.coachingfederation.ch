@@ -809,6 +809,11 @@ export function EventPublishingSection({
                       </td>
                       <td className="truncate px-4 py-3 font-medium" title={r.full_name}>
                         {r.full_name}
+                        {r.checked_in_at ? (
+                          <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
+                            {t("events.checkIn.resultIn")}
+                          </span>
+                        ) : null}
                       </td>
                       <td className="whitespace-nowrap px-4 py-3">
                         {t(`events.regStatus.${r.status}`)}
