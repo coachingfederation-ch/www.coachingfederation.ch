@@ -21,6 +21,7 @@ import {
   type Registration,
 } from "@/components/cms/EventEditorSections";
 import { EventTicketsSection } from "@/components/cms/EventTicketsSection";
+import { EventCceSection } from "@/components/cms/EventCceSection";
 import { EventDiscountCodesSection } from "@/components/cms/EventDiscountCodesSection";
 import { EventWaitlistSection } from "@/components/cms/EventWaitlistSection";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
@@ -309,6 +310,19 @@ function EventEditor() {
         />
 
         <EventLocationSection event={event} patch={patch} t={t} />
+
+        <EventCceSection
+          eventId={event.id}
+          startsAt={event.starts_at}
+          endsAt={event.ends_at}
+          timezone={event.timezone ?? "Europe/Zurich"}
+          defaultContactName=""
+          defaultContactEmail=""
+          defaultFacilitator=""
+          enabled={Boolean(event.cce_enabled)}
+          onEnabledChange={(next) => patch({ cce_enabled: next })}
+          t={t}
+        />
 
         <EventPublishingSection
           event={event}
