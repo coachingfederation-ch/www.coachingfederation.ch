@@ -2,10 +2,15 @@
  * Turns the free-form `map_location` field into something renderable.
  *
  * Staff paste whatever they have: a plain address, a Google Maps link copied
- * from the browser, or a share link. We normalise all of those into a single
- * search query and use the keyless `output=embed` map, so no API key or map
- * connector is required. Share links (maps.app.goo.gl) hide the coordinates
- * behind a redirect and cannot be embedded — those degrade to a plain link.
+ * from the browser, a share link, or the whole "Embed a map" <iframe> HTML
+ * snippet. Handling order:
+ *   1. an <iframe> snippet — use its src verbatim (this is Google's own,
+ *      always-renderable embed URL);
+ *   2. a /maps/embed?pb=... URL — already an embed URL, use verbatim;
+ *   3. anything else — normalise to a search query and use the keyless
+ *      `output=embed` map, so no API key or map connector is required.
+ * Share links (maps.app.goo.gl) hide the coordinates behind a redirect and
+ * cannot be embedded — those degrade to a plain link.
  */
 
 export type EventMap = {
@@ -16,6 +21,17 @@ export type EventMap = {
 };
 
 const isUrl = (value: string) => /^https?:\/\//i.test(value);
+
+/** Google's "Embed a map" tab hands out a full <iframe …> snippet. */
+function srcFromIframe(raw: string): string | null {
+  const match = raw.match(/<iframe[^>]*\ssrc=["']([^"']+)["']/i);
+  if (!match) return null;
+  const src = match[1]!.replace(/&amp;/g, "&");
+  return /^https:\/\/(www\.)?google\.[a-z.]+\/maps\/embed\?/i.test(src) ? src : null;
+}
+
+const isEmbedUrl = (value: string) =>
+  /^https:\/\/(www\.)?google\.[a-z.]+\/maps\/embed\?/i.test(value);
 
 /** Pull a usable query out of a Google/Apple/OSM maps URL. */
 function queryFromUrl(raw: string): string | null {
@@ -60,6 +76,15 @@ function queryFromUrl(raw: string): string | null {
 export function eventMap(value: string | null | undefined): EventMap | null {
   const raw = (value ?? "").trim();
   if (!raw) return null;
+
+  // 1 + 2: an embed URL (pasted bare or inside the iframe snippet) is already
+  // exactly what the iframe needs — never re-derive a query from it.
+  const embed = srcFromIframe(raw) ?? (isEmbedUrl(raw) ? raw : null);
+  if (embed) {
+    // The pb= payload carries the pin; the "open in Maps" link reuses it via
+    // the human-facing viewer URL Google exposes for the same embed.
+    return { embedSrc: embed, linkHref: embed.replace("/maps/embed?", "/maps?") };
+  }
 
   const query = isUrl(raw) ? queryFromUrl(raw) : raw;
   const search = (q: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
