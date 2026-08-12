@@ -14,6 +14,7 @@ import { localizePath } from "@/i18n/config";
 import { supabase } from "@/integrations/supabase/client";
 import { CARD_SHADOW } from "@/components/site-chrome";
 import { PaymentOverlay } from "@/components/events/PaymentOverlay";
+import { FormQuestionFields } from "@/components/forms/FormQuestionFields";
 import { isPastEvent, type PublicEvent } from "@/lib/events";
 import { trackGoal } from "@/lib/plausible";
 import {
