@@ -1,0 +1,185 @@
+/**
+ * Staff check-in server functions.
+ *
+ * Authorisation is decided twice, on purpose: the caller's own RLS-scoped
+ * client must be able to see the registration at all, and the database
+ * routine re-checks that the caller manages that event before it opens the
+ * door. Nothing here trusts an event id supplied by the browser.
+ */
+import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { assertOrganizer } from "./authz";
+import type { CheckInOutcome } from "./check-in";
+
+const BOARD_COLUMNS =
+  "id, full_name, email, status, payment_status, refund_status, tier_id, amount_cents, currency, checked_in_at, created_by_staff";
+
+export type CheckInAttendee = {
+  id: string;
+  full_name: string;
+  email: string;
+  status: string;
+  payment_status: string;
+  refund_status: string | null;
+  tier_id: string | null;
+  amount_cents: number;
+  currency: string;
+  checked_in_at: string | null;
+  created_by_staff: boolean | null;
+  tier_name: string | null;
+};
+
+/** Everything the door screen needs for one event, in one round trip. */
+export const loadCheckInBoard = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+
+    const { data: event, error: eventError } = await context.supabase
+      .from("events")
+      .select("id, title, starts_at, timezone, capacity")
+      .eq("id", data.eventId)
+      .maybeSingle();
+    if (eventError || !event) throw new Error("Event not found");
+
+    const [{ data: rows, error }, { data: tiers }] = await Promise.all([
+      context.supabase
+        .from("event_registrations")
+        .select(BOARD_COLUMNS)
+        .eq("event_id", data.eventId)
+        .order("full_name", { ascending: true }),
+      context.supabase
+        .from("event_ticket_tiers")
+        .select("id, name")
+        .eq("event_id", data.eventId),
+    ]);
+    if (error) throw new Error(error.message);
+
+    const tierNames = new Map<string, string>(
+      ((tiers ?? []) as { id: string; name: string }[]).map((t) => [t.id, t.name]),
+    );
+    const attendees: CheckInAttendee[] = ((rows ?? []) as CheckInAttendee[]).map((r) => ({
+      ...r,
+      tier_name: r.tier_id ? (tierNames.get(r.tier_id) ?? null) : null,
+    }));
+
+    return {
+      event: event as { id: string; title: string; starts_at: string; capacity: number | null },
+      attendees,
+    };
+  });
+
+/** Idempotent: the database returns "already" instead of a second attendance. */
+export const checkInAttendee = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ registrationId: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ context, data }) => runCheckIn(context, data.registrationId));
+
+/** Scan path: resolves the ticket code, then runs the same guarded routine. */
+export const checkInByToken = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        eventId: z.string().uuid(),
+        token: z.string().trim().min(16).max(64).regex(/^[A-Za-z0-9_-]+$/),
+      })
+      .parse(input),
+  )
+  .handler(async ({ context, data }): Promise<CheckInOutcome> => {
+    await assertOrganizer(context);
+    const { registrationForToken } = await import("./check-in.server");
+    const match = await registrationForToken(data.token);
+    if (!match) return { outcome: "not_found" };
+    if (match.event_id !== data.eventId) {
+      // A valid ticket for a different event must read as a clear refusal,
+      // not as an unknown code.
+      return { outcome: "wrong_event", name: "" };
+    }
+    return runCheckIn(context, match.id);
+  });
+
+/** Corrects a mistaken scan. Editors and admins only, enforced in the database. */
+export const undoAttendeeCheckIn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ registrationId: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const { data: result, error } = await context.supabase.rpc("undo_check_in", {
+      _registration_id: data.registrationId,
+    });
+    if (error) throw new Error(error.message);
+    return result as { outcome: string };
+  });
+
+/** The attendee's own ticket code and QR, for staff to re-share on request. */
+export const getAttendeeTicketLink = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ registrationId: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const { data: row, error } = await context.supabase
+      .from("event_registrations")
+      .select("id")
+      .eq("id", data.registrationId)
+      .maybeSingle();
+    if (error || !row) throw new Error("Registration not found");
+
+    const { ensureCheckInToken, ticketUrl } = await import("./check-in.server");
+    const token = await ensureCheckInToken(data.registrationId);
+    return { url: token ? ticketUrl(token) : null };
+  });
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+async function runCheckIn(context: any, registrationId: string): Promise<CheckInOutcome> {
+  await assertOrganizer(context);
+
+  // RLS decides whether this staff member may see the seat at all. The name is
+  // read before the door call so every outcome can be announced with a person.
+  const { data: row } = await context.supabase
+    .from("event_registrations")
+    .select("id, full_name, tier_id")
+    .eq("id", registrationId)
+    .maybeSingle();
+  if (!row) return { outcome: "not_found" };
+
+  let tierName: string | null = null;
+  if (row.tier_id) {
+    const { data: tier } = await context.supabase
+      .from("event_ticket_tiers")
+      .select("name")
+      .eq("id", row.tier_id)
+      .maybeSingle();
+    tierName = tier?.name ?? null;
+  }
+
+  const { data: result, error } = await context.supabase.rpc("check_in_registration", {
+    _registration_id: registrationId,
+  });
+  if (error) throw new Error(error.message);
+
+  const outcome = result as { outcome: string; reason?: string; checked_in_at?: string };
+  if (outcome.outcome === "checked_in") {
+    return { outcome: "checked_in", name: row.full_name, tierName };
+  }
+  if (outcome.outcome === "already") {
+    return {
+      outcome: "already",
+      name: row.full_name,
+      tierName,
+      checkedInAt: outcome.checked_in_at ?? null,
+    };
+  }
+  if (outcome.outcome === "ineligible") {
+    return { outcome: "ineligible", name: row.full_name, reason: outcome.reason ?? "ineligible" };
+  }
+  return { outcome: "not_found" };
+}
