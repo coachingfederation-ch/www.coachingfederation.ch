@@ -87,6 +87,7 @@ import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/c
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicTicketQrTokenRouteImport } from './routes/api/public/ticket-qr.$token'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
+import { Route as StaffManageEventsIdCceRouteImport } from './routes/_staff/manage.events.$id_.cce'
 import { Route as StaffManageEventsIdCheckInRouteImport } from './routes/_staff/manage.events.$id_.check-in'
 import { Route as StaffManageEventsIdReportingRouteImport } from './routes/_staff/manage.events.$id_.reporting'
 
@@ -485,6 +486,11 @@ const LovableEmailTransactionalPreviewRoute =
     path: '/lovable/email/transactional/preview',
     getParentRoute: () => rootRouteImport,
   } as any)
+const StaffManageEventsIdCceRoute = StaffManageEventsIdCceRouteImport.update({
+  id: '/manage/events/$id_/cce',
+  path: '/manage/events/$id/cce',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
 const StaffManageEventsIdCheckInRoute =
   StaffManageEventsIdCheckInRouteImport.update({
     id: '/manage/events/$id_/check-in',
@@ -575,6 +581,7 @@ export interface FileRoutesByFullPath {
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events/': typeof StaffManageEventsIndexRoute
+  '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
 }
@@ -651,6 +658,7 @@ export interface FileRoutesByTo {
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events': typeof StaffManageEventsIndexRoute
+  '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
 }
@@ -734,6 +742,7 @@ export interface FileRoutesById {
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/_staff/manage/events/': typeof StaffManageEventsIndexRoute
+  '/_staff/manage/events/$id_/cce': typeof StaffManageEventsIdCceRoute
   '/_staff/manage/events/$id_/check-in': typeof StaffManageEventsIdCheckInRoute
   '/_staff/manage/events/$id_/reporting': typeof StaffManageEventsIdReportingRoute
 }
@@ -816,6 +825,7 @@ export interface FileRouteTypes {
     | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/manage/events/'
+    | '/manage/events/$id/cce'
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
   fileRoutesByTo: FileRoutesByTo
@@ -892,6 +902,7 @@ export interface FileRouteTypes {
     | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/manage/events'
+    | '/manage/events/$id/cce'
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
   id:
@@ -974,6 +985,7 @@ export interface FileRouteTypes {
     | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/_staff/manage/events/'
+    | '/_staff/manage/events/$id_/cce'
     | '/_staff/manage/events/$id_/check-in'
     | '/_staff/manage/events/$id_/reporting'
   fileRoutesById: FileRoutesById
@@ -1568,6 +1580,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_staff/manage/events/$id_/cce': {
+      id: '/_staff/manage/events/$id_/cce'
+      path: '/manage/events/$id/cce'
+      fullPath: '/manage/events/$id/cce'
+      preLoaderRoute: typeof StaffManageEventsIdCceRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/_staff/manage/events/$id_/check-in': {
       id: '/_staff/manage/events/$id_/check-in'
       path: '/manage/events/$id/check-in'
@@ -1686,6 +1705,7 @@ interface StaffRouteRouteChildren {
   StaffMembersIndexRoute: typeof StaffMembersIndexRoute
   StaffManageEventsIdRoute: typeof StaffManageEventsIdRoute
   StaffManageEventsIndexRoute: typeof StaffManageEventsIndexRoute
+  StaffManageEventsIdCceRoute: typeof StaffManageEventsIdCceRoute
   StaffManageEventsIdCheckInRoute: typeof StaffManageEventsIdCheckInRoute
   StaffManageEventsIdReportingRoute: typeof StaffManageEventsIdReportingRoute
 }
@@ -1703,6 +1723,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffMembersIndexRoute: StaffMembersIndexRoute,
   StaffManageEventsIdRoute: StaffManageEventsIdRoute,
   StaffManageEventsIndexRoute: StaffManageEventsIndexRoute,
+  StaffManageEventsIdCceRoute: StaffManageEventsIdCceRoute,
   StaffManageEventsIdCheckInRoute: StaffManageEventsIdCheckInRoute,
   StaffManageEventsIdReportingRoute: StaffManageEventsIdReportingRoute,
 }

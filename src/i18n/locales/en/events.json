@@ -146,7 +146,8 @@
       "inviteBody": "You were invited from the waitlist. Complete your registration below to take the place.",
       "inviteExpires": "Your invitation is held until {deadline}.",
       "inviteExpired": "This invitation has expired and the place has gone back to the waitlist."
-    }
+    },
+    "cceApproved": "Approved for {cc} CC units and {rd} RD units"
   },
   "filters": {
     "when": "When",

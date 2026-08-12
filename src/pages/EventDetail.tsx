@@ -90,6 +90,17 @@ export default function EventDetailPage({
   const marks = heroMarks(event.slug ?? event.id ?? "");
   // A hand-placed hero arrangement replaces the automatic slug-seeded marks.
   const placedMarks = sanitizeHeroMarks("event", event.hero_marks);
+
+  // Only an approved application is public; the CC/RD units are denormalised
+  // onto the event row so anonymous visitors never touch the application table.
+  const ccUnits = Number(event.cce_approved_cc_hours ?? 0);
+  const rdUnits = Number(event.cce_approved_rd_hours ?? 0);
+  const cceUnits =
+    ccUnits > 0 || rdUnits > 0
+      ? t("events.detail.cceApproved")
+          .replace("{cc}", String(ccUnits))
+          .replace("{rd}", String(rdUnits))
+      : null;
   const map = eventMap(event.map_location);
 
   const session = useQuery({
@@ -197,6 +208,11 @@ export default function EventDetailPage({
 
         <div className="mx-auto grid max-w-5xl gap-10 px-8 py-16 lg:grid-cols-[1fr_20rem]">
           <article className="prose-icf max-w-none">
+            {cceUnits ? (
+              <p className="not-prose mb-6 inline-flex rounded-full border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-semibold text-primary">
+                {cceUnits}
+              </p>
+            ) : null}
             {event.description ? (
               <RichTextView
                 text={event.description}

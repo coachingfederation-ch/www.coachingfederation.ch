@@ -953,6 +953,185 @@ export type Database = {
         }
         Relationships: []
       }
+      event_cce_applications: {
+        Row: {
+          additional_facilitators: string | null
+          approved_cc_hours: number | null
+          approved_rd_hours: number | null
+          attendance_monitoring: string | null
+          break_minutes: number
+          completion_requirements: string | null
+          contact_email: string | null
+          contact_name: string | null
+          content_rationale: string | null
+          core_competency_hours: number
+          created_at: string
+          created_by: string | null
+          decision_at: string | null
+          decision_notes: string | null
+          delivery_method:
+            | Database["public"]["Enums"]["event_cce_delivery"]
+            | null
+          event_id: string
+          id: string
+          internal_notes: string | null
+          jotform_reference: string | null
+          learning_objectives: string | null
+          primary_facilitator_credential: string | null
+          primary_facilitator_name: string | null
+          resource_development_hours: number
+          status: Database["public"]["Enums"]["event_cce_status"]
+          submitted_at: string | null
+          submitted_by: string | null
+          supporting_material_note: string | null
+          supporting_material_url: string | null
+          target_audience: string | null
+          updated_at: string
+        }
+        Insert: {
+          additional_facilitators?: string | null
+          approved_cc_hours?: number | null
+          approved_rd_hours?: number | null
+          attendance_monitoring?: string | null
+          break_minutes?: number
+          completion_requirements?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          content_rationale?: string | null
+          core_competency_hours?: number
+          created_at?: string
+          created_by?: string | null
+          decision_at?: string | null
+          decision_notes?: string | null
+          delivery_method?:
+            | Database["public"]["Enums"]["event_cce_delivery"]
+            | null
+          event_id: string
+          id?: string
+          internal_notes?: string | null
+          jotform_reference?: string | null
+          learning_objectives?: string | null
+          primary_facilitator_credential?: string | null
+          primary_facilitator_name?: string | null
+          resource_development_hours?: number
+          status?: Database["public"]["Enums"]["event_cce_status"]
+          submitted_at?: string | null
+          submitted_by?: string | null
+          supporting_material_note?: string | null
+          supporting_material_url?: string | null
+          target_audience?: string | null
+          updated_at?: string
+        }
+        Update: {
+          additional_facilitators?: string | null
+          approved_cc_hours?: number | null
+          approved_rd_hours?: number | null
+          attendance_monitoring?: string | null
+          break_minutes?: number
+          completion_requirements?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          content_rationale?: string | null
+          core_competency_hours?: number
+          created_at?: string
+          created_by?: string | null
+          decision_at?: string | null
+          decision_notes?: string | null
+          delivery_method?:
+            | Database["public"]["Enums"]["event_cce_delivery"]
+            | null
+          event_id?: string
+          id?: string
+          internal_notes?: string | null
+          jotform_reference?: string | null
+          learning_objectives?: string | null
+          primary_facilitator_credential?: string | null
+          primary_facilitator_name?: string | null
+          resource_development_hours?: number
+          status?: Database["public"]["Enums"]["event_cce_status"]
+          submitted_at?: string | null
+          submitted_by?: string | null
+          supporting_material_note?: string | null
+          supporting_material_url?: string | null
+          target_audience?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_cce_applications_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: true
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_cce_applications_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: true
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_cce_schedule_rows: {
+        Row: {
+          application_id: string
+          cce_category: Database["public"]["Enums"]["event_cce_category"]
+          created_at: string
+          delivery_method:
+            | Database["public"]["Enums"]["event_cce_delivery"]
+            | null
+          duration_minutes: number
+          ends_at_text: string | null
+          facilitator: string | null
+          id: string
+          position: number
+          starts_at_text: string | null
+          topic: string | null
+          updated_at: string
+        }
+        Insert: {
+          application_id: string
+          cce_category?: Database["public"]["Enums"]["event_cce_category"]
+          created_at?: string
+          delivery_method?:
+            | Database["public"]["Enums"]["event_cce_delivery"]
+            | null
+          duration_minutes?: number
+          ends_at_text?: string | null
+          facilitator?: string | null
+          id?: string
+          position?: number
+          starts_at_text?: string | null
+          topic?: string | null
+          updated_at?: string
+        }
+        Update: {
+          application_id?: string
+          cce_category?: Database["public"]["Enums"]["event_cce_category"]
+          created_at?: string
+          delivery_method?:
+            | Database["public"]["Enums"]["event_cce_delivery"]
+            | null
+          duration_minutes?: number
+          ends_at_text?: string | null
+          facilitator?: string | null
+          id?: string
+          position?: number
+          starts_at_text?: string | null
+          topic?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_cce_schedule_rows_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "event_cce_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_discount_codes: {
         Row: {
           code: string
@@ -1537,6 +1716,9 @@ export type Database = {
         Row: {
           capacity: number | null
           category_id: string | null
+          cce_approved_cc_hours: number | null
+          cce_approved_rd_hours: number | null
+          cce_enabled: boolean
           city: string | null
           community_id: string | null
           content_updated_at: string
@@ -1578,6 +1760,9 @@ export type Database = {
         Insert: {
           capacity?: number | null
           category_id?: string | null
+          cce_approved_cc_hours?: number | null
+          cce_approved_rd_hours?: number | null
+          cce_enabled?: boolean
           city?: string | null
           community_id?: string | null
           content_updated_at?: string
@@ -1619,6 +1804,9 @@ export type Database = {
         Update: {
           capacity?: number | null
           category_id?: string | null
+          cce_approved_cc_hours?: number | null
+          cce_approved_rd_hours?: number | null
+          cce_enabled?: boolean
           city?: string | null
           community_id?: string | null
           content_updated_at?: string
@@ -3247,6 +3435,8 @@ export type Database = {
           capacity: number | null
           category_name: string | null
           category_slug: string | null
+          cce_approved_cc_hours: number | null
+          cce_approved_rd_hours: number | null
           city: string | null
           community_id: string | null
           community_name: string | null
@@ -3415,6 +3605,18 @@ export type Database = {
         | "published"
         | "unpublished"
         | "review"
+      event_cce_category: "core_competency" | "resource_development" | "break"
+      event_cce_delivery: "in_person" | "teleclass" | "webinar"
+      event_cce_status:
+        | "not_requested"
+        | "draft"
+        | "missing_information"
+        | "ready_for_review"
+        | "submitted"
+        | "approved"
+        | "declined"
+        | "not_required_rd_only"
+        | "separate_conference_process"
       event_location_mode: "in_person" | "online" | "hybrid"
       event_payment_status: "not_required" | "pending" | "paid" | "expired"
       event_registration_mode: "none" | "rsvp" | "rsvp_members" | "rsvp_tickets"
@@ -3578,6 +3780,19 @@ export const Constants = {
         "published",
         "unpublished",
         "review",
+      ],
+      event_cce_category: ["core_competency", "resource_development", "break"],
+      event_cce_delivery: ["in_person", "teleclass", "webinar"],
+      event_cce_status: [
+        "not_requested",
+        "draft",
+        "missing_information",
+        "ready_for_review",
+        "submitted",
+        "approved",
+        "declined",
+        "not_required_rd_only",
+        "separate_conference_process",
       ],
       event_location_mode: ["in_person", "online", "hybrid"],
       event_payment_status: ["not_required", "pending", "paid", "expired"],
