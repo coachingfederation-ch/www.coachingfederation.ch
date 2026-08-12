@@ -120,17 +120,6 @@ function toPublicTier(row: TierRow, locale: Locale): PublicTier {
   };
 }
 
-function toPublicField(row: FieldRow, locale: Locale): PublicRegistrationField {
-  return {
-    id: row.id,
-    key: row.field_key,
-    label: localisedText(row as never, "label", locale) ?? row.label,
-    type: row.field_type,
-    options: row.options ?? [],
-    required: row.is_required,
-  };
-}
-
 /** Which tier the server applies when the visitor does not pick one. */
 export function defaultTierFor(tiers: PublicTier[], membership: MembershipState) {
   if (membership === "member") {
@@ -153,7 +142,8 @@ export async function loadEventTicketing(
   const { publicSupabaseClient } = await import("./supabase-public.server");
   const supabase = publicSupabaseClient();
 
-  const [{ data: tierRows }, { data: fieldRows }, membership] = await Promise.all([
+  const { loadPublicRegistrationForm } = await import("./event-forms.server");
+  const [{ data: tierRows }, form, membership] = await Promise.all([
     supabase
       .from("event_ticket_tiers_public")
       .select(
@@ -161,20 +151,15 @@ export async function loadEventTicketing(
       )
       .eq("event_id", eventId)
       .order("sort_order", { ascending: true }),
-    supabase
-      .from("event_registration_fields_public")
-      .select(
-        "id, field_key, label, label_de, label_fr, label_it, field_type, options, is_required, sort_order",
-      )
-      .eq("event_id", eventId)
-      .order("sort_order", { ascending: true }),
+    loadPublicRegistrationForm(eventId, locale),
     resolveMembership(userId),
   ]);
 
   const tiers = ((tierRows ?? []) as TierRow[]).map((row) => toPublicTier(row, locale));
   return {
     tiers,
-    fields: ((fieldRows ?? []) as FieldRow[]).map((row) => toPublicField(row, locale)),
+    formId: form?.id ?? null,
+    questions: form?.questions ?? [],
     membership,
     defaultTierId: defaultTierFor(tiers, membership),
   };
@@ -223,32 +208,8 @@ export async function validateAnswers(
   eventId: string,
   answers: Record<string, string>,
 ): Promise<{ ok: true; answers: Record<string, string> } | { ok: false }> {
-  const { data: rows } = await supabaseAdmin
-    .from("event_registration_fields")
-    .select("field_key, field_type, options, is_required")
-    .eq("event_id", eventId)
-    .eq("is_active", true);
-  const fields = (rows ?? []) as Pick<
-    FieldRow,
-    "field_key" | "field_type" | "options" | "is_required"
-  >[];
-  const cleaned: Record<string, string> = {};
-
-  for (const field of fields) {
-    const raw = (answers[field.field_key] ?? "").toString().trim().slice(0, 2000);
-    if (field.field_type === "single_choice" && raw && !(field.options ?? []).includes(raw)) {
-      return { ok: false };
-    }
-    if (field.field_type === "checkbox") {
-      const checked = raw === "true";
-      if (field.is_required && !checked) return { ok: false };
-      cleaned[field.field_key] = checked ? "true" : "false";
-      continue;
-    }
-    if (field.is_required && !raw) return { ok: false };
-    if (raw) cleaned[field.field_key] = raw;
-  }
-  return { ok: true, answers: cleaned };
+  const { validateRegistrationAnswers } = await import("./event-forms.server");
+  return validateRegistrationAnswers(eventId, answers);
 }
 
 /**
