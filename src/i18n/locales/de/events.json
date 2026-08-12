@@ -126,7 +126,27 @@
         "member_only": "Dieser Code gilt für aktive ICF-Mitglieder. Bitte melden Sie sich an oder bestätigen Sie Ihre Mitgliedsnummer."
       }
     },
-    "membersOnlyPrompt": "Mitglieder können sich für diesen Event anmelden. Melden Sie sich mit Ihrem verknüpften Konto an oder geben Sie Ihre ICF-Mitgliedsnummer ein."
+    "membersOnlyPrompt": "Mitglieder können sich für diesen Event anmelden. Melden Sie sich mit Ihrem verknüpften Konto an oder geben Sie Ihre ICF-Mitgliedsnummer ein.",
+    "waitlist": {
+      "title": "Auf die Warteliste",
+      "intro": "Dieser Anlass ist ausgebucht. Hinterlassen Sie Ihre Angaben — wir melden uns, sobald ein Platz frei wird.",
+      "introTier": "Dieses Ticket ist ausverkauft. Hinterlassen Sie Ihre Angaben — wir melden uns, sobald ein Platz frei wird.",
+      "name": "Ihr Name",
+      "email": "E-Mail",
+      "note": "Was wir wissen sollten (optional)",
+      "submit": "Auf die Warteliste",
+      "saving": "Wird eingetragen…",
+      "done": "Sie stehen auf der Warteliste. Wir melden uns, sobald ein Platz frei wird.",
+      "already": "Sie stehen bereits auf der Warteliste für diesen Anlass.",
+      "closed": "Die Anmeldung für diesen Anlass ist geschlossen.",
+      "error": "Das hat gerade nicht geklappt. Bitte versuchen Sie es nochmals.",
+      "rateLimited": "Zu viele Versuche. Bitte später nochmals versuchen.",
+      "privacy": "Wir nutzen Ihre Angaben nur, um Sie zu diesem Anlass zu kontaktieren.",
+      "inviteTitle": "Ein Platz ist für Sie reserviert",
+      "inviteBody": "Sie wurden von der Warteliste eingeladen. Schliessen Sie die Anmeldung unten ab, um den Platz zu übernehmen.",
+      "inviteExpires": "Ihre Einladung gilt bis {deadline}.",
+      "inviteExpired": "Diese Einladung ist abgelaufen; der Platz ist zurück auf der Warteliste."
+    }
   },
   "filters": {
     "when": "Zeitraum",

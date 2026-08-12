@@ -126,7 +126,27 @@
         "member_only": "Questo codice è riservato ai membri ICF attivi. Accedi o conferma il tuo numero di socio."
       }
     },
-    "membersOnlyPrompt": "I soci possono iscriversi a questo evento. Accedi con il tuo account collegato oppure inserisci il tuo numero socio ICF."
+    "membersOnlyPrompt": "I soci possono iscriversi a questo evento. Accedi con il tuo account collegato oppure inserisci il tuo numero socio ICF.",
+    "waitlist": {
+      "title": "Iscriviti alla lista d'attesa",
+      "intro": "Questo evento è al completo. Lascia i tuoi dati e ti scriveremo appena si libera un posto.",
+      "introTier": "Questo biglietto è esaurito. Lascia i tuoi dati e ti scriveremo appena si libera un posto.",
+      "name": "Il tuo nome",
+      "email": "E-mail",
+      "note": "Cosa dovremmo sapere (facoltativo)",
+      "submit": "Iscriviti alla lista d'attesa",
+      "saving": "Iscrizione in corso…",
+      "done": "Sei in lista d'attesa. Ti scriveremo se si libera un posto.",
+      "already": "Sei già in lista d'attesa per questo evento.",
+      "closed": "Le iscrizioni a questo evento sono chiuse.",
+      "error": "Non siamo riusciti ad aggiungerti. Riprova.",
+      "rateLimited": "Troppi tentativi. Riprova più tardi.",
+      "privacy": "Usiamo i tuoi dati solo per contattarti riguardo a questo evento.",
+      "inviteTitle": "Un posto è riservato a te",
+      "inviteBody": "Sei stato invitato dalla lista d'attesa. Completa l'iscrizione qui sotto per prendere il posto.",
+      "inviteExpires": "Il tuo invito è valido fino al {deadline}.",
+      "inviteExpired": "Questo invito è scaduto e il posto è tornato in lista d'attesa."
+    }
   },
   "filters": {
     "when": "Periodo",
