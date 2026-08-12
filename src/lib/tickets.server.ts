@@ -11,9 +11,7 @@ import {
   localisedText,
   type EventTicketing,
   type MembershipState,
-  type PublicRegistrationField,
   type PublicTier,
-  type RegistrationFieldType,
   type TierSegment,
 } from "./tickets";
 
@@ -38,19 +36,6 @@ type TierRow = {
   sort_order: number;
   seats_remaining: number | null;
   is_sold_out: boolean | null;
-};
-
-type FieldRow = {
-  id: string;
-  field_key: string;
-  label: string;
-  label_de: string | null;
-  label_fr: string | null;
-  label_it: string | null;
-  field_type: RegistrationFieldType;
-  options: string[];
-  is_required: boolean;
-  sort_order: number;
 };
 
 /**
