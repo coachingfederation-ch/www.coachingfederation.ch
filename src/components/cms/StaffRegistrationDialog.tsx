@@ -150,7 +150,11 @@ export function StaffRegistrationDialog({
             <span className="mb-1 block text-xs font-semibold text-muted-foreground">
               {t("events.staffAdd.notes")}
             </span>
-            <input className={inputClass} value={notes} onChange={(e) => setNotes(e.target.value)} />
+            <input
+              className={inputClass}
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
           </label>
           <label className="flex items-center gap-2 text-sm">
             <input

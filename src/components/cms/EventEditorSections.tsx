@@ -778,7 +778,6 @@ export function EventPublishingSection({
             {visibleRegistrations.length === 0 ? (
               <tr>
                 <td colSpan={5} className="px-4 py-6 text-muted-foreground">
-
                   {registrations.length === 0
                     ? t("events.noAttendees")
                     : t("events.noMatchingAttendees")}

@@ -65,7 +65,10 @@ function CheckInPage() {
 
   const stats = useMemo(() => {
     const confirmed = (board?.attendees ?? []).filter((a) => a.status === "confirmed");
-    return { confirmed: confirmed.length, checkedIn: confirmed.filter((a) => a.checked_in_at).length };
+    return {
+      confirmed: confirmed.length,
+      checkedIn: confirmed.filter((a) => a.checked_in_at).length,
+    };
   }, [board]);
 
   const runToken = useCallback(
