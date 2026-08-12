@@ -87,6 +87,7 @@ import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/c
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicTicketQrTokenRouteImport } from './routes/api/public/ticket-qr.$token'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
+import { Route as StaffManageEventsIdCheckInRouteImport } from './routes/_staff/manage.events.$id_.check-in'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -483,6 +484,12 @@ const LovableEmailTransactionalPreviewRoute =
     path: '/lovable/email/transactional/preview',
     getParentRoute: () => rootRouteImport,
   } as any)
+const StaffManageEventsIdCheckInRoute =
+  StaffManageEventsIdCheckInRouteImport.update({
+    id: '/manage/events/$id_/check-in',
+    path: '/manage/events/$id/check-in',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -561,6 +568,7 @@ export interface FileRoutesByFullPath {
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events/': typeof StaffManageEventsIndexRoute
+  '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -635,6 +643,7 @@ export interface FileRoutesByTo {
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events': typeof StaffManageEventsIndexRoute
+  '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -716,6 +725,7 @@ export interface FileRoutesById {
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/_staff/manage/events/': typeof StaffManageEventsIndexRoute
+  '/_staff/manage/events/$id_/check-in': typeof StaffManageEventsIdCheckInRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -796,6 +806,7 @@ export interface FileRouteTypes {
     | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/manage/events/'
+    | '/manage/events/$id/check-in'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -870,6 +881,7 @@ export interface FileRouteTypes {
     | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/manage/events'
+    | '/manage/events/$id/check-in'
   id:
     | '__root__'
     | '/'
@@ -950,6 +962,7 @@ export interface FileRouteTypes {
     | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/_staff/manage/events/'
+    | '/_staff/manage/events/$id_/check-in'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1542,6 +1555,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_staff/manage/events/$id_/check-in': {
+      id: '/_staff/manage/events/$id_/check-in'
+      path: '/manage/events/$id/check-in'
+      fullPath: '/manage/events/$id/check-in'
+      preLoaderRoute: typeof StaffManageEventsIdCheckInRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
   }
 }
 
@@ -1646,6 +1666,7 @@ interface StaffRouteRouteChildren {
   StaffMembersIndexRoute: typeof StaffMembersIndexRoute
   StaffManageEventsIdRoute: typeof StaffManageEventsIdRoute
   StaffManageEventsIndexRoute: typeof StaffManageEventsIndexRoute
+  StaffManageEventsIdCheckInRoute: typeof StaffManageEventsIdCheckInRoute
 }
 
 const StaffRouteRouteChildren: StaffRouteRouteChildren = {
@@ -1661,6 +1682,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffMembersIndexRoute: StaffMembersIndexRoute,
   StaffManageEventsIdRoute: StaffManageEventsIdRoute,
   StaffManageEventsIndexRoute: StaffManageEventsIndexRoute,
+  StaffManageEventsIdCheckInRoute: StaffManageEventsIdCheckInRoute,
 }
 
 const StaffRouteRouteWithChildren = StaffRouteRoute._addFileChildren(
