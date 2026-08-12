@@ -579,6 +579,20 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
 
     return (
       <form onSubmit={submit} className="mt-4 space-y-3">
+        {invite ? (
+          <div className="rounded-xl bg-teal-soft px-3 py-3 text-teal-foreground">
+            <p className="text-sm font-semibold">{t("events.detail.waitlist.inviteTitle")}</p>
+            <p className="mt-1 text-xs leading-relaxed">
+              {t("events.detail.waitlist.inviteBody")}{" "}
+              {t("events.detail.waitlist.inviteExpires", {
+                deadline: new Intl.DateTimeFormat(`${locale}-CH`, {
+                  dateStyle: "long",
+                  timeStyle: "short",
+                }).format(new Date(invite.expiresAt)),
+              })}
+            </p>
+          </div>
+        ) : null}
         {ticketMode && ticketing.isPending ? (
           <p className="text-sm text-muted-foreground">{t("events.detail.tickets.loading")}</p>
         ) : showTiers ? (
@@ -587,7 +601,10 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
             <div className="mt-2 space-y-2">
               {tiers.map((tier) => {
                 const locked = tier.segment === "member" && membership !== "member";
-                const disabled = tier.isSoldOut || locked;
+                // The tier an invitation was issued for stays selectable for
+                // that visitor, even while it reads sold out to everybody else.
+                const invited = invite?.tierId === tier.id;
+                const disabled = (tier.isSoldOut && !invited) || locked;
                 return (
                   <div
                     key={tier.id}
