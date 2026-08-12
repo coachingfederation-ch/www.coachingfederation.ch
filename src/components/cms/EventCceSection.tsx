@@ -217,7 +217,7 @@ export function EventCceSection({
             </span>
             <p className="mt-1 font-semibold">{t(`cce.status.${status}`)}</p>
             <Link
-              to="/manage/events/$id/cce"
+              to="/manage/events/$id_/cce"
               params={{ id: eventId }}
               className="mt-2 inline-block text-xs font-semibold text-primary underline"
             >
