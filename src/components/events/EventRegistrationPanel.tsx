@@ -584,12 +584,13 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
             <p className="text-sm font-semibold">{t("events.detail.waitlist.inviteTitle")}</p>
             <p className="mt-1 text-xs leading-relaxed">
               {t("events.detail.waitlist.inviteBody")}{" "}
-              {t("events.detail.waitlist.inviteExpires", {
-                deadline: new Intl.DateTimeFormat(`${locale}-CH`, {
+              {t("events.detail.waitlist.inviteExpires").replace(
+                "{deadline}",
+                new Intl.DateTimeFormat(`${locale}-CH`, {
                   dateStyle: "long",
                   timeStyle: "short",
                 }).format(new Date(invite.expiresAt)),
-              })}
+              )}
             </p>
           </div>
         ) : null}
