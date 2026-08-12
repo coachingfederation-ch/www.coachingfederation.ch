@@ -574,7 +574,11 @@ export function EventPublishingSection({
   confirmed: number;
   setRegistrationStatusAndReload: (r: Registration) => void | Promise<void>;
   resendConfirmation: (r: Registration) => void | Promise<void>;
-  cancelAttendee: (r: Registration, refund: boolean | undefined) => void | Promise<void>;
+  cancelAttendee: (
+    r: Registration,
+    refund: boolean | undefined,
+    note: string | null,
+  ) => void | Promise<void>;
   retryRefund: (r: Registration) => void | Promise<void>;
   ticketsSection?: React.ReactNode;
   t: (k: string) => string;
@@ -914,7 +918,7 @@ export function EventPublishingSection({
         onClose={() => setPendingCancel(null)}
         onConfirm={async (r, refund) => {
           setPendingCancel(null);
-          await cancelAttendee(r, refund);
+          await cancelAttendee(r, refund, note);
         }}
         t={t}
       />

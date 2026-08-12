@@ -200,12 +200,20 @@ function EventEditor() {
    * partial failure is surfaced instead of silently swallowed, because money
    * and mail are involved.
    */
-  const cancelAttendee = async (r: Registration, refund: boolean | undefined) => {
+  const cancelAttendee = async (
+    r: Registration,
+    refund: boolean | undefined,
+    note: string | null,
+  ) => {
     setMessage(null);
     setError(null);
     try {
       const result = await cancelRegistration({
-        data: { registrationId: r.id, ...(refund === undefined ? {} : { refund }) },
+        data: {
+          registrationId: r.id,
+          ...(refund === undefined ? {} : { refund }),
+          ...(note ? { note } : {}),
+        },
       });
       if (result.refund.status === "failed") setError(t("events.refundFailed"));
       else if (result.email.status === "failed") setError(t("events.cancelEmailFailed"));
