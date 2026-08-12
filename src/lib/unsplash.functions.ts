@@ -4,6 +4,8 @@
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { assertStaff } from "./authz";
 
 export interface UnsplashPhoto {
   id: string;
@@ -19,8 +21,13 @@ export interface UnsplashPhoto {
 
 const UTM = "utm_source=icf_switzerland&utm_medium=referral";
 
-/** Searches Unsplash photos. The access key stays on the server. */
+/**
+ * Searches Unsplash photos. The access key stays on the server, and the shared
+ * quota is reserved for signed-in CMS staff — an anonymous caller must never be
+ * able to relay through this endpoint.
+ */
 export const searchUnsplash = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data) =>
     z
       .object({
@@ -30,7 +37,11 @@ export const searchUnsplash = createServerFn({ method: "GET" })
       .parse(data),
   )
   .handler(
-    async ({ data }): Promise<{ photos: UnsplashPhoto[]; totalPages: number; error?: string }> => {
+    async ({
+      data,
+      context,
+    }): Promise<{ photos: UnsplashPhoto[]; totalPages: number; error?: string }> => {
+      await assertStaff(context);
       const key = process.env.UNSPLASH_ACCESS_KEY;
       if (!key) return { photos: [], totalPages: 0, error: "unsplash_not_configured" };
 
@@ -86,6 +97,7 @@ export const searchUnsplash = createServerFn({ method: "GET" })
 
 /** Required by the Unsplash API guidelines whenever a photo is selected for use. */
 export const trackUnsplashDownload = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data) =>
     z
       .object({
@@ -96,7 +108,8 @@ export const trackUnsplashDownload = createServerFn({ method: "POST" })
       })
       .parse(data),
   )
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    await assertStaff(context);
     const key = process.env.UNSPLASH_ACCESS_KEY;
     if (!key) return { ok: false };
     try {
