@@ -111,8 +111,12 @@ export const undoAttendeeCheckIn = createServerFn({ method: "POST" })
   )
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
-    const { data: result, error } = await context.supabase.rpc("undo_check_in", {
+    // The routine is service-role only; the caller is verified above and the
+    // database re-checks the actor's admin/editor role.
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: result, error } = await supabaseAdmin.rpc("undo_check_in", {
       _registration_id: data.registrationId,
+      _actor: context.userId,
     });
     if (error) throw new Error(error.message);
     return result as { outcome: string };
@@ -161,8 +165,10 @@ async function runCheckIn(context: any, registrationId: string): Promise<CheckIn
     tierName = tier?.name ?? null;
   }
 
-  const { data: result, error } = await context.supabase.rpc("check_in_registration", {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: result, error } = await supabaseAdmin.rpc("check_in_registration", {
     _registration_id: registrationId,
+    _actor: context.userId,
   });
   if (error) throw new Error(error.message);
 
