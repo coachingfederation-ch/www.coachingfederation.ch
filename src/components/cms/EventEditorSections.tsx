@@ -916,7 +916,7 @@ export function EventPublishingSection({
         registration={pendingCancel}
         eventStartsAt={event.starts_at}
         onClose={() => setPendingCancel(null)}
-        onConfirm={async (r, refund) => {
+        onConfirm={async (r, refund, note) => {
           setPendingCancel(null);
           await cancelAttendee(r, refund, note);
         }}
