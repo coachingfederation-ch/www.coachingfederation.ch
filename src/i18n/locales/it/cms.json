@@ -19,7 +19,8 @@
     "opsStructure": "Struttura operativa",
     "europePulse": "Europe Pulse",
     "governance": "Governance",
-    "chatInsights": "Chat Agent Insights"
+    "chatInsights": "Chat Agent Insights",
+    "knowledge": "Conoscenze dell'assistente"
   },
   "auth": {
     "signInSub": "Accedi per continuare",
@@ -1547,5 +1548,31 @@
       "feedback": "Feedback",
       "escalation": "Escalation reason"
     }
+  },
+  "knowledge": {
+    "title": "Conoscenze dell'assistente",
+    "subtitle": "Domande frequenti e note che l'assistente del sito può usare nelle risposte. Vengono usate solo le voci pubblicate.",
+    "addTitle": "Aggiungi una voce",
+    "add": "Aggiungi voce",
+    "fieldKind": "Tipo",
+    "kindFaq": "FAQ",
+    "kindNote": "Conoscenza",
+    "fieldTitle": "Titolo",
+    "fieldQuestion": "Domanda",
+    "fieldBody": "Testo",
+    "fieldAnswer": "Risposta",
+    "fieldKeywords": "Parole chiave, separate da virgole (facoltativo)",
+    "fieldLinkPath": "Percorso del link, ad es. /for-coaches (facoltativo)",
+    "languageHint": "Scrivi in una sola lingua: l'assistente risponde ai visitatori nella loro.",
+    "needTitleBody": "Titolo e testo sono obbligatori.",
+    "search": "Cerca voci",
+    "filterAll": "Tutte",
+    "filterStatus": "Stato",
+    "published": "Pubblicata",
+    "draft": "Bozza",
+    "updated": "Aggiornata",
+    "delete": "Elimina voce",
+    "confirmDelete": "Eliminare questa voce? L'assistente smetterà di usarla.",
+    "empty": "Nessuna voce corrisponde a questi filtri."
   }
 }

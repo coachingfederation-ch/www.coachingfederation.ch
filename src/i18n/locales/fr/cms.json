@@ -19,7 +19,8 @@
     "opsStructure": "Structure opérationnelle",
     "europePulse": "Europe Pulse",
     "governance": "Gouvernance",
-    "chatInsights": "Chat Agent Insights"
+    "chatInsights": "Chat Agent Insights",
+    "knowledge": "Connaissances de l'assistant"
   },
   "auth": {
     "signInSub": "Connectez-vous pour continuer",
@@ -1547,5 +1548,31 @@
       "feedback": "Feedback",
       "escalation": "Escalation reason"
     }
+  },
+  "knowledge": {
+    "title": "Connaissances de l'assistant",
+    "subtitle": "Questions fréquentes et notes que l'assistant du site peut utiliser dans ses réponses. Seules les entrées publiées sont utilisées.",
+    "addTitle": "Ajouter une entrée",
+    "add": "Ajouter l'entrée",
+    "fieldKind": "Type",
+    "kindFaq": "FAQ",
+    "kindNote": "Connaissance",
+    "fieldTitle": "Titre",
+    "fieldQuestion": "Question",
+    "fieldBody": "Texte",
+    "fieldAnswer": "Réponse",
+    "fieldKeywords": "Mots-clés, séparés par des virgules (facultatif)",
+    "fieldLinkPath": "Chemin du lien, par ex. /for-coaches (facultatif)",
+    "languageHint": "Rédigez dans une seule langue — l'assistant répond aux visiteurs dans la leur.",
+    "needTitleBody": "Un titre et un texte sont nécessaires.",
+    "search": "Rechercher des entrées",
+    "filterAll": "Toutes",
+    "filterStatus": "Statut",
+    "published": "Publiée",
+    "draft": "Brouillon",
+    "updated": "Mise à jour",
+    "delete": "Supprimer l'entrée",
+    "confirmDelete": "Supprimer cette entrée ? L'assistant cessera de l'utiliser.",
+    "empty": "Aucune entrée ne correspond à ces filtres."
   }
 }

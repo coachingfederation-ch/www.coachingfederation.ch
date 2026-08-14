@@ -175,6 +175,40 @@ export function buildAssistantTools(options: { locale: Locale; userId?: string }
     },
   });
 
+  const searchKnowledge = tool({
+    description:
+      "Search the chapter's own knowledge base: staff-written FAQs and knowledge notes about membership, ICF Credentials, processes, policies and how the chapter works. Use this for any chapter question that is not a coach, event, article or community lookup. Answer only from what it returns; if nothing matches, say so.",
+    inputSchema: z.object({
+      query: z.string().max(160),
+      kind: z.enum(["faq", "note"]).nullable(),
+      limit: z.number().int().min(1).max(10).nullable(),
+    }),
+    execute: async (input) => {
+      const supabase = await anonClient();
+      let q = supabase
+        .from("assistant_knowledge")
+        .select("kind, title, body, link_path, keywords")
+        .eq("is_published", true);
+      if (input.kind) q = q.eq("kind", input.kind);
+
+      const term = sanitise(input.query);
+      if (term) {
+        const words = term.split(" ").filter((w) => w.length > 2);
+        q = q.or(
+          [
+            `title.ilike.%${term}%`,
+            `body.ilike.%${term}%`,
+            ...(words.length ? [`keywords.ov.{${words.join(",")}}`] : []),
+          ].join(","),
+        );
+      }
+
+      const { data, error } = await q.limit(input.limit ?? 5);
+      if (error) return { error: "Could not search the knowledge base." };
+      return { count: data?.length ?? 0, entries: data ?? [] };
+    },
+  });
+
   const memberTool = userId
     ? tool({
         description:
@@ -196,6 +230,7 @@ export function buildAssistantTools(options: { locale: Locale; userId?: string }
     list_insights: listInsights,
     get_insight: getInsight,
     list_communities: listCommunities,
+    search_knowledge: searchKnowledge,
     ...(memberTool ? { get_my_membership: memberTool } : {}),
   };
 }
