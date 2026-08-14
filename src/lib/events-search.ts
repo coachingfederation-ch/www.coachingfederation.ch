@@ -12,6 +12,7 @@ export const eventsSearchSchema = z.object({
   when: z.string().optional().catch(undefined),
   category: z.string().optional().catch(undefined),
   region: z.string().optional().catch(undefined),
+  community: z.string().optional().catch(undefined),
   lang: z.string().optional().catch(undefined),
   format: z.string().optional().catch(undefined),
 });
