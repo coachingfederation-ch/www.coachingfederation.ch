@@ -79,6 +79,58 @@ function FilterSelect({
   );
 }
 
+/**
+ * "Where" combines two vocabularies in one control: the region taxonomy and the
+ * local communities that actually have events. Values are prefixed so a single
+ * select can carry both facets without ambiguity.
+ */
+function WhereSelect({
+  label,
+  anyLabel,
+  value,
+  regionGroupLabel,
+  communityGroupLabel,
+  regions,
+  communities,
+  onChange,
+}: {
+  label: string;
+  anyLabel: string;
+  value: string;
+  regionGroupLabel: string;
+  communityGroupLabel: string;
+  regions: { value: string; label: string }[];
+  communities: { value: string; label: string }[];
+  onChange: (next: string) => void;
+}) {
+  return (
+    <label className="block">
+      <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        {label}
+      </span>
+      <select className={selectClass} value={value} onChange={(e) => onChange(e.target.value)}>
+        <option value="">{anyLabel}</option>
+        <optgroup label={regionGroupLabel}>
+          {regions.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </optgroup>
+        {communities.length > 0 ? (
+          <optgroup label={communityGroupLabel}>
+            {communities.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </optgroup>
+        ) : null}
+      </select>
+    </label>
+  );
+}
+
 export default function EventsPage({ data }: { data: EventsPageData }) {
   const { t, locale } = useI18n();
   const navigate = useNavigate();
@@ -88,9 +140,24 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
   const when = search.when === "past" ? "past" : "upcoming";
   const category = search.category ?? "";
   const region = search.region ?? "";
+  const community = search.community ?? "";
   const lang = search.lang ?? "";
   const format = search.format ?? "";
-  const hasFacetFilters = Boolean(category || region || lang || format);
+  const hasFacetFilters = Boolean(category || region || community || lang || format);
+
+  // Communities are derived from the rows on the page: a community with nothing
+  // to show never appears in the filter.
+  const communityOptions = (() => {
+    const seen = new Map<string, string>();
+    for (const e of [...(featured ? [featured] : []), ...upcoming, ...past]) {
+      if (e.community_slug && e.community_name && !seen.has(e.community_slug)) {
+        seen.set(e.community_slug, e.community_name);
+      }
+    }
+    return [...seen.entries()]
+      .map(([slug, name]) => ({ value: `community:${slug}`, label: name }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  })();
 
   const setFilter = (key: keyof EventsSearch, value: string) => {
     void navigate({
@@ -98,6 +165,21 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
       search: ((prev: Record<string, unknown>) => ({
         ...prev,
         [key]: value || undefined,
+      })) as never,
+      replace: true,
+    });
+  };
+
+  /** One control, two facets: writing one always clears the other. */
+  const whereValue = community ? `community:${community}` : region ? `region:${region}` : "";
+  const setWhere = (next: string) => {
+    const isCommunity = next.startsWith("community:");
+    const slug = next.slice(next.indexOf(":") + 1);
+    void navigate({
+      search: ((prev: Record<string, unknown>) => ({
+        ...prev,
+        region: !next || isCommunity ? undefined : slug,
+        community: next && isCommunity ? slug : undefined,
       })) as never,
       replace: true,
     });
@@ -111,6 +193,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
   const matches = (e: PublicEvent) =>
     (!category || e.category_slug === category) &&
     (!region || e.region_slug === region) &&
+    (!community || e.community_slug === community) &&
     (!lang || (e.language ?? "en") === lang) &&
     (!format || (e.location_mode ?? "in_person") === format);
 
@@ -184,12 +267,15 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                   options={categories.map((c) => ({ value: c.slug, label: c.label }))}
                   onChange={(v) => setFilter("category", v)}
                 />
-                <FilterSelect
-                  label={t("events.filters.region")}
-                  anyLabel={t("events.filters.allRegions")}
-                  value={region}
-                  options={regions.map((r) => ({ value: r.slug, label: r.label }))}
-                  onChange={(v) => setFilter("region", v)}
+                <WhereSelect
+                  label={t("events.filters.where")}
+                  anyLabel={t("events.filters.allWhere")}
+                  value={whereValue}
+                  regionGroupLabel={t("events.filters.groupRegions")}
+                  communityGroupLabel={t("events.filters.groupCommunities")}
+                  regions={regions.map((r) => ({ value: `region:${r.slug}`, label: r.label }))}
+                  communities={communityOptions}
+                  onChange={setWhere}
                 />
                 <FilterSelect
                   label={t("events.filters.language")}
