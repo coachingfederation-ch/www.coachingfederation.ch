@@ -228,6 +228,48 @@ export type Database = {
           },
         ]
       }
+      assistant_knowledge: {
+        Row: {
+          body: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_published: boolean
+          keywords: string[]
+          kind: Database["public"]["Enums"]["assistant_knowledge_kind"]
+          link_path: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_published?: boolean
+          keywords?: string[]
+          kind?: Database["public"]["Enums"]["assistant_knowledge_kind"]
+          link_path?: string | null
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_published?: boolean
+          keywords?: string[]
+          kind?: Database["public"]["Enums"]["assistant_knowledge_kind"]
+          link_path?: string | null
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           created_at: string
@@ -3996,6 +4038,7 @@ export type Database = {
         | "published"
         | "unpublished"
         | "review"
+      assistant_knowledge_kind: "faq" | "note"
       chat_answer_outcome:
         | "successful"
         | "partially_successful"
@@ -4179,6 +4222,7 @@ export const Constants = {
         "unpublished",
         "review",
       ],
+      assistant_knowledge_kind: ["faq", "note"],
       chat_answer_outcome: [
         "successful",
         "partially_successful",
