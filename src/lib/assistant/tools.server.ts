@@ -196,6 +196,7 @@ export function buildAssistantTools(options: { locale: Locale; userId?: string }
     list_insights: listInsights,
     get_insight: getInsight,
     list_communities: listCommunities,
+    search_knowledge: searchKnowledge,
     ...(memberTool ? { get_my_membership: memberTool } : {}),
   };
 }
