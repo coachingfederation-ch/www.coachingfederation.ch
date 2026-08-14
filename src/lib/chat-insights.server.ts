@@ -223,31 +223,3 @@ export async function buildChatInsightCsv(
     rows: rows.length,
   };
 }
-
-export type CategoryInput = {
-  id?: string;
-  slug: string;
-  labelEn: string;
-  labelDe: string;
-  labelFr: string;
-  labelIt: string;
-  sortOrder: number;
-  isActive: boolean;
-};
-
-export async function upsertChatCategory(input: CategoryInput): Promise<void> {
-  const supabase = await admin();
-  const payload = {
-    slug: input.slug,
-    label_en: input.labelEn,
-    label_de: input.labelDe,
-    label_fr: input.labelFr,
-    label_it: input.labelIt,
-    sort_order: input.sortOrder,
-    is_active: input.isActive,
-  };
-  const { error } = input.id
-    ? await supabase.from("chat_question_categories").update(payload).eq("id", input.id)
-    : await supabase.from("chat_question_categories").insert(payload);
-  if (error) throw new Error(error.message);
-}

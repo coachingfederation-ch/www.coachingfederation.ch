@@ -45,30 +45,3 @@ export const exportChatInsightsCsv = createServerFn({ method: "POST" })
     const { buildChatInsightCsv } = await import("./chat-insights.server");
     return buildChatInsightCsv(data.filters);
   });
-
-export const saveChatCategory = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) =>
-    z
-      .object({
-        id: z.string().uuid().optional(),
-        slug: z
-          .string()
-          .min(2)
-          .max(64)
-          .regex(/^[a-z0-9_]+$/),
-        labelEn: z.string().min(1).max(120),
-        labelDe: z.string().max(120).default(""),
-        labelFr: z.string().max(120).default(""),
-        labelIt: z.string().max(120).default(""),
-        sortOrder: z.number().int().min(0).max(9999).default(0),
-        isActive: z.boolean().default(true),
-      })
-      .parse(input),
-  )
-  .handler(async ({ context, data }) => {
-    await assertAdmin(context);
-    const { upsertChatCategory } = await import("./chat-insights.server");
-    await upsertChatCategory(data);
-    return { ok: true };
-  });
