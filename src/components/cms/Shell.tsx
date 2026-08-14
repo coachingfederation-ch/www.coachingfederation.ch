@@ -19,6 +19,7 @@ import {
   Globe2,
   UserCircle,
   MessagesSquare,
+  BookOpen,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
