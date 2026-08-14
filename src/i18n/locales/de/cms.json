@@ -19,7 +19,8 @@
     "opsStructure": "Operationelle Struktur",
     "europePulse": "Europe Pulse",
     "governance": "Governance",
-    "chatInsights": "Chat-Agent-Insights"
+    "chatInsights": "Chat-Agent-Insights",
+    "knowledge": "Assistenz-Wissen"
   },
   "auth": {
     "signInSub": "Melden Sie sich an, um fortzufahren",
@@ -1547,5 +1548,31 @@
       "feedback": "Rückmeldung",
       "escalation": "Eskalationsgrund"
     }
+  },
+  "knowledge": {
+    "title": "Assistenz-Wissen",
+    "subtitle": "Häufige Fragen und Wissensnotizen, die der Website-Assistent bei Antworten nutzen kann. Nur veröffentlichte Einträge werden verwendet.",
+    "addTitle": "Eintrag hinzufügen",
+    "add": "Eintrag hinzufügen",
+    "fieldKind": "Typ",
+    "kindFaq": "FAQ",
+    "kindNote": "Wissen",
+    "fieldTitle": "Titel",
+    "fieldQuestion": "Frage",
+    "fieldBody": "Text",
+    "fieldAnswer": "Antwort",
+    "fieldKeywords": "Stichworte, mit Komma getrennt (optional)",
+    "fieldLinkPath": "Linkpfad, z. B. /for-coaches (optional)",
+    "languageHint": "Nur in einer Sprache schreiben — der Assistent antwortet Besuchenden in deren Sprache.",
+    "needTitleBody": "Titel und Text sind erforderlich.",
+    "search": "Einträge durchsuchen",
+    "filterAll": "Alle",
+    "filterStatus": "Status",
+    "published": "Veröffentlicht",
+    "draft": "Entwurf",
+    "updated": "Aktualisiert",
+    "delete": "Eintrag löschen",
+    "confirmDelete": "Diesen Eintrag löschen? Der Assistent nutzt ihn dann nicht mehr.",
+    "empty": "Keine Einträge entsprechen diesen Filtern."
   }
 }

@@ -19,7 +19,8 @@
     "opsStructure": "Operational structure",
     "europePulse": "Europe Pulse",
     "governance": "Governance",
-    "chatInsights": "Chat Agent Insights"
+    "chatInsights": "Chat Agent Insights",
+    "knowledge": "Assistant knowledge"
   },
   "auth": {
     "signInSub": "Sign in to continue",
@@ -1547,5 +1548,31 @@
       "feedback": "Feedback",
       "escalation": "Escalation reason"
     }
+  },
+  "knowledge": {
+    "title": "Assistant knowledge",
+    "subtitle": "FAQs and knowledge notes the site assistant can use when it answers visitors. Only published entries are used.",
+    "addTitle": "Add an entry",
+    "add": "Add entry",
+    "fieldKind": "Type",
+    "kindFaq": "FAQ",
+    "kindNote": "Knowledge",
+    "fieldTitle": "Title",
+    "fieldQuestion": "Question",
+    "fieldBody": "Text",
+    "fieldAnswer": "Answer",
+    "fieldKeywords": "Keywords, comma separated (optional)",
+    "fieldLinkPath": "Link path, e.g. /for-coaches (optional)",
+    "languageHint": "Write in one language only — the assistant answers visitors in their own language.",
+    "needTitleBody": "A title and a text are required.",
+    "search": "Search entries",
+    "filterAll": "All",
+    "filterStatus": "Status",
+    "published": "Published",
+    "draft": "Draft",
+    "updated": "Updated",
+    "delete": "Delete entry",
+    "confirmDelete": "Delete this entry? The assistant will stop using it.",
+    "empty": "No entries match these filters."
   }
 }
