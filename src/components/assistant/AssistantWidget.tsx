@@ -388,9 +388,9 @@ export function AssistantWidget() {
                                     <button
                                       key={value}
                                       type="button"
-                                      aria-label={t(`assistant.feedback.${
-                                        value === "helpful" ? "yes" : "no"
-                                      }`)}
+                                      aria-label={t(
+                                        `assistant.feedback.${value === "helpful" ? "yes" : "no"}`,
+                                      )}
                                       onClick={() => {
                                         setFeedbackGiven((prev) => ({
                                           ...prev,

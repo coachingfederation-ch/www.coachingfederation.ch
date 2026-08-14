@@ -99,10 +99,14 @@ Assistant answer:
 ${input.answer.slice(0, 3000)}`,
     });
 
-    const json = text.replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+    const json = text
+      .replace(/^```(?:json)?/i, "")
+      .replace(/```$/, "")
+      .trim();
     const parsed = JSON.parse(json) as Record<string, unknown>;
     const category = typeof parsed.category === "string" ? parsed.category : "other";
-    const outcome = typeof parsed.outcome === "string" ? (parsed.outcome as ChatOutcome) : "unknown";
+    const outcome =
+      typeof parsed.outcome === "string" ? (parsed.outcome as ChatOutcome) : "unknown";
     const detail = typeof parsed.detail === "string" ? parsed.detail.trim().slice(0, 120) : "";
     const reason =
       typeof parsed.escalation_reason === "string"
@@ -121,8 +125,7 @@ ${input.answer.slice(0, 3000)}`,
       category: slugs.includes(category) ? category : "other",
       detail: detail || null,
       outcome: finalOutcome,
-      escalationReason:
-        finalOutcome === "escalated" ? reason || "contact_details_offered" : null,
+      escalationReason: finalOutcome === "escalated" ? reason || "contact_details_offered" : null,
     };
   } catch {
     return fallback;

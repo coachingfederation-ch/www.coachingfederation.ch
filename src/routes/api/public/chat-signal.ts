@@ -13,9 +13,8 @@ export const Route = createFileRoute("/api/public/chat-signal")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const { checkRateLimit, clientIp, rateLimitResponse } = await import(
-          "@/lib/rate-limit.server"
-        );
+        const { checkRateLimit, clientIp, rateLimitResponse } =
+          await import("@/lib/rate-limit.server");
         const verdict = await checkRateLimit("chat-signal", `ip:${clientIp(request)}`, [
           { windowSeconds: 300, max: 60 },
           { windowSeconds: 86_400, max: 400 },

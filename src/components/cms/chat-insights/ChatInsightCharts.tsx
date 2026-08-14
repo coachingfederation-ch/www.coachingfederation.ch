@@ -75,7 +75,11 @@ export function ChatInsightCharts({
     .map((p) => ({ name: t(`chatInsights.outcome.${p.outcome}`), value: p.count, key: p.outcome }));
   const feedbackData = [
     { name: t("chatInsights.feedback.helpful"), value: feedback.helpful, key: "successful" },
-    { name: t("chatInsights.feedback.notHelpful"), value: feedback.notHelpful, key: "unsuccessful" },
+    {
+      name: t("chatInsights.feedback.notHelpful"),
+      value: feedback.notHelpful,
+      key: "unsuccessful",
+    },
   ].filter((d) => d.value > 0);
 
   return (
