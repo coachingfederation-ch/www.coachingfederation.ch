@@ -5,7 +5,7 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useRouter } from "@tanstack/react-router";
-import { MessageCircle, RotateCcw, X } from "lucide-react";
+import { MessageCircle, RotateCcw, ThumbsDown, ThumbsUp, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
@@ -36,6 +36,49 @@ import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "icf-assistant-conversation";
+const SESSION_KEY = "icf-assistant-session";
+
+function randomId() {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`.padEnd(36, "0").slice(0, 36);
+}
+
+/**
+ * An opaque per-visit identifier so the insights report can tell "one person
+ * asked five questions" from "five people asked one". It is generated in the
+ * browser, kept in sessionStorage and never linked to an account.
+ */
+function currentSessionId(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const existing = window.sessionStorage.getItem(SESSION_KEY);
+    if (existing) return existing;
+    const fresh = randomId();
+    window.sessionStorage.setItem(SESSION_KEY, fresh);
+    return fresh;
+  } catch {
+    return null;
+  }
+}
+
+/** Fire-and-forget telemetry: a failure here must never disturb the chat. */
+function sendSignal(body: {
+  interactionId: string;
+  feedback?: "helpful" | "not_helpful";
+  contactClicked?: boolean;
+}) {
+  void fetch("/api/public/chat-signal", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    keepalive: true,
+  }).catch(() => undefined);
+}
+
+/** The human fallback the assistant offers; a click on it counts as a referral. */
+function isContactHref(href: string) {
+  return /office@coachingfederation\.ch/i.test(href) || /\/contact\b/i.test(href);
+}
 
 /**
  * Links the assistant writes are relative site paths; only a full URL to
@@ -98,6 +141,11 @@ export function AssistantWidget() {
   const [initialMessages] = useState<UIMessage[]>(() => loadStoredMessages());
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  /** Interaction id of the turn currently in flight, if any. */
+  const pendingInteraction = useRef<string | null>(null);
+  /** Assistant message id → interaction id, so feedback finds the right row. */
+  const [turnIds, setTurnIds] = useState<Record<string, string>>({});
+  const [feedbackGiven, setFeedbackGiven] = useState<Record<string, "helpful" | "not_helpful">>({});
 
   const { messages, sendMessage, status, error, stop, setMessages } = useChat({
     messages: initialMessages,
@@ -109,10 +157,32 @@ export function AssistantWidget() {
         const { data } = await supabase.auth.getSession();
         const token = data.session?.access_token;
         const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
-        return { body: { messages: outgoing, locale }, headers };
+        const interactionId = randomId();
+        pendingInteraction.current = interactionId;
+        return {
+          body: {
+            messages: outgoing,
+            locale,
+            interactionId,
+            sessionId: currentSessionId(),
+          },
+          headers,
+        };
       },
     }),
   });
+
+  // Once a turn settles, remember which answer belongs to which logged
+  // interaction so the "was this helpful?" buttons can report against it.
+  useEffect(() => {
+    if (status !== "ready") return;
+    const id = pendingInteraction.current;
+    if (!id) return;
+    const last = messages[messages.length - 1];
+    if (!last || last.role !== "assistant") return;
+    pendingInteraction.current = null;
+    setTurnIds((prev) => (prev[last.id] ? prev : { ...prev, [last.id]: id }));
+  }, [messages, status]);
 
   // Persist after every change so a reload keeps the conversation.
   useEffect(() => {
@@ -145,6 +215,9 @@ export function AssistantWidget() {
     stop();
     setMessages([]);
     setInput("");
+    setTurnIds({});
+    setFeedbackGiven({});
+    pendingInteraction.current = null;
     if (typeof window !== "undefined") window.localStorage.removeItem(STORAGE_KEY);
     textareaRef.current?.focus();
   }, [setMessages, stop]);
@@ -266,6 +339,7 @@ export function AssistantWidget() {
                 const text = textOf(message);
                 const usedTool = message.parts.some(isToolPart);
                 if (!text && !usedTool) return null;
+                const interactionId = turnIds[message.id];
                 return (
                   <Message key={message.id} from={message.role}>
                     <MessageContent
@@ -276,7 +350,17 @@ export function AssistantWidget() {
                       )}
                     >
                       {message.role === "assistant" ? (
-                        <>
+                        <div
+                          onClickCapture={(event) => {
+                            // A click on the contact address is the signal that
+                            // the referral actually landed.
+                            const anchor = (event.target as HTMLElement).closest("a");
+                            const href = anchor?.getAttribute("href") ?? "";
+                            if (interactionId && href && isContactHref(href)) {
+                              sendSignal({ interactionId, contactClicked: true });
+                            }
+                          }}
+                        >
                           {!text && usedTool && (
                             <Shimmer className="text-sm">{t("assistant.searching")}</Shimmer>
                           )}
@@ -289,7 +373,45 @@ export function AssistantWidget() {
                               {text}
                             </MessageResponse>
                           )}
-                        </>
+                          {text && interactionId && (
+                            <div className="mt-2 flex items-center gap-2">
+                              {feedbackGiven[interactionId] ? (
+                                <span className="text-[11px] text-muted-foreground">
+                                  {t("assistant.feedback.thanks")}
+                                </span>
+                              ) : (
+                                <>
+                                  <span className="text-[11px] text-muted-foreground">
+                                    {t("assistant.feedback.question")}
+                                  </span>
+                                  {(["helpful", "not_helpful"] as const).map((value) => (
+                                    <button
+                                      key={value}
+                                      type="button"
+                                      aria-label={t(
+                                        `assistant.feedback.${value === "helpful" ? "yes" : "no"}`,
+                                      )}
+                                      onClick={() => {
+                                        setFeedbackGiven((prev) => ({
+                                          ...prev,
+                                          [interactionId]: value,
+                                        }));
+                                        sendSignal({ interactionId, feedback: value });
+                                      }}
+                                      className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                    >
+                                      {value === "helpful" ? (
+                                        <ThumbsUp className="size-3.5" aria-hidden="true" />
+                                      ) : (
+                                        <ThumbsDown className="size-3.5" aria-hidden="true" />
+                                      )}
+                                    </button>
+                                  ))}
+                                </>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       ) : (
                         <p className="whitespace-pre-wrap text-sm">{text}</p>
                       )}

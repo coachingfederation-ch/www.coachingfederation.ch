@@ -107,6 +107,19 @@ export const Route = createFileRoute("/api/chat")({
         const messages = (body.messages as UIMessage[]).slice(-24);
         const locale: Locale = isLocale(body.locale) ? body.locale : "en";
 
+        // Telemetry identifiers. Both are opaque, browser-generated values: the
+        // interaction id lets later feedback find its own row, the session id
+        // groups a visit. Neither identifies a person.
+        const interactionId =
+          typeof (body as { interactionId?: unknown }).interactionId === "string" &&
+          /^[0-9a-f-]{36}$/i.test((body as { interactionId: string }).interactionId)
+            ? (body as { interactionId: string }).interactionId
+            : undefined;
+        const sessionId =
+          typeof (body as { sessionId?: unknown }).sessionId === "string"
+            ? (body as { sessionId: string }).sessionId.slice(0, 64)
+            : null;
+
         const apiKey = process.env.LOVABLE_API_KEY;
         if (!apiKey) return new Response("The assistant is not configured.", { status: 500 });
 
@@ -136,6 +149,27 @@ export const Route = createFileRoute("/api/chat")({
           stopWhen: stepCountIs(8),
           onError: ({ error }) => {
             console.error("[assistant]", error);
+          },
+          // Best-effort telemetry: classification and the insert happen after
+          // the visitor already has the answer, and every failure is swallowed
+          // inside logChatInteraction.
+          onFinish: ({ text }) => {
+            if (!interactionId) return;
+            const lastUser = [...messages].reverse().find((m) => m.role === "user");
+            const question = (lastUser?.parts ?? [])
+              .map((p) => (p.type === "text" ? p.text : ""))
+              .join("")
+              .trim();
+            void import("@/lib/assistant/logging.server").then(({ logChatInteraction }) =>
+              logChatInteraction({
+                interactionId,
+                sessionId,
+                locale,
+                question,
+                answer: text ?? "",
+                errored: !text?.trim(),
+              }),
+            );
           },
         });
 

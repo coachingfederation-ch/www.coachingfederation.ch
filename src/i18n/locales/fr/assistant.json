@@ -20,5 +20,11 @@
     "body": "Ce lien mène vers un autre site web.",
     "cancel": "Annuler",
     "open": "Ouvrir le lien"
+  },
+  "feedback": {
+    "question": "Est-ce utile ?",
+    "yes": "Utile",
+    "no": "Pas utile",
+    "thanks": "Merci pour votre retour."
   }
 }

@@ -615,6 +615,96 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_interaction_logs: {
+        Row: {
+          category_detail: string | null
+          category_slug: string
+          contact_clicked: boolean
+          contact_shown: boolean
+          created_at: string
+          escalation_reason: string | null
+          feedback: Database["public"]["Enums"]["chat_feedback"] | null
+          id: string
+          locale: string
+          occurred_at: string
+          outcome: Database["public"]["Enums"]["chat_answer_outcome"]
+          session_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          category_detail?: string | null
+          category_slug?: string
+          contact_clicked?: boolean
+          contact_shown?: boolean
+          created_at?: string
+          escalation_reason?: string | null
+          feedback?: Database["public"]["Enums"]["chat_feedback"] | null
+          id: string
+          locale?: string
+          occurred_at?: string
+          outcome?: Database["public"]["Enums"]["chat_answer_outcome"]
+          session_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category_detail?: string | null
+          category_slug?: string
+          contact_clicked?: boolean
+          contact_shown?: boolean
+          created_at?: string
+          escalation_reason?: string | null
+          feedback?: Database["public"]["Enums"]["chat_feedback"] | null
+          id?: string
+          locale?: string
+          occurred_at?: string
+          outcome?: Database["public"]["Enums"]["chat_answer_outcome"]
+          session_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      chat_question_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          label_de: string
+          label_en: string
+          label_fr: string
+          label_it: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          label_de?: string
+          label_en: string
+          label_fr?: string
+          label_it?: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          label_de?: string
+          label_en?: string
+          label_fr?: string
+          label_it?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       coach_finder_config: {
         Row: {
           coaching_enabled: boolean
@@ -3906,6 +3996,13 @@ export type Database = {
         | "published"
         | "unpublished"
         | "review"
+      chat_answer_outcome:
+        | "successful"
+        | "partially_successful"
+        | "escalated"
+        | "unsuccessful"
+        | "unknown"
+      chat_feedback: "helpful" | "not_helpful"
       event_cce_category: "core_competency" | "resource_development" | "break"
       event_cce_delivery: "in_person" | "teleclass" | "webinar"
       event_cce_status:
@@ -4082,6 +4179,14 @@ export const Constants = {
         "unpublished",
         "review",
       ],
+      chat_answer_outcome: [
+        "successful",
+        "partially_successful",
+        "escalated",
+        "unsuccessful",
+        "unknown",
+      ],
+      chat_feedback: ["helpful", "not_helpful"],
       event_cce_category: ["core_competency", "resource_development", "break"],
       event_cce_delivery: ["in_person", "teleclass", "webinar"],
       event_cce_status: [
