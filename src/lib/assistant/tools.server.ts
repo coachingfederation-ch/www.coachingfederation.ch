@@ -177,6 +177,14 @@ export function buildAssistantTools(options: { locale: Locale; userId?: string }
 
   const memberTool = userId
     ? tool({
+        description: "placeholder",
+        inputSchema: z.object({}),
+        execute: async () => ({}),
+      })
+    : undefined;
+
+  const _unusedMemberTool = userId
+    ? tool({
         description:
           "Read the signed-in member's own chapter context: their greeting name and the local communities that cover their selected service regions. Use for questions like 'which community is mine?'.",
         inputSchema: z.object({}),
