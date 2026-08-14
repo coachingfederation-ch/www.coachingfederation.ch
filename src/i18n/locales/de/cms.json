@@ -18,7 +18,8 @@
     "events": "Events",
     "opsStructure": "Operationelle Struktur",
     "europePulse": "Europe Pulse",
-    "governance": "Governance"
+    "governance": "Governance",
+    "chatInsights": "Chat-Agent-Insights"
   },
   "auth": {
     "signInSub": "Melden Sie sich an, um fortzufahren",
@@ -1466,6 +1467,85 @@
       "contentRationale": "Content rationale",
       "schedule": "Schedule",
       "supportingMaterial": "Supporting material"
+    }
+  },
+  "chatInsights": {
+    "title": "Chat-Agent-Insights",
+    "subtitle": "Was Besucherinnen und Besucher den Assistenten fragen, wie gut er antwortet und wie oft wir an das Büro weiterleiten. Nur Metadaten — Fragen und Chatverläufe werden nicht gespeichert.",
+    "loading": "Wird geladen …",
+    "loadError": "Die Auswertung konnte nicht geladen werden.",
+    "noData": "Keine Interaktionen für diese Filter.",
+    "noFeedback": "Noch keine Rückmeldungen.",
+    "exportCsv": "CSV exportieren",
+    "exporting": "Export läuft …",
+    "exportFailed": "Der Export ist fehlgeschlagen.",
+    "truncated": "Es werden nur die 500 neuesten Interaktionen angezeigt. Die Kennzahlen oben umfassen alle Treffer — exportieren Sie die CSV für die vollständige Liste.",
+    "yes": "Ja",
+    "no": "Nein",
+    "period": {
+      "last7": "Letzte 7 Tage",
+      "last30": "Letzte 30 Tage",
+      "last90": "Letzte 90 Tage",
+      "all": "Gesamter Zeitraum"
+    },
+    "filters": {
+      "from": "Von",
+      "to": "Bis",
+      "category": "Kategorie",
+      "outcome": "Antwortergebnis",
+      "contact": "Kontakt-E-Mail",
+      "language": "Sprache",
+      "feedback": "Rückmeldung",
+      "search": "Suche",
+      "searchPlaceholder": "Detail oder Eskalationsgrund",
+      "all": "Alle",
+      "contactShown": "Angezeigt",
+      "contactNotShown": "Nicht angezeigt",
+      "contactClicked": "Angeklickt",
+      "reset": "Filter zurücksetzen"
+    },
+    "outcome": {
+      "successful": "Erfolgreich",
+      "partially_successful": "Teilweise erfolgreich",
+      "escalated": "Weitergeleitet",
+      "unsuccessful": "Nicht erfolgreich",
+      "unknown": "Unbekannt"
+    },
+    "feedback": {
+      "helpful": "Hilfreich",
+      "notHelpful": "Nicht hilfreich",
+      "none": "Keine Rückmeldung"
+    },
+    "kpi": {
+      "totalAllTime": "Interaktionen gesamt",
+      "total": "Im gewählten Zeitraum",
+      "successRate": "Erfolgreiche Antworten",
+      "escalationRate": "Weiterleitungen",
+      "contactShownRate": "Kontakt-E-Mail angezeigt",
+      "helpfulRate": "Hilfreiche Rückmeldungen",
+      "responses": "Rückmeldungen"
+    },
+    "charts": {
+      "title": "Visuelle Auswertung",
+      "categories": "Fragen nach Kategorie",
+      "outcomes": "Antwortergebnisse",
+      "contactOverTime": "Weiterleitungen an die Kontakt-E-Mail im Zeitverlauf",
+      "feedback": "Hilfreich vs. nicht hilfreich",
+      "interactions": "Interaktionen",
+      "contactShown": "Angezeigt",
+      "contactClicked": "Angeklickt"
+    },
+    "table": {
+      "title": "Detailprotokoll",
+      "when": "Datum und Zeit",
+      "category": "Kategorie",
+      "detail": "Detail",
+      "language": "Sprache",
+      "outcome": "Ergebnis",
+      "contactShown": "Kontakt angezeigt",
+      "contactClicked": "Kontakt angeklickt",
+      "feedback": "Rückmeldung",
+      "escalation": "Eskalationsgrund"
     }
   }
 }

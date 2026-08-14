@@ -20,5 +20,11 @@
     "body": "This link leads to another website.",
     "cancel": "Cancel",
     "open": "Open link"
+  },
+  "feedback": {
+    "question": "Was this helpful?",
+    "yes": "Helpful",
+    "no": "Not helpful",
+    "thanks": "Thanks for the feedback."
   }
 }

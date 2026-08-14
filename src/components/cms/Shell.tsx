@@ -18,6 +18,7 @@ import {
   Network,
   Globe2,
   UserCircle,
+  MessagesSquare,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
@@ -46,6 +47,7 @@ const nav = [
   { to: "/operational-structure", key: "nav.opsStructure", icon: Network, allowedRoles: [] },
   { to: "/manage/europe-pulse", key: "nav.europePulse", icon: Globe2, allowedRoles: [] },
   { to: "/manage/governance", key: "nav.governance", icon: FileText, allowedRoles: ["editor"] },
+  { to: "/manage/chat-insights", key: "nav.chatInsights", icon: MessagesSquare, allowedRoles: [] },
   { to: "/roles", key: "nav.roles", icon: ShieldCheck, allowedRoles: [] },
 ] as const satisfies ReadonlyArray<{
   to: string;

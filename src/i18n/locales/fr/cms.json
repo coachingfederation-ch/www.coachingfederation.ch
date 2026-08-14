@@ -18,7 +18,8 @@
     "events": "Événements",
     "opsStructure": "Structure opérationnelle",
     "europePulse": "Europe Pulse",
-    "governance": "Gouvernance"
+    "governance": "Gouvernance",
+    "chatInsights": "Chat Agent Insights"
   },
   "auth": {
     "signInSub": "Connectez-vous pour continuer",
@@ -1466,6 +1467,85 @@
       "contentRationale": "Content rationale",
       "schedule": "Schedule",
       "supportingMaterial": "Supporting material"
+    }
+  },
+  "chatInsights": {
+    "title": "Chat Agent Insights",
+    "subtitle": "What visitors ask the site assistant, how well it answers, and how often we hand them over to the office. Metadata only — no questions or transcripts are stored.",
+    "loading": "Loading…",
+    "loadError": "The insights could not be loaded.",
+    "noData": "No interactions match these filters.",
+    "noFeedback": "No feedback yet.",
+    "exportCsv": "Export CSV",
+    "exporting": "Exporting…",
+    "exportFailed": "The export failed.",
+    "truncated": "Only the most recent 500 interactions are listed. The figures above cover every match — export the CSV for the full list.",
+    "yes": "Yes",
+    "no": "No",
+    "period": {
+      "last7": "Last 7 days",
+      "last30": "Last 30 days",
+      "last90": "Last 90 days",
+      "all": "All time"
+    },
+    "filters": {
+      "from": "From",
+      "to": "To",
+      "category": "Category",
+      "outcome": "Answer outcome",
+      "contact": "Contact email",
+      "language": "Language",
+      "feedback": "Visitor feedback",
+      "search": "Search",
+      "searchPlaceholder": "Category detail or escalation reason",
+      "all": "All",
+      "contactShown": "Shown",
+      "contactNotShown": "Not shown",
+      "contactClicked": "Clicked",
+      "reset": "Reset filters"
+    },
+    "outcome": {
+      "successful": "Successful",
+      "partially_successful": "Partially successful",
+      "escalated": "Escalated",
+      "unsuccessful": "Unsuccessful",
+      "unknown": "Unknown"
+    },
+    "feedback": {
+      "helpful": "Helpful",
+      "notHelpful": "Not helpful",
+      "none": "No feedback"
+    },
+    "kpi": {
+      "totalAllTime": "Total interactions",
+      "total": "In selected period",
+      "successRate": "Successful answers",
+      "escalationRate": "Escalations",
+      "contactShownRate": "Contact email shown",
+      "helpfulRate": "Helpful feedback",
+      "responses": "responses"
+    },
+    "charts": {
+      "title": "Visual insights",
+      "categories": "Questions by category",
+      "outcomes": "Answer outcomes",
+      "contactOverTime": "Contact-email referrals over time",
+      "feedback": "Helpful vs not helpful",
+      "interactions": "Interactions",
+      "contactShown": "Shown",
+      "contactClicked": "Clicked"
+    },
+    "table": {
+      "title": "Detailed log",
+      "when": "Date and time",
+      "category": "Category",
+      "detail": "Detail",
+      "language": "Language",
+      "outcome": "Outcome",
+      "contactShown": "Contact shown",
+      "contactClicked": "Contact clicked",
+      "feedback": "Feedback",
+      "escalation": "Escalation reason"
     }
   }
 }

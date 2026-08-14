@@ -75,10 +75,12 @@ import { Route as StaffArticlesIndexRouteImport } from './routes/_staff/articles
 import { Route as StaffArticlesIdRouteImport } from './routes/_staff/articles.$id'
 import { Route as StaffArticlesCategoriesRouteImport } from './routes/_staff/articles.categories'
 import { Route as StaffArticlesNewRouteImport } from './routes/_staff/articles.new'
+import { Route as StaffManageChatInsightsRouteImport } from './routes/_staff/manage.chat-insights'
 import { Route as StaffManageEuropePulseRouteImport } from './routes/_staff/manage.europe-pulse'
 import { Route as StaffManageGovernanceRouteImport } from './routes/_staff/manage.governance'
 import { Route as StaffMembersIndexRouteImport } from './routes/_staff/members.index'
 import { Route as StaffMembersIdRouteImport } from './routes/_staff/members.$id'
+import { Route as ApiPublicChatSignalRouteImport } from './routes/api/public/chat-signal'
 import { Route as ApiPublicEuropePulseScanRouteImport } from './routes/api/public/europe-pulse-scan'
 import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public/event-reminders'
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
@@ -425,6 +427,11 @@ const StaffArticlesNewRoute = StaffArticlesNewRouteImport.update({
   path: '/new',
   getParentRoute: () => StaffArticlesRoute,
 } as any)
+const StaffManageChatInsightsRoute = StaffManageChatInsightsRouteImport.update({
+  id: '/manage/chat-insights',
+  path: '/manage/chat-insights',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
 const StaffManageEuropePulseRoute = StaffManageEuropePulseRouteImport.update({
   id: '/manage/europe-pulse',
   path: '/manage/europe-pulse',
@@ -444,6 +451,11 @@ const StaffMembersIdRoute = StaffMembersIdRouteImport.update({
   id: '/members/$id',
   path: '/members/$id',
   getParentRoute: () => StaffRouteRoute,
+} as any)
+const ApiPublicChatSignalRoute = ApiPublicChatSignalRouteImport.update({
+  id: '/api/public/chat-signal',
+  path: '/api/public/chat-signal',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicEuropePulseScanRoute =
   ApiPublicEuropePulseScanRouteImport.update({
@@ -578,9 +590,11 @@ export interface FileRoutesByFullPath {
   '/articles/$id': typeof StaffArticlesIdRoute
   '/articles/categories': typeof StaffArticlesCategoriesRoute
   '/articles/new': typeof StaffArticlesNewRoute
+  '/manage/chat-insights': typeof StaffManageChatInsightsRoute
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/manage/governance': typeof StaffManageGovernanceRoute
   '/members/$id': typeof StaffMembersIdRoute
+  '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
@@ -657,9 +671,11 @@ export interface FileRoutesByTo {
   '/articles/$id': typeof StaffArticlesIdRoute
   '/articles/categories': typeof StaffArticlesCategoriesRoute
   '/articles/new': typeof StaffArticlesNewRoute
+  '/manage/chat-insights': typeof StaffManageChatInsightsRoute
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/manage/governance': typeof StaffManageGovernanceRoute
   '/members/$id': typeof StaffMembersIdRoute
+  '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
@@ -743,9 +759,11 @@ export interface FileRoutesById {
   '/_staff/articles/$id': typeof StaffArticlesIdRoute
   '/_staff/articles/categories': typeof StaffArticlesCategoriesRoute
   '/_staff/articles/new': typeof StaffArticlesNewRoute
+  '/_staff/manage/chat-insights': typeof StaffManageChatInsightsRoute
   '/_staff/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/_staff/manage/governance': typeof StaffManageGovernanceRoute
   '/_staff/members/$id': typeof StaffMembersIdRoute
+  '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
@@ -828,9 +846,11 @@ export interface FileRouteTypes {
     | '/articles/$id'
     | '/articles/categories'
     | '/articles/new'
+    | '/manage/chat-insights'
     | '/manage/europe-pulse'
     | '/manage/governance'
     | '/members/$id'
+    | '/api/public/chat-signal'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-reminders'
     | '/api/public/member-sync'
@@ -907,9 +927,11 @@ export interface FileRouteTypes {
     | '/articles/$id'
     | '/articles/categories'
     | '/articles/new'
+    | '/manage/chat-insights'
     | '/manage/europe-pulse'
     | '/manage/governance'
     | '/members/$id'
+    | '/api/public/chat-signal'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-reminders'
     | '/api/public/member-sync'
@@ -992,9 +1014,11 @@ export interface FileRouteTypes {
     | '/_staff/articles/$id'
     | '/_staff/articles/categories'
     | '/_staff/articles/new'
+    | '/_staff/manage/chat-insights'
     | '/_staff/manage/europe-pulse'
     | '/_staff/manage/governance'
     | '/_staff/members/$id'
+    | '/api/public/chat-signal'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-reminders'
     | '/api/public/member-sync'
@@ -1049,6 +1073,7 @@ export interface RootRouteChildren {
   EventsIndexRoute: typeof EventsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  ApiPublicChatSignalRoute: typeof ApiPublicChatSignalRoute
   ApiPublicEuropePulseScanRoute: typeof ApiPublicEuropePulseScanRoute
   ApiPublicEventRemindersRoute: typeof ApiPublicEventRemindersRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
@@ -1522,6 +1547,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffArticlesNewRouteImport
       parentRoute: typeof StaffArticlesRoute
     }
+    '/_staff/manage/chat-insights': {
+      id: '/_staff/manage/chat-insights'
+      path: '/manage/chat-insights'
+      fullPath: '/manage/chat-insights'
+      preLoaderRoute: typeof StaffManageChatInsightsRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/_staff/manage/europe-pulse': {
       id: '/_staff/manage/europe-pulse'
       path: '/manage/europe-pulse'
@@ -1549,6 +1581,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/members/$id'
       preLoaderRoute: typeof StaffMembersIdRouteImport
       parentRoute: typeof StaffRouteRoute
+    }
+    '/api/public/chat-signal': {
+      id: '/api/public/chat-signal'
+      path: '/api/public/chat-signal'
+      fullPath: '/api/public/chat-signal'
+      preLoaderRoute: typeof ApiPublicChatSignalRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/europe-pulse-scan': {
       id: '/api/public/europe-pulse-scan'
@@ -1739,6 +1778,7 @@ interface StaffRouteRouteChildren {
   StaffOperationalStructureRoute: typeof StaffOperationalStructureRoute
   StaffRolesRoute: typeof StaffRolesRoute
   StaffVocabulariesRoute: typeof StaffVocabulariesRoute
+  StaffManageChatInsightsRoute: typeof StaffManageChatInsightsRoute
   StaffManageEuropePulseRoute: typeof StaffManageEuropePulseRoute
   StaffManageGovernanceRoute: typeof StaffManageGovernanceRoute
   StaffMembersIdRoute: typeof StaffMembersIdRoute
@@ -1758,6 +1798,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffOperationalStructureRoute: StaffOperationalStructureRoute,
   StaffRolesRoute: StaffRolesRoute,
   StaffVocabulariesRoute: StaffVocabulariesRoute,
+  StaffManageChatInsightsRoute: StaffManageChatInsightsRoute,
   StaffManageEuropePulseRoute: StaffManageEuropePulseRoute,
   StaffManageGovernanceRoute: StaffManageGovernanceRoute,
   StaffMembersIdRoute: StaffMembersIdRoute,
@@ -1833,6 +1874,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsIndexRoute: EventsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  ApiPublicChatSignalRoute: ApiPublicChatSignalRoute,
   ApiPublicEuropePulseScanRoute: ApiPublicEuropePulseScanRoute,
   ApiPublicEventRemindersRoute: ApiPublicEventRemindersRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,
