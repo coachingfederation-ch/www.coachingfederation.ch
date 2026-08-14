@@ -154,23 +154,25 @@ export const Route = createFileRoute("/api/chat")({
           // Best-effort telemetry: classification and the insert happen after
           // the visitor already has the answer, and every failure is swallowed
           // inside logChatInteraction.
-          onFinish: ({ text }) => {
+          // Awaited on purpose: the serverless worker tears the request down as
+          // soon as the stream closes, so a fire-and-forget promise here would
+          // never reach the insert in production.
+          onFinish: async ({ text }) => {
             if (!interactionId) return;
             const lastUser = [...messages].reverse().find((m) => m.role === "user");
             const question = (lastUser?.parts ?? [])
               .map((p) => (p.type === "text" ? p.text : ""))
               .join("")
               .trim();
-            void import("@/lib/assistant/logging.server").then(({ logChatInteraction }) =>
-              logChatInteraction({
-                interactionId,
-                sessionId,
-                locale,
-                question,
-                answer: text ?? "",
-                errored: !text?.trim(),
-              }),
-            );
+            const { logChatInteraction } = await import("@/lib/assistant/logging.server");
+            await logChatInteraction({
+              interactionId,
+              sessionId,
+              locale,
+              question,
+              answer: text ?? "",
+              errored: !text?.trim(),
+            });
           },
         });
 
