@@ -89,6 +89,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      // viewport-fit=cover is what lets the volunteer console pad against the
+      // iPhone notch and home indicator via env(safe-area-inset-*).
+      { name: "theme-color", content: "#212251" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "apple-mobile-web-app-title", content: "ICF Chat" },
       { title: "The Switzerland Chapter of ICF | Find a credentialed coach" },
       {
         name: "description",
@@ -132,6 +138,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
+      // Home-screen install for the volunteer chat console (see manifest).
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/app-icon-192.png" },
       // Fonts are self-hosted (see @font-face in src/styles.css); preload them
       // so first paint doesn't flash the fallback stack.
       {
