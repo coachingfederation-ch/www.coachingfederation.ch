@@ -20,7 +20,8 @@
     "europePulse": "Europe Pulse",
     "governance": "Governance",
     "chatInsights": "Chat Agent Insights",
-    "knowledge": "Conoscenze dell'assistente"
+    "knowledge": "Conoscenze dell'assistente",
+    "liveChat": "Chat dal vivo"
   },
   "auth": {
     "signInSub": "Accedi per continuare",
@@ -1574,5 +1575,24 @@
     "delete": "Elimina voce",
     "confirmDelete": "Eliminare questa voce? L'assistente smetterà di usarla.",
     "empty": "Nessuna voce corrisponde a questi filtri."
+  },
+  "liveChat": {
+    "title": "Chat dal vivo dei volontari",
+    "subtitle": "Calendario dei turni dei volontari e codice QR che apre la console mobile. Il calendario è informativo — i volontari si mettono online dal telefono.",
+    "onlineNow": "Online ora",
+    "nobodyOnline": "Nessun volontario online.",
+    "qrAlt": "Codice QR per la console dei volontari",
+    "qrHint": "I volontari scansionano il codice, accedono con il proprio account socio e si mettono online.",
+    "addTitle": "Aggiungi un turno",
+    "fieldStart": "Inizio",
+    "fieldEnd": "Fine",
+    "fieldVolunteer": "Nome del volontario",
+    "fieldNote": "Nota (facoltativa)",
+    "add": "Aggiungi turno",
+    "needTimes": "Indica un orario di inizio e di fine.",
+    "confirmDelete": "Eliminare questo turno?",
+    "delete": "Elimina turno",
+    "colWhen": "Quando",
+    "noShifts": "Nessun turno pianificato."
   }
 }

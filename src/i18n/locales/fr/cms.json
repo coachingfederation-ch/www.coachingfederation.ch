@@ -20,7 +20,8 @@
     "europePulse": "Europe Pulse",
     "governance": "Gouvernance",
     "chatInsights": "Chat Agent Insights",
-    "knowledge": "Connaissances de l'assistant"
+    "knowledge": "Connaissances de l'assistant",
+    "liveChat": "Chat en direct"
   },
   "auth": {
     "signInSub": "Connectez-vous pour continuer",
@@ -1574,5 +1575,24 @@
     "delete": "Supprimer l'entrée",
     "confirmDelete": "Supprimer cette entrée ? L'assistant cessera de l'utiliser.",
     "empty": "Aucune entrée ne correspond à ces filtres."
+  },
+  "liveChat": {
+    "title": "Chat en direct des bénévoles",
+    "subtitle": "Planning des créneaux bénévoles et code QR qui ouvre la console mobile. Le planning est informatif — les bénévoles se mettent en ligne depuis leur téléphone.",
+    "onlineNow": "En ligne maintenant",
+    "nobodyOnline": "Aucun bénévole en ligne.",
+    "qrAlt": "Code QR vers la console des bénévoles",
+    "qrHint": "Les bénévoles scannent ce code, se connectent avec leur compte membre et se mettent en ligne.",
+    "addTitle": "Ajouter un créneau",
+    "fieldStart": "Début",
+    "fieldEnd": "Fin",
+    "fieldVolunteer": "Nom du bénévole",
+    "fieldNote": "Note (facultatif)",
+    "add": "Ajouter le créneau",
+    "needTimes": "Veuillez indiquer un début et une fin.",
+    "confirmDelete": "Supprimer ce créneau ?",
+    "delete": "Supprimer le créneau",
+    "colWhen": "Quand",
+    "noShifts": "Aucun créneau planifié."
   }
 }
