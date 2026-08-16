@@ -9,7 +9,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertAdmin } from "./authz";
+import { assertPlatformAdmin } from "./authz";
 import type { Locale } from "@/i18n/config";
 import { PULSE_COLUMNS, localizePulse, type PulseItem, type PulseRow } from "./europe-pulse";
 
@@ -82,7 +82,7 @@ export const listEuropePulse = createServerFn({ method: "GET" })
 export const runEuropePulseNow = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const userId = await assertAdmin(context);
+    const userId = await assertPlatformAdmin(context);
     const { runEuropePulse } = await import("./europe-pulse.server");
     return runEuropePulse({ triggerSource: "manual", triggeredBy: userId });
   });
@@ -95,7 +95,7 @@ export const retryFailedChapters = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ runId: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
-    const userId = await assertAdmin(context);
+    const userId = await assertPlatformAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: rows } = await supabaseAdmin
       .from("europe_pulse_raw")

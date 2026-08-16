@@ -3,13 +3,13 @@
  *
  * Read-only reporting plus category maintenance. Both are admin-only: the log
  * is operational telemetry about the whole site, not a per-user resource, so
- * `assertAdmin` — a check against the caller's own `user_roles` rows — is the
+ * `assertPlatformAdmin` — a check against the caller's own `user_roles` rows — is the
  * boundary.
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertAdmin } from "./authz";
+import { assertPlatformAdmin } from "./authz";
 
 const filterSchema = z.object({
   from: z
@@ -32,7 +32,7 @@ export const getChatInsights = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ filters: filterSchema }).parse(input))
   .handler(async ({ context, data }) => {
-    await assertAdmin(context);
+    await assertPlatformAdmin(context);
     const { buildChatInsightReport } = await import("./chat-insights.server");
     return buildChatInsightReport(data.filters);
   });
@@ -41,7 +41,7 @@ export const exportChatInsightsCsv = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ filters: filterSchema }).parse(input))
   .handler(async ({ context, data }) => {
-    await assertAdmin(context);
+    await assertPlatformAdmin(context);
     const { buildChatInsightCsv } = await import("./chat-insights.server");
     return buildChatInsightCsv(data.filters);
   });
