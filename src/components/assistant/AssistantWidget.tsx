@@ -353,7 +353,6 @@ export function AssistantWidget() {
             </div>
           </header>
 
-          <Conversation className="flex-1">
           {liveChat ? (
             <LiveChatPanel onBack={() => setLiveChat(false)} pagePath={path} />
           ) : (
