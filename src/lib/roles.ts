@@ -27,6 +27,18 @@ export async function fetchMyRoles(userId: string): Promise<RoleSet> {
   return toRoleSet((data ?? []).map((row) => row.role as AppRole));
 }
 
+/**
+ * Same read, but a failed request throws instead of degrading to "no roles".
+ * Route gates need that distinction: offline is not the same as unauthorised,
+ * and silently returning EMPTY_ROLES bounces a signed-in member to /no-access
+ * whenever the network hiccups.
+ */
+export async function fetchMyRolesOrThrow(userId: string): Promise<RoleSet> {
+  const { data, error } = await supabase.from("user_roles").select("role").eq("user_id", userId);
+  if (error) throw new Error(error.message);
+  return toRoleSet((data ?? []).map((row) => row.role as AppRole));
+}
+
 export const myRolesQueryOptions = (userId: string | null) =>
   queryOptions({
     queryKey: ["my-roles", userId],
