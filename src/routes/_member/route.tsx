@@ -11,9 +11,17 @@ import { myRolesQueryOptions } from "@/lib/roles";
 
 export const Route = createFileRoute("/_member")({
   ssr: false,
-  beforeLoad: async ({ context }) => {
+  beforeLoad: async ({ context, location }) => {
     const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) throw redirect({ to: "/auth", search: { next: undefined } });
+    if (error || !data.user) {
+      // The installed home-screen app has its own storage container, so it
+      // launches signed out. Send it to the QR scanner rather than a password
+      // form the volunteer probably cannot complete on a phone.
+      if (location.pathname.startsWith("/volunteer-chat")) {
+        throw redirect({ to: "/volunteer-login" });
+      }
+      throw redirect({ to: "/auth", search: { next: undefined } });
+    }
 
     const roles = await context.queryClient.ensureQueryData(myRolesQueryOptions(data.user.id));
     if (!roles.isMember) {
