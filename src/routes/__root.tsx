@@ -185,7 +185,8 @@ function RootComponent() {
   // The volunteer console is a chat surface of its own — the public assistant
   // launcher would sit on top of it.
   const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const hideAssistant = pathname.startsWith("/volunteer-chat");
+  const hideAssistant =
+    pathname.startsWith("/volunteer-chat") || pathname.startsWith("/volunteer-login");
 
   return (
     <QueryClientProvider client={queryClient}>
