@@ -72,8 +72,17 @@ function RolesPage() {
   }, []);
 
   const toggle = async (row: MemberRow, role: ManagedRole) => {
+    // Must cover every managed role explicitly: a fall-through default made
+    // "administrator" read the publisher flag and revoke a grant that was
+    // never held, which the server correctly rejects.
     const held =
-      role === "editor" ? row.isEditor : role === "organizer" ? row.isOrganizer : row.isPublisher;
+      role === "administrator"
+        ? row.isAdministrator
+        : role === "editor"
+          ? row.isEditor
+          : role === "organizer"
+            ? row.isOrganizer
+            : row.isPublisher;
     setPending(`${row.memberId}:${role}`);
     try {
       if (held) await revokeMemberRole({ data: { memberId: row.memberId, role } });
