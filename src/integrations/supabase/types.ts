@@ -4175,6 +4175,7 @@ export type Database = {
         | "member"
         | "organizer"
         | "publisher"
+        | "administrator"
       article_lang: "en" | "fr" | "de" | "it"
       article_status:
         | "draft"
@@ -4357,6 +4358,7 @@ export const Constants = {
         "member",
         "organizer",
         "publisher",
+        "administrator",
       ],
       article_lang: ["en", "fr", "de", "it"],
       article_status: [
