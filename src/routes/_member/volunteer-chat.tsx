@@ -88,6 +88,7 @@ function VolunteerChatPage() {
   const [pushState, setPushState] = useState<"on" | "off" | "blocked">("off");
   const [pushBusy, setPushBusy] = useState(false);
   const waitingCountRef = useRef(0);
+  const [lastEnded, setLastEnded] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     if (!pushSupported()) return;
