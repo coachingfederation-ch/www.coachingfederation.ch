@@ -93,6 +93,14 @@ volunteer's own account and revoked when the volunteer is deactivated.
 both entry points. Responses stay outcome-neutral: a code is simply "no longer
 valid".
 
+There is no idle timeout. The member gate (`src/routes/_member/route.tsx`)
+trusts the locally stored session first, so a cold launch without network no
+longer looks like a sign-out, and `useSessionKeepAlive`
+(`src/lib/session-keepalive.ts`) refreshes the token whenever the app returns to
+the foreground. What can still end a session is iOS clearing the installed
+app's storage after a long period without use — then `/volunteer-login` shows
+"your sign-in expired" and a fresh scan is needed.
+
 ## Alerts
 
 While the console is open: a chime and a waiting counter
