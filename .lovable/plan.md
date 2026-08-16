@@ -30,7 +30,7 @@ Today Super Admin (`admin`) can only be created by a database migration: the Rol
 **UI (`src/routes/_staff/roles.tsx`, `RoleDetailPanel.tsx`, `RoleTableRow.tsx`)**
 - Extend the explicit per-role `held` mapping in `toggle` with the `admin` case (same pattern as the recent Administrator fix — no fall-through default).
 - Render the Super Admin switch visually distinct (destructive-toned) with the confirmation dialog, and disable it for your own row and when only one Super Admin exists.
-- New CMS strings in `src/i18n/locales/{en,de,fr,it}/cms.json` under `roles.*`: switch label, description, confirm text, self/last-admin disabled hints, email-promote label, and the not-found and success messages.
+- New CMS strings in `src/i18n/locales/{en,de,fr,it}/cms.json` under `roles.*`: switch label, description, confirm text, self/last-admin disabled hints, and success messages.
 
 ## PR note
 
