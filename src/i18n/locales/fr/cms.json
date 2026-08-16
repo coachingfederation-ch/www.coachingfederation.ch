@@ -584,6 +584,15 @@
         "empty": "Aucune communauté locale ne couvre votre zone de service pour le moment.",
         "view": "Voir la communauté",
         "contact": "Contacter la communauté"
+      },
+      "liveChat": {
+        "title": "Bénévole du chat en direct",
+        "body": "Vous êtes activé pour répondre aux visiteurs dans le chat en direct.",
+        "qrAlt": "QR code vers la console de chat bénévole",
+        "qrHint": "Scannez-le avec votre téléphone pour ouvrir la console et passer en ligne.",
+        "open": "Ouvrir la console de chat",
+        "leave": "Arrêter le bénévolat",
+        "confirmLeave": "Arrêter d'être bénévole du chat en direct ?"
       }
     }
   },
@@ -1606,22 +1615,22 @@
     "empty": "Aucune entrée ne correspond à ces filtres."
   },
   "liveChat": {
-    "title": "Chat en direct des bénévoles",
-    "subtitle": "Planning des créneaux bénévoles et code QR qui ouvre la console mobile. Le planning est informatif — les bénévoles se mettent en ligne depuis leur téléphone.",
+    "title": "Chat en direct bénévole",
+    "subtitle": "Choisissez les membres qui peuvent prendre les discussions en direct. Les bénévoles se mettent en ligne depuis leur téléphone.",
     "onlineNow": "En ligne maintenant",
     "nobodyOnline": "Aucun bénévole en ligne.",
     "qrAlt": "Code QR vers la console des bénévoles",
     "qrHint": "Les bénévoles scannent ce code, se connectent avec leur compte membre et se mettent en ligne.",
-    "addTitle": "Ajouter un créneau",
-    "fieldStart": "Début",
-    "fieldEnd": "Fin",
-    "fieldVolunteer": "Nom du bénévole",
-    "fieldNote": "Note (facultatif)",
-    "add": "Ajouter le créneau",
-    "needTimes": "Veuillez indiquer un début et une fin.",
-    "confirmDelete": "Supprimer ce créneau ?",
-    "delete": "Supprimer le créneau",
-    "colWhen": "Quand",
-    "noShifts": "Aucun créneau planifié."
+    "activatedTitle": "Bénévoles activés",
+    "activatedHint": "Seuls les membres avec un compte activé et un ICF Credential valide peuvent être activés.",
+    "pickMember": "Choisir un membre…",
+    "addVolunteer": "Activer la personne",
+    "colVolunteer": "Personne bénévole",
+    "colLastChat": "Dernière conversation",
+    "remove": "Retirer",
+    "confirmRemove": "Retirer cette personne du chat en direct ?",
+    "noVolunteers": "Aucune personne bénévole activée.",
+    "never": "Jamais",
+    "recent": "À l'instant"
   }
 }

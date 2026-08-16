@@ -584,6 +584,15 @@
         "empty": "Noch keine lokale Community deckt Ihr Einzugsgebiet ab.",
         "view": "Community anzeigen",
         "contact": "Community kontaktieren"
+      },
+      "liveChat": {
+        "title": "Live-Chat-Freiwillige",
+        "body": "Sie sind aktiviert, um Besuchende im Live-Chat zu beantworten.",
+        "qrAlt": "QR-Code zur Freiwilligen-Chatkonsole",
+        "qrHint": "Scannen Sie den Code mit Ihrem Handy, um die Konsole zu öffnen und online zu gehen.",
+        "open": "Chatkonsole öffnen",
+        "leave": "Nicht mehr mitmachen",
+        "confirmLeave": "Nicht mehr als Live-Chat-Freiwillige mitmachen?"
       }
     }
   },
@@ -1607,21 +1616,21 @@
   },
   "liveChat": {
     "title": "Freiwilligen-Live-Chat",
-    "subtitle": "Einsatzplan der Freiwilligen und QR-Code zur mobilen Freiwilligen-Konsole. Der Plan ist rein informativ — online gehen die Freiwilligen über ihr Handy.",
+    "subtitle": "Wählen Sie, welche Mitglieder Live-Chats übernehmen dürfen. Online gehen die Freiwilligen selbst über ihr Handy.",
     "onlineNow": "Jetzt online",
     "nobodyOnline": "Zurzeit ist niemand online.",
     "qrAlt": "QR-Code zur Freiwilligen-Konsole",
     "qrHint": "Freiwillige scannen den Code mit dem Handy, melden sich mit ihrem Mitgliedskonto an und gehen online.",
-    "addTitle": "Einsatz hinzufügen",
-    "fieldStart": "Beginn",
-    "fieldEnd": "Ende",
-    "fieldVolunteer": "Name der freiwilligen Person",
-    "fieldNote": "Notiz (optional)",
-    "add": "Einsatz hinzufügen",
-    "needTimes": "Bitte Beginn und Ende angeben.",
-    "confirmDelete": "Diesen Einsatz löschen?",
-    "delete": "Einsatz löschen",
-    "colWhen": "Wann",
-    "noShifts": "Noch keine Einsätze geplant."
+    "activatedTitle": "Aktivierte Freiwillige",
+    "activatedHint": "Aktiviert werden können nur Mitglieder mit beanspruchtem Konto und gültigem ICF Credential.",
+    "pickMember": "Mitglied auswählen…",
+    "addVolunteer": "Freiwillige Person aktivieren",
+    "colVolunteer": "Freiwillige Person",
+    "colLastChat": "Letztes Gespräch",
+    "remove": "Entfernen",
+    "confirmRemove": "Diese Person aus dem Live-Chat entfernen?",
+    "noVolunteers": "Noch keine Freiwilligen aktiviert.",
+    "never": "Nie",
+    "recent": "Gerade eben"
   }
 }

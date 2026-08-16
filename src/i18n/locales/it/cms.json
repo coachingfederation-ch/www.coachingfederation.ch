@@ -584,6 +584,15 @@
         "empty": "Nessuna community locale copre ancora la tua area di servizio.",
         "view": "Vedi community",
         "contact": "Contatta la community"
+      },
+      "liveChat": {
+        "title": "Volontario della chat dal vivo",
+        "body": "Sei attivato per rispondere ai visitatori nella chat dal vivo.",
+        "qrAlt": "QR code per la console di chat dei volontari",
+        "qrHint": "Scansionalo con il telefono per aprire la console e andare online.",
+        "open": "Apri la console di chat",
+        "leave": "Smetti di fare volontariato",
+        "confirmLeave": "Smettere di essere volontario della chat dal vivo?"
       }
     }
   },
@@ -1606,22 +1615,22 @@
     "empty": "Nessuna voce corrisponde a questi filtri."
   },
   "liveChat": {
-    "title": "Chat dal vivo dei volontari",
-    "subtitle": "Calendario dei turni dei volontari e codice QR che apre la console mobile. Il calendario è informativo — i volontari si mettono online dal telefono.",
+    "title": "Chat dal vivo volontari",
+    "subtitle": "Scegli quali soci possono gestire le chat dal vivo. I volontari vanno online dal proprio telefono.",
     "onlineNow": "Online ora",
     "nobodyOnline": "Nessun volontario online.",
     "qrAlt": "Codice QR per la console dei volontari",
     "qrHint": "I volontari scansionano il codice, accedono con il proprio account socio e si mettono online.",
-    "addTitle": "Aggiungi un turno",
-    "fieldStart": "Inizio",
-    "fieldEnd": "Fine",
-    "fieldVolunteer": "Nome del volontario",
-    "fieldNote": "Nota (facoltativa)",
-    "add": "Aggiungi turno",
-    "needTimes": "Indica un orario di inizio e di fine.",
-    "confirmDelete": "Eliminare questo turno?",
-    "delete": "Elimina turno",
-    "colWhen": "Quando",
-    "noShifts": "Nessun turno pianificato."
+    "activatedTitle": "Volontari attivati",
+    "activatedHint": "Possono essere attivati solo i soci con account attivato e un ICF Credential valido.",
+    "pickMember": "Seleziona un socio…",
+    "addVolunteer": "Attiva volontario",
+    "colVolunteer": "Persona volontaria",
+    "colLastChat": "Ultima conversazione",
+    "remove": "Rimuovi",
+    "confirmRemove": "Rimuovere questa persona dalla chat dal vivo?",
+    "noVolunteers": "Nessuna persona volontaria attivata.",
+    "never": "Mai",
+    "recent": "Poco fa"
   }
 }
