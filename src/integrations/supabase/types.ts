@@ -2502,38 +2502,47 @@ export type Database = {
         }
         Relationships: []
       }
-      live_chat_shifts: {
+      live_chat_volunteers: {
         Row: {
+          activated_by: string | null
           created_at: string
-          created_by: string | null
-          ends_at: string
-          id: string
-          note: string | null
-          starts_at: string
+          display_name: string
+          member_id: string | null
           updated_at: string
-          volunteer_name: string
+          user_id: string
         }
         Insert: {
+          activated_by?: string | null
           created_at?: string
-          created_by?: string | null
-          ends_at: string
-          id?: string
-          note?: string | null
-          starts_at: string
+          display_name?: string
+          member_id?: string | null
           updated_at?: string
-          volunteer_name?: string
+          user_id: string
         }
         Update: {
+          activated_by?: string | null
           created_at?: string
-          created_by?: string | null
-          ends_at?: string
-          id?: string
-          note?: string | null
-          starts_at?: string
+          display_name?: string
+          member_id?: string | null
           updated_at?: string
-          volunteer_name?: string
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "live_chat_volunteers_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "coach_directory_public"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "live_chat_volunteers_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       member_archive_snapshots: {
         Row: {
