@@ -40,8 +40,12 @@ export const listRoleAdminData = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context);
-    const { listClaimedMemberRoles, listInternalStaffAccounts, listRoleGrantAudit, countSuperAdmins } =
-      await import("./roles-admin.server");
+    const {
+      listClaimedMemberRoles,
+      listInternalStaffAccounts,
+      listRoleGrantAudit,
+      countSuperAdmins,
+    } = await import("./roles-admin.server");
     const [members, internal, audit, superAdminCount] = await Promise.all([
       listClaimedMemberRoles(),
       listInternalStaffAccounts(),
