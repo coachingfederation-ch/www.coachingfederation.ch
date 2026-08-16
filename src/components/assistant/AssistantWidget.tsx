@@ -21,6 +21,7 @@ import {
   PromptInputTextarea,
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
+import { LiveChatPanel } from "@/components/assistant/LiveChatPanel";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -137,6 +138,9 @@ export function AssistantWidget() {
   const path = useCanonicalPath();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  /** Number of volunteers on duty; drives the launcher dot and the handover. */
+  const [volunteersOnline, setVolunteersOnline] = useState(0);
+  const [liveChat, setLiveChat] = useState(false);
   const [pendingExternal, setPendingExternal] = useState<string | null>(null);
   const [initialMessages] = useState<UIMessage[]>(() => loadStoredMessages());
   const [input, setInput] = useState("");
@@ -197,6 +201,33 @@ export function AssistantWidget() {
   useEffect(() => {
     if (open) textareaRef.current?.focus();
   }, [open, status]);
+
+  // Poll the volunteer count so the launcher can promise a human only when one
+  // is actually there. Cheap (a single integer) and paused while hidden.
+  useEffect(() => {
+    let cancelled = false;
+    const read = async () => {
+      if (typeof document !== "undefined" && document.hidden) return;
+      try {
+        const response = await fetch("/api/public/live-chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "status" }),
+        });
+        if (!response.ok || cancelled) return;
+        const body = (await response.json()) as { online?: number };
+        setVolunteersOnline(typeof body.online === "number" ? body.online : 0);
+      } catch {
+        // Offline or blocked: keep the AI-only launcher.
+      }
+    };
+    void read();
+    const timer = window.setInterval(() => void read(), open ? 20_000 : 60_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
+  }, [open]);
 
   const busy = status === "submitted" || status === "streaming";
 
