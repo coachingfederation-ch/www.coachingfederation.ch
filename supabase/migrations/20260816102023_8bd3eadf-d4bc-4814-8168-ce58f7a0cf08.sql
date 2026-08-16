@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.tg_user_roles_protect_last_admin() FROM PUBLIC, anon, authenticated;

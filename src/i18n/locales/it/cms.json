@@ -705,7 +705,7 @@
     "internalEmpty": "Nessun account interno.",
     "colRoles": "Ruoli",
     "adminBadge": "Super Admin",
-    "adminNote": "Accesso completo, configurato separatamente",
+    "adminNote": "Accesso completo a tutto, inclusi soci, integrazione e ruoli",
     "organizerBadge": "Organizzatore",
     "grantEditor": "Concedi ruolo redattore",
     "revokeEditor": "Revoca ruolo redattore",
@@ -736,7 +736,12 @@
     "organizerDesc": "Creare e gestire eventi",
     "publisherDesc": "Revisionare e pubblicare articoli",
     "administratorBadge": "Amministratore",
-    "administratorDesc": "Gestire vocabolari, coach finder, struttura, governance, chat e conoscenza"
+    "administratorDesc": "Gestire vocabolari, coach finder, struttura, governance, chat e conoscenza",
+    "superAdminDesc": "Accesso completo a tutto, inclusi soci, integrazione e ruoli",
+    "superAdminGrantConfirm": "Concedere l’accesso Super Admin completo a {name}? Potrà gestire tutte le aree, inclusi i ruoli.",
+    "superAdminRevokeConfirm": "Rimuovere l’accesso Super Admin a {name}?",
+    "superAdminSelfHint": "Non puoi modificare il tuo accesso Super Admin.",
+    "superAdminLastHint": "L’ultimo Super Admin non può essere rimosso."
   },
   "events": {
     "title": "Eventi",

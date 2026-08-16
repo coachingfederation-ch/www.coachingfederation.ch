@@ -3,13 +3,15 @@
  *
  * Access rights are assigned here rather than in the table: each right is an
  * independent, additive grant, so a checklist reads better than a row of
- * buttons and stays legible as rights are added. Admin stays read-only — it is
- * provisioned by migration, never from a session.
+ * buttons and stays legible as rights are added. Super Admin sits apart from
+ * the four managed rights: it is full access, so it is styled as a distinct,
+ * destructive-toned action and is blocked for your own account and for the
+ * last remaining Super Admin (the database enforces both rules too).
  */
 import { useEffect, useState } from "react";
-import { CalendarDays, Megaphone, ShieldCheck, SlidersHorizontal, X } from "lucide-react";
+import { CalendarDays, Crown, Megaphone, ShieldCheck, SlidersHorizontal, X } from "lucide-react";
 import { listAccountRoleAudit, type listRoleAdminData } from "@/lib/roles.functions";
-import type { ManagedRole } from "@/lib/role-model";
+import type { GrantableRole, ManagedRole } from "@/lib/role-model";
 
 type MemberRow = Awaited<ReturnType<typeof listRoleAdminData>>["members"][number];
 type AuditRow = Awaited<ReturnType<typeof listRoleAdminData>>["audit"][number];
@@ -52,6 +54,8 @@ function holds(member: MemberRow, role: ManagedRole): boolean {
 export function RoleDetailPanel({
   member,
   pending,
+  isSelf,
+  isLastSuperAdmin,
   onToggle,
   onRemoveAccess,
   onClose,
@@ -59,7 +63,9 @@ export function RoleDetailPanel({
 }: {
   member: MemberRow;
   pending: string | null;
-  onToggle: (row: MemberRow, role: ManagedRole) => void | Promise<void>;
+  isSelf: boolean;
+  isLastSuperAdmin: boolean;
+  onToggle: (row: MemberRow, role: GrantableRole) => void | Promise<void>;
   onRemoveAccess: (authUserId: string, name: string) => void | Promise<void>;
   onClose: () => void;
   t: (k: string) => string;
@@ -151,6 +157,22 @@ export function RoleDetailPanel({
           </ul>
         )}
 
+        {/* Super Admin: full access, so it is separated from the scoped rights
+            above and never silently bundled into "Remove access". */}
+        <SuperAdminSwitch
+          on={member.isAdmin}
+          busy={pending === `${member.memberId}:admin`}
+          disabledReason={
+            isSelf
+              ? t("roles.superAdminSelfHint")
+              : member.isAdmin && isLastSuperAdmin
+                ? t("roles.superAdminLastHint")
+                : null
+          }
+          onToggle={() => void onToggle(member, "admin")}
+          t={t}
+        />
+
         {!member.isAdmin && hasAnyRight ? (
           <button
             onClick={() => void onRemoveAccess(member.authUserId, member.name)}
@@ -178,6 +200,48 @@ export function RoleDetailPanel({
           )}
         </ul>
       </aside>
+    </div>
+  );
+}
+
+export function SuperAdminSwitch({
+  on,
+  busy,
+  disabledReason,
+  onToggle,
+  t,
+}: {
+  on: boolean;
+  busy: boolean;
+  disabledReason: string | null;
+  onToggle: () => void;
+  t: (k: string) => string;
+}) {
+  return (
+    <div className="mt-4">
+      <button
+        onClick={onToggle}
+        disabled={busy || disabledReason !== null}
+        aria-pressed={on}
+        className={`flex w-full items-start gap-3 rounded-xl border px-3 py-3 text-left transition disabled:opacity-50 ${
+          on ? "border-destructive/40 bg-destructive/5" : "border-border hover:bg-secondary/60"
+        }`}
+      >
+        <span
+          className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md border ${
+            on ? "border-destructive bg-destructive text-white" : "border-border bg-card"
+          }`}
+        >
+          {on ? <Crown className="h-3.5 w-3.5" /> : null}
+        </span>
+        <span className="min-w-0">
+          <span className="block text-sm font-semibold">{t("roles.adminBadge")}</span>
+          <span className="block text-xs text-muted-foreground">{t("roles.superAdminDesc")}</span>
+        </span>
+      </button>
+      {disabledReason ? (
+        <p className="mt-1.5 text-xs text-muted-foreground">{disabledReason}</p>
+      ) : null}
     </div>
   );
 }

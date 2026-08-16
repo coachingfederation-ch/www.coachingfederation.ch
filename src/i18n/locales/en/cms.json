@@ -705,7 +705,7 @@
     "internalEmpty": "No internal accounts.",
     "colRoles": "Roles",
     "adminBadge": "Super Admin",
-    "adminNote": "Full access, provisioned separately",
+    "adminNote": "Full access to everything, including members, integration and roles",
     "organizerBadge": "Organizer",
     "grantEditor": "Grant editor",
     "revokeEditor": "Revoke editor",
@@ -736,7 +736,12 @@
     "organizerDesc": "Create and manage events",
     "publisherDesc": "Review and publish articles",
     "administratorBadge": "Administrator",
-    "administratorDesc": "Manage vocabularies, coach finder, structure, governance, chat and knowledge"
+    "administratorDesc": "Manage vocabularies, coach finder, structure, governance, chat and knowledge",
+    "superAdminDesc": "Full access to everything, including members, integration and roles",
+    "superAdminGrantConfirm": "Grant full Super Admin access to {name}? They will be able to manage every area, including roles.",
+    "superAdminRevokeConfirm": "Remove Super Admin access from {name}?",
+    "superAdminSelfHint": "You cannot change your own Super Admin access.",
+    "superAdminLastHint": "The last Super Admin cannot be removed."
   },
   "events": {
     "title": "Events",

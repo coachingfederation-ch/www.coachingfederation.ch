@@ -13,14 +13,18 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertAdmin } from "./authz";
-import { MANAGED_ROLES } from "./role-model";
+import { GRANTABLE_ROLES, MANAGED_ROLES } from "./role-model";
 
 const memberIdSchema = z.object({ memberId: z.string().uuid() });
 const grantSchema = z.object({
   memberId: z.string().uuid(),
-  role: z.enum(MANAGED_ROLES),
+  role: z.enum(GRANTABLE_ROLES),
 });
 const accountSchema = z.object({ authUserId: z.string().uuid() });
+const accountRoleSchema = z.object({
+  authUserId: z.string().uuid(),
+  role: z.enum(GRANTABLE_ROLES),
+});
 const qaAccountSchema = z.object({
   memberId: z.string().uuid(),
   email: z.string().email(),
@@ -36,14 +40,21 @@ export const listRoleAdminData = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context);
-    const { listClaimedMemberRoles, listInternalStaffAccounts, listRoleGrantAudit } =
-      await import("./roles-admin.server");
-    const [members, internal, audit] = await Promise.all([
+    const {
+      listClaimedMemberRoles,
+      listInternalStaffAccounts,
+      listRoleGrantAudit,
+      countSuperAdmins,
+    } = await import("./roles-admin.server");
+    const [members, internal, audit, superAdminCount] = await Promise.all([
       listClaimedMemberRoles(),
       listInternalStaffAccounts(),
       listRoleGrantAudit(),
+      countSuperAdmins(),
     ]);
-    return { members, internal, audit };
+    // The caller's own id and the Super Admin headcount drive the lockout
+    // guards in the UI; the database enforces the same two rules.
+    return { members, internal, audit, superAdminCount, currentUserId: context.userId };
   });
 
 /**
@@ -142,6 +153,45 @@ export const revokeMemberRole = createServerFn({ method: "POST" })
       .eq("role", data.role)
       .select("id");
     if (error) throw new Error("Could not revoke access.");
+    if (!deleted || deleted.length === 0) throw new Error("Could not revoke access.");
+    return { ok: true };
+  });
+
+/**
+ * Grants a role to an account addressed by its auth user id — the internal
+ * accounts on the Roles screen have no imported member record to key off.
+ * Only `admin` is legal here: the four managed roles still require a
+ * claim-linked member and go through `grantMemberRole`.
+ */
+export const grantAccountRole = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => accountRoleSchema.parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    if (data.role !== "admin") throw new Error("Could not grant access.");
+    const { error } = await context.supabase
+      .from("user_roles")
+      .insert({ user_id: data.authUserId, role: data.role })
+      .select("id");
+    if (error && error.code !== "23505") throw new Error("Could not grant access.");
+    return { ok: true };
+  });
+
+/** Revokes one role from an account addressed by its auth user id. */
+export const revokeAccountRole = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => accountRoleSchema.parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { data: deleted, error } = await context.supabase
+      .from("user_roles")
+      .delete()
+      .eq("user_id", data.authUserId)
+      .eq("role", data.role)
+      .select("id");
+    // The database refuses a self-revoke and the removal of the last Super
+    // Admin; surface that reason instead of the generic message.
+    if (error) throw new Error(error.message || "Could not revoke access.");
     if (!deleted || deleted.length === 0) throw new Error("Could not revoke access.");
     return { ok: true };
   });

@@ -80,6 +80,16 @@ export async function listClaimedMemberRoles(): Promise<ClaimedMemberRole[]> {
 }
 
 /** Grant/revoke history for one account — shown in the per-account detail view. */
+export async function countSuperAdmins(): Promise<number> {
+  const { count, error } = await supabaseAdmin
+    .from("user_roles")
+    .select("id", { count: "exact", head: true })
+    .eq("role", "admin");
+  if (error) throw error;
+  return count ?? 0;
+}
+
+/** Grant/revoke history for one account — shown in the per-account detail view. */
 export async function listRoleGrantAuditForUser(
   authUserId: string,
   limit = 20,

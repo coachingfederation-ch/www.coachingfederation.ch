@@ -705,7 +705,7 @@
     "internalEmpty": "Aucun compte interne.",
     "colRoles": "Rôles",
     "adminBadge": "Super Admin",
-    "adminNote": "Accès complet, configuré séparément",
+    "adminNote": "Accès complet à tout, y compris les membres, l’intégration et les rôles",
     "organizerBadge": "Organisateur",
     "grantEditor": "Accorder l'accès éditeur",
     "revokeEditor": "Révoquer l'accès éditeur",
@@ -736,7 +736,12 @@
     "organizerDesc": "Créer et gérer des événements",
     "publisherDesc": "Relire et publier des articles",
     "administratorBadge": "Administrateur",
-    "administratorDesc": "Gérer les vocabulaires, le coach finder, la structure, la gouvernance, le chat et les connaissances"
+    "administratorDesc": "Gérer les vocabulaires, le coach finder, la structure, la gouvernance, le chat et les connaissances",
+    "superAdminDesc": "Accès complet à tout, y compris les membres, l’intégration et les rôles",
+    "superAdminGrantConfirm": "Accorder l’accès Super Admin complet à {name} ? Cette personne pourra gérer tous les domaines, y compris les rôles.",
+    "superAdminRevokeConfirm": "Retirer l’accès Super Admin à {name} ?",
+    "superAdminSelfHint": "Vous ne pouvez pas modifier votre propre accès Super Admin.",
+    "superAdminLastHint": "Le dernier Super Admin ne peut pas être retiré."
   },
   "events": {
     "title": "Événements",
