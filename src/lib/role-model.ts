@@ -44,6 +44,15 @@ export const STAFF_ROLES: AppRole[] = [
 export const MANAGED_ROLES = ["administrator", "editor", "organizer", "publisher"] as const;
 export type ManagedRole = (typeof MANAGED_ROLES)[number];
 
+/**
+ * Everything a Super Admin may assign from the Roles screen. `admin` is
+ * deliberately kept OUT of `MANAGED_ROLES`: the bulk "Remove access" action and
+ * every existing managed-role check must keep their original meaning, so the
+ * Super Admin grant is only ever touched by an explicit, single-role action.
+ */
+export const GRANTABLE_ROLES = ["admin", ...MANAGED_ROLES] as const;
+export type GrantableRole = (typeof GRANTABLE_ROLES)[number];
+
 /** @deprecated use MANAGED_ROLES. Kept so older call sites keep compiling. */
 export const MANAGED_ROLE = "editor" as const;
 
