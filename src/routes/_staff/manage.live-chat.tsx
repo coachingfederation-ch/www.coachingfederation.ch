@@ -40,13 +40,6 @@ type Presence = { user_id: string; display_name: string; last_seen_at: string };
 const COLUMNS = "id, starts_at, ends_at, volunteer_name, note";
 const PRESENCE_TIMEOUT_MS = 90_000;
 
-/** "2026-08-16T18:00:00Z" -> "2026-08-16T18:00" for datetime-local inputs. */
-function toLocalInput(iso: string): string {
-  const date = new Date(iso);
-  const offset = date.getTimezoneOffset() * 60_000;
-  return new Date(date.getTime() - offset).toISOString().slice(0, 16);
-}
-
 function LiveChatPage() {
   const { t, locale } = useCms();
   const [shifts, setShifts] = useState<Shift[]>([]);
