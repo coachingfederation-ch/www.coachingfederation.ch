@@ -24,10 +24,13 @@ import type { AppRole, RoleSet } from "@/lib/role-model";
  * A guard never redirects to a route that same account would be denied on, so
  * this cannot loop.
  */
-function fallbackFor(roles: RoleSet): "/articles" | "/manage/events" | "/member" | "/no-access" {
+function fallbackFor(
+  roles: RoleSet,
+): "/articles" | "/manage/events" | "/vocabularies" | "/member" | "/no-access" {
   if (hasExactRole(roles.roles, "editor")) return "/articles";
   if (hasExactRole(roles.roles, "publisher")) return "/articles";
   if (hasExactRole(roles.roles, "organizer")) return "/manage/events";
+  if (hasExactRole(roles.roles, "administrator")) return "/vocabularies";
   if (roles.isMember) return "/member";
   return "/no-access";
 }
@@ -50,13 +53,21 @@ export async function requireStaffAccess(
   throw redirect({ to: fallbackFor(roles) });
 }
 
-/** Admin-only screens: no non-admin role may enter. */
+/** Super-Admin-only screens: members, integration, role administration. */
 export const ADMIN_ONLY: AppRole[] = [];
+/**
+ * Administrator-scoped screens: vocabularies, coach finder, operational
+ * structure, Europe Pulse, governance, chat agent insights, assistant
+ * knowledge and live chat. Super Admins pass through the admin bypass.
+ */
+export const PLATFORM_ADMIN_ROLES: AppRole[] = ["administrator"];
 /**
  * Editorial screens (`/articles/*`). Publishers belong here too: reviewing and
  * publishing happens in the article editor, and RLS still decides what they
  * may change.
  */
 export const ARTICLE_ROLES: AppRole[] = ["editor", "publisher"];
+/** Article categories: editorial vocabulary, so editors manage it. */
+export const CATEGORY_ROLES: AppRole[] = ["editor"];
 /** Event management screens (`/manage/events/*`). */
 export const EVENT_ROLES: AppRole[] = ["organizer"];

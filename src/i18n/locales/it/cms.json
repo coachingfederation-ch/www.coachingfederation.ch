@@ -20,7 +20,8 @@
     "europePulse": "Europe Pulse",
     "governance": "Governance",
     "chatInsights": "Chat Agent Insights",
-    "knowledge": "Conoscenze dell'assistente"
+    "knowledge": "Conoscenze dell'assistente",
+    "liveChat": "Chat dal vivo"
   },
   "auth": {
     "signInSub": "Accedi per continuare",
@@ -703,8 +704,8 @@
     "internalIntro": "Account con privilegi privi di scheda membro ICF importata. Gli account che sono sia membri sia amministratori sono elencati sopra. Questi sono forniti esternamente all'app e non possono essere modificati qui; l'accesso come redattore richiede sempre un profilo membro collegato.",
     "internalEmpty": "Nessun account interno.",
     "colRoles": "Ruoli",
-    "adminBadge": "Amministratore",
-    "adminNote": "Configurato separatamente",
+    "adminBadge": "Super Admin",
+    "adminNote": "Accesso completo, configurato separatamente",
     "organizerBadge": "Organizzatore",
     "grantEditor": "Concedi ruolo redattore",
     "revokeEditor": "Revoca ruolo redattore",
@@ -733,7 +734,9 @@
     "accountAuditTitle": "Modifiche recenti per questo account",
     "editorDesc": "Creare e modificare articoli",
     "organizerDesc": "Creare e gestire eventi",
-    "publisherDesc": "Revisionare e pubblicare articoli"
+    "publisherDesc": "Revisionare e pubblicare articoli",
+    "administratorBadge": "Amministratore",
+    "administratorDesc": "Gestire vocabolari, coach finder, struttura, governance, chat e conoscenza"
   },
   "events": {
     "title": "Eventi",
@@ -1153,6 +1156,28 @@
       "colRefunds": "Rimborsi",
       "colNet": "Netto",
       "colCheckIns": "Check-in"
+    },
+    "filters": {
+      "search": "Ricerca",
+      "searchPlaceholder": "Cerca per titolo…",
+      "category": "Categoria",
+      "community": "Community",
+      "host": "Host",
+      "city": "Città",
+      "allCategories": "Tutte le categorie",
+      "allCommunities": "Tutte le community",
+      "allHosts": "Tutti gli host",
+      "allCities": "Tutte le città",
+      "allStatuses": "Tutti gli stati",
+      "clear": "Azzera i filtri",
+      "count": "{count} eventi",
+      "noMatches": "Nessun evento corrisponde a questi filtri."
+    },
+    "pagination": {
+      "range": "{from}–{to} di {total}",
+      "page": "Pagina {page} di {pages}",
+      "previous": "Precedente",
+      "next": "Successivo"
     }
   },
   "eventTranslations": {
@@ -1574,5 +1599,24 @@
     "delete": "Elimina voce",
     "confirmDelete": "Eliminare questa voce? L'assistente smetterà di usarla.",
     "empty": "Nessuna voce corrisponde a questi filtri."
+  },
+  "liveChat": {
+    "title": "Chat dal vivo dei volontari",
+    "subtitle": "Calendario dei turni dei volontari e codice QR che apre la console mobile. Il calendario è informativo — i volontari si mettono online dal telefono.",
+    "onlineNow": "Online ora",
+    "nobodyOnline": "Nessun volontario online.",
+    "qrAlt": "Codice QR per la console dei volontari",
+    "qrHint": "I volontari scansionano il codice, accedono con il proprio account socio e si mettono online.",
+    "addTitle": "Aggiungi un turno",
+    "fieldStart": "Inizio",
+    "fieldEnd": "Fine",
+    "fieldVolunteer": "Nome del volontario",
+    "fieldNote": "Nota (facoltativa)",
+    "add": "Aggiungi turno",
+    "needTimes": "Indica un orario di inizio e di fine.",
+    "confirmDelete": "Eliminare questo turno?",
+    "delete": "Elimina turno",
+    "colWhen": "Quando",
+    "noShifts": "Nessun turno pianificato."
   }
 }

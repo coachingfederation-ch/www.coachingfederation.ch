@@ -1,0 +1,469 @@
+/**
+ * Volunteer live-chat console (/volunteer-chat), designed for a phone.
+ *
+ * Behind the Member Area gate: only signed-in members can go online, which
+ * keeps visitor conversations behind authentication. Everything here goes
+ * through the browser Supabase client — the `live_chat_*` RLS policies are the
+ * real boundary — and uses Realtime for waiting requests and message delivery.
+ *
+ * Presence is a heartbeat row rather than an ephemeral channel, so the public
+ * widget can read "is anyone on duty?" server-side.
+ */
+import { createFileRoute } from "@tanstack/react-router";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ChevronDown, Loader2, Radio } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useI18n } from "@/i18n";
+import { cn } from "@/lib/utils";
+
+export const Route = createFileRoute("/_member/volunteer-chat")({
+  head: () => ({
+    meta: [
+      { title: "Volunteer chat — The Switzerland Chapter of ICF" },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
+  component: VolunteerChatPage,
+});
+
+const HEARTBEAT_MS = 30_000;
+const PRESENCE_TIMEOUT_MS = 90_000;
+
+type Conversation = {
+  id: string;
+  visitor_name: string;
+  status: "waiting" | "active" | "closed";
+  volunteer_user_id: string | null;
+  created_at: string;
+  ended_at: string | null;
+};
+
+type Message = { id: string; sender: "visitor" | "volunteer" | "system"; body: string };
+
+type Presence = { user_id: string; display_name: string; last_seen_at: string };
+
+const CONVERSATION_COLUMNS =
+  "id, visitor_name, status, volunteer_user_id, created_at, ended_at";
+
+function VolunteerChatPage() {
+  const { t } = useI18n();
+  const [userId, setUserId] = useState<string | null>(null);
+  const [name, setName] = useState("");
+  const [online, setOnline] = useState(false);
+  const [others, setOthers] = useState<Presence[]>([]);
+  const [waiting, setWaiting] = useState<Conversation[]>([]);
+  const [mine, setMine] = useState<Conversation[]>([]);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [reply, setReply] = useState("");
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [transcript, setTranscript] = useState<Record<string, Message[]>>({});
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  // Identify the volunteer and prefill the display name from a previous shift.
+  useEffect(() => {
+    void (async () => {
+      const { data } = await supabase.auth.getUser();
+      const user = data.user;
+      if (!user) return;
+      setUserId(user.id);
+      const { data: row } = await supabase
+        .from("live_chat_presence")
+        .select("display_name, is_online")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      setName(row?.display_name || (user.email ?? "").split("@")[0] || "");
+      setOnline(Boolean(row?.is_online));
+    })();
+  }, []);
+
+  const loadLists = useCallback(async () => {
+    if (!userId) return;
+    const [{ data: presence }, { data: conversations }] = await Promise.all([
+      supabase.from("live_chat_presence").select("user_id, display_name, last_seen_at").eq("is_online", true),
+      supabase
+        .from("live_chat_conversations")
+        .select(CONVERSATION_COLUMNS)
+        .order("created_at", { ascending: false })
+        .limit(50),
+    ]);
+    const fresh = (presence ?? []).filter(
+      (row) => Date.now() - new Date(row.last_seen_at).getTime() < PRESENCE_TIMEOUT_MS,
+    );
+    setOthers(fresh as Presence[]);
+    const rows = (conversations ?? []) as Conversation[];
+    setWaiting(rows.filter((row) => row.status === "waiting"));
+    setMine(rows.filter((row) => row.volunteer_user_id === userId));
+    const current = rows.find((row) => row.volunteer_user_id === userId && row.status === "active");
+    setActiveId((prev) => prev ?? current?.id ?? null);
+  }, [userId]);
+
+  useEffect(() => {
+    void loadLists();
+  }, [loadLists]);
+
+  // Heartbeat: a volunteer who closes the page drops offline within 90s.
+  useEffect(() => {
+    if (!userId || !online) return;
+    const beat = async () => {
+      await supabase.from("live_chat_presence").upsert({
+        user_id: userId,
+        display_name: name.trim().slice(0, 60),
+        is_online: true,
+        last_seen_at: new Date().toISOString(),
+      });
+    };
+    void beat();
+    const timer = window.setInterval(() => void beat(), HEARTBEAT_MS);
+    return () => window.clearInterval(timer);
+  }, [name, online, userId]);
+
+  // Live updates for waiting requests, presence and the open thread.
+  useEffect(() => {
+    if (!userId) return;
+    const channel = supabase
+      .channel("live-chat-volunteer")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "live_chat_conversations" },
+        () => void loadLists(),
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "live_chat_presence" },
+        () => void loadLists(),
+      )
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "live_chat_messages" },
+        (payload) => {
+          const row = payload.new as Message & { conversation_id: string };
+          if (row.conversation_id !== activeId) return;
+          setMessages((prev) =>
+            prev.some((m) => m.id === row.id)
+              ? prev
+              : [...prev, { id: row.id, sender: row.sender, body: row.body }],
+          );
+        },
+      )
+      .subscribe();
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [activeId, loadLists, userId]);
+
+  const loadMessages = useCallback(async (conversationId: string) => {
+    const { data } = await supabase
+      .from("live_chat_messages")
+      .select("id, sender, body")
+      .eq("conversation_id", conversationId)
+      .order("created_at", { ascending: true });
+    return (data ?? []) as Message[];
+  }, []);
+
+  useEffect(() => {
+    if (!activeId) return;
+    void loadMessages(activeId).then(setMessages);
+  }, [activeId, loadMessages]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ block: "end" });
+  }, [messages.length]);
+
+  const toggleOnline = useCallback(async () => {
+    if (!userId) return;
+    const next = !online;
+    setOnline(next);
+    await supabase.from("live_chat_presence").upsert({
+      user_id: userId,
+      display_name: name.trim().slice(0, 60),
+      is_online: next,
+      last_seen_at: new Date().toISOString(),
+    });
+    void loadLists();
+  }, [loadLists, name, online, userId]);
+
+  // First acceptance wins: the update only matches while the row is waiting.
+  const accept = useCallback(
+    async (conversationId: string) => {
+      if (!userId) return;
+      setBusy(true);
+      setError(null);
+      const { data, error: updateError } = await supabase
+        .from("live_chat_conversations")
+        .update({
+          status: "active",
+          volunteer_user_id: userId,
+          volunteer_name: name.trim().slice(0, 60),
+          accepted_at: new Date().toISOString(),
+        })
+        .eq("id", conversationId)
+        .eq("status", "waiting")
+        .select("id");
+      setBusy(false);
+      if (updateError || (data ?? []).length === 0) {
+        setError(t("live-chat.volunteer.taken"));
+        void loadLists();
+        return;
+      }
+      setActiveId(conversationId);
+      void loadLists();
+    },
+    [loadLists, name, t, userId],
+  );
+
+  const send = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      const text = reply.trim();
+      if (!activeId || !text) return;
+      setReply("");
+      const { error: insertError } = await supabase
+        .from("live_chat_messages")
+        .insert({ conversation_id: activeId, sender: "volunteer", body: text.slice(0, 2000) });
+      if (insertError) setError(t("live-chat.volunteer.error"));
+    },
+    [activeId, reply, t],
+  );
+
+  const endChat = useCallback(async () => {
+    if (!activeId) return;
+    await supabase
+      .from("live_chat_conversations")
+      .update({ status: "closed", ended_at: new Date().toISOString() })
+      .eq("id", activeId);
+    setActiveId(null);
+    setMessages([]);
+    void loadLists();
+  }, [activeId, loadLists]);
+
+  const openTranscript = useCallback(
+    async (conversationId: string) => {
+      setExpanded((prev) => (prev === conversationId ? null : conversationId));
+      if (!transcript[conversationId]) {
+        const rows = await loadMessages(conversationId);
+        setTranscript((prev) => ({ ...prev, [conversationId]: rows }));
+      }
+    },
+    [loadMessages, transcript],
+  );
+
+  const activeConversation = mine.find((row) => row.id === activeId) ?? null;
+  const recent = mine.filter((row) => row.status === "closed").slice(0, 3);
+
+  if (activeConversation) {
+    return (
+      <div className="flex min-h-screen flex-col bg-background">
+        <header className="flex items-center justify-between gap-3 bg-hero px-4 py-3 text-hero-foreground">
+          <div className="min-w-0">
+            <p className="truncate font-display text-base font-semibold">
+              {activeConversation.visitor_name}
+            </p>
+            <p className="text-xs text-hero-foreground/80">{t("live-chat.volunteer.title")}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => void endChat()}
+            className="min-h-11 rounded-full bg-hero-foreground/10 px-4 text-sm font-semibold"
+          >
+            {t("live-chat.volunteer.endChat")}
+          </button>
+        </header>
+        <div className="flex-1 space-y-3 overflow-y-auto p-4">
+          {messages.map((entry) => (
+            <div
+              key={entry.id}
+              className={cn(
+                "max-w-[85%] rounded-2xl px-3 py-2 text-sm",
+                entry.sender === "volunteer"
+                  ? "ml-auto bg-primary text-primary-foreground"
+                  : "bg-card text-foreground",
+              )}
+            >
+              <span className="whitespace-pre-wrap">{entry.body}</span>
+            </div>
+          ))}
+          <div ref={bottomRef} />
+        </div>
+        <form onSubmit={send} className="flex items-end gap-2 border-t border-border p-3">
+          <textarea
+            value={reply}
+            onChange={(event) => setReply(event.target.value)}
+            rows={2}
+            maxLength={2000}
+            placeholder={t("live-chat.volunteer.placeholder")}
+            aria-label={t("live-chat.volunteer.placeholder")}
+            className="min-h-11 flex-1 resize-none rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          />
+          <button
+            type="submit"
+            disabled={reply.trim().length === 0}
+            className="min-h-11 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+          >
+            {t("live-chat.volunteer.send")}
+          </button>
+        </form>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background pb-10">
+      <header className="bg-hero px-4 py-5 text-hero-foreground">
+        <h1 className="font-display text-xl font-semibold">{t("live-chat.volunteer.title")}</h1>
+        <p className="mt-1 text-xs text-hero-foreground/80">
+          {online ? t("live-chat.volunteer.youAreOnline") : t("live-chat.volunteer.youAreOffline")}
+        </p>
+      </header>
+
+      <div className="mx-auto max-w-md space-y-5 p-4">
+        <section className="rounded-2xl border border-border bg-card p-4">
+          <label className="block text-xs font-semibold text-foreground">
+            {t("live-chat.volunteer.nameLabel")}
+            <input
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              maxLength={60}
+              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm font-normal text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            />
+          </label>
+          <button
+            type="button"
+            onClick={() => void toggleOnline()}
+            disabled={!name.trim()}
+            className={cn(
+              "mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold transition-colors disabled:opacity-60",
+              online
+                ? "border border-border text-foreground hover:bg-secondary"
+                : "bg-primary text-primary-foreground hover:bg-primary/90",
+            )}
+          >
+            <Radio className="size-4" aria-hidden="true" />
+            {online ? t("live-chat.volunteer.goOffline") : t("live-chat.volunteer.goOnline")}
+          </button>
+          {online && (
+            <p className="mt-2 text-[11px] text-muted-foreground">
+              {t("live-chat.volunteer.keepOpen")}
+            </p>
+          )}
+        </section>
+
+        {error && (
+          <p role="alert" className="text-sm text-destructive">
+            {error}
+          </p>
+        )}
+
+        <section>
+          <h2 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            {t("live-chat.volunteer.onlineNow")}
+          </h2>
+          <ul className="space-y-1 rounded-2xl border border-border bg-card p-3">
+            {others.length === 0 && (
+              <li className="text-sm text-muted-foreground">
+                {t("live-chat.volunteer.nobodyElse")}
+              </li>
+            )}
+            {others.map((person) => (
+              <li key={person.user_id} className="flex items-center gap-2 text-sm text-foreground">
+                <span className="size-2 rounded-full bg-emerald-500" aria-hidden="true" />
+                {person.display_name}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            {t("live-chat.volunteer.requests")}
+          </h2>
+          <div className="space-y-2">
+            {waiting.length === 0 && (
+              <p className="rounded-2xl border border-border bg-card p-3 text-sm text-muted-foreground">
+                {t("live-chat.volunteer.noRequests")}
+              </p>
+            )}
+            {waiting.map((request) => (
+              <div
+                key={request.id}
+                className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-3"
+              >
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-foreground">
+                    {request.visitor_name}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {new Date(request.created_at).toLocaleTimeString()}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => void accept(request.id)}
+                  disabled={busy || !online}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+                >
+                  {busy && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
+                  {t("live-chat.volunteer.accept")}
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            {t("live-chat.volunteer.recent")}
+          </h2>
+          <div className="space-y-2">
+            {recent.length === 0 && (
+              <p className="rounded-2xl border border-border bg-card p-3 text-sm text-muted-foreground">
+                {t("live-chat.volunteer.noRecent")}
+              </p>
+            )}
+            {recent.map((row) => (
+              <div key={row.id} className="rounded-2xl border border-border bg-card">
+                <button
+                  type="button"
+                  onClick={() => void openTranscript(row.id)}
+                  aria-expanded={expanded === row.id}
+                  className="flex min-h-11 w-full items-center justify-between gap-3 px-3 py-2 text-left"
+                >
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-semibold text-foreground">
+                      {row.visitor_name}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(row.created_at).toLocaleDateString()} ·{" "}
+                      {t("live-chat.volunteer.closed")}
+                    </span>
+                  </span>
+                  <ChevronDown
+                    className={cn(
+                      "size-4 shrink-0 transition-transform",
+                      expanded === row.id && "rotate-180",
+                    )}
+                    aria-hidden="true"
+                  />
+                </button>
+                {expanded === row.id && (
+                  <div className="space-y-2 border-t border-border px-3 py-2">
+                    {(transcript[row.id] ?? []).map((entry) => (
+                      <p key={entry.id} className="text-sm text-foreground">
+                        <span className="font-semibold">
+                          {entry.sender === "volunteer" ? name : row.visitor_name}:{" "}
+                        </span>
+                        <span className="whitespace-pre-wrap">{entry.body}</span>
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}

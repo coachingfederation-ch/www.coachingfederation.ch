@@ -11,15 +11,37 @@
  * `user` is dormant: its RLS policies still exist and are still enforced, but
  * nothing grants it and no UI surfaces it.
  *
+ * Two privileged levels exist. `admin` is the SUPER ADMIN grant: provisioned by
+ * migration only, full access to everything including members, integration and
+ * role administration. `administrator` is the assignable Administrator grant
+ * with a scoped set of areas (vocabularies, coach finder, operational
+ * structure, Europe Pulse, governance, chat agent, knowledge, live chat).
+ * Keeping them as two distinct grants is deliberate: any check that still asks
+ * for `admin` stays Super-Admin-only, so a missed call site narrows access
+ * instead of widening it.
+ *
  * Client-safe: no imports, no secrets, no I/O.
  */
-export type AppRole = "admin" | "editor" | "organizer" | "publisher" | "member" | "user";
+export type AppRole =
+  | "admin"
+  | "administrator"
+  | "editor"
+  | "organizer"
+  | "publisher"
+  | "member"
+  | "user";
 
 /** Roles that may reach the staff CMS. */
-export const STAFF_ROLES: AppRole[] = ["admin", "editor", "organizer", "publisher"];
+export const STAFF_ROLES: AppRole[] = [
+  "admin",
+  "administrator",
+  "editor",
+  "organizer",
+  "publisher",
+];
 
 /** The roles an admin may grant or revoke through the application. */
-export const MANAGED_ROLES = ["editor", "organizer", "publisher"] as const;
+export const MANAGED_ROLES = ["administrator", "editor", "organizer", "publisher"] as const;
 export type ManagedRole = (typeof MANAGED_ROLES)[number];
 
 /** @deprecated use MANAGED_ROLES. Kept so older call sites keep compiling. */
@@ -28,6 +50,7 @@ export const MANAGED_ROLE = "editor" as const;
 export type RoleSet = {
   roles: AppRole[];
   isAdmin: boolean;
+  isPlatformAdmin: boolean;
   isEditor: boolean;
   isOrganizer: boolean;
   isPublisher: boolean;
@@ -38,6 +61,7 @@ export type RoleSet = {
 export const EMPTY_ROLES: RoleSet = {
   roles: [],
   isAdmin: false,
+  isPlatformAdmin: false,
   isEditor: false,
   isOrganizer: false,
   isPublisher: false,
@@ -49,7 +73,10 @@ export function toRoleSet(roles: AppRole[]): RoleSet {
   const has = (r: AppRole) => roles.includes(r);
   return {
     roles,
+    // `isAdmin` stays the Super Admin test — everything gated on it keeps its
+    // original, unchanged meaning.
     isAdmin: has("admin"),
+    isPlatformAdmin: has("admin") || has("administrator"),
     isEditor: has("admin") || has("editor"),
     // Editors and admins manage every event, so they are organizers too.
     isOrganizer: has("admin") || has("editor") || has("organizer"),
@@ -77,8 +104,16 @@ export function hasExactRole(roles: AppRole[], role: AppRole): boolean {
  */
 export function landingPath(
   roles: RoleSet,
-): "/articles" | "/manage/events" | "/member" | "/no-access" {
+): "/articles" | "/manage/events" | "/vocabularies" | "/member" | "/no-access" {
   if (roles.isMember) return "/member";
+  // An Administrator without editorial rights starts in their own first area.
+  if (
+    hasExactRole(roles.roles, "administrator") &&
+    !roles.isAdmin &&
+    !hasExactRole(roles.roles, "editor") &&
+    !hasExactRole(roles.roles, "publisher")
+  )
+    return "/vocabularies";
   // An organizer-only staff account has no access to /articles — the route
   // guard would bounce them straight back out.
   if (

@@ -13,14 +13,14 @@
  */
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertEditor } from "./authz";
+import { assertPlatformAdmin } from "./authz";
 import type { CoachFinderConfig } from "./vocabularies";
 
 export const getCoachFinderConfigForStaff = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<CoachFinderConfig | null> => {
     // Admin/editor only — no other staff role has settings access.
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await supabaseAdmin

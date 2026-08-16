@@ -14,13 +14,13 @@ import { Loader2, RefreshCw, Eye, EyeOff, AlertTriangle } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { PulseItemCard } from "@/components/cms/PulseItemCard";
 import { PulseRunControls } from "@/components/cms/PulseRunControls";
-import { requireStaffAccess, ADMIN_ONLY } from "@/lib/staff-guard";
+import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
 import { supabase } from "@/integrations/supabase/client";
 import { runEuropePulseNow, retryFailedChapters } from "@/lib/europe-pulse.functions";
 import { flagFor, PULSE_COLUMNS, type PulsePublishMode, type PulseRow } from "@/lib/europe-pulse";
 
 export const Route = createFileRoute("/_staff/manage/europe-pulse")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, ADMIN_ONLY),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, PLATFORM_ADMIN_ROLES),
   head: () => ({
     meta: [
       { title: "Europe Pulse — The Switzerland Chapter of ICF CMS" },

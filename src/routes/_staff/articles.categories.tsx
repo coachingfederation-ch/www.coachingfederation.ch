@@ -5,7 +5,7 @@
  */
 
 import { createFileRoute } from "@tanstack/react-router";
-import { requireStaffAccess, ADMIN_ONLY } from "@/lib/staff-guard";
+import { requireStaffAccess, CATEGORY_ROLES } from "@/lib/staff-guard";
 import { useEffect, useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
@@ -14,7 +14,7 @@ import { slugify, type CategoryRow } from "@/lib/articles";
 import { useCms } from "@/i18n/cms";
 
 export const Route = createFileRoute("/_staff/articles/categories")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, ADMIN_ONLY),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, CATEGORY_ROLES),
   head: () => ({
     meta: [
       { title: "Categories — The Switzerland Chapter of ICF Insights CMS" },

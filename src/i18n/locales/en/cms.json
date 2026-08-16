@@ -20,7 +20,8 @@
     "europePulse": "Europe Pulse",
     "governance": "Governance",
     "chatInsights": "Chat Agent Insights",
-    "knowledge": "Assistant knowledge"
+    "knowledge": "Assistant knowledge",
+    "liveChat": "Live chat"
   },
   "auth": {
     "signInSub": "Sign in to continue",
@@ -703,8 +704,8 @@
     "internalIntro": "Privileged accounts with no imported ICF member record. Accounts that are both a member and an administrator are listed above. These are provisioned outside the app and cannot be changed here; editor access always requires a claim-linked member record.",
     "internalEmpty": "No internal accounts.",
     "colRoles": "Roles",
-    "adminBadge": "Administrator",
-    "adminNote": "Provisioned separately",
+    "adminBadge": "Super Admin",
+    "adminNote": "Full access, provisioned separately",
     "organizerBadge": "Organizer",
     "grantEditor": "Grant editor",
     "revokeEditor": "Revoke editor",
@@ -733,7 +734,9 @@
     "accountAuditTitle": "Recent changes for this account",
     "editorDesc": "Create and edit articles",
     "organizerDesc": "Create and manage events",
-    "publisherDesc": "Review and publish articles"
+    "publisherDesc": "Review and publish articles",
+    "administratorBadge": "Administrator",
+    "administratorDesc": "Manage vocabularies, coach finder, structure, governance, chat and knowledge"
   },
   "events": {
     "title": "Events",
@@ -1153,6 +1156,28 @@
       "colRefunds": "Refunds",
       "colNet": "Net",
       "colCheckIns": "Check-ins"
+    },
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Search by title…",
+      "category": "Category",
+      "community": "Community",
+      "host": "Host",
+      "city": "City",
+      "allCategories": "All categories",
+      "allCommunities": "All communities",
+      "allHosts": "All hosts",
+      "allCities": "All cities",
+      "allStatuses": "All statuses",
+      "clear": "Clear filters",
+      "count": "{count} events",
+      "noMatches": "No events match these filters."
+    },
+    "pagination": {
+      "range": "Showing {from}–{to} of {total}",
+      "page": "Page {page} of {pages}",
+      "previous": "Previous",
+      "next": "Next"
     }
   },
   "eventTranslations": {
@@ -1574,5 +1599,24 @@
     "delete": "Delete entry",
     "confirmDelete": "Delete this entry? The assistant will stop using it.",
     "empty": "No entries match these filters."
+  },
+  "liveChat": {
+    "title": "Volunteer live chat",
+    "subtitle": "Roster of volunteer shifts and the QR code that opens the mobile volunteer console. The roster is informational — volunteers go online from their phone.",
+    "onlineNow": "Online now",
+    "nobodyOnline": "No volunteer is online.",
+    "qrAlt": "QR code to the volunteer chat console",
+    "qrHint": "Volunteers scan this with a phone, sign in with their member account and go online.",
+    "addTitle": "Add a shift",
+    "fieldStart": "Starts",
+    "fieldEnd": "Ends",
+    "fieldVolunteer": "Volunteer name",
+    "fieldNote": "Note (optional)",
+    "add": "Add shift",
+    "needTimes": "Please set a start and an end time.",
+    "confirmDelete": "Delete this shift?",
+    "delete": "Delete shift",
+    "colWhen": "When",
+    "noShifts": "No shifts scheduled yet."
   }
 }

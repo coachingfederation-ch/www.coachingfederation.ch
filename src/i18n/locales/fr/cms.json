@@ -20,7 +20,8 @@
     "europePulse": "Europe Pulse",
     "governance": "Gouvernance",
     "chatInsights": "Chat Agent Insights",
-    "knowledge": "Connaissances de l'assistant"
+    "knowledge": "Connaissances de l'assistant",
+    "liveChat": "Chat en direct"
   },
   "auth": {
     "signInSub": "Connectez-vous pour continuer",
@@ -703,8 +704,8 @@
     "internalIntro": "Comptes privilégiés sans dossier membre ICF importé. Les comptes qui sont à la fois membre et administrateur sont répertoriés ci-dessus. Ceux-ci sont configurés en dehors de l'application et ne peuvent pas être modifiés ici ; l'accès éditeur nécessite toujours un dossier membre lié.",
     "internalEmpty": "Aucun compte interne.",
     "colRoles": "Rôles",
-    "adminBadge": "Administrateur",
-    "adminNote": "Configuré séparément",
+    "adminBadge": "Super Admin",
+    "adminNote": "Accès complet, configuré séparément",
     "organizerBadge": "Organisateur",
     "grantEditor": "Accorder l'accès éditeur",
     "revokeEditor": "Révoquer l'accès éditeur",
@@ -733,7 +734,9 @@
     "accountAuditTitle": "Modifications récentes pour ce compte",
     "editorDesc": "Créer et modifier des articles",
     "organizerDesc": "Créer et gérer des événements",
-    "publisherDesc": "Relire et publier des articles"
+    "publisherDesc": "Relire et publier des articles",
+    "administratorBadge": "Administrateur",
+    "administratorDesc": "Gérer les vocabulaires, le coach finder, la structure, la gouvernance, le chat et les connaissances"
   },
   "events": {
     "title": "Événements",
@@ -1153,6 +1156,28 @@
       "colRefunds": "Remboursements",
       "colNet": "Net",
       "colCheckIns": "Enregistrements"
+    },
+    "filters": {
+      "search": "Recherche",
+      "searchPlaceholder": "Rechercher par titre…",
+      "category": "Catégorie",
+      "community": "Communauté",
+      "host": "Hôte",
+      "city": "Ville",
+      "allCategories": "Toutes les catégories",
+      "allCommunities": "Toutes les communautés",
+      "allHosts": "Tous les hôtes",
+      "allCities": "Toutes les villes",
+      "allStatuses": "Tous les statuts",
+      "clear": "Réinitialiser les filtres",
+      "count": "{count} événements",
+      "noMatches": "Aucun événement ne correspond à ces filtres."
+    },
+    "pagination": {
+      "range": "{from}–{to} sur {total}",
+      "page": "Page {page} sur {pages}",
+      "previous": "Précédent",
+      "next": "Suivant"
     }
   },
   "eventTranslations": {
@@ -1574,5 +1599,24 @@
     "delete": "Supprimer l'entrée",
     "confirmDelete": "Supprimer cette entrée ? L'assistant cessera de l'utiliser.",
     "empty": "Aucune entrée ne correspond à ces filtres."
+  },
+  "liveChat": {
+    "title": "Chat en direct des bénévoles",
+    "subtitle": "Planning des créneaux bénévoles et code QR qui ouvre la console mobile. Le planning est informatif — les bénévoles se mettent en ligne depuis leur téléphone.",
+    "onlineNow": "En ligne maintenant",
+    "nobodyOnline": "Aucun bénévole en ligne.",
+    "qrAlt": "Code QR vers la console des bénévoles",
+    "qrHint": "Les bénévoles scannent ce code, se connectent avec leur compte membre et se mettent en ligne.",
+    "addTitle": "Ajouter un créneau",
+    "fieldStart": "Début",
+    "fieldEnd": "Fin",
+    "fieldVolunteer": "Nom du bénévole",
+    "fieldNote": "Note (facultatif)",
+    "add": "Ajouter le créneau",
+    "needTimes": "Veuillez indiquer un début et une fin.",
+    "confirmDelete": "Supprimer ce créneau ?",
+    "delete": "Supprimer le créneau",
+    "colWhen": "Quand",
+    "noShifts": "Aucun créneau planifié."
   }
 }

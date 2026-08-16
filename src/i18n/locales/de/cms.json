@@ -20,7 +20,8 @@
     "europePulse": "Europe Pulse",
     "governance": "Governance",
     "chatInsights": "Chat-Agent-Insights",
-    "knowledge": "Assistenz-Wissen"
+    "knowledge": "Assistenz-Wissen",
+    "liveChat": "Live-Chat"
   },
   "auth": {
     "signInSub": "Melden Sie sich an, um fortzufahren",
@@ -703,8 +704,8 @@
     "internalIntro": "Privilegierte Konten ohne importierten ICF-Mitgliedsdatensatz. Konten, die sowohl Mitglied als auch Administrator sind, werden oben aufgeführt. Diese werden ausserhalb der App bereitgestellt und können hier nicht geändert werden; Redaktions-Zugriff erfordert immer ein verknüpftes Mitgliedskonto.",
     "internalEmpty": "Keine internen Konten.",
     "colRoles": "Rollen",
-    "adminBadge": "Administrator",
-    "adminNote": "Separat bereitgestellt",
+    "adminBadge": "Super Admin",
+    "adminNote": "Vollzugriff, separat bereitgestellt",
     "organizerBadge": "Organisator",
     "grantEditor": "Redaktor-Rolle erteilen",
     "revokeEditor": "Redaktor-Rolle entziehen",
@@ -733,7 +734,9 @@
     "accountAuditTitle": "Letzte Änderungen für dieses Konto",
     "editorDesc": "Artikel erstellen und bearbeiten",
     "organizerDesc": "Veranstaltungen erstellen und verwalten",
-    "publisherDesc": "Artikel prüfen und veröffentlichen"
+    "publisherDesc": "Artikel prüfen und veröffentlichen",
+    "administratorBadge": "Administrator",
+    "administratorDesc": "Vokabulare, Coach-Finder, Struktur, Governance, Chat und Wissen verwalten"
   },
   "events": {
     "title": "Events",
@@ -1153,6 +1156,28 @@
       "colRefunds": "Erstattungen",
       "colNet": "Netto",
       "colCheckIns": "Check-ins"
+    },
+    "filters": {
+      "search": "Suche",
+      "searchPlaceholder": "Nach Titel suchen…",
+      "category": "Kategorie",
+      "community": "Community",
+      "host": "Gastgeber",
+      "city": "Stadt",
+      "allCategories": "Alle Kategorien",
+      "allCommunities": "Alle Communities",
+      "allHosts": "Alle Gastgeber",
+      "allCities": "Alle Städte",
+      "allStatuses": "Alle Status",
+      "clear": "Filter zurücksetzen",
+      "count": "{count} Veranstaltungen",
+      "noMatches": "Keine Veranstaltungen entsprechen diesen Filtern."
+    },
+    "pagination": {
+      "range": "{from}–{to} von {total}",
+      "page": "Seite {page} von {pages}",
+      "previous": "Zurück",
+      "next": "Weiter"
     }
   },
   "eventTranslations": {
@@ -1574,5 +1599,24 @@
     "delete": "Eintrag löschen",
     "confirmDelete": "Diesen Eintrag löschen? Der Assistent nutzt ihn dann nicht mehr.",
     "empty": "Keine Einträge entsprechen diesen Filtern."
+  },
+  "liveChat": {
+    "title": "Freiwilligen-Live-Chat",
+    "subtitle": "Einsatzplan der Freiwilligen und QR-Code zur mobilen Freiwilligen-Konsole. Der Plan ist rein informativ — online gehen die Freiwilligen über ihr Handy.",
+    "onlineNow": "Jetzt online",
+    "nobodyOnline": "Zurzeit ist niemand online.",
+    "qrAlt": "QR-Code zur Freiwilligen-Konsole",
+    "qrHint": "Freiwillige scannen den Code mit dem Handy, melden sich mit ihrem Mitgliedskonto an und gehen online.",
+    "addTitle": "Einsatz hinzufügen",
+    "fieldStart": "Beginn",
+    "fieldEnd": "Ende",
+    "fieldVolunteer": "Name der freiwilligen Person",
+    "fieldNote": "Notiz (optional)",
+    "add": "Einsatz hinzufügen",
+    "needTimes": "Bitte Beginn und Ende angeben.",
+    "confirmDelete": "Diesen Einsatz löschen?",
+    "delete": "Einsatz löschen",
+    "colWhen": "Wann",
+    "noShifts": "Noch keine Einsätze geplant."
   }
 }

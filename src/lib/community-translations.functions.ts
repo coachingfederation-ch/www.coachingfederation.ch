@@ -12,7 +12,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertAdmin } from "./authz";
+import { assertPlatformAdmin } from "./authz";
 
 const LOCALE_NAMES: Record<string, string> = {
   de: "Swiss Standard German (no ß, use ss)",
@@ -37,7 +37,7 @@ export const translateCommunity = createServerFn({ method: "POST" })
   .inputValidator((data) => inputSchema.parse(data))
   .handler(async ({ data, context }): Promise<CommunityTranslationResult> => {
     const { supabase } = context;
-    await assertAdmin(context);
+    await assertPlatformAdmin(context);
 
     const { data: project, error } = await supabase
       .from("op_projects")
