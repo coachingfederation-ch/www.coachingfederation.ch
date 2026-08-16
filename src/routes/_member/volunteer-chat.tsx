@@ -237,6 +237,7 @@ function VolunteerChatPage() {
       if (!userId) return;
       setOnline(next);
       setShowOthers(false);
+      if (!next) setLastEnded(null);
       await supabase.from("live_chat_presence").upsert({
         user_id: userId,
         display_name: name.trim().slice(0, 60),
@@ -254,6 +255,7 @@ function VolunteerChatPage() {
       if (!userId) return;
       setBusy(true);
       setError(null);
+      setLastEnded(null);
       const { data, error: updateError } = await supabase
         .from("live_chat_conversations")
         .update({
