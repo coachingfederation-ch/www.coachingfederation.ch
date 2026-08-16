@@ -2392,6 +2392,149 @@ export type Database = {
         }
         Relationships: []
       }
+      live_chat_conversations: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          ended_at: string | null
+          id: string
+          last_message_at: string
+          locale: string
+          page_path: string | null
+          status: string
+          updated_at: string
+          visitor_email: string | null
+          visitor_key_hash: string
+          visitor_name: string
+          volunteer_name: string | null
+          volunteer_user_id: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          last_message_at?: string
+          locale?: string
+          page_path?: string | null
+          status?: string
+          updated_at?: string
+          visitor_email?: string | null
+          visitor_key_hash: string
+          visitor_name?: string
+          volunteer_name?: string | null
+          volunteer_user_id?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          last_message_at?: string
+          locale?: string
+          page_path?: string | null
+          status?: string
+          updated_at?: string
+          visitor_email?: string | null
+          visitor_key_hash?: string
+          visitor_name?: string
+          volunteer_name?: string | null
+          volunteer_user_id?: string | null
+        }
+        Relationships: []
+      }
+      live_chat_messages: {
+        Row: {
+          body: string
+          conversation_id: string
+          created_at: string
+          id: string
+          sender: string
+        }
+        Insert: {
+          body: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          sender: string
+        }
+        Update: {
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          sender?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_chat_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "live_chat_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_chat_presence: {
+        Row: {
+          created_at: string
+          display_name: string
+          is_online: boolean
+          last_seen_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string
+          is_online?: boolean
+          last_seen_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          is_online?: boolean
+          last_seen_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      live_chat_shifts: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          ends_at: string
+          id: string
+          note: string | null
+          starts_at: string
+          updated_at: string
+          volunteer_name: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          ends_at: string
+          id?: string
+          note?: string | null
+          starts_at: string
+          updated_at?: string
+          volunteer_name?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          ends_at?: string
+          id?: string
+          note?: string | null
+          starts_at?: string
+          updated_at?: string
+          volunteer_name?: string
+        }
+        Relationships: []
+      }
       member_archive_snapshots: {
         Row: {
           created_at: string
@@ -4003,6 +4146,7 @@ export type Database = {
         Args: { _actor: string; _registration_id: string }
         Returns: Json
       }
+      live_chat_online_count: { Args: never; Returns: number }
       member_has_directory_credential: {
         Args: { _credential_expires_on: string; _credential_slug: string }
         Returns: boolean

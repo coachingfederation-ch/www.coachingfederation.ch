@@ -43,6 +43,7 @@ import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as MemberMemberRouteImport } from './routes/_member/member'
 import { Route as MemberMyProfileRouteImport } from './routes/_member/my-profile'
+import { Route as MemberVolunteerChatRouteImport } from './routes/_member/volunteer-chat'
 import { Route as StaffArticlesRouteImport } from './routes/_staff/articles'
 import { Route as StaffCoachFinderRouteImport } from './routes/_staff/coach-finder'
 import { Route as StaffIntegrationRouteImport } from './routes/_staff/integration'
@@ -79,11 +80,14 @@ import { Route as StaffManageChatInsightsRouteImport } from './routes/_staff/man
 import { Route as StaffManageEuropePulseRouteImport } from './routes/_staff/manage.europe-pulse'
 import { Route as StaffManageGovernanceRouteImport } from './routes/_staff/manage.governance'
 import { Route as StaffManageKnowledgeRouteImport } from './routes/_staff/manage.knowledge'
+import { Route as StaffManageLiveChatRouteImport } from './routes/_staff/manage.live-chat'
 import { Route as StaffMembersIndexRouteImport } from './routes/_staff/members.index'
 import { Route as StaffMembersIdRouteImport } from './routes/_staff/members.$id'
 import { Route as ApiPublicChatSignalRouteImport } from './routes/api/public/chat-signal'
 import { Route as ApiPublicEuropePulseScanRouteImport } from './routes/api/public/europe-pulse-scan'
 import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public/event-reminders'
+import { Route as ApiPublicLiveChatRouteImport } from './routes/api/public/live-chat'
+import { Route as ApiPublicLiveChatPurgeRouteImport } from './routes/api/public/live-chat-purge'
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
@@ -264,6 +268,11 @@ const MemberMemberRoute = MemberMemberRouteImport.update({
 const MemberMyProfileRoute = MemberMyProfileRouteImport.update({
   id: '/my-profile',
   path: '/my-profile',
+  getParentRoute: () => MemberRouteRoute,
+} as any)
+const MemberVolunteerChatRoute = MemberVolunteerChatRouteImport.update({
+  id: '/volunteer-chat',
+  path: '/volunteer-chat',
   getParentRoute: () => MemberRouteRoute,
 } as any)
 const StaffArticlesRoute = StaffArticlesRouteImport.update({
@@ -448,6 +457,11 @@ const StaffManageKnowledgeRoute = StaffManageKnowledgeRouteImport.update({
   path: '/manage/knowledge',
   getParentRoute: () => StaffRouteRoute,
 } as any)
+const StaffManageLiveChatRoute = StaffManageLiveChatRouteImport.update({
+  id: '/manage/live-chat',
+  path: '/manage/live-chat',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
 const StaffMembersIndexRoute = StaffMembersIndexRouteImport.update({
   id: '/members/',
   path: '/members/',
@@ -472,6 +486,16 @@ const ApiPublicEuropePulseScanRoute =
 const ApiPublicEventRemindersRoute = ApiPublicEventRemindersRouteImport.update({
   id: '/api/public/event-reminders',
   path: '/api/public/event-reminders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicLiveChatRoute = ApiPublicLiveChatRouteImport.update({
+  id: '/api/public/live-chat',
+  path: '/api/public/live-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicLiveChatPurgeRoute = ApiPublicLiveChatPurgeRouteImport.update({
+  id: '/api/public/live-chat-purge',
+  path: '/api/public/live-chat-purge',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicMemberSyncRoute = ApiPublicMemberSyncRouteImport.update({
@@ -567,6 +591,7 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/member': typeof MemberMemberRoute
   '/my-profile': typeof MemberMyProfileRoute
+  '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/articles': typeof StaffArticlesRouteWithChildren
   '/coach-finder': typeof StaffCoachFinderRoute
   '/integration': typeof StaffIntegrationRoute
@@ -600,10 +625,13 @@ export interface FileRoutesByFullPath {
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/manage/governance': typeof StaffManageGovernanceRoute
   '/manage/knowledge': typeof StaffManageKnowledgeRoute
+  '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/members/$id': typeof StaffMembersIdRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
+  '/api/public/live-chat': typeof ApiPublicLiveChatRoute
+  '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
@@ -650,6 +678,7 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/member': typeof MemberMemberRoute
   '/my-profile': typeof MemberMyProfileRoute
+  '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/coach-finder': typeof StaffCoachFinderRoute
   '/integration': typeof StaffIntegrationRoute
   '/operational-structure': typeof StaffOperationalStructureRoute
@@ -682,10 +711,13 @@ export interface FileRoutesByTo {
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/manage/governance': typeof StaffManageGovernanceRoute
   '/manage/knowledge': typeof StaffManageKnowledgeRoute
+  '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/members/$id': typeof StaffMembersIdRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
+  '/api/public/live-chat': typeof ApiPublicLiveChatRoute
+  '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/$locale/communities': typeof LocaleCommunitiesIndexRoute
   '/$locale/events': typeof LocaleEventsIndexRoute
@@ -738,6 +770,7 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_member/member': typeof MemberMemberRoute
   '/_member/my-profile': typeof MemberMyProfileRoute
+  '/_member/volunteer-chat': typeof MemberVolunteerChatRoute
   '/_staff/articles': typeof StaffArticlesRouteWithChildren
   '/_staff/coach-finder': typeof StaffCoachFinderRoute
   '/_staff/integration': typeof StaffIntegrationRoute
@@ -771,10 +804,13 @@ export interface FileRoutesById {
   '/_staff/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/_staff/manage/governance': typeof StaffManageGovernanceRoute
   '/_staff/manage/knowledge': typeof StaffManageKnowledgeRoute
+  '/_staff/manage/live-chat': typeof StaffManageLiveChatRoute
   '/_staff/members/$id': typeof StaffMembersIdRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
+  '/api/public/live-chat': typeof ApiPublicLiveChatRoute
+  '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
@@ -826,6 +862,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/member'
     | '/my-profile'
+    | '/volunteer-chat'
     | '/articles'
     | '/coach-finder'
     | '/integration'
@@ -859,10 +896,13 @@ export interface FileRouteTypes {
     | '/manage/europe-pulse'
     | '/manage/governance'
     | '/manage/knowledge'
+    | '/manage/live-chat'
     | '/members/$id'
     | '/api/public/chat-signal'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-reminders'
+    | '/api/public/live-chat'
+    | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
     | '/$locale/communities/'
     | '/$locale/events/'
@@ -909,6 +949,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/member'
     | '/my-profile'
+    | '/volunteer-chat'
     | '/coach-finder'
     | '/integration'
     | '/operational-structure'
@@ -941,10 +982,13 @@ export interface FileRouteTypes {
     | '/manage/europe-pulse'
     | '/manage/governance'
     | '/manage/knowledge'
+    | '/manage/live-chat'
     | '/members/$id'
     | '/api/public/chat-signal'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-reminders'
+    | '/api/public/live-chat'
+    | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
     | '/$locale/communities'
     | '/$locale/events'
@@ -996,6 +1040,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/_member/member'
     | '/_member/my-profile'
+    | '/_member/volunteer-chat'
     | '/_staff/articles'
     | '/_staff/coach-finder'
     | '/_staff/integration'
@@ -1029,10 +1074,13 @@ export interface FileRouteTypes {
     | '/_staff/manage/europe-pulse'
     | '/_staff/manage/governance'
     | '/_staff/manage/knowledge'
+    | '/_staff/manage/live-chat'
     | '/_staff/members/$id'
     | '/api/public/chat-signal'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-reminders'
+    | '/api/public/live-chat'
+    | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
     | '/$locale/communities/'
     | '/$locale/events/'
@@ -1088,6 +1136,8 @@ export interface RootRouteChildren {
   ApiPublicChatSignalRoute: typeof ApiPublicChatSignalRoute
   ApiPublicEuropePulseScanRoute: typeof ApiPublicEuropePulseScanRoute
   ApiPublicEventRemindersRoute: typeof ApiPublicEventRemindersRoute
+  ApiPublicLiveChatRoute: typeof ApiPublicLiveChatRoute
+  ApiPublicLiveChatPurgeRoute: typeof ApiPublicLiveChatPurgeRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
   ApiPublicCalendarFileRoute: typeof ApiPublicCalendarFileRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -1333,6 +1383,13 @@ declare module '@tanstack/react-router' {
       path: '/my-profile'
       fullPath: '/my-profile'
       preLoaderRoute: typeof MemberMyProfileRouteImport
+      parentRoute: typeof MemberRouteRoute
+    }
+    '/_member/volunteer-chat': {
+      id: '/_member/volunteer-chat'
+      path: '/volunteer-chat'
+      fullPath: '/volunteer-chat'
+      preLoaderRoute: typeof MemberVolunteerChatRouteImport
       parentRoute: typeof MemberRouteRoute
     }
     '/_staff/articles': {
@@ -1587,6 +1644,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageKnowledgeRouteImport
       parentRoute: typeof StaffRouteRoute
     }
+    '/_staff/manage/live-chat': {
+      id: '/_staff/manage/live-chat'
+      path: '/manage/live-chat'
+      fullPath: '/manage/live-chat'
+      preLoaderRoute: typeof StaffManageLiveChatRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/_staff/members/': {
       id: '/_staff/members/'
       path: '/members'
@@ -1620,6 +1684,20 @@ declare module '@tanstack/react-router' {
       path: '/api/public/event-reminders'
       fullPath: '/api/public/event-reminders'
       preLoaderRoute: typeof ApiPublicEventRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/live-chat': {
+      id: '/api/public/live-chat'
+      path: '/api/public/live-chat'
+      fullPath: '/api/public/live-chat'
+      preLoaderRoute: typeof ApiPublicLiveChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/live-chat-purge': {
+      id: '/api/public/live-chat-purge'
+      path: '/api/public/live-chat-purge'
+      fullPath: '/api/public/live-chat-purge'
+      preLoaderRoute: typeof ApiPublicLiveChatPurgeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/member-sync': {
@@ -1761,11 +1839,13 @@ const LocaleRouteRouteWithChildren = LocaleRouteRoute._addFileChildren(
 interface MemberRouteRouteChildren {
   MemberMemberRoute: typeof MemberMemberRoute
   MemberMyProfileRoute: typeof MemberMyProfileRoute
+  MemberVolunteerChatRoute: typeof MemberVolunteerChatRoute
 }
 
 const MemberRouteRouteChildren: MemberRouteRouteChildren = {
   MemberMemberRoute: MemberMemberRoute,
   MemberMyProfileRoute: MemberMyProfileRoute,
+  MemberVolunteerChatRoute: MemberVolunteerChatRoute,
 }
 
 const MemberRouteRouteWithChildren = MemberRouteRoute._addFileChildren(
@@ -1801,6 +1881,7 @@ interface StaffRouteRouteChildren {
   StaffManageEuropePulseRoute: typeof StaffManageEuropePulseRoute
   StaffManageGovernanceRoute: typeof StaffManageGovernanceRoute
   StaffManageKnowledgeRoute: typeof StaffManageKnowledgeRoute
+  StaffManageLiveChatRoute: typeof StaffManageLiveChatRoute
   StaffMembersIdRoute: typeof StaffMembersIdRoute
   StaffMembersIndexRoute: typeof StaffMembersIndexRoute
   StaffManageEventsIdRoute: typeof StaffManageEventsIdRoute
@@ -1822,6 +1903,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffManageEuropePulseRoute: StaffManageEuropePulseRoute,
   StaffManageGovernanceRoute: StaffManageGovernanceRoute,
   StaffManageKnowledgeRoute: StaffManageKnowledgeRoute,
+  StaffManageLiveChatRoute: StaffManageLiveChatRoute,
   StaffMembersIdRoute: StaffMembersIdRoute,
   StaffMembersIndexRoute: StaffMembersIndexRoute,
   StaffManageEventsIdRoute: StaffManageEventsIdRoute,
@@ -1898,6 +1980,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicChatSignalRoute: ApiPublicChatSignalRoute,
   ApiPublicEuropePulseScanRoute: ApiPublicEuropePulseScanRoute,
   ApiPublicEventRemindersRoute: ApiPublicEventRemindersRoute,
+  ApiPublicLiveChatRoute: ApiPublicLiveChatRoute,
+  ApiPublicLiveChatPurgeRoute: ApiPublicLiveChatPurgeRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,
   ApiPublicCalendarFileRoute: ApiPublicCalendarFileRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,

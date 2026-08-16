@@ -21,6 +21,7 @@ import {
   PromptInputTextarea,
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
+import { LiveChatPanel } from "@/components/assistant/LiveChatPanel";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -137,6 +138,9 @@ export function AssistantWidget() {
   const path = useCanonicalPath();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  /** Number of volunteers on duty; drives the launcher dot and the handover. */
+  const [volunteersOnline, setVolunteersOnline] = useState(0);
+  const [liveChat, setLiveChat] = useState(false);
   const [pendingExternal, setPendingExternal] = useState<string | null>(null);
   const [initialMessages] = useState<UIMessage[]>(() => loadStoredMessages());
   const [input, setInput] = useState("");
@@ -197,6 +201,33 @@ export function AssistantWidget() {
   useEffect(() => {
     if (open) textareaRef.current?.focus();
   }, [open, status]);
+
+  // Poll the volunteer count so the launcher can promise a human only when one
+  // is actually there. Cheap (a single integer) and paused while hidden.
+  useEffect(() => {
+    let cancelled = false;
+    const read = async () => {
+      if (typeof document !== "undefined" && document.hidden) return;
+      try {
+        const response = await fetch("/api/public/live-chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "status" }),
+        });
+        if (!response.ok || cancelled) return;
+        const body = (await response.json()) as { online?: number };
+        setVolunteersOnline(typeof body.online === "number" ? body.online : 0);
+      } catch {
+        // Offline or blocked: keep the AI-only launcher.
+      }
+    };
+    void read();
+    const timer = window.setInterval(() => void read(), open ? 20_000 : 60_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
+  }, [open]);
 
   const busy = status === "submitted" || status === "streaming";
 
@@ -280,7 +311,14 @@ export function AssistantWidget() {
           className="fixed bottom-5 right-5 z-50 inline-flex min-h-11 items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground shadow-lg transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
           <MessageCircle className="size-5" aria-hidden="true" />
-          {t("assistant.launcher")}
+          {volunteersOnline > 0 ? t("live-chat.launcher") : t("assistant.launcher")}
+          {volunteersOnline > 0 && (
+            <span
+              className="size-2.5 rounded-full bg-emerald-500 ring-2 ring-accent"
+              title={t("live-chat.online")}
+              aria-label={t("live-chat.online")}
+            />
+          )}
         </button>
       )}
 
@@ -315,6 +353,10 @@ export function AssistantWidget() {
             </div>
           </header>
 
+          {liveChat ? (
+            <LiveChatPanel onBack={() => setLiveChat(false)} pagePath={path} />
+          ) : (
+            <>
           <Conversation className="flex-1">
             <ConversationContent className="gap-4 px-4 py-4">
               {messages.length === 0 && (
@@ -451,7 +493,19 @@ export function AssistantWidget() {
             <p className="mt-2 text-[11px] leading-snug text-muted-foreground">
               {t("assistant.disclaimer")}
             </p>
+            {volunteersOnline > 0 && (
+              <button
+                type="button"
+                onClick={() => setLiveChat(true)}
+                className="mt-2 inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-full border border-border px-3 text-xs font-semibold text-foreground transition-colors hover:bg-secondary"
+              >
+                <span className="size-2 rounded-full bg-emerald-500" aria-hidden="true" />
+                {t("live-chat.handover")}
+              </button>
+            )}
           </div>
+            </>
+          )}
         </div>
       )}
 

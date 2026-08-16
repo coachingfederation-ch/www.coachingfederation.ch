@@ -20,6 +20,7 @@ import {
   UserCircle,
   MessagesSquare,
   BookOpen,
+  Headset,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
@@ -50,6 +51,7 @@ const nav = [
   { to: "/manage/governance", key: "nav.governance", icon: FileText, allowedRoles: ["editor"] },
   { to: "/manage/chat-insights", key: "nav.chatInsights", icon: MessagesSquare, allowedRoles: [] },
   { to: "/manage/knowledge", key: "nav.knowledge", icon: BookOpen, allowedRoles: [] },
+  { to: "/manage/live-chat", key: "nav.liveChat", icon: Headset, allowedRoles: [] },
   { to: "/roles", key: "nav.roles", icon: ShieldCheck, allowedRoles: [] },
 ] as const satisfies ReadonlyArray<{
   to: string;

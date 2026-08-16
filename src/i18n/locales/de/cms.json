@@ -20,7 +20,8 @@
     "europePulse": "Europe Pulse",
     "governance": "Governance",
     "chatInsights": "Chat-Agent-Insights",
-    "knowledge": "Assistenz-Wissen"
+    "knowledge": "Assistenz-Wissen",
+    "liveChat": "Live-Chat"
   },
   "auth": {
     "signInSub": "Melden Sie sich an, um fortzufahren",
@@ -1574,5 +1575,24 @@
     "delete": "Eintrag löschen",
     "confirmDelete": "Diesen Eintrag löschen? Der Assistent nutzt ihn dann nicht mehr.",
     "empty": "Keine Einträge entsprechen diesen Filtern."
+  },
+  "liveChat": {
+    "title": "Freiwilligen-Live-Chat",
+    "subtitle": "Einsatzplan der Freiwilligen und QR-Code zur mobilen Freiwilligen-Konsole. Der Plan ist rein informativ — online gehen die Freiwilligen über ihr Handy.",
+    "onlineNow": "Jetzt online",
+    "nobodyOnline": "Zurzeit ist niemand online.",
+    "qrAlt": "QR-Code zur Freiwilligen-Konsole",
+    "qrHint": "Freiwillige scannen den Code mit dem Handy, melden sich mit ihrem Mitgliedskonto an und gehen online.",
+    "addTitle": "Einsatz hinzufügen",
+    "fieldStart": "Beginn",
+    "fieldEnd": "Ende",
+    "fieldVolunteer": "Name der freiwilligen Person",
+    "fieldNote": "Notiz (optional)",
+    "add": "Einsatz hinzufügen",
+    "needTimes": "Bitte Beginn und Ende angeben.",
+    "confirmDelete": "Diesen Einsatz löschen?",
+    "delete": "Einsatz löschen",
+    "colWhen": "Wann",
+    "noShifts": "Noch keine Einsätze geplant."
   }
 }

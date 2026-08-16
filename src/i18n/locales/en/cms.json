@@ -20,7 +20,8 @@
     "europePulse": "Europe Pulse",
     "governance": "Governance",
     "chatInsights": "Chat Agent Insights",
-    "knowledge": "Assistant knowledge"
+    "knowledge": "Assistant knowledge",
+    "liveChat": "Live chat"
   },
   "auth": {
     "signInSub": "Sign in to continue",
@@ -1574,5 +1575,24 @@
     "delete": "Delete entry",
     "confirmDelete": "Delete this entry? The assistant will stop using it.",
     "empty": "No entries match these filters."
+  },
+  "liveChat": {
+    "title": "Volunteer live chat",
+    "subtitle": "Roster of volunteer shifts and the QR code that opens the mobile volunteer console. The roster is informational — volunteers go online from their phone.",
+    "onlineNow": "Online now",
+    "nobodyOnline": "No volunteer is online.",
+    "qrAlt": "QR code to the volunteer chat console",
+    "qrHint": "Volunteers scan this with a phone, sign in with their member account and go online.",
+    "addTitle": "Add a shift",
+    "fieldStart": "Starts",
+    "fieldEnd": "Ends",
+    "fieldVolunteer": "Volunteer name",
+    "fieldNote": "Note (optional)",
+    "add": "Add shift",
+    "needTimes": "Please set a start and an end time.",
+    "confirmDelete": "Delete this shift?",
+    "delete": "Delete shift",
+    "colWhen": "When",
+    "noShifts": "No shifts scheduled yet."
   }
 }
