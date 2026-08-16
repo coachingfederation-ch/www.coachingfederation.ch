@@ -329,6 +329,7 @@ function VolunteerChatPage() {
     setActiveId(null);
     setMessages([]);
   }, [activeConversation]);
+
   const recent = mine.filter((row) => row.status === "closed").slice(0, 3);
 
   if (activated === false) {
