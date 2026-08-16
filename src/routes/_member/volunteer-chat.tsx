@@ -83,6 +83,32 @@ function VolunteerChatPage() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const [pushState, setPushState] = useState<"on" | "off" | "blocked">("off");
+  const [pushBusy, setPushBusy] = useState(false);
+  const waitingCountRef = useRef(0);
+
+  useEffect(() => {
+    if (!pushSupported()) return;
+    void currentPushState().then(setPushState);
+  }, []);
+
+  // A new arrival while the console is open gets a chime as well as the badge.
+  useEffect(() => {
+    if (waiting.length > waitingCountRef.current) playWaitingChime();
+    waitingCountRef.current = waiting.length;
+  }, [waiting.length]);
+
+  const togglePush = useCallback(async () => {
+    setPushBusy(true);
+    if (pushState === "on") {
+      await disablePush().catch(() => undefined);
+      setPushState("off");
+    } else {
+      const next = await enablePush().catch(() => "error" as const);
+      setPushState(next === "on" ? "on" : next === "blocked" ? "blocked" : "off");
+    }
+    setPushBusy(false);
+  }, [pushState]);
 
   // Identify the volunteer, confirm the activation and prefill the display name.
   useEffect(() => {
