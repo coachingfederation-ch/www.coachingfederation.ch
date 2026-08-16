@@ -494,7 +494,19 @@ export function AssistantWidget() {
             <p className="mt-2 text-[11px] leading-snug text-muted-foreground">
               {t("assistant.disclaimer")}
             </p>
+            {volunteersOnline > 0 && (
+              <button
+                type="button"
+                onClick={() => setLiveChat(true)}
+                className="mt-2 inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-full border border-border px-3 text-xs font-semibold text-foreground transition-colors hover:bg-secondary"
+              >
+                <span className="size-2 rounded-full bg-emerald-500" aria-hidden="true" />
+                {t("live-chat.handover")}
+              </button>
+            )}
           </div>
+            </>
+          )}
         </div>
       )}
 
