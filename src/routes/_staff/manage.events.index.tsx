@@ -113,7 +113,8 @@ function ManageEventsPage() {
       if (search.community && row.community_id !== search.community) return false;
       if (search.host && !row.hosts.some((h) => h.id === search.host)) return false;
       if (search.city) {
-        if (search.city === ONLINE_CITY ? Boolean(row.city) : row.city !== search.city) return false;
+        if (search.city === ONLINE_CITY ? Boolean(row.city) : row.city !== search.city)
+          return false;
       }
       if (search.status && row.status !== search.status) return false;
       return true;
