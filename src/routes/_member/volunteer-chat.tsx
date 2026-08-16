@@ -232,15 +232,6 @@ function VolunteerChatPage() {
     bottomRef.current?.scrollIntoView({ block: "end" });
   }, [messages.length]);
 
-  // When the visitor closes the chat, show a friendly confirmation before
-  // returning the volunteer to the waiting list.
-  useEffect(() => {
-    if (activeConversation?.status !== "closed") return;
-    setLastEnded({ id: activeConversation.id, name: activeConversation.visitor_name });
-    setActiveId(null);
-    setMessages([]);
-  }, [activeConversation]);
-
   const setPresence = useCallback(
     async (next: boolean) => {
       if (!userId) return;
