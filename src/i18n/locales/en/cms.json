@@ -704,8 +704,8 @@
     "internalIntro": "Privileged accounts with no imported ICF member record. Accounts that are both a member and an administrator are listed above. These are provisioned outside the app and cannot be changed here; editor access always requires a claim-linked member record.",
     "internalEmpty": "No internal accounts.",
     "colRoles": "Roles",
-    "adminBadge": "Administrator",
-    "adminNote": "Provisioned separately",
+    "adminBadge": "Super Admin",
+    "adminNote": "Full access, provisioned separately",
     "organizerBadge": "Organizer",
     "grantEditor": "Grant editor",
     "revokeEditor": "Revoke editor",
@@ -734,7 +734,9 @@
     "accountAuditTitle": "Recent changes for this account",
     "editorDesc": "Create and edit articles",
     "organizerDesc": "Create and manage events",
-    "publisherDesc": "Review and publish articles"
+    "publisherDesc": "Review and publish articles",
+    "administratorBadge": "Administrator",
+    "administratorDesc": "Manage vocabularies, coach finder, structure, governance, chat and knowledge"
   },
   "events": {
     "title": "Events",

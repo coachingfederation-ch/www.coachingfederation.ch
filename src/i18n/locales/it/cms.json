@@ -704,8 +704,8 @@
     "internalIntro": "Account con privilegi privi di scheda membro ICF importata. Gli account che sono sia membri sia amministratori sono elencati sopra. Questi sono forniti esternamente all'app e non possono essere modificati qui; l'accesso come redattore richiede sempre un profilo membro collegato.",
     "internalEmpty": "Nessun account interno.",
     "colRoles": "Ruoli",
-    "adminBadge": "Amministratore",
-    "adminNote": "Configurato separatamente",
+    "adminBadge": "Super Admin",
+    "adminNote": "Accesso completo, configurato separatamente",
     "organizerBadge": "Organizzatore",
     "grantEditor": "Concedi ruolo redattore",
     "revokeEditor": "Revoca ruolo redattore",
@@ -734,7 +734,9 @@
     "accountAuditTitle": "Modifiche recenti per questo account",
     "editorDesc": "Creare e modificare articoli",
     "organizerDesc": "Creare e gestire eventi",
-    "publisherDesc": "Revisionare e pubblicare articoli"
+    "publisherDesc": "Revisionare e pubblicare articoli",
+    "administratorBadge": "Amministratore",
+    "administratorDesc": "Gestire vocabolari, coach finder, struttura, governance, chat e conoscenza"
   },
   "events": {
     "title": "Eventi",
