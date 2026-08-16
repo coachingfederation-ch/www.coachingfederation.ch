@@ -119,6 +119,9 @@ export function LiveChatVolunteerTile() {
         </a>
       </div>
       <p className="mt-3 text-xs text-muted-foreground">{t("member.home.liveChat.installHint")}</p>
+      <p className="mt-1 text-xs text-muted-foreground">
+        {t("member.home.liveChat.staySignedInHint")}
+      </p>
       <button
         type="button"
         onClick={() => void optOut()}

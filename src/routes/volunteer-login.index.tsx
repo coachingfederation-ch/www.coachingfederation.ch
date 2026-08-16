@@ -20,6 +20,9 @@ import { extractVolunteerToken, signInWithVolunteerToken } from "@/lib/volunteer
 
 export const Route = createFileRoute("/volunteer-login/")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>) => ({
+    reason: search.reason === "expired" ? ("expired" as const) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Volunteer sign-in — The Switzerland Chapter of ICF" },
@@ -39,6 +42,7 @@ const CTA =
 function VolunteerScanLoginPage() {
   const { t } = useI18n();
   const navigate = useNavigate();
+  const { reason } = Route.useSearch();
   const [phase, setPhase] = useState<Phase>("idle");
   const [cameraError, setCameraError] = useState(false);
   const [manual, setManual] = useState("");
@@ -121,6 +125,12 @@ function VolunteerScanLoginPage() {
         <p className="mt-2 text-sm text-muted-foreground">
           {t("live-chat.volunteer.scanIntro")}
         </p>
+
+        {reason === "expired" && phase === "idle" ? (
+          <p className="mt-3 rounded-2xl bg-accent/15 px-4 py-3 text-sm text-foreground">
+            {t("live-chat.volunteer.sessionExpired")}
+          </p>
+        ) : null}
 
         <div className="mt-5 flex-1">
           {phase === "scanning" && (

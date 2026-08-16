@@ -69,6 +69,7 @@
     "scanManualLabel": "Oppure inserisci il codice manualmente",
     "scanManualPlaceholder": "Incolla il codice di accesso",
     "scanManualSubmit": "Accedi",
-    "scanPasswordFallback": "Accedi invece con e-mail e password"
+    "scanPasswordFallback": "Accedi invece con e-mail e password",
+    "sessionExpired": "Il tuo accesso è scaduto. Scansiona un nuovo codice dalla tua pagina socio."
   }
 }

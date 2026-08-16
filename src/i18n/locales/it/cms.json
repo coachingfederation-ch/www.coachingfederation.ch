@@ -597,7 +597,8 @@
         "qrShow": "Mostra il codice QR di accesso",
         "qrRenew": "Mostra un nuovo codice",
         "qrExpiresIn": "Valido ancora",
-        "installHint": "Sul telefono usa Condividi → Aggiungi a Home, poi accedi una volta scansionando questo codice."
+        "installHint": "Sul telefono usa Condividi → Aggiungi a Home, poi accedi una volta scansionando questo codice.",
+        "staySignedInHint": "Apri l’app ogni poche settimane — altrimenti il telefono elimina l’accesso e dovrai scansionare un nuovo codice."
       }
     }
   },

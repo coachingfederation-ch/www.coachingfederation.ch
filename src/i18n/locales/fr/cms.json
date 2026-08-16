@@ -597,7 +597,8 @@
         "qrShow": "Afficher le QR code de connexion",
         "qrRenew": "Afficher un nouveau code",
         "qrExpiresIn": "Valable encore",
-        "installHint": "Sur votre téléphone, utilisez Partager → Sur l’écran d’accueil, puis connectez-vous une fois en scannant ce code."
+        "installHint": "Sur votre téléphone, utilisez Partager → Sur l’écran d’accueil, puis connectez-vous une fois en scannant ce code.",
+        "staySignedInHint": "Ouvrez l’app toutes les quelques semaines — sinon votre téléphone efface la connexion et il faut scanner un nouveau code."
       }
     }
   },
