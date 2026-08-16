@@ -49,6 +49,16 @@
     "keepOpen": "Keep this page open to receive chats.",
     "error": "Something went wrong. Please try again.",
     "notActivated": "Your account is not activated for live chat. Ask the chapter office to add you.",
-    "startIntro": "Set the name visitors will see, then go online to receive chats."
+    "startIntro": "Set the name visitors will see, then go online to receive chats.",
+    "waitingBadge": "Waiting",
+    "alertsTitle": "Alerts when someone is waiting",
+    "alertsBody": "Get a notification on this phone as soon as a visitor asks for a volunteer.",
+    "alertsOn": "Turn on alerts",
+    "alertsOff": "Turn off alerts",
+    "alertsBlocked": "Notifications are blocked in your browser settings. Allow them for this site to get alerts.",
+    "alertsInstallFirst": "Add this page to your home screen first — your phone only allows alerts for installed apps.",
+    "alertsInstallHint": "Tip: add this page to your home screen to keep alerts working when the app is closed.",
+    "qrExpired": "This sign-in code is no longer valid. Open your member page and show a new QR code.",
+    "qrSigningIn": "Signing you in…"
   }
 }
