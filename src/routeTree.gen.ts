@@ -84,6 +84,8 @@ import { Route as StaffMembersIdRouteImport } from './routes/_staff/members.$id'
 import { Route as ApiPublicChatSignalRouteImport } from './routes/api/public/chat-signal'
 import { Route as ApiPublicEuropePulseScanRouteImport } from './routes/api/public/europe-pulse-scan'
 import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public/event-reminders'
+import { Route as ApiPublicLiveChatRouteImport } from './routes/api/public/live-chat'
+import { Route as ApiPublicLiveChatPurgeRouteImport } from './routes/api/public/live-chat-purge'
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
@@ -474,6 +476,16 @@ const ApiPublicEventRemindersRoute = ApiPublicEventRemindersRouteImport.update({
   path: '/api/public/event-reminders',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicLiveChatRoute = ApiPublicLiveChatRouteImport.update({
+  id: '/api/public/live-chat',
+  path: '/api/public/live-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicLiveChatPurgeRoute = ApiPublicLiveChatPurgeRouteImport.update({
+  id: '/api/public/live-chat-purge',
+  path: '/api/public/live-chat-purge',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicMemberSyncRoute = ApiPublicMemberSyncRouteImport.update({
   id: '/api/public/member-sync',
   path: '/api/public/member-sync',
@@ -604,6 +616,8 @@ export interface FileRoutesByFullPath {
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
+  '/api/public/live-chat': typeof ApiPublicLiveChatRoute
+  '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
@@ -686,6 +700,8 @@ export interface FileRoutesByTo {
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
+  '/api/public/live-chat': typeof ApiPublicLiveChatRoute
+  '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/$locale/communities': typeof LocaleCommunitiesIndexRoute
   '/$locale/events': typeof LocaleEventsIndexRoute
@@ -775,6 +791,8 @@ export interface FileRoutesById {
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
+  '/api/public/live-chat': typeof ApiPublicLiveChatRoute
+  '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
@@ -863,6 +881,8 @@ export interface FileRouteTypes {
     | '/api/public/chat-signal'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-reminders'
+    | '/api/public/live-chat'
+    | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
     | '/$locale/communities/'
     | '/$locale/events/'
@@ -945,6 +965,8 @@ export interface FileRouteTypes {
     | '/api/public/chat-signal'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-reminders'
+    | '/api/public/live-chat'
+    | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
     | '/$locale/communities'
     | '/$locale/events'
@@ -1033,6 +1055,8 @@ export interface FileRouteTypes {
     | '/api/public/chat-signal'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-reminders'
+    | '/api/public/live-chat'
+    | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
     | '/$locale/communities/'
     | '/$locale/events/'
@@ -1088,6 +1112,8 @@ export interface RootRouteChildren {
   ApiPublicChatSignalRoute: typeof ApiPublicChatSignalRoute
   ApiPublicEuropePulseScanRoute: typeof ApiPublicEuropePulseScanRoute
   ApiPublicEventRemindersRoute: typeof ApiPublicEventRemindersRoute
+  ApiPublicLiveChatRoute: typeof ApiPublicLiveChatRoute
+  ApiPublicLiveChatPurgeRoute: typeof ApiPublicLiveChatPurgeRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
   ApiPublicCalendarFileRoute: typeof ApiPublicCalendarFileRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -1622,6 +1648,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicEventRemindersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/live-chat': {
+      id: '/api/public/live-chat'
+      path: '/api/public/live-chat'
+      fullPath: '/api/public/live-chat'
+      preLoaderRoute: typeof ApiPublicLiveChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/live-chat-purge': {
+      id: '/api/public/live-chat-purge'
+      path: '/api/public/live-chat-purge'
+      fullPath: '/api/public/live-chat-purge'
+      preLoaderRoute: typeof ApiPublicLiveChatPurgeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/member-sync': {
       id: '/api/public/member-sync'
       path: '/api/public/member-sync'
@@ -1898,6 +1938,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicChatSignalRoute: ApiPublicChatSignalRoute,
   ApiPublicEuropePulseScanRoute: ApiPublicEuropePulseScanRoute,
   ApiPublicEventRemindersRoute: ApiPublicEventRemindersRoute,
+  ApiPublicLiveChatRoute: ApiPublicLiveChatRoute,
+  ApiPublicLiveChatPurgeRoute: ApiPublicLiveChatPurgeRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,
   ApiPublicCalendarFileRoute: ApiPublicCalendarFileRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
