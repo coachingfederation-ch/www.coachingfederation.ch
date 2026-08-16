@@ -60,6 +60,15 @@
     "alertsInstallFirst": "Ajoutez d’abord cette page à l’écran d’accueil — votre téléphone n’autorise les alertes que pour les applications installées.",
     "alertsInstallHint": "Astuce : ajoutez cette page à l’écran d’accueil pour continuer à recevoir les alertes lorsque l’application est fermée.",
     "qrExpired": "Ce code de connexion n’est plus valable. Ouvrez votre page membre et affichez un nouveau QR code.",
-    "qrSigningIn": "Connexion en cours…"
+    "qrSigningIn": "Connexion en cours…",
+    "scanTitle": "Se connecter en scannant",
+    "scanIntro": "Ouvrez votre page membre sur un ordinateur, affichez le QR code de connexion, puis scannez-le ici.",
+    "scanStart": "Scanner le QR code",
+    "scanAgain": "Scanner à nouveau",
+    "scanCameraBlocked": "La caméra n’est pas disponible. Autorisez l’accès à la caméra ou saisissez le code ci-dessous.",
+    "scanManualLabel": "Ou saisissez le code manuellement",
+    "scanManualPlaceholder": "Collez le code de connexion",
+    "scanManualSubmit": "Se connecter",
+    "scanPasswordFallback": "Se connecter plutôt avec e-mail et mot de passe"
   }
 }

@@ -60,6 +60,15 @@
     "alertsInstallFirst": "Add this page to your home screen first — your phone only allows alerts for installed apps.",
     "alertsInstallHint": "Tip: add this page to your home screen to keep alerts working when the app is closed.",
     "qrExpired": "This sign-in code is no longer valid. Open your member page and show a new QR code.",
-    "qrSigningIn": "Signing you in…"
+    "qrSigningIn": "Signing you in…",
+    "scanTitle": "Sign in by scanning",
+    "scanIntro": "Open your member page on a computer, show the sign-in QR code, then scan it here.",
+    "scanStart": "Scan QR code",
+    "scanAgain": "Scan again",
+    "scanCameraBlocked": "The camera is not available. Allow camera access, or type the code below.",
+    "scanManualLabel": "Or enter the code manually",
+    "scanManualPlaceholder": "Paste the sign-in code",
+    "scanManualSubmit": "Sign in",
+    "scanPasswordFallback": "Sign in with email and password instead"
   }
 }

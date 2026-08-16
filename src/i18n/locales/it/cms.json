@@ -589,15 +589,15 @@
         "title": "Volontario della chat dal vivo",
         "body": "Sei attivato per rispondere ai visitatori nella chat dal vivo.",
         "qrAlt": "QR code per la console di chat dei volontari",
-        "qrHint": "Scansionalo con il telefono per aprire la console e andare online.",
+        "qrHint": "Nell’app volontari sul telefono tocca «Scansiona il QR code» e inquadra questo codice.",
         "open": "Apri la console di chat",
         "leave": "Smetti di fare volontariato",
         "confirmLeave": "Smettere di essere volontario della chat dal vivo?",
-        "qrIntro": "Mostra un codice QR monouso e scansionalo con il telefono per aprire la console senza accedere di nuovo.",
+        "qrIntro": "Mostra un codice QR monouso e scansionalo dall’app volontari sul telefono per accedere senza password.",
         "qrShow": "Mostra il codice QR di accesso",
         "qrRenew": "Mostra un nuovo codice",
         "qrExpiresIn": "Valido ancora",
-        "installHint": "Sul telefono usa Condividi → Aggiungi a Home per tenere la console a portata di tocco."
+        "installHint": "Sul telefono usa Condividi → Aggiungi a Home, poi accedi una volta scansionando questo codice."
       }
     }
   },
