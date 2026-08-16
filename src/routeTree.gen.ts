@@ -43,6 +43,7 @@ import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as MemberMemberRouteImport } from './routes/_member/member'
 import { Route as MemberMyProfileRouteImport } from './routes/_member/my-profile'
+import { Route as MemberVolunteerChatRouteImport } from './routes/_member/volunteer-chat'
 import { Route as StaffArticlesRouteImport } from './routes/_staff/articles'
 import { Route as StaffCoachFinderRouteImport } from './routes/_staff/coach-finder'
 import { Route as StaffIntegrationRouteImport } from './routes/_staff/integration'
@@ -266,6 +267,11 @@ const MemberMemberRoute = MemberMemberRouteImport.update({
 const MemberMyProfileRoute = MemberMyProfileRouteImport.update({
   id: '/my-profile',
   path: '/my-profile',
+  getParentRoute: () => MemberRouteRoute,
+} as any)
+const MemberVolunteerChatRoute = MemberVolunteerChatRouteImport.update({
+  id: '/volunteer-chat',
+  path: '/volunteer-chat',
   getParentRoute: () => MemberRouteRoute,
 } as any)
 const StaffArticlesRoute = StaffArticlesRouteImport.update({
@@ -579,6 +585,7 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/member': typeof MemberMemberRoute
   '/my-profile': typeof MemberMyProfileRoute
+  '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/articles': typeof StaffArticlesRouteWithChildren
   '/coach-finder': typeof StaffCoachFinderRoute
   '/integration': typeof StaffIntegrationRoute
@@ -664,6 +671,7 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/member': typeof MemberMemberRoute
   '/my-profile': typeof MemberMyProfileRoute
+  '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/coach-finder': typeof StaffCoachFinderRoute
   '/integration': typeof StaffIntegrationRoute
   '/operational-structure': typeof StaffOperationalStructureRoute
@@ -754,6 +762,7 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_member/member': typeof MemberMemberRoute
   '/_member/my-profile': typeof MemberMyProfileRoute
+  '/_member/volunteer-chat': typeof MemberVolunteerChatRoute
   '/_staff/articles': typeof StaffArticlesRouteWithChildren
   '/_staff/coach-finder': typeof StaffCoachFinderRoute
   '/_staff/integration': typeof StaffIntegrationRoute
@@ -844,6 +853,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/member'
     | '/my-profile'
+    | '/volunteer-chat'
     | '/articles'
     | '/coach-finder'
     | '/integration'
@@ -929,6 +939,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/member'
     | '/my-profile'
+    | '/volunteer-chat'
     | '/coach-finder'
     | '/integration'
     | '/operational-structure'
@@ -1018,6 +1029,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/_member/member'
     | '/_member/my-profile'
+    | '/_member/volunteer-chat'
     | '/_staff/articles'
     | '/_staff/coach-finder'
     | '/_staff/integration'
@@ -1359,6 +1371,13 @@ declare module '@tanstack/react-router' {
       path: '/my-profile'
       fullPath: '/my-profile'
       preLoaderRoute: typeof MemberMyProfileRouteImport
+      parentRoute: typeof MemberRouteRoute
+    }
+    '/_member/volunteer-chat': {
+      id: '/_member/volunteer-chat'
+      path: '/volunteer-chat'
+      fullPath: '/volunteer-chat'
+      preLoaderRoute: typeof MemberVolunteerChatRouteImport
       parentRoute: typeof MemberRouteRoute
     }
     '/_staff/articles': {
@@ -1801,11 +1820,13 @@ const LocaleRouteRouteWithChildren = LocaleRouteRoute._addFileChildren(
 interface MemberRouteRouteChildren {
   MemberMemberRoute: typeof MemberMemberRoute
   MemberMyProfileRoute: typeof MemberMyProfileRoute
+  MemberVolunteerChatRoute: typeof MemberVolunteerChatRoute
 }
 
 const MemberRouteRouteChildren: MemberRouteRouteChildren = {
   MemberMemberRoute: MemberMemberRoute,
   MemberMyProfileRoute: MemberMyProfileRoute,
+  MemberVolunteerChatRoute: MemberVolunteerChatRoute,
 }
 
 const MemberRouteRouteWithChildren = MemberRouteRoute._addFileChildren(
