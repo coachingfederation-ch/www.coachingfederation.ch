@@ -18,6 +18,7 @@ export type ClaimedMemberRole = {
   name: string;
   email: string | null;
   activityState: string;
+  isAdministrator: boolean;
   isEditor: boolean;
   isOrganizer: boolean;
   isPublisher: boolean;
@@ -69,6 +70,7 @@ export async function listClaimedMemberRoles(): Promise<ClaimedMemberRole[]> {
       name: displayName(m),
       email: (m.email as string | null) ?? null,
       activityState: m.activity_state as string,
+      isAdministrator: roles.includes("administrator"),
       isEditor: roles.includes("editor"),
       isOrganizer: roles.includes("organizer"),
       isPublisher: roles.includes("publisher"),
