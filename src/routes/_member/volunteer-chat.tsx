@@ -46,9 +46,11 @@ const PRESENCE_TIMEOUT_MS = 90_000;
 
 /** Full-height phone frame: safe-area aware, never taller than the viewport. */
 const SCREEN = "flex h-[100dvh] flex-col overflow-hidden bg-background";
-const HEADER = "shrink-0 bg-hero px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] text-hero-foreground";
+const HEADER =
+  "shrink-0 bg-hero px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] text-hero-foreground";
 const BODY = "min-h-0 flex-1 overflow-y-auto overscroll-contain";
-const FOOTER = "shrink-0 border-t border-border bg-card px-3 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]";
+const FOOTER =
+  "shrink-0 border-t border-border bg-card px-3 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]";
 
 type Conversation = {
   id: string;
@@ -642,9 +644,7 @@ function NotificationRow({
           className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-4 text-sm font-semibold text-foreground disabled:opacity-60"
         >
           {busy && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
-          {state === "on"
-            ? t("live-chat.volunteer.alertsOff")
-            : t("live-chat.volunteer.alertsOn")}
+          {state === "on" ? t("live-chat.volunteer.alertsOff") : t("live-chat.volunteer.alertsOn")}
         </button>
       )}
       {supported && !standalone && (
