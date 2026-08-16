@@ -215,9 +215,27 @@ export function DeckSection() {
                       {g.group}
                     </p>
                     <ul className="mt-2 space-y-1 text-xs leading-relaxed text-hero-foreground/90">
-                      {g.items.map((s) => (
-                        <li key={s}>{s}</li>
-                      ))}
+                      {g.items.map((s) => {
+                        const label = sourceLabel(s);
+                        const url = sourceUrl(s);
+                        return (
+                          <li key={label}>
+                            {url ? (
+                              <a
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline decoration-hero-foreground/40 underline-offset-4 transition hover:text-accent hover:decoration-accent"
+                              >
+                                {label}
+                                <span className="sr-only"> {t("common.opensInNewTab")}</span>
+                              </a>
+                            ) : (
+                              label
+                            )}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 ))}
