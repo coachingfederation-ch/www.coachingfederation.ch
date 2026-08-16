@@ -1154,6 +1154,28 @@
       "colRefunds": "Refunds",
       "colNet": "Net",
       "colCheckIns": "Check-ins"
+    },
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Search by title…",
+      "category": "Category",
+      "community": "Community",
+      "host": "Host",
+      "city": "City",
+      "allCategories": "All categories",
+      "allCommunities": "All communities",
+      "allHosts": "All hosts",
+      "allCities": "All cities",
+      "allStatuses": "All statuses",
+      "clear": "Clear filters",
+      "count": "{count} events",
+      "noMatches": "No events match these filters."
+    },
+    "pagination": {
+      "range": "Showing {from}–{to} of {total}",
+      "page": "Page {page} of {pages}",
+      "previous": "Previous",
+      "next": "Next"
     }
   },
   "eventTranslations": {

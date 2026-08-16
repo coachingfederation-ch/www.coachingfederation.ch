@@ -1154,6 +1154,28 @@
       "colRefunds": "Erstattungen",
       "colNet": "Netto",
       "colCheckIns": "Check-ins"
+    },
+    "filters": {
+      "search": "Suche",
+      "searchPlaceholder": "Nach Titel suchen…",
+      "category": "Kategorie",
+      "community": "Community",
+      "host": "Gastgeber",
+      "city": "Stadt",
+      "allCategories": "Alle Kategorien",
+      "allCommunities": "Alle Communities",
+      "allHosts": "Alle Gastgeber",
+      "allCities": "Alle Städte",
+      "allStatuses": "Alle Status",
+      "clear": "Filter zurücksetzen",
+      "count": "{count} Veranstaltungen",
+      "noMatches": "Keine Veranstaltungen entsprechen diesen Filtern."
+    },
+    "pagination": {
+      "range": "{from}–{to} von {total}",
+      "page": "Seite {page} von {pages}",
+      "previous": "Zurück",
+      "next": "Weiter"
     }
   },
   "eventTranslations": {

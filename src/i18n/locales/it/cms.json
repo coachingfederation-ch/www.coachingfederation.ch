@@ -1154,6 +1154,28 @@
       "colRefunds": "Rimborsi",
       "colNet": "Netto",
       "colCheckIns": "Check-in"
+    },
+    "filters": {
+      "search": "Ricerca",
+      "searchPlaceholder": "Cerca per titolo…",
+      "category": "Categoria",
+      "community": "Community",
+      "host": "Host",
+      "city": "Città",
+      "allCategories": "Tutte le categorie",
+      "allCommunities": "Tutte le community",
+      "allHosts": "Tutti gli host",
+      "allCities": "Tutte le città",
+      "allStatuses": "Tutti gli stati",
+      "clear": "Azzera i filtri",
+      "count": "{count} eventi",
+      "noMatches": "Nessun evento corrisponde a questi filtri."
+    },
+    "pagination": {
+      "range": "{from}–{to} di {total}",
+      "page": "Pagina {page} di {pages}",
+      "previous": "Precedente",
+      "next": "Successivo"
     }
   },
   "eventTranslations": {
