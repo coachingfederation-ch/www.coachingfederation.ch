@@ -47,6 +47,8 @@
     "noRecent": "Noch keine Chats.",
     "closed": "Beendet",
     "keepOpen": "Lassen Sie diese Seite offen, um Chats zu erhalten.",
-    "error": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
+    "error": "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
+    "notActivated": "Ihr Konto ist nicht für den Live-Chat aktiviert. Bitte wenden Sie sich an das Chapter-Office.",
+    "startIntro": "Legen Sie den Namen fest, den Besuchende sehen, und gehen Sie dann online."
   }
 }

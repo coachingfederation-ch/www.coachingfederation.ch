@@ -1,135 +1,129 @@
 /**
- * Volunteer live-chat roster (/manage/live-chat).
- * Exports: Route. Admin surface for the informational shift roster plus the QR
- * code volunteers scan to open the mobile console.
+ * Activated live-chat volunteers (/manage/live-chat).
+ * Exports: Route. Admins decide which members may take live chats; the
+ * volunteers themselves go online from their phone, so this page never gates
+ * availability — it only grants and removes the permission.
  *
- * The roster does not gate anything — going online happens on the volunteer's
- * phone — so this page is deliberately a plain schedule. Writes go through the
- * browser client against the admin-only RLS policy on `live_chat_shifts`.
+ * Reads and writes go through admin-only server functions: listing other
+ * accounts is exactly what member RLS forbids.
  */
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import QRCode from "qrcode";
 import { Plus, Trash2 } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
 import { PLATFORM_ADMIN_ROLES, requireStaffAccess } from "@/lib/staff-guard";
+import {
+  activateLiveChatVolunteer,
+  deactivateLiveChatVolunteer,
+  listLiveChatVolunteers,
+} from "@/lib/live-chat-volunteers.functions";
+import type { ActivatedVolunteer, EligibleMember } from "@/lib/live-chat-volunteers.server";
 
 export const Route = createFileRoute("/_staff/manage/live-chat")({
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, PLATFORM_ADMIN_ROLES),
   head: () => ({
     meta: [
-      { title: "Live chat roster — The Switzerland Chapter of ICF CMS" },
+      { title: "Live chat volunteers — The Switzerland Chapter of ICF CMS" },
       { name: "robots", content: "noindex" },
     ],
   }),
   component: LiveChatPage,
 });
 
-type Shift = {
-  id: string;
-  starts_at: string;
-  ends_at: string;
-  volunteer_name: string;
-  note: string | null;
-};
-
 type Presence = { user_id: string; display_name: string; last_seen_at: string };
 
-const COLUMNS = "id, starts_at, ends_at, volunteer_name, note";
 const PRESENCE_TIMEOUT_MS = 90_000;
+
+/** "Recent" for the last hour, then day-grained wording. */
+function relativeDays(iso: string | null, locale: string, never: string, recent: string) {
+  if (!iso) return never;
+  const then = new Date(iso).getTime();
+  if (Date.now() - then < 3_600_000) return recent;
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  const days = Math.round(
+    (startOfToday.getTime() - new Date(iso).setHours(0, 0, 0, 0)) / 86_400_000,
+  );
+  return new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(-days, "day");
+}
 
 function LiveChatPage() {
   const { t, locale } = useCms();
-  const [shifts, setShifts] = useState<Shift[]>([]);
+  const [volunteers, setVolunteers] = useState<ActivatedVolunteer[]>([]);
+  const [eligible, setEligible] = useState<EligibleMember[]>([]);
   const [online, setOnline] = useState<Presence[]>([]);
+  const [selected, setSelected] = useState("");
   const [qr, setQr] = useState<string | null>(null);
   const [url, setUrl] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const [startsAt, setStartsAt] = useState("");
-  const [endsAt, setEndsAt] = useState("");
-  const [volunteerName, setVolunteerName] = useState("");
-  const [note, setNote] = useState("");
-
-  const load = async () => {
-    const [{ data: rows, error: err }, { data: presence }] = await Promise.all([
-      supabase.from("live_chat_shifts").select(COLUMNS).order("starts_at", { ascending: true }),
-      supabase
-        .from("live_chat_presence")
-        .select("user_id, display_name, last_seen_at")
-        .eq("is_online", true),
-    ]);
-    if (err) {
-      setError(err.message);
-      return;
+  const load = useCallback(async () => {
+    try {
+      const [{ volunteers: rows, eligible: candidates }, { data: presence }] = await Promise.all([
+        listLiveChatVolunteers(),
+        supabase
+          .from("live_chat_presence")
+          .select("user_id, display_name, last_seen_at")
+          .eq("is_online", true),
+      ]);
+      setVolunteers(rows);
+      setEligible(candidates);
+      setOnline(
+        ((presence ?? []) as Presence[]).filter(
+          (row) => Date.now() - new Date(row.last_seen_at).getTime() < PRESENCE_TIMEOUT_MS,
+        ),
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
     }
-    setShifts((rows ?? []) as Shift[]);
-    setOnline(
-      ((presence ?? []) as Presence[]).filter(
-        (row) => Date.now() - new Date(row.last_seen_at).getTime() < PRESENCE_TIMEOUT_MS,
-      ),
-    );
-  };
+  }, []);
 
   useEffect(() => {
     void load();
     const timer = window.setInterval(() => void load(), 30_000);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [load]);
 
   // The QR target is same-origin, so it works from preview and production alike.
   useEffect(() => {
     const target = `${window.location.origin}/volunteer-chat`;
     setUrl(target);
-    void QRCode.toDataURL(target, { width: 320, margin: 1 }).then(setQr).catch(() => setQr(null));
+    void QRCode.toDataURL(target, { width: 320, margin: 1 })
+      .then(setQr)
+      .catch(() => setQr(null));
   }, []);
 
   const add = async () => {
-    if (!startsAt || !endsAt) {
-      setError(t("liveChat.needTimes"));
-      return;
-    }
+    if (!selected) return;
     setBusy(true);
     setError(null);
-    const { data: auth } = await supabase.auth.getUser();
-    const { error: err } = await supabase.from("live_chat_shifts").insert({
-      starts_at: new Date(startsAt).toISOString(),
-      ends_at: new Date(endsAt).toISOString(),
-      volunteer_name: volunteerName.trim(),
-      note: note.trim() || null,
-      created_by: auth.user?.id ?? null,
-    });
-    setBusy(false);
-    if (err) {
-      setError(err.message);
-      return;
+    try {
+      await activateLiveChatVolunteer({ data: { memberId: selected } });
+      setSelected("");
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
     }
-    setStartsAt("");
-    setEndsAt("");
-    setVolunteerName("");
-    setNote("");
-    await load();
+    setBusy(false);
   };
 
-  const remove = async (shift: Shift) => {
-    if (!window.confirm(t("liveChat.confirmDelete"))) return;
-    const { error: err } = await supabase.from("live_chat_shifts").delete().eq("id", shift.id);
-    if (err) {
-      setError(err.message);
-      return;
+  const remove = async (volunteer: ActivatedVolunteer) => {
+    if (!window.confirm(t("liveChat.confirmRemove"))) return;
+    setError(null);
+    try {
+      await deactivateLiveChatVolunteer({ data: { userId: volunteer.userId } });
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
     }
-    await load();
   };
 
   const inputClass =
     "rounded-xl border border-border bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/20";
-  const dateTimeFormat = new Intl.DateTimeFormat(locale, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
 
   return (
     <Shell>
@@ -173,87 +167,74 @@ function LiveChatPage() {
 
         <div className="mt-6 rounded-2xl border border-border bg-card p-5">
           <h2 className="text-sm font-bold uppercase tracking-wide text-muted-foreground">
-            {t("liveChat.addTitle")}
+            {t("liveChat.activatedTitle")}
           </h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <label className="grid gap-1 text-xs font-semibold">
-              {t("liveChat.fieldStart")}
-              <input
-                type="datetime-local"
-                value={startsAt}
-                onChange={(e) => setStartsAt(e.target.value)}
-                className={inputClass}
-              />
+          <p className="mt-1 text-xs text-muted-foreground">{t("liveChat.activatedHint")}</p>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <label className="sr-only" htmlFor="volunteer-picker">
+              {t("liveChat.pickMember")}
             </label>
-            <label className="grid gap-1 text-xs font-semibold">
-              {t("liveChat.fieldEnd")}
-              <input
-                type="datetime-local"
-                value={endsAt}
-                onChange={(e) => setEndsAt(e.target.value)}
-                className={inputClass}
-              />
-            </label>
-            <input
-              value={volunteerName}
-              onChange={(e) => setVolunteerName(e.target.value)}
-              placeholder={t("liveChat.fieldVolunteer")}
-              aria-label={t("liveChat.fieldVolunteer")}
-              className={inputClass}
-            />
-            <input
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder={t("liveChat.fieldNote")}
-              aria-label={t("liveChat.fieldNote")}
-              className={inputClass}
-            />
+            <select
+              id="volunteer-picker"
+              value={selected}
+              onChange={(e) => setSelected(e.target.value)}
+              className={`${inputClass} min-w-64`}
+            >
+              <option value="">{t("liveChat.pickMember")}</option>
+              {eligible.map((member) => (
+                <option key={member.memberId} value={member.memberId}>
+                  {member.name}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              onClick={() => void add()}
+              disabled={busy || !selected}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+            >
+              <Plus className="size-4" aria-hidden="true" />
+              {t("liveChat.addVolunteer")}
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => void add()}
-            disabled={busy}
-            className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
-          >
-            <Plus className="size-4" aria-hidden="true" />
-            {t("liveChat.add")}
-          </button>
         </div>
 
         <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-card">
           <table className="w-full text-sm">
             <thead className="bg-secondary/60 text-left text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
-                <th className="px-4 py-3">{t("liveChat.colWhen")}</th>
-                <th className="px-4 py-3">{t("liveChat.fieldVolunteer")}</th>
-                <th className="px-4 py-3">{t("liveChat.fieldNote")}</th>
+                <th className="px-4 py-3">{t("liveChat.colVolunteer")}</th>
+                <th className="px-4 py-3">{t("liveChat.colLastChat")}</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody>
-              {shifts.length === 0 && (
+              {volunteers.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-4 py-6 text-muted-foreground">
-                    {t("liveChat.noShifts")}
+                  <td colSpan={3} className="px-4 py-6 text-muted-foreground">
+                    {t("liveChat.noVolunteers")}
                   </td>
                 </tr>
               )}
-              {shifts.map((shift) => (
-                <tr key={shift.id} className="border-t border-border">
-                  <td className="px-4 py-3">
-                    {dateTimeFormat.format(new Date(shift.starts_at))} –{" "}
-                    {dateTimeFormat.format(new Date(shift.ends_at))}
+              {volunteers.map((volunteer) => (
+                <tr key={volunteer.userId} className="border-t border-border">
+                  <td className="px-4 py-3 font-medium">{volunteer.name}</td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    {relativeDays(
+                      volunteer.lastConversationAt,
+                      locale,
+                      t("liveChat.never"),
+                      t("liveChat.recent"),
+                    )}
                   </td>
-                  <td className="px-4 py-3">{shift.volunteer_name || "—"}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{shift.note || "—"}</td>
                   <td className="px-4 py-3 text-right">
                     <button
                       type="button"
-                      onClick={() => void remove(shift)}
-                      aria-label={t("liveChat.delete")}
-                      className="rounded-full p-2 text-muted-foreground hover:bg-secondary hover:text-destructive"
+                      onClick={() => void remove(volunteer)}
+                      className="inline-flex min-h-9 items-center gap-1 rounded-full border border-border px-3 text-xs font-semibold text-destructive"
                     >
-                      <Trash2 className="size-4" aria-hidden="true" />
+                      <Trash2 className="size-3.5" aria-hidden="true" />
+                      {t("liveChat.remove")}
                     </button>
                   </td>
                 </tr>

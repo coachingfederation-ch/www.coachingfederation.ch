@@ -47,6 +47,8 @@
     "noRecent": "Ancora nessuna chat.",
     "closed": "Chiusa",
     "keepOpen": "Tieni aperta questa pagina per ricevere le chat.",
-    "error": "Qualcosa è andato storto. Riprova."
+    "error": "Qualcosa è andato storto. Riprova.",
+    "notActivated": "Il tuo account non è attivato per la chat dal vivo. Contatta l'ufficio del chapter.",
+    "startIntro": "Imposta il nome visibile ai visitatori, poi vai online per ricevere le chat."
   }
 }

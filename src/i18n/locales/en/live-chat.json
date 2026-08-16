@@ -47,6 +47,8 @@
     "noRecent": "No chats yet.",
     "closed": "Closed",
     "keepOpen": "Keep this page open to receive chats.",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "notActivated": "Your account is not activated for live chat. Ask the chapter office to add you.",
+    "startIntro": "Set the name visitors will see, then go online to receive chats."
   }
 }

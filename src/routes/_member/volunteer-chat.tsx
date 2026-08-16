@@ -1,20 +1,23 @@
 /**
  * Volunteer live-chat console (/volunteer-chat), designed for a phone.
  *
- * Behind the Member Area gate: only signed-in members can go online, which
- * keeps visitor conversations behind authentication. Everything here goes
- * through the browser Supabase client — the `live_chat_*` RLS policies are the
- * real boundary — and uses Realtime for waiting requests and message delivery.
+ * Behind the Member Area gate, and additionally restricted to members an admin
+ * activated as volunteers (`live_chat_volunteers`) — the same rule the RLS
+ * policies enforce, mirrored here so a non-volunteer gets an explanation
+ * instead of an empty console.
  *
- * Presence is a heartbeat row rather than an ephemeral channel, so the public
- * widget can read "is anyone on duty?" server-side.
+ * The flow is deliberately linear: enter the name visitors see, go online,
+ * then work the waiting list. Presence is a heartbeat row rather than an
+ * ephemeral channel, so the public widget can read "is anyone on duty?"
+ * server-side.
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronDown, Loader2, Radio } from "lucide-react";
+import { ChevronDown, Loader2, Radio, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { cn } from "@/lib/utils";
+import { getMyVolunteerStatus } from "@/lib/live-chat-volunteers.functions";
 
 export const Route = createFileRoute("/_member/volunteer-chat")({
   head: () => ({
@@ -42,15 +45,16 @@ type Message = { id: string; sender: "visitor" | "volunteer" | "system"; body: s
 
 type Presence = { user_id: string; display_name: string; last_seen_at: string };
 
-const CONVERSATION_COLUMNS =
-  "id, visitor_name, status, volunteer_user_id, created_at, ended_at";
+const CONVERSATION_COLUMNS = "id, visitor_name, status, volunteer_user_id, created_at, ended_at";
 
 function VolunteerChatPage() {
   const { t } = useI18n();
   const [userId, setUserId] = useState<string | null>(null);
+  const [activated, setActivated] = useState<boolean | null>(null);
   const [name, setName] = useState("");
   const [online, setOnline] = useState(false);
   const [others, setOthers] = useState<Presence[]>([]);
+  const [showOthers, setShowOthers] = useState(false);
   const [waiting, setWaiting] = useState<Conversation[]>([]);
   const [mine, setMine] = useState<Conversation[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -62,27 +66,36 @@ function VolunteerChatPage() {
   const [busy, setBusy] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
-  // Identify the volunteer and prefill the display name from a previous shift.
+  // Identify the volunteer, confirm the activation and prefill the display name.
   useEffect(() => {
     void (async () => {
       const { data } = await supabase.auth.getUser();
       const user = data.user;
       if (!user) return;
       setUserId(user.id);
+      const status = await getMyVolunteerStatus().catch(() => ({
+        active: false,
+        displayName: "",
+      }));
+      setActivated(status.active);
+      if (!status.active) return;
       const { data: row } = await supabase
         .from("live_chat_presence")
         .select("display_name, is_online")
         .eq("user_id", user.id)
         .maybeSingle();
-      setName(row?.display_name || (user.email ?? "").split("@")[0] || "");
+      setName(row?.display_name || status.displayName || (user.email ?? "").split("@")[0] || "");
       setOnline(Boolean(row?.is_online));
     })();
   }, []);
 
   const loadLists = useCallback(async () => {
-    if (!userId) return;
+    if (!userId || !activated) return;
     const [{ data: presence }, { data: conversations }] = await Promise.all([
-      supabase.from("live_chat_presence").select("user_id, display_name, last_seen_at").eq("is_online", true),
+      supabase
+        .from("live_chat_presence")
+        .select("user_id, display_name, last_seen_at")
+        .eq("is_online", true),
       supabase
         .from("live_chat_conversations")
         .select(CONVERSATION_COLUMNS)
@@ -98,7 +111,7 @@ function VolunteerChatPage() {
     setMine(rows.filter((row) => row.volunteer_user_id === userId));
     const current = rows.find((row) => row.volunteer_user_id === userId && row.status === "active");
     setActiveId((prev) => prev ?? current?.id ?? null);
-  }, [userId]);
+  }, [activated, userId]);
 
   useEffect(() => {
     void loadLists();
@@ -122,7 +135,7 @@ function VolunteerChatPage() {
 
   // Live updates for waiting requests, presence and the open thread.
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || !activated) return;
     const channel = supabase
       .channel("live-chat-volunteer")
       .on(
@@ -152,7 +165,7 @@ function VolunteerChatPage() {
     return () => {
       void supabase.removeChannel(channel);
     };
-  }, [activeId, loadLists, userId]);
+  }, [activated, activeId, loadLists, userId]);
 
   const loadMessages = useCallback(async (conversationId: string) => {
     const { data } = await supabase
@@ -172,18 +185,21 @@ function VolunteerChatPage() {
     bottomRef.current?.scrollIntoView({ block: "end" });
   }, [messages.length]);
 
-  const toggleOnline = useCallback(async () => {
-    if (!userId) return;
-    const next = !online;
-    setOnline(next);
-    await supabase.from("live_chat_presence").upsert({
-      user_id: userId,
-      display_name: name.trim().slice(0, 60),
-      is_online: next,
-      last_seen_at: new Date().toISOString(),
-    });
-    void loadLists();
-  }, [loadLists, name, online, userId]);
+  const setPresence = useCallback(
+    async (next: boolean) => {
+      if (!userId) return;
+      setOnline(next);
+      setShowOthers(false);
+      await supabase.from("live_chat_presence").upsert({
+        user_id: userId,
+        display_name: name.trim().slice(0, 60),
+        is_online: next,
+        last_seen_at: new Date().toISOString(),
+      });
+      void loadLists();
+    },
+    [loadLists, name, userId],
+  );
 
   // First acceptance wins: the update only matches while the row is waiting.
   const accept = useCallback(
@@ -253,6 +269,19 @@ function VolunteerChatPage() {
   const activeConversation = mine.find((row) => row.id === activeId) ?? null;
   const recent = mine.filter((row) => row.status === "closed").slice(0, 3);
 
+  if (activated === false) {
+    return (
+      <div className="min-h-screen bg-background">
+        <header className="bg-hero px-4 py-5 text-hero-foreground">
+          <h1 className="font-display text-xl font-semibold">{t("live-chat.volunteer.title")}</h1>
+        </header>
+        <p className="mx-auto max-w-md p-4 text-sm text-muted-foreground">
+          {t("live-chat.volunteer.notActivated")}
+        </p>
+      </div>
+    );
+  }
+
   if (activeConversation) {
     return (
       <div className="flex min-h-screen flex-col bg-background">
@@ -287,15 +316,13 @@ function VolunteerChatPage() {
           ))}
           <div ref={bottomRef} />
         </div>
-        <form onSubmit={send} className="flex items-end gap-2 border-t border-border p-3">
-          <textarea
+        <form onSubmit={send} className="flex items-center gap-2 border-t border-border p-3">
+          <input
             value={reply}
             onChange={(event) => setReply(event.target.value)}
-            rows={2}
-            maxLength={2000}
             placeholder={t("live-chat.volunteer.placeholder")}
             aria-label={t("live-chat.volunteer.placeholder")}
-            className="min-h-11 flex-1 resize-none rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="min-h-11 flex-1 rounded-full border border-border bg-card px-4 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
           <button
             type="submit"
@@ -309,71 +336,95 @@ function VolunteerChatPage() {
     );
   }
 
+  // Start flow: nothing but the name and one button until the volunteer is on duty.
+  if (!online) {
+    return (
+      <div className="min-h-screen bg-background">
+        <header className="bg-hero px-4 py-5 text-hero-foreground">
+          <h1 className="font-display text-xl font-semibold">{t("live-chat.volunteer.title")}</h1>
+          <p className="mt-1 text-xs text-hero-foreground/80">
+            {t("live-chat.volunteer.youAreOffline")}
+          </p>
+        </header>
+        <div className="mx-auto max-w-md p-4">
+          <section className="rounded-2xl border border-border bg-card p-4">
+            <p className="text-sm text-muted-foreground">{t("live-chat.volunteer.startIntro")}</p>
+            <label className="mt-3 block text-xs font-semibold text-foreground">
+              {t("live-chat.volunteer.nameLabel")}
+              <input
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                maxLength={60}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm font-normal text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
+            </label>
+            <button
+              type="button"
+              onClick={() => void setPresence(true)}
+              disabled={!name.trim() || activated === null}
+              className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
+            >
+              <Radio className="size-4" aria-hidden="true" />
+              {t("live-chat.volunteer.goOnline")}
+            </button>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background pb-10">
-      <header className="bg-hero px-4 py-5 text-hero-foreground">
-        <h1 className="font-display text-xl font-semibold">{t("live-chat.volunteer.title")}</h1>
-        <p className="mt-1 text-xs text-hero-foreground/80">
-          {online ? t("live-chat.volunteer.youAreOnline") : t("live-chat.volunteer.youAreOffline")}
-        </p>
+      <header className="bg-hero px-4 py-4 text-hero-foreground">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <h1 className="truncate font-display text-lg font-semibold">
+              {t("live-chat.volunteer.title")}
+            </h1>
+            <p className="text-xs text-hero-foreground/80">
+              {t("live-chat.volunteer.youAreOnline")} · {name}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => void setPresence(false)}
+            className="min-h-11 shrink-0 rounded-full bg-hero-foreground/10 px-4 text-sm font-semibold"
+          >
+            {t("live-chat.volunteer.goOffline")}
+          </button>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowOthers((prev) => !prev)}
+          aria-expanded={showOthers}
+          className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full bg-hero-foreground/10 px-4 text-sm font-semibold"
+        >
+          <Users className="size-4" aria-hidden="true" />
+          {t("live-chat.volunteer.onlineNow")} {others.length}
+          <ChevronDown
+            className={cn("size-4 transition-transform", showOthers && "rotate-180")}
+            aria-hidden="true"
+          />
+        </button>
+        {showOthers && (
+          <ul className="mt-2 space-y-1 rounded-2xl bg-hero-foreground/10 p-3 text-sm">
+            {others.length === 0 && <li>{t("live-chat.volunteer.nobodyElse")}</li>}
+            {others.map((person) => (
+              <li key={person.user_id} className="flex items-center gap-2">
+                <span className="size-2 rounded-full bg-emerald-400" aria-hidden="true" />
+                {person.display_name}
+              </li>
+            ))}
+          </ul>
+        )}
       </header>
 
       <div className="mx-auto max-w-md space-y-5 p-4">
-        <section className="rounded-2xl border border-border bg-card p-4">
-          <label className="block text-xs font-semibold text-foreground">
-            {t("live-chat.volunteer.nameLabel")}
-            <input
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              maxLength={60}
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm font-normal text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            />
-          </label>
-          <button
-            type="button"
-            onClick={() => void toggleOnline()}
-            disabled={!name.trim()}
-            className={cn(
-              "mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold transition-colors disabled:opacity-60",
-              online
-                ? "border border-border text-foreground hover:bg-secondary"
-                : "bg-primary text-primary-foreground hover:bg-primary/90",
-            )}
-          >
-            <Radio className="size-4" aria-hidden="true" />
-            {online ? t("live-chat.volunteer.goOffline") : t("live-chat.volunteer.goOnline")}
-          </button>
-          {online && (
-            <p className="mt-2 text-[11px] text-muted-foreground">
-              {t("live-chat.volunteer.keepOpen")}
-            </p>
-          )}
-        </section>
-
         {error && (
           <p role="alert" className="text-sm text-destructive">
             {error}
           </p>
         )}
-
-        <section>
-          <h2 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            {t("live-chat.volunteer.onlineNow")}
-          </h2>
-          <ul className="space-y-1 rounded-2xl border border-border bg-card p-3">
-            {others.length === 0 && (
-              <li className="text-sm text-muted-foreground">
-                {t("live-chat.volunteer.nobodyElse")}
-              </li>
-            )}
-            {others.map((person) => (
-              <li key={person.user_id} className="flex items-center gap-2 text-sm text-foreground">
-                <span className="size-2 rounded-full bg-emerald-500" aria-hidden="true" />
-                {person.display_name}
-              </li>
-            ))}
-          </ul>
-        </section>
 
         <section>
           <h2 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
@@ -401,7 +452,7 @@ function VolunteerChatPage() {
                 <button
                   type="button"
                   onClick={() => void accept(request.id)}
-                  disabled={busy || !online}
+                  disabled={busy}
                   className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-60"
                 >
                   {busy && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
@@ -463,6 +514,8 @@ function VolunteerChatPage() {
             ))}
           </div>
         </section>
+
+        <p className="text-[11px] text-muted-foreground">{t("live-chat.volunteer.keepOpen")}</p>
       </div>
     </div>
   );
