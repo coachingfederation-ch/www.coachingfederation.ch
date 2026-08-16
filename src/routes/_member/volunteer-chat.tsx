@@ -315,21 +315,23 @@ function VolunteerChatPage() {
 
   if (activated === false) {
     return (
-      <div className="min-h-screen bg-background">
-        <header className="bg-hero px-4 py-5 text-hero-foreground">
+      <div className={SCREEN}>
+        <header className={HEADER}>
           <h1 className="font-display text-xl font-semibold">{t("live-chat.volunteer.title")}</h1>
         </header>
-        <p className="mx-auto max-w-md p-4 text-sm text-muted-foreground">
-          {t("live-chat.volunteer.notActivated")}
-        </p>
+        <div className={BODY}>
+          <p className="mx-auto max-w-md p-4 text-sm text-muted-foreground">
+            {t("live-chat.volunteer.notActivated")}
+          </p>
+        </div>
       </div>
     );
   }
 
   if (activeConversation) {
     return (
-      <div className="flex min-h-screen flex-col bg-background">
-        <header className="flex items-center justify-between gap-3 bg-hero px-4 py-3 text-hero-foreground">
+      <div className={SCREEN}>
+        <header className={cn(HEADER, "flex items-center justify-between gap-3")}>
           <div className="min-w-0">
             <p className="truncate font-display text-base font-semibold">
               {activeConversation.visitor_name}
@@ -344,7 +346,7 @@ function VolunteerChatPage() {
             {t("live-chat.volunteer.endChat")}
           </button>
         </header>
-        <div className="flex-1 space-y-3 overflow-y-auto p-4">
+        <div className={cn(BODY, "space-y-3 p-4")}>
           {messages.map((entry) => (
             <div
               key={entry.id}
@@ -360,18 +362,18 @@ function VolunteerChatPage() {
           ))}
           <div ref={bottomRef} />
         </div>
-        <form onSubmit={send} className="flex items-center gap-2 border-t border-border p-3">
+        <form onSubmit={send} className={cn(FOOTER, "flex items-center gap-2")}>
           <input
             value={reply}
             onChange={(event) => setReply(event.target.value)}
             placeholder={t("live-chat.volunteer.placeholder")}
             aria-label={t("live-chat.volunteer.placeholder")}
-            className="min-h-11 flex-1 rounded-full border border-border bg-card px-4 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="min-h-11 w-full min-w-0 flex-1 rounded-full border border-border bg-background px-4 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
           <button
             type="submit"
             disabled={reply.trim().length === 0}
-            className="min-h-11 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+            className="min-h-11 shrink-0 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
             {t("live-chat.volunteer.send")}
           </button>
@@ -383,15 +385,15 @@ function VolunteerChatPage() {
   // Start flow: nothing but the name and one button until the volunteer is on duty.
   if (!online) {
     return (
-      <div className="min-h-screen bg-background">
-        <header className="bg-hero px-4 py-5 text-hero-foreground">
+      <div className={SCREEN}>
+        <header className={HEADER}>
           <h1 className="font-display text-xl font-semibold">{t("live-chat.volunteer.title")}</h1>
           <p className="mt-1 text-xs text-hero-foreground/80">
             {t("live-chat.volunteer.youAreOffline")}
           </p>
         </header>
-        <div className="mx-auto max-w-md p-4">
-          <section className="rounded-2xl border border-border bg-card p-4">
+        <div className={cn(BODY, "p-4")}>
+          <section className="mx-auto max-w-md rounded-2xl border border-border bg-card p-4">
             <p className="text-sm text-muted-foreground">{t("live-chat.volunteer.startIntro")}</p>
             <label className="mt-3 block text-xs font-semibold text-foreground">
               {t("live-chat.volunteer.nameLabel")}
@@ -399,27 +401,35 @@ function VolunteerChatPage() {
                 value={name}
                 onChange={(event) => setName(event.target.value)}
                 maxLength={60}
-                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm font-normal text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="mt-1 min-h-11 w-full rounded-lg border border-border bg-background px-3 py-2 text-base font-normal text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
             </label>
-            <button
-              type="button"
-              onClick={() => void setPresence(true)}
-              disabled={!name.trim() || activated === null}
-              className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
-            >
-              <Radio className="size-4" aria-hidden="true" />
-              {t("live-chat.volunteer.goOnline")}
-            </button>
           </section>
+          <NotificationRow
+            state={pushState}
+            busy={pushBusy}
+            onToggle={() => void togglePush()}
+            t={t}
+          />
+        </div>
+        <div className={FOOTER}>
+          <button
+            type="button"
+            onClick={() => void setPresence(true)}
+            disabled={!name.trim() || activated === null}
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
+          >
+            <Radio className="size-4" aria-hidden="true" />
+            {t("live-chat.volunteer.goOnline")}
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background pb-10">
-      <header className="bg-hero px-4 py-4 text-hero-foreground">
+    <div className={SCREEN}>
+      <header className={HEADER}>
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <h1 className="truncate font-display text-lg font-semibold">
@@ -437,19 +447,26 @@ function VolunteerChatPage() {
             {t("live-chat.volunteer.goOffline")}
           </button>
         </div>
-        <button
-          type="button"
-          onClick={() => setShowOthers((prev) => !prev)}
-          aria-expanded={showOthers}
-          className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full bg-hero-foreground/10 px-4 text-sm font-semibold"
-        >
-          <Users className="size-4" aria-hidden="true" />
-          {t("live-chat.volunteer.onlineNow")} {others.length}
-          <ChevronDown
-            className={cn("size-4 transition-transform", showOthers && "rotate-180")}
-            aria-hidden="true"
-          />
-        </button>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowOthers((prev) => !prev)}
+            aria-expanded={showOthers}
+            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-hero-foreground/10 px-4 text-sm font-semibold"
+          >
+            <Users className="size-4" aria-hidden="true" />
+            {t("live-chat.volunteer.onlineNow")} {others.length}
+            <ChevronDown
+              className={cn("size-4 transition-transform", showOthers && "rotate-180")}
+              aria-hidden="true"
+            />
+          </button>
+          {waiting.length > 0 && (
+            <span className="inline-flex min-h-11 items-center gap-2 rounded-full bg-accent px-4 text-sm font-bold text-accent-foreground">
+              {t("live-chat.volunteer.waitingBadge")} {waiting.length}
+            </span>
+          )}
+        </div>
         {showOthers && (
           <ul className="mt-2 space-y-1 rounded-2xl bg-hero-foreground/10 p-3 text-sm">
             {others.length === 0 && <li>{t("live-chat.volunteer.nobodyElse")}</li>}
@@ -463,7 +480,7 @@ function VolunteerChatPage() {
         )}
       </header>
 
-      <div className="mx-auto max-w-md space-y-5 p-4">
+      <div className={cn(BODY, "space-y-5 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")}>
         {error && (
           <p role="alert" className="text-sm text-destructive">
             {error}
