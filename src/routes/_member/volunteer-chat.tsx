@@ -510,6 +510,22 @@ function VolunteerChatPage() {
           </p>
         )}
 
+        {lastEnded && (
+          <div className="rounded-2xl border border-border bg-accent p-3 text-sm text-accent-foreground">
+            <div className="flex items-start justify-between gap-3">
+              <p>{t("live-chat.volunteer.ended")}</p>
+              <button
+                type="button"
+                onClick={() => setLastEnded(null)}
+                aria-label={t("live-chat.volunteer.endChat")}
+                className="rounded-full p-1 transition-colors hover:bg-accent-foreground/10"
+              >
+                <X className="size-4" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        )}
+
         <section>
           <h2 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
             {t("live-chat.volunteer.requests")}
