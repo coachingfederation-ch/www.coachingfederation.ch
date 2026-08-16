@@ -19,6 +19,33 @@ const LIST_COLUMNS =
 
 const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, practical_notes, published_at, content_updated_at, hero_marks, cce_enabled`;
 
+/** One row of the staff events list, enriched with filterable labels. */
+export type ListedEvent = {
+  id: string;
+  series_id: string | null;
+  slug: string;
+  title: string;
+  summary: string | null;
+  language: string;
+  status: string;
+  starts_at: string;
+  ends_at: string | null;
+  timezone: string | null;
+  location_mode: string;
+  venue_name: string | null;
+  city: string | null;
+  capacity: number | null;
+  is_featured: boolean;
+  category_id: string | null;
+  region_id: string | null;
+  community_id: string | null;
+  organizer_id: string | null;
+  updated_at: string | null;
+  category_name: string | null;
+  community_name: string | null;
+  hosts: { id: string; name: string }[];
+};
+
 const recurrenceRule = z.object({
   frequency: z.enum(RECURRENCE_FREQUENCIES),
   interval: z.number().int().min(1).max(8),
