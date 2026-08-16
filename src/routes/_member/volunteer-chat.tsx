@@ -293,14 +293,18 @@ function VolunteerChatPage() {
 
   const endChat = useCallback(async () => {
     if (!activeId) return;
+    const conversation = mine.find((row) => row.id === activeId);
     await supabase
       .from("live_chat_conversations")
       .update({ status: "closed", ended_at: new Date().toISOString() })
       .eq("id", activeId);
+    if (conversation) {
+      setLastEnded({ id: conversation.id, name: conversation.visitor_name });
+    }
     setActiveId(null);
     setMessages([]);
     void loadLists();
-  }, [activeId, loadLists]);
+  }, [activeId, loadLists, mine]);
 
   const openTranscript = useCallback(
     async (conversationId: string) => {
@@ -314,6 +318,15 @@ function VolunteerChatPage() {
   );
 
   const activeConversation = mine.find((row) => row.id === activeId) ?? null;
+
+  // When the visitor closes the chat, show a friendly confirmation before
+  // returning the volunteer to the waiting list.
+  useEffect(() => {
+    if (activeConversation?.status !== "closed") return;
+    setLastEnded({ id: activeConversation.id, name: activeConversation.visitor_name });
+    setActiveId(null);
+    setMessages([]);
+  }, [activeConversation]);
   const recent = mine.filter((row) => row.status === "closed").slice(0, 3);
 
   if (activated === false) {
