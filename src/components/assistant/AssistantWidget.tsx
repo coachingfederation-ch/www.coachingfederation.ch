@@ -311,7 +311,14 @@ export function AssistantWidget() {
           className="fixed bottom-5 right-5 z-50 inline-flex min-h-11 items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground shadow-lg transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
           <MessageCircle className="size-5" aria-hidden="true" />
-          {t("assistant.launcher")}
+          {volunteersOnline > 0 ? t("live-chat.launcher") : t("assistant.launcher")}
+          {volunteersOnline > 0 && (
+            <span
+              className="size-2.5 rounded-full bg-emerald-500 ring-2 ring-accent"
+              title={t("live-chat.online")}
+              aria-label={t("live-chat.online")}
+            />
+          )}
         </button>
       )}
 
@@ -346,6 +353,11 @@ export function AssistantWidget() {
             </div>
           </header>
 
+          <Conversation className="flex-1">
+          {liveChat ? (
+            <LiveChatPanel onBack={() => setLiveChat(false)} pagePath={path} />
+          ) : (
+            <>
           <Conversation className="flex-1">
             <ConversationContent className="gap-4 px-4 py-4">
               {messages.length === 0 && (
