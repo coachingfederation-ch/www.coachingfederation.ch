@@ -10,9 +10,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
-import { redeemVolunteerLoginCode } from "@/lib/volunteer-qr.functions";
+import { signInWithVolunteerToken } from "@/lib/volunteer-qr-signin";
 
 export const Route = createFileRoute("/volunteer-login/$token")({
   ssr: false,
@@ -34,17 +33,9 @@ function VolunteerLoginPage() {
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const { tokenHash } = await redeemVolunteerLoginCode({ data: { token } }).catch(() => ({
-        tokenHash: null,
-      }));
+      const ok = await signInWithVolunteerToken(token);
       if (cancelled) return;
-      if (!tokenHash) {
-        setFailed(true);
-        return;
-      }
-      const { error } = await supabase.auth.verifyOtp({ type: "magiclink", token_hash: tokenHash });
-      if (cancelled) return;
-      if (error) {
+      if (!ok) {
         setFailed(true);
         return;
       }

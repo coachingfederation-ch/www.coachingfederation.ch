@@ -60,6 +60,15 @@
     "alertsInstallFirst": "Aggiungi prima questa pagina alla schermata Home — il telefono consente gli avvisi solo per le app installate.",
     "alertsInstallHint": "Suggerimento: aggiungi questa pagina alla schermata Home per continuare a ricevere gli avvisi ad app chiusa.",
     "qrExpired": "Questo codice di accesso non è più valido. Apri la tua pagina socio e mostra un nuovo codice QR.",
-    "qrSigningIn": "Accesso in corso…"
+    "qrSigningIn": "Accesso in corso…",
+    "scanTitle": "Accedi con la scansione",
+    "scanIntro": "Apri la tua pagina socio sul computer, mostra il QR code di accesso e scansionalo qui.",
+    "scanStart": "Scansiona il QR code",
+    "scanAgain": "Scansiona di nuovo",
+    "scanCameraBlocked": "La fotocamera non è disponibile. Consenti l’accesso alla fotocamera o inserisci il codice qui sotto.",
+    "scanManualLabel": "Oppure inserisci il codice manualmente",
+    "scanManualPlaceholder": "Incolla il codice di accesso",
+    "scanManualSubmit": "Accedi",
+    "scanPasswordFallback": "Accedi invece con e-mail e password"
   }
 }

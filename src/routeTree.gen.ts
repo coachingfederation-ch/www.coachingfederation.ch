@@ -63,6 +63,7 @@ import { Route as FormTokenRouteImport } from './routes/form.$token'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as InsightsIdRouteImport } from './routes/insights.$id'
 import { Route as TicketTokenRouteImport } from './routes/ticket.$token'
+import { Route as VolunteerLoginIndexRouteImport } from './routes/volunteer-login.index'
 import { Route as VolunteerLoginTokenRouteImport } from './routes/volunteer-login.$token'
 import { Route as LocaleCoachProfileIdRouteImport } from './routes/$locale/coach.$profileId'
 import { Route as LocaleCommunitiesIndexRouteImport } from './routes/$locale/communities.index'
@@ -372,6 +373,11 @@ const TicketTokenRoute = TicketTokenRouteImport.update({
   path: '/ticket/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VolunteerLoginIndexRoute = VolunteerLoginIndexRouteImport.update({
+  id: '/volunteer-login/',
+  path: '/volunteer-login/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VolunteerLoginTokenRoute = VolunteerLoginTokenRouteImport.update({
   id: '/volunteer-login/$token',
   path: '/volunteer-login/$token',
@@ -619,6 +625,7 @@ export interface FileRoutesByFullPath {
   '/communities/': typeof CommunitiesIndexRoute
   '/events/': typeof EventsIndexRoute
   '/insights/': typeof InsightsIndexRoute
+  '/volunteer-login/': typeof VolunteerLoginIndexRoute
   '/$locale/coach/$profileId': typeof LocaleCoachProfileIdRoute
   '/$locale/communities/$slug': typeof LocaleCommunitiesSlugRoute
   '/$locale/events/$slug': typeof LocaleEventsSlugRoute
@@ -706,6 +713,7 @@ export interface FileRoutesByTo {
   '/communities': typeof CommunitiesIndexRoute
   '/events': typeof EventsIndexRoute
   '/insights': typeof InsightsIndexRoute
+  '/volunteer-login': typeof VolunteerLoginIndexRoute
   '/$locale/coach/$profileId': typeof LocaleCoachProfileIdRoute
   '/$locale/communities/$slug': typeof LocaleCommunitiesSlugRoute
   '/$locale/events/$slug': typeof LocaleEventsSlugRoute
@@ -800,6 +808,7 @@ export interface FileRoutesById {
   '/communities/': typeof CommunitiesIndexRoute
   '/events/': typeof EventsIndexRoute
   '/insights/': typeof InsightsIndexRoute
+  '/volunteer-login/': typeof VolunteerLoginIndexRoute
   '/$locale/coach/$profileId': typeof LocaleCoachProfileIdRoute
   '/$locale/communities/$slug': typeof LocaleCommunitiesSlugRoute
   '/$locale/events/$slug': typeof LocaleEventsSlugRoute
@@ -893,6 +902,7 @@ export interface FileRouteTypes {
     | '/communities/'
     | '/events/'
     | '/insights/'
+    | '/volunteer-login/'
     | '/$locale/coach/$profileId'
     | '/$locale/communities/$slug'
     | '/$locale/events/$slug'
@@ -980,6 +990,7 @@ export interface FileRouteTypes {
     | '/communities'
     | '/events'
     | '/insights'
+    | '/volunteer-login'
     | '/$locale/coach/$profileId'
     | '/$locale/communities/$slug'
     | '/$locale/events/$slug'
@@ -1073,6 +1084,7 @@ export interface FileRouteTypes {
     | '/communities/'
     | '/events/'
     | '/insights/'
+    | '/volunteer-login/'
     | '/$locale/coach/$profileId'
     | '/$locale/communities/$slug'
     | '/$locale/events/$slug'
@@ -1144,6 +1156,7 @@ export interface RootRouteChildren {
   ClaimIndexRoute: typeof ClaimIndexRoute
   CommunitiesIndexRoute: typeof CommunitiesIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
+  VolunteerLoginIndexRoute: typeof VolunteerLoginIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicChatSignalRoute: typeof ApiPublicChatSignalRoute
@@ -1536,6 +1549,13 @@ declare module '@tanstack/react-router' {
       path: '/ticket/$token'
       fullPath: '/ticket/$token'
       preLoaderRoute: typeof TicketTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/volunteer-login/': {
+      id: '/volunteer-login/'
+      path: '/volunteer-login'
+      fullPath: '/volunteer-login/'
+      preLoaderRoute: typeof VolunteerLoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/volunteer-login/$token': {
@@ -1996,6 +2016,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClaimIndexRoute: ClaimIndexRoute,
   CommunitiesIndexRoute: CommunitiesIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
+  VolunteerLoginIndexRoute: VolunteerLoginIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicChatSignalRoute: ApiPublicChatSignalRoute,

@@ -60,6 +60,15 @@
     "alertsInstallFirst": "Füge diese Seite zuerst zum Home-Bildschirm hinzu — dein Gerät erlaubt Mitteilungen nur für installierte Apps.",
     "alertsInstallHint": "Tipp: Füge diese Seite zum Home-Bildschirm hinzu, damit Hinweise auch bei geschlossener App ankommen.",
     "qrExpired": "Dieser Anmeldecode ist nicht mehr gültig. Öffne deine Mitgliederseite und zeige einen neuen QR-Code an.",
-    "qrSigningIn": "Du wirst angemeldet…"
+    "qrSigningIn": "Du wirst angemeldet…",
+    "scanTitle": "Mit Scan anmelden",
+    "scanIntro": "Öffne deine Mitgliederseite am Computer, zeige den Anmelde-QR-Code und scanne ihn hier.",
+    "scanStart": "QR-Code scannen",
+    "scanAgain": "Erneut scannen",
+    "scanCameraBlocked": "Die Kamera ist nicht verfügbar. Erlaube den Kamerazugriff oder gib den Code unten ein.",
+    "scanManualLabel": "Oder Code manuell eingeben",
+    "scanManualPlaceholder": "Anmeldecode einfügen",
+    "scanManualSubmit": "Anmelden",
+    "scanPasswordFallback": "Stattdessen mit E-Mail und Passwort anmelden"
   }
 }

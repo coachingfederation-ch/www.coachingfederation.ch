@@ -589,15 +589,15 @@
         "title": "Bénévole du chat en direct",
         "body": "Vous êtes activé pour répondre aux visiteurs dans le chat en direct.",
         "qrAlt": "QR code vers la console de chat bénévole",
-        "qrHint": "Scannez-le avec votre téléphone pour ouvrir la console et passer en ligne.",
+        "qrHint": "Dans l’application bénévole sur votre téléphone, touchez « Scanner le QR code » et visez ce code.",
         "open": "Ouvrir la console de chat",
         "leave": "Arrêter le bénévolat",
         "confirmLeave": "Arrêter d'être bénévole du chat en direct ?",
-        "qrIntro": "Affichez un QR code à usage unique et scannez-le avec votre téléphone pour ouvrir la console sans vous reconnecter.",
+        "qrIntro": "Affichez un QR code à usage unique, puis scannez-le depuis l’application bénévole sur votre téléphone pour vous y connecter sans mot de passe.",
         "qrShow": "Afficher le QR code de connexion",
         "qrRenew": "Afficher un nouveau code",
         "qrExpiresIn": "Valable encore",
-        "installHint": "Sur votre téléphone, utilisez Partager → Sur l’écran d’accueil pour garder la console à portée de main."
+        "installHint": "Sur votre téléphone, utilisez Partager → Sur l’écran d’accueil, puis connectez-vous une fois en scannant ce code."
       }
     }
   },
