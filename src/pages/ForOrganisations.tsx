@@ -7,7 +7,6 @@ import { useMemo, useState } from "react";
 import { Mark, type MarkName } from "@/components/marks";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { CultureSurvey } from "@/components/organisations/CultureSurvey";
-import { BrevoChat } from "@/components/organisations/BrevoChat";
 import { DeckSection } from "@/components/organisations/DeckSection";
 import { WhoWeServe, SEGMENT_IDS, type SegmentId } from "@/components/organisations/WhoWeServe";
 import {
@@ -187,7 +186,6 @@ export default function ForOrganisationsPage() {
         </section>
       </main>
       <SiteFooter />
-      <BrevoChat />
     </div>
   );
 }
