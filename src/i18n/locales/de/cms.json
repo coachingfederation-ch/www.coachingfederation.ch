@@ -705,7 +705,7 @@
     "internalEmpty": "Keine internen Konten.",
     "colRoles": "Rollen",
     "adminBadge": "Super Admin",
-    "adminNote": "Vollzugriff, separat bereitgestellt",
+    "adminNote": "Vollzugriff auf alles, inklusive Mitglieder, Integration und Rollen",
     "organizerBadge": "Organisator",
     "grantEditor": "Redaktor-Rolle erteilen",
     "revokeEditor": "Redaktor-Rolle entziehen",
@@ -736,7 +736,12 @@
     "organizerDesc": "Veranstaltungen erstellen und verwalten",
     "publisherDesc": "Artikel prüfen und veröffentlichen",
     "administratorBadge": "Administrator",
-    "administratorDesc": "Vokabulare, Coach-Finder, Struktur, Governance, Chat und Wissen verwalten"
+    "administratorDesc": "Vokabulare, Coach-Finder, Struktur, Governance, Chat und Wissen verwalten",
+    "superAdminDesc": "Vollzugriff auf alles, inklusive Mitglieder, Integration und Rollen",
+    "superAdminGrantConfirm": "{name} vollen Super-Admin-Zugriff erteilen? Damit können alle Bereiche verwaltet werden, auch die Rollen.",
+    "superAdminRevokeConfirm": "Super-Admin-Zugriff von {name} entfernen?",
+    "superAdminSelfHint": "Sie können Ihren eigenen Super-Admin-Zugriff nicht ändern.",
+    "superAdminLastHint": "Der letzte Super Admin kann nicht entfernt werden."
   },
   "events": {
     "title": "Events",
