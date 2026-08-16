@@ -10,14 +10,26 @@
  * then work the waiting list. Presence is a heartbeat row rather than an
  * ephemeral channel, so the public widget can read "is anyone on duty?"
  * server-side.
+ *
+ * Layout note: every screen is a 100dvh column (header / scrolling body /
+ * pinned action) with safe-area padding, so on a phone the composer and the
+ * primary button can never be pushed below the browser chrome.
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronDown, Loader2, Radio, Users } from "lucide-react";
+import { Bell, BellOff, ChevronDown, Loader2, Radio, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { cn } from "@/lib/utils";
 import { getMyVolunteerStatus } from "@/lib/live-chat-volunteers.functions";
+import {
+  currentPushState,
+  disablePush,
+  enablePush,
+  isStandalone,
+  playWaitingChime,
+  pushSupported,
+} from "@/lib/volunteer-notifications";
 
 export const Route = createFileRoute("/_member/volunteer-chat")({
   head: () => ({
@@ -31,6 +43,12 @@ export const Route = createFileRoute("/_member/volunteer-chat")({
 
 const HEARTBEAT_MS = 30_000;
 const PRESENCE_TIMEOUT_MS = 90_000;
+
+/** Full-height phone frame: safe-area aware, never taller than the viewport. */
+const SCREEN = "flex h-[100dvh] flex-col overflow-hidden bg-background";
+const HEADER = "shrink-0 bg-hero px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] text-hero-foreground";
+const BODY = "min-h-0 flex-1 overflow-y-auto overscroll-contain";
+const FOOTER = "shrink-0 border-t border-border bg-card px-3 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]";
 
 type Conversation = {
   id: string;
