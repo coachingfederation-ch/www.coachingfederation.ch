@@ -17,7 +17,7 @@
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Bell, BellOff, ChevronDown, Loader2, Radio, Users } from "lucide-react";
+import { Bell, BellOff, ChevronDown, Loader2, Radio, Users, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { cn } from "@/lib/utils";
@@ -88,6 +88,7 @@ function VolunteerChatPage() {
   const [pushState, setPushState] = useState<"on" | "off" | "blocked">("off");
   const [pushBusy, setPushBusy] = useState(false);
   const waitingCountRef = useRef(0);
+  const [lastEnded, setLastEnded] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     if (!pushSupported()) return;
@@ -236,6 +237,7 @@ function VolunteerChatPage() {
       if (!userId) return;
       setOnline(next);
       setShowOthers(false);
+      if (!next) setLastEnded(null);
       await supabase.from("live_chat_presence").upsert({
         user_id: userId,
         display_name: name.trim().slice(0, 60),
@@ -253,6 +255,7 @@ function VolunteerChatPage() {
       if (!userId) return;
       setBusy(true);
       setError(null);
+      setLastEnded(null);
       const { data, error: updateError } = await supabase
         .from("live_chat_conversations")
         .update({
@@ -292,14 +295,18 @@ function VolunteerChatPage() {
 
   const endChat = useCallback(async () => {
     if (!activeId) return;
+    const conversation = mine.find((row) => row.id === activeId);
     await supabase
       .from("live_chat_conversations")
       .update({ status: "closed", ended_at: new Date().toISOString() })
       .eq("id", activeId);
+    if (conversation) {
+      setLastEnded({ id: conversation.id, name: conversation.visitor_name });
+    }
     setActiveId(null);
     setMessages([]);
     void loadLists();
-  }, [activeId, loadLists]);
+  }, [activeId, loadLists, mine]);
 
   const openTranscript = useCallback(
     async (conversationId: string) => {
@@ -313,6 +320,16 @@ function VolunteerChatPage() {
   );
 
   const activeConversation = mine.find((row) => row.id === activeId) ?? null;
+
+  // When the visitor closes the chat, show a friendly confirmation before
+  // returning the volunteer to the waiting list.
+  useEffect(() => {
+    if (activeConversation?.status !== "closed") return;
+    setLastEnded({ id: activeConversation.id, name: activeConversation.visitor_name });
+    setActiveId(null);
+    setMessages([]);
+  }, [activeConversation]);
+
   const recent = mine.filter((row) => row.status === "closed").slice(0, 3);
 
   if (activated === false) {
@@ -492,6 +509,22 @@ function VolunteerChatPage() {
           <p role="alert" className="text-sm text-destructive">
             {error}
           </p>
+        )}
+
+        {lastEnded && (
+          <div className="rounded-2xl border border-border bg-accent p-3 text-sm text-accent-foreground">
+            <div className="flex items-start justify-between gap-3">
+              <p>{t("live-chat.volunteer.ended")}</p>
+              <button
+                type="button"
+                onClick={() => setLastEnded(null)}
+                aria-label={t("live-chat.volunteer.endChat")}
+                className="rounded-full p-1 transition-colors hover:bg-accent-foreground/10"
+              >
+                <X className="size-4" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
         )}
 
         <section>
