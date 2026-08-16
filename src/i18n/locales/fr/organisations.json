@@ -144,21 +144,39 @@
       {
         "group": "Études ICF",
         "items": [
-          "Étude mondiale ICF sur le coaching",
-          "Étude mondiale ICF auprès des clients du coaching",
-          "Créer une culture forte du coaching (ICF)"
+          {
+            "label": "Étude mondiale ICF sur le coaching",
+            "url": "https://coachingfederation.org/research/global-coaching-study"
+          },
+          {
+            "label": "Étude mondiale ICF auprès des clients du coaching",
+            "url": "https://coachingfederation.org/research/"
+          },
+          {
+            "label": "Créer une culture forte du coaching (ICF)",
+            "url": "https://coachingfederation.org/resources/resource-library/"
+          }
         ]
       },
       {
         "group": "Recherches sur le monde du travail",
         "items": [
-          "Rapports mondiaux sur l'engagement au travail",
-          "Rapports sur le marché du travail et les compétences en Suisse"
+          {
+            "label": "Rapports mondiaux sur l'engagement au travail",
+            "url": "https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx"
+          },
+          {
+            "label": "Rapports sur le marché du travail et les compétences en Suisse",
+            "url": "https://www.adeccogroup.com/en-ch/future-of-work/job-index"
+          }
         ]
       },
       {
         "group": "The Switzerland Chapter of ICF",
-        "items": ["Sondage auprès des membres du chapitre", "Briefing organisationnel 2026"]
+        "items": [
+          "Sondage auprès des membres du chapitre",
+          "Briefing organisationnel 2026"
+        ]
       }
     ],
     "download": {
