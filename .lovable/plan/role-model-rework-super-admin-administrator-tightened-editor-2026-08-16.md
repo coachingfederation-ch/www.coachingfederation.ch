@@ -26,12 +26,12 @@ Single migration:
 
 1. Add `superadmin` to the `app_role` enum. The existing `admin` grant is migrated to `superadmin`, so today's privileged account keeps full rights; `admin` is then free to mean "Administrator".
 2. Add two `private` helper functions:
-   - `is_superadmin(uid)` — exactly `superadmin`.
-   - `is_platform_admin(uid)` — `admin` or `superadmin`.
+  - `is_superadmin(uid)` — exactly `superadmin`.
+  - `is_platform_admin(uid)` — `admin` or `superadmin`.
 3. Repoint policies:
-   - Super-Admin-only tables (`user_roles`, `role_grants`, `members`/`member_*`, `integration_config`, `api_rate_limits`, `article_linkedin_posts`, `linkedin_config`): `has_role(uid,'admin')` → `is_superadmin(uid)`.
-   - Administrator-scope tables (`cf_*`, `coach_finder_config`, `op_*`, `europe_pulse*`, `governance_documents`, `chat_question_categories`, `chat_interaction_logs`, `assistant_knowledge`, `live_chat_*`): checks become `is_platform_admin(uid)`. Governance, `cf_*` and `coach_finder_config` writes move off `is_editor`, which is what removes Governance from Editors.
-   - `categories` keeps `is_editor` (Editors need it) plus platform admins.
+  - Super-Admin-only tables (`user_roles`, `role_grants`, `members`/`member_*`, `integration_config`, `api_rate_limits`, `article_linkedin_posts`, `linkedin_config`): `has_role(uid,'admin')` → `is_superadmin(uid)`.
+  - Administrator-scope tables (`cf_*`, `coach_finder_config`, `op_*`, `europe_pulse*`, `governance_documents`, `chat_question_categories`, `chat_interaction_logs`, `assistant_knowledge`, `live_chat_*`): checks become `is_platform_admin(uid)`. Governance, `cf_*` and `coach_finder_config` writes move off `is_editor`, which is what removes Governance from Editors.
+  - `categories` keeps `is_editor` (Editors need it) plus platform admins.
 4. `private.is_editor` / `is_staff` are updated so `superadmin` still satisfies every existing check that isn't repointed.
 
 ## Application code
@@ -43,11 +43,20 @@ Single migration:
 - `src/components/cms/RoleTableRow.tsx` / `RoleDetailPanel.tsx` / `src/routes/_staff/roles.tsx`: add an Administrator toggle alongside Editor / Organizer / Publisher, visible to Super Admins; Super Admin itself stays migration-only and read-only.
 - i18n: add `roles.superAdmin`, `roles.administrator` and the Administrator toggle labels to `cms.json` in en, de, fr, it.
 
-## PR note
+&nbsp;
+
+# Approval additions
+
+- Update relevant /doc documentation
+- Create a new roles specific documentation laying out the access rights per role  
+
+
+# PR note
 
 **Summary** — Splits the single `admin` role into a migration-only Super Admin and an assignable Administrator with a scoped set of CMS areas, and shifts Governance from Editor to Administrator while giving Editors Categories.
 
 **Changes**
+
 - Backend/schema: new enum value, two `private` role helpers, ~33 policies repointed, existing admin grant migrated to `superadmin`.
 - App: role model, staff guards, server-side authz, CMS navigation, Roles screen toggles.
 - Config: i18n keys in four locales.
@@ -58,4 +67,4 @@ Single migration:
 
 **Risks & rollback** — blast radius is CMS access control. Enum values cannot be dropped, so rollback means a follow-up migration restoring the old policy bodies and moving `superadmin` back to `admin`. Reverting app code alone would lock the Super Admin out of admin-only screens, so code and migration must be reverted together.
 
-**Follow-ups / known debt** — Super Admin remains provisioned by migration only, by design; a future pass could let one Super Admin promote another with a two-person rule.
+**Follow-ups / known debt** — Super Admin remains provisioned by migration only, by design; a future pass could let one Super Admin promote another with a two-person rule.  
