@@ -104,8 +104,16 @@ export function hasExactRole(roles: AppRole[], role: AppRole): boolean {
  */
 export function landingPath(
   roles: RoleSet,
-): "/articles" | "/manage/events" | "/member" | "/no-access" {
+): "/articles" | "/manage/events" | "/vocabularies" | "/member" | "/no-access" {
   if (roles.isMember) return "/member";
+  // An Administrator without editorial rights starts in their own first area.
+  if (
+    hasExactRole(roles.roles, "administrator") &&
+    !roles.isAdmin &&
+    !hasExactRole(roles.roles, "editor") &&
+    !hasExactRole(roles.roles, "publisher")
+  )
+    return "/vocabularies";
   // An organizer-only staff account has no access to /articles — the route
   // guard would bounce them straight back out.
   if (
