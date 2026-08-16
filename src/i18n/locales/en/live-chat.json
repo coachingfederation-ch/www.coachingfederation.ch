@@ -69,6 +69,7 @@
     "scanManualLabel": "Or enter the code manually",
     "scanManualPlaceholder": "Paste the sign-in code",
     "scanManualSubmit": "Sign in",
-    "scanPasswordFallback": "Sign in with email and password instead"
+    "scanPasswordFallback": "Sign in with email and password instead",
+    "sessionExpired": "Your sign-in expired. Scan a new code from your member page to continue."
   }
 }

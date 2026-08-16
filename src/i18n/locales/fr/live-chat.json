@@ -69,6 +69,7 @@
     "scanManualLabel": "Ou saisissez le code manuellement",
     "scanManualPlaceholder": "Collez le code de connexion",
     "scanManualSubmit": "Se connecter",
-    "scanPasswordFallback": "Se connecter plutôt avec e-mail et mot de passe"
+    "scanPasswordFallback": "Se connecter plutôt avec e-mail et mot de passe",
+    "sessionExpired": "Votre connexion a expiré. Scannez un nouveau code depuis votre page membre."
   }
 }

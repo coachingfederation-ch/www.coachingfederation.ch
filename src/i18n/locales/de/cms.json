@@ -597,7 +597,8 @@
         "qrShow": "Anmelde-QR-Code anzeigen",
         "qrRenew": "Neuen Code anzeigen",
         "qrExpiresIn": "Gültig noch",
-        "installHint": "Nutze auf dem Handy «Teilen → Zum Home-Bildschirm» und melde dich dort einmal per Code-Scan an."
+        "installHint": "Nutze auf dem Handy «Teilen → Zum Home-Bildschirm» und melde dich dort einmal per Code-Scan an.",
+        "staySignedInHint": "Öffne die App alle paar Wochen — sonst verwirft dein Telefon die Anmeldung und du scannst einen neuen Code."
       }
     }
   },

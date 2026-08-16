@@ -69,6 +69,7 @@
     "scanManualLabel": "Oder Code manuell eingeben",
     "scanManualPlaceholder": "Anmeldecode einfügen",
     "scanManualSubmit": "Anmelden",
-    "scanPasswordFallback": "Stattdessen mit E-Mail und Passwort anmelden"
+    "scanPasswordFallback": "Stattdessen mit E-Mail und Passwort anmelden",
+    "sessionExpired": "Deine Anmeldung ist abgelaufen. Scanne einen neuen Code von deiner Mitgliederseite."
   }
 }

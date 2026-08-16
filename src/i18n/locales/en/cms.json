@@ -597,7 +597,8 @@
         "qrShow": "Show sign-in QR code",
         "qrRenew": "Show a new code",
         "qrExpiresIn": "Valid for",
-        "installHint": "On your phone, use Share → Add to Home Screen, then sign in once by scanning this code."
+        "installHint": "On your phone, use Share → Add to Home Screen, then sign in once by scanning this code.",
+        "staySignedInHint": "Open the app every few weeks — otherwise your phone drops the sign-in and you scan a new code."
       }
     }
   },
