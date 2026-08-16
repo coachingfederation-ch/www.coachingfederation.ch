@@ -92,7 +92,9 @@ function ManageEventsPage() {
       if (row.community_id && row.community_name)
         communities.set(row.community_id, row.community_name);
       for (const host of row.hosts) hosts.set(host.id, host.name);
-      if (row.city) cities.add(row.city);
+      // Events without a city — and the handful typed literally as "Online" —
+      // collapse into a single "Online" option so the list has no duplicates.
+      if (row.city && row.city.trim().toLowerCase() !== "online") cities.add(row.city);
       else hasOnline = true;
     }
     const byLabel = (a: [string, string], b: [string, string]) => a[1].localeCompare(b[1]);
