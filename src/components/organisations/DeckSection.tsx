@@ -19,10 +19,16 @@ type Slide = {
   source?: string;
 };
 
+/** A source entry is either plain text or a labelled external link. */
+type SourceItem = string | { label: string; url?: string };
+
+const sourceLabel = (s: SourceItem) => (typeof s === "string" ? s : s.label);
+const sourceUrl = (s: SourceItem) => (typeof s === "string" ? undefined : s.url);
+
 export function DeckSection() {
   const { t, tList } = useI18n();
   const slides = tList<Slide>("organisations.deck.slides");
-  const sources = tList<{ group: string; items: string[] }>("organisations.deck.sources");
+  const sources = tList<{ group: string; items: SourceItem[] }>("organisations.deck.sources");
   const [index, setIndex] = useState(0);
   const [showSources, setShowSources] = useState(false);
   const touchX = useRef<number | null>(null);
