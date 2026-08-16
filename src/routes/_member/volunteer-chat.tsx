@@ -17,7 +17,7 @@
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Bell, BellOff, ChevronDown, Loader2, Radio, Users } from "lucide-react";
+import { Bell, BellOff, ChevronDown, Loader2, Radio, Users, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { cn } from "@/lib/utils";
