@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.live_chat_online_count() FROM anon, authenticated;
