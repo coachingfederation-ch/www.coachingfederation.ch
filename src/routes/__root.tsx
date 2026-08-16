@@ -88,7 +88,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       // viewport-fit=cover is what lets the volunteer console pad against the
       // iPhone notch and home indicator via env(safe-area-inset-*).
       { name: "theme-color", content: "#212251" },
