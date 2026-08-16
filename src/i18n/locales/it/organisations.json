@@ -144,16 +144,31 @@
       {
         "group": "Ricerca ICF",
         "items": [
-          "ICF Global Coaching Study",
-          "ICF Global Coaching Client Study",
-          "ICF Building Strong Coaching Cultures"
+          {
+            "label": "ICF Global Coaching Study",
+            "url": "https://coachingfederation.org/research/global-coaching-study"
+          },
+          {
+            "label": "ICF Global Coaching Client Study",
+            "url": "https://coachingfederation.org/research/"
+          },
+          {
+            "label": "ICF Building Strong Coaching Cultures",
+            "url": "https://coachingfederation.org/resources/resource-library/"
+          }
         ]
       },
       {
         "group": "Ricerche sul mondo del lavoro",
         "items": [
-          "Rapporti globali sul coinvolgimento al lavoro",
-          "Rapporti sul mercato del lavoro e sulle competenze in Svizzera"
+          {
+            "label": "Rapporti globali sul coinvolgimento al lavoro",
+            "url": "https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx"
+          },
+          {
+            "label": "Rapporti sul mercato del lavoro e sulle competenze in Svizzera",
+            "url": "https://www.adeccogroup.com/en-ch/future-of-work/job-index"
+          }
         ]
       },
       {

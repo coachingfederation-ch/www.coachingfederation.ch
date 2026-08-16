@@ -19,10 +19,16 @@ type Slide = {
   source?: string;
 };
 
+/** A source entry is either plain text or a labelled external link. */
+type SourceItem = string | { label: string; url?: string };
+
+const sourceLabel = (s: SourceItem) => (typeof s === "string" ? s : s.label);
+const sourceUrl = (s: SourceItem) => (typeof s === "string" ? undefined : s.url);
+
 export function DeckSection() {
   const { t, tList } = useI18n();
   const slides = tList<Slide>("organisations.deck.slides");
-  const sources = tList<{ group: string; items: string[] }>("organisations.deck.sources");
+  const sources = tList<{ group: string; items: SourceItem[] }>("organisations.deck.sources");
   const [index, setIndex] = useState(0);
   const [showSources, setShowSources] = useState(false);
   const touchX = useRef<number | null>(null);
@@ -209,9 +215,27 @@ export function DeckSection() {
                       {g.group}
                     </p>
                     <ul className="mt-2 space-y-1 text-xs leading-relaxed text-hero-foreground/90">
-                      {g.items.map((s) => (
-                        <li key={s}>{s}</li>
-                      ))}
+                      {g.items.map((s) => {
+                        const label = sourceLabel(s);
+                        const url = sourceUrl(s);
+                        return (
+                          <li key={label}>
+                            {url ? (
+                              <a
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline decoration-hero-foreground/40 underline-offset-4 transition hover:text-accent hover:decoration-accent"
+                              >
+                                {label}
+                                <span className="sr-only"> {t("common.opensInNewTab")}</span>
+                              </a>
+                            ) : (
+                              label
+                            )}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 ))}
