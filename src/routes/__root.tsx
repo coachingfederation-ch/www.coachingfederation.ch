@@ -172,6 +172,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // The volunteer console is a chat surface of its own — the public assistant
+  // launcher would sit on top of it.
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const hideAssistant = pathname.startsWith("/volunteer-chat");
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -179,7 +183,7 @@ function RootComponent() {
       <Outlet />
       <PlausibleAnalytics />
       <LanguageNotice />
-      <AssistantWidget />
+      {!hideAssistant && <AssistantWidget />}
       {/* Single global toast outlet — refused actions surface here rather than throwing. */}
       <Toaster position="top-center" richColors />
     </QueryClientProvider>

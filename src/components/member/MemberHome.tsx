@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { useCms } from "@/i18n/cms";
 import { getMemberHome } from "@/lib/member-home.functions";
+import { LiveChatVolunteerTile } from "./LiveChatVolunteerTile";
 
 const ENGAGE_URL =
   "https://engage.coachingfederation.org/communities/community-home?CommunityKey=230cb83a-26a7-4ffb-a2c4-fd9309091489";
@@ -85,6 +86,8 @@ export function MemberHome() {
             {t("member.home.soon")}
           </button>
         </section>
+
+        <LiveChatVolunteerTile />
 
         <section className={CARD}>
           <Megaphone className="h-5 w-5 text-primary" aria-hidden />
