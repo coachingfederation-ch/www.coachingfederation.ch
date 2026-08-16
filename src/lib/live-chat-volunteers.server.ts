@@ -101,7 +101,9 @@ export async function listActivatedVolunteers(): Promise<ActivatedVolunteer[]> {
 export async function activateVolunteer(memberId: string, actorUserId: string): Promise<void> {
   const { data: member, error } = await supabaseAdmin
     .from("members")
-    .select("id, auth_user_id, full_name, first_name, last_name, activity_state, credential_slug, credential_expires_on")
+    .select(
+      "id, auth_user_id, full_name, first_name, last_name, activity_state, credential_slug, credential_expires_on",
+    )
     .eq("id", memberId)
     .maybeSingle();
   if (error) throw error;
@@ -125,13 +127,7 @@ export async function activateVolunteer(memberId: string, actorUserId: string): 
 
 /** Removing an activation also drops the volunteer offline. */
 export async function deactivateVolunteer(userId: string): Promise<void> {
-  const { error } = await supabaseAdmin
-    .from("live_chat_volunteers")
-    .delete()
-    .eq("user_id", userId);
+  const { error } = await supabaseAdmin.from("live_chat_volunteers").delete().eq("user_id", userId);
   if (error) throw error;
-  await supabaseAdmin
-    .from("live_chat_presence")
-    .update({ is_online: false })
-    .eq("user_id", userId);
+  await supabaseAdmin.from("live_chat_presence").update({ is_online: false }).eq("user_id", userId);
 }

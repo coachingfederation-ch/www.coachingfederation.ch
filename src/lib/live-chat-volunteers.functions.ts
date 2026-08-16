@@ -18,9 +18,8 @@ export const listLiveChatVolunteers = createServerFn({ method: "POST" })
       context,
     }): Promise<{ volunteers: ActivatedVolunteer[]; eligible: EligibleMember[] }> => {
       await assertPlatformAdmin(context);
-      const { listActivatedVolunteers, listEligibleMembers } = await import(
-        "./live-chat-volunteers.server"
-      );
+      const { listActivatedVolunteers, listEligibleMembers } =
+        await import("./live-chat-volunteers.server");
       const [volunteers, eligible] = await Promise.all([
         listActivatedVolunteers(),
         listEligibleMembers(),

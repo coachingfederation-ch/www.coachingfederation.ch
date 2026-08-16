@@ -20,10 +20,7 @@ import {
   deactivateLiveChatVolunteer,
   listLiveChatVolunteers,
 } from "@/lib/live-chat-volunteers.functions";
-import type {
-  ActivatedVolunteer,
-  EligibleMember,
-} from "@/lib/live-chat-volunteers.server";
+import type { ActivatedVolunteer, EligibleMember } from "@/lib/live-chat-volunteers.server";
 
 export const Route = createFileRoute("/_staff/manage/live-chat")({
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, PLATFORM_ADMIN_ROLES),
@@ -47,7 +44,9 @@ function relativeDays(iso: string | null, locale: string, never: string, recent:
   if (Date.now() - then < 3_600_000) return recent;
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
-  const days = Math.round((startOfToday.getTime() - new Date(iso).setHours(0, 0, 0, 0)) / 86_400_000);
+  const days = Math.round(
+    (startOfToday.getTime() - new Date(iso).setHours(0, 0, 0, 0)) / 86_400_000,
+  );
   return new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(-days, "day");
 }
 
@@ -93,7 +92,9 @@ function LiveChatPage() {
   useEffect(() => {
     const target = `${window.location.origin}/volunteer-chat`;
     setUrl(target);
-    void QRCode.toDataURL(target, { width: 320, margin: 1 }).then(setQr).catch(() => setQr(null));
+    void QRCode.toDataURL(target, { width: 320, margin: 1 })
+      .then(setQr)
+      .catch(() => setQr(null));
   }, []);
 
   const add = async () => {
