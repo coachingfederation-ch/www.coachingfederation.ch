@@ -248,7 +248,7 @@ function ManageEventsPage() {
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-            <span>{t("events.filters.count", { count: filtered.length })}</span>
+            <span>{t("events.filters.count").replace("{count}", String(filtered.length))}</span>
             {hasFilters ? (
               <button
                 type="button"
@@ -356,11 +356,10 @@ function ManageEventsPage() {
         {filtered.length > PAGE_SIZE ? (
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
             <span className="text-muted-foreground">
-              {t("events.pagination.range", {
-                from: start + 1,
-                to: Math.min(start + PAGE_SIZE, filtered.length),
-                total: filtered.length,
-              })}
+              {t("events.pagination.range")
+                .replace("{from}", String(start + 1))
+                .replace("{to}", String(Math.min(start + PAGE_SIZE, filtered.length)))
+                .replace("{total}", String(filtered.length))}
             </span>
             <div className="flex items-center gap-2">
               <button
@@ -378,7 +377,9 @@ function ManageEventsPage() {
                 {t("events.pagination.previous")}
               </button>
               <span className="text-muted-foreground">
-                {t("events.pagination.page", { page, pages: pageCount })}
+                {t("events.pagination.page")
+                  .replace("{page}", String(page))
+                  .replace("{pages}", String(pageCount))}
               </span>
               <button
                 type="button"
