@@ -704,8 +704,8 @@
     "internalIntro": "Comptes privilégiés sans dossier membre ICF importé. Les comptes qui sont à la fois membre et administrateur sont répertoriés ci-dessus. Ceux-ci sont configurés en dehors de l'application et ne peuvent pas être modifiés ici ; l'accès éditeur nécessite toujours un dossier membre lié.",
     "internalEmpty": "Aucun compte interne.",
     "colRoles": "Rôles",
-    "adminBadge": "Administrateur",
-    "adminNote": "Configuré séparément",
+    "adminBadge": "Super Admin",
+    "adminNote": "Accès complet, configuré séparément",
     "organizerBadge": "Organisateur",
     "grantEditor": "Accorder l'accès éditeur",
     "revokeEditor": "Révoquer l'accès éditeur",
@@ -734,7 +734,9 @@
     "accountAuditTitle": "Modifications récentes pour ce compte",
     "editorDesc": "Créer et modifier des articles",
     "organizerDesc": "Créer et gérer des événements",
-    "publisherDesc": "Relire et publier des articles"
+    "publisherDesc": "Relire et publier des articles",
+    "administratorBadge": "Administrateur",
+    "administratorDesc": "Gérer les vocabulaires, le coach finder, la structure, la gouvernance, le chat et les connaissances"
   },
   "events": {
     "title": "Événements",

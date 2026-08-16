@@ -7,7 +7,7 @@
  * provisioned by migration, never from a session.
  */
 import { useEffect, useState } from "react";
-import { CalendarDays, Megaphone, ShieldCheck, X } from "lucide-react";
+import { CalendarDays, Megaphone, ShieldCheck, SlidersHorizontal, X } from "lucide-react";
 import { listAccountRoleAudit, type listRoleAdminData } from "@/lib/roles.functions";
 import type { ManagedRole } from "@/lib/role-model";
 
@@ -16,6 +16,12 @@ type AuditRow = Awaited<ReturnType<typeof listRoleAdminData>>["audit"][number];
 
 const RIGHTS: { role: ManagedRole; labelKey: string; descKey: string; icon: typeof ShieldCheck }[] =
   [
+    {
+      role: "administrator",
+      labelKey: "roles.administratorBadge",
+      descKey: "roles.administratorDesc",
+      icon: SlidersHorizontal,
+    },
     {
       role: "editor",
       labelKey: "roles.editorBadge",
@@ -37,6 +43,7 @@ const RIGHTS: { role: ManagedRole; labelKey: string; descKey: string; icon: type
   ];
 
 function holds(member: MemberRow, role: ManagedRole): boolean {
+  if (role === "administrator") return member.isAdministrator;
   if (role === "editor") return member.isEditor;
   if (role === "organizer") return member.isOrganizer;
   return member.isPublisher;
@@ -76,7 +83,8 @@ export function RoleDetailPanel({
     };
   }, [member.authUserId, pending]);
 
-  const hasAnyRight = member.isEditor || member.isOrganizer || member.isPublisher;
+  const hasAnyRight =
+    member.isAdministrator || member.isEditor || member.isOrganizer || member.isPublisher;
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">

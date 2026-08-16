@@ -36,22 +36,44 @@ import type { AppRole } from "@/lib/role-model";
  * editor. The real boundary is RLS plus the server-side role checks; this only
  * avoids dead ends.
  */
+const PLATFORM_ADMIN: readonly AppRole[] = ["administrator"];
+
 const nav = [
   { to: "/articles", key: "nav.articles", icon: FileText, allowedRoles: ["editor"] },
   { to: "/articles/new", key: "nav.newArticle", icon: PencilLine, allowedRoles: ["editor"] },
-  { to: "/articles/categories", key: "nav.categories", icon: Tags, allowedRoles: [] },
+  { to: "/articles/categories", key: "nav.categories", icon: Tags, allowedRoles: ["editor"] },
   // Organizers see only this item; the shell itself is open to all staff roles.
   { to: "/manage/events", key: "nav.events", icon: CalendarDays, allowedRoles: ["organizer"] },
-  { to: "/vocabularies", key: "nav.vocabularies", icon: ListTree, allowedRoles: [] },
-  { to: "/coach-finder", key: "nav.coachFinder", icon: SlidersHorizontal, allowedRoles: [] },
+  { to: "/vocabularies", key: "nav.vocabularies", icon: ListTree, allowedRoles: PLATFORM_ADMIN },
+  {
+    to: "/coach-finder",
+    key: "nav.coachFinder",
+    icon: SlidersHorizontal,
+    allowedRoles: PLATFORM_ADMIN,
+  },
   { to: "/members", key: "nav.members", icon: Users, allowedRoles: [] },
   { to: "/integration", key: "nav.integration", icon: PlugZap, allowedRoles: [] },
-  { to: "/operational-structure", key: "nav.opsStructure", icon: Network, allowedRoles: [] },
-  { to: "/manage/europe-pulse", key: "nav.europePulse", icon: Globe2, allowedRoles: [] },
-  { to: "/manage/governance", key: "nav.governance", icon: FileText, allowedRoles: ["editor"] },
-  { to: "/manage/chat-insights", key: "nav.chatInsights", icon: MessagesSquare, allowedRoles: [] },
-  { to: "/manage/knowledge", key: "nav.knowledge", icon: BookOpen, allowedRoles: [] },
-  { to: "/manage/live-chat", key: "nav.liveChat", icon: Headset, allowedRoles: [] },
+  {
+    to: "/operational-structure",
+    key: "nav.opsStructure",
+    icon: Network,
+    allowedRoles: PLATFORM_ADMIN,
+  },
+  { to: "/manage/europe-pulse", key: "nav.europePulse", icon: Globe2, allowedRoles: PLATFORM_ADMIN },
+  {
+    to: "/manage/governance",
+    key: "nav.governance",
+    icon: FileText,
+    allowedRoles: PLATFORM_ADMIN,
+  },
+  {
+    to: "/manage/chat-insights",
+    key: "nav.chatInsights",
+    icon: MessagesSquare,
+    allowedRoles: PLATFORM_ADMIN,
+  },
+  { to: "/manage/knowledge", key: "nav.knowledge", icon: BookOpen, allowedRoles: PLATFORM_ADMIN },
+  { to: "/manage/live-chat", key: "nav.liveChat", icon: Headset, allowedRoles: PLATFORM_ADMIN },
   { to: "/roles", key: "nav.roles", icon: ShieldCheck, allowedRoles: [] },
 ] as const satisfies ReadonlyArray<{
   to: string;

@@ -13,7 +13,7 @@ import { ChatInsightCharts } from "@/components/cms/chat-insights/ChatInsightCha
 import { ChatInsightFilterBar } from "@/components/cms/chat-insights/ChatInsightFilterBar";
 import { ChatInsightTable } from "@/components/cms/chat-insights/ChatInsightTable";
 import { useCms } from "@/i18n/cms";
-import { ADMIN_ONLY, requireStaffAccess } from "@/lib/staff-guard";
+import { PLATFORM_ADMIN_ROLES, requireStaffAccess } from "@/lib/staff-guard";
 import {
   EMPTY_CHAT_FILTERS,
   formatRate,
@@ -25,7 +25,7 @@ import {
 import { exportChatInsightsCsv, getChatInsights } from "@/lib/chat-insights.functions";
 
 export const Route = createFileRoute("/_staff/manage/chat-insights")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, ADMIN_ONLY),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, PLATFORM_ADMIN_ROLES),
   head: () => ({
     meta: [
       { title: "Chat Agent Insights — The Switzerland Chapter of ICF CMS" },

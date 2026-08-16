@@ -49,6 +49,18 @@ export async function assertAdmin(context: AuthedContext): Promise<string> {
   return assertRole(context, "admin");
 }
 
+/**
+ * Throws unless the caller is a Super Admin (`admin`) or an Administrator
+ * (`administrator`). Used by the Administrator-scoped areas: vocabularies,
+ * coach finder, operational structure, Europe Pulse, governance, chat agent
+ * insights, assistant knowledge and live chat.
+ */
+export async function assertPlatformAdmin(context: AuthedContext): Promise<string> {
+  const roles = await rolesOf(context);
+  if (!roles.includes("admin") && !roles.includes("administrator")) throw new Error("Forbidden");
+  return context.userId;
+}
+
 /** Throws unless the caller is admin, editor or organizer. */
 export async function assertStaff(context: AuthedContext): Promise<string> {
   const roles = await rolesOf(context);

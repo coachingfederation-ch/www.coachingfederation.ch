@@ -14,12 +14,12 @@ import { Trash2, Upload, ExternalLink } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
-import { requireStaffAccess, ARTICLE_ROLES } from "@/lib/staff-guard";
+import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
 import { GOVERNANCE_DOCUMENT_BUCKET } from "@/lib/storage";
 import { GOVERNANCE_CATEGORIES, formatFileSize, type GovernanceCategory } from "@/lib/governance";
 
 export const Route = createFileRoute("/_staff/manage/governance")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, ARTICLE_ROLES),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, PLATFORM_ADMIN_ROLES),
   head: () => ({
     meta: [
       { title: "Governance documents — The Switzerland Chapter of ICF CMS" },

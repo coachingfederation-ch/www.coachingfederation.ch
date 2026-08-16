@@ -704,8 +704,8 @@
     "internalIntro": "Privilegierte Konten ohne importierten ICF-Mitgliedsdatensatz. Konten, die sowohl Mitglied als auch Administrator sind, werden oben aufgeführt. Diese werden ausserhalb der App bereitgestellt und können hier nicht geändert werden; Redaktions-Zugriff erfordert immer ein verknüpftes Mitgliedskonto.",
     "internalEmpty": "Keine internen Konten.",
     "colRoles": "Rollen",
-    "adminBadge": "Administrator",
-    "adminNote": "Separat bereitgestellt",
+    "adminBadge": "Super Admin",
+    "adminNote": "Vollzugriff, separat bereitgestellt",
     "organizerBadge": "Organisator",
     "grantEditor": "Redaktor-Rolle erteilen",
     "revokeEditor": "Redaktor-Rolle entziehen",
@@ -734,7 +734,9 @@
     "accountAuditTitle": "Letzte Änderungen für dieses Konto",
     "editorDesc": "Artikel erstellen und bearbeiten",
     "organizerDesc": "Veranstaltungen erstellen und verwalten",
-    "publisherDesc": "Artikel prüfen und veröffentlichen"
+    "publisherDesc": "Artikel prüfen und veröffentlichen",
+    "administratorBadge": "Administrator",
+    "administratorDesc": "Vokabulare, Coach-Finder, Struktur, Governance, Chat und Wissen verwalten"
   },
   "events": {
     "title": "Events",

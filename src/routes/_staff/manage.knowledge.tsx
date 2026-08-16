@@ -14,10 +14,10 @@ import { Plus, Trash2 } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
-import { ADMIN_ONLY, requireStaffAccess } from "@/lib/staff-guard";
+import { PLATFORM_ADMIN_ROLES, requireStaffAccess } from "@/lib/staff-guard";
 
 export const Route = createFileRoute("/_staff/manage/knowledge")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, ADMIN_ONLY),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, PLATFORM_ADMIN_ROLES),
   head: () => ({
     meta: [
       { title: "Assistant knowledge — The Switzerland Chapter of ICF CMS" },

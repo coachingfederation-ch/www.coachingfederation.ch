@@ -17,7 +17,7 @@ import { Plus } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
-import { requireStaffAccess, ADMIN_ONLY } from "@/lib/staff-guard";
+import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
 import { slugifyVocab } from "@/lib/vocabularies";
 import {
   countOpsAssignments,
@@ -38,7 +38,7 @@ import {
 } from "@/components/cms/ops/types";
 
 export const Route = createFileRoute("/_staff/operational-structure")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, ADMIN_ONLY),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, PLATFORM_ADMIN_ROLES),
   head: () => ({
     meta: [
       { title: "Operational structure — The Switzerland Chapter of ICF CMS" },
