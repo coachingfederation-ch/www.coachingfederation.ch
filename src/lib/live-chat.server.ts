@@ -82,6 +82,14 @@ export async function startConversation(input: {
     body: input.message.slice(0, MESSAGE_MAX),
   });
 
+  // Best effort: wake volunteers who enabled notifications on their phone.
+  try {
+    const { notifyWaitingVisitor } = await import("./live-chat-push.server");
+    await notifyWaitingVisitor(input.name.slice(0, 80));
+  } catch {
+    // A push outage must never stop a visitor from queueing.
+  }
+
   return { conversationId: data.id, visitorKey };
 }
 

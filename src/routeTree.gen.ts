@@ -63,6 +63,7 @@ import { Route as FormTokenRouteImport } from './routes/form.$token'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as InsightsIdRouteImport } from './routes/insights.$id'
 import { Route as TicketTokenRouteImport } from './routes/ticket.$token'
+import { Route as VolunteerLoginTokenRouteImport } from './routes/volunteer-login.$token'
 import { Route as LocaleCoachProfileIdRouteImport } from './routes/$locale/coach.$profileId'
 import { Route as LocaleCommunitiesIndexRouteImport } from './routes/$locale/communities.index'
 import { Route as LocaleCommunitiesSlugRouteImport } from './routes/$locale/communities.$slug'
@@ -371,6 +372,11 @@ const TicketTokenRoute = TicketTokenRouteImport.update({
   path: '/ticket/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VolunteerLoginTokenRoute = VolunteerLoginTokenRouteImport.update({
+  id: '/volunteer-login/$token',
+  path: '/volunteer-login/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LocaleCoachProfileIdRoute = LocaleCoachProfileIdRouteImport.update({
   id: '/coach/$profileId',
   path: '/coach/$profileId',
@@ -607,6 +613,7 @@ export interface FileRoutesByFullPath {
   '/form/$token': typeof FormTokenRoute
   '/insights/$id': typeof InsightsIdRoute
   '/ticket/$token': typeof TicketTokenRoute
+  '/volunteer-login/$token': typeof VolunteerLoginTokenRoute
   '/$locale/': typeof LocaleIndexRoute
   '/claim/': typeof ClaimIndexRoute
   '/communities/': typeof CommunitiesIndexRoute
@@ -693,6 +700,7 @@ export interface FileRoutesByTo {
   '/form/$token': typeof FormTokenRoute
   '/insights/$id': typeof InsightsIdRoute
   '/ticket/$token': typeof TicketTokenRoute
+  '/volunteer-login/$token': typeof VolunteerLoginTokenRoute
   '/$locale': typeof LocaleIndexRoute
   '/claim': typeof ClaimIndexRoute
   '/communities': typeof CommunitiesIndexRoute
@@ -786,6 +794,7 @@ export interface FileRoutesById {
   '/form/$token': typeof FormTokenRoute
   '/insights/$id': typeof InsightsIdRoute
   '/ticket/$token': typeof TicketTokenRoute
+  '/volunteer-login/$token': typeof VolunteerLoginTokenRoute
   '/$locale/': typeof LocaleIndexRoute
   '/claim/': typeof ClaimIndexRoute
   '/communities/': typeof CommunitiesIndexRoute
@@ -878,6 +887,7 @@ export interface FileRouteTypes {
     | '/form/$token'
     | '/insights/$id'
     | '/ticket/$token'
+    | '/volunteer-login/$token'
     | '/$locale/'
     | '/claim/'
     | '/communities/'
@@ -964,6 +974,7 @@ export interface FileRouteTypes {
     | '/form/$token'
     | '/insights/$id'
     | '/ticket/$token'
+    | '/volunteer-login/$token'
     | '/$locale'
     | '/claim'
     | '/communities'
@@ -1056,6 +1067,7 @@ export interface FileRouteTypes {
     | '/form/$token'
     | '/insights/$id'
     | '/ticket/$token'
+    | '/volunteer-login/$token'
     | '/$locale/'
     | '/claim/'
     | '/communities/'
@@ -1128,6 +1140,7 @@ export interface RootRouteChildren {
   EventsSlugRoute: typeof EventsSlugRoute
   FormTokenRoute: typeof FormTokenRoute
   TicketTokenRoute: typeof TicketTokenRoute
+  VolunteerLoginTokenRoute: typeof VolunteerLoginTokenRoute
   ClaimIndexRoute: typeof ClaimIndexRoute
   CommunitiesIndexRoute: typeof CommunitiesIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
@@ -1523,6 +1536,13 @@ declare module '@tanstack/react-router' {
       path: '/ticket/$token'
       fullPath: '/ticket/$token'
       preLoaderRoute: typeof TicketTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/volunteer-login/$token': {
+      id: '/volunteer-login/$token'
+      path: '/volunteer-login/$token'
+      fullPath: '/volunteer-login/$token'
+      preLoaderRoute: typeof VolunteerLoginTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$locale/coach/$profileId': {
@@ -1972,6 +1992,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsSlugRoute: EventsSlugRoute,
   FormTokenRoute: FormTokenRoute,
   TicketTokenRoute: TicketTokenRoute,
+  VolunteerLoginTokenRoute: VolunteerLoginTokenRoute,
   ClaimIndexRoute: ClaimIndexRoute,
   CommunitiesIndexRoute: CommunitiesIndexRoute,
   EventsIndexRoute: EventsIndexRoute,

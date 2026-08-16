@@ -49,6 +49,16 @@
     "keepOpen": "Tieni aperta questa pagina per ricevere le chat.",
     "error": "Qualcosa è andato storto. Riprova.",
     "notActivated": "Il tuo account non è attivato per la chat dal vivo. Contatta l'ufficio del chapter.",
-    "startIntro": "Imposta il nome visibile ai visitatori, poi vai online per ricevere le chat."
+    "startIntro": "Imposta il nome visibile ai visitatori, poi vai online per ricevere le chat.",
+    "waitingBadge": "In attesa",
+    "alertsTitle": "Avvisi quando qualcuno attende",
+    "alertsBody": "Ricevi una notifica su questo telefono appena un visitatore chiede di parlare con un volontario.",
+    "alertsOn": "Attiva gli avvisi",
+    "alertsOff": "Disattiva gli avvisi",
+    "alertsBlocked": "Le notifiche sono bloccate nelle impostazioni del browser. Consentile per questo sito.",
+    "alertsInstallFirst": "Aggiungi prima questa pagina alla schermata Home — il telefono consente gli avvisi solo per le app installate.",
+    "alertsInstallHint": "Suggerimento: aggiungi questa pagina alla schermata Home per continuare a ricevere gli avvisi ad app chiusa.",
+    "qrExpired": "Questo codice di accesso non è più valido. Apri la tua pagina socio e mostra un nuovo codice QR.",
+    "qrSigningIn": "Accesso in corso…"
   }
 }

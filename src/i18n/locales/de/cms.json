@@ -592,7 +592,12 @@
         "qrHint": "Scannen Sie den Code mit Ihrem Handy, um die Konsole zu öffnen und online zu gehen.",
         "open": "Chatkonsole öffnen",
         "leave": "Nicht mehr mitmachen",
-        "confirmLeave": "Nicht mehr als Live-Chat-Freiwillige mitmachen?"
+        "confirmLeave": "Nicht mehr als Live-Chat-Freiwillige mitmachen?",
+        "qrIntro": "Zeige einen Einmal-QR-Code und scanne ihn mit dem Handy, um die Konsole ohne erneute Anmeldung zu öffnen.",
+        "qrShow": "Anmelde-QR-Code anzeigen",
+        "qrRenew": "Neuen Code anzeigen",
+        "qrExpiresIn": "Gültig noch",
+        "installHint": "Nutze auf dem Handy «Teilen → Zum Home-Bildschirm», damit die Konsole nur einen Tipp entfernt ist."
       }
     }
   },

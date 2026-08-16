@@ -592,7 +592,12 @@
         "qrHint": "Scannez-le avec votre téléphone pour ouvrir la console et passer en ligne.",
         "open": "Ouvrir la console de chat",
         "leave": "Arrêter le bénévolat",
-        "confirmLeave": "Arrêter d'être bénévole du chat en direct ?"
+        "confirmLeave": "Arrêter d'être bénévole du chat en direct ?",
+        "qrIntro": "Affichez un QR code à usage unique et scannez-le avec votre téléphone pour ouvrir la console sans vous reconnecter.",
+        "qrShow": "Afficher le QR code de connexion",
+        "qrRenew": "Afficher un nouveau code",
+        "qrExpiresIn": "Valable encore",
+        "installHint": "Sur votre téléphone, utilisez Partager → Sur l’écran d’accueil pour garder la console à portée de main."
       }
     }
   },

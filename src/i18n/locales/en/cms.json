@@ -592,7 +592,12 @@
         "qrHint": "Scan this with your phone to open the console and go online.",
         "open": "Open the chat console",
         "leave": "Stop volunteering",
-        "confirmLeave": "Stop being a live chat volunteer?"
+        "confirmLeave": "Stop being a live chat volunteer?",
+        "qrIntro": "Show a one-time QR code and scan it with your phone to open the console without signing in again.",
+        "qrShow": "Show sign-in QR code",
+        "qrRenew": "Show a new code",
+        "qrExpiresIn": "Valid for",
+        "installHint": "On your phone, use Share → Add to Home Screen to keep the console one tap away."
       }
     }
   },

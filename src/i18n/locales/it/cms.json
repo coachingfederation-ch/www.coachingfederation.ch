@@ -592,7 +592,12 @@
         "qrHint": "Scansionalo con il telefono per aprire la console e andare online.",
         "open": "Apri la console di chat",
         "leave": "Smetti di fare volontariato",
-        "confirmLeave": "Smettere di essere volontario della chat dal vivo?"
+        "confirmLeave": "Smettere di essere volontario della chat dal vivo?",
+        "qrIntro": "Mostra un codice QR monouso e scansionalo con il telefono per aprire la console senza accedere di nuovo.",
+        "qrShow": "Mostra il codice QR di accesso",
+        "qrRenew": "Mostra un nuovo codice",
+        "qrExpiresIn": "Valido ancora",
+        "installHint": "Sul telefono usa Condividi → Aggiungi a Home per tenere la console a portata di tocco."
       }
     }
   },
