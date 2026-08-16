@@ -19,6 +19,33 @@ const LIST_COLUMNS =
 
 const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, practical_notes, published_at, content_updated_at, hero_marks, cce_enabled`;
 
+/** One row of the staff events list, enriched with filterable labels. */
+export type ListedEvent = {
+  id: string;
+  series_id: string | null;
+  slug: string;
+  title: string;
+  summary: string | null;
+  language: string;
+  status: string;
+  starts_at: string;
+  ends_at: string | null;
+  timezone: string | null;
+  location_mode: string;
+  venue_name: string | null;
+  city: string | null;
+  capacity: number | null;
+  is_featured: boolean;
+  category_id: string | null;
+  region_id: string | null;
+  community_id: string | null;
+  organizer_id: string | null;
+  updated_at: string | null;
+  category_name: string | null;
+  community_name: string | null;
+  hosts: { id: string; name: string }[];
+};
+
 const recurrenceRule = z.object({
   frequency: z.enum(RECURRENCE_FREQUENCIES),
   interval: z.number().int().min(1).max(8),
@@ -130,10 +157,76 @@ export const listManagedEvents = createServerFn({ method: "POST" })
     await assertOrganizer(context);
     const { data, error } = await context.supabase
       .from("events")
-      .select(LIST_COLUMNS)
+      .select(`${LIST_COLUMNS}, community_id`)
       .order("starts_at", { ascending: false });
     if (error) throw new Error(error.message);
-    return data ?? [];
+    const rows = (data ?? []) as (Record<string, unknown> & {
+      id: string;
+      category_id: string | null;
+      community_id: string | null;
+    })[];
+    if (rows.length === 0) return [] as ListedEvent[];
+
+    // Labels and hosts are resolved separately: embedded selects would be
+    // filtered by the caller's RLS on the related tables, which is not what a
+    // staff listing needs.
+    const { publicSupabaseClient } = await import("./supabase-public.server");
+    const pub = publicSupabaseClient();
+
+    const categoryIds = [...new Set(rows.map((r) => r.category_id).filter(Boolean))] as string[];
+    const communityIds = [...new Set(rows.map((r) => r.community_id).filter(Boolean))] as string[];
+
+    const [categories, communities, hostLinks] = await Promise.all([
+      categoryIds.length
+        ? pub.from("cf_event_categories").select("id, name").in("id", categoryIds)
+        : Promise.resolve({ data: [] as { id: string; name: string }[] }),
+      communityIds.length
+        ? context.supabase.from("op_projects").select("id, name").in("id", communityIds)
+        : Promise.resolve({ data: [] as { id: string; name: string }[] }),
+      pub
+        .from("event_hosts")
+        .select("event_id, profile_id, sort_order")
+        .in(
+          "event_id",
+          rows.map((r) => r.id),
+        )
+        .order("sort_order", { ascending: true }),
+    ]);
+
+    const categoryName = new Map(
+      ((categories.data ?? []) as { id: string; name: string }[]).map((c) => [c.id, c.name]),
+    );
+    const communityName = new Map(
+      ((communities.data ?? []) as { id: string; name: string }[]).map((c) => [c.id, c.name]),
+    );
+
+    const links = (hostLinks.data ?? []) as { event_id: string; profile_id: string }[];
+    const profileIds = [...new Set(links.map((l) => l.profile_id))];
+    const hostName = new Map<string, string>();
+    if (profileIds.length) {
+      const { data: profiles } = await pub
+        .from("coach_directory_public")
+        .select("profile_id, full_name")
+        .in("profile_id", profileIds);
+      for (const p of (profiles ?? []) as { profile_id: string; full_name: string | null }[]) {
+        if (p.full_name) hostName.set(p.profile_id, p.full_name);
+      }
+    }
+    const hostsByEvent = new Map<string, { id: string; name: string }[]>();
+    for (const link of links) {
+      const name = hostName.get(link.profile_id);
+      if (!name) continue;
+      const list = hostsByEvent.get(link.event_id) ?? [];
+      list.push({ id: link.profile_id, name });
+      hostsByEvent.set(link.event_id, list);
+    }
+
+    return rows.map((row) => ({
+      ...row,
+      category_name: row.category_id ? (categoryName.get(row.category_id) ?? null) : null,
+      community_name: row.community_id ? (communityName.get(row.community_id) ?? null) : null,
+      hosts: hostsByEvent.get(row.id) ?? [],
+    })) as ListedEvent[];
   });
 
 export const getManagedEvent = createServerFn({ method: "POST" })
