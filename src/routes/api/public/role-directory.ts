@@ -8,7 +8,7 @@
  */
 import { createFileRoute } from "@tanstack/react-router";
 
-const EXPORTED_ROLES = ["admin", "administrator", "editor", "publisher", "organizer"];
+const EXPORTED_ROLES = ["admin", "administrator", "editor", "publisher", "organizer"] as const;
 
 function authorised(request: Request): boolean {
   const secret = process.env["ROLE_DIRECTORY_SECRET"] ?? "";
