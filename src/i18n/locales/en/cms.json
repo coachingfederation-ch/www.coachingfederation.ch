@@ -453,7 +453,14 @@
     "gateClaimOpenConfirm": "Open account claiming for all members? They will be able to bind their ICF record to a login.",
     "gateReasonTest": "Blocked in test mode.",
     "gateReasonNoCutover": "Blocked until the cutover is completed.",
-    "gateReasonFrozen": "Blocked while the cutover is in progress."
+    "gateReasonFrozen": "Blocked while the cutover is in progress.",
+    "egressTitle": "Outbound IP address",
+    "egressBody": "The address ICF sees when this app connects to their SOAP service. It can change between runs, so check a few times. Every sync run also logs this address.",
+    "egressCheck": "Check outbound IP",
+    "egressChecking": "Checking…",
+    "egressAgreed": "Both services report the same address.",
+    "egressDisagree": "The services report different addresses — the outbound address is not stable.",
+    "egressCheckedAt": "Checked"
   },
   "member": {
     "title": "My coach profile",
