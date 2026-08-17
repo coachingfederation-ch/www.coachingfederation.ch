@@ -17,6 +17,7 @@ import { template as memberClaimInvitation } from "./member-claim-invitation";
 import { template as eventRegistrationConfirmation } from "./event-registration-confirmation";
 import { template as eventCancellation } from "./event-cancellation";
 import { template as eventWaitlistInvitation } from "./event-waitlist-invitation";
+import { template as eventInvitation } from "./event-invitation";
 import { template as eventReminder } from "./event-reminder";
 import { template as eventFollowUpInvitation } from "./event-follow-up-invitation";
 
@@ -33,6 +34,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "event-registration-confirmation": eventRegistrationConfirmation,
   "event-cancellation": eventCancellation,
   "event-waitlist-invitation": eventWaitlistInvitation,
+  "event-invitation": eventInvitation,
   "event-reminder": eventReminder,
   "event-follow-up-invitation": eventFollowUpInvitation,
 };
