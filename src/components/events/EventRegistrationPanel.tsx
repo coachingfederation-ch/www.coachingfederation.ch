@@ -770,7 +770,8 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className={inputClass}
+          readOnly={Boolean(guestInvite)}
+          className={`${inputClass}${guestInvite ? " bg-secondary text-muted-foreground" : ""}`}
         />
 
         <FormQuestionFields
