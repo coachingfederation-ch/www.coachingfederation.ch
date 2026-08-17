@@ -386,6 +386,8 @@ function IntegrationPage() {
               </div>
             </section>
 
+            <OutboundIpCard t={t} />
+
             <ContentOwnershipPanel />
 
             <LinkedInPageSettings />
