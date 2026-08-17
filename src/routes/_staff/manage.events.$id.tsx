@@ -24,6 +24,7 @@ import { EventTicketsSection } from "@/components/cms/EventTicketsSection";
 import { EventCceSection } from "@/components/cms/EventCceSection";
 import { EventDiscountCodesSection } from "@/components/cms/EventDiscountCodesSection";
 import { EventWaitlistSection } from "@/components/cms/EventWaitlistSection";
+import { EventInvitationsSection } from "@/components/cms/EventInvitationsSection";
 import { EventFormsSection } from "@/components/cms/EventFormsSection";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { useCms } from "@/i18n/cms";
@@ -352,7 +353,12 @@ function EventEditor() {
                   />
                 </>
               ) : null}
-              {event.registration_mode !== "none" ? (
+              {event.registration_mode === "rsvp_invited" ? (
+                <EventInvitationsSection eventId={event.id} t={t} />
+              ) : null}
+              {/* A waitlist makes no sense when the guest list is the gate. */}
+              {event.registration_mode !== "none" &&
+              event.registration_mode !== "rsvp_invited" ? (
                 <EventWaitlistSection eventId={event.id} t={t} />
               ) : null}
               <EventFormsSection eventId={event.id} t={t} />

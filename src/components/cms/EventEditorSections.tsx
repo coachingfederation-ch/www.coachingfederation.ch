@@ -661,6 +661,7 @@ export function EventPublishingSection({
               <option value="rsvp">{t("events.regMode.rsvp")}</option>
               <option value="rsvp_members">{t("events.regMode.rsvpMembers")}</option>
               <option value="rsvp_tickets">{t("events.regMode.rsvpTickets")}</option>
+              <option value="rsvp_invited">{t("events.regMode.rsvpInvited")}</option>
             </select>
           </Field>
           {/* The membership flag only means anything on a members-only RSVP. */}
