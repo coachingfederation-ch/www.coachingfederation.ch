@@ -66,7 +66,8 @@
       "answers": "Bitte beantworte alle Pflichtfragen.",
       "payment": "Die Zahlung konnte nicht gestartet werden. Bitte versuche es erneut.",
       "members_only": "Dieser Event steht nur aktiven ICF-Mitgliedern offen.",
-      "discount": "Dieser Rabattcode kann nicht mehr verwendet werden. Bitte entfernen Sie ihn und versuchen Sie es erneut."
+      "discount": "Dieser Rabattcode kann nicht mehr verwendet werden. Bitte entfernen Sie ihn und versuchen Sie es erneut.",
+      "invite_required": "Dieser Anlass steht nur eingeladenen Mitgliedern offen."
     },
     "notFoundTitle": "Event nicht gefunden",
     "notFoundBody": "Dieses Event wurde möglicherweise entfernt oder der Link ist ungültig.",
@@ -147,7 +148,15 @@
       "inviteExpires": "Ihre Einladung gilt bis {deadline}.",
       "inviteExpired": "Diese Einladung ist abgelaufen; der Platz ist zurück auf der Warteliste."
     },
-    "cceApproved": "Anerkannt für {cc} CC-Einheiten und {rd} RD-Einheiten"
+    "cceApproved": "Anerkannt für {cc} CC-Einheiten und {rd} RD-Einheiten",
+    "invited": {
+      "title": "Ihre persönliche Einladung",
+      "body": "Auf der Gästeliste ist ein Platz für Sie reserviert. Bestätigen Sie unten, um ihn anzunehmen.",
+      "locked": "Dieser Anlass findet nur auf Einladung statt. Falls Sie eingeladen wurden, nutzen Sie bitte den persönlichen Link in Ihrer E-Mail.",
+      "expired": "Dieser Einladungslink wurde bereits verwendet oder ist nicht mehr gültig.",
+      "declined": "Danke für Ihre Rückmeldung. Wir haben notiert, dass Sie nicht teilnehmen können.",
+      "decline": "Ich kann nicht teilnehmen"
+    }
   },
   "filters": {
     "when": "Zeitraum",

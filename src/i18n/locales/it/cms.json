@@ -816,7 +816,8 @@
       "rsvp": "Iscrizione (pubblica)",
       "none": "Nessuna iscrizione",
       "rsvpMembers": "Iscrizione (soci)",
-      "rsvpTickets": "Iscrizione (biglietto)"
+      "rsvpTickets": "Iscrizione (biglietto)",
+      "rsvpInvited": "Iscrizione (membri invitati)"
     },
     "attendees": "Partecipanti",
     "confirmedSuffix": "confermati",
@@ -1198,6 +1199,33 @@
       "page": "Pagina {page} di {pages}",
       "previous": "Precedente",
       "next": "Successivo"
+    },
+    "invitations": {
+      "title": "Membri invitati",
+      "hint": "Solo i membri di questa lista ricevono un link personale, e solo quel link apre il modulo di iscrizione.",
+      "search": "Cerca un membro attivo",
+      "searchPlaceholder": "Cerca per nome o e-mail",
+      "invite": "Invita",
+      "sending": "Invio…",
+      "sent": "Invito inviato.",
+      "resend": "Invia di nuovo",
+      "resent": "È stato inviato un nuovo link di invito. Il link precedente non funziona più.",
+      "remove": "Rimuovi",
+      "empty": "Non è ancora stato invitato nessuno.",
+      "status": "Stato",
+      "invitedAt": "Invitato il",
+      "state": {
+        "invited": "Invitato",
+        "registered": "Iscritto",
+        "declined": "Rifiutato",
+        "revoked": "Rimosso",
+        "expired": "Scaduto"
+      },
+      "error": {
+        "duplicate": "Questo membro è già nella lista degli invitati.",
+        "email": "L'invito è stato salvato ma l'e-mail non è stata inviata.",
+        "error": "Non è stato possibile invitare questo membro."
+      }
     }
   },
   "eventTranslations": {

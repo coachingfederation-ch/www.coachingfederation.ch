@@ -66,7 +66,8 @@
       "answers": "Please answer all required questions.",
       "payment": "We couldn't start the payment. Please try again.",
       "members_only": "This event is open to active ICF members only.",
-      "discount": "That discount code can no longer be used. Please remove it and try again."
+      "discount": "That discount code can no longer be used. Please remove it and try again.",
+      "invite_required": "This event is open to invited members only."
     },
     "notFoundTitle": "Event not found",
     "notFoundBody": "This event may have been unpublished or the link is incorrect.",
@@ -147,7 +148,15 @@
       "inviteExpires": "Your invitation is held until {deadline}.",
       "inviteExpired": "This invitation has expired and the place has gone back to the waitlist."
     },
-    "cceApproved": "Approved for {cc} CC units and {rd} RD units"
+    "cceApproved": "Approved for {cc} CC units and {rd} RD units",
+    "invited": {
+      "title": "Your personal invitation",
+      "body": "A place is kept for you on the guest list. Confirm below to take it.",
+      "locked": "This event is by invitation only. If you were invited, please use the personal link in your email.",
+      "expired": "This invitation link has already been used or is no longer valid.",
+      "declined": "Thank you for letting us know. We have noted that you cannot make it.",
+      "decline": "I can't make it"
+    }
   },
   "filters": {
     "when": "When",

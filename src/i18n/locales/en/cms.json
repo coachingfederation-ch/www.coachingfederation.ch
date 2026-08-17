@@ -816,7 +816,8 @@
       "rsvp": "RSVP (public)",
       "none": "No registration",
       "rsvpMembers": "RSVP (members)",
-      "rsvpTickets": "RSVP (ticket)"
+      "rsvpTickets": "RSVP (ticket)",
+      "rsvpInvited": "RSVP (invited members)"
     },
     "attendees": "Attendees",
     "confirmedSuffix": "confirmed",
@@ -1198,6 +1199,33 @@
       "page": "Page {page} of {pages}",
       "previous": "Previous",
       "next": "Next"
+    },
+    "invitations": {
+      "title": "Invited members",
+      "hint": "Only the members on this list receive a personal link, and only that link opens the registration form.",
+      "search": "Find an active member",
+      "searchPlaceholder": "Search by name or email",
+      "invite": "Invite",
+      "sending": "Sending…",
+      "sent": "Invitation sent.",
+      "resend": "Resend",
+      "resent": "A new invitation link was sent. The previous link no longer works.",
+      "remove": "Remove",
+      "empty": "Nobody has been invited yet.",
+      "status": "Status",
+      "invitedAt": "Invited",
+      "state": {
+        "invited": "Invited",
+        "registered": "Registered",
+        "declined": "Declined",
+        "revoked": "Removed",
+        "expired": "Expired"
+      },
+      "error": {
+        "duplicate": "That member is already on the guest list.",
+        "email": "The invitation was saved but the email could not be sent.",
+        "error": "We could not invite that member."
+      }
     }
   },
   "eventTranslations": {
