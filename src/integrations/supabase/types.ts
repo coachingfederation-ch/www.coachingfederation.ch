@@ -1691,6 +1691,96 @@ export type Database = {
           },
         ]
       }
+      event_invitations: {
+        Row: {
+          created_at: string
+          email: string
+          event_id: string
+          full_name: string
+          id: string
+          invite_token_hash: string | null
+          invited_at: string | null
+          invited_by: string | null
+          locale: string
+          member_id: string | null
+          registration_id: string | null
+          responded_at: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          event_id: string
+          full_name: string
+          id?: string
+          invite_token_hash?: string | null
+          invited_at?: string | null
+          invited_by?: string | null
+          locale?: string
+          member_id?: string | null
+          registration_id?: string | null
+          responded_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          event_id?: string
+          full_name?: string
+          id?: string
+          invite_token_hash?: string | null
+          invited_at?: string | null
+          invited_by?: string | null
+          locale?: string
+          member_id?: string | null
+          registration_id?: string | null
+          responded_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_invitations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_invitations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_invitations_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "coach_directory_public"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "event_invitations_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_invitations_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "event_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_registrations: {
         Row: {
           amount_cents: number
@@ -4271,7 +4361,12 @@ export type Database = {
         | "separate_conference_process"
       event_location_mode: "in_person" | "online" | "hybrid"
       event_payment_status: "not_required" | "pending" | "paid" | "expired"
-      event_registration_mode: "none" | "rsvp" | "rsvp_members" | "rsvp_tickets"
+      event_registration_mode:
+        | "none"
+        | "rsvp"
+        | "rsvp_members"
+        | "rsvp_tickets"
+        | "rsvp_invited"
       event_registration_status: "confirmed" | "cancelled"
       event_status: "draft" | "published" | "cancelled"
       event_tier_segment: "member" | "non_member" | "general"
@@ -4458,7 +4553,13 @@ export const Constants = {
       ],
       event_location_mode: ["in_person", "online", "hybrid"],
       event_payment_status: ["not_required", "pending", "paid", "expired"],
-      event_registration_mode: ["none", "rsvp", "rsvp_members", "rsvp_tickets"],
+      event_registration_mode: [
+        "none",
+        "rsvp",
+        "rsvp_members",
+        "rsvp_tickets",
+        "rsvp_invited",
+      ],
       event_registration_status: ["confirmed", "cancelled"],
       event_status: ["draft", "published", "cancelled"],
       event_tier_segment: ["member", "non_member", "general"],

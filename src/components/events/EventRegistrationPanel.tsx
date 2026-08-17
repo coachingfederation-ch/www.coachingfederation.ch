@@ -32,6 +32,10 @@ import {
 } from "@/lib/tickets.functions";
 import { validateDiscountCode, validateDiscountCodeAsMember } from "@/lib/discount-codes.functions";
 import { checkWaitlistInvite } from "@/lib/waitlist.functions";
+import {
+  checkEventInvitation,
+  declineEventInvitation,
+} from "@/lib/event-invitations.functions";
 import { EventWaitlistForm } from "@/components/events/EventWaitlistForm";
 import type { DiscountFailure, DiscountPreview } from "@/lib/discount-codes";
 import {
@@ -49,6 +53,7 @@ type Reason =
   | "closed"
   | "duplicate"
   | "members_only"
+  | "invite_required"
   | "tier_required"
   | "tier_unavailable"
   | "answers"
@@ -176,12 +181,31 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const inviteQuery = useQuery({
     queryKey: ["waitlist-invite", eventId, inviteToken],
     queryFn: () => checkWaitlistInvite({ data: { eventId, token: inviteToken! } }),
-    enabled: Boolean(inviteToken),
+    enabled: Boolean(inviteToken) && (event.registration_mode ?? "none") !== "rsvp_invited",
     retry: false,
     staleTime: 60_000,
   });
   const invite = inviteQuery.data ?? null;
   const inviteExpired = Boolean(inviteToken) && inviteQuery.isFetched && !invite;
+
+  // On an invitation-only event the same ?invite= token is a guest-list token:
+  // it is the only thing that opens the form, and it carries the name and
+  // email the place was kept for.
+  const guestInviteQuery = useQuery({
+    queryKey: ["event-invitation", eventId, inviteToken],
+    queryFn: () => checkEventInvitation({ data: { eventId, token: inviteToken! } }),
+    enabled: Boolean(inviteToken) && (event.registration_mode ?? "none") === "rsvp_invited",
+    retry: false,
+    staleTime: 60_000,
+  });
+  const guestInvite = guestInviteQuery.data ?? null;
+  const [declined, setDeclined] = useState(false);
+
+  useEffect(() => {
+    if (!guestInvite) return;
+    setFullName(guestInvite.fullName);
+    setEmail(guestInvite.email);
+  }, [guestInvite]);
 
   // The invited person's own details win over anything prefilled.
   useEffect(() => {
@@ -270,6 +294,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const mode = event.registration_mode ?? "none";
   const rsvpMode = mode !== "none";
   const ticketMode = mode === "rsvp_tickets";
+  const invitedMode = mode === "rsvp_invited";
   const membersOnly = mode === "rsvp_members" && event.guest_registration_allowed === false;
 
   // A tier only applies on a ticketed event, even if tiers linger from an
@@ -354,7 +379,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
       tierId: ticketMode ? tierId : null,
       memberId: memberIdState === "confirmed" ? memberId.trim() : null,
       discountCode: appliedDiscount ? appliedDiscount.code : null,
-      inviteToken: invite ? inviteToken : null,
+      inviteToken: invite || guestInvite ? inviteToken : null,
       answers,
       environment: paymentsConfigured() ? getStripeEnvironment() : ("sandbox" as const),
     };
@@ -530,7 +555,28 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     }
     // A live invitation is the one way past a full event, so the check for it
     // comes before the "sold out" message.
-    if ((event.is_full || (ticketMode && allSoldOut)) && !invite)
+    if (invitedMode) {
+      // The guest list is the gate: without a live personal token there is
+      // nothing to show and no waitlist to join.
+      if (declined)
+        return (
+          <p className="mt-4 text-sm text-muted-foreground">
+            {t("events.detail.invited.declined")}
+          </p>
+        );
+      if (!guestInvite)
+        return (
+          <div className="mt-4">
+            <p className="text-sm text-muted-foreground">{t("events.detail.invited.locked")}</p>
+            {inviteToken && guestInviteQuery.isFetched ? (
+              <p className="mt-3 text-xs text-[color:var(--warn)]">
+                {t("events.detail.invited.expired")}
+              </p>
+            ) : null}
+          </div>
+        );
+    }
+    if ((event.is_full || (ticketMode && allSoldOut)) && !invite && !guestInvite)
       return (
         <div className="mt-4">
           <p className="text-sm text-muted-foreground">
@@ -580,6 +626,12 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
 
     return (
       <form onSubmit={submit} className="mt-4 space-y-3">
+        {guestInvite ? (
+          <div className="rounded-xl bg-teal-soft px-3 py-3 text-teal-foreground">
+            <p className="text-sm font-semibold">{t("events.detail.invited.title")}</p>
+            <p className="mt-1 text-xs leading-relaxed">{t("events.detail.invited.body")}</p>
+          </div>
+        ) : null}
         {invite ? (
           <div className="rounded-xl bg-teal-soft px-3 py-3 text-teal-foreground">
             <p className="text-sm font-semibold">{t("events.detail.waitlist.inviteTitle")}</p>
@@ -718,7 +770,8 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className={inputClass}
+          readOnly={Boolean(guestInvite)}
+          className={`${inputClass}${guestInvite ? " bg-secondary text-muted-foreground" : ""}`}
         />
 
         <FormQuestionFields
@@ -825,6 +878,20 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
               : t("events.detail.rsvp")}
         </button>
         {paymentsBroken ? notice(t("events.detail.tickets.paymentsUnavailable"), "warn") : null}
+        {guestInvite ? (
+          <button
+            type="button"
+            onClick={async () => {
+              const result = await declineEventInvitation({
+                data: { eventId, token: inviteToken! },
+              });
+              if (result.ok) setDeclined(true);
+            }}
+            className="w-full rounded-full border border-border px-5 py-2.5 text-xs font-semibold hover:bg-secondary"
+          >
+            {t("events.detail.invited.decline")}
+          </button>
+        ) : null}
         {state.kind === "error" ? (
           <p className="text-sm text-destructive">{t(`events.detail.error.${state.reason}`)}</p>
         ) : null}

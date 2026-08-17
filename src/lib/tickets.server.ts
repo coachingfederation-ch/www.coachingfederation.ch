@@ -253,7 +253,7 @@ export type RegistrationInput = {
   memberId: string | null;
   /** Optional discount code typed by the visitor; validated server-side. */
   discountCode: string | null;
-  /** Single-use waitlist invitation token, when the visitor arrived from one. */
+  /** Single-use waitlist or guest-list invitation token from the emailed link. */
   inviteToken: string | null;
   answers: Record<string, string>;
   environment: "sandbox" | "live";
@@ -269,6 +269,7 @@ export type RegistrationOutcome =
         | "closed"
         | "duplicate"
         | "members_only"
+        | "invite_required"
         | "tier_required"
         | "tier_unavailable"
         | "answers"
@@ -285,6 +286,7 @@ function failureReason(error: { code?: string; message?: string }): Registration
   if (message.includes("permission denied") || message.includes("row-level security"))
     return { ok: false, reason: "error" };
   if (message.includes("active members only")) return { ok: false, reason: "members_only" };
+  if (message.includes("invited members only")) return { ok: false, reason: "invite_required" };
   if (message.includes("discount code")) return { ok: false, reason: "discount" };
   if (message.includes("tier is full")) return { ok: false, reason: "full" };
   if (message.includes("tier")) return { ok: false, reason: "tier_unavailable" };
@@ -325,6 +327,7 @@ export async function submitRegistration(
   const mode = eventRow.registration_mode;
   if (mode === "none") return { ok: false, reason: "closed" };
   const membersOnly = mode === "rsvp_members" && !eventRow.guest_registration_allowed;
+  const invitedOnly = mode === "rsvp_invited";
 
   const membership = await resolveMembership(userId, input.memberId, rateSubject);
   if (membersOnly && membership !== "member") return { ok: false, reason: "members_only" };
@@ -341,16 +344,27 @@ export async function submitRegistration(
 
   const tier = resolved.tier;
 
-  // A live waitlist invitation lets this one email past the capacity check.
-  // The email is taken from the invitation, never from the form, so a shared
-  // link cannot seat somebody else.
-  const invite = input.inviteToken
+  // An invitation-only event is opened by the guest-list token alone; on other
+  // events a live waitlist invitation lets this one email past the capacity
+  // check. Either way the email is taken from the invitation, never from the
+  // form, so a shared link cannot seat somebody else.
+  const guestListInvite =
+    invitedOnly && input.inviteToken
+      ? await (async () => {
+          const { resolveInvitationToken } = await import("./event-invitations.server");
+          return resolveInvitationToken(input.eventId, input.inviteToken!);
+        })()
+      : null;
+  if (invitedOnly && !guestListInvite) return { ok: false, reason: "invite_required" };
+
+  const invite = !invitedOnly && input.inviteToken
     ? await (async () => {
         const { resolveInviteToken } = await import("./waitlist.server");
         return resolveInviteToken(input.eventId, input.inviteToken!);
       })()
     : null;
-  const email = invite ? invite.email : input.email;
+  const email = guestListInvite ? guestListInvite.email : invite ? invite.email : input.email;
+  const fullName = guestListInvite ? guestListInvite.fullName : input.fullName;
 
   // A discount only exists on a priced ticket. The verdict here decides the
   // Stripe amount; the database trigger recomputes the very same figure from
@@ -373,7 +387,7 @@ export async function submitRegistration(
   // because membership may rest on a member number the database cannot verify.
   // The same applies to a member-only discount code.
   const writer =
-    membersOnly || discountRecord?.member_only || invite ? supabaseAdmin : client;
+    membersOnly || invitedOnly || discountRecord?.member_only || invite ? supabaseAdmin : client;
   // The id is generated here rather than read back: anonymous guests hold an
   // insert-only grant, so a RETURNING clause would fail with a permission error.
   const registrationId = crypto.randomUUID();
@@ -382,7 +396,7 @@ export async function submitRegistration(
     event_id: input.eventId,
     user_id: userId,
     email,
-    full_name: input.fullName,
+    full_name: fullName,
     notes: input.notes,
     // Stored so the confirmation — which may be sent later by the payment
     // webhook, with no session — is written in the attendee's own language.
@@ -399,6 +413,10 @@ export async function submitRegistration(
   if (invite) {
     const { markInviteConverted } = await import("./waitlist.server");
     await markInviteConverted(invite.entryId, registrationId);
+  }
+  if (guestListInvite) {
+    const { markInvitationRegistered } = await import("./event-invitations.server");
+    await markInvitationRegistered(guestListInvite.invitationId, registrationId);
   }
 
   if (!paid || !tier) {

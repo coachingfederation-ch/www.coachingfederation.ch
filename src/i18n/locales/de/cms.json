@@ -816,7 +816,8 @@
       "rsvp": "Anmeldung (öffentlich)",
       "none": "Keine Anmeldung",
       "rsvpMembers": "Anmeldung (Mitglieder)",
-      "rsvpTickets": "Anmeldung (Ticket)"
+      "rsvpTickets": "Anmeldung (Ticket)",
+      "rsvpInvited": "Anmeldung (eingeladene Mitglieder)"
     },
     "attendees": "Teilnehmende",
     "confirmedSuffix": "bestätigt",
@@ -1198,6 +1199,33 @@
       "page": "Seite {page} von {pages}",
       "previous": "Zurück",
       "next": "Weiter"
+    },
+    "invitations": {
+      "title": "Eingeladene Mitglieder",
+      "hint": "Nur die Mitglieder auf dieser Liste erhalten einen persönlichen Link, und nur dieser Link öffnet das Anmeldeformular.",
+      "search": "Aktives Mitglied suchen",
+      "searchPlaceholder": "Nach Name oder E-Mail suchen",
+      "invite": "Einladen",
+      "sending": "Wird gesendet…",
+      "sent": "Einladung gesendet.",
+      "resend": "Erneut senden",
+      "resent": "Ein neuer Einladungslink wurde gesendet. Der bisherige Link funktioniert nicht mehr.",
+      "remove": "Entfernen",
+      "empty": "Es wurde noch niemand eingeladen.",
+      "status": "Status",
+      "invitedAt": "Eingeladen",
+      "state": {
+        "invited": "Eingeladen",
+        "registered": "Angemeldet",
+        "declined": "Abgesagt",
+        "revoked": "Entfernt",
+        "expired": "Abgelaufen"
+      },
+      "error": {
+        "duplicate": "Dieses Mitglied steht bereits auf der Gästeliste.",
+        "email": "Die Einladung wurde gespeichert, die E-Mail konnte aber nicht versendet werden.",
+        "error": "Wir konnten dieses Mitglied nicht einladen."
+      }
     }
   },
   "eventTranslations": {

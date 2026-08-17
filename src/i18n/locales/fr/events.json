@@ -66,7 +66,8 @@
       "answers": "Merci de répondre à toutes les questions obligatoires.",
       "payment": "Impossible de démarrer le paiement. Veuillez réessayer.",
       "members_only": "Cet événement est réservé aux membres ICF actifs.",
-      "discount": "Ce code de réduction n'est plus utilisable. Retirez-le et réessayez."
+      "discount": "Ce code de réduction n'est plus utilisable. Retirez-le et réessayez.",
+      "invite_required": "Cet événement est réservé aux membres invités."
     },
     "notFoundTitle": "Événement introuvable",
     "notFoundBody": "Cet événement a peut-être été dépublié ou le lien est incorrect.",
@@ -147,7 +148,15 @@
       "inviteExpires": "Votre invitation est valable jusqu'au {deadline}.",
       "inviteExpired": "Cette invitation a expiré et la place est retournée sur la liste d'attente."
     },
-    "cceApproved": "Approuvé pour {cc} unités CC et {rd} unités RD"
+    "cceApproved": "Approuvé pour {cc} unités CC et {rd} unités RD",
+    "invited": {
+      "title": "Votre invitation personnelle",
+      "body": "Une place vous est réservée sur la liste des invités. Confirmez ci-dessous pour la prendre.",
+      "locked": "Cet événement se déroule sur invitation uniquement. Si vous avez été invité·e, utilisez le lien personnel reçu par e-mail.",
+      "expired": "Ce lien d'invitation a déjà été utilisé ou n'est plus valable.",
+      "declined": "Merci de nous l'avoir fait savoir. Nous avons noté que vous ne pouvez pas venir.",
+      "decline": "Je ne peux pas venir"
+    }
   },
   "filters": {
     "when": "Période",
