@@ -878,6 +878,20 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
               : t("events.detail.rsvp")}
         </button>
         {paymentsBroken ? notice(t("events.detail.tickets.paymentsUnavailable"), "warn") : null}
+        {guestInvite ? (
+          <button
+            type="button"
+            onClick={async () => {
+              const result = await declineEventInvitation({
+                data: { eventId, token: inviteToken! },
+              });
+              if (result.ok) setDeclined(true);
+            }}
+            className="w-full rounded-full border border-border px-5 py-2.5 text-xs font-semibold hover:bg-secondary"
+          >
+            {t("events.detail.invited.decline")}
+          </button>
+        ) : null}
         {state.kind === "error" ? (
           <p className="text-sm text-destructive">{t(`events.detail.error.${state.reason}`)}</p>
         ) : null}
