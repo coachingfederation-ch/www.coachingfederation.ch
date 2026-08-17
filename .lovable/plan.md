@@ -1,106 +1,65 @@
-# Staying "online" on iOS when the app is in the background
+# Upcoming events on community pages: accent-framed image cards
 
-## The honest constraint
+Scope: the "Upcoming events" section of a local community page
+(`src/components/communities/CommunityEvents.tsx`). No data, routing or CMS change.
 
-iOS gives a home-screen web app no background execution at all. When the volunteer
-switches apps or locks the phone, the page is frozen within seconds: no timers, no
-network, no realtime socket. There is no "background app refresh" toggle a website can
-use — that setting only applies to native apps. So the current 30-second heartbeat stops
-the moment the app leaves the screen, and after 90 seconds the volunteer counts as gone.
+## What changes
 
-Anything that keeps a volunteer reachable on iOS therefore has to come from either
-(a) the server deciding how long "online" lasts, or (b) Web Push waking the volunteer up.
-Both already have foundations in the project (presence table, push subscriptions, VAPID
-keys, `push-sw.js`).
+The section keeps its bone background, eyebrow, heading and lede, and the "See all
+events" link. The cards become graphic:
 
-## What to change
+- **Image window** — the event cover image sits in a rounded window inside the card,
+  gently scaling on hover. Never distorted; a missing image falls back to a Deep Blue
+  panel with a calendar mark in Yellow at low opacity.
+- **Date badge** — the day and month are overprinted on the image as a Deep Blue pill
+  (white pill on the image-less fallback), so the date reads at a glance.
+- **Accent frame** — each card carries a thick top border in Yellow, Blue or Light Blue,
+  rotating through the list so the grid has rhythm instead of six identical tiles.
+- **Card body** — chips first (language, community, "full"), then the title, then the
+  two-line summary.
+- **Footer row** — venue on the left, time on the right, each under a small blue label,
+  separated by a hairline rule.
+- **Hover / focus** — soft lift and shadow, title shifts to Blue, visible focus ring;
+  reduced-motion users get no movement. Whole card stays one link.
 
-### 1. Duty window instead of a live heartbeat
-
-Going online starts a **duty window** — the volunteer is considered on duty until it ends,
-regardless of whether the phone screen is on.
-
-- Volunteer taps "Go online" and picks a duration (default 2 hours, options 1h / 2h / 4h).
-- Presence stores an `on_duty_until` timestamp; the public "is anyone on duty?" count uses
-  it instead of the 90-second heartbeat.
-- The heartbeat keeps running while the app is visible, but only refreshes the window; it
-  no longer decides availability on its own.
-- The header shows the remaining time and a one-tap "extend" action; reopening the app
-  extends it automatically.
-- Going offline, or the window expiring, drops the volunteer. A safety rule: if a waiting
-  visitor gets no answer within a couple of minutes, that volunteer's window ends so the
-  widget stops promising a human.
-
-### 2. Push as the actual wake-up
-
-The duty window only works if the volunteer learns about a visitor while the app is
-closed — that is exactly what Web Push does, and it already exists.
-
-- Make notification opt-in part of going online rather than a separate button, with a
-  clear line that on iOS it needs the home-screen app.
-- Notifications become time-sensitive style: visitor first name, waiting since, and a tap
-  target that opens straight into that conversation.
-- Re-notify once after ~60 seconds if nobody has accepted.
-- If a volunteer has no working push subscription, going online warns them that they will
-  only see visitors while the app is open.
-
-### 3. Keep the screen alive during an active chat
-
-While a conversation is open and the app is in the foreground, request a screen wake lock
-so the phone does not lock mid-conversation and freeze the thread. Released when the chat
-ends or the app is hidden.
-
-### 4. Fast catch-up on resume
-
-On resume the app already refreshes the session; add a presence + list refresh in the same
-step so the volunteer sees the current queue immediately instead of a stale one.
-
-## What cannot be done
-
-- No background polling, no periodic sync on iOS (Periodic Background Sync is Chromium-only).
-- No sound or vibration from a closed web app other than a push notification.
-- Push on iOS requires the app added to the home screen and notifications allowed; in plain
-  Safari there is no way to reach a volunteer whose app is closed.
+Grid moves to three columns on large screens, two on tablet, one on phone, with equal
+card heights.
 
 ## Technical notes
 
-- `live_chat_presence`: add `on_duty_until timestamptz`; `live_chat_online_count()` and the
-  volunteer list switch from `last_seen_at > now() - 90s` to `on_duty_until > now()`.
-  Keep `last_seen_at` for the "active right now" indicator in the roster.
-- Duty window is written through a server function so the client cannot set an arbitrary
-  length; extension on resume goes through the same call.
-- `src/routes/_member/volunteer-chat.tsx`: heartbeat effect refreshes the window while
-  visible; header gains remaining-time + extend; wake lock via `navigator.wakeLock` behind
-  a capability check.
-- `live-chat-push.server.ts`: richer payload (conversation id, visitor first name), a
-  single re-notify pass, and skipping volunteers whose window has expired.
-- `public/push-sw.js`: `notificationclick` deep-links to the conversation.
-- Copy in `live-chat.json` (EN/DE/FR/IT) for duration picker, remaining time, push warning.
+- Only `CommunityEvents.tsx` changes, plus any new semantic tokens needed in
+  `src/styles.css`. All colours through existing ICF tokens (`primary`, `accent`,
+  `chip`, `card`, `background`) — no hex literals, no new fonts.
+- Cover image comes from the existing `image_url` on `PublicEvent`; images are lazy
+  loaded with an empty alt (the card title carries the meaning).
+- Accent colour is derived from the card index so it is stable and needs no data.
+- Date badge uses the existing `formatEventDate` helpers with a short day/month form;
+  the full date/time stays available in the footer time cell and as the link title.
+- Same markup used wherever this component is reused; the "hosted elsewhere" community
+  chip behaviour is unchanged.
 
 ## PR note
 
-**Summary** — iOS freezes an installed web app in the background, so heartbeat-based
-presence drops volunteers as soon as they leave the screen. Replace it with a server-held
-duty window plus push wake-ups, so a volunteer stays reachable with the phone in a pocket.
+**Summary** — The community-page events list reads as six flat text boxes. This gives it
+cover imagery, an overprinted date badge and rotating ICF accent frames so upcoming
+events look like events, without changing content or behaviour.
 
 **Changes**
-- UI: go-online duration picker, remaining-time and extend control, push warning, wake lock
-  during an active chat, queue refresh on resume.
-- Backend: `on_duty_until` on presence, online-count and roster switched to it, duty window
-  set/extended through a server function, push payload and re-notify pass.
-- i18n: new keys in EN/DE/FR/IT.
+- UI: `CommunityEvents.tsx` rewritten presentationally — image window with fallback,
+  date badge, accent top border, chips/title/summary body, venue + time footer, hover
+  and focus states, three-column grid.
+- Tokens: new accent/utility tokens in `src/styles.css` only if required.
 
-**Backend / schema changes** — One new column on `live_chat_presence` and an updated
-`live_chat_online_count()`; no new tables, grants unchanged.
+**Backend / schema changes** — None.
 
-**Testing & verification** — Installed app on iPhone: go online, lock the phone, confirm the
-widget still offers a human and that a new visitor produces a notification that opens the
-right chat; window expiry drops availability; unanswered-visitor safety rule verified; plain
-Safari (no push) shows the warning; desktop browser unaffected.
+**Testing & verification** — Community page at desktop, tablet and phone widths; events
+with and without a cover image; long titles and long summaries; "full" and
+"hosted by another community" chips; keyboard focus ring and 44px targets; contrast of
+date badge and labels against their surfaces; reduced-motion.
 
-**Risks & rollback** — Main risk is promising a human who never answers; mitigated by the
-unanswered-visitor rule and a bounded window. Revert restores the heartbeat rule; the extra
-column is harmless if left.
+**Risks & rollback** — Presentational only, one component; revert the file to restore the
+current cards. Slight risk of visual weight difference against neighbouring sections,
+checked in the same pass.
 
-**Follow-ups / known debt** — No background execution is possible on iOS; a native wrapper
-would be the only way to get true background presence.
+**Follow-ups / known debt** — Events pages elsewhere still use the older card style; if
+this lands well the same treatment can be extended to `/events` and the home page later.
