@@ -35,6 +35,8 @@
       "lede": "I prossimi incontri organizzati da questa comunità.",
       "fallbackTitle": "Prossimi eventi nelle vicinanze",
       "fallbackLede": "Questa comunità non ha date in calendario al momento — ecco gli incontri delle altre comunità locali.",
+      "venueLabel": "Luogo",
+      "timeLabel": "Orario",
       "all": "Vedi tutti gli eventi"
     }
   },
