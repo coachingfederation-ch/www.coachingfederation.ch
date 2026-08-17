@@ -32,6 +32,10 @@ import {
 } from "@/lib/tickets.functions";
 import { validateDiscountCode, validateDiscountCodeAsMember } from "@/lib/discount-codes.functions";
 import { checkWaitlistInvite } from "@/lib/waitlist.functions";
+import {
+  checkEventInvitation,
+  declineEventInvitation,
+} from "@/lib/event-invitations.functions";
 import { EventWaitlistForm } from "@/components/events/EventWaitlistForm";
 import type { DiscountFailure, DiscountPreview } from "@/lib/discount-codes";
 import {
