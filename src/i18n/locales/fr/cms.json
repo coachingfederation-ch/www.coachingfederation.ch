@@ -455,12 +455,19 @@
     "gateReasonNoCutover": "Bloqué tant que la bascule n'est pas terminée.",
     "gateReasonFrozen": "Bloqué pendant la bascule.",
     "egressTitle": "Adresse IP sortante",
-    "egressBody": "L’adresse que voit ICF lorsque cette application se connecte à son service SOAP. Elle peut changer d’une exécution à l’autre : vérifiez plusieurs fois. Chaque synchronisation consigne également cette adresse.",
+    "egressBody": "L'adresse que voit ICF lorsque cette application appelle son service SOAP, vérifiée séparément en IPv4 et IPv6. Elle peut changer d'une exécution à l'autre : vérifiez plusieurs fois. Chaque synchronisation journalise les deux adresses.",
     "egressCheck": "Vérifier l’IP sortante",
     "egressChecking": "Vérification…",
     "egressAgreed": "Les deux services indiquent la même adresse.",
     "egressDisagree": "Les services indiquent des adresses différentes — l’adresse sortante n’est pas stable.",
-    "egressCheckedAt": "Vérifié"
+    "egressCheckedAt": "Vérifié",
+    "egressIpv4": "Adresse IPv4",
+    "egressIpv6": "Adresse IPv6",
+    "egressNoIpv4": "Aucune adresse IPv4 n'a pu être déterminée — le trafic sortant est peut-être uniquement IPv6.",
+    "egressNoIpv6": "Aucune adresse IPv6 n'a pu être déterminée.",
+    "egressIcfHost": "Hôte SOAP ICF :",
+    "egressIcfDual": "résout en IPv4 et IPv6.",
+    "egressIcfIpv4Only": "résout uniquement en IPv4 : notre connexion sort donc en IPv4."
   },
   "member": {
     "title": "Mon profil de coach",

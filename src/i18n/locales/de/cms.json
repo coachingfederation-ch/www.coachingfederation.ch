@@ -455,12 +455,19 @@
     "gateReasonNoCutover": "Gesperrt, bis der Cutover abgeschlossen ist.",
     "gateReasonFrozen": "Gesperrt, solange der Cutover läuft.",
     "egressTitle": "Ausgehende IP-Adresse",
-    "egressBody": "Die Adresse, die ICF sieht, wenn diese App sich mit deren SOAP-Dienst verbindet. Sie kann sich zwischen Läufen ändern, prüfen Sie daher mehrmals. Jeder Sync-Lauf protokolliert diese Adresse ebenfalls.",
+    "egressBody": "Die Adresse, die ICF sieht, wenn diese App den SOAP-Dienst aufruft — getrennt für IPv4 und IPv6 geprüft. Sie kann sich zwischen Läufen ändern, prüfen Sie also mehrmals. Jeder Sync-Lauf protokolliert beide Adressen.",
     "egressCheck": "Ausgehende IP prüfen",
     "egressChecking": "Wird geprüft …",
     "egressAgreed": "Beide Dienste melden dieselbe Adresse.",
     "egressDisagree": "Die Dienste melden unterschiedliche Adressen – die ausgehende Adresse ist nicht stabil.",
-    "egressCheckedAt": "Geprüft"
+    "egressCheckedAt": "Geprüft",
+    "egressIpv4": "IPv4-Adresse",
+    "egressIpv6": "IPv6-Adresse",
+    "egressNoIpv4": "Es konnte keine IPv4-Adresse ermittelt werden — der ausgehende Verkehr läuft möglicherweise nur über IPv6.",
+    "egressNoIpv6": "Es konnte keine IPv6-Adresse ermittelt werden.",
+    "egressIcfHost": "ICF-SOAP-Host:",
+    "egressIcfDual": "löst auf IPv4 und IPv6 auf.",
+    "egressIcfIpv4Only": "löst nur auf IPv4 auf, unsere Verbindung geht also über IPv4 hinaus."
   },
   "member": {
     "title": "Mein Coach-Profil",
