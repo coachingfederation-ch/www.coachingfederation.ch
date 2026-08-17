@@ -555,7 +555,28 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     }
     // A live invitation is the one way past a full event, so the check for it
     // comes before the "sold out" message.
-    if ((event.is_full || (ticketMode && allSoldOut)) && !invite)
+    if (invitedMode) {
+      // The guest list is the gate: without a live personal token there is
+      // nothing to show and no waitlist to join.
+      if (declined)
+        return (
+          <p className="mt-4 text-sm text-muted-foreground">
+            {t("events.detail.invited.declined")}
+          </p>
+        );
+      if (!guestInvite)
+        return (
+          <div className="mt-4">
+            <p className="text-sm text-muted-foreground">{t("events.detail.invited.locked")}</p>
+            {inviteToken && guestInviteQuery.isFetched ? (
+              <p className="mt-3 text-xs text-[color:var(--warn)]">
+                {t("events.detail.invited.expired")}
+              </p>
+            ) : null}
+          </div>
+        );
+    }
+    if ((event.is_full || (ticketMode && allSoldOut)) && !invite && !guestInvite)
       return (
         <div className="mt-4">
           <p className="text-sm text-muted-foreground">
@@ -605,6 +626,12 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
 
     return (
       <form onSubmit={submit} className="mt-4 space-y-3">
+        {guestInvite ? (
+          <div className="rounded-xl bg-teal-soft px-3 py-3 text-teal-foreground">
+            <p className="text-sm font-semibold">{t("events.detail.invited.title")}</p>
+            <p className="mt-1 text-xs leading-relaxed">{t("events.detail.invited.body")}</p>
+          </div>
+        ) : null}
         {invite ? (
           <div className="rounded-xl bg-teal-soft px-3 py-3 text-teal-foreground">
             <p className="text-sm font-semibold">{t("events.detail.waitlist.inviteTitle")}</p>
