@@ -4271,7 +4271,12 @@ export type Database = {
         | "separate_conference_process"
       event_location_mode: "in_person" | "online" | "hybrid"
       event_payment_status: "not_required" | "pending" | "paid" | "expired"
-      event_registration_mode: "none" | "rsvp" | "rsvp_members" | "rsvp_tickets"
+      event_registration_mode:
+        | "none"
+        | "rsvp"
+        | "rsvp_members"
+        | "rsvp_tickets"
+        | "rsvp_invited"
       event_registration_status: "confirmed" | "cancelled"
       event_status: "draft" | "published" | "cancelled"
       event_tier_segment: "member" | "non_member" | "general"
@@ -4458,7 +4463,13 @@ export const Constants = {
       ],
       event_location_mode: ["in_person", "online", "hybrid"],
       event_payment_status: ["not_required", "pending", "paid", "expired"],
-      event_registration_mode: ["none", "rsvp", "rsvp_members", "rsvp_tickets"],
+      event_registration_mode: [
+        "none",
+        "rsvp",
+        "rsvp_members",
+        "rsvp_tickets",
+        "rsvp_invited",
+      ],
       event_registration_status: ["confirmed", "cancelled"],
       event_status: ["draft", "published", "cancelled"],
       event_tier_segment: ["member", "non_member", "general"],
