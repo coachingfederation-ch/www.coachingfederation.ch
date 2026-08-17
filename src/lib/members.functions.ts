@@ -45,6 +45,18 @@ export const cleanupExpiredMembers = createServerFn({ method: "POST" })
     return await runLifecycleCleanup(userId);
   });
 
+/**
+ * Which outbound IP the ICF SOAP sync connects from. Runs in the same runtime
+ * as the sync, so the answer is the address ICF Global actually sees.
+ */
+export const getOutboundIpDiagnostics = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { lookupEgressIp } = await import("./egress-ip.server");
+    return await lookupEgressIp();
+  });
+
 /** One-time TEST -> LIVE cutover (admin only, irreversible). */
 export const executeCutover = createServerFn({ method: "POST" })
   .inputValidator((input) => z.object({ confirm: z.literal("CUTOVER") }).parse(input))

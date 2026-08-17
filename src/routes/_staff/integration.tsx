@@ -25,6 +25,7 @@ import {
   executeCutover,
   rehearseCutover,
   cleanupExpiredMembers,
+  getOutboundIpDiagnostics,
 } from "@/lib/members.functions";
 
 export const Route = createFileRoute("/_staff/integration")({
@@ -163,6 +164,62 @@ function GatesCard({
           )}
         </div>
       </div>
+    </section>
+  );
+}
+
+/**
+ * Which address ICF sees us connect from. The lookup runs in the same runtime
+ * as the SOAP sync, so it answers "is 185.x.x.x us?" definitively for that run.
+ */
+function OutboundIpCard({ t }: { t: (key: string) => string }) {
+  const [checking, setChecking] = useState(false);
+  const [result, setResult] = useState<{
+    checkedAt: string;
+    agreedIp: string | null;
+    probes: { service: string; ip: string | null; error: string | null }[];
+  } | null>(null);
+  const [failure, setFailure] = useState<string | null>(null);
+
+  const check = async () => {
+    setChecking(true);
+    setFailure(null);
+    try {
+      setResult(await getOutboundIpDiagnostics());
+    } catch (err) {
+      setFailure(err instanceof Error ? err.message : String(err));
+    } finally {
+      setChecking(false);
+    }
+  };
+
+  return (
+    <section className={CARD}>
+      <h2 className="text-sm font-bold">{t("integration.egressTitle")}</h2>
+      <p className="mt-1 text-xs text-muted-foreground">{t("integration.egressBody")}</p>
+      <button className={BTN + " mt-3"} disabled={checking} onClick={() => void check()}>
+        {checking ? t("integration.egressChecking") : t("integration.egressCheck")}
+      </button>
+      {failure ? <p className="mt-3 text-xs text-destructive">{failure}</p> : null}
+      {result ? (
+        <div className="mt-4">
+          <p className="font-mono text-lg font-bold">{result.agreedIp ?? "—"}</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {result.agreedIp ? t("integration.egressAgreed") : t("integration.egressDisagree")}
+          </p>
+          <ul className="mt-3 space-y-1 text-xs text-muted-foreground">
+            {result.probes.map((p) => (
+              <li key={p.service}>
+                <span className="font-semibold">{p.service}:</span>{" "}
+                <span className="font-mono">{p.ip ?? (p.error ?? "—")}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 text-xs text-muted-foreground">
+            {t("integration.egressCheckedAt")} {formatDate(result.checkedAt)}
+          </p>
+        </div>
+      ) : null}
     </section>
   );
 }
@@ -328,6 +385,8 @@ function IntegrationPage() {
                 </button>
               </div>
             </section>
+
+            <OutboundIpCard t={t} />
 
             <ContentOwnershipPanel />
 

@@ -453,7 +453,14 @@
     "gateClaimOpenConfirm": "Aprire la rivendicazione account a tutti i soci? Potranno collegare la loro scheda ICF a un accesso.",
     "gateReasonTest": "Bloccato in modalità test.",
     "gateReasonNoCutover": "Bloccato finché il cutover non è completato.",
-    "gateReasonFrozen": "Bloccato mentre il cutover è in corso."
+    "gateReasonFrozen": "Bloccato mentre il cutover è in corso.",
+    "egressTitle": "Indirizzo IP in uscita",
+    "egressBody": "L’indirizzo che ICF vede quando questa applicazione si collega al loro servizio SOAP. Può cambiare tra un’esecuzione e l’altra: verificate più volte. Ogni sincronizzazione registra anche questo indirizzo.",
+    "egressCheck": "Verifica IP in uscita",
+    "egressChecking": "Verifica in corso…",
+    "egressAgreed": "Entrambi i servizi indicano lo stesso indirizzo.",
+    "egressDisagree": "I servizi indicano indirizzi diversi: l’indirizzo in uscita non è stabile.",
+    "egressCheckedAt": "Verificato"
   },
   "member": {
     "title": "Il mio profilo coach",

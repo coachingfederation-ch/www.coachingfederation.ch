@@ -71,6 +71,9 @@ export async function runMemberSync(options: {
   console.log(
     `[member-sync] run=${runId} mode=${config.mode} trigger=${options.triggerSource} start`,
   );
+  // Record the address ICF sees us connect from (best effort, never fatal).
+  const { logEgressIp } = await import("./egress-ip.server");
+  await logEgressIp(runId);
 
   const finish = async (result: Omit<SyncResult, "runId">) => {
     await supabaseAdmin

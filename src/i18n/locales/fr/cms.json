@@ -453,7 +453,14 @@
     "gateClaimOpenConfirm": "Ouvrir la revendication de compte à tous les membres ? Ils pourront lier leur fiche ICF à un identifiant.",
     "gateReasonTest": "Bloqué en mode test.",
     "gateReasonNoCutover": "Bloqué tant que la bascule n'est pas terminée.",
-    "gateReasonFrozen": "Bloqué pendant la bascule."
+    "gateReasonFrozen": "Bloqué pendant la bascule.",
+    "egressTitle": "Adresse IP sortante",
+    "egressBody": "L’adresse que voit ICF lorsque cette application se connecte à son service SOAP. Elle peut changer d’une exécution à l’autre : vérifiez plusieurs fois. Chaque synchronisation consigne également cette adresse.",
+    "egressCheck": "Vérifier l’IP sortante",
+    "egressChecking": "Vérification…",
+    "egressAgreed": "Les deux services indiquent la même adresse.",
+    "egressDisagree": "Les services indiquent des adresses différentes — l’adresse sortante n’est pas stable.",
+    "egressCheckedAt": "Vérifié"
   },
   "member": {
     "title": "Mon profil de coach",
