@@ -174,10 +174,15 @@ function GatesCard({
  */
 function OutboundIpCard({ t }: { t: (key: string) => string }) {
   const [checking, setChecking] = useState(false);
-  const [result, setResult] = useState<{
-    checkedAt: string;
+  type Family = {
     agreedIp: string | null;
     probes: { service: string; ip: string | null; error: string | null }[];
+  };
+  const [result, setResult] = useState<{
+    checkedAt: string;
+    ipv4: Family;
+    ipv6: Family;
+    icfHost: { host: string; hasA: boolean; hasAAAA: boolean } | null;
   } | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
 
@@ -202,20 +207,45 @@ function OutboundIpCard({ t }: { t: (key: string) => string }) {
       </button>
       {failure ? <p className="mt-3 text-xs text-destructive">{failure}</p> : null}
       {result ? (
-        <div className="mt-4">
-          <p className="font-mono text-lg font-bold">{result.agreedIp ?? "—"}</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {result.agreedIp ? t("integration.egressAgreed") : t("integration.egressDisagree")}
-          </p>
-          <ul className="mt-3 space-y-1 text-xs text-muted-foreground">
-            {result.probes.map((p) => (
-              <li key={p.service}>
-                <span className="font-semibold">{p.service}:</span>{" "}
-                <span className="font-mono">{p.ip ?? (p.error ?? "—")}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-2 text-xs text-muted-foreground">
+        <div className="mt-4 space-y-4">
+          {(
+            [
+              ["integration.egressIpv4", result.ipv4, "integration.egressNoIpv4"],
+              ["integration.egressIpv6", result.ipv6, "integration.egressNoIpv6"],
+            ] as const
+          ).map(([labelKey, family, emptyKey]) => (
+            <div key={labelKey}>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                {t(labelKey)}
+              </p>
+              <p className="font-mono text-lg font-bold break-all">{family.agreedIp ?? "—"}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {family.agreedIp
+                  ? t("integration.egressAgreed")
+                  : family.probes.some((p) => p.ip)
+                    ? t("integration.egressDisagree")
+                    : t(emptyKey)}
+              </p>
+              <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+                {family.probes.map((p) => (
+                  <li key={p.service}>
+                    <span className="font-semibold">{p.service}:</span>{" "}
+                    <span className="font-mono break-all">{p.ip ?? (p.error ?? "—")}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          {result.icfHost ? (
+            <p className="text-xs text-muted-foreground">
+              {t("integration.egressIcfHost")}{" "}
+              <span className="font-mono">{result.icfHost.host}</span> —{" "}
+              {result.icfHost.hasAAAA
+                ? t("integration.egressIcfDual")
+                : t("integration.egressIcfIpv4Only")}
+            </p>
+          ) : null}
+          <p className="text-xs text-muted-foreground">
             {t("integration.egressCheckedAt")} {formatDate(result.checkedAt)}
           </p>
         </div>
