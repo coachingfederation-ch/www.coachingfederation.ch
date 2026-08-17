@@ -35,6 +35,8 @@
       "lede": "The next gatherings hosted by this community.",
       "fallbackTitle": "Upcoming events nearby",
       "fallbackLede": "This community has no dates in the calendar right now — here is what other local communities are hosting.",
+      "venueLabel": "Venue",
+      "timeLabel": "Time",
       "all": "See all events"
     }
   },
