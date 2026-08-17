@@ -91,6 +91,7 @@ import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public
 import { Route as ApiPublicLiveChatRouteImport } from './routes/api/public/live-chat'
 import { Route as ApiPublicLiveChatPurgeRouteImport } from './routes/api/public/live-chat-purge'
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
+import { Route as ApiPublicRoleDirectoryRouteImport } from './routes/api/public/role-directory'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
 import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/calendar.$file'
@@ -515,6 +516,11 @@ const ApiPublicMemberSyncRoute = ApiPublicMemberSyncRouteImport.update({
   path: '/api/public/member-sync',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicRoleDirectoryRoute = ApiPublicRoleDirectoryRouteImport.update({
+  id: '/api/public/role-directory',
+  path: '/api/public/role-directory',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StaffManageEventsIndexRoute = StaffManageEventsIndexRouteImport.update({
   id: '/manage/events/',
   path: '/manage/events/',
@@ -647,6 +653,7 @@ export interface FileRoutesByFullPath {
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
+  '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
   '/$locale/insights/': typeof LocaleInsightsIndexRoute
@@ -735,6 +742,7 @@ export interface FileRoutesByTo {
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
+  '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/$locale/communities': typeof LocaleCommunitiesIndexRoute
   '/$locale/events': typeof LocaleEventsIndexRoute
   '/$locale/insights': typeof LocaleInsightsIndexRoute
@@ -830,6 +838,7 @@ export interface FileRoutesById {
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
+  '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
   '/$locale/insights/': typeof LocaleInsightsIndexRoute
@@ -924,6 +933,7 @@ export interface FileRouteTypes {
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
+    | '/api/public/role-directory'
     | '/$locale/communities/'
     | '/$locale/events/'
     | '/$locale/insights/'
@@ -1012,6 +1022,7 @@ export interface FileRouteTypes {
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
+    | '/api/public/role-directory'
     | '/$locale/communities'
     | '/$locale/events'
     | '/$locale/insights'
@@ -1106,6 +1117,7 @@ export interface FileRouteTypes {
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
+    | '/api/public/role-directory'
     | '/$locale/communities/'
     | '/$locale/events/'
     | '/$locale/insights/'
@@ -1165,6 +1177,7 @@ export interface RootRouteChildren {
   ApiPublicLiveChatRoute: typeof ApiPublicLiveChatRoute
   ApiPublicLiveChatPurgeRoute: typeof ApiPublicLiveChatPurgeRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
+  ApiPublicRoleDirectoryRoute: typeof ApiPublicRoleDirectoryRoute
   ApiPublicCalendarFileRoute: typeof ApiPublicCalendarFileRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicTicketQrTokenRoute: typeof ApiPublicTicketQrTokenRoute
@@ -1747,6 +1760,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMemberSyncRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/role-directory': {
+      id: '/api/public/role-directory'
+      path: '/api/public/role-directory'
+      fullPath: '/api/public/role-directory'
+      preLoaderRoute: typeof ApiPublicRoleDirectoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_staff/manage/events/': {
       id: '/_staff/manage/events/'
       path: '/manage/events'
@@ -2025,6 +2045,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicLiveChatRoute: ApiPublicLiveChatRoute,
   ApiPublicLiveChatPurgeRoute: ApiPublicLiveChatPurgeRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,
+  ApiPublicRoleDirectoryRoute: ApiPublicRoleDirectoryRoute,
   ApiPublicCalendarFileRoute: ApiPublicCalendarFileRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicTicketQrTokenRoute: ApiPublicTicketQrTokenRoute,
