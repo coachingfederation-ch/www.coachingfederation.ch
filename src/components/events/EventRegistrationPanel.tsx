@@ -49,6 +49,7 @@ type Reason =
   | "closed"
   | "duplicate"
   | "members_only"
+  | "invite_required"
   | "tier_required"
   | "tier_unavailable"
   | "answers"
@@ -176,12 +177,31 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const inviteQuery = useQuery({
     queryKey: ["waitlist-invite", eventId, inviteToken],
     queryFn: () => checkWaitlistInvite({ data: { eventId, token: inviteToken! } }),
-    enabled: Boolean(inviteToken),
+    enabled: Boolean(inviteToken) && (event.registration_mode ?? "none") !== "rsvp_invited",
     retry: false,
     staleTime: 60_000,
   });
   const invite = inviteQuery.data ?? null;
   const inviteExpired = Boolean(inviteToken) && inviteQuery.isFetched && !invite;
+
+  // On an invitation-only event the same ?invite= token is a guest-list token:
+  // it is the only thing that opens the form, and it carries the name and
+  // email the place was kept for.
+  const guestInviteQuery = useQuery({
+    queryKey: ["event-invitation", eventId, inviteToken],
+    queryFn: () => checkEventInvitation({ data: { eventId, token: inviteToken! } }),
+    enabled: Boolean(inviteToken) && (event.registration_mode ?? "none") === "rsvp_invited",
+    retry: false,
+    staleTime: 60_000,
+  });
+  const guestInvite = guestInviteQuery.data ?? null;
+  const [declined, setDeclined] = useState(false);
+
+  useEffect(() => {
+    if (!guestInvite) return;
+    setFullName(guestInvite.fullName);
+    setEmail(guestInvite.email);
+  }, [guestInvite]);
 
   // The invited person's own details win over anything prefilled.
   useEffect(() => {
@@ -270,6 +290,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const mode = event.registration_mode ?? "none";
   const rsvpMode = mode !== "none";
   const ticketMode = mode === "rsvp_tickets";
+  const invitedMode = mode === "rsvp_invited";
   const membersOnly = mode === "rsvp_members" && event.guest_registration_allowed === false;
 
   // A tier only applies on a ticketed event, even if tiers linger from an
@@ -354,7 +375,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
       tierId: ticketMode ? tierId : null,
       memberId: memberIdState === "confirmed" ? memberId.trim() : null,
       discountCode: appliedDiscount ? appliedDiscount.code : null,
-      inviteToken: invite ? inviteToken : null,
+      inviteToken: invite || guestInvite ? inviteToken : null,
       answers,
       environment: paymentsConfigured() ? getStripeEnvironment() : ("sandbox" as const),
     };
