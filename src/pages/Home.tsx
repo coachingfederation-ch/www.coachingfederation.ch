@@ -168,8 +168,8 @@ function WhyCredentialed() {
 }
 
 const THEME_STYLES: { bg: string; fg: string; mark: MarkName }[] = [
-  { bg: "bg-mark-cream", fg: "text-mark-indigo", mark: "circular1" },
-  { bg: "bg-mark-cream", fg: "text-mark-blue", mark: "star" },
+  { bg: "bg-card", fg: "text-mark-indigo", mark: "circular1" },
+  { bg: "bg-card", fg: "text-mark-blue", mark: "star" },
   { bg: "bg-mark-yellow", fg: "text-mark-indigo", mark: "asterisk1" },
   { bg: "bg-mark-indigo", fg: "text-mark-cream", mark: "circular2" },
 ];
