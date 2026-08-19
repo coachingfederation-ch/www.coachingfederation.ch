@@ -24,16 +24,16 @@ export function SiteFooter() {
             {t("common.nav.findACoach")}
           </LocaleLink>
           <LocaleLink
-            to="/for-organisations"
-            className="inline-flex min-h-6 items-center text-white/80 hover:text-white"
-          >
-            {t("common.nav.forOrganisations")}
-          </LocaleLink>
-          <LocaleLink
             to="/for-coaches"
             className="inline-flex min-h-6 items-center text-white/80 hover:text-white"
           >
             {t("common.nav.forCoaches")}
+          </LocaleLink>
+          <LocaleLink
+            to="/for-organisations"
+            className="inline-flex min-h-6 items-center text-white/80 hover:text-white"
+          >
+            {t("common.nav.forOrganisations")}
           </LocaleLink>
           <LocaleLink
             to="/insights"
@@ -68,6 +68,12 @@ export function SiteFooter() {
             <Shield className="h-3.5 w-3.5" aria-hidden="true" />
             {t("common.footer.trustCenter")}
           </a>
+          <LocaleLink
+            to="/imprint"
+            className="inline-flex min-h-6 items-center text-white/80 hover:text-white"
+          >
+            {t("common.footer.imprint")}
+          </LocaleLink>
           <a
             href="https://coachingfederation.org/credentialing/coaching-ethics/"
             target="_blank"
@@ -76,12 +82,6 @@ export function SiteFooter() {
           >
             {t("common.footer.ethics")}
           </a>
-          <LocaleLink
-            to="/imprint"
-            className="inline-flex min-h-6 items-center text-white/80 hover:text-white"
-          >
-            {t("common.footer.imprint")}
-          </LocaleLink>
         </nav>
       </div>
     </footer>
