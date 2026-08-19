@@ -16,7 +16,7 @@ import type { MarkName } from "@/design-system/icf-welcome-design-system-a835df/
 // Imported from the component module rather than the library index: the index
 // also re-exports the library's own showcase chrome, whose links point at
 // routes that only exist in the design-system project.
-import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df/components/photography/AiPhoto";
+import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
 import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { SiteHeaderBar, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SponsorMarquee, type SponsorItem } from "@/components/home/SponsorMarquee";

@@ -1,5 +1,4 @@
 @import "tailwindcss" source(none);
-@import "tw-animate-css";
 /*
  * Attached design system theme (ICF Welcome Design System). Imported after the
  * project's own Tailwind setup so its tokens are the source of truth for the
