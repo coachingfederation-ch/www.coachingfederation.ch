@@ -44,7 +44,7 @@ export type CredentialCheckResult = {
 };
 
 const XWEB_NS = "http://www.avectra.com/2005/";
-const TIMEOUT_MS = 15000;
+const TIMEOUT_MS = 25000;
 
 function shape(name: string): SecretShape {
   const raw = process.env[name];
