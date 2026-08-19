@@ -96,7 +96,10 @@ export function MarkdownEditor({
 
   useEffect(() => {
     const stored = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
-    if ((stored === "write" || stored === "split" || stored === "preview") && modes.includes(stored)) {
+    if (
+      (stored === "write" || stored === "split" || stored === "preview") &&
+      modes.includes(stored)
+    ) {
       setMode(stored);
       return;
     }
