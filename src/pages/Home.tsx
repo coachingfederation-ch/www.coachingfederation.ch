@@ -10,7 +10,7 @@ import adPractice from "@/assets/ads/ad-practice.jpg";
 import adRetreats from "@/assets/ads/ad-retreats.jpg";
 import adMentoring from "@/assets/ads/ad-mentoring.jpg";
 import heroImg from "@/assets/hero-coaching.jpg";
-import leadershipImgAsset from "@/assets/leadership-team.jpg.asset.json";
+import leadershipImg from "@/assets/leadership-team.jpg";
 import { Mark, type MarkName } from "@/components/marks";
 // Imported from the component module rather than the library index: the index
 // also re-exports the library's own showcase chrome, whose links point at
@@ -257,14 +257,17 @@ function ForOrganisations() {
             </a>
           </div>
         </div>
-        <img
-          src={leadershipImgAsset.url}
-          alt={t("home.organisations.imgAlt")}
-          width={1600}
-          height={1200}
-          loading="lazy"
-          className="aspect-[5/4] w-full rounded-2xl object-cover"
-        />
+        <div className="relative">
+          <img
+            src={leadershipImg}
+            alt={t("home.organisations.imgAlt")}
+            width={1600}
+            height={1280}
+            loading="lazy"
+            className="aspect-[5/4] w-full rounded-2xl object-cover"
+          />
+          <AiBadge label={t("common.aiGenerated")} className="absolute bottom-4 left-4" />
+        </div>
       </div>
     </section>
   );
