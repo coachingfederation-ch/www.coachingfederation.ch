@@ -256,6 +256,124 @@ function OutboundIpCard({ t }: { t: (key: string) => string }) {
 }
 
 function IntegrationPage() {
+  return <IntegrationPageBody />;
+}
+
+/**
+ * Isolated ICF login check. Answers "is the sync failing because of our stored
+ * credentials, the endpoint, or the ICF account?" without ever showing a value.
+ */
+function CredentialCheckCard({ t }: { t: (key: string) => string }) {
+  const [checking, setChecking] = useState(false);
+  const [result, setResult] = useState<{
+    checkedAt: string;
+    mode: string;
+    ok: boolean;
+    warning: string | null;
+    attempts: { label: string; url: string; ok: boolean; fault: string | null }[];
+    secrets: {
+      name: string;
+      present: boolean;
+      length: number;
+      hasLeadingWhitespace: boolean;
+      hasTrailingWhitespace: boolean;
+      hasNewline: boolean;
+      hasNonAscii: boolean;
+    }[];
+  } | null>(null);
+  const [failure, setFailure] = useState<string | null>(null);
+
+  const check = async () => {
+    setChecking(true);
+    setFailure(null);
+    try {
+      setResult(await checkIcfCredentials());
+    } catch (err) {
+      setFailure(err instanceof Error ? err.message : String(err));
+    } finally {
+      setChecking(false);
+    }
+  };
+
+  const flags = (s: {
+    hasLeadingWhitespace: boolean;
+    hasTrailingWhitespace: boolean;
+    hasNewline: boolean;
+    hasNonAscii: boolean;
+  }) =>
+    [
+      s.hasLeadingWhitespace ? t("integration.credLeading") : null,
+      s.hasTrailingWhitespace ? t("integration.credTrailing") : null,
+      s.hasNewline ? t("integration.credNewline") : null,
+      s.hasNonAscii ? t("integration.credNonAscii") : null,
+    ].filter(Boolean) as string[];
+
+  return (
+    <section className={CARD}>
+      <h2 className="text-sm font-bold">{t("integration.credTitle")}</h2>
+      <p className="mt-1 text-xs text-muted-foreground">{t("integration.credBody")}</p>
+      <button className={BTN + " mt-3"} disabled={checking} onClick={() => void check()}>
+        {checking ? t("integration.credChecking") : t("integration.credCheck")}
+      </button>
+      {failure ? <p className="mt-3 text-xs text-destructive">{failure}</p> : null}
+      {result ? (
+        <div className="mt-4 space-y-4">
+          <p className={result.ok ? "text-sm font-bold" : "text-sm font-bold text-destructive"}>
+            {result.ok ? t("integration.credOk") : t("integration.credFailed")}{" "}
+            <span className="font-mono uppercase">{result.mode}</span>
+          </p>
+          {result.warning ? (
+            <p className="text-xs text-destructive">{result.warning}</p>
+          ) : (
+            <p className="text-xs text-muted-foreground">{t("integration.credSecretsClean")}</p>
+          )}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t("integration.credAttempts")}
+            </p>
+            <ul className="mt-2 space-y-2 text-xs">
+              {result.attempts.map((a) => (
+                <li key={a.label}>
+                  <span className="font-semibold">{a.ok ? "✓" : "✕"} {a.label}</span>
+                  <br />
+                  <span className="font-mono break-all text-muted-foreground">{a.url}</span>
+                  {a.fault ? (
+                    <>
+                      <br />
+                      <span className="text-destructive">{a.fault}</span>
+                    </>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t("integration.credSecrets")}
+            </p>
+            <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+              {result.secrets.map((s) => (
+                <li key={s.name}>
+                  <span className="font-mono">{s.name}</span>:{" "}
+                  {s.present
+                    ? `${s.length} ${t("integration.credChars")}${
+                        flags(s).length ? ` — ${flags(s).join(", ")}` : ""
+                      }`
+                    : t("integration.credMissing")}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {t("integration.egressCheckedAt")} {formatDate(result.checkedAt)}
+          </p>
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+function IntegrationPageBody() {
   const { t } = useCms();
   const [config, setConfig] = useState<IntegrationConfig | null>(null);
   const [runs, setRuns] = useState<SyncRun[]>([]);
