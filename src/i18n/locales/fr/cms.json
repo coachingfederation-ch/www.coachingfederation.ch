@@ -467,7 +467,22 @@
     "egressNoIpv6": "Aucune adresse IPv6 n'a pu être déterminée.",
     "egressIcfHost": "Hôte SOAP ICF :",
     "egressIcfDual": "résout en IPv4 et IPv6.",
-    "egressIcfIpv4Only": "résout uniquement en IPv4 : notre connexion sort donc en IPv4."
+    "egressIcfIpv4Only": "résout uniquement en IPv4 : notre connexion sort donc en IPv4.",
+    "credTitle": "Vérification des identifiants ICF",
+    "credBody": "Exécute uniquement l’étape de connexion ICF, depuis le même environnement que la synchronisation nocturne. Cela permet de distinguer un secret mal collé ou un mauvais point d’accès d’un compte désactivé par ICF. Aucune valeur d’identifiant n’est affichée ni journalisée.",
+    "credCheck": "Vérifier les identifiants ICF",
+    "credChecking": "Vérification…",
+    "credOk": "Connexion réussie en mode",
+    "credFailed": "Connexion refusée en mode",
+    "credSecretsClean": "Les secrets enregistrés semblent corrects — aucun espace ni saut de ligne parasite.",
+    "credAttempts": "Tentatives de connexion",
+    "credSecrets": "Secrets enregistrés",
+    "credChars": "caractères",
+    "credMissing": "non configuré",
+    "credLeading": "espace en début",
+    "credTrailing": "espace en fin",
+    "credNewline": "contient un saut de ligne",
+    "credNonAscii": "contient un caractère non standard"
   },
   "member": {
     "title": "Mon profil de coach",

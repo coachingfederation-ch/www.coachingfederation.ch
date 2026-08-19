@@ -467,7 +467,22 @@
     "egressNoIpv6": "Es konnte keine IPv6-Adresse ermittelt werden.",
     "egressIcfHost": "ICF-SOAP-Host:",
     "egressIcfDual": "löst auf IPv4 und IPv6 auf.",
-    "egressIcfIpv4Only": "löst nur auf IPv4 auf, unsere Verbindung geht also über IPv4 hinaus."
+    "egressIcfIpv4Only": "löst nur auf IPv4 auf, unsere Verbindung geht also über IPv4 hinaus.",
+    "credTitle": "ICF-Zugangsdaten prüfen",
+    "credBody": "Führt nur den ICF-Anmeldeschritt aus, aus derselben Laufzeitumgebung wie der nächtliche Sync. So lässt sich ein falsch eingefügtes Secret oder ein falscher Anmelde-Endpunkt von einem durch ICF deaktivierten Konto unterscheiden. Es wird nie ein Zugangswert angezeigt oder protokolliert.",
+    "credCheck": "ICF-Zugangsdaten prüfen",
+    "credChecking": "Wird geprüft …",
+    "credOk": "Anmeldung erfolgreich im Modus",
+    "credFailed": "Anmeldung abgelehnt im Modus",
+    "credSecretsClean": "Die gespeicherten Secrets sehen sauber aus – keine überflüssigen Leerzeichen oder Zeilenumbrüche.",
+    "credAttempts": "Anmeldeversuche",
+    "credSecrets": "Gespeicherte Secrets",
+    "credChars": "Zeichen",
+    "credMissing": "nicht konfiguriert",
+    "credLeading": "führendes Leerzeichen",
+    "credTrailing": "abschliessendes Leerzeichen",
+    "credNewline": "enthält einen Zeilenumbruch",
+    "credNonAscii": "enthält ein nicht standardmässiges Zeichen"
   },
   "member": {
     "title": "Mein Coach-Profil",

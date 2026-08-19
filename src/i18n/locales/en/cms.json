@@ -467,7 +467,22 @@
     "egressNoIpv6": "No IPv6 address could be determined.",
     "egressIcfHost": "ICF SOAP host:",
     "egressIcfDual": "resolves to both IPv4 and IPv6.",
-    "egressIcfIpv4Only": "resolves to IPv4 only, so our connection must leave over IPv4."
+    "egressIcfIpv4Only": "resolves to IPv4 only, so our connection must leave over IPv4.",
+    "credTitle": "ICF credentials check",
+    "credBody": "Runs only the ICF login step, from the same runtime as the nightly sync. Use it to tell a mis-pasted secret or a wrong login endpoint apart from an account ICF has disabled. No credential value is ever shown or logged.",
+    "credCheck": "Check ICF credentials",
+    "credChecking": "Checking…",
+    "credOk": "Login succeeded in mode",
+    "credFailed": "Login rejected in mode",
+    "credSecretsClean": "Stored secrets look clean — no stray whitespace or line breaks.",
+    "credAttempts": "Login attempts",
+    "credSecrets": "Stored secrets",
+    "credChars": "characters",
+    "credMissing": "not configured",
+    "credLeading": "leading whitespace",
+    "credTrailing": "trailing whitespace",
+    "credNewline": "contains a line break",
+    "credNonAscii": "contains a non-standard character"
   },
   "member": {
     "title": "My coach profile",
