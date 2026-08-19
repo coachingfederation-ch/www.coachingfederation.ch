@@ -5,7 +5,12 @@
 import { localizePath, SITE_URL, type Locale } from "@/i18n/config";
 import { makeT } from "@/i18n";
 
-type ProfileLike = { full_name: string | null; tagline: string | null; city: string | null };
+type ProfileLike = {
+  full_name: string | null;
+  tagline: string | null;
+  city: string | null;
+  image_url?: string | null;
+};
 
 export function coachHead(
   loaderData: { profile: ProfileLike } | undefined,
@@ -26,6 +31,22 @@ export function coachHead(
   const title = `${name} — The Switzerland Chapter of ICF`;
   const description = p.tagline || t("directory.detail.metaFallback").replace("{name}", name);
   const url = `${SITE_URL}${localizePath(`/coach/${profileId}`, locale)}`;
+  const image = p.image_url?.startsWith("https://") ? p.image_url : undefined;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    headline: title,
+    mainEntity: {
+      "@type": "Person",
+      name,
+      description,
+      url,
+      ...(image ? { image } : {}),
+      ...(p.city ? { homeLocation: { "@type": "Place", name: p.city } } : {}),
+    },
+  };
+
   return {
     meta: [
       { title },
@@ -37,5 +58,6 @@ export function coachHead(
       { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: url }],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }],
   };
 }
