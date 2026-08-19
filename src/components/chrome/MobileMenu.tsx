@@ -1,11 +1,10 @@
 /**
- * Mobile navigation sheet shown under the header on small screens, plus the
- * account links block reused inside it. Rendered by Header's SiteNav.
+ * Account links block rendered inside the design system header's mobile sheet.
  */
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
-import { LocaleLink, useI18n } from "@/i18n";
-import { navItems, signOutHere, useHeaderSession } from "@/components/chrome/constants";
+import { useI18n } from "@/i18n";
+import { signOutHere, useHeaderSession } from "@/components/chrome/constants";
 
 /** Account entries inside the mobile menu sheet. */
 export function MobileAccountLinks({ onNavigate }: { onNavigate: () => void }) {
@@ -35,36 +34,5 @@ export function MobileAccountLinks({ onNavigate }: { onNavigate: () => void }) {
         </>
       )}
     </div>
-  );
-}
-
-export function MobileMenu({ onClose }: { onClose: () => void }) {
-  const { t } = useI18n();
-  return (
-    <nav
-      id="site-mobile-nav"
-      aria-label={t("common.nav.primaryLabel")}
-      className="absolute inset-x-0 top-full z-40 mt-3 flex flex-col rounded-2xl bg-hero p-2 text-[13px] font-semibold shadow-lg ring-1 ring-white/20 lg:hidden"
-    >
-      {navItems.map((i) => (
-        <LocaleLink
-          key={i.to}
-          to={i.to}
-          activeOptions={{ exact: true }}
-          onClick={onClose}
-          className="rounded-full px-4 py-3 text-white/85 transition hover:bg-white/10 hover:text-white data-[status=active]:bg-white/15 data-[status=active]:text-white"
-        >
-          {t(`common.nav.${i.key}`)}
-        </LocaleLink>
-      ))}
-      <LocaleLink
-        to="/find-a-coach"
-        onClick={onClose}
-        className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-accent px-5 text-[11px] font-semibold uppercase tracking-wider text-accent-foreground"
-      >
-        {t("common.nav.findACoach")}
-      </LocaleLink>
-      <MobileAccountLinks onNavigate={onClose} />
-    </nav>
   );
 }

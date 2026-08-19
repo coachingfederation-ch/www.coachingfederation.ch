@@ -16,6 +16,7 @@ import { Mark, type MarkName } from "@/components/marks";
 // also re-exports the library's own showcase chrome, whose links point at
 // routes that only exist in the design-system project.
 import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df/components/photography/AiPhoto";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { SiteHeaderBar, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SponsorMarquee, type SponsorItem } from "@/components/home/SponsorMarquee";
 import { useI18n, LocaleLink } from "@/i18n";
@@ -44,12 +45,9 @@ function HeroHeader() {
               {t("home.hero.subtitle")}
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
-              <LocaleLink
-                to="/find-a-coach"
-                className="inline-flex h-12 items-center rounded-full bg-accent px-6 text-sm font-semibold text-accent-foreground transition hover:brightness-105"
-              >
-                {t("common.nav.findACoach")} →
-              </LocaleLink>
+              <Button asChild variant="pill" size="pill">
+                <LocaleLink to="/find-a-coach">{t("common.nav.findACoach")} →</LocaleLink>
+              </Button>
               <LocaleLink
                 to="/for-organisations"
                 className="inline-flex h-12 items-center text-sm font-semibold text-white/85 underline-offset-4 transition hover:text-white hover:underline"
@@ -64,7 +62,7 @@ function HeroHeader() {
               alt={t("home.hero.imgAlt")}
               width={1440}
               height={1152}
-              className="aspect-[5/4] w-full rounded-[2rem] object-cover"
+              className="aspect-[5/4] w-full rounded-4xl object-cover"
             />
             {/* The hero photograph is AI generated: the disclosure travels with
                 the image and sits clear of the faces. */}
@@ -240,13 +238,11 @@ function ForOrganisations() {
             {t("home.organisations.subtitle")}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <LocaleLink
-              to="/for-organisations"
-              hash="organisation-contact"
-              className="inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
-            >
-              {t("home.organisations.talkToUs")}
-            </LocaleLink>
+            <Button asChild variant="default" size="pill">
+              <LocaleLink to="/for-organisations" hash="organisation-contact">
+                {t("home.organisations.talkToUs")}
+              </LocaleLink>
+            </Button>
             <a
               href="https://coachingfederation.org/resources/resource-library/?_topic=coaching-in-organizations&_resource_type=case-studies"
               target="_blank"
