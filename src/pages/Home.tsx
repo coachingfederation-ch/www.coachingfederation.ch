@@ -42,7 +42,7 @@ function HeroHeader() {
               <span className="text-accent">{t("home.hero.titleAccent")}</span>
               {t("home.hero.titlePost")}
             </h1>
-            <p className="mt-6 max-w-xl text-[17px] leading-[1.65] text-white/85">
+            <p className="mt-6 max-w-xl text-[17px] leading-[1.65] text-hero-foreground/85">
               {t("home.hero.subtitle")}
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -51,7 +51,7 @@ function HeroHeader() {
               </Button>
               <LocaleLink
                 to="/for-organisations"
-                className="inline-flex h-12 items-center text-sm font-semibold text-white/85 underline-offset-4 transition hover:text-white hover:underline"
+                className="inline-flex h-12 items-center text-sm font-semibold text-hero-foreground/85 underline-offset-4 transition hover:text-hero-foreground hover:underline"
               >
                 {t("common.nav.forOrganisations")}
               </LocaleLink>
@@ -405,7 +405,7 @@ function Join() {
         <div>
           <p className="eyebrow !text-accent">{t("home.join.eyebrow")}</p>
           <h2 className="mt-3 display-lg">{t("home.join.title")}</h2>
-          <p className="mt-5 max-w-lg text-base leading-relaxed text-white/85">
+          <p className="mt-5 max-w-lg text-base leading-relaxed text-hero-foreground/85">
             {t("home.join.subtitle")}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -413,22 +413,22 @@ function Join() {
               href="https://coachingfederation.org/about/icf-membership/individual-membership/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-10 items-center rounded-full bg-white px-5 text-sm font-semibold text-primary transition hover:bg-white/90"
+              className="inline-flex h-10 items-center rounded-full bg-hero-foreground px-5 text-sm font-semibold text-hero transition hover:bg-hero-foreground/90"
             >
               {t("home.join.becomeMember")}
             </a>
             <LocaleLink
               to="/for-coaches"
               hash="credentials"
-              className="inline-flex h-10 items-center rounded-full border border-white/30 px-5 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="inline-flex h-10 items-center rounded-full border border-hero-foreground/30 px-5 text-sm font-semibold text-hero-foreground transition hover:bg-hero-foreground/10"
             >
               {t("home.join.exploreCredentials")}
             </LocaleLink>
           </div>
         </div>
-        <div className="rounded-2xl border border-white/15 bg-white/5 p-6 backdrop-blur">
-          <h3 className="text-xl font-semibold tracking-tight">{t("home.join.newsletterTitle")}</h3>
-          <p className="mt-2 text-sm leading-relaxed text-white/85">
+        <div className="rounded-2xl border border-hero-foreground/15 bg-hero-foreground/5 p-6 backdrop-blur">
+          <h3 className="text-xl font-semibold tracking-tight text-hero-foreground">{t("home.join.newsletterTitle")}</h3>
+          <p className="mt-2 text-sm leading-relaxed text-hero-foreground/85">
             {t("home.join.newsletterSubtitle")}
           </p>
           <form
@@ -445,11 +445,11 @@ function Join() {
               type="email"
               required
               placeholder={t("home.join.emailPlaceholder")}
-              className="h-10 w-full rounded-full border border-white/20 bg-white/10 px-4 text-sm text-white placeholder:text-white/70 outline-none focus:border-white/60"
+              className="h-10 w-full rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-4 text-sm text-hero-foreground placeholder:text-hero-foreground/70 outline-none focus:border-hero-foreground/60"
             />
             <button
               type="submit"
-              className="h-10 rounded-full bg-white px-5 text-sm font-semibold text-primary transition hover:bg-white/90"
+              className="h-10 rounded-full bg-hero-foreground px-5 text-sm font-semibold text-hero transition hover:bg-hero-foreground/90"
             >
               {t("home.join.subscribe")}
             </button>

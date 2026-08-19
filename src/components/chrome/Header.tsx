@@ -135,7 +135,7 @@ export function CompactHero({
         <div className="mt-14 max-w-3xl">
           <p className="eyebrow !text-accent">{eyebrow}</p>
           <h1 className="display-xl mt-4">{title}</h1>
-          <p className="mt-6 max-w-2xl text-[17px] leading-[1.65] text-white/85">{lede}</p>
+          <p className="mt-6 max-w-2xl text-[17px] leading-[1.65] text-hero-foreground/85">{lede}</p>
           {ctaLabel && (
             <div className="mt-9">
               <Button asChild variant="pill" size="pill">
