@@ -69,7 +69,7 @@ function HeroHeader() {
                 the image and sits clear of the faces. */}
             <AiBadge label={t("common.aiGenerated")} className="absolute bottom-4 left-4" />
             <Mark
-              name="asterisk1"
+              name="Asterisk01"
               className="pointer-events-none absolute -right-4 -top-7 h-24 w-24 text-mark-yellow sm:-right-6 sm:-top-9 sm:h-28 sm:w-28"
             />
           </div>
@@ -301,9 +301,9 @@ function Sponsors() {
 }
 
 const EVENT_STYLES: { bg: string; fg: string; mark: MarkName }[] = [
-  { bg: "bg-mark-cream", fg: "text-mark-indigo", mark: "arrow1" },
-  { bg: "bg-mark-indigo", fg: "text-mark-yellow", mark: "asterisk3" },
-  { bg: "bg-mark-yellow", fg: "text-mark-indigo", mark: "arrow2" },
+  { bg: "bg-mark-cream", fg: "text-mark-indigo", mark: "Arrow01" },
+  { bg: "bg-mark-indigo", fg: "text-mark-yellow", mark: "Asterisk03" },
+  { bg: "bg-mark-yellow", fg: "text-mark-indigo", mark: "Arrow02" },
 ];
 
 function Events() {
@@ -398,7 +398,7 @@ function Join() {
   return (
     <section className="relative overflow-hidden bg-hero text-hero-foreground">
       <Mark
-        name="circular2"
+        name="CircularMark02"
         className="pointer-events-none absolute -right-16 -top-10 h-96 w-96 text-mark-cream opacity-40"
       />
       <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 py-24 md:grid-cols-[1.2fr_1fr] md:items-center">
