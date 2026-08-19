@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, Clock, Languages, MapPin, Users } from "lucide-react";
 import { SiteFooter, SiteHeaderBar } from "@/components/site-chrome";
 import { Mark, type MarkName } from "@/components/marks";
-import { RichTextView } from "@/components/rich-text-view";
+import { Markdown } from "@/components/markdown";
 import { HeroMarks } from "@/components/HeroMarks";
 import { EventHeroSurface } from "@/components/events/EventHeroSurface";
 import { EventRegistrationPanel } from "@/components/events/EventRegistrationPanel";
@@ -214,10 +214,9 @@ export default function EventDetailPage({
               </p>
             ) : null}
             {event.description ? (
-              <RichTextView
-                text={event.description}
-                className="gap-5 text-base text-foreground/90"
-              />
+              <div className="text-base text-foreground/90">
+                <Markdown>{event.description}</Markdown>
+              </div>
             ) : (
               <p className="text-base text-muted-foreground">{event.summary}</p>
             )}
