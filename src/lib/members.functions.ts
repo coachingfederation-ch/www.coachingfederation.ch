@@ -57,7 +57,10 @@ export const getOutboundIpDiagnostics = createServerFn({ method: "POST" })
     return await lookupEgressIp();
   });
 
-/** One-time TEST -> LIVE cutover (admin only, irreversible). */
+/**
+ * Isolated ICF login check (admin only). Runs just the Authenticate step so a
+ * failing sync can be attributed to a secret, an endpoint, or the ICF account.
+ */
 export const checkIcfCredentials = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
