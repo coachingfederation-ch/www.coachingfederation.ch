@@ -10,7 +10,7 @@ import { AiAssistPanel } from "@/components/cms/AiAssistPanel";
 import { useCms } from "@/i18n/cms";
 
 export type EditorMode = "write" | "split" | "preview";
-const MODES: { key: EditorMode; icon: typeof Pencil }[] = [
+const ALL_MODES: { key: EditorMode; icon: typeof Pencil }[] = [
   { key: "write", icon: Pencil },
   { key: "split", icon: Columns2 },
   { key: "preview", icon: Eye },
@@ -49,6 +49,7 @@ export function MarkdownEditor({
   rows = 20,
   textareaRef,
   language = "en",
+  modes = ["write", "split", "preview"],
 }: {
   value: string;
   onChange: (next: string) => void;
@@ -57,11 +58,14 @@ export function MarkdownEditor({
   textareaRef?: RefObject<HTMLTextAreaElement | null>;
   /** Source language of the document, passed to the AI assistant. */
   language?: string;
+  /** Which view modes to offer; callers can drop the side-by-side split. */
+  modes?: EditorMode[];
 }) {
   const { t } = useCms();
   const fallbackRef = useRef<HTMLTextAreaElement | null>(null);
   const ref = textareaRef ?? fallbackRef;
   const [mode, setMode] = useState<EditorMode>("write");
+  const available = ALL_MODES.filter((m) => modes.includes(m.key));
   const [aiOpen, setAiOpen] = useState(false);
   // Mirrors the textarea selection so the panel keeps its scope after focus
   // moves into the panel's own controls.
@@ -92,11 +96,14 @@ export function MarkdownEditor({
 
   useEffect(() => {
     const stored = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
-    if (stored === "write" || stored === "split" || stored === "preview") {
+    if ((stored === "write" || stored === "split" || stored === "preview") && modes.includes(stored)) {
       setMode(stored);
       return;
     }
-    if (typeof window !== "undefined" && window.innerWidth >= 1024) setMode("split");
+    if (typeof window !== "undefined" && window.innerWidth >= 1024 && modes.includes("split"))
+      setMode("split");
+    // Mode set is fixed per call site; only the initial choice matters.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const pick = (next: EditorMode) => {
@@ -129,7 +136,7 @@ export function MarkdownEditor({
           <Sparkles className="h-3.5 w-3.5" />
           {t("ai.toggle")}
         </button>
-        {MODES.map(({ key, icon: Icon }) => (
+        {available.map(({ key, icon: Icon }) => (
           <button
             key={key}
             type="button"
