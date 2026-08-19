@@ -1,0 +1,2359 @@
+{
+  "meta": {
+    "name": "ICF Welcome Design System",
+    "package": "@ws-8ezwjgawfkrnem7hmtfc/adaee055-e6f2-4d44-9b16-337d4735d93f",
+    "version": "2.0.0",
+    "framework": "react",
+    "css_framework": "tailwind",
+    "starter_template": "custom_design_system_tailwind",
+    "theme_files": [
+      "src/styles.css"
+    ],
+    "source_type": "local",
+    "source_manifest": {
+      "#enrichment": "2ad5b7d0742306b5738969cb788205f05ac5cc774d182ec529a442357c141661",
+      ".gitignore": "6d9e901a692b46a83707c245fb03bc91",
+      ".lovable/meta.yaml": "954a981e8847ec1692669dbb04ae9ae9",
+      ".lovable/plan/icf-design-system-2026-08-19.md": "6dc8078cc20859e3b42b160d9e41fb1a",
+      ".lovable/project.json": "cd369d2c1a917c3065a94c968eeb6939",
+      ".lovable/sources.yaml": "f39f708c65f19e1a4add806fe3098f6d",
+      ".lovable/system.md": "eaa7d884a812a203ed8aa6d679277594",
+      ".prettierignore": "7279a476f196a2da5f7edd18db568dc6",
+      ".prettierrc": "185ef0234746ab738ac1ab6cec5e2bd9",
+      "AGENTS.md": "3da3c4cd15b686e79a248c25735d6aaf",
+      "README.md": "15ccc2c959c0bff2136261ce044c418f",
+      "bunfig.toml": "89115995d9de72fdfc894e16b1e75297",
+      "components.json": "30d3d035361ce807021f5c54620962e9",
+      "eslint.config.js": "345bdd57e188e0e4525edcd00e5003f5",
+      "package.json": "e301e923773a260751ca57fca251b6c6",
+      "public/favicon.png": "3c6c93c8f28c9f6dbc57d208fbfcdd1c",
+      "public/fonts/Quicksand-OFL.txt": "e18525e4234ac03c13a59b5a64efb05e",
+      "public/fonts/plus-jakarta-sans-variable.woff2": "d8c39204c3aff6cd44d6ead9bf4130fe",
+      "public/fonts/quicksand-variable.woff2": "67a48003c2bac1f57d5a0287f45a2c0f",
+      "public/robots.txt": "f9dff89adf98833e676de2205921996a",
+      "src/assets/logos/ICF_SwitzerlandCharterChapter_Horizontal_RGB_Negative.png.asset.json": "248ab974bea27ec69317f799131339d1",
+      "src/assets/logos/ICF_SwitzerlandCharterChapter_Horizontal_RGB_Positive.png.asset.json": "ee3ddb74d4c1d840b8b01e880a105be1",
+      "src/assets/logos/ICF_SwitzerlandCharterChapter_Horizontal_RGB_White.png.asset.json": "b9fe08e11a249b23387316e401b5d238",
+      "src/assets/logos/ICF_SwitzerlandCharterChapter_Vertical_RGB_Negative.png.asset.json": "720d846d778027c8960cb91f8d7f4059",
+      "src/assets/logos/ICF_SwitzerlandCharterChapter_Vertical_RGB_Positive.png.asset.json": "89c883b128037c00916a4afdfc69d961",
+      "src/assets/logos/ICF_SwitzerlandCharterChapter_Vertical_RGB_White.png.asset.json": "3388249d5cf340e1df5de37a91e38e58",
+      "src/assets/marks/Arrow01.svg.asset.json": "2261ac2588ff91edcebb9422ed09acd4",
+      "src/assets/marks/Arrow02.svg.asset.json": "78a9aa3fe559900aaa6ca622166d31ad",
+      "src/assets/marks/Arrow03.svg.asset.json": "01867aa0b27e69d10bc5617dfad10699",
+      "src/assets/marks/Asterisk01.svg.asset.json": "84ecf7dce60b1feaad5ec151a807d981",
+      "src/assets/marks/Asterisk02.svg.asset.json": "7f169d4b29b1da82589c0e3407be9bd6",
+      "src/assets/marks/Asterisk03.svg.asset.json": "334f3a45ffe5b09249877080c2807c1b",
+      "src/assets/marks/Asterisk04.svg.asset.json": "5d8fae7ebabcefabb24332500d8f43ef",
+      "src/assets/marks/CircularMark01.svg.asset.json": "600f405f708720f931c4c9d4244be7e3",
+      "src/assets/marks/CircularMark02.svg.asset.json": "673cce9303feca88c49fc07fb81a2e8b",
+      "src/assets/marks/CircularMark03.svg.asset.json": "6ecb962ee8df0656b671754a457c9adb",
+      "src/assets/marks/Line01.svg.asset.json": "64236c36ba435b3d13b3be6ff3529a86",
+      "src/assets/marks/Line02.svg.asset.json": "ef203204d23e1fa0c5cabdfdb170c3f6",
+      "src/assets/marks/Line03.svg.asset.json": "36206cd862f9f58f294076dabcd62bb5",
+      "src/assets/marks/Line04.svg.asset.json": "234fad4abb76a1f564c87031c0085d85",
+      "src/assets/marks/Other01.svg.asset.json": "9489a80105418b40482310a205cac4f0",
+      "src/assets/marks/Other02.svg.asset.json": "0f0debbdbe88a8fc6e5e79ca21c6ae7a",
+      "src/assets/marks/Other03.svg.asset.json": "bd7d32ebe61d39a2336e4b93c1bf3dc3",
+      "src/assets/marks/Other04.svg.asset.json": "ea90dc5a269472a92b91ecaa2c079e65",
+      "src/assets/marks/Other05.svg.asset.json": "331d7bd49403dcfce96222b5d8488c33",
+      "src/assets/marks/Other06.svg.asset.json": "bd1fb7fba4bbe9621f1f3ce2e4e98c5e",
+      "src/assets/marks/Star01.svg.asset.json": "3584da3546599c17219fffde1a1b6ef1",
+      "src/assets/marks/Star02.svg.asset.json": "510765a91bdc20ba8db460da3c4557c6",
+      "src/assets/marks/Star03.svg.asset.json": "3f80fd472a26d386cecc3dbefd240cbf",
+      "src/assets/marks/TextHighlighMark01.svg.asset.json": "df8848837627308ebbd1335509167654",
+      "src/assets/marks/TextHighlighMark02.svg.asset.json": "6bab9dda292c96f8eab30d2e4a3d7330",
+      "src/assets/marks/TextHighlighMark03.svg.asset.json": "cce93d909a607cc32683fd0d12b60cd2",
+      "src/assets/marks/ThinnerStrokeMark01.svg.asset.json": "5edb00ce72971c1e6402a56d411029fb",
+      "src/assets/marks/ThinnerStrokeMark02.svg.asset.json": "dd2950042605c9f155b8e4131e0d744f",
+      "src/assets/marks/ThinnerStrokeMark03.svg.asset.json": "6c5499295c6df97799b7155ca13ea15f",
+      "src/assets/marks/ThinnerStrokeMark04.svg.asset.json": "9a2c4b6baccb5c77c8c30760f86ac298",
+      "src/assets/photography/coaching-conversation.jpg": "21456dd5e09533caf3c3b8dfba0a8bef",
+      "src/assets/photography/community-circle.jpg": "a72b32300de1bd6df355ca1f3474989d",
+      "src/assets/photography/focus-in-action.jpg": "9de212acc186582ff96e53197ad47d9a",
+      "src/assets/photography/honest-portrait.jpg": "831214b017bf0ac150e1cb9e80502715",
+      "src/components/brand/Logo.tsx": "98439efd800af8c89baa7281e31a9ba3",
+      "src/components/brand/logos.ts": "fb92b3182a4498b3a5a34f52bf408d5d",
+      "src/components/brush/BrushMark.tsx": "7e2705d43eb0acdd934e40753aabe870",
+      "src/components/brush/marks.ts": "a11a117695ba5675b916710629274681",
+      "src/components/callout-shades.ts": "081d0eecdc058491b80b38e06472d3fe",
+      "src/components/callout.tsx": "c2e67162659f6c34010c98ddc80ef53e",
+      "src/components/chrome/SiteFooter.tsx": "3756a94ec80287e5027ed1613cbc5d3e",
+      "src/components/chrome/SiteHeader.tsx": "d9b9ed1b69fa1f019f2aacecd866ab5c",
+      "src/components/patterns/StyleGuidePatterns.tsx": "0fc2d779a09b9cca0f01569030be7221",
+      "src/components/photography/AiPhoto.tsx": "3da04d764c6b814422e92dd65a899d4f",
+      "src/components/social/SocialBanner.tsx": "2f7770e0617d66fbf0a599f660a3c720",
+      "src/components/ui/accordion.tsx": "55f9dda62b4e3913c9b23e5015a86aef",
+      "src/components/ui/alert-dialog.tsx": "96350e949e9b7b674545430a410ab89c",
+      "src/components/ui/alert.tsx": "f993d7e96b1e25ce50e68ed97e11d2a8",
+      "src/components/ui/aspect-ratio.tsx": "c5c364545e1b25a94e9e752cd67ad048",
+      "src/components/ui/avatar.tsx": "72989cd32f72c4122802540ef32525a5",
+      "src/components/ui/badge.tsx": "81cade001fc4260f9943e18dcd79449b",
+      "src/components/ui/breadcrumb.tsx": "bb9ac254f12662b20d5d50b84308bf3a",
+      "src/components/ui/button-group.tsx": "964036f9f529f5720fb805cf3b3ed0a8",
+      "src/components/ui/button.tsx": "a919e2ecb968cefe5a11b560c13c1191",
+      "src/components/ui/calendar.tsx": "e7631005d4c03774a358576887584bda",
+      "src/components/ui/card.tsx": "d6c48ea36221b9cdc3576d305d12d5d5",
+      "src/components/ui/carousel.tsx": "e324c68ae00cd5aed49317638abd429a",
+      "src/components/ui/chart.tsx": "6a3baf94f2e89f1f97d4d7a28f3622d2",
+      "src/components/ui/checkbox.tsx": "f78aac270ca482c8c2cb907ef6260462",
+      "src/components/ui/collapsible.tsx": "767631bbc344945c236f185f4078d71d",
+      "src/components/ui/command.tsx": "014782599cc838b021ec68b07ad4ea02",
+      "src/components/ui/context-menu.tsx": "e8f839271b665238e63fd6190f134201",
+      "src/components/ui/dialog.tsx": "ef4fe8e7de8675730afe3d633b260e09",
+      "src/components/ui/drawer.tsx": "8be333e8fd8e42576b1b5f72f07f4337",
+      "src/components/ui/dropdown-menu.tsx": "093373982130b4dcb6db4bfea6e5edb5",
+      "src/components/ui/form.tsx": "1b0aa6302b9017ea2a1307c22a1d2983",
+      "src/components/ui/hover-card.tsx": "1442794c5ca2a78d69e4e613b315ed3d",
+      "src/components/ui/input-group.tsx": "9981d455c5aaa88a564bd59ddfaf8f26",
+      "src/components/ui/input-otp.tsx": "65625f2f1c4d731a760aeed7b54459d1",
+      "src/components/ui/input.tsx": "1d4cc52a4cd8afb3e18e45bda942bb8a",
+      "src/components/ui/label.tsx": "7e35df4ca8edd0835efd97ca7937ef92",
+      "src/components/ui/menubar.tsx": "5b905a1833e557a421efa69dcc03ce85",
+      "src/components/ui/navigation-menu.tsx": "e85351147a02b29577ff83d188b63c24",
+      "src/components/ui/pagination.tsx": "fac6cdbb4bbf78b273d85cd36d6cbb49",
+      "src/components/ui/popover.tsx": "f18aa1da2144f25ee60795c539c51bcd",
+      "src/components/ui/progress.tsx": "55c462e5c9dd678dcf2c0c510b014ac4",
+      "src/components/ui/radio-group.tsx": "0e1ace237a5da3197e3eb1e6683faba9",
+      "src/components/ui/resizable.tsx": "d9fcb9203c749fcab4e125a99bb12a86",
+      "src/components/ui/scroll-area.tsx": "87b65d3eb26f2b02ff35a7acea585ba5",
+      "src/components/ui/select.tsx": "31ea1bbd6671833b010b2e852c8a55d0",
+      "src/components/ui/separator.tsx": "433d163c4ffa00b59398a0c293198b5e",
+      "src/components/ui/sheet.tsx": "0221fbf97b69611b47fcbc10bb27669a",
+      "src/components/ui/sidebar.tsx": "83c1623eb50ebc370d7b1b84a542e369",
+      "src/components/ui/skeleton.tsx": "41b182e6e2fc3805960d41e767d4a972",
+      "src/components/ui/slider.tsx": "4752f1bfa26426988d325599e01c335b",
+      "src/components/ui/sonner.tsx": "97f59f60be3413196d095fcbf7383216",
+      "src/components/ui/spinner.tsx": "4799669575bae50e8c2b5a1764cb8c89",
+      "src/components/ui/switch.tsx": "82f5d8b0c59bb7ff305caa9f502e79ff",
+      "src/components/ui/table.tsx": "7cc889989d53894b659903c73aded96e",
+      "src/components/ui/tabs.tsx": "56e725558c2ce72c18243bf51717f385",
+      "src/components/ui/textarea.tsx": "c7aad96fb9545210d53135a96c76ed6b",
+      "src/components/ui/toggle-group.tsx": "ac26383acf721d116ca8e3ab5c5355d5",
+      "src/components/ui/toggle.tsx": "ee8c5adac74e7242b85b544db1a8fbad",
+      "src/components/ui/tooltip.tsx": "67d71db5a1ab935695d1def497f5b8a6",
+      "src/hooks/use-mobile.tsx": "c0a0bdd4638c391a1dd06ac82074e60b",
+      "src/index.ts": "ddbf2f8a8802c933f085858a17aef1cc",
+      "src/lib/brand-guidelines.ts": "81e048a8f6b3cd7906675373aee68820",
+      "src/lib/design-tokens.ts": "534ccd20cbf060ca5a8dff49ff5f9d5b",
+      "src/lib/error-capture.ts": "f630d9686a9a989170f22eff4de7b30d",
+      "src/lib/error-page.ts": "8da0ddd7569bac2676b9a5c8edff8a36",
+      "src/lib/lovable-error-reporting.ts": "77368331b8ef6e6edcf1a29b24a52d39",
+      "src/lib/utils.ts": "d9837f38cc05303254571985e3164050",
+      "src/routeTree.gen.ts": "a9d68146e7d701c34fb979f735ad5b11",
+      "src/router.tsx": "8f905e713b0eba7fa8148b7995a708c9",
+      "src/routes/README.md": "b3a2f259b66fd1a11f54b6d5ac83bf57",
+      "src/routes/__root.tsx": "39cc8449d4142339b76020192c38332e",
+      "src/routes/brand.tsx": "763d546a07cdea6f2cfe592cf0401f97",
+      "src/routes/components.tsx": "341fe58041df96348fc9fb86d958b3e3",
+      "src/routes/foundations.tsx": "5013ceb9005e692d5b875ceaaa6077ce",
+      "src/routes/index.tsx": "e5c5a30a6aac59d21feb28dde77bdd91",
+      "src/routes/logos.tsx": "64ab32515478f8a06de6983877b175bb",
+      "src/routes/marks.tsx": "495dd82c6087975c972e79c4958348ba",
+      "src/routes/patterns.tsx": "a09e67f71e4cdf64c396a96b55dc21bf",
+      "src/routes/social.tsx": "3ae6207828a31c7b3365e6b00e908007",
+      "src/server.ts": "c7bbc49bb70e318af618d92775ee0f27",
+      "src/start.ts": "0502f82c58afce5012b4c102e6fe2437",
+      "src/styles.css": "36cc5047d8448ac6a7a6ef88c9227347",
+      "tsconfig.json": "cd4d65fabb4a8d0d52e8ebe313edd35e",
+      "vite.config.ts": "d67e8217e5f31b87c276b6357c9aedcf"
+    },
+    "pipeline_version": 8
+  },
+  "tokens": {
+    "color": [
+      {
+        "name": "--background",
+        "raw": "oklch(0.9581 0.0181 78.24)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--foreground",
+        "raw": "oklch(0.2802 0.084 278.57)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--card",
+        "raw": "oklch(1 0 0)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--card-foreground",
+        "raw": "oklch(0.2802 0.084 278.57)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--popover",
+        "raw": "oklch(1 0 0)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--popover-foreground",
+        "raw": "oklch(0.2802 0.084 278.57)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--primary",
+        "raw": "oklch(0.3949 0.1616 271.45)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--primary-foreground",
+        "raw": "oklch(1 0 0)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--secondary",
+        "raw": "oklch(0.94 0.016 78.24)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--secondary-foreground",
+        "raw": "oklch(0.3949 0.1616 271.45)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--muted",
+        "raw": "oklch(0.945 0.014 78.24)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--muted-foreground",
+        "raw": "oklch(0.46 0.055 278.57)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--accent",
+        "raw": "oklch(0.8488 0.1627 94.87)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--accent-foreground",
+        "raw": "oklch(0.2802 0.084 278.57)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--highlight",
+        "raw": "oklch(0.6177 0.1969 269.18)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--highlight-foreground",
+        "raw": "oklch(1 0 0)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--destructive",
+        "raw": "oklch(0.577 0.245 27.325)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--destructive-foreground",
+        "raw": "oklch(0.984 0.003 247.858)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--border",
+        "raw": "oklch(0.885 0.018 278.57)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--input",
+        "raw": "oklch(0.9 0.016 278.57)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--ring",
+        "raw": "oklch(0.6177 0.1969 269.18)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--hero",
+        "raw": "oklch(0.2802 0.084 278.57)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--hero-foreground",
+        "raw": "oklch(1 0 0)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--pillar-sg",
+        "raw": "oklch(0.6177 0.1969 269.18)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--pillar-oe",
+        "raw": "oklch(0.3949 0.1616 271.45)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--pillar-ce",
+        "raw": "oklch(0.2802 0.084 278.57)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--chip",
+        "raw": "oklch(0.965 0.014 78.24)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--chip-foreground",
+        "raw": "oklch(0.3949 0.1616 271.45)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--chip-active-border",
+        "raw": "oklch(0.6177 0.1969 269.18)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--mark-cream",
+        "raw": "oklch(0.9581 0.0181 78.24)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--mark-indigo",
+        "raw": "oklch(0.2802 0.084 278.57)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--mark-blue",
+        "raw": "oklch(0.6177 0.1969 269.18)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--mark-yellow",
+        "raw": "oklch(0.8488 0.1627 94.87)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--cyan",
+        "raw": "oklch(0.6928 0.1189 213.5)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--cyan-foreground",
+        "raw": "oklch(0.2802 0.084 278.57)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--teal",
+        "raw": "oklch(0.6177 0.1969 269.18)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--teal-soft",
+        "raw": "oklch(0.94 0.03 269.18)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--teal-foreground",
+        "raw": "oklch(0.3949 0.1616 271.45)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--warn",
+        "raw": "oklch(0.6 0.15 55)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--warn-soft",
+        "raw": "oklch(0.96 0.05 80)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--warn-foreground",
+        "raw": "oklch(0.42 0.12 55)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--chart-1",
+        "raw": "oklch(0.646 0.222 41.116)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--chart-2",
+        "raw": "oklch(0.6 0.118 184.704)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--chart-3",
+        "raw": "oklch(0.398 0.07 227.392)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--chart-4",
+        "raw": "oklch(0.828 0.189 84.429)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--chart-5",
+        "raw": "oklch(0.769 0.188 70.08)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar",
+        "raw": "oklch(0.984 0.003 247.858)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-foreground",
+        "raw": "oklch(0.129 0.042 264.695)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-primary",
+        "raw": "oklch(0.208 0.042 265.755)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-primary-foreground",
+        "raw": "oklch(0.984 0.003 247.858)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-accent",
+        "raw": "oklch(0.968 0.007 247.896)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-accent-foreground",
+        "raw": "oklch(0.208 0.042 265.755)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-border",
+        "raw": "oklch(0.929 0.013 255.508)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-ring",
+        "raw": "oklch(0.704 0.04 256.788)",
+        "source": "src/styles.css"
+      }
+    ],
+    "typography": [
+      {
+        "name": "--font-sans",
+        "raw": "\"Plus Jakarta Sans\", system-ui, -apple-system, sans-serif",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--font-body",
+        "raw": "\"Plus Jakarta Sans\", system-ui, -apple-system, sans-serif",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--font-heading",
+        "raw": "\"Quicksand\", system-ui, -apple-system, sans-serif",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--font-display",
+        "raw": "\"Quicksand\", system-ui, -apple-system, sans-serif",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--font-mono",
+        "raw": "ui-monospace, \"SF Mono\", Menlo, Consolas, monospace",
+        "source": "src/styles.css"
+      }
+    ],
+    "radius": [
+      {
+        "name": "--radius-sm",
+        "raw": "calc(var(--radius) - 4px)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius-md",
+        "raw": "calc(var(--radius) - 2px)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius-xl",
+        "raw": "calc(var(--radius) + 4px)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius-2xl",
+        "raw": "calc(var(--radius) + 8px)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius-3xl",
+        "raw": "calc(var(--radius) + 12px)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius-4xl",
+        "raw": "calc(var(--radius) + 16px)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius",
+        "raw": "0.75rem",
+        "source": "src/styles.css"
+      }
+    ],
+    "shadow": [
+      {
+        "name": "--shadow-soft",
+        "raw": "0 1px 2px oklch(0.2802 0.084 278.57 / 5%), 0 6px 18px oklch(0.2802 0.084 278.57 / 5%)",
+        "source": "src/styles.css"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Logo",
+      "file": "src/components/brand/Logo",
+      "import_path": "",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "any",
+          "default": "horizontal"
+        },
+        {
+          "name": "tone",
+          "type": "any",
+          "default": "positive"
+        },
+        {
+          "name": "decorative",
+          "type": "boolean",
+          "default": "false"
+        }
+      ]
+    },
+    {
+      "name": "BrushMark",
+      "file": "src/components/brush/BrushMark",
+      "import_path": "",
+      "props": [
+        {
+          "name": "name",
+          "type": "any",
+          "default": "TextHighlighMark01",
+          "required": true
+        },
+        {
+          "name": "preserveRatio",
+          "type": "boolean",
+          "default": "true"
+        }
+      ]
+    },
+    {
+      "name": "MarkedText",
+      "file": "src/components/brush/BrushMark",
+      "import_path": "",
+      "props": [
+        {
+          "name": "children",
+          "type": "any",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "any",
+          "default": "TextHighlighMark01"
+        },
+        {
+          "name": "markClassName",
+          "type": "string"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "relative z-10"
+        }
+      ]
+    },
+    {
+      "name": "Callout",
+      "file": "src/components/callout",
+      "import_path": ""
+    },
+    {
+      "name": "SiteFooter",
+      "file": "src/components/chrome/SiteFooter",
+      "import_path": ""
+    },
+    {
+      "name": "SiteHeader",
+      "file": "src/components/chrome/SiteHeader",
+      "import_path": ""
+    },
+    {
+      "name": "CompactHero",
+      "file": "src/components/patterns/StyleGuidePatterns",
+      "import_path": ""
+    },
+    {
+      "name": "PillarCards",
+      "file": "src/components/patterns/StyleGuidePatterns",
+      "import_path": ""
+    },
+    {
+      "name": "ChipRow",
+      "file": "src/components/patterns/StyleGuidePatterns",
+      "import_path": ""
+    },
+    {
+      "name": "CalloutSet",
+      "file": "src/components/patterns/StyleGuidePatterns",
+      "import_path": ""
+    },
+    {
+      "name": "Marquee",
+      "file": "src/components/patterns/StyleGuidePatterns",
+      "import_path": ""
+    },
+    {
+      "name": "AiBadge",
+      "file": "src/components/photography/AiPhoto",
+      "import_path": "",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "AI generated"
+        }
+      ]
+    },
+    {
+      "name": "AiPhoto",
+      "file": "src/components/photography/AiPhoto",
+      "import_path": "",
+      "props": [
+        {
+          "name": "alt",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "caption",
+          "type": "any"
+        },
+        {
+          "name": "badgeLabel",
+          "type": "string"
+        },
+        {
+          "name": "badgePosition",
+          "type": "enum",
+          "values": [
+            "bottom-left",
+            "bottom-right",
+            "top-left",
+            "top-right"
+          ],
+          "default": "bottom-left"
+        },
+        {
+          "name": "figureClassName",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "SocialBanner",
+      "file": "src/components/social/SocialBanner",
+      "import_path": "",
+      "props": [
+        {
+          "name": "format",
+          "type": "enum",
+          "values": [
+            "linkedin",
+            "x",
+            "facebook"
+          ],
+          "default": "linkedin"
+        },
+        {
+          "name": "children",
+          "type": "any",
+          "default": "Inspire. Transform."
+        },
+        {
+          "name": "highlight",
+          "type": "string",
+          "default": "Thrive."
+        },
+        {
+          "name": "mark",
+          "type": "any",
+          "default": "Asterisk02"
+        }
+      ]
+    },
+    {
+      "name": "Accordion",
+      "file": "src/components/ui/accordion",
+      "import_path": ""
+    },
+    {
+      "name": "AccordionItem",
+      "file": "src/components/ui/accordion",
+      "import_path": ""
+    },
+    {
+      "name": "AccordionTrigger",
+      "file": "src/components/ui/accordion",
+      "import_path": ""
+    },
+    {
+      "name": "AccordionContent",
+      "file": "src/components/ui/accordion",
+      "import_path": ""
+    },
+    {
+      "name": "AlertDialog",
+      "file": "src/components/ui/alert-dialog",
+      "import_path": ""
+    },
+    {
+      "name": "AlertDialogPortal",
+      "file": "src/components/ui/alert-dialog",
+      "import_path": ""
+    },
+    {
+      "name": "AlertDialogOverlay",
+      "file": "src/components/ui/alert-dialog",
+      "import_path": ""
+    },
+    {
+      "name": "AlertDialogTrigger",
+      "file": "src/components/ui/alert-dialog",
+      "import_path": ""
+    },
+    {
+      "name": "AlertDialogContent",
+      "file": "src/components/ui/alert-dialog",
+      "import_path": ""
+    },
+    {
+      "name": "AlertDialogHeader",
+      "file": "src/components/ui/alert-dialog",
+      "import_path": ""
+    },
+    {
+      "name": "AlertDialogFooter",
+      "file": "src/components/ui/alert-dialog",
+      "import_path": ""
+    },
+    {
+      "name": "AlertDialogTitle",
+      "file": "src/components/ui/alert-dialog",
+      "import_path": ""
+    },
+    {
+      "name": "AlertDialogDescription",
+      "file": "src/components/ui/alert-dialog",
+      "import_path": ""
+    },
+    {
+      "name": "AlertDialogAction",
+      "file": "src/components/ui/alert-dialog",
+      "import_path": ""
+    },
+    {
+      "name": "AlertDialogCancel",
+      "file": "src/components/ui/alert-dialog",
+      "import_path": ""
+    },
+    {
+      "name": "Alert",
+      "file": "src/components/ui/alert",
+      "import_path": "",
+      "props": [
+        {
+          "name": "variant",
+          "type": "enum",
+          "values": [
+            "default",
+            "destructive"
+          ],
+          "default": "default"
+        }
+      ]
+    },
+    {
+      "name": "AlertTitle",
+      "file": "src/components/ui/alert",
+      "import_path": ""
+    },
+    {
+      "name": "AlertDescription",
+      "file": "src/components/ui/alert",
+      "import_path": ""
+    },
+    {
+      "name": "AspectRatio",
+      "file": "src/components/ui/aspect-ratio",
+      "import_path": ""
+    },
+    {
+      "name": "Avatar",
+      "file": "src/components/ui/avatar",
+      "import_path": ""
+    },
+    {
+      "name": "AvatarImage",
+      "file": "src/components/ui/avatar",
+      "import_path": ""
+    },
+    {
+      "name": "AvatarFallback",
+      "file": "src/components/ui/avatar",
+      "import_path": ""
+    },
+    {
+      "name": "Badge",
+      "file": "src/components/ui/badge",
+      "import_path": "",
+      "props": [
+        {
+          "name": "variant",
+          "type": "enum",
+          "values": [
+            "default",
+            "secondary",
+            "destructive",
+            "outline"
+          ],
+          "default": "default"
+        }
+      ]
+    },
+    {
+      "name": "Breadcrumb",
+      "file": "src/components/ui/breadcrumb",
+      "import_path": ""
+    },
+    {
+      "name": "BreadcrumbList",
+      "file": "src/components/ui/breadcrumb",
+      "import_path": ""
+    },
+    {
+      "name": "BreadcrumbItem",
+      "file": "src/components/ui/breadcrumb",
+      "import_path": ""
+    },
+    {
+      "name": "BreadcrumbLink",
+      "file": "src/components/ui/breadcrumb",
+      "import_path": ""
+    },
+    {
+      "name": "BreadcrumbPage",
+      "file": "src/components/ui/breadcrumb",
+      "import_path": ""
+    },
+    {
+      "name": "BreadcrumbSeparator",
+      "file": "src/components/ui/breadcrumb",
+      "import_path": ""
+    },
+    {
+      "name": "BreadcrumbEllipsis",
+      "file": "src/components/ui/breadcrumb",
+      "import_path": ""
+    },
+    {
+      "name": "ButtonGroup",
+      "file": "src/components/ui/button-group",
+      "import_path": "",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "horizontal"
+        }
+      ]
+    },
+    {
+      "name": "ButtonGroupSeparator",
+      "file": "src/components/ui/button-group",
+      "import_path": ""
+    },
+    {
+      "name": "ButtonGroupText",
+      "file": "src/components/ui/button-group",
+      "import_path": ""
+    },
+    {
+      "name": "Button",
+      "file": "src/components/ui/button",
+      "import_path": "",
+      "props": [
+        {
+          "name": "variant",
+          "type": "enum",
+          "values": [
+            "default",
+            "destructive",
+            "outline",
+            "secondary",
+            "ghost",
+            "link"
+          ],
+          "default": "default"
+        },
+        {
+          "name": "size",
+          "type": "enum",
+          "values": [
+            "default",
+            "sm",
+            "lg",
+            "icon",
+            "icon-sm"
+          ],
+          "default": "default"
+        },
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "default": "false"
+        }
+      ]
+    },
+    {
+      "name": "Calendar",
+      "file": "src/components/ui/calendar",
+      "import_path": ""
+    },
+    {
+      "name": "CalendarDayButton",
+      "file": "src/components/ui/calendar",
+      "import_path": ""
+    },
+    {
+      "name": "Card",
+      "file": "src/components/ui/card",
+      "import_path": ""
+    },
+    {
+      "name": "CardHeader",
+      "file": "src/components/ui/card",
+      "import_path": ""
+    },
+    {
+      "name": "CardFooter",
+      "file": "src/components/ui/card",
+      "import_path": ""
+    },
+    {
+      "name": "CardTitle",
+      "file": "src/components/ui/card",
+      "import_path": ""
+    },
+    {
+      "name": "CardDescription",
+      "file": "src/components/ui/card",
+      "import_path": ""
+    },
+    {
+      "name": "CardContent",
+      "file": "src/components/ui/card",
+      "import_path": ""
+    },
+    {
+      "name": "Carousel",
+      "file": "src/components/ui/carousel",
+      "import_path": "",
+      "props": [
+        {
+          "name": "opts",
+          "type": "any"
+        },
+        {
+          "name": "plugins",
+          "type": "any"
+        },
+        {
+          "name": "orientation",
+          "type": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "horizontal"
+        },
+        {
+          "name": "setApi",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "name": "CarouselContent",
+      "file": "src/components/ui/carousel",
+      "import_path": ""
+    },
+    {
+      "name": "CarouselItem",
+      "file": "src/components/ui/carousel",
+      "import_path": ""
+    },
+    {
+      "name": "CarouselPrevious",
+      "file": "src/components/ui/carousel",
+      "import_path": ""
+    },
+    {
+      "name": "CarouselNext",
+      "file": "src/components/ui/carousel",
+      "import_path": ""
+    },
+    {
+      "name": "ChartContainer",
+      "file": "src/components/ui/chart",
+      "import_path": ""
+    },
+    {
+      "name": "ChartTooltip",
+      "file": "src/components/ui/chart",
+      "import_path": ""
+    },
+    {
+      "name": "ChartTooltipContent",
+      "file": "src/components/ui/chart",
+      "import_path": ""
+    },
+    {
+      "name": "ChartLegend",
+      "file": "src/components/ui/chart",
+      "import_path": ""
+    },
+    {
+      "name": "ChartLegendContent",
+      "file": "src/components/ui/chart",
+      "import_path": ""
+    },
+    {
+      "name": "ChartStyle",
+      "file": "src/components/ui/chart",
+      "import_path": ""
+    },
+    {
+      "name": "Checkbox",
+      "file": "src/components/ui/checkbox",
+      "import_path": ""
+    },
+    {
+      "name": "Collapsible",
+      "file": "src/components/ui/collapsible",
+      "import_path": ""
+    },
+    {
+      "name": "CollapsibleTrigger",
+      "file": "src/components/ui/collapsible",
+      "import_path": ""
+    },
+    {
+      "name": "CollapsibleContent",
+      "file": "src/components/ui/collapsible",
+      "import_path": ""
+    },
+    {
+      "name": "Command",
+      "file": "src/components/ui/command",
+      "import_path": ""
+    },
+    {
+      "name": "CommandDialog",
+      "file": "src/components/ui/command",
+      "import_path": ""
+    },
+    {
+      "name": "CommandInput",
+      "file": "src/components/ui/command",
+      "import_path": ""
+    },
+    {
+      "name": "CommandList",
+      "file": "src/components/ui/command",
+      "import_path": ""
+    },
+    {
+      "name": "CommandEmpty",
+      "file": "src/components/ui/command",
+      "import_path": ""
+    },
+    {
+      "name": "CommandGroup",
+      "file": "src/components/ui/command",
+      "import_path": ""
+    },
+    {
+      "name": "CommandItem",
+      "file": "src/components/ui/command",
+      "import_path": ""
+    },
+    {
+      "name": "CommandShortcut",
+      "file": "src/components/ui/command",
+      "import_path": ""
+    },
+    {
+      "name": "CommandSeparator",
+      "file": "src/components/ui/command",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenu",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuTrigger",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuContent",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuItem",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuCheckboxItem",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuRadioItem",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuLabel",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuSeparator",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuShortcut",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuGroup",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuPortal",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuSub",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuSubContent",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuSubTrigger",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "ContextMenuRadioGroup",
+      "file": "src/components/ui/context-menu",
+      "import_path": ""
+    },
+    {
+      "name": "Dialog",
+      "file": "src/components/ui/dialog",
+      "import_path": ""
+    },
+    {
+      "name": "DialogPortal",
+      "file": "src/components/ui/dialog",
+      "import_path": ""
+    },
+    {
+      "name": "DialogOverlay",
+      "file": "src/components/ui/dialog",
+      "import_path": ""
+    },
+    {
+      "name": "DialogTrigger",
+      "file": "src/components/ui/dialog",
+      "import_path": ""
+    },
+    {
+      "name": "DialogClose",
+      "file": "src/components/ui/dialog",
+      "import_path": ""
+    },
+    {
+      "name": "DialogContent",
+      "file": "src/components/ui/dialog",
+      "import_path": ""
+    },
+    {
+      "name": "DialogHeader",
+      "file": "src/components/ui/dialog",
+      "import_path": ""
+    },
+    {
+      "name": "DialogFooter",
+      "file": "src/components/ui/dialog",
+      "import_path": ""
+    },
+    {
+      "name": "DialogTitle",
+      "file": "src/components/ui/dialog",
+      "import_path": ""
+    },
+    {
+      "name": "DialogDescription",
+      "file": "src/components/ui/dialog",
+      "import_path": ""
+    },
+    {
+      "name": "Drawer",
+      "file": "src/components/ui/drawer",
+      "import_path": ""
+    },
+    {
+      "name": "DrawerPortal",
+      "file": "src/components/ui/drawer",
+      "import_path": ""
+    },
+    {
+      "name": "DrawerOverlay",
+      "file": "src/components/ui/drawer",
+      "import_path": ""
+    },
+    {
+      "name": "DrawerTrigger",
+      "file": "src/components/ui/drawer",
+      "import_path": ""
+    },
+    {
+      "name": "DrawerClose",
+      "file": "src/components/ui/drawer",
+      "import_path": ""
+    },
+    {
+      "name": "DrawerContent",
+      "file": "src/components/ui/drawer",
+      "import_path": ""
+    },
+    {
+      "name": "DrawerHeader",
+      "file": "src/components/ui/drawer",
+      "import_path": ""
+    },
+    {
+      "name": "DrawerFooter",
+      "file": "src/components/ui/drawer",
+      "import_path": ""
+    },
+    {
+      "name": "DrawerTitle",
+      "file": "src/components/ui/drawer",
+      "import_path": ""
+    },
+    {
+      "name": "DrawerDescription",
+      "file": "src/components/ui/drawer",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenu",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuTrigger",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuContent",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuItem",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuCheckboxItem",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuRadioItem",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuLabel",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuSeparator",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuShortcut",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuGroup",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuPortal",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuSub",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuSubContent",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuSubTrigger",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "DropdownMenuRadioGroup",
+      "file": "src/components/ui/dropdown-menu",
+      "import_path": ""
+    },
+    {
+      "name": "Form",
+      "file": "src/components/ui/form",
+      "import_path": ""
+    },
+    {
+      "name": "FormItem",
+      "file": "src/components/ui/form",
+      "import_path": ""
+    },
+    {
+      "name": "FormLabel",
+      "file": "src/components/ui/form",
+      "import_path": ""
+    },
+    {
+      "name": "FormControl",
+      "file": "src/components/ui/form",
+      "import_path": ""
+    },
+    {
+      "name": "FormDescription",
+      "file": "src/components/ui/form",
+      "import_path": ""
+    },
+    {
+      "name": "FormMessage",
+      "file": "src/components/ui/form",
+      "import_path": ""
+    },
+    {
+      "name": "FormField",
+      "file": "src/components/ui/form",
+      "import_path": ""
+    },
+    {
+      "name": "HoverCard",
+      "file": "src/components/ui/hover-card",
+      "import_path": ""
+    },
+    {
+      "name": "HoverCardTrigger",
+      "file": "src/components/ui/hover-card",
+      "import_path": ""
+    },
+    {
+      "name": "HoverCardContent",
+      "file": "src/components/ui/hover-card",
+      "import_path": ""
+    },
+    {
+      "name": "InputGroup",
+      "file": "src/components/ui/input-group",
+      "import_path": ""
+    },
+    {
+      "name": "InputGroupAddon",
+      "file": "src/components/ui/input-group",
+      "import_path": "",
+      "props": [
+        {
+          "name": "align",
+          "type": "enum",
+          "values": [
+            "inline-start",
+            "inline-end",
+            "block-start",
+            "block-end"
+          ],
+          "default": "inline-start"
+        }
+      ]
+    },
+    {
+      "name": "InputGroupButton",
+      "file": "src/components/ui/input-group",
+      "import_path": "",
+      "props": [
+        {
+          "name": "size",
+          "type": "enum",
+          "values": [
+            "xs",
+            "sm",
+            "icon-xs",
+            "icon-sm"
+          ],
+          "default": "xs"
+        }
+      ]
+    },
+    {
+      "name": "InputGroupText",
+      "file": "src/components/ui/input-group",
+      "import_path": ""
+    },
+    {
+      "name": "InputGroupInput",
+      "file": "src/components/ui/input-group",
+      "import_path": ""
+    },
+    {
+      "name": "InputGroupTextarea",
+      "file": "src/components/ui/input-group",
+      "import_path": ""
+    },
+    {
+      "name": "InputOTP",
+      "file": "src/components/ui/input-otp",
+      "import_path": ""
+    },
+    {
+      "name": "InputOTPGroup",
+      "file": "src/components/ui/input-otp",
+      "import_path": ""
+    },
+    {
+      "name": "InputOTPSlot",
+      "file": "src/components/ui/input-otp",
+      "import_path": ""
+    },
+    {
+      "name": "InputOTPSeparator",
+      "file": "src/components/ui/input-otp",
+      "import_path": ""
+    },
+    {
+      "name": "Input",
+      "file": "src/components/ui/input",
+      "import_path": ""
+    },
+    {
+      "name": "Label",
+      "file": "src/components/ui/label",
+      "import_path": ""
+    },
+    {
+      "name": "Menubar",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarMenu",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarTrigger",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarContent",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarItem",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarSeparator",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarLabel",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarCheckboxItem",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarRadioGroup",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarRadioItem",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarPortal",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarSubContent",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarSubTrigger",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarGroup",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarSub",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "MenubarShortcut",
+      "file": "src/components/ui/menubar",
+      "import_path": ""
+    },
+    {
+      "name": "NavigationMenu",
+      "file": "src/components/ui/navigation-menu",
+      "import_path": ""
+    },
+    {
+      "name": "NavigationMenuList",
+      "file": "src/components/ui/navigation-menu",
+      "import_path": ""
+    },
+    {
+      "name": "NavigationMenuItem",
+      "file": "src/components/ui/navigation-menu",
+      "import_path": ""
+    },
+    {
+      "name": "NavigationMenuContent",
+      "file": "src/components/ui/navigation-menu",
+      "import_path": ""
+    },
+    {
+      "name": "NavigationMenuTrigger",
+      "file": "src/components/ui/navigation-menu",
+      "import_path": ""
+    },
+    {
+      "name": "NavigationMenuLink",
+      "file": "src/components/ui/navigation-menu",
+      "import_path": ""
+    },
+    {
+      "name": "NavigationMenuIndicator",
+      "file": "src/components/ui/navigation-menu",
+      "import_path": ""
+    },
+    {
+      "name": "NavigationMenuViewport",
+      "file": "src/components/ui/navigation-menu",
+      "import_path": ""
+    },
+    {
+      "name": "Pagination",
+      "file": "src/components/ui/pagination",
+      "import_path": ""
+    },
+    {
+      "name": "PaginationContent",
+      "file": "src/components/ui/pagination",
+      "import_path": ""
+    },
+    {
+      "name": "PaginationLink",
+      "file": "src/components/ui/pagination",
+      "import_path": "",
+      "props": [
+        {
+          "name": "isActive",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "PaginationItem",
+      "file": "src/components/ui/pagination",
+      "import_path": ""
+    },
+    {
+      "name": "PaginationPrevious",
+      "file": "src/components/ui/pagination",
+      "import_path": ""
+    },
+    {
+      "name": "PaginationNext",
+      "file": "src/components/ui/pagination",
+      "import_path": ""
+    },
+    {
+      "name": "PaginationEllipsis",
+      "file": "src/components/ui/pagination",
+      "import_path": ""
+    },
+    {
+      "name": "Popover",
+      "file": "src/components/ui/popover",
+      "import_path": ""
+    },
+    {
+      "name": "PopoverTrigger",
+      "file": "src/components/ui/popover",
+      "import_path": ""
+    },
+    {
+      "name": "PopoverContent",
+      "file": "src/components/ui/popover",
+      "import_path": ""
+    },
+    {
+      "name": "PopoverAnchor",
+      "file": "src/components/ui/popover",
+      "import_path": ""
+    },
+    {
+      "name": "Progress",
+      "file": "src/components/ui/progress",
+      "import_path": ""
+    },
+    {
+      "name": "RadioGroup",
+      "file": "src/components/ui/radio-group",
+      "import_path": ""
+    },
+    {
+      "name": "RadioGroupItem",
+      "file": "src/components/ui/radio-group",
+      "import_path": ""
+    },
+    {
+      "name": "ResizablePanelGroup",
+      "file": "src/components/ui/resizable",
+      "import_path": ""
+    },
+    {
+      "name": "ResizablePanel",
+      "file": "src/components/ui/resizable",
+      "import_path": ""
+    },
+    {
+      "name": "ResizableHandle",
+      "file": "src/components/ui/resizable",
+      "import_path": ""
+    },
+    {
+      "name": "ScrollArea",
+      "file": "src/components/ui/scroll-area",
+      "import_path": ""
+    },
+    {
+      "name": "ScrollBar",
+      "file": "src/components/ui/scroll-area",
+      "import_path": ""
+    },
+    {
+      "name": "Select",
+      "file": "src/components/ui/select",
+      "import_path": ""
+    },
+    {
+      "name": "SelectGroup",
+      "file": "src/components/ui/select",
+      "import_path": ""
+    },
+    {
+      "name": "SelectValue",
+      "file": "src/components/ui/select",
+      "import_path": ""
+    },
+    {
+      "name": "SelectTrigger",
+      "file": "src/components/ui/select",
+      "import_path": ""
+    },
+    {
+      "name": "SelectContent",
+      "file": "src/components/ui/select",
+      "import_path": ""
+    },
+    {
+      "name": "SelectLabel",
+      "file": "src/components/ui/select",
+      "import_path": ""
+    },
+    {
+      "name": "SelectItem",
+      "file": "src/components/ui/select",
+      "import_path": ""
+    },
+    {
+      "name": "SelectSeparator",
+      "file": "src/components/ui/select",
+      "import_path": ""
+    },
+    {
+      "name": "SelectScrollUpButton",
+      "file": "src/components/ui/select",
+      "import_path": ""
+    },
+    {
+      "name": "SelectScrollDownButton",
+      "file": "src/components/ui/select",
+      "import_path": ""
+    },
+    {
+      "name": "Separator",
+      "file": "src/components/ui/separator",
+      "import_path": ""
+    },
+    {
+      "name": "Sheet",
+      "file": "src/components/ui/sheet",
+      "import_path": "",
+      "props": [
+        {
+          "name": "side",
+          "type": "enum",
+          "values": [
+            "top",
+            "bottom",
+            "left",
+            "right"
+          ],
+          "default": "right"
+        }
+      ]
+    },
+    {
+      "name": "SheetPortal",
+      "file": "src/components/ui/sheet",
+      "import_path": ""
+    },
+    {
+      "name": "SheetOverlay",
+      "file": "src/components/ui/sheet",
+      "import_path": ""
+    },
+    {
+      "name": "SheetTrigger",
+      "file": "src/components/ui/sheet",
+      "import_path": ""
+    },
+    {
+      "name": "SheetClose",
+      "file": "src/components/ui/sheet",
+      "import_path": ""
+    },
+    {
+      "name": "SheetContent",
+      "file": "src/components/ui/sheet",
+      "import_path": ""
+    },
+    {
+      "name": "SheetHeader",
+      "file": "src/components/ui/sheet",
+      "import_path": ""
+    },
+    {
+      "name": "SheetFooter",
+      "file": "src/components/ui/sheet",
+      "import_path": ""
+    },
+    {
+      "name": "SheetTitle",
+      "file": "src/components/ui/sheet",
+      "import_path": ""
+    },
+    {
+      "name": "SheetDescription",
+      "file": "src/components/ui/sheet",
+      "import_path": ""
+    },
+    {
+      "name": "Sidebar",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarContent",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarFooter",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarGroup",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarGroupAction",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarGroupContent",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarGroupLabel",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarHeader",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarInput",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarInset",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarMenu",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarMenuAction",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarMenuBadge",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarMenuButton",
+      "file": "src/components/ui/sidebar",
+      "import_path": "",
+      "props": [
+        {
+          "name": "variant",
+          "type": "enum",
+          "values": [
+            "default",
+            "outline"
+          ],
+          "default": "default"
+        },
+        {
+          "name": "size",
+          "type": "enum",
+          "values": [
+            "default",
+            "sm",
+            "lg"
+          ],
+          "default": "default"
+        }
+      ]
+    },
+    {
+      "name": "SidebarMenuItem",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarMenuSkeleton",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarMenuSub",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarMenuSubButton",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarMenuSubItem",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarProvider",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarRail",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarSeparator",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "SidebarTrigger",
+      "file": "src/components/ui/sidebar",
+      "import_path": ""
+    },
+    {
+      "name": "Skeleton",
+      "file": "src/components/ui/skeleton",
+      "import_path": ""
+    },
+    {
+      "name": "Slider",
+      "file": "src/components/ui/slider",
+      "import_path": ""
+    },
+    {
+      "name": "Toaster",
+      "file": "src/components/ui/sonner",
+      "import_path": ""
+    },
+    {
+      "name": "Spinner",
+      "file": "src/components/ui/spinner",
+      "import_path": ""
+    },
+    {
+      "name": "Switch",
+      "file": "src/components/ui/switch",
+      "import_path": ""
+    },
+    {
+      "name": "Table",
+      "file": "src/components/ui/table",
+      "import_path": ""
+    },
+    {
+      "name": "TableHeader",
+      "file": "src/components/ui/table",
+      "import_path": ""
+    },
+    {
+      "name": "TableBody",
+      "file": "src/components/ui/table",
+      "import_path": ""
+    },
+    {
+      "name": "TableFooter",
+      "file": "src/components/ui/table",
+      "import_path": ""
+    },
+    {
+      "name": "TableHead",
+      "file": "src/components/ui/table",
+      "import_path": ""
+    },
+    {
+      "name": "TableRow",
+      "file": "src/components/ui/table",
+      "import_path": ""
+    },
+    {
+      "name": "TableCell",
+      "file": "src/components/ui/table",
+      "import_path": ""
+    },
+    {
+      "name": "TableCaption",
+      "file": "src/components/ui/table",
+      "import_path": ""
+    },
+    {
+      "name": "Tabs",
+      "file": "src/components/ui/tabs",
+      "import_path": ""
+    },
+    {
+      "name": "TabsList",
+      "file": "src/components/ui/tabs",
+      "import_path": ""
+    },
+    {
+      "name": "TabsTrigger",
+      "file": "src/components/ui/tabs",
+      "import_path": ""
+    },
+    {
+      "name": "TabsContent",
+      "file": "src/components/ui/tabs",
+      "import_path": ""
+    },
+    {
+      "name": "Textarea",
+      "file": "src/components/ui/textarea",
+      "import_path": ""
+    },
+    {
+      "name": "ToggleGroup",
+      "file": "src/components/ui/toggle-group",
+      "import_path": ""
+    },
+    {
+      "name": "ToggleGroupItem",
+      "file": "src/components/ui/toggle-group",
+      "import_path": ""
+    },
+    {
+      "name": "Toggle",
+      "file": "src/components/ui/toggle",
+      "import_path": "",
+      "props": [
+        {
+          "name": "variant",
+          "type": "enum",
+          "values": [
+            "default",
+            "outline"
+          ],
+          "default": "default"
+        },
+        {
+          "name": "size",
+          "type": "enum",
+          "values": [
+            "default",
+            "sm",
+            "lg"
+          ],
+          "default": "default"
+        }
+      ]
+    },
+    {
+      "name": "Tooltip",
+      "file": "src/components/ui/tooltip",
+      "import_path": ""
+    },
+    {
+      "name": "TooltipTrigger",
+      "file": "src/components/ui/tooltip",
+      "import_path": ""
+    },
+    {
+      "name": "TooltipContent",
+      "file": "src/components/ui/tooltip",
+      "import_path": ""
+    },
+    {
+      "name": "TooltipProvider",
+      "file": "src/components/ui/tooltip",
+      "import_path": ""
+    }
+  ],
+  "assets": [
+    {
+      "file": "src/assets/logos/ICF_SwitzerlandCharterChapter_Horizontal_RGB_Negative.png.asset.json",
+      "kind": "logo",
+      "format": "png",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/logos/ICF_SwitzerlandCharterChapter_Horizontal_RGB_Positive.png.asset.json",
+      "kind": "logo",
+      "format": "png",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/logos/ICF_SwitzerlandCharterChapter_Horizontal_RGB_White.png.asset.json",
+      "kind": "logo",
+      "format": "png",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/logos/ICF_SwitzerlandCharterChapter_Vertical_RGB_Negative.png.asset.json",
+      "kind": "logo",
+      "format": "png",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/logos/ICF_SwitzerlandCharterChapter_Vertical_RGB_Positive.png.asset.json",
+      "kind": "logo",
+      "format": "png",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/logos/ICF_SwitzerlandCharterChapter_Vertical_RGB_White.png.asset.json",
+      "kind": "logo",
+      "format": "png",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Arrow01.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Arrow02.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Arrow03.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Asterisk01.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Asterisk02.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Asterisk03.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Asterisk04.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/CircularMark01.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/CircularMark02.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/CircularMark03.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Line01.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Line02.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Line03.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Line04.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Other01.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Other02.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Other03.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Other04.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Other05.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Other06.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Star01.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Star02.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/Star03.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/TextHighlighMark01.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/TextHighlighMark02.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/TextHighlighMark03.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/ThinnerStrokeMark01.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/ThinnerStrokeMark02.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/ThinnerStrokeMark03.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/marks/ThinnerStrokeMark04.svg.asset.json",
+      "kind": "image",
+      "format": "svg",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/photography/coaching-conversation.jpg",
+      "kind": "photography",
+      "format": "jpg"
+    },
+    {
+      "file": "src/assets/photography/community-circle.jpg",
+      "kind": "photography",
+      "format": "jpg"
+    },
+    {
+      "file": "src/assets/photography/focus-in-action.jpg",
+      "kind": "photography",
+      "format": "jpg"
+    },
+    {
+      "file": "src/assets/photography/honest-portrait.jpg",
+      "kind": "photography",
+      "format": "jpg"
+    }
+  ]
+}

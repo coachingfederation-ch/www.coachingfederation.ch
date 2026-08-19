@@ -1,0 +1,45 @@
+/**
+ * Renders an official ICF Switzerland lockup.
+ *
+ * The logo is artwork, so it is an <img> rather than a masked shape: it must
+ * keep its own two brand colours and must never inherit a token colour. Pick
+ * the variant that matches the surface — `positive` on light, `negative` on the
+ * Deep Blue hero band, `white` over imagery.
+ */
+import * as React from "react";
+import { cn } from "@/design-system/icf-welcome-design-system-a835df/lib/utils";
+import { LOGOS, type LogoName, type LogoOrientation, type LogoTone } from "./logos";
+
+export type LogoProps = Omit<React.ComponentPropsWithoutRef<"img">, "src" | "width" | "height"> & {
+  orientation?: LogoOrientation;
+  tone?: LogoTone;
+  /**
+   * Decorative instances (e.g. next to a visible text lockup) pass `decorative`
+   * so the logo is hidden from assistive tech instead of announced twice.
+   */
+  decorative?: boolean;
+};
+
+export function Logo({
+  orientation = "horizontal",
+  tone = "positive",
+  decorative = false,
+  className,
+  alt,
+  ...props
+}: LogoProps) {
+  const key = `${orientation}-${tone}` as LogoName;
+  const logo = LOGOS[key];
+
+  return (
+    <img
+      src={logo.url}
+      width={logo.width}
+      height={logo.height}
+      alt={decorative ? "" : (alt ?? "ICF Switzerland Charter Chapter")}
+      {...(decorative ? { "aria-hidden": true } : {})}
+      className={cn("h-auto w-full max-w-full object-contain", className)}
+      {...props}
+    />
+  );
+}
