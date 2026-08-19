@@ -2,6 +2,7 @@
  * Site-wide footer with copyright and secondary navigation links, shared by
  * all public page layouts.
  */
+import { Shield } from "lucide-react";
 import { LocaleLink, useI18n } from "@/i18n";
 
 export function SiteFooter() {
@@ -58,6 +59,15 @@ export function SiteFooter() {
           >
             {t("common.footer.privacy")}
           </LocaleLink>
+          <a
+            href="https://new.coachingfederation.ch/.well-known/trust.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-6 items-center gap-1.5 text-white/80 hover:text-white"
+          >
+            <Shield className="h-3.5 w-3.5" aria-hidden="true" />
+            {t("common.footer.trustCenter")}
+          </a>
           <a
             href="https://coachingfederation.org/credentialing/coaching-ethics/"
             target="_blank"
