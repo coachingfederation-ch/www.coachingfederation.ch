@@ -148,7 +148,7 @@ export async function listRoleGrantAudit(
     .from("role_grants")
     .select("id, user_id, role, action, actor_user_id, created_at", { count: "exact" });
 
-  if (filters.role) query = query.eq("role", filters.role);
+  if (filters.role) query = query.eq("role", filters.role as never);
   if (filters.action) query = query.eq("action", filters.action);
 
   const search = (filters.search ?? "").trim();
@@ -235,11 +235,33 @@ async function authUserIdsMatching(search: string): Promise<string[]> {
  * `role_grants_archive`. Nothing is lost — the archive is service-role only.
  */
 export async function archiveOldRoleGrants(months = 24): Promise<{ archived: number }> {
-  const { data, error } = await supabaseAdmin.rpc("archive_old_role_grants", {
-    _older_than: `${months} months`,
-  });
+  const cutoff = new Date();
+  cutoff.setMonth(cutoff.getMonth() - months);
+
+  // Copy first, delete second: a failed insert must leave the source intact.
+  const { data: due, error } = await supabaseAdmin
+    .from("role_grants")
+    .select("id, user_id, role, action, actor_user_id, created_at")
+    .lt("created_at", cutoff.toISOString())
+    .limit(1000);
   if (error) throw error;
-  return { archived: (data as number | null) ?? 0 };
+  if (!due?.length) return { archived: 0 };
+
+  const { error: insertError } = await supabaseAdmin
+    .from("role_grants_archive")
+    .upsert(due, { onConflict: "id" });
+  if (insertError) throw insertError;
+
+  const { error: deleteError } = await supabaseAdmin
+    .from("role_grants")
+    .delete()
+    .in(
+      "id",
+      due.map((row) => row.id as string),
+    );
+  if (deleteError) throw deleteError;
+
+  return { archived: due.length };
 }
 
 /**
