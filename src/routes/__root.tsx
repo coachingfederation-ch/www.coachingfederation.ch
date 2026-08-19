@@ -102,15 +102,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Find a credentialed coach in Switzerland, develop leaders in your organisation, and join the coaching community across Zürich, Romandie and Ticino.",
       },
       { name: "author", content: "The Switzerland Chapter of ICF" },
-      {
-        property: "og:title",
-        content: "The Switzerland Chapter of ICF | Find a credentialed coach",
-      },
-      {
-        property: "og:description",
-        content:
-          "Find a credentialed coach in Switzerland, develop leaders in your organisation, and join the coaching community across Zürich, Romandie and Ticino.",
-      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       {
