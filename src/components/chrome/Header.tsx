@@ -37,12 +37,7 @@ function AccountControl() {
 
   if (!userId) {
     return (
-      <Button
-        asChild
-        variant="pill-ghost"
-        size="pill"
-        className="hidden text-white sm:inline-flex"
-      >
+      <Button asChild variant="pill-ghost" size="pill" className="hidden text-white sm:inline-flex">
         <Link to="/auth" search={{ next: undefined }}>
           {t("common.nav.memberLogin")}
         </Link>

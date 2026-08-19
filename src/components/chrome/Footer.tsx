@@ -4,7 +4,10 @@
  * link list (in-app routes plus the external Trust Center and ethics links).
  */
 import { Shield } from "lucide-react";
-import { SiteFooter as DsSiteFooter, type SiteLinkComponent } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  SiteFooter as DsSiteFooter,
+  type SiteLinkComponent,
+} from "@/design-system/icf-welcome-design-system-a835df";
 import { LocaleLink, useI18n } from "@/i18n";
 
 const localeLinkComponent = LocaleLink as unknown as SiteLinkComponent;
