@@ -94,7 +94,7 @@ const eventInput = z.object({
   image_credit_name: z.string().trim().max(200).nullable().optional().or(z.literal("")),
   image_credit_url: z.string().trim().url().max(1000).nullable().optional().or(z.literal("")),
   capacity: z.number().int().positive().max(100000).nullable().optional(),
-  registration_mode: z.enum(["none", "rsvp", "rsvp_members", "rsvp_tickets"]),
+  registration_mode: z.enum(["none", "rsvp", "rsvp_members", "rsvp_tickets", "rsvp_invited"]),
   registration_opens_at: z.string().min(1).nullable().optional(),
   registration_closes_at: z.string().min(1).nullable().optional(),
   guest_registration_allowed: z.boolean(),
