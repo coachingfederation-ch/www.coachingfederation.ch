@@ -785,7 +785,17 @@
     "superAdminGrantConfirm": "Grant full Super Admin access to {name}? They will be able to manage every area, including roles.",
     "superAdminRevokeConfirm": "Remove Super Admin access from {name}?",
     "superAdminSelfHint": "You cannot change your own Super Admin access.",
-    "superAdminLastHint": "The last Super Admin cannot be removed."
+    "superAdminLastHint": "The last Super Admin cannot be removed.",
+    "auditSearchPlaceholder": "Search by name or email",
+    "auditFilterRole": "All roles",
+    "auditFilterAction": "All actions",
+    "auditActionGranted": "Granted",
+    "auditActionRevoked": "Revoked",
+    "auditApplyFilter": "Filter",
+    "auditShowMore": "Show more",
+    "auditCount": "Showing {shown} of {total}",
+    "auditNoMatches": "No role changes match these filters.",
+    "auditRetentionNote": "Entries older than 24 months are archived automatically and no longer shown here."
   },
   "events": {
     "title": "Events",

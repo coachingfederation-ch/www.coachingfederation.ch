@@ -785,7 +785,17 @@
     "superAdminGrantConfirm": "Accorder l’accès Super Admin complet à {name} ? Cette personne pourra gérer tous les domaines, y compris les rôles.",
     "superAdminRevokeConfirm": "Retirer l’accès Super Admin à {name} ?",
     "superAdminSelfHint": "Vous ne pouvez pas modifier votre propre accès Super Admin.",
-    "superAdminLastHint": "Le dernier Super Admin ne peut pas être retiré."
+    "superAdminLastHint": "Le dernier Super Admin ne peut pas être retiré.",
+    "auditSearchPlaceholder": "Rechercher par nom ou e-mail",
+    "auditFilterRole": "Tous les rôles",
+    "auditFilterAction": "Toutes les actions",
+    "auditActionGranted": "Accordé",
+    "auditActionRevoked": "Retiré",
+    "auditApplyFilter": "Filtrer",
+    "auditShowMore": "Afficher plus",
+    "auditCount": "{shown} sur {total} affichés",
+    "auditNoMatches": "Aucun changement de rôle ne correspond à ces filtres.",
+    "auditRetentionNote": "Les entrées de plus de 24 mois sont archivées automatiquement et ne sont plus affichées ici."
   },
   "events": {
     "title": "Événements",
