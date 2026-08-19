@@ -140,6 +140,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       // Home-screen install for the volunteer chat console (see manifest).
       { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/app-icon-192.png" },
       // Fonts are self-hosted (see @font-face in src/styles.css); preload them
       // so first paint doesn't flash the fallback stack.
