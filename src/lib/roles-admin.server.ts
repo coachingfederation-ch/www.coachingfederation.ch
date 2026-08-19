@@ -124,13 +124,43 @@ export async function listRoleGrantAuditForUser(
   }));
 }
 
-/** Recent grant/revoke history, resolved to human-readable names. */
-export async function listRoleGrantAudit(limit = 50): Promise<RoleGrantEntry[]> {
-  const { data, error } = await supabaseAdmin
+export type RoleGrantFilters = {
+  /** Free-text match on the subject's name or email. */
+  search?: string;
+  role?: string;
+  action?: string;
+};
+
+/**
+ * Recent grant/revoke history, resolved to human-readable names.
+ *
+ * Paged and filtered in the database so a search reaches the whole history,
+ * not just the page currently on screen. Name search resolves ids first
+ * (members, then profiles, then auth email) because `role_grants` stores only
+ * the auth user id.
+ */
+export async function listRoleGrantAudit(
+  limit = 10,
+  offset = 0,
+  filters: RoleGrantFilters = {},
+): Promise<{ entries: RoleGrantEntry[]; total: number }> {
+  let query = supabaseAdmin
     .from("role_grants")
-    .select("id, user_id, role, action, actor_user_id, created_at")
+    .select("id, user_id, role, action, actor_user_id, created_at", { count: "exact" });
+
+  if (filters.role) query = query.eq("role", filters.role);
+  if (filters.action) query = query.eq("action", filters.action);
+
+  const search = (filters.search ?? "").trim();
+  if (search) {
+    const ids = await authUserIdsMatching(search);
+    if (!ids.length) return { entries: [], total: 0 };
+    query = query.in("user_id", ids);
+  }
+
+  const { data, error, count } = await query
     .order("created_at", { ascending: false })
-    .limit(limit);
+    .range(offset, offset + limit - 1);
   if (error) throw error;
 
   const ids = new Set<string>();
@@ -147,16 +177,69 @@ export async function listRoleGrantAudit(limit = 50): Promise<RoleGrantEntry[]> 
     for (const [id, email] of emails) names.set(id, email);
   }
 
-  return (data ?? []).map((row) => ({
-    id: row.id as string,
-    userId: row.user_id as string,
-    role: row.role as string,
-    action: row.action as string,
-    actorUserId: (row.actor_user_id as string | null) ?? null,
-    createdAt: row.created_at as string,
-    subjectName: names.get(row.user_id as string) ?? null,
-    actorName: row.actor_user_id ? (names.get(row.actor_user_id as string) ?? null) : null,
-  }));
+  return {
+    total: count ?? 0,
+    entries: (data ?? []).map((row) => ({
+      id: row.id as string,
+      userId: row.user_id as string,
+      role: row.role as string,
+      action: row.action as string,
+      actorUserId: (row.actor_user_id as string | null) ?? null,
+      createdAt: row.created_at as string,
+      subjectName: names.get(row.user_id as string) ?? null,
+      actorName: row.actor_user_id ? (names.get(row.actor_user_id as string) ?? null) : null,
+    })),
+  };
+}
+
+/**
+ * Auth user ids whose member record, profile name or account email matches the
+ * search term. Used to translate a human name into the ids `role_grants` keys
+ * on.
+ */
+async function authUserIdsMatching(search: string): Promise<string[]> {
+  const like = `%${search.replace(/[%_]/g, (c) => `\\${c}`)}%`;
+  const ids = new Set<string>();
+
+  const { data: members } = await supabaseAdmin
+    .from("members")
+    .select("auth_user_id")
+    .not("auth_user_id", "is", null)
+    .or(`full_name.ilike.${like},first_name.ilike.${like},last_name.ilike.${like},email.ilike.${like}`);
+  for (const row of members ?? []) ids.add(row.auth_user_id as string);
+
+  const { data: profiles } = await supabaseAdmin
+    .from("profiles")
+    .select("id")
+    .or(`first_name.ilike.${like},last_name.ilike.${like}`);
+  for (const row of profiles ?? []) ids.add(row.id as string);
+
+  // Internal accounts have neither a member row nor always a profile name, so
+  // fall back to the auth email of the accounts that appear in the history.
+  const { data: roleRows } = await supabaseAdmin.from("user_roles").select("user_id");
+  const needle = search.toLowerCase();
+  await Promise.all(
+    [...new Set((roleRows ?? []).map((r) => r.user_id as string))]
+      .filter((id) => !ids.has(id))
+      .map(async (id) => {
+        const { data } = await supabaseAdmin.auth.admin.getUserById(id);
+        if ((data?.user?.email ?? "").toLowerCase().includes(needle)) ids.add(id);
+      }),
+  );
+
+  return [...ids];
+}
+
+/**
+ * Retention: moves history entries older than the given number of months into
+ * `role_grants_archive`. Nothing is lost — the archive is service-role only.
+ */
+export async function archiveOldRoleGrants(months = 24): Promise<{ archived: number }> {
+  const { data, error } = await supabaseAdmin.rpc("archive_old_role_grants", {
+    _older_than: `${months} months`,
+  });
+  if (error) throw error;
+  return { archived: (data as number | null) ?? 0 };
 }
 
 /**
