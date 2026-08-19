@@ -43,5 +43,6 @@
     "it": "Italiano",
     "en": "Inglese"
   },
-  "opensInNewTab": "(si apre in una nuova scheda)"
+  "opensInNewTab": "(si apre in una nuova scheda)",
+  "aiGenerated": "Generato con IA"
 }
