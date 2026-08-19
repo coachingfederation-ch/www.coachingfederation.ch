@@ -3958,6 +3958,36 @@ export type Database = {
         }
         Relationships: []
       }
+      role_grants_archive: {
+        Row: {
+          action: string
+          actor_user_id: string | null
+          archived_at: string
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          action: string
+          actor_user_id?: string | null
+          archived_at?: string
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string | null
+          archived_at?: string
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
