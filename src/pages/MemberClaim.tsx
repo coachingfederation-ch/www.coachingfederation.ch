@@ -34,7 +34,7 @@ function Shell({
   const { locale, setLocale } = useCms();
   return (
     <div className="flex min-h-dvh items-center justify-center bg-background px-4 py-12">
-      <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-[var(--shadow-soft)]">
+      <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-soft">
         <div className="mb-6 text-center">
           <h1 className="text-xl font-bold tracking-tight">{title}</h1>
           {subtitle && (

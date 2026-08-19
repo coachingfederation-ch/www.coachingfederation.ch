@@ -360,7 +360,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                       </span>
                     ))}
                     {featured.is_full ? (
-                      <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-[11px] font-semibold text-[color:var(--warn)]">
+                      <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-[11px] font-semibold text-warn-foreground">
                         {t("events.tag.full")}
                       </span>
                     ) : null}
@@ -439,7 +439,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                             </span>
                           ))}
                           {e.is_full ? (
-                            <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-[11px] font-semibold text-[color:var(--warn)]">
+                            <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-[11px] font-semibold text-warn-foreground">
                               {t("events.tag.full")}
                             </span>
                           ) : null}
