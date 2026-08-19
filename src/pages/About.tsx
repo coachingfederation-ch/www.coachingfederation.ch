@@ -3,7 +3,7 @@
  * Exports: AboutPage (default). Rendered by src/routes/about.tsx and the locale-prefixed
  * equivalent in src/routes/$locale/about.tsx.
  */
-import { Mark } from "@/components/marks";
+import { BrushMark as Mark } from "@/design-system/icf-welcome-design-system-a835df";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { DeibCommitment } from "@/components/about/DeibCommitment";
 import { ContactForm } from "@/components/about/ContactForm";
@@ -11,6 +11,8 @@ import { Governance } from "@/components/about/Governance";
 import { TeamPreview } from "@/components/team/TeamPreview";
 import { CommunitiesPreview } from "@/components/communities/CommunitiesPreview";
 import { useI18n } from "@/i18n";
+
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 
 export default function AboutPage() {
   const { t, tList } = useI18n();
