@@ -58,6 +58,15 @@ export const getOutboundIpDiagnostics = createServerFn({ method: "POST" })
   });
 
 /** One-time TEST -> LIVE cutover (admin only, irreversible). */
+export const checkIcfCredentials = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const userId = await assertAdmin(context);
+    const { checkIcfCredentials: run } = await import("./icf-credentials-check.server");
+    return await run(userId);
+  });
+
+/** One-time TEST -> LIVE cutover (admin only, irreversible). */
 export const executeCutover = createServerFn({ method: "POST" })
   .inputValidator((input) => z.object({ confirm: z.literal("CUTOVER") }).parse(input))
   .middleware([requireSupabaseAuth])
