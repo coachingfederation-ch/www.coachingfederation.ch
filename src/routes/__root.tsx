@@ -89,12 +89,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { name: "apple-mobile-web-app-title", content: "ICF Chat" },
-      { title: "The Switzerland Chapter of ICF | Find a credentialed coach" },
-      {
-        name: "description",
-        content:
-          "Find a credentialed coach in Switzerland, develop leaders in your organisation, and join the coaching community across Zürich, Romandie and Ticino.",
-      },
       { name: "author", content: "The Switzerland Chapter of ICF" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
