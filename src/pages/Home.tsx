@@ -11,7 +11,8 @@ import adRetreats from "@/assets/ads/ad-retreats.jpg";
 import adMentoring from "@/assets/ads/ad-mentoring.jpg";
 import heroImg from "@/assets/hero-coaching.jpg";
 import leadershipImg from "@/assets/leadership-team.jpg";
-import { Mark, type MarkName } from "@/components/marks";
+import { BrushMark as Mark } from "@/design-system/icf-welcome-design-system-a835df/components/brush/BrushMark";
+import type { MarkName } from "@/design-system/icf-welcome-design-system-a835df/components/brush/marks";
 // Imported from the component module rather than the library index: the index
 // also re-exports the library's own showcase chrome, whose links point at
 // routes that only exist in the design-system project.
@@ -41,7 +42,7 @@ function HeroHeader() {
               <span className="text-accent">{t("home.hero.titleAccent")}</span>
               {t("home.hero.titlePost")}
             </h1>
-            <p className="mt-6 max-w-xl text-[17px] leading-[1.65] text-white/85">
+            <p className="mt-6 max-w-xl text-[17px] leading-[1.65] text-hero-foreground/85">
               {t("home.hero.subtitle")}
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -50,7 +51,7 @@ function HeroHeader() {
               </Button>
               <LocaleLink
                 to="/for-organisations"
-                className="inline-flex h-12 items-center text-sm font-semibold text-white/85 underline-offset-4 transition hover:text-white hover:underline"
+                className="inline-flex h-12 items-center text-sm font-semibold text-hero-foreground/85 underline-offset-4 transition hover:text-hero-foreground hover:underline"
               >
                 {t("common.nav.forOrganisations")}
               </LocaleLink>
@@ -68,7 +69,7 @@ function HeroHeader() {
                 the image and sits clear of the faces. */}
             <AiBadge label={t("common.aiGenerated")} className="absolute bottom-4 left-4" />
             <Mark
-              name="asterisk1"
+              name="Asterisk01"
               className="pointer-events-none absolute -right-4 -top-7 h-24 w-24 text-mark-yellow sm:-right-6 sm:-top-9 sm:h-28 sm:w-28"
             />
           </div>
@@ -142,7 +143,7 @@ function WhyCredentialed() {
   return (
     <section className="relative mt-20 overflow-hidden bg-card py-24">
       <Mark
-        name="circular1"
+        name="CircularMark01"
         className="pointer-events-none absolute -right-20 top-10 h-64 w-64 text-mark-blue opacity-10"
       />
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
@@ -173,10 +174,10 @@ function WhyCredentialed() {
 }
 
 const THEME_STYLES: { bg: string; fg: string; mark: MarkName }[] = [
-  { bg: "bg-card", fg: "text-mark-indigo", mark: "circular1" },
-  { bg: "bg-card", fg: "text-mark-blue", mark: "star" },
-  { bg: "bg-mark-yellow", fg: "text-mark-indigo", mark: "asterisk1" },
-  { bg: "bg-mark-indigo", fg: "text-mark-cream", mark: "circular2" },
+  { bg: "bg-card", fg: "text-mark-indigo", mark: "CircularMark01" },
+  { bg: "bg-card", fg: "text-mark-blue", mark: "Star01" },
+  { bg: "bg-mark-yellow", fg: "text-mark-indigo", mark: "Asterisk01" },
+  { bg: "bg-mark-indigo", fg: "text-mark-cream", mark: "CircularMark02" },
 ];
 
 function CoachingInAction() {
@@ -300,9 +301,9 @@ function Sponsors() {
 }
 
 const EVENT_STYLES: { bg: string; fg: string; mark: MarkName }[] = [
-  { bg: "bg-mark-cream", fg: "text-mark-indigo", mark: "arrow1" },
-  { bg: "bg-mark-indigo", fg: "text-mark-yellow", mark: "asterisk3" },
-  { bg: "bg-mark-yellow", fg: "text-mark-indigo", mark: "arrow2" },
+  { bg: "bg-mark-cream", fg: "text-mark-indigo", mark: "Arrow01" },
+  { bg: "bg-mark-indigo", fg: "text-mark-yellow", mark: "Asterisk03" },
+  { bg: "bg-mark-yellow", fg: "text-mark-indigo", mark: "Arrow02" },
 ];
 
 function Events() {
@@ -397,14 +398,14 @@ function Join() {
   return (
     <section className="relative overflow-hidden bg-hero text-hero-foreground">
       <Mark
-        name="circular2"
+        name="CircularMark02"
         className="pointer-events-none absolute -right-16 -top-10 h-96 w-96 text-mark-cream opacity-40"
       />
       <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 py-24 md:grid-cols-[1.2fr_1fr] md:items-center">
         <div>
           <p className="eyebrow !text-accent">{t("home.join.eyebrow")}</p>
           <h2 className="mt-3 display-lg">{t("home.join.title")}</h2>
-          <p className="mt-5 max-w-lg text-base leading-relaxed text-white/85">
+          <p className="mt-5 max-w-lg text-base leading-relaxed text-hero-foreground/85">
             {t("home.join.subtitle")}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -412,22 +413,22 @@ function Join() {
               href="https://coachingfederation.org/about/icf-membership/individual-membership/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-10 items-center rounded-full bg-white px-5 text-sm font-semibold text-primary transition hover:bg-white/90"
+              className="inline-flex h-10 items-center rounded-full bg-hero-foreground px-5 text-sm font-semibold text-primary transition hover:bg-hero-foreground/90"
             >
               {t("home.join.becomeMember")}
             </a>
             <LocaleLink
               to="/for-coaches"
               hash="credentials"
-              className="inline-flex h-10 items-center rounded-full border border-white/30 px-5 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="inline-flex h-10 items-center rounded-full border border-hero-foreground/30 px-5 text-sm font-semibold text-hero-foreground transition hover:bg-hero-foreground/10"
             >
               {t("home.join.exploreCredentials")}
             </LocaleLink>
           </div>
         </div>
-        <div className="rounded-2xl border border-white/15 bg-white/5 p-6 backdrop-blur">
-          <h3 className="text-xl font-semibold tracking-tight">{t("home.join.newsletterTitle")}</h3>
-          <p className="mt-2 text-sm leading-relaxed text-white/85">
+        <div className="rounded-2xl border border-hero-foreground/15 bg-hero-foreground/5 p-6 backdrop-blur">
+          <h3 className="text-xl font-semibold tracking-tight text-hero-foreground">{t("home.join.newsletterTitle")}</h3>
+          <p className="mt-2 text-sm leading-relaxed text-hero-foreground/85">
             {t("home.join.newsletterSubtitle")}
           </p>
           <form
@@ -444,11 +445,11 @@ function Join() {
               type="email"
               required
               placeholder={t("home.join.emailPlaceholder")}
-              className="h-10 w-full rounded-full border border-white/20 bg-white/10 px-4 text-sm text-white placeholder:text-white/70 outline-none focus:border-white/60"
+              className="h-10 w-full rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-4 text-sm text-hero-foreground placeholder:text-hero-foreground/70 outline-none focus:border-hero-foreground/60"
             />
             <button
               type="submit"
-              className="h-10 rounded-full bg-white px-5 text-sm font-semibold text-primary transition hover:bg-white/90"
+              className="h-10 rounded-full bg-hero-foreground px-5 text-sm font-semibold text-primary transition hover:bg-hero-foreground/90"
             >
               {t("home.join.subscribe")}
             </button>
