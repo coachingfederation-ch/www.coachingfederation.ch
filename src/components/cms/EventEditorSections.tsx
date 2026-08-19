@@ -7,7 +7,7 @@ import * as React from "react";
 import { ImagePlus, X } from "lucide-react";
 import { EventTranslationsPanel } from "@/components/cms/EventTranslationsPanel";
 import { EventHostsPanel } from "@/components/cms/EventHostsPanel";
-import { RichTextEditor } from "@/components/cms/RichTextField";
+import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -390,9 +390,11 @@ export function EventContentSection({
             />
           </Field>
           <Field label={t("events.fieldDescription")}>
-            <RichTextEditor
+            <MarkdownEditor
               value={event.description ?? ""}
-              minHeight="16rem"
+              rows={14}
+              language={event.language}
+              modes={["write", "preview"]}
               onChange={(next) => patch({ description: next })}
             />
           </Field>
