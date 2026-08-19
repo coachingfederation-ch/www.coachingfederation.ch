@@ -535,6 +535,7 @@ function IntegrationPageBody() {
               </div>
             </section>
 
+            <CredentialCheckCard t={t} />
             <OutboundIpCard t={t} />
 
             <ContentOwnershipPanel />
