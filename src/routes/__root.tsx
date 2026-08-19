@@ -89,6 +89,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { name: "apple-mobile-web-app-title", content: "ICF Chat" },
+      {
+        name: "google-site-verification",
+        content: "xq_8krrQuKWAOqJrBYGE4imhxpBUI515JKRmWcgO63I",
+      },
       { name: "author", content: "The Switzerland Chapter of ICF" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
