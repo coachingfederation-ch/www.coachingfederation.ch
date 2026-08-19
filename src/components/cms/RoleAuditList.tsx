@@ -72,8 +72,7 @@ export function RoleAuditList({
     void fetchPage(0);
   };
 
-  const selectClass =
-    "rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground";
+  const selectClass = "rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground";
 
   return (
     <>

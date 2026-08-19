@@ -205,7 +205,9 @@ async function authUserIdsMatching(search: string): Promise<string[]> {
     .from("members")
     .select("auth_user_id")
     .not("auth_user_id", "is", null)
-    .or(`full_name.ilike.${like},first_name.ilike.${like},last_name.ilike.${like},email.ilike.${like}`);
+    .or(
+      `full_name.ilike.${like},first_name.ilike.${like},last_name.ilike.${like},email.ilike.${like}`,
+    );
   for (const row of members ?? []) ids.add(row.auth_user_id as string);
 
   const { data: profiles } = await supabaseAdmin
