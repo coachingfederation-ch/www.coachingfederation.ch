@@ -180,10 +180,13 @@ export function CultureSurvey() {
                 type="button"
                 disabled={!pressure}
                 onClick={() => setStep("questions")}
-                className="mt-8 inline-flex h-11 items-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-40"
+                className="mt-8 inline-flex h-12 w-full items-center justify-center rounded-full bg-primary px-6 text-base font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-40"
               >
                 {t("organisations.survey.start")} →
               </button>
+              <p className="mt-4 text-center text-xs text-foreground/60">
+                {t("organisations.survey.privacy")}
+              </p>
             </div>
           ) : null}
 
