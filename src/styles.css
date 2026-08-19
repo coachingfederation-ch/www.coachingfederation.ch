@@ -1,5 +1,4 @@
 @import "tailwindcss" source(none);
-@source "../src";
 @import "tw-animate-css";
 /*
  * Attached design system theme (ICF Welcome Design System). Imported after the
@@ -7,6 +6,7 @@
  * components under src/design-system/.
  */
 @import "./design-system/icf-welcome-design-system-a835df/styles.css";
+@source "../src";
 
 @custom-variant dark (&:is(.dark *));
 
