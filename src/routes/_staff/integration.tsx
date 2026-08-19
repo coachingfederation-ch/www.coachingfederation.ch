@@ -231,7 +231,7 @@ function OutboundIpCard({ t }: { t: (key: string) => string }) {
                 {family.probes.map((p) => (
                   <li key={p.service}>
                     <span className="font-semibold">{p.service}:</span>{" "}
-                    <span className="font-mono break-all">{p.ip ?? (p.error ?? "—")}</span>
+                    <span className="font-mono break-all">{p.ip ?? p.error ?? "—"}</span>
                   </li>
                 ))}
               </ul>
@@ -334,7 +334,9 @@ function CredentialCheckCard({ t }: { t: (key: string) => string }) {
             <ul className="mt-2 space-y-2 text-xs">
               {result.attempts.map((a) => (
                 <li key={a.label}>
-                  <span className="font-semibold">{a.ok ? "✓" : "✕"} {a.label}</span>
+                  <span className="font-semibold">
+                    {a.ok ? "✓" : "✕"} {a.label}
+                  </span>
                   <br />
                   <span className="font-mono break-all text-muted-foreground">{a.url}</span>
                   {a.fault ? (

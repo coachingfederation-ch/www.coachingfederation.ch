@@ -148,7 +148,14 @@ export async function checkIcfCredentials(actorUserId: string): Promise<Credenti
       attempt("netFORUMXML.asmx (used by the sync)", signonUrl, username, password),
       attempt("Signon.asmx (netFORUM login endpoint)", signonAsmx, username, password),
       ...(trimmedDiffers
-        ? [attempt("netFORUMXML.asmx (whitespace trimmed)", signonUrl, username.trim(), password.trim())]
+        ? [
+            attempt(
+              "netFORUMXML.asmx (whitespace trimmed)",
+              signonUrl,
+              username.trim(),
+              password.trim(),
+            ),
+          ]
         : []),
     ]);
   }
