@@ -15,8 +15,7 @@ export const navItems = [
   { key: "events", to: "/events" },
 ] as const;
 
-export const CARD_SHADOW =
-  "shadow-[0_1px_2px_rgba(33,34,81,0.03),0_6px_16px_-14px_rgba(33,34,81,0.06)]";
+export const CARD_SHADOW = "shadow-soft";
 
 export const MENU_ITEM =
   "block min-h-11 px-4 py-3 text-left text-[12px] font-semibold leading-5 text-foreground/80 hover:bg-muted hover:text-foreground";
