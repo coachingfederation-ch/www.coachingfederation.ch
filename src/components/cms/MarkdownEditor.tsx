@@ -108,7 +108,10 @@ export function MarkdownEditor({
 
   const pick = (next: EditorMode) => {
     setMode(next);
-    if (typeof window !== "undefined") window.localStorage.setItem(STORAGE_KEY, next);
+    // Only the full editor persists its choice, so a reduced field cannot
+    // change the article editor's remembered mode.
+    if (typeof window !== "undefined" && modes.length === 3)
+      window.localStorage.setItem(STORAGE_KEY, next);
   };
 
   const paneHeight = "min-h-[28rem] max-h-[70vh]";
