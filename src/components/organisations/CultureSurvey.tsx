@@ -97,18 +97,52 @@ export function CultureSurvey() {
 
   const selectedInsight = pressures.find((p) => p.id === pressure)?.insight;
 
+  const intro = step === "pressure";
+
   return (
     <section id="assessment" className="bg-hero py-24 text-hero-foreground">
-      <div className="mx-auto max-w-4xl px-8">
-        <p className="eyebrow !text-hero-foreground">{t("organisations.survey.eyebrow")}</p>
-        <h2 className="mt-3 display-lg">{t("organisations.survey.title")}</h2>
-        <p className="mt-4 text-base leading-relaxed text-hero-foreground/90">
-          {t("organisations.survey.lede")}
-        </p>
+      <div
+        className={
+          "mx-auto px-8 " +
+          (intro
+            ? "grid max-w-6xl gap-12 lg:grid-cols-2 lg:items-center"
+            : "max-w-4xl")
+        }
+      >
+        <div>
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="rounded-full bg-accent px-3 py-1 text-xs font-bold uppercase tracking-widest text-accent-foreground">
+              {t("organisations.survey.freeBadge")}
+            </span>
+            <span className="text-xs font-semibold uppercase tracking-widest text-hero-foreground/70">
+              {t("organisations.survey.effort")}
+            </span>
+          </div>
+          <p className="eyebrow mt-6 !text-hero-foreground">{t("organisations.survey.eyebrow")}</p>
+          <h2 className="mt-3 display-lg">{t("organisations.survey.title")}</h2>
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-hero-foreground/90">
+            {t("organisations.survey.lede")}
+          </p>
+          {intro ? (
+            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+              {DIMENSIONS.map((d) => (
+                <li
+                  key={d}
+                  className="flex items-center gap-3 rounded-xl border border-hero-foreground/15 bg-hero-foreground/5 px-4 py-3 text-sm font-medium"
+                >
+                  <span aria-hidden className="h-2 w-2 shrink-0 rounded-full bg-accent" />
+                  {t(`organisations.survey.dimensions.${d}`)}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
 
         <div
           className={
-            "mt-10 rounded-2xl border border-accent/40 bg-card p-6 shadow-lg md:p-10 " + CARD_SHADOW
+            "rounded-2xl border border-accent/40 bg-card p-6 text-foreground shadow-lg md:p-10 " +
+            (intro ? "" : "mt-10 ") +
+            CARD_SHADOW
           }
         >
           {step === "pressure" ? (
