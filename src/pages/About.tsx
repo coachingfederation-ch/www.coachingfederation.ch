@@ -3,7 +3,7 @@
  * Exports: AboutPage (default). Rendered by src/routes/about.tsx and the locale-prefixed
  * equivalent in src/routes/$locale/about.tsx.
  */
-import { Mark } from "@/components/marks";
+import { BrushMark as Mark, Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { DeibCommitment } from "@/components/about/DeibCommitment";
 import { ContactForm } from "@/components/about/ContactForm";
@@ -38,17 +38,18 @@ export default function AboutPage() {
               <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
                 {t("about.mission.body")}
               </p>
-              <a
-                href="https://coachingfederation-ch-okr.lovable.app"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-8 inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-white transition hover:bg-primary/90"
-              >
-                Our Strategy
-              </a>
+              <Button asChild variant="default" size="pill" className="mt-8">
+                <a
+                  href="https://coachingfederation-ch-okr.lovable.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Our Strategy
+                </a>
+              </Button>
             </div>
             <div className="grid aspect-[4/3] place-items-center rounded-2xl border border-border/70 bg-background">
-              <Mark name="star" className="h-1/2 w-1/2 text-mark-indigo" />
+              <Mark name="Star01" className="h-1/2 w-1/2 text-mark-indigo" />
             </div>
           </div>
         </section>

@@ -3,7 +3,7 @@
  * Exports: ForCoachesPage (default). Rendered by src/routes/for-coaches.tsx and
  * the locale-prefixed equivalent in src/routes/$locale/for-coaches.tsx.
  */
-import { Mark } from "@/components/marks";
+import { BrushMark as Mark, Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import {
   BenefitGrid,
@@ -54,21 +54,22 @@ export default function ForCoachesPage() {
                 </div>
               ))}
             </div>
-            <a
-              href="https://coachingfederation.org/credentialing/icf-credentials-overview/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-white transition hover:bg-primary/90"
-            >
-              {t("coaches.credentials.cta")}
-            </a>
+            <Button asChild variant="default" size="pill" className="mt-8">
+              <a
+                href="https://coachingfederation.org/credentialing/icf-credentials-overview/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("coaches.credentials.cta")}
+              </a>
+            </Button>
           </div>
         </section>
 
         <section className="bg-background py-24">
           <div className="mx-auto grid max-w-7xl gap-10 px-8 md:grid-cols-[1fr_1.2fr] md:items-center">
             <div className="grid aspect-[4/3] place-items-center rounded-2xl bg-mark-blue text-mark-cream">
-              <Mark name="asterisk1" className="h-1/2 w-1/2" />
+              <Mark name="Asterisk01" className="h-1/2 w-1/2" />
             </div>
             <div>
               <p className="eyebrow">{t("coaches.deib.eyebrow")}</p>
@@ -127,7 +128,7 @@ export default function ForCoachesPage() {
               </a>
             </div>
             <div className="grid aspect-[4/3] place-items-center rounded-2xl bg-mark-blue text-mark-cream">
-              <Mark name="star" className="h-1/2 w-1/2" />
+              <Mark name="Star01" className="h-1/2 w-1/2" />
             </div>
           </div>
         </section>
