@@ -173,7 +173,10 @@
       },
       {
         "group": "The Switzerland Chapter of ICF",
-        "items": ["Sondaggio tra i membri del Chapter", "Briefing organizzativo 2026"]
+        "items": [
+          "Sondaggio tra i membri del Chapter",
+          "Briefing organizzativo 2026"
+        ]
       }
     ],
     "download": {
@@ -394,7 +397,10 @@
     "thanks": {
       "title": "Grazie — abbiamo ricevuto il tuo risultato.",
       "desc": "Un membro del team organizzativo di The Switzerland Chapter of ICF ti contatterà a breve. Nel frattempo, consulta la nostra directory dei coach o i prossimi eventi."
-    }
+    },
+    "freeBadge": "Valutazione gratuita",
+    "effort": "8 domande · circa 3 minuti",
+    "privacy": "I risultati restano a lei. Non ci viene inviato nulla, a meno che non richieda un colloquio."
   },
   "events": {
     "eyebrow": "Per i leader organizzativi",
