@@ -17,6 +17,7 @@ import { useMyRoles } from "@/lib/roles";
 import { RoleTableRow } from "@/components/cms/RoleTableRow";
 import { RoleDetailPanel, SuperAdminSwitch } from "@/components/cms/RoleDetailPanel";
 import { QaTestAccountPanel } from "@/components/cms/QaTestAccountPanel";
+import { RoleAuditList } from "@/components/cms/RoleAuditList";
 import {
   grantMemberRole,
   listRoleAdminData,
@@ -48,6 +49,7 @@ function RolesPage() {
   const [members, setMembers] = useState<MemberRow[]>([]);
   const [internal, setInternal] = useState<InternalRow[]>([]);
   const [audit, setAudit] = useState<AuditRow[]>([]);
+  const [auditTotal, setAuditTotal] = useState(0);
   const [superAdminCount, setSuperAdminCount] = useState(0);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -62,6 +64,7 @@ function RolesPage() {
       setMembers(data.members);
       setInternal(data.internal);
       setAudit(data.audit);
+      setAuditTotal(data.auditTotal);
       setSuperAdminCount(data.superAdminCount);
       setCurrentUserId(data.currentUserId);
       setError(null);
@@ -340,25 +343,7 @@ function RolesPage() {
 
         <h2 className="mt-10 text-lg font-semibold tracking-tight">{t("roles.auditTitle")}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{t("roles.auditIntro")}</p>
-        <ul className="mt-3 space-y-2 text-sm">
-          {audit.length === 0 ? (
-            <li className="text-muted-foreground">{t("roles.auditEmpty")}</li>
-          ) : (
-            audit.map((entry) => (
-              <li
-                key={entry.id}
-                className="rounded-lg border border-border bg-card px-4 py-2 text-muted-foreground"
-              >
-                <span className="font-medium text-foreground">
-                  {entry.subjectName ?? entry.userId}
-                </span>{" "}
-                — {entry.role} {entry.action}
-                {entry.actorName ? ` (${t("roles.auditBy")} ${entry.actorName})` : ""} ·{" "}
-                {new Date(entry.createdAt).toLocaleString()}
-              </li>
-            ))
-          )}
-        </ul>
+        <RoleAuditList initialEntries={audit} initialTotal={auditTotal} t={t} />
       </div>
     </Shell>
   );

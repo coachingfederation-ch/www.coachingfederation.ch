@@ -21,6 +21,13 @@ const grantSchema = z.object({
   role: z.enum(GRANTABLE_ROLES),
 });
 const accountSchema = z.object({ authUserId: z.string().uuid() });
+const historySchema = z.object({
+  limit: z.number().int().min(1).max(50).default(10),
+  offset: z.number().int().min(0).default(0),
+  search: z.string().max(120).optional(),
+  role: z.enum(GRANTABLE_ROLES).optional(),
+  action: z.enum(["granted", "revoked"]).optional(),
+});
 const accountRoleSchema = z.object({
   authUserId: z.string().uuid(),
   role: z.enum(GRANTABLE_ROLES),
@@ -49,12 +56,37 @@ export const listRoleAdminData = createServerFn({ method: "POST" })
     const [members, internal, audit, superAdminCount] = await Promise.all([
       listClaimedMemberRoles(),
       listInternalStaffAccounts(),
-      listRoleGrantAudit(),
+      listRoleGrantAudit(10, 0),
       countSuperAdmins(),
     ]);
     // The caller's own id and the Super Admin headcount drive the lockout
     // guards in the UI; the database enforces the same two rules.
-    return { members, internal, audit, superAdminCount, currentUserId: context.userId };
+    return {
+      members,
+      internal,
+      audit: audit.entries,
+      auditTotal: audit.total,
+      superAdminCount,
+      currentUserId: context.userId,
+    };
+  });
+
+/**
+ * Paged and filtered role change history. Separate from `listRoleAdminData` so
+ * paging does not re-read the whole member and internal-account model.
+ */
+export const listRoleGrantHistory = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => historySchema.parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { listRoleGrantAudit } = await import("./roles-admin.server");
+    const { entries, total } = await listRoleGrantAudit(data.limit, data.offset, {
+      search: data.search,
+      role: data.role,
+      action: data.action,
+    });
+    return { entries, total };
   });
 
 /**

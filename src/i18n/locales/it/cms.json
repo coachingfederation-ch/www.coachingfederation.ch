@@ -785,7 +785,17 @@
     "superAdminGrantConfirm": "Concedere l’accesso Super Admin completo a {name}? Potrà gestire tutte le aree, inclusi i ruoli.",
     "superAdminRevokeConfirm": "Rimuovere l’accesso Super Admin a {name}?",
     "superAdminSelfHint": "Non puoi modificare il tuo accesso Super Admin.",
-    "superAdminLastHint": "L’ultimo Super Admin non può essere rimosso."
+    "superAdminLastHint": "L’ultimo Super Admin non può essere rimosso.",
+    "auditSearchPlaceholder": "Cerca per nome o e-mail",
+    "auditFilterRole": "Tutti i ruoli",
+    "auditFilterAction": "Tutte le azioni",
+    "auditActionGranted": "Assegnato",
+    "auditActionRevoked": "Revocato",
+    "auditApplyFilter": "Filtra",
+    "auditShowMore": "Mostra altri",
+    "auditCount": "{shown} di {total} visualizzati",
+    "auditNoMatches": "Nessuna modifica di ruolo corrisponde a questi filtri.",
+    "auditRetentionNote": "Le voci più vecchie di 24 mesi vengono archiviate automaticamente e non sono più mostrate qui."
   },
   "events": {
     "title": "Eventi",
