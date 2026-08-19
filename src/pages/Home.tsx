@@ -449,7 +449,7 @@ function Join() {
             />
             <button
               type="submit"
-              className="h-10 rounded-full bg-hero-foreground px-5 text-sm font-semibold text-hero transition hover:bg-hero-foreground/90"
+              className="h-10 rounded-full bg-hero-foreground px-5 text-sm font-semibold text-primary transition hover:bg-hero-foreground/90"
             >
               {t("home.join.subscribe")}
             </button>
