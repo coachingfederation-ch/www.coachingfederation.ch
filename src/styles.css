@@ -16,58 +16,6 @@
  * styles and utilities live below.
  */
 
-@layer base {
-  * {
-    border-color: var(--color-border);
-  }
-
-  html {
-    overflow-x: hidden;
-  }
-
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: var(--font-heading);
-    /* Quicksand is geometric and runs wide. A light negative tracking keeps
-       headlines compact without the cramped counters that -0.05em caused;
-       600 stays the canonical headline weight. */
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    text-wrap: balance;
-  }
-
-  p {
-    text-wrap: pretty;
-  }
-
-  /*
-   * WCAG 2.4.7 / 2.4.13: many custom pills and inputs set `outline-none`,
-   * which removed the only keyboard focus indicator. Restore a consistent,
-   * token-based indicator for every interactive element. `!important` is
-   * required because Tailwind utilities are emitted after the base layer.
-   */
-  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-    outline: 2px solid var(--color-ring) !important;
-    outline-offset: 2px !important;
-  }
-
-  .bg-hero :where(a, button, input, select, textarea, [tabindex]):focus-visible,
-  .text-hero-foreground :where(a, button, input, select, textarea, [tabindex]):focus-visible {
-    outline-color: var(--color-hero-foreground) !important;
-  }
-}
-
 @utility eyebrow {
   font-size: 11px;
   font-weight: 700;
