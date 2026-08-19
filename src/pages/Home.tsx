@@ -11,7 +11,8 @@ import adRetreats from "@/assets/ads/ad-retreats.jpg";
 import adMentoring from "@/assets/ads/ad-mentoring.jpg";
 import heroImg from "@/assets/hero-coaching.jpg";
 import leadershipImg from "@/assets/leadership-team.jpg";
-import { Mark, type MarkName } from "@/components/marks";
+import { BrushMark as Mark } from "@/design-system/icf-welcome-design-system-a835df/components/brush/BrushMark";
+import type { MarkName } from "@/design-system/icf-welcome-design-system-a835df/components/brush/marks";
 // Imported from the component module rather than the library index: the index
 // also re-exports the library's own showcase chrome, whose links point at
 // routes that only exist in the design-system project.
