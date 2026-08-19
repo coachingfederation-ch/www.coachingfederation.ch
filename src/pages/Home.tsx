@@ -413,7 +413,7 @@ function Join() {
               href="https://coachingfederation.org/about/icf-membership/individual-membership/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-10 items-center rounded-full bg-hero-foreground px-5 text-sm font-semibold text-hero transition hover:bg-hero-foreground/90"
+              className="inline-flex h-10 items-center rounded-full bg-hero-foreground px-5 text-sm font-semibold text-primary transition hover:bg-hero-foreground/90"
             >
               {t("home.join.becomeMember")}
             </a>
