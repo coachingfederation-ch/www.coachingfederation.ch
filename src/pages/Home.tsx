@@ -174,10 +174,10 @@ function WhyCredentialed() {
 }
 
 const THEME_STYLES: { bg: string; fg: string; mark: MarkName }[] = [
-  { bg: "bg-card", fg: "text-mark-indigo", mark: "circular1" },
-  { bg: "bg-card", fg: "text-mark-blue", mark: "star" },
-  { bg: "bg-mark-yellow", fg: "text-mark-indigo", mark: "asterisk1" },
-  { bg: "bg-mark-indigo", fg: "text-mark-cream", mark: "circular2" },
+  { bg: "bg-card", fg: "text-mark-indigo", mark: "CircularMark01" },
+  { bg: "bg-card", fg: "text-mark-blue", mark: "Star01" },
+  { bg: "bg-mark-yellow", fg: "text-mark-indigo", mark: "Asterisk01" },
+  { bg: "bg-mark-indigo", fg: "text-mark-cream", mark: "CircularMark02" },
 ];
 
 function CoachingInAction() {
