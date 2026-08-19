@@ -173,7 +173,10 @@
       },
       {
         "group": "The Switzerland Chapter of ICF",
-        "items": ["Mitgliederbefragung des Chapters", "Organisations-Briefing 2026"]
+        "items": [
+          "Mitgliederbefragung des Chapters",
+          "Organisations-Briefing 2026"
+        ]
       }
     ],
     "download": {
@@ -394,7 +397,10 @@
     "thanks": {
       "title": "Vielen Dank – Ihr Ergebnis ist auf dem Weg zu uns.",
       "desc": "Ein Mitglied des Organisationsteams von The Switzerland Chapter of ICF wird sich kürze bei Ihnen melden. In der Zwischenzeit können Sie unser Coach-Verzeichnis durchsuchen oder bevorstehende Veranstaltungen entdecken."
-    }
+    },
+    "freeBadge": "Kostenlose Standortbestimmung",
+    "effort": "8 Fragen · rund 3 Minuten",
+    "privacy": "Ihre Auswertung bleibt bei Ihnen. Wir erhalten nur etwas, wenn Sie ein Gespräch wünschen."
   },
   "events": {
     "eyebrow": "Für Führungskräfte in Organisationen",
