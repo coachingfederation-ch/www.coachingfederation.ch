@@ -12,6 +12,10 @@ import adMentoring from "@/assets/ads/ad-mentoring.jpg";
 import heroImg from "@/assets/hero-coaching.jpg";
 import leadershipImgAsset from "@/assets/leadership-team.jpg.asset.json";
 import { Mark, type MarkName } from "@/components/marks";
+// Imported from the component module rather than the library index: the index
+// also re-exports the library's own showcase chrome, whose links point at
+// routes that only exist in the design-system project.
+import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df/components/photography/AiPhoto";
 import { SiteHeaderBar, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SponsorMarquee, type SponsorItem } from "@/components/home/SponsorMarquee";
 import { useI18n, LocaleLink } from "@/i18n";
@@ -58,10 +62,13 @@ function HeroHeader() {
             <img
               src={heroImg}
               alt={t("home.hero.imgAlt")}
-              width={1600}
-              height={1200}
+              width={1440}
+              height={1152}
               className="aspect-[5/4] w-full rounded-[2rem] object-cover"
             />
+            {/* The hero photograph is AI generated: the disclosure travels with
+                the image and sits clear of the faces. */}
+            <AiBadge label={t("common.aiGenerated")} className="absolute bottom-4 left-4" />
             <Mark
               name="asterisk1"
               className="pointer-events-none absolute -right-4 -top-7 h-24 w-24 text-mark-yellow sm:-right-6 sm:-top-9 sm:h-28 sm:w-28"
@@ -282,7 +289,12 @@ function Sponsors() {
         </div>
       </div>
       <div className="mt-12">
-        <SponsorMarquee items={items} adLabel={t("home.ads.adLabel")} cta={t("home.ads.cta")} />
+        <SponsorMarquee
+          items={items}
+          adLabel={t("home.ads.adLabel")}
+          cta={t("home.ads.cta")}
+          aiLabel={t("common.aiGenerated")}
+        />
       </div>
     </section>
   );

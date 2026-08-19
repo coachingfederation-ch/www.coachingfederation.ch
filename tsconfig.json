@@ -1,5 +1,12 @@
 {
   "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts", "eslint.config.js"],
+  // The attached design system ships showcase chrome (SiteHeader/SiteFooter)
+  // whose <Link> targets are the library project's own routes (/brand,
+  // /components, …). Those routes don't exist here, so TanStack Router's typed
+  // links reject them. The vendor copy must not be edited (it is overwritten on
+  // every design-system update), and the app uses its own chrome, so the
+  // vendored subtree is kept out of the app typecheck. Vite still compiles it.
+  "exclude": ["src/design-system/**"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",

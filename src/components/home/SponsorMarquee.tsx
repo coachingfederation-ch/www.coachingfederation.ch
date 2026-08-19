@@ -8,8 +8,11 @@
  *
  * Content is static demo data for now (see `home.ads` in the locale files);
  * imagery is AI generated and purely decorative, so the images carry an empty
- * alt and the partner name carries the meaning.
+ * alt and the partner name carries the meaning. The AI disclosure badge is
+ * mandatory on every generated photograph, so it ships inside the image frame.
  */
+import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df/components/photography/AiPhoto";
+
 export type SponsorItem = {
   name: string;
   category: string;
@@ -18,7 +21,17 @@ export type SponsorItem = {
   image?: string;
 };
 
-function SponsorCard({ item, cta, adLabel }: { item: SponsorItem; cta: string; adLabel: string }) {
+function SponsorCard({
+  item,
+  cta,
+  adLabel,
+  aiLabel,
+}: {
+  item: SponsorItem;
+  cta: string;
+  adLabel: string;
+  aiLabel: string;
+}) {
   return (
     <article className="group/card relative flex h-full w-[19rem] shrink-0 flex-col overflow-hidden rounded-3xl border border-white/10 bg-hero text-hero-foreground shadow-[0_25px_50px_-12px_color-mix(in_oklab,var(--hero)_45%,transparent)] sm:w-[21rem]">
       <div className="relative h-44 w-full overflow-hidden">
@@ -26,14 +39,15 @@ function SponsorCard({ item, cta, adLabel }: { item: SponsorItem; cta: string; a
           <img
             src={item.image}
             alt=""
-            width={1024}
-            height={576}
+            width={1088}
+            height={608}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-700 group-hover/card:scale-105"
           />
         ) : null}
         {/* Fade the photo into the card instead of ending on a hard edge. */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-hero via-hero/10 to-transparent" />
+        {item.image ? <AiBadge label={aiLabel} className="absolute bottom-3 left-4" /> : null}
         <span className="absolute right-4 top-4 inline-flex items-center rounded-md bg-accent px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-accent-foreground">
           {adLabel}
         </span>
@@ -74,10 +88,12 @@ export function SponsorMarquee({
   items,
   adLabel,
   cta,
+  aiLabel,
 }: {
   items: SponsorItem[];
   adLabel: string;
   cta: string;
+  aiLabel: string;
 }) {
   return (
     <div
@@ -96,7 +112,7 @@ export function SponsorMarquee({
           >
             {items.map((item) => (
               <div key={item.name} className="flex">
-                <SponsorCard item={item} cta={cta} adLabel={adLabel} />
+                <SponsorCard item={item} cta={cta} adLabel={adLabel} aiLabel={aiLabel} />
               </div>
             ))}
           </div>
