@@ -55,6 +55,12 @@ export function coachHead(
       { property: "og:description", content: description },
       { property: "og:type", content: "profile" },
       { property: "og:url", content: url },
+      ...(image
+        ? [
+            { property: "og:image", content: image },
+            { name: "twitter:image", content: image },
+          ]
+        : []),
       { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: url }],
