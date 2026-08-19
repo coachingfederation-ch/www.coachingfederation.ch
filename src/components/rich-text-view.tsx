@@ -1,7 +1,7 @@
 /**
  * Renders the shared Markdown subset (bold, italic, bullet and numbered lists,
  * three heading levels) written with the standard rich-text editor.
- * Exports: RichTextView. Used by coach profiles and event detail pages.
+ * Exports: RichTextView. Used by coach profiles.
  */
 import { parseRichText, type RichInline } from "@/lib/rich-text";
 
