@@ -143,7 +143,7 @@ function WhyCredentialed() {
   return (
     <section className="relative mt-20 overflow-hidden bg-card py-24">
       <Mark
-        name="circular1"
+        name="CircularMark01"
         className="pointer-events-none absolute -right-20 top-10 h-64 w-64 text-mark-blue opacity-10"
       />
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
