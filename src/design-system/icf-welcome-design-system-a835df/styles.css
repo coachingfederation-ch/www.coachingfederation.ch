@@ -3,14 +3,16 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Self-hosted typefaces. No external font CDN is used anywhere in this app
- * (Swiss data-protection requirement): both families are served from our own
- * origin out of /public/fonts. Each is a single variable WOFF2 covering every
- * weight we use, so the whole type system costs two same-origin requests.
+ * Self-hosted typefaces. No external font CDN is used anywhere (Swiss
+ * data-protection requirement). The files ship inside the library itself at
+ * ./assets/fonts/, and the URLs below are module-relative so a consuming
+ * project gets working fonts from the copied `src/` tree alone — no
+ * public/fonts copy and no extra wiring. Each family is a single variable
+ * WOFF2 covering every weight we use.
  */
 @font-face {
   font-family: "Quicksand";
-  src: url("/fonts/quicksand-variable.woff2") format("woff2");
+  src: url("./assets/fonts/quicksand-variable.woff2") format("woff2");
   font-weight: 300 700;
   font-style: normal;
   font-display: swap;
@@ -18,7 +20,7 @@
 
 @font-face {
   font-family: "Plus Jakarta Sans";
-  src: url("/fonts/plus-jakarta-sans-variable.woff2") format("woff2");
+  src: url("./assets/fonts/plus-jakarta-sans-variable.woff2") format("woff2");
   font-weight: 200 800;
   font-style: normal;
   font-display: swap;

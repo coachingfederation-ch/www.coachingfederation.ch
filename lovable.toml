@@ -1,5 +1,4 @@
 [[libraries]]
-  name = "ICF Welcome Design System"
-  project_id = "adaee055-e6f2-4d44-9b16-337d4735d93f"
-  slug = "icf-welcome-design-system-a835df"
-  version = "2.1.0"
+project_id = "adaee055-e6f2-4d44-9b16-337d4735d93f"
+version = "2.1.1"
+slug = "icf-welcome-design-system-a835df"

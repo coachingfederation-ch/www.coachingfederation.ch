@@ -10,9 +10,28 @@ import * as React from "react";
 import { cn } from "@/design-system/icf-welcome-design-system-a835df/lib/utils";
 import { LOGOS, type LogoName, type LogoOrientation, type LogoTone } from "./logos";
 
+/**
+ * Cleared lockup widths. The lockup must never be smaller than `xs`
+ * (~112px wide) or the "Switzerland Charter Chapter" wordmark stops being
+ * legible. `full` fills the container — use it only inside a box you have
+ * already sized.
+ */
+export type LogoSize = "xs" | "sm" | "md" | "lg" | "xl" | "full";
+
+const SIZES: Record<LogoSize, string> = {
+  xs: "w-28",
+  sm: "w-36",
+  md: "w-44",
+  lg: "w-60",
+  xl: "w-80",
+  full: "w-full",
+};
+
 export type LogoProps = Omit<React.ComponentPropsWithoutRef<"img">, "src" | "width" | "height"> & {
   orientation?: LogoOrientation;
   tone?: LogoTone;
+  /** Cleared width step. Defaults to `full` so a sized parent still wins. */
+  size?: LogoSize;
   /**
    * Decorative instances (e.g. next to a visible text lockup) pass `decorative`
    * so the logo is hidden from assistive tech instead of announced twice.
@@ -23,6 +42,7 @@ export type LogoProps = Omit<React.ComponentPropsWithoutRef<"img">, "src" | "wid
 export function Logo({
   orientation = "horizontal",
   tone = "positive",
+  size = "full",
   decorative = false,
   className,
   alt,
@@ -38,7 +58,7 @@ export function Logo({
       height={logo.height}
       alt={decorative ? "" : (alt ?? "ICF Switzerland Charter Chapter")}
       {...(decorative ? { "aria-hidden": true } : {})}
-      className={cn("h-auto w-full max-w-full object-contain", className)}
+      className={cn("h-auto max-w-full object-contain", SIZES[size], className)}
       {...props}
     />
   );

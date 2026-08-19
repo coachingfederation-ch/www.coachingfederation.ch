@@ -87,15 +87,32 @@ supplies. See the `/chrome` route for the full anatomy.
 ```tsx
 <SiteHeader
   variant="compact"                              // "hero" on the landing page
-  items={[{ to: "/", label: "Home" }, { to: "/events", label: "Events" }]}
-  cta={{ to: "/find-a-coach", label: "Find a coach" }}
+  items={[{ to: "/", label: t("nav.home") }, { to: "/events", label: t("nav.events") }]}
+  cta={{ to: "/find-a-coach", label: t("nav.findCoach") }}
   utilitySlot={<LanguageSwitcher />}
+  mobileSlot={(close) => <AccountLinks onNavigate={close} />}
+  skipToContentLabel={t("a11y.skipToContent")}
+  openMenuLabel={t("a11y.openMenu")}
+  closeMenuLabel={t("a11y.closeMenu")}
 />
 <SiteFooter
-  items={[{ to: "/imprint", label: "Imprint" }, { to: "/privacy", label: "Privacy" }]}
-  externalLinks={[{ href: "https://coachingfederation.org", label: "coachingfederation.org" }]}
+  links={[
+    { to: "/imprint", label: t("nav.imprint") },
+    { to: "/privacy", label: t("nav.privacy") },
+    { href: "https://coachingfederation.org", label: "coachingfederation.org", icon: <ExternalLink /> },
+  ]}
+  copyright={t("footer.copyright")}
 />
 ```
+
+Every user-visible string in the chrome is a prop — nav labels, CTA, skip link,
+menu button labels and the copyright — so a localised app never forks these
+components. The footer takes one ordered `links` list mixing in-app `to` entries
+with external `href` entries and optional `icon`s; order in the array is the
+order on screen. Projects that do not use TanStack Router pass their own link
+component via `linkComponent` on both shells. `mobileSlot` receives the sheet's
+`close` callback so custom links can dismiss the sheet on navigate.
+
 
 Logo placement:
 

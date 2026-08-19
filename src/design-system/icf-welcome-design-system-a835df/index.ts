@@ -66,7 +66,9 @@ export {
   ChartStyle,
   ChartTooltip,
   ChartTooltipContent,
+  type ChartConfig,
 } from "./components/ui/chart";
+export { useIsMobile } from "./hooks/use-mobile";
 export { Checkbox } from "./components/ui/checkbox";
 export { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./components/ui/collapsible";
 export {
@@ -280,14 +282,16 @@ export { ToggleGroup, ToggleGroupItem } from "./components/ui/toggle-group";
 export { Toggle, toggleVariants } from "./components/ui/toggle";
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./components/ui/tooltip";
 export { CALLOUT_SHADES, Callout, SHADE_SWATCH, calloutShadeFrom } from "./components/callout";
-export { SiteHeader } from "./components/chrome/SiteHeader";
+export { SiteHeader, defaultLinkComponent } from "./components/chrome/SiteHeader";
 export type {
   SiteHeaderProps,
   SiteHeaderVariant,
+  SiteLinkComponent,
+  SiteLinkProps,
   SiteNavItem,
 } from "./components/chrome/SiteHeader";
 export { SiteFooter } from "./components/chrome/SiteFooter";
-export type { SiteFooterProps, SiteFooterExternalLink } from "./components/chrome/SiteFooter";
+export type { SiteFooterProps, SiteFooterLink } from "./components/chrome/SiteFooter";
 export {
   CalloutSet,
   ChipRow,
@@ -298,6 +302,7 @@ export {
 export { BrushMark, MarkedText } from "./components/brush/BrushMark";
 export { MARKS, MARK_CATEGORY_LABELS, MARK_NAMES } from "./components/brush/marks";
 export { Logo } from "./components/brand/Logo";
+export type { LogoProps, LogoSize } from "./components/brand/Logo";
 export { LOGOS, LOGO_MIN_SIZE, LOGO_NAMES } from "./components/brand/logos";
 export { COLOR_GROUPS, PILLARS, RADII, TYPE_SCALE } from "./lib/design-tokens";
 export {

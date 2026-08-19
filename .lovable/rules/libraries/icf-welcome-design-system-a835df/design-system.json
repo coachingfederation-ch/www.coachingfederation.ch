@@ -2,7 +2,7 @@
   "meta": {
     "name": "ICF Switzerland Design System",
     "package": "@ws-8ezwjgawfkrnem7hmtfc/adaee055-e6f2-4d44-9b16-337d4735d93f",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "framework": "react",
     "css_framework": "tailwind",
     "starter_template": "custom_design_system_tailwind",
@@ -18,7 +18,7 @@
       ".lovable/plan/icf-design-system-2026-08-19.md": "6dc8078cc20859e3b42b160d9e41fb1a",
       ".lovable/project.json": "cd369d2c1a917c3065a94c968eeb6939",
       ".lovable/sources.yaml": "f39f708c65f19e1a4add806fe3098f6d",
-      ".lovable/system.md": "c6b57e491040266b48a515289c1eeecf",
+      ".lovable/system.md": "10166c5cf3bbcaad2bdda750b10e880c",
       ".prettierignore": "7279a476f196a2da5f7edd18db568dc6",
       ".prettierrc": "185ef0234746ab738ac1ab6cec5e2bd9",
       "AGENTS.md": "3da3c4cd15b686e79a248c25735d6aaf",
@@ -28,10 +28,10 @@
       "eslint.config.js": "345bdd57e188e0e4525edcd00e5003f5",
       "package.json": "e301e923773a260751ca57fca251b6c6",
       "public/favicon.png": "3c6c93c8f28c9f6dbc57d208fbfcdd1c",
-      "public/fonts/Quicksand-OFL.txt": "e18525e4234ac03c13a59b5a64efb05e",
-      "public/fonts/plus-jakarta-sans-variable.woff2": "d8c39204c3aff6cd44d6ead9bf4130fe",
-      "public/fonts/quicksand-variable.woff2": "67a48003c2bac1f57d5a0287f45a2c0f",
       "public/robots.txt": "f9dff89adf98833e676de2205921996a",
+      "src/assets/fonts/Quicksand-OFL.txt": "e18525e4234ac03c13a59b5a64efb05e",
+      "src/assets/fonts/plus-jakarta-sans-variable.woff2": "d8c39204c3aff6cd44d6ead9bf4130fe",
+      "src/assets/fonts/quicksand-variable.woff2": "67a48003c2bac1f57d5a0287f45a2c0f",
       "src/assets/logos/ICF_SwitzerlandCharterChapter_Horizontal_RGB_Negative.png.asset.json": "248ab974bea27ec69317f799131339d1",
       "src/assets/logos/ICF_SwitzerlandCharterChapter_Horizontal_RGB_Positive.png.asset.json": "ee3ddb74d4c1d840b8b01e880a105be1",
       "src/assets/logos/ICF_SwitzerlandCharterChapter_Horizontal_RGB_White.png.asset.json": "b9fe08e11a249b23387316e401b5d238",
@@ -72,14 +72,14 @@
       "src/assets/photography/community-circle.jpg": "a72b32300de1bd6df355ca1f3474989d",
       "src/assets/photography/focus-in-action.jpg": "9de212acc186582ff96e53197ad47d9a",
       "src/assets/photography/honest-portrait.jpg": "831214b017bf0ac150e1cb9e80502715",
-      "src/components/brand/Logo.tsx": "98439efd800af8c89baa7281e31a9ba3",
+      "src/components/brand/Logo.tsx": "6321ba873716128fdd284aa466b1e687",
       "src/components/brand/logos.ts": "fb92b3182a4498b3a5a34f52bf408d5d",
       "src/components/brush/BrushMark.tsx": "7e2705d43eb0acdd934e40753aabe870",
       "src/components/brush/marks.ts": "a11a117695ba5675b916710629274681",
       "src/components/callout-shades.ts": "081d0eecdc058491b80b38e06472d3fe",
       "src/components/callout.tsx": "c2e67162659f6c34010c98ddc80ef53e",
-      "src/components/chrome/SiteFooter.tsx": "63720f33774e893794f49bb94688f5d7",
-      "src/components/chrome/SiteHeader.tsx": "08dd5b01fe444a6140e60bf2b35de4d0",
+      "src/components/chrome/SiteFooter.tsx": "a9e1191c2a2249a907d68bd9bd5400df",
+      "src/components/chrome/SiteHeader.tsx": "2a25e9a163438e69ccf435ed7b8f40db",
       "src/components/patterns/StyleGuidePatterns.tsx": "0fc2d779a09b9cca0f01569030be7221",
       "src/components/photography/AiPhoto.tsx": "3da04d764c6b814422e92dd65a899d4f",
       "src/components/social/SocialBanner.tsx": "2f7770e0617d66fbf0a599f660a3c720",
@@ -91,7 +91,7 @@
       "src/components/ui/badge.tsx": "81cade001fc4260f9943e18dcd79449b",
       "src/components/ui/breadcrumb.tsx": "bb9ac254f12662b20d5d50b84308bf3a",
       "src/components/ui/button-group.tsx": "964036f9f529f5720fb805cf3b3ed0a8",
-      "src/components/ui/button.tsx": "a919e2ecb968cefe5a11b560c13c1191",
+      "src/components/ui/button.tsx": "f74af71e4f0c35566b01b9a28627dce7",
       "src/components/ui/calendar.tsx": "e7631005d4c03774a358576887584bda",
       "src/components/ui/card.tsx": "d6c48ea36221b9cdc3576d305d12d5d5",
       "src/components/ui/carousel.tsx": "e324c68ae00cd5aed49317638abd429a",
@@ -133,7 +133,7 @@
       "src/components/ui/toggle.tsx": "ee8c5adac74e7242b85b544db1a8fbad",
       "src/components/ui/tooltip.tsx": "67d71db5a1ab935695d1def497f5b8a6",
       "src/hooks/use-mobile.tsx": "c0a0bdd4638c391a1dd06ac82074e60b",
-      "src/index.ts": "4d9eab49dc6a4c325dfd8fb6991abcd2",
+      "src/index.ts": "bfd843ad21eb3300ed3f55e94e0e8877",
       "src/lib/brand-guidelines.ts": "81e048a8f6b3cd7906675373aee68820",
       "src/lib/design-tokens.ts": "534ccd20cbf060ca5a8dff49ff5f9d5b",
       "src/lib/error-capture.ts": "f630d9686a9a989170f22eff4de7b30d",
@@ -143,9 +143,9 @@
       "src/routeTree.gen.ts": "941a5b02a6311d5e7d6c6b420f3360d5",
       "src/router.tsx": "8f905e713b0eba7fa8148b7995a708c9",
       "src/routes/README.md": "b3a2f259b66fd1a11f54b6d5ac83bf57",
-      "src/routes/__root.tsx": "d107ffd7c42549b1db1897d897d36c29",
+      "src/routes/__root.tsx": "c74618860f285050fe9bf7e28db68369",
       "src/routes/brand.tsx": "763d546a07cdea6f2cfe592cf0401f97",
-      "src/routes/chrome.tsx": "5a802c084ff307b82dc7e64997201f74",
+      "src/routes/chrome.tsx": "aae39a591c711dc09456060fd590485f",
       "src/routes/components.tsx": "341fe58041df96348fc9fb86d958b3e3",
       "src/routes/foundations.tsx": "5013ceb9005e692d5b875ceaaa6077ce",
       "src/routes/index.tsx": "f5d6403fffce0117ac9a6e338ff8d06d",
@@ -155,7 +155,7 @@
       "src/routes/social.tsx": "3ae6207828a31c7b3365e6b00e908007",
       "src/server.ts": "c7bbc49bb70e318af618d92775ee0f27",
       "src/start.ts": "0502f82c58afce5012b4c102e6fe2437",
-      "src/styles.css": "36cc5047d8448ac6a7a6ef88c9227347",
+      "src/styles.css": "86e7b1954a937e2fea3aad5c55deb31a",
       "tsconfig.json": "cd4d65fabb4a8d0d52e8ebe313edd35e",
       "vite.config.ts": "d67e8217e5f31b87c276b6357c9aedcf"
     },
@@ -523,6 +523,19 @@
           "default": "positive"
         },
         {
+          "name": "size",
+          "type": "enum",
+          "values": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "full"
+          ],
+          "default": "full"
+        },
+        {
           "name": "decorative",
           "type": "boolean",
           "default": "false"
@@ -584,11 +597,11 @@
       "import_path": "",
       "props": [
         {
-          "name": "items",
+          "name": "links",
           "type": "any"
         },
         {
-          "name": "externalLinks",
+          "name": "linkComponent",
           "type": "any"
         },
         {
@@ -644,6 +657,10 @@
           "default": "/"
         },
         {
+          "name": "linkComponent",
+          "type": "any"
+        },
+        {
           "name": "navLabel",
           "type": "string",
           "default": "Main"
@@ -652,6 +669,21 @@
           "name": "brandLabel",
           "type": "string",
           "default": "ICF Switzerland home"
+        },
+        {
+          "name": "skipToContentLabel",
+          "type": "string",
+          "default": "Skip to content"
+        },
+        {
+          "name": "openMenuLabel",
+          "type": "string",
+          "default": "Open menu"
+        },
+        {
+          "name": "closeMenuLabel",
+          "type": "string",
+          "default": "Close menu"
         },
         {
           "name": "kicker",
@@ -667,7 +699,7 @@
         },
         {
           "name": "mobileSlot",
-          "type": "any"
+          "type": "function"
         },
         {
           "name": "standalone",
@@ -1008,7 +1040,9 @@
             "outline",
             "secondary",
             "ghost",
-            "link"
+            "link",
+            "pill",
+            "pill-ghost"
           ],
           "default": "default"
         },
@@ -1020,7 +1054,8 @@
             "sm",
             "lg",
             "icon",
-            "icon-sm"
+            "icon-sm",
+            "pill"
           ],
           "default": "default"
         },
@@ -2223,6 +2258,16 @@
     }
   ],
   "assets": [
+    {
+      "file": "src/assets/fonts/plus-jakarta-sans-variable.woff2",
+      "kind": "font",
+      "format": "woff2"
+    },
+    {
+      "file": "src/assets/fonts/quicksand-variable.woff2",
+      "kind": "font",
+      "format": "woff2"
+    },
     {
       "file": "src/assets/logos/ICF_SwitzerlandCharterChapter_Horizontal_RGB_Negative.png.asset.json",
       "kind": "logo",
