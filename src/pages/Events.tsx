@@ -64,7 +64,7 @@ function FilterSelect({
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+      <span className="section-label mb-1.5 block">
         {label}
       </span>
       <select className={selectClass} value={value} onChange={(e) => onChange(e.target.value)}>
@@ -105,7 +105,7 @@ function WhereSelect({
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+      <span className="section-label mb-1.5 block">
         {label}
       </span>
       <select className={selectClass} value={value} onChange={(e) => onChange(e.target.value)}>
@@ -233,7 +233,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
           <div className="mx-auto max-w-7xl px-8">
             <div className="flex flex-wrap items-end gap-4">
               <div>
-                <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                <span className="section-label mb-1.5 block">
                   {t("events.filters.when")}
                 </span>
                 <div
@@ -354,13 +354,13 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                     {tagsFor(featured).map((tag) => (
                       <span
                         key={tag}
-                        className="inline-flex items-center rounded-full border border-border/70 bg-chip px-2.5 py-1 text-[11px] font-semibold text-chip-foreground"
+                        className="inline-flex items-center rounded-full border border-border/70 bg-chip px-2.5 py-1 text-xs font-semibold text-chip-foreground"
                       >
                         {tag}
                       </span>
                     ))}
                     {featured.is_full ? (
-                      <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-[11px] font-semibold text-warn-foreground">
+                      <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
                         {t("events.tag.full")}
                       </span>
                     ) : null}
@@ -433,13 +433,13 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                           {tagsFor(e).map((tag) => (
                             <span
                               key={tag}
-                              className="inline-flex items-center rounded-full border border-border/70 bg-chip px-2.5 py-1 text-[11px] font-semibold text-chip-foreground"
+                              className="inline-flex items-center rounded-full border border-border/70 bg-chip px-2.5 py-1 text-xs font-semibold text-chip-foreground"
                             >
                               {tag}
                             </span>
                           ))}
                           {e.is_full ? (
-                            <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-[11px] font-semibold text-warn-foreground">
+                            <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
                               {t("events.tag.full")}
                             </span>
                           ) : null}

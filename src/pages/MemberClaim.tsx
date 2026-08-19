@@ -47,7 +47,7 @@ function Shell({
                 type="button"
                 onClick={() => setLocale(l)}
                 className={
-                  "rounded-full px-2.5 py-1 text-[11px] font-semibold transition " +
+                  "rounded-full px-2.5 py-1 text-xs font-semibold transition " +
                   (l === locale
                     ? "bg-primary text-primary-foreground"
                     : "bg-secondary text-muted-foreground hover:text-foreground")
