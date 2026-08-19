@@ -3,7 +3,7 @@
  * Exports: ForCoachesPage (default). Rendered by src/routes/for-coaches.tsx and
  * the locale-prefixed equivalent in src/routes/$locale/for-coaches.tsx.
  */
-import { Mark } from "@/components/marks";
+import { BrushMark as Mark, Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import {
   BenefitGrid,
@@ -127,7 +127,7 @@ export default function ForCoachesPage() {
               </a>
             </div>
             <div className="grid aspect-[4/3] place-items-center rounded-2xl bg-mark-blue text-mark-cream">
-              <Mark name="star" className="h-1/2 w-1/2" />
+              <Mark name="Star01" className="h-1/2 w-1/2" />
             </div>
           </div>
         </section>
