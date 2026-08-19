@@ -5,7 +5,7 @@
 
 # Components
 
-Component catalog for **ICF Welcome Design System**. Import all components from `@/design-system/icf-welcome-design-system-a835df`.
+Component catalog for **ICF Switzerland Design System**. Import all components from `@/design-system/icf-welcome-design-system-a835df`.
 
 ### Accordion
 
@@ -1535,11 +1535,86 @@ import { SidebarTrigger } from "@/design-system/icf-welcome-design-system-a835df
 import { SiteFooter } from "@/design-system/icf-welcome-design-system-a835df"
 ```
 
+The footer shell: same Deep Blue band, white lockup above the copyright, one wrapping row of secondary links (legal, contact, deeper destinations). It deliberately does not mirror the header nav; `externalLinks` renders outbound links in a new tab.
+
+**Props:**
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | any | `—` |
+| `externalLinks` | any | `—` |
+| `copyright` | any | `—` |
+| `showLogo` | boolean | `true` |
+| `navLabel` | string | `Footer` |
+
+**Examples:**
+
+_Product app footer_
+```tsx
+<SiteFooter
+  items={[
+    { to: "/about", label: "About" },
+    { to: "/imprint", label: "Imprint" },
+    { to: "/privacy", label: "Privacy" },
+  ]}
+  externalLinks={[{ href: "https://coachingfederation.org", label: "coachingfederation.org" }]}
+/>
+```
+
+**Avoid:**
+
+- Copying the style guide's own footer links into a real site.
+- Repeating the header navigation verbatim instead of secondary links.
+- Putting an external URL in `items` instead of `externalLinks`.
+- Turning the single wrapping row into a multi-column sitemap.
+
 ### SiteHeader
 
 ```ts
 import { SiteHeader } from "@/design-system/icf-welcome-design-system-a835df"
 ```
+
+The site header shell abstracted from the live ICF site: Deep Blue band, negative lockup top-left linking home, primary nav right, ghost utility controls, one Yellow accent pill CTA last, mobile sheet below `lg`. Navigation is data — pass the consuming project's own routes via `items`. Use `variant="hero"` on the landing page and `compact` on inner pages.
+
+**Props:**
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | any | `—` |
+| `variant` | hero · compact | `compact` |
+| `homeTo` | string | `/` |
+| `navLabel` | string | `Main` |
+| `brandLabel` | string | `ICF Switzerland home` |
+| `kicker` | any | `—` |
+| `cta` | any | `—` |
+| `utilitySlot` | any | `—` |
+| `mobileSlot` | any | `—` |
+| `standalone` | boolean | `true` |
+
+**Examples:**
+
+_Product app header_
+```tsx
+<SiteHeader
+  variant="compact"
+  items={[
+    { to: "/", label: "Home" },
+    { to: "/about", label: "About" },
+    { to: "/events", label: "Events" },
+  ]}
+  cta={{ to: "/find-a-coach", label: "Find a coach" }}
+  utilitySlot={<LanguageSwitcher />}
+  mobileSlot={<AccountLinks />}
+/>
+```
+
+**Avoid:**
+
+- Reusing the design system's own nav (Brand, Foundations, Components, Patterns, Chrome, Marks, Logo, Social) in a product app.
+- More than one accent pill in the bar, or an accent pill used for a utility control.
+- Centring the lockup, adding a second logo, or using the positive lockup on the Deep Blue band.
+- More than six primary nav entries; deeper pages belong under a section page.
+- Linking to routes that do not exist yet — create the route file first.
 
 ### Skeleton
 

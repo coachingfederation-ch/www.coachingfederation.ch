@@ -281,7 +281,13 @@ export { Toggle, toggleVariants } from "./components/ui/toggle";
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./components/ui/tooltip";
 export { CALLOUT_SHADES, Callout, SHADE_SWATCH, calloutShadeFrom } from "./components/callout";
 export { SiteHeader } from "./components/chrome/SiteHeader";
+export type {
+  SiteHeaderProps,
+  SiteHeaderVariant,
+  SiteNavItem,
+} from "./components/chrome/SiteHeader";
 export { SiteFooter } from "./components/chrome/SiteFooter";
+export type { SiteFooterProps, SiteFooterExternalLink } from "./components/chrome/SiteFooter";
 export {
   CalloutSet,
   ChipRow,
@@ -294,7 +300,12 @@ export { MARKS, MARK_CATEGORY_LABELS, MARK_NAMES } from "./components/brush/mark
 export { Logo } from "./components/brand/Logo";
 export { LOGOS, LOGO_MIN_SIZE, LOGO_NAMES } from "./components/brand/logos";
 export { COLOR_GROUPS, PILLARS, RADII, TYPE_SCALE } from "./lib/design-tokens";
-export { AiBadge, AiPhoto, type AiBadgeProps, type AiPhotoProps } from "./components/photography/AiPhoto";
+export {
+  AiBadge,
+  AiPhoto,
+  type AiBadgeProps,
+  type AiPhotoProps,
+} from "./components/photography/AiPhoto";
 export {
   AI_PHOTOGRAPHY,
   BEHAVIORS,

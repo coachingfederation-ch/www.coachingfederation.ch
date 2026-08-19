@@ -5,7 +5,7 @@
 
 # Design Tokens
 
-Token reference for **ICF Welcome Design System**. Use utility classes and CSS variables — never raw values.
+Token reference for **ICF Switzerland Design System**. Use utility classes and CSS variables — never raw values.
 
 ## Colors
 

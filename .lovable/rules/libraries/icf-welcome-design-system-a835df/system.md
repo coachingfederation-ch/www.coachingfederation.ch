@@ -78,5 +78,45 @@ AI-generated imagery follows the same natural-photography direction as shot imag
 
 Every AI-generated image must be clearly marked as AI generated. Render it with the `AiPhoto` component (or `AiBadge` when composing a custom frame) so the disclosure ships with the image; never remove, crop out or fade the badge, and never use AI imagery to depict a real, identifiable person or event.
 
+## Site chrome (SiteHeader / SiteFooter)
+
+Both are abstracted shells: the Deep Blue band, lockup placement, active
+underline and accent pill are fixed; every link is data the consuming project
+supplies. See the `/chrome` route for the full anatomy.
+
+```tsx
+<SiteHeader
+  variant="compact"                              // "hero" on the landing page
+  items={[{ to: "/", label: "Home" }, { to: "/events", label: "Events" }]}
+  cta={{ to: "/find-a-coach", label: "Find a coach" }}
+  utilitySlot={<LanguageSwitcher />}
+/>
+<SiteFooter
+  items={[{ to: "/imprint", label: "Imprint" }, { to: "/privacy", label: "Privacy" }]}
+  externalLinks={[{ href: "https://coachingfederation.org", label: "coachingfederation.org" }]}
+/>
+```
+
+Logo placement:
+
+- Header: horizontal **negative** lockup at the leading edge of the band, always
+  linking home. Footer: horizontal **white** lockup above the copyright. Never
+  centre it, never add a second logo, never use the positive lockup on Deep Blue.
+
+Link placement:
+
+- Header carries **primary** destinations only — four to six. Footer carries the
+  **secondary** set (legal, contact, external). They need not match, and the
+  footer may link to pages the header never shows.
+- Exactly one Yellow accent pill per header, always last; utility controls
+  (language, account, search) are ghost-outlined pills.
+- The current page is marked by the Yellow underline plus white text; never
+  underline other links.
+- Never reuse this design system's own sections — Overview, Brand, Foundations,
+  Components, Patterns, Chrome, Marks, Logo, Social — in a product app. Every
+  `to` must be a route that exists; create the route file before linking.
+- Extend through the provided props (`kicker`, `utilitySlot`, `mobileSlot`,
+  `cta`, `navLabel`, `brandLabel`) instead of forking the component.
+
 
 <!-- END THIRD-PARTY LIBRARY CONTENT: design-system/icf-welcome-design-system-a835df -->
