@@ -4,6 +4,10 @@
  * Server-only. Credentials come from secrets and are selected by the current
  * integration mode, so a single runtime can point at TEST or LIVE without a
  * code change.
+ *
+ * Optional `ICF_RELAY_AUTH` is a shared-secret for a fixed-egress relay. It is
+ * never logged and should only be set in production/deployed environments. When
+ * empty or unset, no relay header is sent, so local/dev runs keep working.
  */
 import { XMLParser } from "fast-xml-parser";
 import type { IntegrationMode } from "./integration";
@@ -267,6 +271,9 @@ async function callSoap(
     headers: {
       "Content-Type": "text/xml; charset=utf-8",
       SOAPAction: `${XWEB_NS}${operation}`,
+      ...(process.env["ICF_RELAY_AUTH"]
+        ? { "X-Relay-Auth": process.env["ICF_RELAY_AUTH"] }
+        : {}),
     },
     body: envelope,
   });
