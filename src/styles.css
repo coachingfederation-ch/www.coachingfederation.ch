@@ -7,8 +7,6 @@
 @import "./design-system/icf-welcome-design-system-a835df/styles.css";
 @source "../src";
 
-@custom-variant dark (&:is(.dark *));
-
 /*
  * Fonts, theme tokens and palette come from the attached design system
  * stylesheet imported above (single source of truth). Only app-specific base
