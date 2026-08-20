@@ -337,7 +337,7 @@ function Events() {
                 <Mark name={e.mark} className="h-3/5 w-3/5" />
               </div>
               <div className="flex flex-1 flex-col p-6">
-                <p className="btn-mono !text-muted-foreground">
+                <p className="btn-mono text-muted-foreground">
                   {e.date} · {e.city}
                 </p>
                 <h3 className="mt-3 text-lg font-semibold leading-snug tracking-tight text-foreground">
