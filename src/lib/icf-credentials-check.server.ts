@@ -75,8 +75,13 @@ function escapeXml(value: string): string {
 }
 
 /**
- * One Authenticate attempt against a specific URL. Returns the fault string
- * rather than throwing, because the whole point is to compare endpoints.
+ * One Authenticate attempt against netFORUMXML.asmx. Returns the fault string
+ * rather than throwing, because the caller wants to compare the original
+ * credentials with a trimmed variant.
+ *
+ * The relay requires `X-Relay-Auth` on every request; the header is added when
+ * `ICF_RELAY_AUTH` is set (the diagnostic already short-circuits when it is
+ * missing, so by the time we reach this function the header is always present).
  */
 async function attempt(
   label: string,
@@ -95,6 +100,9 @@ async function attempt(
       headers: {
         "Content-Type": "text/xml; charset=utf-8",
         SOAPAction: `${XWEB_NS}Authenticate`,
+        ...(process.env["ICF_RELAY_AUTH"]
+          ? { "X-Relay-Auth": process.env["ICF_RELAY_AUTH"] }
+          : {}),
       },
       body: envelope,
       signal: AbortSignal.timeout(TIMEOUT_MS),
