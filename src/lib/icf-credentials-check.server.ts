@@ -2,8 +2,14 @@
  * ICF credential diagnostic.
  * Exports: checkIcfCredentials. Runs ONLY the xWeb Authenticate step, in the
  * same runtime as the nightly sync, so a failing sync can be attributed to a
- * bad stored secret, the wrong login endpoint, or an invalid/locked account on
- * ICF's side.
+ * bad stored secret, a missing relay shared-secret, or an invalid/locked
+ * account on ICF's side.
+ *
+ * The diagnostic is now routed through the hardened fixed-egress relay. Every
+ * SOAP request must carry the `X-Relay-Auth` header (from `ICF_RELAY_AUTH`).
+ * When that env var is empty/unset the relay returns 403, so the diagnostic
+ * short-circuits and reports "relay auth not configured" instead of a generic
+ * 403.
  *
  * Secret values never leave the server: we report only a shape summary
  * (length, stray whitespace, newline, non-ASCII) which is enough to catch a bad
