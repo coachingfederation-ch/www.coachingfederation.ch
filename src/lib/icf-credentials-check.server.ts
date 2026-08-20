@@ -127,8 +127,10 @@ async function attempt(
 }
 
 /**
- * Try the endpoint the sync uses today plus netFORUM's dedicated Signon.asmx,
- * so we can tell a wrong login address apart from a rejected account.
+ * Try the netFORUMXML.asmx endpoint the real sync uses. The hardened relay is
+ * the only egress path; it requires `X-Relay-Auth` and only proxies
+ * netFORUMXML.asmx, so Signon.asmx is no longer probed (it produced a misleading
+ * relay-level 404).
  */
 export async function checkIcfCredentials(actorUserId: string): Promise<CredentialCheckResult> {
   const config = await loadIntegrationConfigAdmin();
@@ -154,24 +156,35 @@ export async function checkIcfCredentials(actorUserId: string): Promise<Credenti
   let attempts: AuthAttempt[] = [];
   if (!missing.length) {
     const { signonUrl, username, password } = soapCredentials(mode);
-    const signonAsmx = signonUrl.replace(/netFORUMXML\.asmx$/i, "Signon.asmx");
-    // Values are trimmed for the probe only — this tells us whether whitespace
-    // in the stored secret is what ICF is rejecting.
-    const trimmedDiffers = username !== username.trim() || password !== password.trim();
-    attempts = await Promise.all([
-      attempt("netFORUMXML.asmx (used by the sync)", signonUrl, username, password),
-      attempt("Signon.asmx (netFORUM login endpoint)", signonAsmx, username, password),
-      ...(trimmedDiffers
-        ? [
-            attempt(
-              "netFORUMXML.asmx (whitespace trimmed)",
-              signonUrl,
-              username.trim(),
-              password.trim(),
-            ),
-          ]
-        : []),
-    ]);
+    // Relay auth is required for the hardened egress relay. Without it the
+    // request never reaches ICF, so surface the real cause immediately.
+    if (!process.env["ICF_RELAY_AUTH"]) {
+      attempts = [
+        {
+          label: "netFORUMXML.asmx (used by the sync)",
+          url: signonUrl,
+          ok: false,
+          fault: "relay auth not configured",
+        },
+      ];
+    } else {
+      // Values are trimmed for the probe only — this tells us whether whitespace
+      // in the stored secret is what ICF is rejecting.
+      const trimmedDiffers = username !== username.trim() || password !== password.trim();
+      attempts = await Promise.all([
+        attempt("netFORUMXML.asmx (used by the sync)", signonUrl, username, password),
+        ...(trimmedDiffers
+          ? [
+              attempt(
+                "netFORUMXML.asmx (whitespace trimmed)",
+                signonUrl,
+                username.trim(),
+                password.trim(),
+              ),
+            ]
+          : []),
+      ]);
+    }
   }
 
   const ok = attempts.some((a) => a.ok);
