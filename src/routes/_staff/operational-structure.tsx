@@ -26,6 +26,7 @@ import {
   searchOpsMembers,
 } from "@/lib/ops-admin.functions";
 import { grantMemberRole, revokeMemberRole } from "@/lib/roles.functions";
+import { translateOpsLabels } from "@/lib/ops-label-translations.functions";
 import { ProjectGroupList } from "@/components/cms/ops/ProjectGroupList";
 import { ProjectForm } from "@/components/cms/ops/ProjectForm";
 import { RoleAssignmentEditor } from "@/components/cms/ops/RoleAssignmentEditor";
