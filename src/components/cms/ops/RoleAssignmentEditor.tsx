@@ -44,6 +44,12 @@ type Props = {
   pickedRole: string;
   setPickedRole: (value: string) => void;
   assign: () => void | Promise<void>;
+  translateLabels: (
+    table: "op_projects" | "op_project_roles",
+    id: string,
+    name: string,
+  ) => void | Promise<void>;
+  translating: string[];
 };
 
 export function RoleAssignmentEditor({
