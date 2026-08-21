@@ -27,6 +27,7 @@ import {
   revokeAccountRole,
   inviteInternalAccount,
   resendInternalInvitation,
+  revokeInternalAccount,
   withdrawInternalInvitation,
 } from "@/lib/roles.functions";
 import { GRANTABLE_ROLES, type GrantableRole } from "@/lib/role-model";
