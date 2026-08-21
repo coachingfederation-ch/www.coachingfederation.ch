@@ -4,7 +4,7 @@
  * Extracted verbatim from the operational-structure route.
  */
 import type { Dispatch, SetStateAction } from "react";
-import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowUp, Languages, Trash2 } from "lucide-react";
 import type { useCms } from "@/i18n/cms";
 import {
   INPUT,
