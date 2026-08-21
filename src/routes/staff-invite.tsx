@@ -75,7 +75,7 @@ function StaffInvitePage() {
       return;
     }
     await completeInternalInvitation().catch(() => null);
-    void navigate({ to: "/auth/callback", replace: true });
+    void navigate({ to: "/auth/callback", search: { next: "" }, replace: true });
   };
 
   if (phase === "verifying") {
