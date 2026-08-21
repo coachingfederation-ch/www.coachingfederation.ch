@@ -3,7 +3,7 @@
  * toggle, delete, project-type fieldset and the community fields panel.
  * Extracted verbatim from the operational-structure route.
  */
-import { Trash2 } from "lucide-react";
+import { Languages, Trash2 } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import type { useCms } from "@/i18n/cms";
 import { CommunityPanel } from "@/components/cms/CommunityPanel";
@@ -20,9 +20,25 @@ type Props = {
   ) => void | Promise<void>;
   removeRow: (table: "op_projects" | "op_project_roles", id: string) => void | Promise<void>;
   loadProjects: () => void | Promise<void>;
+  translateLabels: (
+    table: "op_projects" | "op_project_roles",
+    id: string,
+    name: string,
+  ) => void | Promise<void>;
+  translating: string[];
 };
 
-export function ProjectForm({ t, project, setProjects, patch, removeRow, loadProjects }: Props) {
+export function ProjectForm({
+  t,
+  project,
+  setProjects,
+  patch,
+  removeRow,
+  loadProjects,
+  translateLabels,
+  translating,
+}: Props) {
+  const busy = translating.includes(project.id);
   return (
     <>
       <section className="rounded-2xl border border-border bg-card p-5">
@@ -57,7 +73,8 @@ export function ProjectForm({ t, project, setProjects, patch, removeRow, loadPro
             />
           ))}
         </div>
-        <div className="mt-3 flex items-center gap-4">
+        <p className="mt-2 text-xs text-muted-foreground">{t("ops.translateHint")}</p>
+        <div className="mt-3 flex flex-wrap items-center gap-4">
           <label className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
             <input
               type="checkbox"
@@ -74,6 +91,14 @@ export function ProjectForm({ t, project, setProjects, patch, removeRow, loadPro
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-destructive"
           >
             <Trash2 className="h-3.5 w-3.5" /> {t("ops.deleteProject")}
+          </button>
+          <button
+            onClick={() => void translateLabels("op_projects", project.id, project.name)}
+            disabled={busy}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-primary disabled:opacity-50"
+          >
+            <Languages className="h-3.5 w-3.5" />
+            {busy ? t("ops.translating") : t("ops.translateLabels")}
           </button>
         </div>
 

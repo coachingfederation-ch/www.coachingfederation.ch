@@ -26,6 +26,7 @@ import {
   searchOpsMembers,
 } from "@/lib/ops-admin.functions";
 import { grantMemberRole, revokeMemberRole } from "@/lib/roles.functions";
+import { translateOpsLabels } from "@/lib/ops-label-translations.functions";
 import { ProjectGroupList } from "@/components/cms/ops/ProjectGroupList";
 import { ProjectForm } from "@/components/cms/ops/ProjectForm";
 import { RoleAssignmentEditor } from "@/components/cms/ops/RoleAssignmentEditor";
@@ -63,6 +64,8 @@ function OperationalStructurePage() {
   const [pickedMember, setPickedMember] = useState("");
   const [pickedRole, setPickedRole] = useState("");
   const [error, setError] = useState<string | null>(null);
+  // Ids currently being machine-translated (a new row, or a manual re-run).
+  const [translating, setTranslating] = useState<string[]>([]);
   // Reordering writes `sort_order`, which drives the public /team filter chips
   // and the /communities order. It is a rare action, so the arrows stay hidden
   // behind this toggle instead of dominating the list.
@@ -162,31 +165,69 @@ function OperationalStructurePage() {
     else if (selected) await loadDetail(selected);
   };
 
+  /**
+   * Machine-translate one English label into DE/FR/IT and write it back.
+   * Creation never depends on this: the row already exists when we get here,
+   * so an AI failure only surfaces a notice, it does not lose the entry.
+   * Results stay editable — the locale inputs write over them normally.
+   */
+  const translateLabels = async (
+    table: "op_projects" | "op_project_roles",
+    id: string,
+    name: string,
+  ) => {
+    if (!name.trim()) return;
+    setTranslating((prev) => [...prev, id]);
+    try {
+      const [labels] = await translateOpsLabels({ data: { names: [name.trim()] } });
+      if (!labels) throw new Error("empty translation");
+      await patch(table, id, {
+        name_de: labels.de,
+        name_fr: labels.fr,
+        name_it: labels.it,
+      });
+    } catch {
+      setError(t("ops.translateFailed"));
+    } finally {
+      setTranslating((prev) => prev.filter((entry) => entry !== id));
+    }
+  };
+
   const addProject = async () => {
     const name = newProject.trim();
     if (!name) return;
-    const { error: err } = await supabase.from("op_projects").insert({
-      name,
-      slug: slugifyVocab(name) || `project-${Date.now()}`,
-      sort_order: (projects.at(-1)?.sort_order ?? 0) + 10,
-    });
+    const { data: row, error: err } = await supabase
+      .from("op_projects")
+      .insert({
+        name,
+        slug: slugifyVocab(name) || `project-${Date.now()}`,
+        sort_order: (projects.at(-1)?.sort_order ?? 0) + 10,
+      })
+      .select("id")
+      .single();
     if (err) return setError(err.message);
     setNewProject("");
     await loadProjects();
+    if (row) await translateLabels("op_projects", row.id, name);
   };
 
   const addRole = async () => {
     const name = newRole.trim();
     if (!name || !selected) return;
-    const { error: err } = await supabase.from("op_project_roles").insert({
-      project_id: selected,
-      name,
-      slug: slugifyVocab(name) || `role-${Date.now()}`,
-      sort_order: (roles.at(-1)?.sort_order ?? 0) + 10,
-    });
+    const { data: row, error: err } = await supabase
+      .from("op_project_roles")
+      .insert({
+        project_id: selected,
+        name,
+        slug: slugifyVocab(name) || `role-${Date.now()}`,
+        sort_order: (roles.at(-1)?.sort_order ?? 0) + 10,
+      })
+      .select("id")
+      .single();
     if (err) return setError(err.message);
     setNewRole("");
     await loadDetail(selected);
+    if (row) await translateLabels("op_project_roles", row.id, name);
   };
 
   const removeRow = async (table: "op_projects" | "op_project_roles", id: string) => {
@@ -300,6 +341,8 @@ function OperationalStructurePage() {
                 patch={patch}
                 removeRow={removeRow}
                 loadProjects={loadProjects}
+                translateLabels={translateLabels}
+                translating={translating}
               />
 
               <RoleAssignmentEditor
@@ -312,6 +355,8 @@ function OperationalStructurePage() {
                 newRole={newRole}
                 setNewRole={setNewRole}
                 addRole={addRole}
+                translateLabels={translateLabels}
+                translating={translating}
                 assignments={assignments}
                 moveAssignmentUp={moveAssignmentUp}
                 unassign={unassign}

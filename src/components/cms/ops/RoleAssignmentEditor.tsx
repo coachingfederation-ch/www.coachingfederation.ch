@@ -4,7 +4,7 @@
  * Extracted verbatim from the operational-structure route.
  */
 import type { Dispatch, SetStateAction } from "react";
-import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowUp, Languages, Trash2 } from "lucide-react";
 import type { useCms } from "@/i18n/cms";
 import {
   INPUT,
@@ -44,6 +44,12 @@ type Props = {
   pickedRole: string;
   setPickedRole: (value: string) => void;
   assign: () => void | Promise<void>;
+  translateLabels: (
+    table: "op_projects" | "op_project_roles",
+    id: string,
+    name: string,
+  ) => void | Promise<void>;
+  translating: string[];
 };
 
 export function RoleAssignmentEditor({
@@ -67,6 +73,8 @@ export function RoleAssignmentEditor({
   pickedRole,
   setPickedRole,
   assign,
+  translateLabels,
+  translating,
 }: Props) {
   return (
     <>
@@ -102,6 +110,15 @@ export function RoleAssignmentEditor({
                   className="rounded p-1 text-muted-foreground hover:bg-secondary disabled:opacity-30"
                 >
                   <ArrowDown className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  onClick={() => void translateLabels("op_project_roles", role.id, role.name)}
+                  disabled={translating.includes(role.id)}
+                  aria-label={t("ops.translateLabels")}
+                  title={t("ops.translateLabels")}
+                  className="rounded p-1 text-muted-foreground hover:text-primary disabled:opacity-30"
+                >
+                  <Languages className="h-3.5 w-3.5" />
                 </button>
                 <button
                   onClick={() => void removeRow("op_project_roles", role.id)}
