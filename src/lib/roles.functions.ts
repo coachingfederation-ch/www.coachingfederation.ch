@@ -371,6 +371,48 @@ export const withdrawInternalInvitation = createServerFn({ method: "POST" })
   });
 
 /**
+ * Revokes an internal (non-member) staff account outright: all managed grants
+ * are removed through the caller's client (audited), then the marker row and
+ * the auth account are deleted.
+ *
+ * Guarded so a Super Admin cannot be removed sideways: the target must not hold
+ * `admin` (turn that off first) and must not be the caller.
+ */
+export const revokeInternalAccount = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => accountSchema.parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    if (data.authUserId === context.userId) throw new Error("Could not revoke the account.");
+
+    const { data: marker } = await context.supabase
+      .from("internal_accounts")
+      .select("auth_user_id")
+      .eq("auth_user_id", data.authUserId)
+      .maybeSingle();
+    if (!marker) throw new Error("Not an internal account.");
+
+    const { data: heldRoles } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", data.authUserId);
+    if ((heldRoles ?? []).some((r) => r.role === "admin")) {
+      throw new Error("Remove Super Admin first.");
+    }
+
+    const { error } = await context.supabase
+      .from("user_roles")
+      .delete()
+      .eq("user_id", data.authUserId)
+      .in("role", MANAGED_ROLES)
+      .select("id");
+    if (error) throw new Error("Could not remove access.");
+
+    const { deleteInternalAccount } = await import("./internal-accounts.server");
+    return await deleteInternalAccount(data.authUserId);
+  });
+
+/**
  * Marks the signed-in internal account as activated. Called once from the
  * password-set screen; harmless if it runs again.
  */
