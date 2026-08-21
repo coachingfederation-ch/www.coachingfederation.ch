@@ -82,9 +82,10 @@ export function MemberHome() {
           <HeartHandshake className="h-5 w-5 text-primary" aria-hidden />
           <h2 className="mt-3 text-lg font-bold">{t("member.home.volunteer.title")}</h2>
           <p className="mt-1 text-sm text-muted-foreground">{t("member.home.volunteer.body")}</p>
-          <button type="button" disabled className={CTA_MUTED}>
-            {t("member.home.soon")}
-          </button>
+          <Link to="/volunteering" className={CTA}>
+            {t("member.home.volunteer.cta")}
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </Link>
         </section>
 
         <LiveChatVolunteerTile />

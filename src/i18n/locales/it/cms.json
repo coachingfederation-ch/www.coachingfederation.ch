@@ -593,7 +593,8 @@
       },
       "volunteer": {
         "title": "Volontariato",
-        "body": "Il chapter vive grazie ai volontari. Comitati, community e progetti hanno tutti bisogno di membri che mettano a disposizione qualche ora. Le posizioni aperte saranno elencate qui."
+        "body": "Il chapter vive grazie ai volontari. Comitati, community e progetti hanno tutti bisogno di membri che mettano a disposizione qualche ora. Le posizioni aperte saranno elencate qui.",
+        "cta": "Prenota ora"
       },
       "ads": {
         "title": "Fai pubblicità con noi",
@@ -628,6 +629,83 @@
         "qrExpiresIn": "Valido ancora",
         "installHint": "Sul telefono usa Condividi → Aggiungi a Home, poi accedi una volta scansionando questo codice.",
         "staySignedInHint": "Apri l’app ogni poche settimane — altrimenti il telefono elimina l’accesso e dovrai scansionare un nuovo codice."
+      }
+    },
+    "volunteering": {
+      "title": "Volontariato",
+      "eyebrow": "Area membri",
+      "intro": "The Switzerland Chapter of ICF è gestita da membri che offrono il proprio tempo. Che tu abbia un'ora al mese o voglia guidare un progetto, c'è un posto per te.",
+      "back": "Torna all'area membri",
+      "opportunities": {
+        "title": "Opportunità aperte",
+        "communityLead": {
+          "title": "Community Lead",
+          "description": "Costruisci un hub locale organizzando eventi, curando i contatti e rappresentando il chapter nella tua regione.",
+          "quote": "Sono entrata per espandere la mia rete; sono rimasta perché potevo dare forma a qualcosa che aiuta l'intera professione.",
+          "attribution": "Anna M., Community Lead Zürich"
+        },
+        "eventHost": {
+          "title": "Host di evento",
+          "description": "Aiuta a gestire gli eventi del chapter, dall'accoglienza al supporto ai relatori.",
+          "quote": "Sono solo poche ore all'anno, e l'energia nella sala resta con me per mesi.",
+          "attribution": "Beat M., Host di evento"
+        },
+        "contentContributor": {
+          "title": "Content Contributor",
+          "description": "Condividi la tua prospettiva attraverso articoli Insights, interviste o contenuti social.",
+          "quote": "Scrivere per il chapter mi ha aiutato a affinare il mio punto di vista.",
+          "attribution": "Carla T., Content Contributor"
+        },
+        "liveChat": {
+          "title": "Volontario della chat dal vivo",
+          "description": "Sii il primo volto amichevole per i visitatori del sito con domande.",
+          "quote": "Le domande sono spesso semplici, ma le conversazioni possono essere significative.",
+          "attribution": "Daniel K., Volontario della chat dal vivo"
+        }
+      },
+      "benefits": {
+        "title": "Cosa ricevi in cambio",
+        "freeStuff": {
+          "title": "Free Stuff",
+          "items": [
+            "Badge da volontario",
+            "Sessioni di supervisione gratuite con supervisori svizzeri pagate da ICFS"
+          ]
+        },
+        "access": {
+          "title": "Access",
+          "items": [
+            "Sessioni riservate ai volontari su AI e approfondimenti sul coaching",
+            "Far parte di progetti in movimento"
+          ]
+        },
+        "power": {
+          "title": "Power",
+          "items": [
+            "Guidare progetti",
+            "Essere riconosciuti da ICFS per aver guidato iniziative"
+          ]
+        },
+        "status": {
+          "title": "Status",
+          "items": [
+            "Costruire la tua reputazione come membro contribuente",
+            "Eccellere come voce guida nella community ICF Switzerland"
+          ]
+        }
+      },
+      "onboarding": {
+        "title": "Prenota una sessione di onboarding",
+        "body": "I nuovi volontari sono invitati a una sessione di onboarding in cui spieghiamo il chapter, i team e come iniziare.",
+        "cta": "Prenota ora",
+        "soon": "In arrivo",
+        "empty": "Al momento non ci sono sessioni di onboarding aperte. Torna presto."
+      },
+      "contact": {
+        "title": "Contatta il Volunteering Director",
+        "body": "Hai domande? Contatta il Volunteering Director.",
+        "fallback": "Il Volunteering Director",
+        "cta": "Invia e-mail"
       }
     }
   },

@@ -593,7 +593,8 @@
       },
       "volunteer": {
         "title": "Ehrenamtliches Engagement",
-        "body": "Das Chapter lebt vom ehrenamtlichen Engagement. Vorstand, Communities und Projekte brauchen Mitglieder, die ein paar Stunden einbringen. Offene Stellen werden hier aufgeführt."
+        "body": "Das Chapter lebt vom ehrenamtlichen Engagement. Vorstand, Communities und Projekte brauchen Mitglieder, die ein paar Stunden einbringen. Offene Stellen werden hier aufgeführt.",
+        "cta": "Jetzt buchen"
       },
       "ads": {
         "title": "Werben Sie bei uns",
@@ -628,6 +629,83 @@
         "qrExpiresIn": "Gültig noch",
         "installHint": "Nutze auf dem Handy «Teilen → Zum Home-Bildschirm» und melde dich dort einmal per Code-Scan an.",
         "staySignedInHint": "Öffne die App alle paar Wochen — sonst verwirft dein Telefon die Anmeldung und du scannst einen neuen Code."
+      }
+    },
+    "volunteering": {
+      "title": "Ehrenamtliches Engagement",
+      "eyebrow": "Mitgliederbereich",
+      "intro": "The Switzerland Chapter of ICF wird von Mitgliedern geführt, die ihre Zeit ehrenamtlich einbringen. Ob Sie eine Stunde im Monat haben oder ein Projekt leiten möchten – es gibt einen Platz für Sie.",
+      "back": "Zurück zum Mitgliederbereich",
+      "opportunities": {
+        "title": "Offene Möglichkeiten",
+        "communityLead": {
+          "title": "Community Lead",
+          "description": "Bauen Sie einen lokalen Hub auf, indem Sie Events organisieren, Kontakte knüpfen und das Chapter in Ihrer Region vertreten.",
+          "quote": "Ich bin dazugekommen, um mein Netzwerk zu erweitern; ich blieb, weil ich etwas gestalten kann, das der ganzen Profession hilft.",
+          "attribution": "Anna M., Community Lead Zürich"
+        },
+        "eventHost": {
+          "title": "Event Host",
+          "description": "Helfen Sie bei der Durchführung von Chapter-Events, vom Check-in bis zur Speaker-Betreuung.",
+          "quote": "Es sind nur ein paar Stunden im Jahr, und die Energie im Raum bleibt monatelang bei mir.",
+          "attribution": "Beat M., Event Host"
+        },
+        "contentContributor": {
+          "title": "Content Contributor",
+          "description": "Teilen Sie Ihre Perspektive durch Insights-Artikel, Interviews oder Social-Media-Beiträge.",
+          "quote": "Für das Chapter zu schreiben half mir, meinen eigenen Standpunkt zu schärfen.",
+          "attribution": "Carla T., Content Contributor"
+        },
+        "liveChat": {
+          "title": "Live-Chat-Freiwillige",
+          "description": "Seien Sie das erste freundliche Gesicht für Besuchende mit Fragen auf der Website.",
+          "quote": "Die Fragen sind oft einfach, aber die Gespräche können bedeutungsvoll sein.",
+          "attribution": "Daniel K., Live-Chat-Freiwilliger"
+        }
+      },
+      "benefits": {
+        "title": "Was Sie zurückbekommen",
+        "freeStuff": {
+          "title": "Free Stuff",
+          "items": [
+            "Volunteer-Badges",
+            "Kostenlose Supervisionen mit Schweizer Supervisor:innen, bezahlt von ICFS"
+          ]
+        },
+        "access": {
+          "title": "Access",
+          "items": [
+            "Freiwilligen-exklusive Sessions zu KI und Coaching-Einblicken",
+            "Teil sein an bewegenden Projekten"
+          ]
+        },
+        "power": {
+          "title": "Power",
+          "items": [
+            "Projekte leiten",
+            "Von ICFS für die Leitung von Initiativen anerkannt werden"
+          ]
+        },
+        "status": {
+          "title": "Status",
+          "items": [
+            "Sich als engagiertes Mitglied einen Namen machen",
+            "Als führende Stimme in der ICF Switzerland Community hervorstechen"
+          ]
+        }
+      },
+      "onboarding": {
+        "title": "Onboarding-Session buchen",
+        "body": "Neue Freiwillige sind zu einer Onboarding-Session eingeladen, in der wir das Chapter, die Teams und den Einstieg erklären.",
+        "cta": "Jetzt buchen",
+        "soon": "Demnächst",
+        "empty": "Derzeit sind keine Onboarding-Sessions geöffnet. Schauen Sie bald wieder vorbei."
+      },
+      "contact": {
+        "title": "Kontaktieren Sie die Volunteering Director",
+        "body": "Haben Sie Fragen? Wenden Sie sich an die Volunteering Director.",
+        "fallback": "Die Volunteering Director",
+        "cta": "E-Mail senden"
       }
     }
   },

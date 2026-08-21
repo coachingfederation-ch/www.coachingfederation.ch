@@ -40,10 +40,11 @@ export function useCms() {
     () => current,
     () => DEFAULT_LOCALE,
   );
-  const { t } = makeT(locale);
+  const { t, tList } = makeT(locale);
   return {
     locale,
     setLocale: setCmsLocale,
     t: (key: string) => t(`cms.${key}`),
+    tList: <T = Record<string, string>>(key: string) => tList<T>(`cms.${key}`),
   };
 }
