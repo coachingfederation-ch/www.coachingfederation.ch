@@ -47,6 +47,7 @@ export interface EventConfirmationProps {
   organiserEmail?: string;
   calendarUrl?: string | null;
   googleUrl?: string | null;
+  outlookUrl?: string | null;
 }
 
 const INK = "#212251";
@@ -206,6 +207,7 @@ const Email = ({
   organiserEmail = "office@coachingfederation.ch",
   calendarUrl = null,
   googleUrl = null,
+  outlookUrl = null,
 }: EventConfirmationProps) => {
   const copy = CONFIRMATION_COPY[locale] ?? CONFIRMATION_COPY.en;
   const [signoffLine, signoffName] = copy.signoff.split("\n");
@@ -292,7 +294,7 @@ const Email = ({
             </>
           ) : null}
 
-          {calendarUrl || googleUrl ? (
+          {calendarUrl || googleUrl || outlookUrl ? (
             <>
               <Hr style={rule} />
               <Text style={sectionTitle}>{copy.calendarTitle}</Text>
@@ -307,6 +309,12 @@ const Email = ({
                 {googleUrl ? (
                   <Link href={googleUrl} style={link}>
                     {copy.addToGoogle}
+                  </Link>
+                ) : null}
+                {(calendarUrl || googleUrl) && outlookUrl ? " · " : null}
+                {outlookUrl ? (
+                  <Link href={outlookUrl} style={link}>
+                    {copy.addToOutlook}
                   </Link>
                 ) : null}
               </Text>
@@ -366,5 +374,6 @@ export const template = {
     organiserEmail: "office@coachingfederation.ch",
     calendarUrl: "https://new.coachingfederation.ch/api/public/calendar/demo.ics",
     googleUrl: "https://calendar.google.com/calendar/render?action=TEMPLATE",
+    outlookUrl: "https://outlook.live.com/calendar/0/deeplink/compose",
   },
 } satisfies TemplateEntry;

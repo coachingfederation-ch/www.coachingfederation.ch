@@ -9,7 +9,12 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { DEFAULT_LOCALE, SITE_URL, localizePath, type Locale } from "@/i18n/config";
 import { localisedText } from "./tickets";
-import { buildEventIcs, calendarUid, googleCalendarUrl } from "./event-calendar";
+import {
+  buildEventIcs,
+  calendarUid,
+  googleCalendarUrl,
+  outlookCalendarUrl,
+} from "./event-calendar";
 import { CONFIRMATION_COPY } from "./email-templates/event-confirmation-copy";
 
 /** Address shown as "questions go here" when an event names no organizer. */
@@ -251,6 +256,7 @@ export async function sendRegistrationConfirmation(
     // A broken calendar entry must never cost the attendee their confirmation.
     let calendarUrl: string | null = null;
     let googleUrl: string | null = null;
+    let outlookUrl: string | null = null;
     try {
       buildEventIcs({
         uid: calendarUid(eventRow.id, registration.id),
@@ -264,13 +270,15 @@ export async function sendRegistrationConfirmation(
         url: eventUrl,
       });
       calendarUrl = `${SITE_URL}/api/public/calendar/${registration.id}.ics`;
-      googleUrl = googleCalendarUrl({
+      const calendarLink = {
         title: content.title,
         details: `${toPlainText(content.summary ?? content.description, 400)}\n\n${eventUrl}`,
         location: eventRow.location_mode === "online" ? eventRow.online_url : location,
         startsAt: eventRow.starts_at,
         endsAt: eventRow.ends_at,
-      });
+      };
+      googleUrl = googleCalendarUrl(calendarLink);
+      outlookUrl = outlookCalendarUrl(calendarLink);
     } catch (e) {
       console.error("Calendar entry could not be built", e);
     }
@@ -300,6 +308,7 @@ export async function sendRegistrationConfirmation(
         organiserEmail,
         calendarUrl,
         googleUrl,
+        outlookUrl,
       },
     });
 

@@ -156,6 +156,13 @@
       "expired": "Questo link di invito è già stato utilizzato o non è più valido.",
       "declined": "Grazie per averci avvisati. Abbiamo preso nota che non potrà partecipare.",
       "decline": "Non posso partecipare"
+    },
+    "calendar": {
+      "add": "Aggiungi al calendario",
+      "google": "Google Calendar",
+      "apple": "Calendario Apple (.ics)",
+      "outlook": "Outlook.com",
+      "office365": "Office 365"
     }
   },
   "filters": {

@@ -13,6 +13,7 @@ import { Markdown } from "@/components/markdown";
 import { HeroMarks } from "@/components/HeroMarks";
 import { EventHeroSurface } from "@/components/events/EventHeroSurface";
 import { EventRegistrationPanel } from "@/components/events/EventRegistrationPanel";
+import { AddToCalendarMenu } from "@/components/events/AddToCalendarMenu";
 import { HERO_EVENT_PLACEMENT, sanitizeHeroMarks } from "@/lib/hero-design";
 import { LocaleLink, useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
@@ -291,7 +292,11 @@ export default function EventDetailPage({
             ) : null}
           </article>
 
-          <EventRegistrationPanel event={event} />
+          <div>
+            <EventRegistrationPanel event={event} />
+            {/* An upcoming event can be saved to a calendar without registering. */}
+            {past ? null : <AddToCalendarMenu event={event} className="mt-4" />}
+          </div>
         </div>
       </main>
       <SiteFooter />

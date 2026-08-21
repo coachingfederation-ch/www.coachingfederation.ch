@@ -194,3 +194,39 @@ export function googleCalendarUrl(input: {
   if (input.location) params.set("location", input.location);
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
+
+/** Shared input for the web-calendar deep links. */
+export type CalendarLinkInput = {
+  title: string;
+  details: string;
+  location: string | null;
+  startsAt: string;
+  endsAt: string | null;
+};
+
+function resolvedEnd(input: CalendarLinkInput) {
+  const start = new Date(input.startsAt);
+  const end = input.endsAt ? new Date(input.endsAt) : null;
+  return end && end.getTime() > start.getTime()
+    ? end
+    : new Date(start.getTime() + DEFAULT_DURATION_MS);
+}
+
+/**
+ * Outlook.com / Microsoft 365 both use the same `deeplink/compose` contract;
+ * only the host differs (personal vs. work or school account).
+ */
+export function outlookCalendarUrl(input: CalendarLinkInput, flavour: "live" | "office" = "live") {
+  const start = new Date(input.startsAt);
+  const params = new URLSearchParams({
+    path: "/calendar/action/compose",
+    rru: "addevent",
+    subject: input.title,
+    body: input.details,
+    startdt: start.toISOString(),
+    enddt: resolvedEnd(input).toISOString(),
+  });
+  if (input.location) params.set("location", input.location);
+  const host = flavour === "office" ? "outlook.office.com" : "outlook.live.com";
+  return `https://${host}/calendar/0/deeplink/compose?${params.toString()}`;
+}

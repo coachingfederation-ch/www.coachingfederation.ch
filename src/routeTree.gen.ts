@@ -98,6 +98,7 @@ import { Route as ApiPublicRoleGrantsArchiveRouteImport } from './routes/api/pub
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
 import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/calendar.$file'
+import { Route as ApiPublicEventCalendarFileRouteImport } from './routes/api/public/event-calendar.$file'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicTicketQrTokenRouteImport } from './routes/api/public/ticket-qr.$token'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -555,6 +556,12 @@ const ApiPublicCalendarFileRoute = ApiPublicCalendarFileRouteImport.update({
   path: '/api/public/calendar/$file',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicEventCalendarFileRoute =
+  ApiPublicEventCalendarFileRouteImport.update({
+    id: '/api/public/event-calendar/$file',
+    path: '/api/public/event-calendar/$file',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -683,6 +690,7 @@ export interface FileRoutesByFullPath {
   '/members/': typeof StaffMembersIndexRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
+  '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -775,6 +783,7 @@ export interface FileRoutesByTo {
   '/members': typeof StaffMembersIndexRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
+  '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -874,6 +883,7 @@ export interface FileRoutesById {
   '/_staff/members/': typeof StaffMembersIndexRoute
   '/_staff/manage/events/$id': typeof StaffManageEventsIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
+  '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -972,6 +982,7 @@ export interface FileRouteTypes {
     | '/members/'
     | '/manage/events/$id'
     | '/api/public/calendar/$file'
+    | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
@@ -1064,6 +1075,7 @@ export interface FileRouteTypes {
     | '/members'
     | '/manage/events/$id'
     | '/api/public/calendar/$file'
+    | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
@@ -1162,6 +1174,7 @@ export interface FileRouteTypes {
     | '/_staff/members/'
     | '/_staff/manage/events/$id'
     | '/api/public/calendar/$file'
+    | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
@@ -1218,6 +1231,7 @@ export interface RootRouteChildren {
   ApiPublicRoleDirectoryRoute: typeof ApiPublicRoleDirectoryRoute
   ApiPublicRoleGrantsArchiveRoute: typeof ApiPublicRoleGrantsArchiveRoute
   ApiPublicCalendarFileRoute: typeof ApiPublicCalendarFileRoute
+  ApiPublicEventCalendarFileRoute: typeof ApiPublicEventCalendarFileRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicTicketQrTokenRoute: typeof ApiPublicTicketQrTokenRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -1848,6 +1862,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicCalendarFileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/event-calendar/$file': {
+      id: '/api/public/event-calendar/$file'
+      path: '/api/public/event-calendar/$file'
+      fullPath: '/api/public/event-calendar/$file'
+      preLoaderRoute: typeof ApiPublicEventCalendarFileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -2111,6 +2132,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicRoleDirectoryRoute: ApiPublicRoleDirectoryRoute,
   ApiPublicRoleGrantsArchiveRoute: ApiPublicRoleGrantsArchiveRoute,
   ApiPublicCalendarFileRoute: ApiPublicCalendarFileRoute,
+  ApiPublicEventCalendarFileRoute: ApiPublicEventCalendarFileRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicTicketQrTokenRoute: ApiPublicTicketQrTokenRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
