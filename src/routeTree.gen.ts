@@ -26,6 +26,7 @@ import { Route as McpRouteImport } from './routes/mcp'
 import { Route as NoAccessRouteImport } from './routes/no-access'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as StaffInviteRouteImport } from './routes/staff-invite'
 import { Route as StaffSignInRouteImport } from './routes/staff-sign-in'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as LocaleIndexRouteImport } from './routes/$locale/index'
@@ -186,6 +187,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffInviteRoute = StaffInviteRouteImport.update({
+  id: '/staff-invite',
+  path: '/staff-invite',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StaffSignInRoute = StaffSignInRouteImport.update({
@@ -606,6 +612,7 @@ export interface FileRoutesByFullPath {
   '/no-access': typeof NoAccessRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/staff-invite': typeof StaffInviteRoute
   '/staff-sign-in': typeof StaffSignInRoute
   '/team': typeof TeamRoute
   '/$locale/about': typeof LocaleAboutRoute
@@ -699,6 +706,7 @@ export interface FileRoutesByTo {
   '/no-access': typeof NoAccessRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/staff-invite': typeof StaffInviteRoute
   '/staff-sign-in': typeof StaffSignInRoute
   '/team': typeof TeamRoute
   '/$locale/about': typeof LocaleAboutRoute
@@ -795,6 +803,7 @@ export interface FileRoutesById {
   '/no-access': typeof NoAccessRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/staff-invite': typeof StaffInviteRoute
   '/staff-sign-in': typeof StaffSignInRoute
   '/team': typeof TeamRoute
   '/$locale/about': typeof LocaleAboutRoute
@@ -892,6 +901,7 @@ export interface FileRouteTypes {
     | '/no-access'
     | '/privacy'
     | '/sitemap.xml'
+    | '/staff-invite'
     | '/staff-sign-in'
     | '/team'
     | '/$locale/about'
@@ -985,6 +995,7 @@ export interface FileRouteTypes {
     | '/no-access'
     | '/privacy'
     | '/sitemap.xml'
+    | '/staff-invite'
     | '/staff-sign-in'
     | '/team'
     | '/$locale/about'
@@ -1080,6 +1091,7 @@ export interface FileRouteTypes {
     | '/no-access'
     | '/privacy'
     | '/sitemap.xml'
+    | '/staff-invite'
     | '/staff-sign-in'
     | '/team'
     | '/$locale/about'
@@ -1178,6 +1190,7 @@ export interface RootRouteChildren {
   NoAccessRoute: typeof NoAccessRoute
   PrivacyRoute: typeof PrivacyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  StaffInviteRoute: typeof StaffInviteRoute
   StaffSignInRoute: typeof StaffSignInRoute
   TeamRoute: typeof TeamRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
@@ -1329,6 +1342,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff-invite': {
+      id: '/staff-invite'
+      path: '/staff-invite'
+      fullPath: '/staff-invite'
+      preLoaderRoute: typeof StaffInviteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/staff-sign-in': {
@@ -2062,6 +2082,7 @@ const rootRouteChildren: RootRouteChildren = {
   NoAccessRoute: NoAccessRoute,
   PrivacyRoute: PrivacyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  StaffInviteRoute: StaffInviteRoute,
   StaffSignInRoute: StaffSignInRoute,
   TeamRoute: TeamRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,

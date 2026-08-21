@@ -2458,6 +2458,42 @@ export type Database = {
         }
         Relationships: []
       }
+      internal_accounts: {
+        Row: {
+          accepted_at: string | null
+          auth_user_id: string
+          created_at: string
+          display_name: string
+          email: string
+          invited_at: string
+          invited_by: string | null
+          revoked_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          auth_user_id: string
+          created_at?: string
+          display_name?: string
+          email?: string
+          invited_at?: string
+          invited_by?: string | null
+          revoked_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          auth_user_id?: string
+          created_at?: string
+          display_name?: string
+          email?: string
+          invited_at?: string
+          invited_by?: string | null
+          revoked_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       linkedin_config: {
         Row: {
           created_at: string

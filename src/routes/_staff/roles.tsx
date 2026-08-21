@@ -10,7 +10,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { requireStaffAccess, ADMIN_ONLY } from "@/lib/staff-guard";
 import { useEffect, useMemo, useState } from "react";
-import { Search, ShieldCheck } from "lucide-react";
+import { MailCheck, Search, ShieldCheck, UserPlus } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { useCms } from "@/i18n/cms";
 import { useMyRoles } from "@/lib/roles";
@@ -25,8 +25,12 @@ import {
   revokeAccountStaffRoles,
   grantAccountRole,
   revokeAccountRole,
+  inviteInternalAccount,
+  resendInternalInvitation,
+  withdrawInternalInvitation,
 } from "@/lib/roles.functions";
-import type { GrantableRole } from "@/lib/role-model";
+import { GRANTABLE_ROLES, type GrantableRole } from "@/lib/role-model";
+
 
 export const Route = createFileRoute("/_staff/roles")({
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, ADMIN_ONLY),
@@ -57,6 +61,12 @@ function RolesPage() {
   const [pending, setPending] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const [inviteName, setInviteName] = useState("");
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteRole, setInviteRole] = useState<GrantableRole | "">("");
+  const [inviteBusy, setInviteBusy] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
 
   const load = async () => {
     try {
@@ -152,6 +162,58 @@ function RolesPage() {
     }
   };
 
+  /** Invites a staff account that has no imported ICF member record. */
+  const sendInvite = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setInviteBusy(true);
+    setError(null);
+    try {
+      await inviteInternalAccount({
+        data: {
+          email: inviteEmail.trim(),
+          displayName: inviteName.trim(),
+          ...(inviteRole ? { role: inviteRole } : {}),
+        },
+      });
+      setInviteOpen(false);
+      setInviteName("");
+      setInviteEmail("");
+      setInviteRole("");
+      setNotice(t("roles.inviteSent"));
+      await load();
+    } catch {
+      setError(t("roles.inviteError"));
+    } finally {
+      setInviteBusy(false);
+    }
+  };
+
+  const resendInvite = async (authUserId: string) => {
+    setPending(`account:${authUserId}:invite`);
+    setError(null);
+    try {
+      await resendInternalInvitation({ data: { authUserId } });
+      setNotice(t("roles.inviteSent"));
+    } catch {
+      setError(t("roles.inviteError"));
+    } finally {
+      setPending(null);
+    }
+  };
+
+  const withdrawInvite = async (authUserId: string, name: string) => {
+    if (!window.confirm(t("roles.withdrawConfirm").replace("{name}", name))) return;
+    setPending(`account:${authUserId}:invite`);
+    try {
+      await withdrawInternalInvitation({ data: { authUserId } });
+      await load();
+    } catch {
+      setError(t("roles.saveError"));
+    } finally {
+      setPending(null);
+    }
+  };
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return members;
@@ -184,6 +246,12 @@ function RolesPage() {
         {error ? (
           <div className="mt-4 rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-2 text-sm text-destructive">
             {error}
+          </div>
+        ) : null}
+
+        {notice ? (
+          <div className="mt-4 rounded-lg border border-border bg-secondary px-4 py-2 text-sm">
+            {notice}
           </div>
         ) : null}
 
@@ -251,8 +319,89 @@ function RolesPage() {
         {/* Internal accounts: admins (and legacy staff roles) with no imported
             ICF member record. Read-only — admin is provisioned by migration and
             the database refuses to grant editor to a non-member. */}
-        <h2 className="mt-10 text-lg font-semibold tracking-tight">{t("roles.internalTitle")}</h2>
-        <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{t("roles.internalIntro")}</p>
+        <div className="mt-10 flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold tracking-tight">{t("roles.internalTitle")}</h2>
+            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+              {t("roles.internalIntro")}
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              setNotice(null);
+              setInviteOpen((open) => !open);
+            }}
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+          >
+            <UserPlus className="h-4 w-4" aria-hidden="true" />
+            {t("roles.inviteCta")}
+          </button>
+        </div>
+
+        {inviteOpen ? (
+          <form
+            onSubmit={sendInvite}
+            className="mt-4 rounded-2xl border border-border bg-card p-5"
+          >
+            <h3 className="text-sm font-semibold">{t("roles.inviteTitle")}</h3>
+            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+              {t("roles.inviteIntro")}
+            </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              <label className="text-sm">
+                <span className="mb-1 block font-semibold">{t("roles.inviteName")}</span>
+                <input
+                  value={inviteName}
+                  onChange={(e) => setInviteName(e.target.value)}
+                  required
+                  minLength={2}
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                />
+              </label>
+              <label className="text-sm">
+                <span className="mb-1 block font-semibold">{t("roles.inviteEmail")}</span>
+                <input
+                  type="email"
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
+                  required
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                />
+              </label>
+              <label className="text-sm">
+                <span className="mb-1 block font-semibold">{t("roles.inviteRole")}</span>
+                <select
+                  value={inviteRole}
+                  onChange={(e) => setInviteRole(e.target.value as GrantableRole | "")}
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                >
+                  <option value="">{t("roles.inviteRoleNone")}</option>
+                  {GRANTABLE_ROLES.filter((role) => role !== "admin").map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="mt-4 flex gap-2">
+              <button
+                type="submit"
+                disabled={inviteBusy}
+                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+              >
+                {inviteBusy ? t("roles.inviteSending") : t("roles.inviteSend")}
+              </button>
+              <button
+                type="button"
+                onClick={() => setInviteOpen(false)}
+                className="rounded-full border border-border px-4 py-2 text-sm font-semibold"
+              >
+                {t("roles.inviteCancel")}
+              </button>
+            </div>
+          </form>
+        ) : null}
         <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card">
           <table className="w-full text-left text-sm">
             <thead className="bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground">
@@ -279,7 +428,15 @@ function RolesPage() {
               ) : (
                 internal.map((a: InternalRow) => (
                   <tr key={a.authUserId} className="border-t border-border">
-                    <td className="px-4 py-3 font-medium">{a.name ?? a.email ?? a.authUserId}</td>
+                    <td className="px-4 py-3 font-medium">
+                      {a.name ?? a.email ?? a.authUserId}
+                      {a.pending ? (
+                        <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-highlight px-2 py-0.5 text-xs font-semibold text-highlight-foreground">
+                          <MailCheck className="h-3.5 w-3.5" aria-hidden="true" />
+                          {t("roles.pendingBadge")}
+                        </span>
+                      ) : null}
+                    </td>
                     <td className="px-4 py-3 text-muted-foreground">{a.email ?? "—"}</td>
                     <td className="px-4 py-3">
                       {a.roles.map((role: string) => (
@@ -317,6 +474,29 @@ function RolesPage() {
                             t={t}
                           />
                         </div>
+                        {a.pending ? (
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => void resendInvite(a.authUserId)}
+                              disabled={pending === `account:${a.authUserId}:invite`}
+                              className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary disabled:opacity-50"
+                            >
+                              {t("roles.resend")}
+                            </button>
+                            <button
+                              onClick={() =>
+                                void withdrawInvite(
+                                  a.authUserId,
+                                  a.name ?? a.email ?? a.authUserId,
+                                )
+                              }
+                              disabled={pending === `account:${a.authUserId}:invite`}
+                              className="rounded-full border border-destructive/40 px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-50"
+                            >
+                              {t("roles.withdraw")}
+                            </button>
+                          </div>
+                        ) : null}
                         {a.roles.some(
                           (r: string) => r === "editor" || r === "organizer" || r === "publisher",
                         ) ? (
