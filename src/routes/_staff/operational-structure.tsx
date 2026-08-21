@@ -355,6 +355,8 @@ function OperationalStructurePage() {
                 newRole={newRole}
                 setNewRole={setNewRole}
                 addRole={addRole}
+                translateLabels={translateLabels}
+                translating={translating}
                 assignments={assignments}
                 moveAssignmentUp={moveAssignmentUp}
                 unassign={unassign}
