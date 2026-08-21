@@ -6,7 +6,6 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import {
   FileText,
-  PencilLine,
   CalendarDays,
   LogOut,
   Tags,
@@ -40,7 +39,6 @@ const PLATFORM_ADMIN: readonly AppRole[] = ["administrator"];
 
 const nav = [
   { to: "/articles", key: "nav.articles", icon: FileText, allowedRoles: ["editor"] },
-  { to: "/articles/new", key: "nav.newArticle", icon: PencilLine, allowedRoles: ["editor"] },
   { to: "/articles/categories", key: "nav.categories", icon: Tags, allowedRoles: ["editor"] },
   // Organizers see only this item; the shell itself is open to all staff roles.
   { to: "/manage/events", key: "nav.events", icon: CalendarDays, allowedRoles: ["organizer"] },

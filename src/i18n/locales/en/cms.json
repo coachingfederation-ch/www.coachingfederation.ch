@@ -1,7 +1,6 @@
 {
   "nav": {
     "articles": "Articles",
-    "newArticle": "New article",
     "categories": "Categories",
     "signOut": "Sign out",
     "role": "Editor",
