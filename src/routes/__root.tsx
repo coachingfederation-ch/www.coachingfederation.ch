@@ -21,7 +21,7 @@ import { LOCALE_HTML_LANG } from "../i18n/config";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { LanguageNotice } from "../components/language-notice";
 import { AssistantWidget } from "../components/assistant/AssistantWidget";
-import { Toaster } from "../components/ui/sonner";
+import { Toaster } from "@/design-system/icf-welcome-design-system-a835df";
 import { PlausibleAnalytics } from "../components/plausible-analytics";
 import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 
