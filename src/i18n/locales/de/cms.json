@@ -889,7 +889,11 @@
     "pendingBadge": "Einladung offen",
     "resend": "Einladung erneut senden",
     "withdraw": "Einladung zurückziehen",
-    "withdrawConfirm": "Einladung für {name} zurückziehen? Der Link funktioniert sofort nicht mehr."
+    "withdrawConfirm": "Einladung für {name} zurückziehen? Der Link funktioniert sofort nicht mehr.",
+    "revokeAccount": "Konto entziehen",
+    "revokeAccountConfirm": "Internes Konto von {name} entziehen? Alle Zugriffe werden entfernt und das Konto wird gelöscht. Das lässt sich nicht rückgängig machen.",
+    "revokeAccountDone": "Internes Konto von {name} wurde entzogen.",
+    "revokeAccountAdminHint": "Super Admin zuerst deaktivieren, bevor dieses Konto entzogen wird."
   },
   "events": {
     "title": "Events",

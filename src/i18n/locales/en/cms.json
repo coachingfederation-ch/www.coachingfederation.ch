@@ -889,7 +889,11 @@
     "pendingBadge": "Invitation pending",
     "resend": "Resend invitation",
     "withdraw": "Withdraw invitation",
-    "withdrawConfirm": "Withdraw the invitation for {name}? Their link stops working immediately."
+    "withdrawConfirm": "Withdraw the invitation for {name}? Their link stops working immediately.",
+    "revokeAccount": "Revoke account",
+    "revokeAccountConfirm": "Revoke the internal account for {name}? All access is removed and the account is deleted. This cannot be undone.",
+    "revokeAccountDone": "Internal account for {name} was revoked.",
+    "revokeAccountAdminHint": "Turn off Super Admin before revoking this account."
   },
   "events": {
     "title": "Events",
