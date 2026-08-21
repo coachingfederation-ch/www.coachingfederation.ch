@@ -73,6 +73,8 @@ export function RoleAssignmentEditor({
   pickedRole,
   setPickedRole,
   assign,
+  translateLabels,
+  translating,
 }: Props) {
   return (
     <>
