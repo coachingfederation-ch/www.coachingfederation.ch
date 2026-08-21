@@ -593,7 +593,8 @@
       },
       "volunteer": {
         "title": "Volunteering",
-        "body": "The chapter runs on volunteers. Boards, communities and projects all need members who give a few hours. Open opportunities will be listed here."
+        "body": "The chapter runs on volunteers. Boards, communities and projects all need members who give a few hours. Open opportunities will be listed here.",
+        "cta": "Explore opportunities"
       },
       "ads": {
         "title": "Advertise with us",
@@ -628,6 +629,83 @@
         "qrExpiresIn": "Valid for",
         "installHint": "On your phone, use Share → Add to Home Screen, then sign in once by scanning this code.",
         "staySignedInHint": "Open the app every few weeks — otherwise your phone drops the sign-in and you scan a new code."
+      }
+    },
+    "volunteering": {
+      "title": "Volunteering",
+      "eyebrow": "Member Area",
+      "intro": "The Switzerland Chapter of ICF is run by members who volunteer their time. Whether you have an hour a month or want to lead a project, there is a place for you.",
+      "back": "Back to Member Area",
+      "opportunities": {
+        "title": "Open opportunities",
+        "communityLead": {
+          "title": "Community Lead",
+          "description": "Build a local hub by hosting events, curating connections, and representing the chapter in your region.",
+          "quote": "I joined to grow my network; I stayed because I could shape something that helps the whole profession.",
+          "attribution": "Anna M., Community Lead Zürich"
+        },
+        "eventHost": {
+          "title": "Event Host",
+          "description": "Help run chapter events, from registration desks to speaker support.",
+          "quote": "It's a few hours a year, and the energy in the room stays with me for months.",
+          "attribution": "Beat M., Event Host"
+        },
+        "contentContributor": {
+          "title": "Content Contributor",
+          "description": "Share your perspective through Insights articles, interviews, or social content.",
+          "quote": "Writing for the chapter helped me refine my own point of view.",
+          "attribution": "Carla T., Content Contributor"
+        },
+        "liveChat": {
+          "title": "Live Chat Volunteer",
+          "description": "Be the first friendly face for website visitors with questions.",
+          "quote": "The questions are often simple, but the conversations can be meaningful.",
+          "attribution": "Daniel K., Live Chat Volunteer"
+        }
+      },
+      "benefits": {
+        "title": "What you get back",
+        "freeStuff": {
+          "title": "Free Stuff",
+          "items": [
+            "Volunteer badges",
+            "Free supervision sessions with Swiss supervisors paid by ICFS"
+          ]
+        },
+        "access": {
+          "title": "Access",
+          "items": [
+            "Volunteer-only sessions on AI and coaching insights",
+            "Be part of moving projects"
+          ]
+        },
+        "power": {
+          "title": "Power",
+          "items": [
+            "Lead projects",
+            "Be recognized by ICFS for leading initiatives"
+          ]
+        },
+        "status": {
+          "title": "Status",
+          "items": [
+            "Build your reputation as a contributing member",
+            "Stand out as a leading voice in the ICF Switzerland Community"
+          ]
+        }
+      },
+      "onboarding": {
+        "title": "Book an onboarding session",
+        "body": "New volunteers are invited to an onboarding session where we explain the chapter, the teams, and how to get started.",
+        "cta": "Book now",
+        "soon": "Coming soon",
+        "empty": "No onboarding sessions are open right now. Check back soon."
+      },
+      "contact": {
+        "title": "Contact the Volunteering Director",
+        "body": "Have questions? Reach out to the Volunteering Director.",
+        "fallback": "The Volunteering Director",
+        "cta": "Send email"
       }
     }
   },
