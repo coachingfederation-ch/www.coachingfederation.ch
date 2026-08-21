@@ -59,6 +59,13 @@ const STATUS_STYLE: Record<string, string> = {
   archived: "bg-secondary text-muted-foreground",
 };
 
+type EventsSearch = z.infer<typeof searchSchema>;
+
+const FILTER_STORE_KEY = "cms.manage-events.filters";
+
+const isPristine = (s: EventsSearch) =>
+  !s.q && !s.category && !s.community && !s.host && !s.city && !s.status && s.page === 1;
+
 function ManageEventsPage() {
   const { t } = useCms();
   const navigate = useNavigate();
@@ -72,6 +79,37 @@ function ManageEventsPage() {
       .then(setRows)
       .catch(() => setError(t("events.loadError")));
   }, [t]);
+
+  // Coming back from an event detail lands here without search params, which
+  // would silently drop the filter set. The last used filters are kept for the
+  // browser session and restored when the URL carries none of its own.
+  const [restored, setRestored] = useState(false);
+  useEffect(() => {
+    if (restored) return;
+    setRestored(true);
+    if (!isPristine(search)) return;
+    try {
+      const raw = sessionStorage.getItem(FILTER_STORE_KEY);
+      if (!raw) return;
+      const stored = searchSchema.parse(JSON.parse(raw));
+      if (isPristine(stored)) return;
+      void navigate({ to: "/manage/events", search: stored, replace: true });
+    } catch {
+      /* a corrupt entry simply means "no saved filters" */
+    }
+    // Runs once per mount; `search` is only read for its initial value.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [restored]);
+
+  useEffect(() => {
+    if (!restored) return;
+    try {
+      sessionStorage.setItem(FILTER_STORE_KEY, JSON.stringify(search));
+    } catch {
+      /* private mode without storage: filters just aren't remembered */
+    }
+  }, [search, restored]);
+
 
   /** Every filter change also resets paging, so results are never off-screen. */
   const setFilter = (patch: Record<string, string | number>) =>
