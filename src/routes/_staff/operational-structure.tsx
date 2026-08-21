@@ -341,6 +341,8 @@ function OperationalStructurePage() {
                 patch={patch}
                 removeRow={removeRow}
                 loadProjects={loadProjects}
+                translateLabels={translateLabels}
+                translating={translating}
               />
 
               <RoleAssignmentEditor
