@@ -200,7 +200,18 @@ export const grantAccountRole = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => accountRoleSchema.parse(input))
   .handler(async ({ context, data }) => {
     await assertAdmin(context);
-    if (data.role !== "admin") throw new Error("Could not grant access.");
+    // Managed roles still require either a claim-linked member record or a
+    // live `internal_accounts` marker — the database policy is the boundary,
+    // this only keeps the error readable.
+    if (data.role !== "admin") {
+      const { data: internal } = await context.supabase
+        .from("internal_accounts")
+        .select("auth_user_id")
+        .eq("auth_user_id", data.authUserId)
+        .is("revoked_at", null)
+        .maybeSingle();
+      if (!internal) throw new Error("Could not grant access.");
+    }
     const { error } = await context.supabase
       .from("user_roles")
       .insert({ user_id: data.authUserId, role: data.role })
@@ -248,5 +259,125 @@ export const revokeAccountStaffRoles = createServerFn({ method: "POST" })
       .in("role", MANAGED_ROLES)
       .select("id");
     if (error) throw new Error("Could not remove access.");
+    return { ok: true };
+  });
+
+
+const inviteSchema = z.object({
+  email: z.string().email().max(200),
+  displayName: z.string().trim().min(2).max(120),
+  role: z.enum(GRANTABLE_ROLES).optional(),
+});
+
+const ROLE_LABELS: Record<string, string> = {
+  admin: "Super Admin",
+  administrator: "Administrator",
+  editor: "Editor",
+  organizer: "Event organizer",
+  publisher: "Publisher",
+};
+
+/**
+ * Invites an internal (non-member) staff account: creates or attaches the auth
+ * account, records the `internal_accounts` marker, optionally grants one role
+ * through the caller's own RLS-scoped client (so the audit trigger records the
+ * acting Super Admin), and mails the one-time password-set link.
+ */
+export const inviteInternalAccount = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => inviteSchema.parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { getRequestUrl } = await import("@tanstack/react-start/server");
+    const { createOrAttachInternalAccount, deliverInternalInvitation } = await import(
+      "./internal-accounts.server"
+    );
+
+    const { authUserId } = await createOrAttachInternalAccount({
+      email: data.email,
+      displayName: data.displayName,
+      invitedBy: context.userId,
+    });
+
+    if (data.role) {
+      const { error } = await context.supabase
+        .from("user_roles")
+        .insert({ user_id: authUserId, role: data.role })
+        .select("id");
+      if (error && error.code !== "23505") throw new Error("Could not grant access.");
+    }
+
+    await deliverInternalInvitation({
+      authUserId,
+      email: data.email,
+      displayName: data.displayName,
+      roleLabel: data.role ? (ROLE_LABELS[data.role] ?? data.role) : "internal access",
+      baseUrl: new URL(getRequestUrl()).origin,
+      isResend: false,
+    });
+
+    return { ok: true, authUserId };
+  });
+
+/** Sends a fresh password-set link; any earlier link stops working. */
+export const resendInternalInvitation = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => accountSchema.parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { getRequestUrl } = await import("@tanstack/react-start/server");
+    const { deliverInternalInvitation } = await import("./internal-accounts.server");
+
+    const { data: row } = await context.supabase
+      .from("internal_accounts")
+      .select("auth_user_id, display_name, email")
+      .eq("auth_user_id", data.authUserId)
+      .is("revoked_at", null)
+      .maybeSingle();
+    if (!row?.email) throw new Error("Could not send the invitation.");
+
+    await deliverInternalInvitation({
+      authUserId: row.auth_user_id as string,
+      email: row.email as string,
+      displayName: (row.display_name as string) || (row.email as string),
+      roleLabel: "internal access",
+      baseUrl: new URL(getRequestUrl()).origin,
+      isResend: true,
+    });
+    return { ok: true };
+  });
+
+/**
+ * Withdraws an invitation: every managed grant is removed through the caller's
+ * client (audited), then the marker row goes away and an account that never
+ * signed in is deleted, which kills the emailed link.
+ */
+export const withdrawInternalInvitation = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => accountSchema.parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    if (data.authUserId === context.userId) throw new Error("Could not withdraw the invitation.");
+
+    await context.supabase
+      .from("user_roles")
+      .delete()
+      .eq("user_id", data.authUserId)
+      .in("role", MANAGED_ROLES)
+      .select("id");
+
+    const { withdrawInternalAccount } = await import("./internal-accounts.server");
+    return await withdrawInternalAccount(data.authUserId);
+  });
+
+/**
+ * Marks the signed-in internal account as activated. Called once from the
+ * password-set screen; harmless if it runs again.
+ */
+export const completeInternalInvitation = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { markInternalAccountAccepted } = await import("./internal-accounts.server");
+    await markInternalAccountAccepted(context.userId);
     return { ok: true };
   });

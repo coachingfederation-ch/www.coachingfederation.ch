@@ -47,6 +47,9 @@ export type InternalStaffAccount = {
   name: string | null;
   email: string | null;
   roles: string[];
+  /** Invited through the Roles screen and not yet activated. */
+  pending: boolean;
+  invitedAt: string | null;
 };
 
 /** Every claimed member (an account exists), with their current CMS grant. */
@@ -346,7 +349,7 @@ export async function listInternalStaffAccounts(): Promise<InternalStaffAccount[
   const { data: roleRows, error } = await supabaseAdmin
     .from("user_roles")
     .select("user_id, role")
-    .in("role", ["admin", "editor", "organizer", "publisher"]);
+    .in("role", ["admin", "administrator", "editor", "organizer", "publisher"]);
   if (error) throw error;
 
   const byUser = new Map<string, string[]>();
@@ -354,6 +357,18 @@ export async function listInternalStaffAccounts(): Promise<InternalStaffAccount[
     const key = row.user_id as string;
     byUser.set(key, [...(byUser.get(key) ?? []), row.role as string]);
   }
+
+  // Invited accounts belong in this table from the moment the invitation goes
+  // out, even before any role is granted or the password is set.
+  const { data: invited } = await supabaseAdmin
+    .from("internal_accounts")
+    .select("auth_user_id, display_name, email, invited_at, accepted_at")
+    .is("revoked_at", null);
+  const inviteByUser = new Map(
+    (invited ?? []).map((row) => [row.auth_user_id as string, row]),
+  );
+  for (const id of inviteByUser.keys()) if (!byUser.has(id)) byUser.set(id, []);
+
   if (!byUser.size) return [];
 
   const { data: bound } = await supabaseAdmin
@@ -367,12 +382,17 @@ export async function listInternalStaffAccounts(): Promise<InternalStaffAccount[
   const [names, emails] = await Promise.all([namesByAuthUser(ids), emailsByAuthUser(ids)]);
 
   return ids
-    .map((id) => ({
-      authUserId: id,
-      name: names.get(id) ?? null,
-      email: emails.get(id) ?? null,
-      roles: (byUser.get(id) ?? []).sort(),
-    }))
+    .map((id) => {
+      const invite = inviteByUser.get(id);
+      return {
+        authUserId: id,
+        name: (invite?.display_name as string | undefined) || names.get(id) || null,
+        email: (invite?.email as string | undefined) || emails.get(id) || null,
+        roles: (byUser.get(id) ?? []).sort(),
+        pending: Boolean(invite && !invite.accepted_at),
+        invitedAt: (invite?.invited_at as string | null | undefined) ?? null,
+      };
+    })
     .sort((a, b) => (a.name ?? a.email ?? "").localeCompare(b.name ?? b.email ?? ""));
 }
 

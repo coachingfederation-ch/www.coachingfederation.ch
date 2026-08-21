@@ -25,8 +25,12 @@ import {
   revokeAccountStaffRoles,
   grantAccountRole,
   revokeAccountRole,
+  inviteInternalAccount,
+  resendInternalInvitation,
+  withdrawInternalInvitation,
 } from "@/lib/roles.functions";
-import type { GrantableRole } from "@/lib/role-model";
+import { GRANTABLE_ROLES, type GrantableRole } from "@/lib/role-model";
+
 
 export const Route = createFileRoute("/_staff/roles")({
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, ADMIN_ONLY),

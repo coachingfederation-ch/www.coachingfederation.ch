@@ -20,6 +20,7 @@ import { template as eventWaitlistInvitation } from "./event-waitlist-invitation
 import { template as eventInvitation } from "./event-invitation";
 import { template as eventReminder } from "./event-reminder";
 import { template as eventFollowUpInvitation } from "./event-follow-up-invitation";
+import { template as internalInvitation } from "./internal-invitation";
 
 /**
  * Template registry — maps template names to their React Email components.
@@ -37,4 +38,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "event-invitation": eventInvitation,
   "event-reminder": eventReminder,
   "event-follow-up-invitation": eventFollowUpInvitation,
+  "internal-invitation": internalInvitation,
 };
