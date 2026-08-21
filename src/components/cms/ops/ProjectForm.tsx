@@ -3,7 +3,7 @@
  * toggle, delete, project-type fieldset and the community fields panel.
  * Extracted verbatim from the operational-structure route.
  */
-import { Trash2 } from "lucide-react";
+import { Languages, Trash2 } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import type { useCms } from "@/i18n/cms";
 import { CommunityPanel } from "@/components/cms/CommunityPanel";
