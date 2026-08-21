@@ -1,10 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Button, Input, Label, Textarea } from "@/design-system/icf-welcome-design-system-a835df";
 import { useI18n } from "@/i18n";
 
 const OFFICE_EMAIL = "office@coachingfederation.ch";
