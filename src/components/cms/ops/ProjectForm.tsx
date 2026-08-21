@@ -92,6 +92,14 @@ export function ProjectForm({
           >
             <Trash2 className="h-3.5 w-3.5" /> {t("ops.deleteProject")}
           </button>
+          <button
+            onClick={() => void translateLabels("op_projects", project.id, project.name)}
+            disabled={busy}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-primary disabled:opacity-50"
+          >
+            <Languages className="h-3.5 w-3.5" />
+            {busy ? t("ops.translating") : t("ops.translateLabels")}
+          </button>
         </div>
 
         <fieldset className="mt-5 border-t border-border pt-4">
