@@ -165,31 +165,69 @@ function OperationalStructurePage() {
     else if (selected) await loadDetail(selected);
   };
 
+  /**
+   * Machine-translate one English label into DE/FR/IT and write it back.
+   * Creation never depends on this: the row already exists when we get here,
+   * so an AI failure only surfaces a notice, it does not lose the entry.
+   * Results stay editable — the locale inputs write over them normally.
+   */
+  const translateLabels = async (
+    table: "op_projects" | "op_project_roles",
+    id: string,
+    name: string,
+  ) => {
+    if (!name.trim()) return;
+    setTranslating((prev) => [...prev, id]);
+    try {
+      const [labels] = await translateOpsLabels({ data: { names: [name.trim()] } });
+      if (!labels) throw new Error("empty translation");
+      await patch(table, id, {
+        name_de: labels.de,
+        name_fr: labels.fr,
+        name_it: labels.it,
+      });
+    } catch {
+      setError(t("ops.translateFailed"));
+    } finally {
+      setTranslating((prev) => prev.filter((entry) => entry !== id));
+    }
+  };
+
   const addProject = async () => {
     const name = newProject.trim();
     if (!name) return;
-    const { error: err } = await supabase.from("op_projects").insert({
-      name,
-      slug: slugifyVocab(name) || `project-${Date.now()}`,
-      sort_order: (projects.at(-1)?.sort_order ?? 0) + 10,
-    });
+    const { data: row, error: err } = await supabase
+      .from("op_projects")
+      .insert({
+        name,
+        slug: slugifyVocab(name) || `project-${Date.now()}`,
+        sort_order: (projects.at(-1)?.sort_order ?? 0) + 10,
+      })
+      .select("id")
+      .single();
     if (err) return setError(err.message);
     setNewProject("");
     await loadProjects();
+    if (row) await translateLabels("op_projects", row.id, name);
   };
 
   const addRole = async () => {
     const name = newRole.trim();
     if (!name || !selected) return;
-    const { error: err } = await supabase.from("op_project_roles").insert({
-      project_id: selected,
-      name,
-      slug: slugifyVocab(name) || `role-${Date.now()}`,
-      sort_order: (roles.at(-1)?.sort_order ?? 0) + 10,
-    });
+    const { data: row, error: err } = await supabase
+      .from("op_project_roles")
+      .insert({
+        project_id: selected,
+        name,
+        slug: slugifyVocab(name) || `role-${Date.now()}`,
+        sort_order: (roles.at(-1)?.sort_order ?? 0) + 10,
+      })
+      .select("id")
+      .single();
     if (err) return setError(err.message);
     setNewRole("");
     await loadDetail(selected);
+    if (row) await translateLabels("op_project_roles", row.id, name);
   };
 
   const removeRow = async (table: "op_projects" | "op_project_roles", id: string) => {
