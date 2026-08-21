@@ -526,7 +526,8 @@ export const listEventHosts = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
     const { loadEventHosts } = await import("./event-hosts.server");
-    return loadEventHosts(data.eventId);
+    // CMS reads use the caller's client: drafts are invisible to the anon reader.
+    return loadEventHosts(data.eventId, context.supabase);
   });
 
 /** Replaces the whole host set for one event — at most two, order preserved. */
@@ -559,7 +560,8 @@ export const setEventHosts = createServerFn({ method: "POST" })
       if (error) throw new Error(error.message);
     }
     const { loadEventHosts } = await import("./event-hosts.server");
-    return loadEventHosts(data.eventId);
+    // CMS reads use the caller's client: drafts are invisible to the anon reader.
+    return loadEventHosts(data.eventId, context.supabase);
   });
 
 /**
