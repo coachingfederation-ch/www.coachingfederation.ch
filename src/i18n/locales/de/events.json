@@ -156,6 +156,13 @@
       "expired": "Dieser Einladungslink wurde bereits verwendet oder ist nicht mehr gültig.",
       "declined": "Danke für Ihre Rückmeldung. Wir haben notiert, dass Sie nicht teilnehmen können.",
       "decline": "Ich kann nicht teilnehmen"
+    },
+    "calendar": {
+      "add": "Zum Kalender hinzufügen",
+      "google": "Google Kalender",
+      "apple": "Apple Kalender (.ics)",
+      "outlook": "Outlook.com",
+      "office365": "Office 365"
     }
   },
   "filters": {

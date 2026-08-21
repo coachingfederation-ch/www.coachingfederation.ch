@@ -33,6 +33,7 @@ export type ConfirmationCopy = {
   calendarIntro: string;
   addToCalendar: string;
   addToGoogle: string;
+  addToOutlook: string;
   viewEvent: string;
   questions: string;
   signoff: string;
@@ -71,6 +72,7 @@ export const CONFIRMATION_COPY: Record<Locale, ConfirmationCopy> = {
     calendarIntro: "The times below are shown in the event's timezone.",
     addToCalendar: "Add to calendar (.ics)",
     addToGoogle: "Add to Google Calendar",
+    addToOutlook: "Add to Outlook",
     viewEvent: "View the event page",
     questions: "Questions? Write to us at {email}.",
     signoff: "Warm regards,\nThe Switzerland Chapter of ICF",
@@ -107,6 +109,7 @@ export const CONFIRMATION_COPY: Record<Locale, ConfirmationCopy> = {
     calendarIntro: "Die Zeiten unten gelten in der Zeitzone der Veranstaltung.",
     addToCalendar: "Zum Kalender hinzufügen (.ics)",
     addToGoogle: "Zu Google Kalender hinzufügen",
+    addToOutlook: "Zu Outlook hinzufügen",
     viewEvent: "Zur Veranstaltungsseite",
     questions: "Fragen? Schreiben Sie uns an {email}.",
     signoff: "Mit freundlichen Grüssen,\nThe Switzerland Chapter of ICF",
@@ -143,6 +146,7 @@ export const CONFIRMATION_COPY: Record<Locale, ConfirmationCopy> = {
     calendarIntro: "Les horaires ci-dessous sont indiqués dans le fuseau horaire de l’événement.",
     addToCalendar: "Ajouter à l’agenda (.ics)",
     addToGoogle: "Ajouter à Google Agenda",
+    addToOutlook: "Ajouter à Outlook",
     viewEvent: "Voir la page de l’événement",
     questions: "Des questions ? Écrivez-nous à {email}.",
     signoff: "Cordialement,\nThe Switzerland Chapter of ICF",
@@ -179,6 +183,7 @@ export const CONFIRMATION_COPY: Record<Locale, ConfirmationCopy> = {
     calendarIntro: "Gli orari indicati sono nel fuso orario dell’evento.",
     addToCalendar: "Aggiungi al calendario (.ics)",
     addToGoogle: "Aggiungi a Google Calendar",
+    addToOutlook: "Aggiungi a Outlook",
     viewEvent: "Vai alla pagina dell’evento",
     questions: "Domande? Scrivici a {email}.",
     signoff: "Cordiali saluti,\nThe Switzerland Chapter of ICF",

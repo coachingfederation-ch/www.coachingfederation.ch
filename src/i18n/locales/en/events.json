@@ -156,6 +156,13 @@
       "expired": "This invitation link has already been used or is no longer valid.",
       "declined": "Thank you for letting us know. We have noted that you cannot make it.",
       "decline": "I can't make it"
+    },
+    "calendar": {
+      "add": "Add to calendar",
+      "google": "Google Calendar",
+      "apple": "Apple Calendar (.ics)",
+      "outlook": "Outlook.com",
+      "office365": "Office 365"
     }
   },
   "filters": {

@@ -156,6 +156,13 @@
       "expired": "Ce lien d'invitation a déjà été utilisé ou n'est plus valable.",
       "declined": "Merci de nous l'avoir fait savoir. Nous avons noté que vous ne pouvez pas venir.",
       "decline": "Je ne peux pas venir"
+    },
+    "calendar": {
+      "add": "Ajouter au calendrier",
+      "google": "Google Agenda",
+      "apple": "Calendrier Apple (.ics)",
+      "outlook": "Outlook.com",
+      "office365": "Office 365"
     }
   },
   "filters": {
