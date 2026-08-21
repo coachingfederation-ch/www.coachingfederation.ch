@@ -889,7 +889,11 @@
     "pendingBadge": "Invito in sospeso",
     "resend": "Invia di nuovo l’invito",
     "withdraw": "Ritira l’invito",
-    "withdrawConfirm": "Ritirare l’invito per {name}? Il link smette subito di funzionare."
+    "withdrawConfirm": "Ritirare l’invito per {name}? Il link smette subito di funzionare.",
+    "revokeAccount": "Revoca account",
+    "revokeAccountConfirm": "Revocare l’account interno di {name}? Tutti gli accessi vengono rimossi e l’account viene eliminato. Operazione irreversibile.",
+    "revokeAccountDone": "L’account interno di {name} è stato revocato.",
+    "revokeAccountAdminHint": "Disattiva Super Admin prima di revocare questo account."
   },
   "events": {
     "title": "Eventi",

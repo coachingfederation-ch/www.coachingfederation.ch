@@ -27,6 +27,7 @@ import {
   revokeAccountRole,
   inviteInternalAccount,
   resendInternalInvitation,
+  revokeInternalAccount,
   withdrawInternalInvitation,
 } from "@/lib/roles.functions";
 import { GRANTABLE_ROLES, type GrantableRole } from "@/lib/role-model";
@@ -196,6 +197,22 @@ function RolesPage() {
       setNotice(t("roles.inviteSent"));
     } catch {
       setError(t("roles.inviteError"));
+    } finally {
+      setPending(null);
+    }
+  };
+
+  /** Deletes an accepted internal (non-member) staff account outright. */
+  const revokeAccount = async (authUserId: string, name: string) => {
+    if (!window.confirm(t("roles.revokeAccountConfirm").replace("{name}", name))) return;
+    setPending(`account:${authUserId}:delete`);
+    setError(null);
+    try {
+      await revokeInternalAccount({ data: { authUserId } });
+      setNotice(t("roles.revokeAccountDone").replace("{name}", name));
+      await load();
+    } catch {
+      setError(t("roles.saveError"));
     } finally {
       setPending(null);
     }
@@ -509,6 +526,29 @@ function RolesPage() {
                           >
                             {t("roles.removeAccess")}
                           </button>
+                        ) : null}
+                        {/* Deleting the account itself is only offered once it
+                            is no longer a Super Admin, and never for your own
+                            account — both rules are enforced server-side too. */}
+                        {!a.pending && a.authUserId !== currentUserId ? (
+                          a.roles.includes("admin") ? (
+                            <p className="text-xs text-muted-foreground">
+                              {t("roles.revokeAccountAdminHint")}
+                            </p>
+                          ) : (
+                            <button
+                              onClick={() =>
+                                void revokeAccount(
+                                  a.authUserId,
+                                  a.name ?? a.email ?? a.authUserId,
+                                )
+                              }
+                              disabled={pending === `account:${a.authUserId}:delete`}
+                              className="rounded-full bg-destructive px-3 py-1.5 text-xs font-semibold text-destructive-foreground hover:opacity-90 disabled:opacity-50"
+                            >
+                              {t("roles.revokeAccount")}
+                            </button>
+                          )
                         ) : null}
                       </div>
                     </td>

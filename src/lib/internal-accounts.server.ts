@@ -148,3 +148,18 @@ export async function withdrawInternalAccount(authUserId: string) {
   }
   return { deletedAccount: neverSignedIn };
 }
+
+/**
+ * Fully revokes an internal account that has already been accepted: the marker
+ * row goes away (so no further role may be granted) and the auth account is
+ * deleted, which ends any live session at the next token refresh.
+ *
+ * Role rows are removed by the caller through its own RLS-scoped client so the
+ * audit trigger records the acting Super Admin before the account disappears.
+ */
+export async function deleteInternalAccount(authUserId: string) {
+  await supabaseAdmin.from("internal_accounts").delete().eq("auth_user_id", authUserId);
+  const { error } = await supabaseAdmin.auth.admin.deleteUser(authUserId);
+  if (error) throw new Error("Could not delete the account.");
+  return { deletedAccount: true as const };
+}

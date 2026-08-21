@@ -889,7 +889,11 @@
     "pendingBadge": "Invitation en attente",
     "resend": "Renvoyer l’invitation",
     "withdraw": "Retirer l’invitation",
-    "withdrawConfirm": "Retirer l’invitation de {name} ? Son lien cesse immédiatement de fonctionner."
+    "withdrawConfirm": "Retirer l’invitation de {name} ? Son lien cesse immédiatement de fonctionner.",
+    "revokeAccount": "Révoquer le compte",
+    "revokeAccountConfirm": "Révoquer le compte interne de {name} ? Tous les accès sont supprimés et le compte est effacé. Action irréversible.",
+    "revokeAccountDone": "Le compte interne de {name} a été révoqué.",
+    "revokeAccountAdminHint": "Désactivez Super Admin avant de révoquer ce compte."
   },
   "events": {
     "title": "Événements",
