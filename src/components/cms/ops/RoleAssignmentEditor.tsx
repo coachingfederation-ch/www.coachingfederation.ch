@@ -112,6 +112,15 @@ export function RoleAssignmentEditor({
                   <ArrowDown className="h-3.5 w-3.5" />
                 </button>
                 <button
+                  onClick={() => void translateLabels("op_project_roles", role.id, role.name)}
+                  disabled={translating.includes(role.id)}
+                  aria-label={t("ops.translateLabels")}
+                  title={t("ops.translateLabels")}
+                  className="rounded p-1 text-muted-foreground hover:text-primary disabled:opacity-30"
+                >
+                  <Languages className="h-3.5 w-3.5" />
+                </button>
+                <button
                   onClick={() => void removeRow("op_project_roles", role.id)}
                   aria-label={t("ops.delete")}
                   className="rounded p-1 text-muted-foreground hover:text-destructive"
