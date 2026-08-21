@@ -14,7 +14,7 @@
   "aliases": {
     "components": "@/components",
     "utils": "@/lib/utils",
-    "ui": "@/components/ui",
+    "ui": "@/design-system/icf-welcome-design-system-a835df/components/ui",
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
