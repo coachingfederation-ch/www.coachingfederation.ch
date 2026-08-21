@@ -13,7 +13,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/design-system/icf-welcome-design-system-a835df";
 import { createStaffRegistration } from "@/lib/events-admin.functions";
 
 const inputClass = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm";

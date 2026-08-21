@@ -16,7 +16,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/design-system/icf-welcome-design-system-a835df";
 import { LinkedInCard } from "@/components/cms/LinkedInCard";
 import { toDataUrl } from "@/lib/linkedin-image";
 import {
