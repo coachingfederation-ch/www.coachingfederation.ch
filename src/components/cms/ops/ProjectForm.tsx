@@ -20,9 +20,25 @@ type Props = {
   ) => void | Promise<void>;
   removeRow: (table: "op_projects" | "op_project_roles", id: string) => void | Promise<void>;
   loadProjects: () => void | Promise<void>;
+  translateLabels: (
+    table: "op_projects" | "op_project_roles",
+    id: string,
+    name: string,
+  ) => void | Promise<void>;
+  translating: string[];
 };
 
-export function ProjectForm({ t, project, setProjects, patch, removeRow, loadProjects }: Props) {
+export function ProjectForm({
+  t,
+  project,
+  setProjects,
+  patch,
+  removeRow,
+  loadProjects,
+  translateLabels,
+  translating,
+}: Props) {
+  const busy = translating.includes(project.id);
   return (
     <>
       <section className="rounded-2xl border border-border bg-card p-5">
