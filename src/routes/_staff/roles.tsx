@@ -201,6 +201,22 @@ function RolesPage() {
     }
   };
 
+  /** Deletes an accepted internal (non-member) staff account outright. */
+  const revokeAccount = async (authUserId: string, name: string) => {
+    if (!window.confirm(t("roles.revokeAccountConfirm").replace("{name}", name))) return;
+    setPending(`account:${authUserId}:delete`);
+    setError(null);
+    try {
+      await revokeInternalAccount({ data: { authUserId } });
+      setNotice(t("roles.revokeAccountDone").replace("{name}", name));
+      await load();
+    } catch {
+      setError(t("roles.saveError"));
+    } finally {
+      setPending(null);
+    }
+  };
+
   const withdrawInvite = async (authUserId: string, name: string) => {
     if (!window.confirm(t("roles.withdrawConfirm").replace("{name}", name))) return;
     setPending(`account:${authUserId}:invite`);
