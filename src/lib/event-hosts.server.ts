@@ -7,10 +7,20 @@
  */
 import type { EventHost } from "./event-hosts";
 
-export async function loadEventHosts(eventId: string): Promise<EventHost[]> {
+/**
+ * `client` overrides the anon reader. The public host policy only exposes
+ * links of *published* events, so the CMS must read a draft event's hosts
+ * through the caller's own RLS-scoped client — otherwise a freshly added host
+ * on a draft comes back empty and looks like it was never saved.
+ */
+export async function loadEventHosts(
+  eventId: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  client?: any,
+): Promise<EventHost[]> {
   const { publicSupabaseClient } = await import("./supabase-public.server");
   const { signProfileImages } = await import("./storage.server");
-  const supabase = publicSupabaseClient();
+  const supabase = client ?? publicSupabaseClient();
 
   const { data: links, error } = await supabase
     .from("event_hosts")
