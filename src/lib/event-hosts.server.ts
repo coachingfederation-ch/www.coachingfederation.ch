@@ -28,36 +28,38 @@ export async function loadEventHosts(
     .eq("event_id", eventId)
     .order("sort_order", { ascending: true });
   if (error) throw new Error(error.message);
-  const ids = (links ?? []).map((l) => l.profile_id as string);
+  const ids = ((links ?? []) as { profile_id: string }[]).map((l) => l.profile_id);
   if (ids.length === 0) return [];
 
-  const { data: rows } = await supabase
+  const { data } = await supabase
     .from("coach_directory_public")
     .select("profile_id, full_name, tagline, profile_image_path")
     .in("profile_id", ids);
+  const rows = (data ?? []) as {
+    profile_id: string;
+    full_name: string | null;
+    tagline: string | null;
+    profile_image_path: string | null;
+  }[];
 
   const signed = await signProfileImages(
-    (rows ?? [])
-      .map((r) => r.profile_image_path as string | null)
-      .filter((p): p is string => Boolean(p)),
+    rows.map((r) => r.profile_image_path).filter((p): p is string => Boolean(p)),
   );
 
   const byId = new Map(
-    (rows ?? []).map((r) => [
-      r.profile_id as string,
+    rows.map((r) => [
+      r.profile_id,
       {
-        profileId: r.profile_id as string,
-        fullName: (r.full_name as string | null) ?? "",
-        tagline: (r.tagline as string | null) ?? null,
-        imageUrl: r.profile_image_path
-          ? (signed.get(r.profile_image_path as string) ?? null)
-          : null,
+        profileId: r.profile_id,
+        fullName: r.full_name ?? "",
+        tagline: r.tagline ?? null,
+        imageUrl: r.profile_image_path ? (signed.get(r.profile_image_path) ?? null) : null,
       } satisfies EventHost,
     ]),
   );
 
   // Preserve the stored order, and drop links whose profile is no longer public.
-  return ids.map((id) => byId.get(id)).filter((h): h is EventHost => Boolean(h));
+  return ids.map((id: string) => byId.get(id)).filter((h): h is EventHost => Boolean(h));
 }
 
 /** Name search over published, eligible directory profiles, capped. */
