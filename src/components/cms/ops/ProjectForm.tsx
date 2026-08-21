@@ -73,7 +73,8 @@ export function ProjectForm({
             />
           ))}
         </div>
-        <div className="mt-3 flex items-center gap-4">
+        <p className="mt-2 text-xs text-muted-foreground">{t("ops.translateHint")}</p>
+        <div className="mt-3 flex flex-wrap items-center gap-4">
           <label className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
             <input
               type="checkbox"
