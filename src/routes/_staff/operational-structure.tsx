@@ -64,6 +64,8 @@ function OperationalStructurePage() {
   const [pickedMember, setPickedMember] = useState("");
   const [pickedRole, setPickedRole] = useState("");
   const [error, setError] = useState<string | null>(null);
+  // Ids currently being machine-translated (a new row, or a manual re-run).
+  const [translating, setTranslating] = useState<string[]>([]);
   // Reordering writes `sort_order`, which drives the public /team filter chips
   // and the /communities order. It is a rare action, so the arrows stay hidden
   // behind this toggle instead of dominating the list.
