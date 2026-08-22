@@ -15,6 +15,8 @@ export const eventsSearchSchema = z.object({
   community: z.string().optional().catch(undefined),
   lang: z.string().optional().catch(undefined),
   format: z.string().optional().catch(undefined),
+  // "members" | "open" — who the event is for, independent of its category.
+  audience: z.string().optional().catch(undefined),
 });
 
 export type EventsSearch = z.infer<typeof eventsSearchSchema>;
