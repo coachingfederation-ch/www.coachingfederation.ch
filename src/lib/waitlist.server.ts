@@ -56,13 +56,15 @@ export async function joinWaitlist(input: JoinWaitlistInput): Promise<JoinWaitli
 
   const { data: event } = await supabaseAdmin
     .from("events")
-    .select("id, status, registration_mode, registration_closes_at, starts_at, ends_at")
+    .select("id, status, registration_mode, registration_closes_at")
     .eq("id", input.eventId)
     .maybeSingle();
   if (!event || event.status !== "published" || event.registration_mode === "none") {
     return { ok: false, reason: "closed" };
   }
-  const closesAt = event.registration_closes_at ?? event.ends_at ?? event.starts_at;
+  // Registration closes only when an explicit close date is set; with no close
+  // date it stays open by default (same rule as the registration guard).
+  const closesAt = event.registration_closes_at;
   if (closesAt && new Date(closesAt).getTime() < Date.now()) {
     return { ok: false, reason: "closed" };
   }
