@@ -195,6 +195,15 @@ export function EventDetailsSection({
               onChange={(e) => patch({ is_featured: e.target.checked })}
             />
           </Field>
+          {/* Audience marker only: the seat policy still comes from the
+              registration mode. */}
+          <Field label={t("events.fieldInternal")}>
+            <input
+              type="checkbox"
+              checked={event.is_internal ?? false}
+              onChange={(e) => patch({ is_internal: e.target.checked })}
+            />
+          </Field>
         </div>
       </Section>
 

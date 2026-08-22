@@ -196,6 +196,7 @@ function ManageEventsPage() {
           registration_closes_at: null,
           guest_registration_allowed: true,
           is_featured: false,
+          is_internal: false,
         },
       });
       void navigate({ to: "/manage/events/$id", params: { id } });
@@ -353,6 +354,11 @@ function ManageEventsPage() {
                   >
                     <td className="px-4 py-3 font-medium">
                       {row.title}
+                      {row.is_internal ? (
+                        <span className="ml-2 inline-flex rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-accent-foreground">
+                          {t("events.tag.membersOnly")}
+                        </span>
+                      ) : null}
                       {row.series_id ? (
                         <span className="ml-2 inline-flex rounded-full bg-secondary px-2 py-0.5 text-[11px] font-semibold text-muted-foreground">
                           {t("events.repeat.badge")}
