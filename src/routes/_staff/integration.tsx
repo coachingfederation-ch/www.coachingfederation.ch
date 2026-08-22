@@ -128,7 +128,7 @@ function GatesCard({
             </>
           ) : (
             <button
-              className="mt-3 rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+              className={`mt-3 ${BTN_SECONDARY}`}
               disabled={busy}
               onClick={() => toggle("gate-email", { emails_suppressed: true })}
             >
@@ -148,7 +148,7 @@ function GatesCard({
           </p>
           {config.account_claim_enabled ? (
             <button
-              className="mt-3 rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+              className={`mt-3 ${BTN_SECONDARY}`}
               disabled={busy}
               onClick={() => toggle("gate-claim", { account_claim_enabled: false })}
             >
@@ -530,7 +530,7 @@ function IntegrationPageBody() {
                   {t("integration.runSync")}
                 </button>
                 <button
-                  className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+                  className={BTN_SECONDARY}
                   disabled={busy !== null}
                   onClick={() => {
                     if (!window.confirm(t("integration.runSyncOverrideConfirm"))) return;
@@ -543,7 +543,7 @@ function IntegrationPageBody() {
                   {t("integration.runSyncOverride")}
                 </button>
                 <button
-                  className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+                  className={BTN_SECONDARY}
                   disabled={busy !== null}
                   onClick={() => {
                     if (!window.confirm(t("integration.cleanupConfirm"))) return;
