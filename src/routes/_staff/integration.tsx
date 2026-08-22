@@ -27,6 +27,7 @@ import {
   cleanupExpiredMembers,
   checkIcfCredentials,
   getOutboundIpDiagnostics,
+  getRelayHealth,
 } from "@/lib/members.functions";
 
 export const Route = createFileRoute("/_staff/integration")({
@@ -681,6 +682,7 @@ function IntegrationPageBody() {
               </div>
             </section>
 
+            <RelayHealthCard t={t} />
             <CredentialCheckCard t={t} />
             <OutboundIpCard t={t} />
 
