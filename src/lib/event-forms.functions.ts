@@ -339,32 +339,59 @@ export const getFormResults = createServerFn({ method: "POST" })
     if (error || !form) throw new Error("This form is not available.");
     const meta = form as { id: string; event_id: string; kind: string; name: string };
 
+    const isRegistration = meta.kind === "registration";
+
+    // Registration answers live on the registration row itself — there is no
+    // second write path and no invitation, so the two kinds read differently.
     const [{ data: recipients }, { data: responses }] = await Promise.all([
-      context.supabase
-        .from("event_form_recipients")
-        .select("id, registration_id, email, locale, status, sent_at, reminder_sent_at, completed_at")
-        .eq("form_id", data.formId),
-      context.supabase
-        .from("event_form_responses")
-        .select("id, registration_id, answers, submitted_at")
-        .eq("form_id", data.formId)
-        .order("submitted_at", { ascending: false }),
+      isRegistration
+        ? Promise.resolve({ data: [] })
+        : context.supabase
+            .from("event_form_recipients")
+            .select("id, registration_id, email, locale, status, sent_at, reminder_sent_at, completed_at")
+            .eq("form_id", data.formId),
+      isRegistration
+        ? Promise.resolve({ data: [] })
+        : context.supabase
+            .from("event_form_responses")
+            .select("id, registration_id, answers, submitted_at")
+            .eq("form_id", data.formId)
+            .order("submitted_at", { ascending: false }),
     ]);
 
     const { data: attendees } = await context.supabase
       .from("event_registrations")
-      .select("id, full_name, email, status, payment_status, refund_status")
-      .eq("event_id", meta.event_id);
+      .select("id, full_name, email, status, payment_status, refund_status, answers, created_at")
+      .eq("event_id", meta.event_id)
+      .order("created_at", { ascending: false });
+
+    const rows = (attendees ?? []) as unknown as {
+      id: string;
+      status: string;
+      answers: Record<string, string> | null;
+      created_at: string;
+    }[];
+
+    const registrationResponses = rows
+      .filter((r) => r.status === "confirmed" && r.answers && Object.keys(r.answers).length > 0)
+      .map((r) => ({
+        id: r.id,
+        registration_id: r.id,
+        answers: r.answers ?? {},
+        submitted_at: r.created_at,
+      }));
 
     const { loadFormQuestions, eligibleAttendees } = await import("./event-forms.server");
-    const eligible = meta.kind === "follow_up" ? (await eligibleAttendees(meta.event_id)).length : 0;
+    const eligible = isRegistration
+      ? rows.filter((r) => r.status === "confirmed").length
+      : (await eligibleAttendees(meta.event_id)).length;
 
     return {
       form: meta,
       questions: await loadFormQuestions(data.formId),
       eligible,
       recipients: recipients ?? [],
-      responses: responses ?? [],
+      responses: isRegistration ? registrationResponses : (responses ?? []),
       attendees: attendees ?? [],
     };
   });
