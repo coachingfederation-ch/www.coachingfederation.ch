@@ -431,7 +431,7 @@ export async function submitRegistration(
     hold_expires_at: holdExpiresAt,
     answers: answers.answers,
   });
-  if (error) return failureReason(error);
+  if (error) return failureReason(error, input.eventId);
 
   if (invite) {
     const { markInviteConverted } = await import("./waitlist.server");
