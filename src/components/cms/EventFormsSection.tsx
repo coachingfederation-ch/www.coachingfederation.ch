@@ -172,15 +172,13 @@ export function EventFormsSection({ eventId, t }: { eventId: string; t: (k: stri
                   : ""}
               </span>
               <div className="ml-auto flex gap-2">
-                {form.kind === "follow_up" ? (
-                  <Link
-                    to="/manage/events/$id/forms/$formId"
-                    params={{ id: eventId, formId: form.id }}
-                    className={buttonClass}
-                  >
-                    {t("events.forms.openResults")}
-                  </Link>
-                ) : null}
+                <Link
+                  to="/manage/events/$id/forms/$formId"
+                  params={{ id: eventId, formId: form.id }}
+                  className={buttonClass}
+                >
+                  {t("events.forms.openResults")}
+                </Link>
                 <button
                   type="button"
                   className={buttonClass}
@@ -193,6 +191,7 @@ export function EventFormsSection({ eventId, t }: { eventId: string; t: (k: stri
             {openId === form.id ? (
               <FormEditor
                 formId={form.id}
+                kind={form.kind}
                 onSaved={load}
                 onDeleted={async () => {
                   setOpenId(null);
