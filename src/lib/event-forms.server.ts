@@ -34,14 +34,39 @@ export type QuestionRow = {
   help_text_fr: string | null;
   help_text_it: string | null;
   options: string[] | null;
+  options_de: string[] | null;
+  options_fr: string[] | null;
+  options_it: string[] | null;
   rating_max: number;
   scale_low_label: string | null;
+  scale_low_label_de: string | null;
+  scale_low_label_fr: string | null;
+  scale_low_label_it: string | null;
   scale_high_label: string | null;
+  scale_high_label_de: string | null;
+  scale_high_label_fr: string | null;
+  scale_high_label_it: string | null;
   is_required: boolean;
   sort_order: number;
   condition_question_id: string | null;
   condition_value: string | null;
 };
+
+/**
+ * Display strings for the options, positionally aligned with the canonical
+ * list. A translated array of a different length is ignored outright: a
+ * partial mapping would silently label an option with the wrong words.
+ */
+function optionLabelsFor(row: QuestionRow, locale: Locale): string[] {
+  const canonical = row.options ?? [];
+  if (locale === "en") return canonical;
+  const translated = (row[`options_${locale}` as keyof QuestionRow] as string[] | null) ?? null;
+  if (!translated || translated.length !== canonical.length) return canonical;
+  return canonical.map((value, i) => {
+    const label = (translated[i] ?? "").trim();
+    return label || value;
+  });
+}
 
 export function toPublicQuestion(row: QuestionRow, locale: Locale): PublicFormQuestion {
   return {
@@ -51,9 +76,10 @@ export function toPublicQuestion(row: QuestionRow, locale: Locale): PublicFormQu
     label: localisedColumn(row as never, "label", locale) ?? row.label,
     help: localisedColumn(row as never, "help_text", locale),
     options: row.options ?? [],
+    optionLabels: optionLabelsFor(row, locale),
     ratingMax: row.rating_max ?? 5,
-    scaleLow: row.scale_low_label,
-    scaleHigh: row.scale_high_label,
+    scaleLow: localisedColumn(row as never, "scale_low_label", locale),
+    scaleHigh: localisedColumn(row as never, "scale_high_label", locale),
     required: row.is_required,
     conditionQuestionId: row.condition_question_id,
     conditionValue: row.condition_value,
@@ -61,7 +87,7 @@ export function toPublicQuestion(row: QuestionRow, locale: Locale): PublicFormQu
 }
 
 const QUESTION_COLUMNS =
-  "id, question_key, qtype, label, label_de, label_fr, label_it, help_text, help_text_de, help_text_fr, help_text_it, options, rating_max, scale_low_label, scale_high_label, is_required, sort_order, condition_question_id, condition_value";
+  "id, question_key, qtype, label, label_de, label_fr, label_it, help_text, help_text_de, help_text_fr, help_text_it, options, options_de, options_fr, options_it, rating_max, scale_low_label, scale_low_label_de, scale_low_label_fr, scale_low_label_it, scale_high_label, scale_high_label_de, scale_high_label_fr, scale_high_label_it, is_required, sort_order, condition_question_id, condition_value";
 
 /** The event's active registration form as the public page needs it. */
 export async function loadPublicRegistrationForm(
