@@ -18,7 +18,7 @@ before adding a new file.
 
 | Module                                       | Responsibility                                                                                                                                                                  |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `member-sync.server.ts`                      | The import engine: pull the ICF feed, normalise, diff, create/update/deactivate, demote profiles that lost eligibility. The most operationally sensitive module in the project. |
+| `member-sync.server.ts`                      | The import engine: pull the ICF feed, normalise, diff, create/update/deactivate, demote profiles that lost eligibility. The most operationally sensitive module in the project. See `docs/member-sync.md`. |
 | `icf-soap.server.ts`                         | SOAP/xWeb client for netFORUM. Credentials read inside handlers.                                                                                                                |
 | `integration-config.server.ts`               | Loads the single `integration_config` row (TEST vs LIVE, email suppression, claim gate).                                                                                        |
 | `member-profile.server.ts` / `.functions.ts` | Member self-service profile: validation, cleaning, the guarded publish path.                                                                                                    |
