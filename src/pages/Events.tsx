@@ -143,7 +143,8 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
   const community = search.community ?? "";
   const lang = search.lang ?? "";
   const format = search.format ?? "";
-  const hasFacetFilters = Boolean(category || region || community || lang || format);
+  const audience = search.audience === "members" || search.audience === "open" ? search.audience : "";
+  const hasFacetFilters = Boolean(category || region || community || lang || format || audience);
 
   // Communities are derived from the rows on the page: a community with nothing
   // to show never appears in the filter.
@@ -195,7 +196,8 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
     (!region || e.region_slug === region) &&
     (!community || e.community_slug === community) &&
     (!lang || (e.language ?? "en") === lang) &&
-    (!format || (e.location_mode ?? "in_person") === format);
+    (!format || (e.location_mode ?? "in_person") === format) &&
+    (!audience || (audience === "members" ? e.is_internal === true : e.is_internal !== true));
 
   // The featured card is a curated hero, so it only survives an unfiltered
   // upcoming view; otherwise it joins the grid like any other match.
@@ -259,7 +261,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                   ))}
                 </div>
               </div>
-              <div className="grid flex-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid flex-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
                 <FilterSelect
                   label={t("events.filters.category")}
                   anyLabel={t("events.filters.allCategories")}
@@ -283,6 +285,16 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                   value={lang}
                   options={LANGUAGES.map((l) => ({ value: l, label: l.toUpperCase() }))}
                   onChange={(v) => setFilter("lang", v)}
+                />
+                <FilterSelect
+                  label={t("events.filters.audience")}
+                  anyLabel={t("events.filters.allAudiences")}
+                  value={audience}
+                  options={[
+                    { value: "open", label: t("events.filters.audienceOpen") },
+                    { value: "members", label: t("events.filters.audienceMembers") },
+                  ]}
+                  onChange={(v) => setFilter("audience", v)}
                 />
                 <FilterSelect
                   label={t("events.filters.format")}
@@ -359,6 +371,11 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                         {tag}
                       </span>
                     ))}
+{featured.is_internal ? (
+                      <span className="inline-flex items-center rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
+                        {t("events.tag.membersOnly")}
+                      </span>
+                    ) : null}
                     {featured.is_full ? (
                       <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
                         {t("events.tag.full")}
@@ -438,6 +455,11 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                               {tag}
                             </span>
                           ))}
+                          {e.is_internal ? (
+                            <span className="inline-flex items-center rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
+                              {t("events.tag.membersOnly")}
+                            </span>
+                          ) : null}
                           {e.is_full ? (
                             <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
                               {t("events.tag.full")}
