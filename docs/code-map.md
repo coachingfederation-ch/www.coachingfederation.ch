@@ -133,6 +133,8 @@ before adding a new file.
 - **`integration_config`** — one row, guarded by a trigger, controlling the
   TEST/LIVE posture.
 - **`member_sync_runs`, `member_sync_events`, `member_import_snapshots`** — the
-  audit trail for every sync. First place to look when member data looks wrong.
+  audit trail for every sync. First place to look when member data looks wrong;
+  reading them is explained in `docs/member-sync.md`.
+
 - **Buckets** `member-profile-images` and `article-images` — both private;
   access is always via signed URLs.
