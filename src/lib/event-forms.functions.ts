@@ -16,7 +16,7 @@ const FORM_COLUMNS =
   "id, event_id, kind, name, is_active, intro, intro_de, intro_fr, intro_it, thank_you, thank_you_de, thank_you_fr, thank_you_it, created_at";
 
 const QUESTION_COLUMNS =
-  "id, form_id, question_key, qtype, label, label_de, label_fr, label_it, help_text, help_text_de, help_text_fr, help_text_it, options, rating_max, scale_low_label, scale_high_label, is_required, sort_order, condition_question_id, condition_value";
+  "id, form_id, question_key, qtype, label, label_de, label_fr, label_it, help_text, help_text_de, help_text_fr, help_text_it, options, options_de, options_fr, options_it, rating_max, scale_low_label, scale_low_label_de, scale_low_label_fr, scale_low_label_it, scale_high_label, scale_high_label_de, scale_high_label_fr, scale_high_label_it, is_required, sort_order, condition_question_id, condition_value";
 
 const questionInput = z.object({
   id: z.string().uuid().nullable().optional(),
@@ -36,14 +36,33 @@ const questionInput = z.object({
   help_text_fr: z.string().trim().max(500).nullable().optional(),
   help_text_it: z.string().trim().max(500).nullable().optional(),
   options: z.array(z.string().trim().min(1).max(200)).max(20),
+  options_de: z.array(z.string().trim().max(200)).max(20).nullable().optional(),
+  options_fr: z.array(z.string().trim().max(200)).max(20).nullable().optional(),
+  options_it: z.array(z.string().trim().max(200)).max(20).nullable().optional(),
   rating_max: z.number().int().min(2).max(10),
   scale_low_label: z.string().trim().max(60).nullable().optional(),
+  scale_low_label_de: z.string().trim().max(60).nullable().optional(),
+  scale_low_label_fr: z.string().trim().max(60).nullable().optional(),
+  scale_low_label_it: z.string().trim().max(60).nullable().optional(),
   scale_high_label: z.string().trim().max(60).nullable().optional(),
+  scale_high_label_de: z.string().trim().max(60).nullable().optional(),
+  scale_high_label_fr: z.string().trim().max(60).nullable().optional(),
+  scale_high_label_it: z.string().trim().max(60).nullable().optional(),
   is_required: z.boolean(),
   /** Index of the earlier question this one depends on, -1 for none. */
   condition_index: z.number().int().min(-1).max(99),
   condition_value: z.string().trim().max(200).nullable().optional(),
 });
+
+/** Keeps a translated option list only when it matches the canonical one. */
+function alignedOptions(
+  translated: string[] | null | undefined,
+  canonical: string[],
+  usesOptions: boolean,
+): string[] | null {
+  if (!usesOptions || !translated || translated.length !== canonical.length) return null;
+  return canonical.map((value, i) => (translated[i] ?? "").trim() || value);
+}
 
 /** Every form on one event, with the counts the list needs. */
 export const listEventForms = createServerFn({ method: "POST" })
@@ -198,6 +217,7 @@ export const saveEventForm = createServerFn({ method: "POST" })
     // Pass one: write the questions without their conditions.
     const ids: string[] = [];
     for (const [index, question] of data.questions.entries()) {
+      const usesOptions = question.qtype === "single_choice" || question.qtype === "multi_choice";
       const row = {
         form_id: data.formId,
         question_key: question.question_key,
@@ -210,10 +230,21 @@ export const saveEventForm = createServerFn({ method: "POST" })
         help_text_de: question.help_text_de || null,
         help_text_fr: question.help_text_fr || null,
         help_text_it: question.help_text_it || null,
-        options: question.qtype === "single_choice" || question.qtype === "multi_choice" ? question.options : [],
+        options: usesOptions ? question.options : [],
+        // A translated list only means anything next to the canonical one, so
+        // it is stored solely when it lines up position for position.
+        options_de: alignedOptions(question.options_de, question.options, usesOptions),
+        options_fr: alignedOptions(question.options_fr, question.options, usesOptions),
+        options_it: alignedOptions(question.options_it, question.options, usesOptions),
         rating_max: question.rating_max,
         scale_low_label: question.scale_low_label || null,
+        scale_low_label_de: question.scale_low_label_de || null,
+        scale_low_label_fr: question.scale_low_label_fr || null,
+        scale_low_label_it: question.scale_low_label_it || null,
         scale_high_label: question.scale_high_label || null,
+        scale_high_label_de: question.scale_high_label_de || null,
+        scale_high_label_fr: question.scale_high_label_fr || null,
+        scale_high_label_it: question.scale_high_label_it || null,
         is_required: question.qtype === "heading" ? false : question.is_required,
         sort_order: index,
         condition_question_id: null,
