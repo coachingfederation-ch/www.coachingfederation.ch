@@ -474,11 +474,30 @@ function cell(value: unknown): string {
 export async function buildFormResponsesCsv(formId: string) {
   const form = await loadForm(formId);
   const questions = (await loadFormQuestions(formId)).filter((q) => q.type !== "heading");
-  const { data: rows } = await supabaseAdmin
-    .from("event_form_responses")
-    .select("registration_id, answers, submitted_at")
-    .eq("form_id", formId)
-    .order("submitted_at", { ascending: true });
+  // A registration form's answers sit on the registration row; a follow-up
+  // form's answers sit in its own response table.
+  const { data: rows } =
+    form?.kind === "registration"
+      ? await supabaseAdmin
+          .from("event_registrations")
+          .select("id, answers, created_at")
+          .eq("event_id", form.event_id)
+          .eq("status", "confirmed")
+          .order("created_at", { ascending: true })
+          .then(({ data }) => ({
+            data: ((data ?? []) as { id: string; answers: Record<string, string> | null; created_at: string }[])
+              .filter((r) => r.answers && Object.keys(r.answers).length > 0)
+              .map((r) => ({
+                registration_id: r.id,
+                answers: r.answers ?? {},
+                submitted_at: r.created_at,
+              })),
+          }))
+      : await supabaseAdmin
+          .from("event_form_responses")
+          .select("registration_id, answers, submitted_at")
+          .eq("form_id", formId)
+          .order("submitted_at", { ascending: true });
 
   const ids = ((rows ?? []) as { registration_id: string }[]).map((r) => r.registration_id);
   const { data: regs } = ids.length

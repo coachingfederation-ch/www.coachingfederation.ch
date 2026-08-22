@@ -172,15 +172,13 @@ export function EventFormsSection({ eventId, t }: { eventId: string; t: (k: stri
                   : ""}
               </span>
               <div className="ml-auto flex gap-2">
-                {form.kind === "follow_up" ? (
-                  <Link
-                    to="/manage/events/$id/forms/$formId"
-                    params={{ id: eventId, formId: form.id }}
-                    className={buttonClass}
-                  >
-                    {t("events.forms.openResults")}
-                  </Link>
-                ) : null}
+                <Link
+                  to="/manage/events/$id/forms/$formId"
+                  params={{ id: eventId, formId: form.id }}
+                  className={buttonClass}
+                >
+                  {t("events.forms.openResults")}
+                </Link>
                 <button
                   type="button"
                   className={buttonClass}
@@ -193,6 +191,7 @@ export function EventFormsSection({ eventId, t }: { eventId: string; t: (k: stri
             {openId === form.id ? (
               <FormEditor
                 formId={form.id}
+                kind={form.kind}
                 onSaved={load}
                 onDeleted={async () => {
                   setOpenId(null);
@@ -235,15 +234,23 @@ export function EventFormsSection({ eventId, t }: { eventId: string; t: (k: stri
 
 function FormEditor({
   formId,
+  kind,
   onSaved,
   onDeleted,
   t,
 }: {
   formId: string;
+  /**
+   * Only follow-up forms have an intro and a thank-you: they are read by the
+   * invitation email and the emailed form page. The registration panel never
+   * renders them, so the registration editor hides them entirely.
+   */
+  kind: "registration" | "follow_up";
   onSaved: () => Promise<void>;
   onDeleted: () => Promise<void>;
   t: (k: string) => string;
 }) {
+  const showTexts = kind === "follow_up";
   const [name, setName] = useState("");
   const [active, setActive] = useState(true);
   const [intro, setIntro] = useState("");
@@ -351,8 +358,8 @@ function FormEditor({
     try {
       const result = await translateEventForm({
         data: {
-          intro: intro || null,
-          thankYou: thankYou || null,
+          intro: showTexts ? intro || null : null,
+          thankYou: showTexts ? thankYou || null : null,
           questions: questions.map((q) => ({
             label: q.label,
             help: q.help_text || null,
@@ -436,14 +443,14 @@ function FormEditor({
           formId,
           name,
           is_active: active,
-          intro: intro || null,
-          intro_de: intros.de || null,
-          intro_fr: intros.fr || null,
-          intro_it: intros.it || null,
-          thank_you: thankYou || null,
-          thank_you_de: thanks.de || null,
-          thank_you_fr: thanks.fr || null,
-          thank_you_it: thanks.it || null,
+          intro: showTexts ? intro || null : null,
+          intro_de: showTexts ? intros.de || null : null,
+          intro_fr: showTexts ? intros.fr || null : null,
+          intro_it: showTexts ? intros.it || null : null,
+          thank_you: showTexts ? thankYou || null : null,
+          thank_you_de: showTexts ? thanks.de || null : null,
+          thank_you_fr: showTexts ? thanks.fr || null : null,
+          thank_you_it: showTexts ? thanks.it || null : null,
           questions: payload,
         },
       });
@@ -499,37 +506,43 @@ function FormEditor({
           <input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} />
           {t("events.forms.active")}
         </label>
-        <div>
-          <label className="block text-xs font-semibold">{t("events.forms.intro")}</label>
-          <textarea rows={2} value={intro} onChange={(e) => setIntro(e.target.value)} className={inputClass} />
-        </div>
-        <div>
-          <label className="block text-xs font-semibold">{t("events.forms.thankYou")}</label>
-          <textarea rows={2} value={thankYou} onChange={(e) => setThankYou(e.target.value)} className={inputClass} />
-        </div>
+        {showTexts ? (
+          <>
+            <div>
+              <label className="block text-xs font-semibold">{t("events.forms.intro")}</label>
+              <textarea rows={2} value={intro} onChange={(e) => setIntro(e.target.value)} className={inputClass} />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold">{t("events.forms.thankYou")}</label>
+              <textarea rows={2} value={thankYou} onChange={(e) => setThankYou(e.target.value)} className={inputClass} />
+            </div>
+          </>
+        ) : null}
       </div>
 
-      <div className="mt-3 grid gap-3 sm:grid-cols-3">
-        {TRANSLATED_LOCALES.map((locale) => (
-          <div key={locale} className="rounded-xl border border-border p-3">
-            <p className="text-xs font-semibold uppercase">{locale}</p>
-            <label className="mt-2 block text-xs font-semibold">{t("events.forms.intro")}</label>
-            <textarea
-              rows={2}
-              value={introTrans[locale]}
-              onChange={(e) => setIntroTrans((prev) => ({ ...prev, [locale]: e.target.value }))}
-              className={inputClass}
-            />
-            <label className="mt-2 block text-xs font-semibold">{t("events.forms.thankYou")}</label>
-            <textarea
-              rows={2}
-              value={thankYouTrans[locale]}
-              onChange={(e) => setThankYouTrans((prev) => ({ ...prev, [locale]: e.target.value }))}
-              className={inputClass}
-            />
-          </div>
-        ))}
-      </div>
+      {showTexts ? (
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          {TRANSLATED_LOCALES.map((locale) => (
+            <div key={locale} className="rounded-xl border border-border p-3">
+              <p className="text-xs font-semibold uppercase">{locale}</p>
+              <label className="mt-2 block text-xs font-semibold">{t("events.forms.intro")}</label>
+              <textarea
+                rows={2}
+                value={introTrans[locale]}
+                onChange={(e) => setIntroTrans((prev) => ({ ...prev, [locale]: e.target.value }))}
+                className={inputClass}
+              />
+              <label className="mt-2 block text-xs font-semibold">{t("events.forms.thankYou")}</label>
+              <textarea
+                rows={2}
+                value={thankYouTrans[locale]}
+                onChange={(e) => setThankYouTrans((prev) => ({ ...prev, [locale]: e.target.value }))}
+                className={inputClass}
+              />
+            </div>
+          ))}
+        </div>
+      ) : null}
       <p className="mt-2 text-xs text-muted-foreground">{t("events.forms.translationHint")}</p>
 
       <div className="mt-4 space-y-3">

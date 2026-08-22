@@ -1242,7 +1242,9 @@
       },
       "savedNoTranslation": "Saved in English — the automatic translation was unavailable.",
       "translatingAndSaving": "Translating and saving…",
-      "translationHint": "German, French and Italian are translated automatically on save. Edit them here whenever you want different wording."
+      "translationHint": "German, French and Italian are translated automatically on save. Edit them here whenever you want different wording.",
+      "registrationsLabel": "registrations",
+      "answeredLabel": "answered"
     },
     "searchAttendees": "Search",
     "searchAttendeesPlaceholder": "Name or email",

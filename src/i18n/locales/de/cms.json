@@ -1242,7 +1242,9 @@
       },
       "savedNoTranslation": "Auf Englisch gespeichert — die automatische Übersetzung war nicht verfügbar.",
       "translatingAndSaving": "Übersetzen und speichern…",
-      "translationHint": "Deutsch, Französisch und Italienisch werden beim Speichern automatisch übersetzt. Passen Sie den Wortlaut hier jederzeit an."
+      "translationHint": "Deutsch, Französisch und Italienisch werden beim Speichern automatisch übersetzt. Passen Sie den Wortlaut hier jederzeit an.",
+      "registrationsLabel": "Registrierungen",
+      "answeredLabel": "beantwortet"
     },
     "searchAttendees": "Suche",
     "searchAttendeesPlaceholder": "Name oder E-Mail",
