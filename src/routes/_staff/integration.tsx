@@ -181,7 +181,7 @@ function GatesCard({
 /** Presentational status dot. Colour is decided server-side. */
 function StatusDot({ level }: { level: "ok" | "warn" | "fail" }) {
   const tone = level === "ok" ? "bg-teal" : level === "warn" ? "bg-warn" : "bg-destructive";
-  return <span className={"mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full " + tone} aria-hidden />;
+  return <span className={"mt-2 size-2 shrink-0 rounded-full " + tone} aria-hidden />;
 }
 
 /**
