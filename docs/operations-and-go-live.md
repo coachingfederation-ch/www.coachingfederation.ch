@@ -76,7 +76,10 @@ re-scans only those. Full detail in `docs/europe-pulse.md`.
 Members who go inactive enter a grace period (`member_lifecycle_queue`) with a
 scheduled deletion date rather than being removed immediately. Membership
 lapses and renewals are routine; immediate deletion would destroy
-member-authored profile content over an administrative gap.
+member-authored profile content over an administrative gap. Anonymisation is an
+admin action, never automatic — the full state machine is in
+`docs/member-sync.md`.
+
 
 ## Go-live: the shape of the migration
 
