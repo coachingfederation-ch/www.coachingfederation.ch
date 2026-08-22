@@ -35,7 +35,14 @@ export type PublicFormQuestion = {
   type: QuestionType;
   label: string;
   help: string | null;
+  /** Canonical (English) option values — what gets stored and validated. */
   options: string[];
+  /**
+   * What the attendee reads, positionally aligned with `options`. Falls back
+   * to the canonical value whenever a translation is missing, so a display
+   * string can never drift away from the value it stands for.
+   */
+  optionLabels: string[];
   ratingMax: number;
   scaleLow: string | null;
   scaleHigh: string | null;
