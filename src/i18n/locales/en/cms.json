@@ -1239,7 +1239,10 @@
         "yes_no": "Yes / no",
         "rating": "Rating",
         "heading": "Section heading"
-      }
+      },
+      "savedNoTranslation": "Saved in English — the automatic translation was unavailable.",
+      "translatingAndSaving": "Translating and saving…",
+      "translationHint": "German, French and Italian are translated automatically on save. Edit them here whenever you want different wording."
     },
     "searchAttendees": "Search",
     "searchAttendeesPlaceholder": "Name or email",
