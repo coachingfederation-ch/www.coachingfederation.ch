@@ -202,6 +202,48 @@ export function AssistantWidget() {
     if (open) textareaRef.current?.focus();
   }, [open, status]);
 
+  // On phones the panel is a full-screen sheet. iOS Safari does not shrink
+  // 100dvh when the on-screen keyboard opens, so the composer would slide
+  // under it; visualViewport tells us the part of the screen that is really
+  // visible and we pin the sheet to exactly that box.
+  useEffect(() => {
+    if (!open || typeof window === "undefined") return;
+    const vv = window.visualViewport;
+    const isMobile = () => window.matchMedia("(max-width: 639px)").matches;
+
+    const body = document.body;
+    const previousOverflow = body.style.overflow;
+    if (isMobile()) body.style.overflow = "hidden";
+
+    const apply = () => {
+      const root = document.documentElement;
+      if (!vv || !isMobile()) {
+        root.style.removeProperty("--assistant-vh");
+        root.style.removeProperty("--assistant-offset");
+        return;
+      }
+      root.style.setProperty("--assistant-vh", `${vv.height}px`);
+      root.style.setProperty(
+        "--assistant-offset",
+        `${Math.max(0, window.innerHeight - vv.height - vv.offsetTop)}px`,
+      );
+    };
+
+    apply();
+    vv?.addEventListener("resize", apply);
+    vv?.addEventListener("scroll", apply);
+    window.addEventListener("orientationchange", apply);
+    return () => {
+      vv?.removeEventListener("resize", apply);
+      vv?.removeEventListener("scroll", apply);
+      window.removeEventListener("orientationchange", apply);
+      body.style.overflow = previousOverflow;
+      document.documentElement.style.removeProperty("--assistant-vh");
+      document.documentElement.style.removeProperty("--assistant-offset");
+    };
+  }, [open]);
+
+
   // Poll the volunteer count so the launcher can promise a human only when one
   // is actually there. Cheap (a single integer) and paused while hidden.
   useEffect(() => {
