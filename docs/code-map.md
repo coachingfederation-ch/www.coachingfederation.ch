@@ -18,7 +18,7 @@ before adding a new file.
 
 | Module                                       | Responsibility                                                                                                                                                                  |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `member-sync.server.ts`                      | The import engine: pull the ICF feed, normalise, diff, create/update/deactivate, demote profiles that lost eligibility. The most operationally sensitive module in the project. |
+| `member-sync.server.ts`                      | The import engine: pull the ICF feed, normalise, diff, create/update/deactivate, demote profiles that lost eligibility. The most operationally sensitive module in the project. See `docs/member-sync.md`. |
 | `icf-soap.server.ts`                         | SOAP/xWeb client for netFORUM. Credentials read inside handlers.                                                                                                                |
 | `integration-config.server.ts`               | Loads the single `integration_config` row (TEST vs LIVE, email suppression, claim gate).                                                                                        |
 | `member-profile.server.ts` / `.functions.ts` | Member self-service profile: validation, cleaning, the guarded publish path.                                                                                                    |
@@ -133,6 +133,8 @@ before adding a new file.
 - **`integration_config`** — one row, guarded by a trigger, controlling the
   TEST/LIVE posture.
 - **`member_sync_runs`, `member_sync_events`, `member_import_snapshots`** — the
-  audit trail for every sync. First place to look when member data looks wrong.
+  audit trail for every sync. First place to look when member data looks wrong;
+  reading them is explained in `docs/member-sync.md`.
+
 - **Buckets** `member-profile-images` and `article-images` — both private;
   access is always via signed URLs.
