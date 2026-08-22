@@ -2190,6 +2190,7 @@ export type Database = {
           image_credit_url: string | null
           image_url: string | null
           is_featured: boolean
+          is_internal: boolean
           language: Database["public"]["Enums"]["article_lang"]
           location_mode: Database["public"]["Enums"]["event_location_mode"]
           map_location: string | null
@@ -2234,6 +2235,7 @@ export type Database = {
           image_credit_url?: string | null
           image_url?: string | null
           is_featured?: boolean
+          is_internal?: boolean
           language?: Database["public"]["Enums"]["article_lang"]
           location_mode?: Database["public"]["Enums"]["event_location_mode"]
           map_location?: string | null
@@ -2278,6 +2280,7 @@ export type Database = {
           image_credit_url?: string | null
           image_url?: string | null
           is_featured?: boolean
+          is_internal?: boolean
           language?: Database["public"]["Enums"]["article_lang"]
           location_mode?: Database["public"]["Enums"]["event_location_mode"]
           map_location?: string | null
@@ -4249,6 +4252,7 @@ export type Database = {
           image_url: string | null
           is_featured: boolean | null
           is_full: boolean | null
+          is_internal: boolean | null
           language: Database["public"]["Enums"]["article_lang"] | null
           location_mode:
             | Database["public"]["Enums"]["event_location_mode"]
