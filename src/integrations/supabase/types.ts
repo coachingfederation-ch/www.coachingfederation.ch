@@ -1353,11 +1353,20 @@ export type Database = {
           label_fr: string | null
           label_it: string | null
           options: string[]
+          options_de: string[] | null
+          options_fr: string[] | null
+          options_it: string[] | null
           qtype: string
           question_key: string
           rating_max: number
           scale_high_label: string | null
+          scale_high_label_de: string | null
+          scale_high_label_fr: string | null
+          scale_high_label_it: string | null
           scale_low_label: string | null
+          scale_low_label_de: string | null
+          scale_low_label_fr: string | null
+          scale_low_label_it: string | null
           sort_order: number
           updated_at: string
         }
@@ -1377,11 +1386,20 @@ export type Database = {
           label_fr?: string | null
           label_it?: string | null
           options?: string[]
+          options_de?: string[] | null
+          options_fr?: string[] | null
+          options_it?: string[] | null
           qtype?: string
           question_key: string
           rating_max?: number
           scale_high_label?: string | null
+          scale_high_label_de?: string | null
+          scale_high_label_fr?: string | null
+          scale_high_label_it?: string | null
           scale_low_label?: string | null
+          scale_low_label_de?: string | null
+          scale_low_label_fr?: string | null
+          scale_low_label_it?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -1401,11 +1419,20 @@ export type Database = {
           label_fr?: string | null
           label_it?: string | null
           options?: string[]
+          options_de?: string[] | null
+          options_fr?: string[] | null
+          options_it?: string[] | null
           qtype?: string
           question_key?: string
           rating_max?: number
           scale_high_label?: string | null
+          scale_high_label_de?: string | null
+          scale_high_label_fr?: string | null
+          scale_high_label_it?: string | null
           scale_low_label?: string | null
+          scale_low_label_de?: string | null
+          scale_low_label_fr?: string | null
+          scale_low_label_it?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -4115,11 +4142,20 @@ export type Database = {
           label_fr: string | null
           label_it: string | null
           options: string[] | null
+          options_de: string[] | null
+          options_fr: string[] | null
+          options_it: string[] | null
           qtype: string | null
           question_key: string | null
           rating_max: number | null
           scale_high_label: string | null
+          scale_high_label_de: string | null
+          scale_high_label_fr: string | null
+          scale_high_label_it: string | null
           scale_low_label: string | null
+          scale_low_label_de: string | null
+          scale_low_label_fr: string | null
+          scale_low_label_it: string | null
           sort_order: number | null
         }
         Relationships: [
