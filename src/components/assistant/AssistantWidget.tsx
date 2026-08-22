@@ -368,8 +368,17 @@ export function AssistantWidget() {
         <div
           role="dialog"
           aria-label={t("assistant.title")}
-          className="fixed inset-x-0 bottom-0 z-50 flex h-[min(80vh,40rem)] flex-col overflow-hidden border border-border bg-card shadow-2xl sm:inset-x-auto sm:bottom-5 sm:right-5 sm:w-[26rem] sm:rounded-2xl"
+          style={
+            {
+              // Mobile only: pinned to the visible viewport so the keyboard
+              // never covers the composer. Ignored from `sm:` upwards.
+              "--assistant-sheet-height": "var(--assistant-vh, 100dvh)",
+              "--assistant-sheet-bottom": "var(--assistant-offset, 0px)",
+            } as React.CSSProperties
+          }
+          className="fixed inset-x-0 bottom-[var(--assistant-sheet-bottom)] z-50 flex h-[var(--assistant-sheet-height)] flex-col overflow-hidden border border-border bg-card shadow-2xl sm:inset-x-auto sm:bottom-5 sm:right-5 sm:h-[min(80vh,40rem)] sm:w-[26rem] sm:rounded-2xl"
         >
+
           <header className="flex items-start justify-between gap-3 bg-hero px-4 py-3 text-hero-foreground">
             <div>
               <p className="font-display text-base font-semibold">{t("assistant.title")}</p>
