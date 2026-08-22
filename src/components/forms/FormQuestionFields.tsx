@@ -89,15 +89,15 @@ export function FormQuestionFields({
                 className={inputClass}
               >
                 <option value="" />
-                {question.options.map((option) => (
+                {question.options.map((option, i) => (
                   <option key={option} value={option}>
-                    {option}
+                    {question.optionLabels[i] ?? option}
                   </option>
                 ))}
               </select>
             ) : question.type === "multi_choice" ? (
               <div className="mt-1 space-y-1">
-                {question.options.map((option) => {
+                {question.options.map((option, i) => {
                   const picked = value ? value.split(MULTI_SEPARATOR) : [];
                   const checked = picked.includes(option);
                   return (
@@ -118,7 +118,7 @@ export function FormQuestionFields({
                           );
                         }}
                       />
-                      <span>{option}</span>
+                      <span>{question.optionLabels[i] ?? option}</span>
                     </label>
                   );
                 })}
