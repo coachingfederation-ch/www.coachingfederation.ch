@@ -58,7 +58,7 @@ deviates.
 
 ---
 
-## 4. `eyebrow !text-accent` on Deep Blue sections
+## 3. `eyebrow !text-accent` on Deep Blue sections
 
 **What deviates** — Section eyebrows on Deep Blue bands force the accent (Yellow)
 colour with `!text-accent` on top of the design system's `eyebrow` utility.
