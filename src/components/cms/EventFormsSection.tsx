@@ -358,8 +358,8 @@ function FormEditor({
     try {
       const result = await translateEventForm({
         data: {
-          intro: intro || null,
-          thankYou: thankYou || null,
+          intro: showTexts ? intro || null : null,
+          thankYou: showTexts ? thankYou || null : null,
           questions: questions.map((q) => ({
             label: q.label,
             help: q.help_text || null,
