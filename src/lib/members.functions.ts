@@ -16,14 +16,26 @@ export const listMembers = createServerFn({ method: "POST" })
     return await listMembersForStaff();
   });
 
-/** Manual sync run (admin). Uses whichever mode integration_config is in. */
+/**
+ * Manual sync run (admin). Uses whichever mode integration_config is in.
+ * `ignoreDropGuard` is a deliberate one-off override for a genuinely large but
+ * correct drop; the empty-feed abort is never skipped, and cron cannot set it.
+ */
 export const runSyncNow = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
+  .inputValidator((input: unknown) =>
+    z.object({ ignoreDropGuard: z.boolean().optional() }).parse(input ?? {}),
+  )
+  .handler(async ({ context, data }) => {
     const userId = await assertAdmin(context);
     const { runMemberSync } = await import("./member-sync.server");
-    return await runMemberSync({ triggerSource: "manual", actorUserId: userId });
+    return await runMemberSync({
+      triggerSource: "manual",
+      actorUserId: userId,
+      ignoreDropGuard: data.ignoreDropGuard ?? false,
+    });
   });
+
 
 /** Admin "Clean up": anonymise members past their scheduled deletion date. */
 export const getSyncRunDetail = createServerFn({ method: "POST" })

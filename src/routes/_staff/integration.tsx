@@ -43,6 +43,14 @@ export const Route = createFileRoute("/_staff/integration")({
 const CARD = "rounded-2xl border border-border bg-card p-5";
 const BTN =
   "rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-95 disabled:opacity-50";
+/**
+ * Secondary action on this screen. The CMS uses a pill outline here; the design
+ * system's `outline` Button variant is `rounded-md`, so swapping a single
+ * button would break the row. Kept as one shared, fully token-backed constant.
+ */
+const BTN_SECONDARY =
+  "rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50";
+
 
 function formatDate(value: string | null) {
   return value ? new Date(value).toLocaleString() : "—";
@@ -120,7 +128,7 @@ function GatesCard({
             </>
           ) : (
             <button
-              className="mt-3 rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+              className={`mt-3 ${BTN_SECONDARY}`}
               disabled={busy}
               onClick={() => toggle("gate-email", { emails_suppressed: true })}
             >
@@ -140,7 +148,7 @@ function GatesCard({
           </p>
           {config.account_claim_enabled ? (
             <button
-              className="mt-3 rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+              className={`mt-3 ${BTN_SECONDARY}`}
               disabled={busy}
               onClick={() => toggle("gate-claim", { account_claim_enabled: false })}
             >
@@ -513,7 +521,7 @@ function IntegrationPageBody() {
                   disabled={busy !== null}
                   onClick={() =>
                     void act("sync", async () => {
-                      const r = await runSyncNow();
+                      const r = await runSyncNow({ data: { ignoreDropGuard: false } });
                       return `${r.status}: ${r.feedCount} in feed, ${r.created} new, ${r.updated} updated, ${r.deactivated} deactivated.${r.message ? " " + r.message : ""}`;
                     })
                   }
@@ -522,7 +530,20 @@ function IntegrationPageBody() {
                   {t("integration.runSync")}
                 </button>
                 <button
-                  className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+                  className={BTN_SECONDARY}
+                  disabled={busy !== null}
+                  onClick={() => {
+                    if (!window.confirm(t("integration.runSyncOverrideConfirm"))) return;
+                    void act("syncOverride", async () => {
+                      const r = await runSyncNow({ data: { ignoreDropGuard: true } });
+                      return `${r.status}: ${r.feedCount} in feed, ${r.created} new, ${r.updated} updated, ${r.deactivated} deactivated.${r.message ? " " + r.message : ""}`;
+                    });
+                  }}
+                >
+                  {t("integration.runSyncOverride")}
+                </button>
+                <button
+                  className={BTN_SECONDARY}
                   disabled={busy !== null}
                   onClick={() => {
                     if (!window.confirm(t("integration.cleanupConfirm"))) return;
@@ -534,6 +555,7 @@ function IntegrationPageBody() {
                 >
                   {t("integration.cleanup")}
                 </button>
+
               </div>
             </section>
 

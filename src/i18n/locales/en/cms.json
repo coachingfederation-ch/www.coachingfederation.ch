@@ -377,6 +377,8 @@
     "saved": "Saved.",
     "actions": "Actions",
     "runSync": "Run sync now",
+    "runSyncOverride": "Run sync, ignore drop guard",
+    "runSyncOverrideConfirm": "Run the sync and skip the feed-drop safety check for this run only? Use this only when you know a large drop in the ICF feed is correct.",
     "cleanup": "Clean up expired members",
     "cleanupConfirm": "Anonymise every member whose grace period has expired? This cannot be undone.",
     "cleanupDone": "member(s) anonymised.",
