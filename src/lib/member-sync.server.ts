@@ -119,27 +119,41 @@ export async function runMemberSync(options: {
   try {
     const feed = await fetchActiveMemberFeed(config.mode);
 
+    // Baseline is the *active* population only: that is what the feed mirrors.
+    // Members already in grace/inactive were legitimately deactivated by an
+    // earlier run and must not count as a fresh drop — otherwise one large
+    // correct deactivation deadlocks every subsequent run.
     const { count: existingCount } = await supabaseAdmin
       .from("members")
       .select("id", { count: "exact", head: true })
-      .neq("activity_state", "anonymized");
+      .eq("activity_state", "active");
 
     // Safety valve: never let a truncated or malformed feed mass-deactivate.
     if (existingCount && existingCount > 0) {
       const dropPct = ((existingCount - feed.length) / existingCount) * 100;
       if (dropPct > config.feed_drop_threshold_pct) {
-        const message = `Aborted: feed returned ${feed.length} members, ${dropPct.toFixed(1)}% below the ${existingCount} on record (threshold ${config.feed_drop_threshold_pct}%).`;
-        await logEvent(runId, "feed_drop_abort", message, { severity: "error" });
-        return await finish({
-          status: "aborted",
-          feedCount: feed.length,
-          created: 0,
-          updated: 0,
-          deactivated: 0,
-          message,
-        });
+        const message = `Aborted: feed returned ${feed.length} members, ${dropPct.toFixed(1)}% below the ${existingCount} active on record (threshold ${config.feed_drop_threshold_pct}%).`;
+        if (options.ignoreDropGuard) {
+          await logEvent(
+            runId,
+            "feed_drop_override",
+            `Drop guard overridden by admin. ${message}`,
+            { severity: "warning", actor_user_id: options.actorUserId ?? undefined },
+          );
+        } else {
+          await logEvent(runId, "feed_drop_abort", message, { severity: "error" });
+          return await finish({
+            status: "aborted",
+            feedCount: feed.length,
+            created: 0,
+            updated: 0,
+            deactivated: 0,
+            message,
+          });
+        }
       }
     }
+
     if (feed.length === 0) {
       const message = "Aborted: ICF feed returned no members.";
       await logEvent(runId, "empty_feed_abort", message, { severity: "error" });
