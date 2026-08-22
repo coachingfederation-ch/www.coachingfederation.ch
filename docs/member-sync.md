@@ -25,7 +25,7 @@ Each run is a two-step SOAP conversation with netFORUM xWeb
 (`src/lib/icf-soap.server.ts`):
 
 1. **Authenticate** against the open endpoint. The session token comes back in a
-   SOAP *header* (`AuthorizationToken`), not in the response body.
+   SOAP _header_ (`AuthorizationToken`), not in the response body.
 2. **ExecuteMethod** against the `/secure/` endpoint, carrying that token, calling
    the chapter method that returns every individual with a chapter relationship.
 
@@ -86,24 +86,24 @@ than discarded.
 
 Three tables make every run auditable after the fact:
 
-| Table                    | Holds                                                                        |
-| ------------------------ | ---------------------------------------------------------------------------- |
-| `member_sync_runs`       | One row per run: status, counts, trigger, error message.                     |
-| `member_sync_events`     | The narrative of a run: what it decided and why, with a severity.            |
+| Table                     | Holds                                                                          |
+| ------------------------- | ------------------------------------------------------------------------------ |
+| `member_sync_runs`        | One row per run: status, counts, trigger, error message.                       |
+| `member_sync_events`      | The narrative of a run: what it decided and why, with a severity.              |
 | `member_import_snapshots` | One row per changed member per run: what the feed said and which fields moved. |
 
 Events carry a severity and a type. The ones worth recognising:
 
-| Event                                                       | Severity | Meaning                                         |
-| ----------------------------------------------------------- | -------- | ----------------------------------------------- |
-| `feed_drop_abort`                                            | error    | The drop guard stopped the run.                 |
-| `feed_drop_override`                                         | warning  | An admin ran the sync past the drop guard.      |
-| `empty_feed_abort`                                           | error    | The feed returned nothing.                      |
-| `member_deactivated`                                         | warning  | A member entered the grace period.              |
-| `directory_visibility_demoted` / `directory_visibility_restored` | warning / info | A profile lost or regained eligibility. |
-| `directory_profiles_created`                                 | info     | Draft profiles created for new members.         |
-| `member_anonymized`                                          | warning  | A grace member was anonymised by cleanup.       |
-| `sync_failed`                                                | error    | The run threw.                                  |
+| Event                                                            | Severity       | Meaning                                    |
+| ---------------------------------------------------------------- | -------------- | ------------------------------------------ |
+| `feed_drop_abort`                                                | error          | The drop guard stopped the run.            |
+| `feed_drop_override`                                             | warning        | An admin ran the sync past the drop guard. |
+| `empty_feed_abort`                                               | error          | The feed returned nothing.                 |
+| `member_deactivated`                                             | warning        | A member entered the grace period.         |
+| `directory_visibility_demoted` / `directory_visibility_restored` | warning / info | A profile lost or regained eligibility.    |
+| `directory_profiles_created`                                     | info           | Draft profiles created for new members.    |
+| `member_anonymized`                                              | warning        | A grace member was anonymised by cleanup.  |
+| `sync_failed`                                                    | error          | The run threw.                             |
 
 ---
 
@@ -123,7 +123,7 @@ The baseline is deliberately the active population, not every member on record.
 Members already moved to grace by an earlier run were legitimately deactivated;
 counting them again would make each large-but-correct drop permanent — the feed
 would look "too small" forever and every subsequent run would abort. Measuring
-against active members only means the guard reacts to *new* loss.
+against active members only means the guard reacts to _new_ loss.
 
 An admin can run one sync past this guard from the panel, for the case where a
 large drop is known to be correct. The override is written into the run log as a
@@ -157,7 +157,7 @@ disappearance from the feed starts a clock instead of a deletion.
 **Entering grace.** When an active member is not in the feed, the sync sets their
 activity state to `grace`, records when they went inactive, and stamps a scheduled
 deletion date at `grace_period_days` from now. A lifecycle queue row is written for
-tracking, and any *published* directory profile is immediately demoted so a lapsed
+tracking, and any _published_ directory profile is immediately demoted so a lapsed
 member never stays visible in the public directory during the window. The member
 row and all their authored content stay untouched.
 
@@ -203,10 +203,10 @@ be switched back to TEST. See `docs/operations-and-go-live.md`.
 
 **Actions.**
 
-- *Run sync now* — a normal manual run, all guards active.
-- *Run sync, ignore drop guard* — behind a confirmation, for a known-correct large
+- _Run sync now_ — a normal manual run, all guards active.
+- _Run sync, ignore drop guard_ — behind a confirmation, for a known-correct large
   drop. Logged as an override; never skips the empty-feed abort.
-- *Clean up* — anonymises grace members whose scheduled deletion date has passed.
+- _Clean up_ — anonymises grace members whose scheduled deletion date has passed.
 
 **Diagnostics.** A credential check that performs the authenticate step in
 isolation, so a credential or whitelist problem can be separated from a feed
@@ -246,14 +246,14 @@ Work from the run outward: the most recent `member_sync_runs` row, then
 `member_sync_events` for that run, then `member_import_snapshots` for the specific
 member. The panel's expandable run history shows all three without a query.
 
-| Symptom                                             | Where to look                                                                                                                                                                  |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Run aborted, "feed returned N members, X% below…"   | The feed genuinely shrank, or it was truncated. Compare against the previous run's feed count. Use the override only once you are satisfied the drop is real.                  |
-| Run aborted on an empty feed                        | Not a membership event. Check credentials and the relay — start with the credential diagnostic.                                                                                |
-| "Invalid credentials supplied"                      | Usually the source IP, not the password: the relay must present its own address and strip forwarded-IP headers. See `docs/icf-sync-relay.md`.                                  |
-| A member vanished from the public directory         | Check their activity state. `grace` means they were missing from the feed and their profile was demoted; a published profile is also demoted when a credential lapses.         |
-| A member is back with ICF but still hidden          | They are restored on the next run. Trigger a manual sync rather than editing the row.                                                                                          |
-| One field looks stale                               | The snapshot for that member and run shows exactly what the feed sent and which fields changed. If the field is not in the imported set, the sync does not own it.             |
+| Symptom                                           | Where to look                                                                                                                                                          |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Run aborted, "feed returned N members, X% below…" | The feed genuinely shrank, or it was truncated. Compare against the previous run's feed count. Use the override only once you are satisfied the drop is real.          |
+| Run aborted on an empty feed                      | Not a membership event. Check credentials and the relay — start with the credential diagnostic.                                                                        |
+| "Invalid credentials supplied"                    | Usually the source IP, not the password: the relay must present its own address and strip forwarded-IP headers. See `docs/icf-sync-relay.md`.                          |
+| A member vanished from the public directory       | Check their activity state. `grace` means they were missing from the feed and their profile was demoted; a published profile is also demoted when a credential lapses. |
+| A member is back with ICF but still hidden        | They are restored on the next run. Trigger a manual sync rather than editing the row.                                                                                  |
+| One field looks stale                             | The snapshot for that member and run shows exactly what the feed sent and which fields changed. If the field is not in the imported set, the sync does not own it.     |
 
 ---
 
@@ -262,7 +262,7 @@ member. The panel's expandable run history shows all three without a query.
 - The sync owns membership facts. It never owns member-authored content —
   biography, service areas, languages, photo — which is written by the member and
   survives deactivation.
-- The sync decides *eligibility* for the public directory; it never publishes on a
+- The sync decides _eligibility_ for the public directory; it never publishes on a
   member's behalf. See `docs/public-directory.md`.
 - Claiming and account binding are a separate flow with their own gating. See
   `docs/auth-and-claim-flow.md`.
