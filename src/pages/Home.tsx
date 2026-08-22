@@ -244,14 +244,15 @@ function ForOrganisations() {
                 {t("home.organisations.talkToUs")}
               </LocaleLink>
             </Button>
-            <a
-              href="https://coachingfederation.org/resources/resource-library/?_topic=coaching-in-organizations&_resource_type=case-studies"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-10 items-center rounded-full border border-border px-5 text-sm font-semibold text-foreground transition hover:bg-secondary"
-            >
-              {t("home.organisations.caseStudies")}
-            </a>
+            <Button asChild variant="pill-ghost" size="pill">
+              <a
+                href="https://coachingfederation.org/resources/resource-library/?_topic=coaching-in-organizations&_resource_type=case-studies"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("home.organisations.caseStudies")}
+              </a>
+            </Button>
           </div>
         </div>
         <div className="relative">

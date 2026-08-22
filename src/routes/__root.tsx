@@ -126,22 +126,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "icon", type: "image/png", href: "/favicon-dark.png", media: "(prefers-color-scheme: dark)" },
       { rel: "apple-touch-icon", href: "/app-icon-192.png" },
-      // Fonts are self-hosted (see @font-face in src/styles.css); preload them
-      // so first paint doesn't flash the fallback stack.
-      {
-        rel: "preload",
-        as: "font",
-        type: "font/woff2",
-        href: "/fonts/plus-jakarta-sans-variable.woff2",
-        crossOrigin: "anonymous",
-      },
-      {
-        rel: "preload",
-        as: "font",
-        type: "font/woff2",
-        href: "/fonts/quicksand-variable.woff2",
-        crossOrigin: "anonymous",
-      },
+      // Fonts are self-hosted and delivered same-origin by the design system
+      // stylesheet (@font-face in the imported design-system CSS, served as
+      // hashed bundle assets). No explicit preloads: they pointed at the public
+      // copies under /fonts/ while @font-face requests the hashed copies, which
+      // only duplicated the download without a first-paint benefit.
     ],
   }),
   shellComponent: RootShell,

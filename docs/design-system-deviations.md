@@ -35,26 +35,7 @@ name-addressable API.
 
 ---
 
-## 2. Self-hosted font preloads stay in the root route
-
-**What deviates** — `src/routes/__root.tsx` carries `<link rel="preload">` tags for
-the self-hosted Quicksand and Plus Jakarta Sans variable fonts, which an audit reads
-as redundant next to the design system's own font wiring.
-
-**Files** — `src/routes/__root.tsx`, `src/styles.css`, `public/fonts/`.
-
-**Why** — Fonts must be served same-origin for Swiss data protection; no external
-font host is acceptable. The preloads also keep first paint stable, since the
-variable fonts are the heaviest render-blocking assets on the landing page. The
-design system assumes it delivers fonts itself, which is the part that does not
-apply here.
-
-**Revisit when** — The fonts move, or the design system takes over same-origin
-delivery of these two families.
-
----
-
-## 3. Light-on-dark CTAs are hand-written
+## 2. Light-on-dark CTAs are hand-written
 
 **What deviates** — Call-to-action links sitting on a Deep Blue band (the About page
 closing CTA, hero CTAs) are anchors with explicit white/outline styling instead of
@@ -77,7 +58,7 @@ deviates.
 
 ---
 
-## 4. `eyebrow !text-accent` on Deep Blue sections
+## 3. `eyebrow !text-accent` on Deep Blue sections
 
 **What deviates** — Section eyebrows on Deep Blue bands force the accent (Yellow)
 colour with `!text-accent` on top of the design system's `eyebrow` utility.
