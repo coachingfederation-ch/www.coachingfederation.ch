@@ -34,11 +34,12 @@ every browser, so using it would let anyone on the internet trigger a full ICF
 re-sync. To rotate: update the `private.app_config` row and the env var together.
 
 1. Pull the member feed over SOAP from netFORUM xWeb.
-2. **Feed sanity check.** If the record count has dropped by more than
-   `feed_drop_threshold_pct` against the previous successful run, abort without
-   writing. A truncated or failing feed would otherwise deactivate the entire
-   membership in one pass — the check exists because that failure is silent and
-   catastrophic.
+2. **Feed sanity check.** If the feed is more than `feed_drop_threshold_pct`
+   smaller than the current *active* member count, abort without writing. A
+   truncated or failing feed would otherwise deactivate the entire membership in
+   one pass — the check exists because that failure is silent and catastrophic.
+   An empty feed always aborts and cannot be overridden.
+
 3. Normalise each record and diff it against the stored row.
 4. Create, update, or deactivate members; demote directory profiles that lost
    eligibility.
