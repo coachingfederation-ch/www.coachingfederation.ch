@@ -1239,7 +1239,10 @@
         "yes_no": "Sì / no",
         "rating": "Valutazione",
         "heading": "Titolo di sezione"
-      }
+      },
+      "savedNoTranslation": "Salvato in inglese — la traduzione automatica non era disponibile.",
+      "translatingAndSaving": "Traduzione e salvataggio…",
+      "translationHint": "Tedesco, francese e italiano vengono tradotti automaticamente al salvataggio. Modifica qui il testo quando vuoi."
     },
     "searchAttendees": "Ricerca",
     "searchAttendeesPlaceholder": "Nome o e-mail",

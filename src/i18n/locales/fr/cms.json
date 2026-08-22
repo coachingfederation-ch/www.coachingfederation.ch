@@ -1239,7 +1239,10 @@
         "yes_no": "Oui / non",
         "rating": "Évaluation",
         "heading": "Intertitre"
-      }
+      },
+      "savedNoTranslation": "Enregistré en anglais — la traduction automatique n'était pas disponible.",
+      "translatingAndSaving": "Traduction et enregistrement…",
+      "translationHint": "L'allemand, le français et l'italien sont traduits automatiquement à l'enregistrement. Modifiez la formulation ici quand vous le souhaitez."
     },
     "searchAttendees": "Recherche",
     "searchAttendeesPlaceholder": "Nom ou e-mail",

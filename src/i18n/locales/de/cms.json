@@ -1239,7 +1239,10 @@
         "yes_no": "Ja / Nein",
         "rating": "Bewertung",
         "heading": "Zwischentitel"
-      }
+      },
+      "savedNoTranslation": "Auf Englisch gespeichert — die automatische Übersetzung war nicht verfügbar.",
+      "translatingAndSaving": "Übersetzen und speichern…",
+      "translationHint": "Deutsch, Französisch und Italienisch werden beim Speichern automatisch übersetzt. Passen Sie den Wortlaut hier jederzeit an."
     },
     "searchAttendees": "Suche",
     "searchAttendeesPlaceholder": "Name oder E-Mail",
