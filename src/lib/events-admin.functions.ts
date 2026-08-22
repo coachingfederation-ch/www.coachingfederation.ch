@@ -15,7 +15,7 @@ import { HERO_MARK_LIMIT } from "./hero-design";
 import { expandRecurrence, occurrenceSlug, RECURRENCE_FREQUENCIES } from "./recurrence";
 
 const LIST_COLUMNS =
-  "id, series_id, slug, title, summary, language, status, starts_at, ends_at, timezone, location_mode, venue_name, city, capacity, is_featured, category_id, region_id, organizer_id, updated_at";
+  "id, series_id, slug, title, summary, language, status, starts_at, ends_at, timezone, location_mode, venue_name, city, capacity, is_featured, is_internal, category_id, region_id, organizer_id, updated_at";
 
 const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, practical_notes, published_at, content_updated_at, hero_marks, cce_enabled`;
 
@@ -36,6 +36,7 @@ export type ListedEvent = {
   city: string | null;
   capacity: number | null;
   is_featured: boolean;
+  is_internal: boolean;
   category_id: string | null;
   region_id: string | null;
   community_id: string | null;
@@ -101,6 +102,8 @@ const eventInput = z.object({
   // Door and joining information, repeated in the reminder emails.
   practical_notes: z.string().trim().max(2000).nullable().optional(),
   is_featured: z.boolean(),
+  // Audience marker: the event is aimed at members (onboarding, engagement).
+  is_internal: z.boolean().optional(),
   category_id: z.string().uuid().nullable().optional(),
   region_id: z.string().uuid().nullable().optional(),
   // Community events name the local community that runs them; other
@@ -635,6 +638,7 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
         community_id: source.community_id,
         // Occurrences never inherit "featured" or a published state.
         is_featured: false,
+        is_internal: source.is_internal,
         status: "draft" as const,
         organizer_id: context.userId,
       }));
