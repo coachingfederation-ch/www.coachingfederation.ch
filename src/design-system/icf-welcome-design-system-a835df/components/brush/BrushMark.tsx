@@ -1,40 +1,126 @@
 /**
  * Brush marks — the hand-drawn layer of the ICF visual language.
  *
- * The marks are painted with `mask-image` rather than `<img>` on purpose: a
- * masked element takes its colour from `currentColor`, so a mark can only ever
- * be tinted with a design token (`text-accent`, `text-primary`, …) and never
- * with a raw hex value baked into the artwork. It also keeps them decorative by
- * default — every instance is `aria-hidden`, since a mark carries no meaning a
- * screen-reader user needs.
+ * Two rendering modes, both of which guarantee the mark can only be tinted with
+ * a design token (it takes its colour from `currentColor`, never from artwork):
+ *
+ * - `render="mask"` (default) paints the artwork with `mask-image`. Cheapest,
+ *   cached by the browser like any image.
+ * - `render="inline"` fetches the SVG once per mark and inlines it with
+ *   `fill="currentColor"`. Needed when the DOM is rasterised to a canvas
+ *   (`html-to-image` share cards), which does not reproduce masked backgrounds.
+ *
+ * Neither mode bundles artwork: marks are fetched lazily, per mark, on use.
+ * Every instance is `aria-hidden` — a mark carries no meaning a screen-reader
+ * user needs.
  */
 import * as React from "react";
 import { cn } from "@/design-system/icf-welcome-design-system-a835df/lib/utils";
-import { MARKS, type MarkName } from "./marks";
+import { MARKS, resolveMarkName, type MarkNameOrAlias } from "./marks";
+
+export type BrushMarkRender = "mask" | "inline";
 
 export type BrushMarkProps = Omit<React.ComponentPropsWithoutRef<"span">, "children"> & {
-  /** Which mark from the library to paint. */
-  name: MarkName;
+  /** Which mark from the library to paint. Canonical name or short alias. */
+  name: MarkNameOrAlias;
   /**
    * Keep the artwork's intrinsic aspect ratio. Leave on when only one axis is
    * constrained; turn off to stretch a mark across a box (underlines).
    */
   preserveRatio?: boolean;
+  /** Rendering strategy. Use `"inline"` for DOM-to-canvas export. */
+  render?: BrushMarkRender;
 };
+
+/** One in-flight/settled fetch per artwork URL, shared across instances. */
+const inlineCache = new Map<string, Promise<string>>();
+
+/**
+ * Strips anything executable or externally-referencing from fetched artwork and
+ * forces the paint to `currentColor`, so the token guarantee still holds.
+ */
+function sanitizeSvg(source: string): string {
+  return source
+    .replace(/<\?xml[^>]*\?>/gi, "")
+    .replace(/<!DOCTYPE[^>]*>/gi, "")
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, "")
+    .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "")
+    .replace(/\s(?:fill|stroke)\s*=\s*("[^"]*"|'[^']*')/gi, (match) =>
+      /none/i.test(match) ? match : match.replace(/=.*/, '="currentColor"'),
+    )
+    .replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/gi, "")
+    .trim();
+}
+
+function fetchInlineSvg(url: string): Promise<string> {
+  let pending = inlineCache.get(url);
+  if (!pending) {
+    pending = fetch(url)
+      .then((response) => {
+        if (!response.ok) throw new Error(`Failed to load mark: ${response.status}`);
+        return response.text();
+      })
+      .then(sanitizeSvg);
+    inlineCache.set(url, pending);
+  }
+  return pending;
+}
 
 export function BrushMark({
   name,
   preserveRatio = true,
+  render = "mask",
   className,
   style,
   ...props
 }: BrushMarkProps) {
-  const mark = MARKS[name];
+  const markName = resolveMarkName(name);
+  const mark = MARKS[markName];
+  const [markup, setMarkup] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (render !== "inline") {
+      setMarkup(null);
+      return;
+    }
+    let active = true;
+    fetchInlineSvg(mark.url)
+      .then((svg) => {
+        if (active) setMarkup(svg);
+      })
+      .catch(() => {
+        if (active) setMarkup(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, [render, mark.url]);
+
+  if (render === "inline") {
+    return (
+      <span
+        aria-hidden="true"
+        data-mark={markName}
+        data-render="inline"
+        className={cn(
+          "pointer-events-none inline-block shrink-0 text-current [&>svg]:h-full [&>svg]:w-full",
+          className,
+        )}
+        style={{
+          ...(preserveRatio ? { aspectRatio: `${mark.width} / ${mark.height}` } : {}),
+          ...style,
+        }}
+        {...(markup ? { dangerouslySetInnerHTML: { __html: markup } } : {})}
+        {...props}
+      />
+    );
+  }
 
   return (
     <span
       aria-hidden="true"
-      data-mark={name}
+      data-mark={markName}
       className={cn("pointer-events-none inline-block shrink-0 bg-current", className)}
       style={{
         maskImage: `url("${mark.url}")`,
@@ -57,10 +143,12 @@ export type MarkedTextProps = {
   /** The words the mark sits behind or under. */
   children: React.ReactNode;
   /** Underline / highlight mark. Defaults to the thin single stroke. */
-  name?: MarkName;
+  name?: MarkNameOrAlias;
   /** Extra classes for the mark itself, e.g. a colour token or height. */
   markClassName?: string;
   className?: string;
+  /** Rendering strategy for the mark. Use `"inline"` for canvas export. */
+  render?: BrushMarkRender;
 };
 
 /**
@@ -72,6 +160,7 @@ export function MarkedText({
   name = "TextHighlighMark01",
   markClassName,
   className,
+  render = "mask",
 }: MarkedTextProps) {
   return (
     <span className={cn("relative inline-block", className)}>
@@ -79,6 +168,7 @@ export function MarkedText({
       <BrushMark
         name={name}
         preserveRatio={false}
+        render={render}
         className={cn(
           "absolute inset-x-0 -bottom-1 h-[0.28em] w-full text-accent",
           markClassName,

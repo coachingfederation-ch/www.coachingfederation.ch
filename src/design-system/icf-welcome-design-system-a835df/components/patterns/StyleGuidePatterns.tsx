@@ -31,7 +31,7 @@ export function CompactHero({
       />
       <div className="relative mx-auto max-w-7xl px-5 pb-20 pt-14 sm:px-8">
         <div className="max-w-3xl">
-          <p className="eyebrow flex items-center gap-2 !text-accent">
+          <p className="eyebrow-accent flex items-center gap-2">
             <BrushMark name="Asterisk02" className="h-3.5 text-accent" />
             {eyebrow}
           </p>

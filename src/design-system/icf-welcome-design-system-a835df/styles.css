@@ -272,13 +272,40 @@
   }
 }
 
+/*
+ * Eyebrow / small-caps label. Colour is deliberately NOT set: the treatment
+ * (family, size, weight, tracking, uppercase) is the valuable part and eyebrows
+ * appear on bone, white, teal and Deep Blue surfaces. Inheriting currentColor
+ * means a surface sets the colour with a token class instead of consumers
+ * overriding this utility with `!important`. Use the companions below for the
+ * two brand-sanctioned on-dark pairings.
+ */
 @utility eyebrow {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-primary);
   line-height: 1.45;
+}
+
+/* Yellow on Deep Blue — the ICF-sanctioned small-text accent pairing (9.4:1). */
+@utility eyebrow-accent {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.45;
+  color: var(--color-accent);
+}
+
+/* Plain on-dark eyebrow: white on Deep Blue. */
+@utility eyebrow-inverse {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.45;
+  color: var(--color-hero-foreground);
 }
 
 @utility section-label {
@@ -290,10 +317,44 @@
   line-height: 1.45;
 }
 
+/*
+ * Small mono metadata face (dates, locations, token names). Colour is inherited
+ * from the surface — it is a typeface role, not a link colour.
+ */
 @utility btn-mono {
   font-family: var(--font-mono);
   font-size: 12px;
-  color: var(--color-primary);
+}
+
+/* The common metadata case: mono face in muted foreground. */
+@utility btn-mono-muted {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-muted-foreground);
+}
+
+/*
+ * Menu row for lightweight (non-Radix) menus — plain anchors or router links
+ * inside a `shadow-soft` card. Matches the DropdownMenuItem treatment so both
+ * kinds of menu read identically. See the MenuRow primitive.
+ */
+@utility menu-item {
+  display: block;
+  min-height: calc(var(--spacing) * 11);
+  padding: calc(var(--spacing) * 3) calc(var(--spacing) * 4);
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25rem;
+  color: color-mix(in oklab, var(--color-foreground) 80%, transparent);
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+
+  &:hover {
+    background-color: var(--color-muted);
+    color: var(--color-foreground);
+  }
 }
 
 /* Editorial display step for hero and major section headlines. */

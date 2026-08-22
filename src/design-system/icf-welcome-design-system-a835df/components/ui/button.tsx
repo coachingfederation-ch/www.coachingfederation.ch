@@ -24,6 +24,17 @@ const buttonVariants = cva(
         /* Secondary/utility pill for the same bar — outlined, never filled. */
         "pill-ghost":
           "rounded-full border border-current bg-transparent text-[11px] font-semibold uppercase tracking-wider hover:bg-current/10",
+        /*
+         * On-dark CTAs. Use on `bg-hero` / `bg-primary` surfaces only — page
+         * heroes and closing CTA bands. `inverse` is the on-dark twin of
+         * `default`/`pill`; `inverse-ghost` the twin of `outline`/`pill-ghost`.
+         * The focus ring switches to the light token so it stays visible
+         * against Deep Blue.
+         */
+        inverse:
+          "bg-hero-foreground text-hero shadow hover:bg-hero-foreground/90 focus-visible:ring-2 focus-visible:ring-hero-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-hero",
+        "inverse-ghost":
+          "border border-hero-foreground/70 bg-transparent text-hero-foreground hover:bg-hero-foreground/10 focus-visible:ring-2 focus-visible:ring-hero-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-hero",
       },
       size: {
         default: "h-9 px-4 py-2",

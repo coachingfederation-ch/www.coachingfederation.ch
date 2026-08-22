@@ -55,6 +55,34 @@ Behaviours: Forward Thinking, Excellence, Humanity.
 - Compose what already exists before writing a parallel component; add new
   exports to `src/index.ts` in the same change.
 
+## Surfaces and utilities
+
+- On Deep Blue bands (`bg-hero`, `bg-primary`) CTAs use `Button` with
+  `variant="inverse"` (solid light fill, the on-dark twin of `default`/`pill`) or
+  `variant="inverse-ghost"` (light border and label, the twin of
+  `outline`/`pill-ghost`). Both work with `size="pill"` and `asChild`, and both
+  carry a light focus ring. Never hand-write an on-dark `<a>` and never re-skin a
+  light variant with colour classes. Never use `inverse*` on bone or white.
+- `eyebrow` and `btn-mono` are colour-neutral: they set family, size, tracking
+  and case only, and inherit `currentColor`. Set the colour with a token class on
+  the element (`text-primary`, `text-muted-foreground`, `text-hero-foreground`),
+  or use the companions `eyebrow-accent` (Yellow on Deep Blue — the sanctioned
+  small-text accent pairing), `eyebrow-inverse` (white on Deep Blue) and
+  `btn-mono-muted`. Never `!important`-override these utilities.
+- Lightweight link menus (account menu, language switcher) use the `MenuRow`
+  primitive — or the `menu-item` utility on an anchor — so the row treatment
+  matches `DropdownMenuItem`. Use the real `DropdownMenu` when Radix keyboard
+  semantics are needed.
+- `BrushMark` accepts short lowercase aliases (`arrow1`, `highlight1`, `stroke4`,
+  legacy `star`) as well as canonical names; enumerate with `MARK_ALIASES` and
+  normalise stored values with `resolveMarkName()`. Pass `render="inline"` when
+  the DOM is rasterised to a canvas (share-card export) — masks do not survive
+  that; artwork is fetched lazily per mark in both modes.
+- Import everything from the design system's barrel (`src/index.ts` of the copied
+  library folder) — `Callout`, `CALLOUT_SHADES`, `CalloutShade`,
+  `CALLOUT_ALIASES` and `SHADE_SWATCH` are all exported there. Do not keep local
+  re-export shims over library modules.
+
 ## Voice when writing UI copy
 
 - First person plural, present tense, active voice, American English, natural

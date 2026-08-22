@@ -92,3 +92,60 @@ export const MARK_CATEGORY_LABELS: Record<MarkCategory, string> = {
   circle: "Circles & rings",
   other: "Other marks",
 };
+
+/**
+ * Short, lowercase aliases for every mark.
+ *
+ * CMS-stored mark placements persist compact names (`arrow1`, `highlight1`,
+ * `stroke4`), so both the canonical PascalCase name and these aliases resolve.
+ * `star` is a legacy alias kept for stored values that predate the numbering.
+ */
+export const MARK_ALIASES = {
+  arrow1: "Arrow01",
+  arrow2: "Arrow02",
+  arrow3: "Arrow03",
+  asterisk1: "Asterisk01",
+  asterisk2: "Asterisk02",
+  asterisk3: "Asterisk03",
+  asterisk4: "Asterisk04",
+  circle1: "CircularMark01",
+  circle2: "CircularMark02",
+  circle3: "CircularMark03",
+  line1: "Line01",
+  line2: "Line02",
+  line3: "Line03",
+  line4: "Line04",
+  other1: "Other01",
+  other2: "Other02",
+  other3: "Other03",
+  other4: "Other04",
+  other5: "Other05",
+  other6: "Other06",
+  star: "Star01",
+  star1: "Star01",
+  star2: "Star02",
+  star3: "Star03",
+  highlight1: "TextHighlighMark01",
+  highlight2: "TextHighlighMark02",
+  highlight3: "TextHighlighMark03",
+  stroke1: "ThinnerStrokeMark01",
+  stroke2: "ThinnerStrokeMark02",
+  stroke3: "ThinnerStrokeMark03",
+  stroke4: "ThinnerStrokeMark04",
+} as const satisfies Record<string, MarkName>;
+
+export type MarkAlias = keyof typeof MARK_ALIASES;
+
+/** Everything `BrushMark`'s `name` prop accepts. */
+export type MarkNameOrAlias = MarkName | MarkAlias;
+
+export const MARK_ALIAS_NAMES = Object.keys(MARK_ALIASES) as MarkAlias[];
+
+/** Resolves a canonical name or a stored alias to a canonical mark name. */
+export function resolveMarkName(value: MarkNameOrAlias): MarkName;
+export function resolveMarkName(value: string): MarkName | null;
+export function resolveMarkName(value: string): MarkName | null {
+  if (value in MARKS) return value as MarkName;
+  const alias = MARK_ALIASES[value.toLowerCase() as MarkAlias];
+  return alias ?? null;
+}

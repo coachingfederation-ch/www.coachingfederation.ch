@@ -2,7 +2,7 @@
   "meta": {
     "name": "ICF Switzerland Design System",
     "package": "@ws-8ezwjgawfkrnem7hmtfc/adaee055-e6f2-4d44-9b16-337d4735d93f",
-    "version": "2.1.1",
+    "version": "2.2.0",
     "framework": "react",
     "css_framework": "tailwind",
     "starter_template": "custom_design_system_tailwind",
@@ -11,14 +11,15 @@
     ],
     "source_type": "local",
     "source_manifest": {
-      "#enrichment": "dcf70fd3eb7efcf71b64823eea33e07974f5d775ceb3e466625ab033f0b8da50",
+      "#enrichment": "c59c78c29d4bc74dfe194d3d130a909a0b1d63bc6e8c1923446ecb819b22285b",
       ".gitignore": "6d9e901a692b46a83707c245fb03bc91",
       ".lovable/meta.yaml": "954a981e8847ec1692669dbb04ae9ae9",
+      ".lovable/plan/absorb-consumer-workarounds-into-the-library-2026-08-22.md": "48d0fb5c2dce365813b2384e081acc8f",
       ".lovable/plan/header-and-footer-navigation-should-be-consumer-defined-2026-08-19.md": "2464325b9b71fb896a3f3ec6e52acf14",
       ".lovable/plan/icf-design-system-2026-08-19.md": "6dc8078cc20859e3b42b160d9e41fb1a",
       ".lovable/project.json": "cd369d2c1a917c3065a94c968eeb6939",
       ".lovable/sources.yaml": "f39f708c65f19e1a4add806fe3098f6d",
-      ".lovable/system.md": "10166c5cf3bbcaad2bdda750b10e880c",
+      ".lovable/system.md": "2b0eead199ad6e0b1610f3719a533753",
       ".prettierignore": "7279a476f196a2da5f7edd18db568dc6",
       ".prettierrc": "185ef0234746ab738ac1ab6cec5e2bd9",
       "AGENTS.md": "3da3c4cd15b686e79a248c25735d6aaf",
@@ -74,13 +75,13 @@
       "src/assets/photography/honest-portrait.jpg": "831214b017bf0ac150e1cb9e80502715",
       "src/components/brand/Logo.tsx": "6321ba873716128fdd284aa466b1e687",
       "src/components/brand/logos.ts": "fb92b3182a4498b3a5a34f52bf408d5d",
-      "src/components/brush/BrushMark.tsx": "7e2705d43eb0acdd934e40753aabe870",
-      "src/components/brush/marks.ts": "a11a117695ba5675b916710629274681",
+      "src/components/brush/BrushMark.tsx": "57e9fde42d17a32a7fe00ccc26a861b0",
+      "src/components/brush/marks.ts": "ec5ddd3ebc2fc2ac82cdfcefb51cf087",
       "src/components/callout-shades.ts": "081d0eecdc058491b80b38e06472d3fe",
       "src/components/callout.tsx": "c2e67162659f6c34010c98ddc80ef53e",
       "src/components/chrome/SiteFooter.tsx": "a9e1191c2a2249a907d68bd9bd5400df",
       "src/components/chrome/SiteHeader.tsx": "2a25e9a163438e69ccf435ed7b8f40db",
-      "src/components/patterns/StyleGuidePatterns.tsx": "0fc2d779a09b9cca0f01569030be7221",
+      "src/components/patterns/StyleGuidePatterns.tsx": "0c566040c67d85d24e61bad5d95cb718",
       "src/components/photography/AiPhoto.tsx": "3da04d764c6b814422e92dd65a899d4f",
       "src/components/social/SocialBanner.tsx": "2f7770e0617d66fbf0a599f660a3c720",
       "src/components/ui/accordion.tsx": "55f9dda62b4e3913c9b23e5015a86aef",
@@ -91,7 +92,7 @@
       "src/components/ui/badge.tsx": "81cade001fc4260f9943e18dcd79449b",
       "src/components/ui/breadcrumb.tsx": "bb9ac254f12662b20d5d50b84308bf3a",
       "src/components/ui/button-group.tsx": "964036f9f529f5720fb805cf3b3ed0a8",
-      "src/components/ui/button.tsx": "f74af71e4f0c35566b01b9a28627dce7",
+      "src/components/ui/button.tsx": "2052dc23b8baec01f14f6f90b2887824",
       "src/components/ui/calendar.tsx": "e7631005d4c03774a358576887584bda",
       "src/components/ui/card.tsx": "d6c48ea36221b9cdc3576d305d12d5d5",
       "src/components/ui/carousel.tsx": "e324c68ae00cd5aed49317638abd429a",
@@ -109,6 +110,7 @@
       "src/components/ui/input-otp.tsx": "65625f2f1c4d731a760aeed7b54459d1",
       "src/components/ui/input.tsx": "1d4cc52a4cd8afb3e18e45bda942bb8a",
       "src/components/ui/label.tsx": "7e35df4ca8edd0835efd97ca7937ef92",
+      "src/components/ui/menu-row.tsx": "c49573613618ac2df1aede8bd8b67e3b",
       "src/components/ui/menubar.tsx": "5b905a1833e557a421efa69dcc03ce85",
       "src/components/ui/navigation-menu.tsx": "e85351147a02b29577ff83d188b63c24",
       "src/components/ui/pagination.tsx": "fac6cdbb4bbf78b273d85cd36d6cbb49",
@@ -133,7 +135,7 @@
       "src/components/ui/toggle.tsx": "ee8c5adac74e7242b85b544db1a8fbad",
       "src/components/ui/tooltip.tsx": "67d71db5a1ab935695d1def497f5b8a6",
       "src/hooks/use-mobile.tsx": "c0a0bdd4638c391a1dd06ac82074e60b",
-      "src/index.ts": "bfd843ad21eb3300ed3f55e94e0e8877",
+      "src/index.ts": "8576f8b4b63cd27e09588bd2780e4276",
       "src/lib/brand-guidelines.ts": "81e048a8f6b3cd7906675373aee68820",
       "src/lib/design-tokens.ts": "534ccd20cbf060ca5a8dff49ff5f9d5b",
       "src/lib/error-capture.ts": "f630d9686a9a989170f22eff4de7b30d",
@@ -144,18 +146,18 @@
       "src/router.tsx": "8f905e713b0eba7fa8148b7995a708c9",
       "src/routes/README.md": "b3a2f259b66fd1a11f54b6d5ac83bf57",
       "src/routes/__root.tsx": "c74618860f285050fe9bf7e28db68369",
-      "src/routes/brand.tsx": "763d546a07cdea6f2cfe592cf0401f97",
-      "src/routes/chrome.tsx": "aae39a591c711dc09456060fd590485f",
-      "src/routes/components.tsx": "341fe58041df96348fc9fb86d958b3e3",
-      "src/routes/foundations.tsx": "5013ceb9005e692d5b875ceaaa6077ce",
-      "src/routes/index.tsx": "f5d6403fffce0117ac9a6e338ff8d06d",
-      "src/routes/logos.tsx": "64ab32515478f8a06de6983877b175bb",
-      "src/routes/marks.tsx": "495dd82c6087975c972e79c4958348ba",
-      "src/routes/patterns.tsx": "a09e67f71e4cdf64c396a96b55dc21bf",
+      "src/routes/brand.tsx": "d0c9d701197ebe036aaace2c6861a2ef",
+      "src/routes/chrome.tsx": "24b03bcd32558b2881d530d28bdd7bae",
+      "src/routes/components.tsx": "ad5d3baa8dd3db842d25d56c29e7224c",
+      "src/routes/foundations.tsx": "0e06fb55ce56e6a3a0e9d506a41aa3f3",
+      "src/routes/index.tsx": "a30315655b10f3164cf67e25e2650e2e",
+      "src/routes/logos.tsx": "450b3aa7cedcd20dc426b40a4f0fa420",
+      "src/routes/marks.tsx": "766092158d13926c3eef2c5f363637af",
+      "src/routes/patterns.tsx": "81c374146c2cd78a73fa7ac10ab2381e",
       "src/routes/social.tsx": "3ae6207828a31c7b3365e6b00e908007",
       "src/server.ts": "c7bbc49bb70e318af618d92775ee0f27",
       "src/start.ts": "0502f82c58afce5012b4c102e6fe2437",
-      "src/styles.css": "86e7b1954a937e2fea3aad5c55deb31a",
+      "src/styles.css": "fe0c4eafdc228b3c8e52dd092497480c",
       "tsconfig.json": "cd4d65fabb4a8d0d52e8ebe313edd35e",
       "vite.config.ts": "d67e8217e5f31b87c276b6357c9aedcf"
     },
@@ -557,7 +559,36 @@
           "name": "preserveRatio",
           "type": "boolean",
           "default": "true"
+        },
+        {
+          "name": "render",
+          "type": "enum",
+          "values": [
+            "mask",
+            "inline"
+          ],
+          "default": "mask"
         }
+      ],
+      "usage": "Paints one hand-drawn ICF mark, tinted only by currentColor so a colour token is the only way to colour it. Accepts canonical names (Arrow01) and short aliases (arrow1, highlight1, stroke4, legacy star). Default render=\"mask\"; pass render=\"inline\" when the DOM is rasterised to a canvas, since masked backgrounds do not survive that. Always decorative and aria-hidden.",
+      "examples": [
+        {
+          "label": "Decorative accent",
+          "code": "\u003cBrushMark name=\"arrow1\" className=\"h-8 text-accent\" /\u003e"
+        },
+        {
+          "label": "Share card exported with html-to-image",
+          "code": "\u003cBrushMark name=\"highlight1\" render=\"inline\" preserveRatio={false} className=\"h-3 w-full text-accent\" /\u003e"
+        },
+        {
+          "label": "Resolving a CMS-stored placement",
+          "code": "const markName = resolveMarkName(stored.mark);\nreturn markName ? \u003cBrushMark name={markName} className=\"h-10 text-primary\" /\u003e : null;"
+        }
+      ],
+      "antipatterns": [
+        "Colouring a mark with a raw hex or a background-image of pre-coloured artwork.",
+        "Giving a mark meaning — it is decorative and aria-hidden, so never use one as the only carrier of information.",
+        "Sizing a mark with max-h/max-w only: a masked span has no intrinsic size and collapses to 0x0. Set an explicit axis."
       ]
     },
     {
@@ -583,6 +614,15 @@
           "name": "className",
           "type": "string",
           "default": "relative z-10"
+        },
+        {
+          "name": "render",
+          "type": "enum",
+          "values": [
+            "mask",
+            "inline"
+          ],
+          "default": "mask"
         }
       ]
     },
@@ -1042,7 +1082,9 @@
             "ghost",
             "link",
             "pill",
-            "pill-ghost"
+            "pill-ghost",
+            "inverse",
+            "inverse-ghost"
           ],
           "default": "default"
         },
@@ -1064,6 +1106,22 @@
           "type": "boolean",
           "default": "false"
         }
+      ],
+      "usage": "The single button/CTA primitive. Pick the variant by surface: default/secondary/outline/ghost/link/pill on light (bone, white, card) surfaces; inverse and inverse-ghost on Deep Blue bands (bg-hero, bg-primary). Use asChild to wrap a router Link or anchor.",
+      "examples": [
+        {
+          "label": "On-dark hero CTAs",
+          "code": "\u003cdiv className=\"bg-hero p-8\"\u003e\n  \u003cButton variant=\"inverse\" size=\"pill\" asChild\u003e\n    \u003cLink to=\"/find-a-coach\"\u003eFind a coach\u003c/Link\u003e\n  \u003c/Button\u003e\n  \u003cButton variant=\"inverse-ghost\" size=\"pill\" asChild\u003e\n    \u003cLink to=\"/events\"\u003eSee events\u003c/Link\u003e\n  \u003c/Button\u003e\n\u003c/div\u003e"
+        },
+        {
+          "label": "Light-surface accent pill",
+          "code": "\u003cButton variant=\"pill\" asChild\u003e\n  \u003cLink to=\"/join\"\u003eBecome a member\u003c/Link\u003e\n\u003c/Button\u003e"
+        }
+      ],
+      "antipatterns": [
+        "Hand-writing an \u003ca\u003e with white background/border styling on Deep Blue instead of variant=\"inverse\" / \"inverse-ghost\".",
+        "Re-skinning a light variant with colour classes (className=\"bg-white text-primary\").",
+        "Using inverse or inverse-ghost on bone, white or card surfaces — they are illegible there."
       ]
     },
     {
@@ -1634,6 +1692,29 @@
       "name": "Label",
       "file": "src/components/ui/label",
       "import_path": ""
+    },
+    {
+      "name": "MenuRow",
+      "file": "src/components/ui/menu-row",
+      "import_path": "",
+      "props": [
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "usage": "Row treatment for lightweight, non-Radix menus — plain anchors or router links inside a shadow-soft card (account menu, language switcher). Matches DropdownMenuItem so both kinds of menu read identically. Use asChild to render a link.",
+      "examples": [
+        {
+          "label": "Language switcher rows",
+          "code": "\u003cdiv className=\"overflow-hidden rounded-xl border border-border bg-card shadow-soft\"\u003e\n  \u003cMenuRow asChild\u003e\u003cLink to=\"/de\"\u003eDeutsch\u003c/Link\u003e\u003c/MenuRow\u003e\n  \u003cMenuRow asChild\u003e\u003cLink to=\"/fr\"\u003eFrançais\u003c/Link\u003e\u003c/MenuRow\u003e\n\u003c/div\u003e"
+        }
+      ],
+      "antipatterns": [
+        "Hand-maintaining the padding/size/hover values on each menu anchor instead of MenuRow or the menu-item utility.",
+        "Using MenuRow where full Radix keyboard semantics are needed — use DropdownMenu with asChild links there."
+      ]
     },
     {
       "name": "Menubar",

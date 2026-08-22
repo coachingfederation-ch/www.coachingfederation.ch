@@ -233,12 +233,39 @@ import { BreadcrumbSeparator } from "@/design-system/icf-welcome-design-system-a
 import { BrushMark } from "@/design-system/icf-welcome-design-system-a835df"
 ```
 
+Paints one hand-drawn ICF mark, tinted only by currentColor so a colour token is the only way to colour it. Accepts canonical names (Arrow01) and short aliases (arrow1, highlight1, stroke4, legacy star). Default render="mask"; pass render="inline" when the DOM is rasterised to a canvas, since masked backgrounds do not survive that. Always decorative and aria-hidden.
+
 **Props:**
 
 | Prop | Type | Default |
 |---|---|---|
 | `name` | any | `TextHighlighMark01` |
 | `preserveRatio` | boolean | `true` |
+| `render` | mask · inline | `mask` |
+
+**Examples:**
+
+_Decorative accent_
+```tsx
+<BrushMark name="arrow1" className="h-8 text-accent" />
+```
+
+_Share card exported with html-to-image_
+```tsx
+<BrushMark name="highlight1" render="inline" preserveRatio={false} className="h-3 w-full text-accent" />
+```
+
+_Resolving a CMS-stored placement_
+```tsx
+const markName = resolveMarkName(stored.mark);
+return markName ? <BrushMark name={markName} className="h-10 text-primary" /> : null;
+```
+
+**Avoid:**
+
+- Colouring a mark with a raw hex or a background-image of pre-coloured artwork.
+- Giving a mark meaning — it is decorative and aria-hidden, so never use one as the only carrier of information.
+- Sizing a mark with max-h/max-w only: a masked span has no intrinsic size and collapses to 0x0. Set an explicit axis.
 
 ### Button
 
@@ -246,13 +273,42 @@ import { BrushMark } from "@/design-system/icf-welcome-design-system-a835df"
 import { Button } from "@/design-system/icf-welcome-design-system-a835df"
 ```
 
+The single button/CTA primitive. Pick the variant by surface: default/secondary/outline/ghost/link/pill on light (bone, white, card) surfaces; inverse and inverse-ghost on Deep Blue bands (bg-hero, bg-primary). Use asChild to wrap a router Link or anchor.
+
 **Props:**
 
 | Prop | Type | Default |
 |---|---|---|
-| `variant` | default · destructive · outline · secondary · ghost · link · pill · pill-ghost | `default` |
+| `variant` | default · destructive · outline · secondary · ghost · link · pill · pill-ghost · inverse · inverse-ghost | `default` |
 | `size` | default · sm · lg · icon · icon-sm · pill | `default` |
 | `asChild` | boolean | `false` |
+
+**Examples:**
+
+_On-dark hero CTAs_
+```tsx
+<div className="bg-hero p-8">
+  <Button variant="inverse" size="pill" asChild>
+    <Link to="/find-a-coach">Find a coach</Link>
+  </Button>
+  <Button variant="inverse-ghost" size="pill" asChild>
+    <Link to="/events">See events</Link>
+  </Button>
+</div>
+```
+
+_Light-surface accent pill_
+```tsx
+<Button variant="pill" asChild>
+  <Link to="/join">Become a member</Link>
+</Button>
+```
+
+**Avoid:**
+
+- Hand-writing an <a> with white background/border styling on Deep Blue instead of variant="inverse" / "inverse-ghost".
+- Re-skinning a light variant with colour classes (className="bg-white text-primary").
+- Using inverse or inverse-ghost on bone, white or card surfaces — they are illegible there.
 
 ### ButtonGroup
 
@@ -976,12 +1032,42 @@ import { MarkedText } from "@/design-system/icf-welcome-design-system-a835df"
 | `name` | any | `TextHighlighMark01` |
 | `markClassName` | string | `—` |
 | `className` | string | `relative z-10` |
+| `render` | mask · inline | `mask` |
 
 ### Marquee
 
 ```ts
 import { Marquee } from "@/design-system/icf-welcome-design-system-a835df"
 ```
+
+### MenuRow
+
+```ts
+import { MenuRow } from "@/design-system/icf-welcome-design-system-a835df"
+```
+
+Row treatment for lightweight, non-Radix menus — plain anchors or router links inside a shadow-soft card (account menu, language switcher). Matches DropdownMenuItem so both kinds of menu read identically. Use asChild to render a link.
+
+**Props:**
+
+| Prop | Type | Default |
+|---|---|---|
+| `asChild` | boolean | `false` |
+
+**Examples:**
+
+_Language switcher rows_
+```tsx
+<div className="overflow-hidden rounded-xl border border-border bg-card shadow-soft">
+  <MenuRow asChild><Link to="/de">Deutsch</Link></MenuRow>
+  <MenuRow asChild><Link to="/fr">Français</Link></MenuRow>
+</div>
+```
+
+**Avoid:**
+
+- Hand-maintaining the padding/size/hover values on each menu anchor instead of MenuRow or the menu-item utility.
+- Using MenuRow where full Radix keyboard semantics are needed — use DropdownMenu with asChild links there.
 
 ### Menubar
 
