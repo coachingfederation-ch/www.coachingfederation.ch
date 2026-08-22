@@ -177,6 +177,128 @@ function GatesCard({
   );
 }
 
+/** Presentational status dot. Colour is decided server-side. */
+function StatusDot({ level }: { level: "ok" | "warn" | "fail" }) {
+  const tone = level === "ok" ? "bg-teal" : level === "warn" ? "bg-warn" : "bg-destructive";
+  return <span className={"mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full " + tone} aria-hidden />;
+}
+
+/**
+ * Read-only "is the sync healthy right now?" summary. Everything is derived in
+ * one admin-guarded server call; the card never changes state and never shows
+ * a secret value.
+ */
+function RelayHealthCard({ t }: { t: (key: string) => string }) {
+  type Health = Awaited<ReturnType<typeof getRelayHealth>>;
+  const [health, setHealth] = useState<Health | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [failure, setFailure] = useState<string | null>(null);
+
+  const load = async () => {
+    setLoading(true);
+    setFailure(null);
+    try {
+      setHealth(await getRelayHealth());
+    } catch (err) {
+      setFailure(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    void load();
+  }, []);
+
+  const rows = health
+    ? [
+        {
+          key: "sync",
+          level: health.lastSync.level,
+          label: t("integration.healthLastSync"),
+          detail:
+            (health.lastSync.status ?? t("integration.healthNever")) +
+            (health.lastSync.at ? ` · ${formatDate(health.lastSync.at)}` : "") +
+            (health.lastSync.error ? ` · ${health.lastSync.error}` : ""),
+        },
+        {
+          key: "relay",
+          level: health.relay.level,
+          label: t("integration.healthRelay"),
+          detail:
+            health.relay.host +
+            (health.relay.error
+              ? ` · ${health.relay.error}`
+              : ` · HTTP ${health.relay.httpStatus} · ${health.relay.roundTripMs} ms`),
+        },
+        {
+          key: "egress",
+          level: health.egress.level,
+          label: t("integration.healthEgress"),
+          detail:
+            (health.egress.ipv4 ?? t("integration.healthEgressUnknown")) +
+            ` · ${t("integration.healthEgressNote")} ${health.egress.whitelistedRelayIp}`,
+        },
+        {
+          key: "cred",
+          level: health.credentials.level,
+          label: t("integration.healthCredentials"),
+          detail:
+            health.credentials.ok === null
+              ? t("integration.healthNever")
+              : (health.credentials.ok
+                  ? t("integration.healthCredentialsOk")
+                  : t("integration.healthCredentialsFailed")) +
+                (health.credentials.at ? ` · ${formatDate(health.credentials.at)}` : ""),
+        },
+        {
+          key: "config",
+          level: health.config.relayAuthConfigured ? ("ok" as const) : ("warn" as const),
+          label: t("integration.healthConfig"),
+          detail:
+            `${health.config.mode.toUpperCase()} · ${health.config.host} · ` +
+            (health.config.viaRelay
+              ? t("integration.healthViaRelay")
+              : t("integration.healthDirect")) +
+            ` · ${
+              health.config.relayAuthConfigured
+                ? t("integration.healthRelayAuthSet")
+                : t("integration.healthRelayAuthMissing")
+            }`,
+        },
+      ]
+    : [];
+
+  return (
+    <section className={CARD}>
+      <h2 className="text-sm font-bold">{t("integration.healthTitle")}</h2>
+      <p className="mt-1 text-xs text-muted-foreground">{t("integration.healthBody")}</p>
+      {failure ? <p className="mt-3 text-xs text-destructive">{failure}</p> : null}
+      {health ? (
+        <>
+          <ul className="mt-4 space-y-3">
+            {rows.map((row) => (
+              <li key={row.key} className="flex gap-3">
+                <StatusDot level={row.level} />
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold">{row.label}</p>
+                  <p className="text-xs break-words text-muted-foreground">{row.detail}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 text-xs text-muted-foreground">
+            {t("integration.egressCheckedAt")} {formatDate(health.checkedAt)}
+          </p>
+        </>
+      ) : null}
+      <button className={BTN_SECONDARY + " mt-3"} disabled={loading} onClick={() => void load()}>
+        {loading ? t("integration.healthChecking") : t("integration.healthRefresh")}
+      </button>
+    </section>
+  );
+}
+
 /**
  * Which address ICF sees us connect from. The lookup runs in the same runtime
  * as the SOAP sync, so it answers "is 185.x.x.x us?" definitively for that run.
