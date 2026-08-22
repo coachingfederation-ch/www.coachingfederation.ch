@@ -17,12 +17,15 @@ import {
   Mail,
   MapPin,
   Megaphone,
+  CalendarDays,
   HeartHandshake,
   UserRound,
   PenLine,
 } from "lucide-react";
 import { useCms } from "@/i18n/cms";
 import { getMemberHome } from "@/lib/member-home.functions";
+import { listPublicEvents } from "@/lib/events.functions";
+import { eventPlace, formatEventDate } from "@/lib/events";
 import { LiveChatVolunteerTile } from "./LiveChatVolunteerTile";
 
 const ENGAGE_URL =
@@ -33,6 +36,65 @@ const CTA =
   "mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90";
 const CTA_MUTED =
   "mt-4 inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground";
+
+/**
+ * The internal-events block: upcoming events flagged "for members only".
+ * Reads the same public list the /events page uses — the flag is an audience
+ * marker, not an access rule, so no separate fetch path is needed.
+ */
+function InternalEvents() {
+  const { t, locale } = useCms();
+  const { data, isLoading } = useQuery({
+    queryKey: ["member-internal-events", locale],
+    queryFn: () => listPublicEvents({ data: { locale } }),
+  });
+
+  const events = [...(data?.featured ? [data.featured] : []), ...(data?.upcoming ?? [])]
+    .filter((e) => e.is_internal)
+    .slice(0, 3);
+
+  return (
+    <section className="mt-10">
+      <h2 className="text-lg font-bold">{t("member.home.internalEvents.title")}</h2>
+      <p className="mt-1 text-sm text-muted-foreground">{t("member.home.internalEvents.body")}</p>
+      {isLoading ? (
+        <p className="mt-4 text-sm text-muted-foreground">
+          {t("member.home.internalEvents.loading")}
+        </p>
+      ) : events.length === 0 ? (
+        <p className="mt-4 text-sm text-muted-foreground">
+          {t("member.home.internalEvents.empty")}{" "}
+          <Link to="/events" className="font-semibold text-primary underline">
+            {t("member.home.internalEvents.browse")}
+          </Link>
+        </p>
+      ) : (
+        <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+          {events.map((event) => (
+            <li key={event.id} className={CARD}>
+              <p className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+                <CalendarDays className="h-3.5 w-3.5 text-primary" aria-hidden />
+                {formatEventDate(event.starts_at!, locale, event.timezone ?? "Europe/Zurich")}
+              </p>
+              <h3 className="mt-2 text-base font-bold">{event.title}</h3>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {eventPlace(event, t("member.home.internalEvents.online"))}
+              </p>
+              <Link
+                to="/events/$slug"
+                params={{ slug: event.slug! }}
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary underline"
+              >
+                {t("member.home.internalEvents.view")}
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
 
 export function MemberHome() {
   const { t, locale } = useCms();
@@ -109,6 +171,8 @@ export function MemberHome() {
           </a>
         </section>
       </div>
+
+      <InternalEvents />
 
       <section className="mt-10">
         <h2 className="text-lg font-bold">{t("member.home.communities.title")}</h2>
