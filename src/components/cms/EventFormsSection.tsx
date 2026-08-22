@@ -234,15 +234,23 @@ export function EventFormsSection({ eventId, t }: { eventId: string; t: (k: stri
 
 function FormEditor({
   formId,
+  kind,
   onSaved,
   onDeleted,
   t,
 }: {
   formId: string;
+  /**
+   * Only follow-up forms have an intro and a thank-you: they are read by the
+   * invitation email and the emailed form page. The registration panel never
+   * renders them, so the registration editor hides them entirely.
+   */
+  kind: "registration" | "follow_up";
   onSaved: () => Promise<void>;
   onDeleted: () => Promise<void>;
   t: (k: string) => string;
 }) {
+  const showTexts = kind === "follow_up";
   const [name, setName] = useState("");
   const [active, setActive] = useState(true);
   const [intro, setIntro] = useState("");
