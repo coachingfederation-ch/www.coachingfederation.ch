@@ -513,13 +513,26 @@ function IntegrationPageBody() {
                   disabled={busy !== null}
                   onClick={() =>
                     void act("sync", async () => {
-                      const r = await runSyncNow();
+                      const r = await runSyncNow({ data: { ignoreDropGuard: false } });
                       return `${r.status}: ${r.feedCount} in feed, ${r.created} new, ${r.updated} updated, ${r.deactivated} deactivated.${r.message ? " " + r.message : ""}`;
                     })
                   }
                 >
                   <RefreshCw className="mr-2 inline h-3.5 w-3.5" />
                   {t("integration.runSync")}
+                </button>
+                <button
+                  className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+                  disabled={busy !== null}
+                  onClick={() => {
+                    if (!window.confirm(t("integration.runSyncOverrideConfirm"))) return;
+                    void act("syncOverride", async () => {
+                      const r = await runSyncNow({ data: { ignoreDropGuard: true } });
+                      return `${r.status}: ${r.feedCount} in feed, ${r.created} new, ${r.updated} updated, ${r.deactivated} deactivated.${r.message ? " " + r.message : ""}`;
+                    });
+                  }}
+                >
+                  {t("integration.runSyncOverride")}
                 </button>
                 <button
                   className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
@@ -534,6 +547,7 @@ function IntegrationPageBody() {
                 >
                   {t("integration.cleanup")}
                 </button>
+
               </div>
             </section>
 
