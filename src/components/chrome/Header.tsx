@@ -37,7 +37,7 @@ function AccountControl() {
 
   if (!userId) {
     return (
-      <Button asChild variant="pill-ghost" size="pill" className="hidden text-white sm:inline-flex">
+      <Button asChild variant="pill-ghost" size="pill" className="hidden sm:inline-flex">
         <Link to="/auth" search={{ next: undefined }}>
           {t("common.nav.memberLogin")}
         </Link>
@@ -55,7 +55,7 @@ function AccountControl() {
         aria-expanded={open}
         aria-label={t("common.nav.accountMenu")}
         onClick={() => setOpen((v) => !v)}
-        className="gap-1.5 text-white"
+        className="gap-1.5"
       >
         <User className="h-3.5 w-3.5" aria-hidden="true" />
         {t("common.nav.myAccount")}
