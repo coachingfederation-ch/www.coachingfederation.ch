@@ -162,7 +162,13 @@ export default function EventDetailPage({
                 ]
               : []),
           ]}
-          pills={[event.category_name, event.region_name].filter(Boolean) as string[]}
+          pills={
+            [
+              event.is_internal ? t("events.tag.membersOnly") : null,
+              event.category_name,
+              event.region_name,
+            ].filter(Boolean) as string[]
+          }
           back={
             <LocaleLink
               to="/events"

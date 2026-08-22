@@ -34,7 +34,8 @@
     "online": "En ligne",
     "hybrid": "Hybride",
     "registration": "Inscription",
-    "full": "Complet"
+    "full": "Complet",
+    "membersOnly": "Réservé aux membres"
   },
   "detail": {
     "backToEvents": "Tous les événements",
@@ -182,6 +183,10 @@
     "allLanguages": "Toutes les langues",
     "allFormats": "Tous les formats",
     "reset": "Réinitialiser les filtres",
-    "noMatches": "Aucun événement ne correspond à ces filtres."
+    "noMatches": "Aucun événement ne correspond à ces filtres.",
+    "audience": "Public",
+    "allAudiences": "Tout le monde",
+    "audienceOpen": "Ouvert à tous",
+    "audienceMembers": "Réservé aux membres"
   }
 }

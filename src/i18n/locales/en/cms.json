@@ -648,6 +648,15 @@
         "qrExpiresIn": "Valid for",
         "installHint": "On your phone, use Share → Add to Home Screen, then sign in once by scanning this code.",
         "staySignedInHint": "Open the app every few weeks — otherwise your phone drops the sign-in and you scan a new code."
+      },
+      "internalEvents": {
+        "title": "For members",
+        "body": "Onboarding and member engagement events, open to you as a member.",
+        "loading": "Loading events…",
+        "empty": "No member events are scheduled right now.",
+        "browse": "See all events",
+        "view": "View event",
+        "online": "Online"
       }
     },
     "volunteering": {
@@ -1382,6 +1391,10 @@
         "email": "The invitation was saved but the email could not be sent.",
         "error": "We could not invite that member."
       }
+    },
+    "fieldInternal": "For members only",
+    "tag": {
+      "membersOnly": "Members only"
     }
   },
   "eventTranslations": {
