@@ -34,7 +34,8 @@
     "online": "Online",
     "hybrid": "Hybrid",
     "registration": "Registration",
-    "full": "Fully booked"
+    "full": "Fully booked",
+    "membersOnly": "Members only"
   },
   "detail": {
     "backToEvents": "All events",
@@ -182,6 +183,10 @@
     "allLanguages": "All languages",
     "allFormats": "All formats",
     "reset": "Reset filters",
-    "noMatches": "No events match these filters."
+    "noMatches": "No events match these filters.",
+    "audience": "Audience",
+    "allAudiences": "Everyone",
+    "audienceOpen": "Open to everyone",
+    "audienceMembers": "Members only"
   }
 }

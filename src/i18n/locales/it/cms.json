@@ -648,6 +648,15 @@
         "qrExpiresIn": "Valido ancora",
         "installHint": "Sul telefono usa Condividi → Aggiungi a Home, poi accedi una volta scansionando questo codice.",
         "staySignedInHint": "Apri l’app ogni poche settimane — altrimenti il telefono elimina l’accesso e dovrai scansionare un nuovo codice."
+      },
+      "internalEvents": {
+        "title": "Per i membri",
+        "body": "Eventi di onboarding e coinvolgimento, aperti a te come membro.",
+        "loading": "Caricamento eventi…",
+        "empty": "Al momento non ci sono eventi per i membri.",
+        "browse": "Vedi tutti gli eventi",
+        "view": "Vedi evento",
+        "online": "Online"
       }
     },
     "volunteering": {
@@ -1382,6 +1391,10 @@
         "email": "L'invito è stato salvato ma l'e-mail non è stata inviata.",
         "error": "Non è stato possibile invitare questo membro."
       }
+    },
+    "fieldInternal": "Solo per membri",
+    "tag": {
+      "membersOnly": "Solo per membri"
     }
   },
   "eventTranslations": {
