@@ -377,6 +377,8 @@
     "saved": "Enregistré.",
     "actions": "Actions",
     "runSync": "Lancer la synchronisation maintenant",
+    "runSyncOverride": "Lancer la synchronisation sans garde-fou",
+    "runSyncOverrideConfirm": "Lancer la synchronisation en ignorant le contrôle de sécurité sur la baisse du flux, pour cette exécution uniquement ? À utiliser seulement lorsque vous savez qu'une forte baisse du flux ICF est correcte.",
     "cleanup": "Nettoyer les membres expirés",
     "cleanupConfirm": "Anonymiser chaque membre dont la période de grâce a expiré ? Cette action est irréversible.",
     "cleanupDone": "membre(s) anonymisé(s).",

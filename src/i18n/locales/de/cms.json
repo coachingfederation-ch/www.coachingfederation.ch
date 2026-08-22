@@ -377,6 +377,8 @@
     "saved": "Gespeichert.",
     "actions": "Aktionen",
     "runSync": "Synchronisation jetzt ausführen",
+    "runSyncOverride": "Synchronisation ohne Rückgangs-Schutz",
+    "runSyncOverrideConfirm": "Die Synchronisation ausführen und die Schutzprüfung für Feed-Rückgänge nur für diesen Lauf überspringen? Nur verwenden, wenn ein grosser Rückgang im ICF-Feed nachweislich korrekt ist.",
     "cleanup": "Abgelaufene Mitglieder bereinigen",
     "cleanupConfirm": "Jedes Mitglied anonymisieren, dessen Übergangsfrist abgelaufen ist? Dies kann nicht rückgängig gemacht werden.",
     "cleanupDone": "Mitglied(er) anonymisiert.",

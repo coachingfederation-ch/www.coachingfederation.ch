@@ -377,6 +377,8 @@
     "saved": "Salvato.",
     "actions": "Azioni",
     "runSync": "Esegui sincronizzazione ora",
+    "runSyncOverride": "Esegui sincronizzazione senza protezione",
+    "runSyncOverrideConfirm": "Eseguire la sincronizzazione ignorando il controllo di sicurezza sul calo del feed, solo per questa esecuzione? Usare solo quando si sa che un forte calo nel feed ICF è corretto.",
     "cleanup": "Pulisci membri scaduti",
     "cleanupConfirm": "Anonimizzare tutti i membri il cui periodo di grazia è scaduto? L'azione non può essere annullata.",
     "cleanupDone": "membro/i anonimizzato/i.",
