@@ -506,37 +506,43 @@ function FormEditor({
           <input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} />
           {t("events.forms.active")}
         </label>
-        <div>
-          <label className="block text-xs font-semibold">{t("events.forms.intro")}</label>
-          <textarea rows={2} value={intro} onChange={(e) => setIntro(e.target.value)} className={inputClass} />
-        </div>
-        <div>
-          <label className="block text-xs font-semibold">{t("events.forms.thankYou")}</label>
-          <textarea rows={2} value={thankYou} onChange={(e) => setThankYou(e.target.value)} className={inputClass} />
-        </div>
+        {showTexts ? (
+          <>
+            <div>
+              <label className="block text-xs font-semibold">{t("events.forms.intro")}</label>
+              <textarea rows={2} value={intro} onChange={(e) => setIntro(e.target.value)} className={inputClass} />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold">{t("events.forms.thankYou")}</label>
+              <textarea rows={2} value={thankYou} onChange={(e) => setThankYou(e.target.value)} className={inputClass} />
+            </div>
+          </>
+        ) : null}
       </div>
 
-      <div className="mt-3 grid gap-3 sm:grid-cols-3">
-        {TRANSLATED_LOCALES.map((locale) => (
-          <div key={locale} className="rounded-xl border border-border p-3">
-            <p className="text-xs font-semibold uppercase">{locale}</p>
-            <label className="mt-2 block text-xs font-semibold">{t("events.forms.intro")}</label>
-            <textarea
-              rows={2}
-              value={introTrans[locale]}
-              onChange={(e) => setIntroTrans((prev) => ({ ...prev, [locale]: e.target.value }))}
-              className={inputClass}
-            />
-            <label className="mt-2 block text-xs font-semibold">{t("events.forms.thankYou")}</label>
-            <textarea
-              rows={2}
-              value={thankYouTrans[locale]}
-              onChange={(e) => setThankYouTrans((prev) => ({ ...prev, [locale]: e.target.value }))}
-              className={inputClass}
-            />
-          </div>
-        ))}
-      </div>
+      {showTexts ? (
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          {TRANSLATED_LOCALES.map((locale) => (
+            <div key={locale} className="rounded-xl border border-border p-3">
+              <p className="text-xs font-semibold uppercase">{locale}</p>
+              <label className="mt-2 block text-xs font-semibold">{t("events.forms.intro")}</label>
+              <textarea
+                rows={2}
+                value={introTrans[locale]}
+                onChange={(e) => setIntroTrans((prev) => ({ ...prev, [locale]: e.target.value }))}
+                className={inputClass}
+              />
+              <label className="mt-2 block text-xs font-semibold">{t("events.forms.thankYou")}</label>
+              <textarea
+                rows={2}
+                value={thankYouTrans[locale]}
+                onChange={(e) => setThankYouTrans((prev) => ({ ...prev, [locale]: e.target.value }))}
+                className={inputClass}
+              />
+            </div>
+          ))}
+        </div>
+      ) : null}
       <p className="mt-2 text-xs text-muted-foreground">{t("events.forms.translationHint")}</p>
 
       <div className="mt-4 space-y-3">
