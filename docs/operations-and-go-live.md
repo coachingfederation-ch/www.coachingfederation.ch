@@ -54,6 +54,10 @@ A manual run can be triggered from `/integration`, which is also where the
 rehearsal simulation lives — it reports what a cutover _would_ do without
 writing.
 
+The pipeline itself, the safety guards, the grace period and the `/integration`
+panel are documented in full in `docs/member-sync.md`.
+
+
 ## The weekly Europe Pulse scan
 
 A second cron job (`icf-europe-pulse-scan-weekly`, Monday 06:00 UTC) calls
