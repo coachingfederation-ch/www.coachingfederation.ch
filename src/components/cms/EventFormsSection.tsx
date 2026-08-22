@@ -24,6 +24,11 @@ import {
   listEventForms,
   saveEventForm,
 } from "@/lib/event-forms.functions";
+import { translateEventForm } from "@/lib/event-form-translations.functions";
+
+/** The locales every questionnaire is machine-translated into on save. */
+const TRANSLATED_LOCALES = ["de", "fr", "it"] as const;
+type TranslatedLocale = (typeof TRANSLATED_LOCALES)[number];
 
 type FormRow = {
   id: string;
@@ -44,10 +49,22 @@ type Draft = {
   label_fr: string;
   label_it: string;
   help_text: string;
+  help_text_de: string;
+  help_text_fr: string;
+  help_text_it: string;
   options: string[];
+  options_de: string[];
+  options_fr: string[];
+  options_it: string[];
   rating_max: number;
   scale_low_label: string;
+  scale_low_label_de: string;
+  scale_low_label_fr: string;
+  scale_low_label_it: string;
   scale_high_label: string;
+  scale_high_label_de: string;
+  scale_high_label_fr: string;
+  scale_high_label_it: string;
   is_required: boolean;
   condition_index: number;
   condition_value: string;
@@ -70,10 +87,22 @@ function emptyDraft(): Draft {
     label_fr: "",
     label_it: "",
     help_text: "",
+    help_text_de: "",
+    help_text_fr: "",
+    help_text_it: "",
     options: [],
+    options_de: [],
+    options_fr: [],
+    options_it: [],
     rating_max: 5,
     scale_low_label: "",
+    scale_low_label_de: "",
+    scale_low_label_fr: "",
+    scale_low_label_it: "",
     scale_high_label: "",
+    scale_high_label_de: "",
+    scale_high_label_fr: "",
+    scale_high_label_it: "",
     is_required: false,
     condition_index: -1,
     condition_value: "",
@@ -219,6 +248,8 @@ function FormEditor({
   const [active, setActive] = useState(true);
   const [intro, setIntro] = useState("");
   const [thankYou, setThankYou] = useState("");
+  const [introTrans, setIntroTrans] = useState<Record<TranslatedLocale, string>>({ de: "", fr: "", it: "" });
+  const [thankYouTrans, setThankYouTrans] = useState<Record<TranslatedLocale, string>>({ de: "", fr: "", it: "" });
   const [questions, setQuestions] = useState<Draft[]>([]);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -236,6 +267,16 @@ function FormEditor({
         setActive(Boolean(form["is_active"]));
         setIntro(String(form["intro"] ?? ""));
         setThankYou(String(form["thank_you"] ?? ""));
+        setIntroTrans({
+          de: String(form["intro_de"] ?? ""),
+          fr: String(form["intro_fr"] ?? ""),
+          it: String(form["intro_it"] ?? ""),
+        });
+        setThankYouTrans({
+          de: String(form["thank_you_de"] ?? ""),
+          fr: String(form["thank_you_fr"] ?? ""),
+          it: String(form["thank_you_it"] ?? ""),
+        });
         const ids = rows.map((r) => String(r["id"]));
         setQuestions(
           rows.map((row) => {
@@ -249,10 +290,22 @@ function FormEditor({
               label_fr: String(row["label_fr"] ?? ""),
               label_it: String(row["label_it"] ?? ""),
               help_text: String(row["help_text"] ?? ""),
+              help_text_de: String(row["help_text_de"] ?? ""),
+              help_text_fr: String(row["help_text_fr"] ?? ""),
+              help_text_it: String(row["help_text_it"] ?? ""),
               options: (row["options"] as string[] | null) ?? [],
+              options_de: (row["options_de"] as string[] | null) ?? [],
+              options_fr: (row["options_fr"] as string[] | null) ?? [],
+              options_it: (row["options_it"] as string[] | null) ?? [],
               rating_max: Number(row["rating_max"] ?? 5),
               scale_low_label: String(row["scale_low_label"] ?? ""),
+              scale_low_label_de: String(row["scale_low_label_de"] ?? ""),
+              scale_low_label_fr: String(row["scale_low_label_fr"] ?? ""),
+              scale_low_label_it: String(row["scale_low_label_it"] ?? ""),
               scale_high_label: String(row["scale_high_label"] ?? ""),
+              scale_high_label_de: String(row["scale_high_label_de"] ?? ""),
+              scale_high_label_fr: String(row["scale_high_label_fr"] ?? ""),
+              scale_high_label_it: String(row["scale_high_label_it"] ?? ""),
               is_required: Boolean(row["is_required"]),
               condition_index: conditionId ? ids.indexOf(conditionId) : -1,
               condition_value: String(row["condition_value"] ?? ""),
@@ -279,15 +332,75 @@ function FormEditor({
       return next.map((q, i) => (q.condition_index >= i ? { ...q, condition_index: -1, condition_value: "" } : q));
     });
 
+  /**
+   * Saves the form. The whole questionnaire is machine-translated into DE, FR
+   * and IT first — one batched call, from the English source — and the result
+   * is merged into the drafts before saving, so the translations land in the
+   * editor as ordinary editable text. A failed translation never blocks the
+   * save: the English copy is stored and the editor says so.
+   */
   const save = async () => {
     setSaving(true);
     setMessage(null);
     setError(null);
+    let drafts = questions;
+    let intros = introTrans;
+    let thanks = thankYouTrans;
+    let translationFailed = false;
+
+    try {
+      const result = await translateEventForm({
+        data: {
+          intro: intro || null,
+          thankYou: thankYou || null,
+          questions: questions.map((q) => ({
+            label: q.label,
+            help: q.help_text || null,
+            options: q.options.filter((o) => o.trim() !== ""),
+            scaleLow: q.qtype === "rating" ? q.scale_low_label || null : null,
+            scaleHigh: q.qtype === "rating" ? q.scale_high_label || null : null,
+          })),
+        },
+      });
+      intros = { de: result.de.intro ?? "", fr: result.fr.intro ?? "", it: result.it.intro ?? "" };
+      thanks = {
+        de: result.de.thankYou ?? "",
+        fr: result.fr.thankYou ?? "",
+        it: result.it.thankYou ?? "",
+      };
+      drafts = questions.map((q, i) => ({
+        ...q,
+        label_de: result.de.questions[i]?.label ?? q.label_de,
+        label_fr: result.fr.questions[i]?.label ?? q.label_fr,
+        label_it: result.it.questions[i]?.label ?? q.label_it,
+        help_text_de: result.de.questions[i]?.help ?? "",
+        help_text_fr: result.fr.questions[i]?.help ?? "",
+        help_text_it: result.it.questions[i]?.help ?? "",
+        options_de: result.de.questions[i]?.options ?? [],
+        options_fr: result.fr.questions[i]?.options ?? [],
+        options_it: result.it.questions[i]?.options ?? [],
+        scale_low_label_de: result.de.questions[i]?.scaleLow ?? "",
+        scale_low_label_fr: result.fr.questions[i]?.scaleLow ?? "",
+        scale_low_label_it: result.it.questions[i]?.scaleLow ?? "",
+        scale_high_label_de: result.de.questions[i]?.scaleHigh ?? "",
+        scale_high_label_fr: result.fr.questions[i]?.scaleHigh ?? "",
+        scale_high_label_it: result.it.questions[i]?.scaleHigh ?? "",
+      }));
+      setQuestions(drafts);
+      setIntroTrans(intros);
+      setThankYouTrans(thanks);
+    } catch {
+      translationFailed = true;
+    }
+
     try {
       const taken: string[] = [];
-      const payload = questions.map((q) => {
+      const payload = drafts.map((q) => {
         const key = q.question_key || questionKeyFrom(q.label, taken);
         taken.push(key);
+        const options = q.options.filter((o) => o.trim() !== "");
+        const translatedOptions = (list: string[]) =>
+          list.length === options.length ? list : null;
         return {
           id: q.id,
           question_key: key,
@@ -297,10 +410,22 @@ function FormEditor({
           label_fr: q.label_fr || null,
           label_it: q.label_it || null,
           help_text: q.help_text || null,
-          options: q.options.filter((o) => o.trim() !== ""),
+          help_text_de: q.help_text_de || null,
+          help_text_fr: q.help_text_fr || null,
+          help_text_it: q.help_text_it || null,
+          options,
+          options_de: translatedOptions(q.options_de),
+          options_fr: translatedOptions(q.options_fr),
+          options_it: translatedOptions(q.options_it),
           rating_max: q.rating_max,
           scale_low_label: q.scale_low_label || null,
+          scale_low_label_de: q.scale_low_label_de || null,
+          scale_low_label_fr: q.scale_low_label_fr || null,
+          scale_low_label_it: q.scale_low_label_it || null,
           scale_high_label: q.scale_high_label || null,
+          scale_high_label_de: q.scale_high_label_de || null,
+          scale_high_label_fr: q.scale_high_label_fr || null,
+          scale_high_label_it: q.scale_high_label_it || null,
           is_required: q.is_required,
           condition_index: q.condition_index,
           condition_value: q.condition_value || null,
@@ -312,11 +437,17 @@ function FormEditor({
           name,
           is_active: active,
           intro: intro || null,
+          intro_de: intros.de || null,
+          intro_fr: intros.fr || null,
+          intro_it: intros.it || null,
           thank_you: thankYou || null,
+          thank_you_de: thanks.de || null,
+          thank_you_fr: thanks.fr || null,
+          thank_you_it: thanks.it || null,
           questions: payload,
         },
       });
-      setMessage(t("events.forms.saved"));
+      setMessage(translationFailed ? t("events.forms.savedNoTranslation") : t("events.forms.saved"));
       await onSaved();
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -341,7 +472,13 @@ function FormEditor({
           label_fr: String(row["label_fr"] ?? ""),
           label_it: String(row["label_it"] ?? ""),
           help_text: String(row["help_text"] ?? ""),
+          help_text_de: String(row["help_text_de"] ?? ""),
+          help_text_fr: String(row["help_text_fr"] ?? ""),
+          help_text_it: String(row["help_text_it"] ?? ""),
           options: (row["options"] as string[] | null) ?? [],
+          options_de: (row["options_de"] as string[] | null) ?? [],
+          options_fr: (row["options_fr"] as string[] | null) ?? [],
+          options_it: (row["options_it"] as string[] | null) ?? [],
           rating_max: Number(row["rating_max"] ?? 5),
           is_required: Boolean(row["is_required"]),
         })),
@@ -371,6 +508,29 @@ function FormEditor({
           <textarea rows={2} value={thankYou} onChange={(e) => setThankYou(e.target.value)} className={inputClass} />
         </div>
       </div>
+
+      <div className="mt-3 grid gap-3 sm:grid-cols-3">
+        {TRANSLATED_LOCALES.map((locale) => (
+          <div key={locale} className="rounded-xl border border-border p-3">
+            <p className="text-xs font-semibold uppercase">{locale}</p>
+            <label className="mt-2 block text-xs font-semibold">{t("events.forms.intro")}</label>
+            <textarea
+              rows={2}
+              value={introTrans[locale]}
+              onChange={(e) => setIntroTrans((prev) => ({ ...prev, [locale]: e.target.value }))}
+              className={inputClass}
+            />
+            <label className="mt-2 block text-xs font-semibold">{t("events.forms.thankYou")}</label>
+            <textarea
+              rows={2}
+              value={thankYouTrans[locale]}
+              onChange={(e) => setThankYouTrans((prev) => ({ ...prev, [locale]: e.target.value }))}
+              className={inputClass}
+            />
+          </div>
+        ))}
+      </div>
+      <p className="mt-2 text-xs text-muted-foreground">{t("events.forms.translationHint")}</p>
 
       <div className="mt-4 space-y-3">
         {questions.map((question, index) => (
@@ -415,7 +575,7 @@ function FormEditor({
           ))}
         </select>
         <button type="button" disabled={saving} className={primaryClass} onClick={() => void save()}>
-          {saving ? t("events.forms.saving") : t("events.forms.save")}
+          {saving ? t("events.forms.translatingAndSaving") : t("events.forms.save")}
         </button>
         <button
           type="button"
@@ -510,18 +670,56 @@ function QuestionEditor({
       </div>
 
       <div className="mt-2 grid gap-3 sm:grid-cols-3">
-        <div>
-          <label className="block text-xs font-semibold">DE</label>
-          <input value={question.label_de} onChange={(e) => onPatch({ label_de: e.target.value })} className={inputClass} />
-        </div>
-        <div>
-          <label className="block text-xs font-semibold">FR</label>
-          <input value={question.label_fr} onChange={(e) => onPatch({ label_fr: e.target.value })} className={inputClass} />
-        </div>
-        <div>
-          <label className="block text-xs font-semibold">IT</label>
-          <input value={question.label_it} onChange={(e) => onPatch({ label_it: e.target.value })} className={inputClass} />
-        </div>
+        {TRANSLATED_LOCALES.map((locale) => (
+          <div key={locale} className="rounded-xl border border-border p-3">
+            <p className="text-xs font-semibold uppercase">{locale}</p>
+            <label className="mt-2 block text-xs font-semibold">{t("events.forms.questionLabel")}</label>
+            <input
+              value={question[`label_${locale}`]}
+              onChange={(e) => onPatch({ [`label_${locale}`]: e.target.value } as Partial<Draft>)}
+              className={inputClass}
+            />
+            <label className="mt-2 block text-xs font-semibold">{t("events.forms.help")}</label>
+            <input
+              value={question[`help_text_${locale}`]}
+              onChange={(e) => onPatch({ [`help_text_${locale}`]: e.target.value } as Partial<Draft>)}
+              className={inputClass}
+            />
+            {usesOptions ? (
+              <>
+                <label className="mt-2 block text-xs font-semibold">{t("events.forms.options")}</label>
+                <textarea
+                  rows={3}
+                  value={question[`options_${locale}`].join("\n")}
+                  onChange={(e) =>
+                    onPatch({ [`options_${locale}`]: e.target.value.split("\n") } as Partial<Draft>)
+                  }
+                  className={inputClass}
+                />
+              </>
+            ) : null}
+            {question.qtype === "rating" ? (
+              <>
+                <label className="mt-2 block text-xs font-semibold">{t("events.forms.scaleLow")}</label>
+                <input
+                  value={question[`scale_low_label_${locale}`]}
+                  onChange={(e) =>
+                    onPatch({ [`scale_low_label_${locale}`]: e.target.value } as Partial<Draft>)
+                  }
+                  className={inputClass}
+                />
+                <label className="mt-2 block text-xs font-semibold">{t("events.forms.scaleHigh")}</label>
+                <input
+                  value={question[`scale_high_label_${locale}`]}
+                  onChange={(e) =>
+                    onPatch({ [`scale_high_label_${locale}`]: e.target.value } as Partial<Draft>)
+                  }
+                  className={inputClass}
+                />
+              </>
+            ) : null}
+          </div>
+        ))}
       </div>
 
       <div className="mt-2">
