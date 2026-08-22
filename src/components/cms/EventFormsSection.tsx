@@ -630,6 +630,7 @@ function QuestionEditor({
           label: source.label,
           help: null,
           options: source.options,
+          optionLabels: source.options,
           ratingMax: source.rating_max,
           scaleLow: null,
           scaleHigh: null,
