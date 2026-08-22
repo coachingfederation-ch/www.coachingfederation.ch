@@ -70,6 +70,19 @@ export const getOutboundIpDiagnostics = createServerFn({ method: "POST" })
   });
 
 /**
+ * Read-only relay/sync health summary for the integration page (admin only).
+ * Aggregates existing signals; performs no state change and returns no secret.
+ */
+export const getRelayHealth = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { loadRelayHealth } = await import("./relay-health.server");
+    return await loadRelayHealth();
+  });
+
+
+/**
  * Isolated ICF login check (admin only). Runs just the Authenticate step so a
  * failing sync can be attributed to a secret, an endpoint, or the ICF account.
  */
