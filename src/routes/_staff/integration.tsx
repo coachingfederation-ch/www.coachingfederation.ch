@@ -43,6 +43,14 @@ export const Route = createFileRoute("/_staff/integration")({
 const CARD = "rounded-2xl border border-border bg-card p-5";
 const BTN =
   "rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-95 disabled:opacity-50";
+/**
+ * Secondary action on this screen. The CMS uses a pill outline here; the design
+ * system's `outline` Button variant is `rounded-md`, so swapping a single
+ * button would break the row. Kept as one shared, fully token-backed constant.
+ */
+const BTN_SECONDARY =
+  "rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50";
+
 
 function formatDate(value: string | null) {
   return value ? new Date(value).toLocaleString() : "—";
