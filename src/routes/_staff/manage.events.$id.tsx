@@ -162,6 +162,7 @@ function EventEditor() {
           registration_closes_at: event.registration_closes_at,
           guest_registration_allowed: event.guest_registration_allowed,
           is_featured: event.is_featured,
+          is_internal: event.is_internal ?? false,
           category_id: event.category_id,
           region_id: event.region_id,
           community_id: event.community_id,
