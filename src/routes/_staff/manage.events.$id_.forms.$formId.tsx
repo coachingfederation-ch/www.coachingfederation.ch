@@ -77,12 +77,15 @@ function FormResultsPage() {
 
   const download = async () => {
     try {
-      const csv = await exportFormResponses({ data: { formId } });
-      const blob = new Blob([csv as unknown as string], { type: "text/csv;charset=utf-8" });
+      const result = (await exportFormResponses({ data: { formId } })) as unknown as {
+        filename: string;
+        csv: string;
+      };
+      const blob = new Blob([result.csv], { type: "text/csv;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `form-responses-${formId}.csv`;
+      link.download = result.filename;
       link.click();
       URL.revokeObjectURL(url);
     } catch (e) {
@@ -92,6 +95,7 @@ function FormResultsPage() {
 
   const names = new Map((data?.attendees ?? []).map((a) => [a.id, a.full_name]));
   const asked = (data?.questions ?? []).filter((q) => q.type !== "heading");
+  const isRegistration = data?.form.kind === "registration";
 
   return (
     <Shell>
@@ -105,20 +109,33 @@ function FormResultsPage() {
         {message ? <p className="mt-3 text-sm text-muted-foreground">{message}</p> : null}
 
         <div className="mt-4 flex flex-wrap gap-2">
-          <button type="button" disabled={busy} className={buttonClass} onClick={() => void send("invite")}>
-            {t("events.forms.sendInvites")}
-          </button>
-          <button type="button" disabled={busy} className={buttonClass} onClick={() => void send("reminder")}>
-            {t("events.forms.sendReminders")}
-          </button>
+          {isRegistration ? null : (
+            <>
+              <button type="button" disabled={busy} className={buttonClass} onClick={() => void send("invite")}>
+                {t("events.forms.sendInvites")}
+              </button>
+              <button type="button" disabled={busy} className={buttonClass} onClick={() => void send("reminder")}>
+                {t("events.forms.sendReminders")}
+              </button>
+            </>
+          )}
           <button type="button" className={buttonClass} onClick={() => void download()}>
             {t("events.forms.exportCsv")}
           </button>
         </div>
 
         <p className="mt-4 text-sm text-muted-foreground">
-          {data?.eligible ?? 0} {t("events.forms.eligibleLabel")} · {data?.recipients.length ?? 0}{" "}
-          {t("events.forms.sentLabel")} · {data?.responses.length ?? 0} {t("events.forms.responsesLabel")}
+          {isRegistration ? (
+            <>
+              {data?.eligible ?? 0} {t("events.forms.registrationsLabel")} · {data?.responses.length ?? 0}{" "}
+              {t("events.forms.answeredLabel")}
+            </>
+          ) : (
+            <>
+              {data?.eligible ?? 0} {t("events.forms.eligibleLabel")} · {data?.recipients.length ?? 0}{" "}
+              {t("events.forms.sentLabel")} · {data?.responses.length ?? 0} {t("events.forms.responsesLabel")}
+            </>
+          )}
         </p>
 
         <div className="mt-6 overflow-x-auto rounded-2xl border border-border bg-card">
