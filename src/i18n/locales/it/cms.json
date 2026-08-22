@@ -1242,7 +1242,9 @@
       },
       "savedNoTranslation": "Salvato in inglese — la traduzione automatica non era disponibile.",
       "translatingAndSaving": "Traduzione e salvataggio…",
-      "translationHint": "Tedesco, francese e italiano vengono tradotti automaticamente al salvataggio. Modifica qui il testo quando vuoi."
+      "translationHint": "Tedesco, francese e italiano vengono tradotti automaticamente al salvataggio. Modifica qui il testo quando vuoi.",
+      "registrationsLabel": "registrazioni",
+      "answeredLabel": "risposte ricevute"
     },
     "searchAttendees": "Ricerca",
     "searchAttendeesPlaceholder": "Nome o e-mail",
