@@ -278,8 +278,19 @@ export type RegistrationOutcome =
         | "error";
     };
 
-/** Maps the database guards to the stable reason codes the UI translates. */
-function failureReason(error: { code?: string; message?: string }): RegistrationOutcome {
+/**
+ * Maps the database guards to the stable reason codes the UI translates.
+ *
+ * Matching is deliberately phrase-exact: every error raised on this table
+ * mentions `event_registrations`, so a loose substring match on "registration"
+ * used to report unrelated failures (constraint violations, schema drift) as
+ * "registration is closed" and hid the real cause. Anything unrecognised now
+ * falls through to the generic reason and is logged for diagnosis.
+ */
+function failureReason(
+  error: { code?: string; message?: string; details?: string | null; hint?: string | null },
+  eventId?: string,
+): RegistrationOutcome {
   if (error.code === "23505") return { ok: false, reason: "duplicate" };
   const message = (error.message ?? "").toLowerCase();
   // Grant/RLS failures mention the table name and must not read as "closed".
@@ -289,17 +300,29 @@ function failureReason(error: { code?: string; message?: string }): Registration
   if (message.includes("invited members only")) return { ok: false, reason: "invite_required" };
   if (message.includes("discount code")) return { ok: false, reason: "discount" };
   if (message.includes("tier is full")) return { ok: false, reason: "full" };
-  if (message.includes("tier")) return { ok: false, reason: "tier_unavailable" };
-  if (message.includes("full") || message.includes("capacity"))
+  if (message.includes("a ticket tier must be selected")) return { ok: false, reason: "tier_required" };
+  if (message.includes("ticket tier is not available"))
+    return { ok: false, reason: "tier_unavailable" };
+  if (message.includes("event is full") || message.includes("capacity"))
     return { ok: false, reason: "full" };
+  // The exact phrases raised by tg_event_registration_guard — nothing else.
   if (
-    message.includes("closed") ||
-    message.includes("not open") ||
-    message.includes("registration")
+    message.includes("registration has closed") ||
+    message.includes("registration has not opened yet") ||
+    message.includes("event is not open for registration") ||
+    message.includes("does not take registrations")
   )
     return { ok: false, reason: "closed" };
+  console.error("[registration] unmapped database error", {
+    eventId,
+    code: error.code,
+    message: error.message,
+    details: error.details,
+    hint: error.hint,
+  });
   return { ok: false, reason: "error" };
 }
+
 
 /**
  * One registration, whichever client the caller owns (anonymous for guests,
