@@ -104,13 +104,14 @@ export default function AboutPage() {
                 href="https://coachingfederation.org/about/icf-membership/individual-membership/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-10 items-center rounded-full bg-white px-5 text-sm font-semibold text-primary transition hover:bg-white/90"
+                className="inline-flex h-10 items-center rounded-full bg-hero-foreground px-5 text-sm font-semibold text-primary transition hover:bg-hero-foreground/90"
               >
                 {t("about.cta.join")}
               </a>
               <a
                 href="#contact"
-                className="inline-flex h-10 items-center rounded-full border border-white/30 px-5 text-sm font-semibold text-white transition hover:bg-white/10"
+                className="inline-flex h-10 items-center rounded-full border border-hero-foreground/30 px-5 text-sm font-semibold text-hero-foreground transition hover:bg-hero-foreground/10"
+
               >
                 {t("about.cta.contact")}
               </a>
