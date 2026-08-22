@@ -130,6 +130,7 @@ function normalize(input: z.infer<typeof eventInput>) {
     image_credit_url: blankToNull(input.image_credit_url),
     capacity: input.capacity ?? null,
     practical_notes: blankToNull(input.practical_notes),
+    is_internal: input.is_internal ?? false,
     category_id: input.category_id ?? null,
     region_id: input.region_id ?? null,
     community_id: input.community_id ?? null,
