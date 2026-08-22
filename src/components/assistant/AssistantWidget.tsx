@@ -16,7 +16,7 @@ import {
 import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message";
 import {
   PromptInput,
-  PromptInputFooter,
+  
   PromptInputSubmit,
   PromptInputTextarea,
 } from "@/components/ai-elements/prompt-input";
@@ -202,6 +202,48 @@ export function AssistantWidget() {
     if (open) textareaRef.current?.focus();
   }, [open, status]);
 
+  // On phones the panel is a full-screen sheet. iOS Safari does not shrink
+  // 100dvh when the on-screen keyboard opens, so the composer would slide
+  // under it; visualViewport tells us the part of the screen that is really
+  // visible and we pin the sheet to exactly that box.
+  useEffect(() => {
+    if (!open || typeof window === "undefined") return;
+    const vv = window.visualViewport;
+    const isMobile = () => window.matchMedia("(max-width: 639px)").matches;
+
+    const body = document.body;
+    const previousOverflow = body.style.overflow;
+    if (isMobile()) body.style.overflow = "hidden";
+
+    const apply = () => {
+      const root = document.documentElement;
+      if (!vv || !isMobile()) {
+        root.style.removeProperty("--assistant-vh");
+        root.style.removeProperty("--assistant-offset");
+        return;
+      }
+      root.style.setProperty("--assistant-vh", `${vv.height}px`);
+      root.style.setProperty(
+        "--assistant-offset",
+        `${Math.max(0, window.innerHeight - vv.height - vv.offsetTop)}px`,
+      );
+    };
+
+    apply();
+    vv?.addEventListener("resize", apply);
+    vv?.addEventListener("scroll", apply);
+    window.addEventListener("orientationchange", apply);
+    return () => {
+      vv?.removeEventListener("resize", apply);
+      vv?.removeEventListener("scroll", apply);
+      window.removeEventListener("orientationchange", apply);
+      body.style.overflow = previousOverflow;
+      document.documentElement.style.removeProperty("--assistant-vh");
+      document.documentElement.style.removeProperty("--assistant-offset");
+    };
+  }, [open]);
+
+
   // Poll the volunteer count so the launcher can promise a human only when one
   // is actually there. Cheap (a single integer) and paused while hidden.
   useEffect(() => {
@@ -326,8 +368,17 @@ export function AssistantWidget() {
         <div
           role="dialog"
           aria-label={t("assistant.title")}
-          className="fixed inset-x-0 bottom-0 z-50 flex h-[min(80vh,40rem)] flex-col overflow-hidden border border-border bg-card shadow-2xl sm:inset-x-auto sm:bottom-5 sm:right-5 sm:w-[26rem] sm:rounded-2xl"
+          style={
+            {
+              // Mobile only: pinned to the visible viewport so the keyboard
+              // never covers the composer. Ignored from `sm:` upwards.
+              "--assistant-sheet-height": "var(--assistant-vh, 100dvh)",
+              "--assistant-sheet-bottom": "var(--assistant-offset, 0px)",
+            } as React.CSSProperties
+          }
+          className="fixed inset-x-0 bottom-[var(--assistant-sheet-bottom)] z-50 flex h-[var(--assistant-sheet-height)] flex-col overflow-hidden border border-border bg-card shadow-2xl sm:inset-x-auto sm:bottom-5 sm:right-5 sm:h-[min(80vh,40rem)] sm:w-[26rem] sm:rounded-2xl"
         >
+
           <header className="flex items-start justify-between gap-3 bg-hero px-4 py-3 text-hero-foreground">
             <div>
               <p className="font-display text-base font-semibold">{t("assistant.title")}</p>
@@ -475,21 +526,25 @@ export function AssistantWidget() {
           </Conversation>
 
           <div className="border-t border-border p-3">
-            <PromptInput onSubmit={(_message, event) => submit(event)}>
+            {/* Single-line composer that grows with the text; the send button
+                sits inside the field so the bar stays one row tall. */}
+            <PromptInput className="relative" onSubmit={(_message, event) => submit(event)}>
               <PromptInputTextarea
                 ref={textareaRef}
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
                 placeholder={t("assistant.placeholder")}
+                rows={1}
+                className="max-h-40 min-h-11 py-2.5 pr-14"
               />
-              <PromptInputFooter className="justify-end">
-                <PromptInputSubmit
-                  status={status}
-                  disabled={!busy && input.trim().length === 0}
-                  onStop={stop}
-                />
-              </PromptInputFooter>
+              <PromptInputSubmit
+                status={status}
+                disabled={!busy && input.trim().length === 0}
+                onStop={stop}
+                className="absolute bottom-1.5 right-1.5 z-10 size-11 sm:size-9"
+              />
             </PromptInput>
+
             <p className="mt-2 text-[11px] leading-snug text-muted-foreground">
               {t("assistant.disclaimer")}
             </p>
