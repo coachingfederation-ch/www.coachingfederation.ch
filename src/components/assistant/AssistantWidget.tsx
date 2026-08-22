@@ -526,21 +526,25 @@ export function AssistantWidget() {
           </Conversation>
 
           <div className="border-t border-border p-3">
-            <PromptInput onSubmit={(_message, event) => submit(event)}>
+            {/* Single-line composer that grows with the text; the send button
+                sits inside the field so the bar stays one row tall. */}
+            <PromptInput className="relative" onSubmit={(_message, event) => submit(event)}>
               <PromptInputTextarea
                 ref={textareaRef}
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
                 placeholder={t("assistant.placeholder")}
+                rows={1}
+                className="max-h-40 min-h-11 py-2.5 pr-14"
               />
-              <PromptInputFooter className="justify-end">
-                <PromptInputSubmit
-                  status={status}
-                  disabled={!busy && input.trim().length === 0}
-                  onStop={stop}
-                />
-              </PromptInputFooter>
+              <PromptInputSubmit
+                status={status}
+                disabled={!busy && input.trim().length === 0}
+                onStop={stop}
+                className="absolute bottom-1.5 right-1.5 z-10 size-11 sm:size-9"
+              />
             </PromptInput>
+
             <p className="mt-2 text-[11px] leading-snug text-muted-foreground">
               {t("assistant.disclaimer")}
             </p>
