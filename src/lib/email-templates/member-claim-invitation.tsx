@@ -20,7 +20,7 @@ import {
 import logoNegativeAsset from "@/assets/icf-horizontal-negative.png.asset.json";
 import { SITE_URL } from "@/i18n/config";
 import logoWhiteAsset from "@/assets/icf-horizontal-white.png.asset.json";
-import type { TemplateEntry } from "./registry";
+import type { EmailTemplateData, TemplateEntry } from "./registry";
 
 /**
  * Member claim invitation — the only email that carries a claim link.
@@ -283,8 +283,8 @@ const Email = ({
 
 export const template = {
   component: Email,
-  subject: (data: Record<string, any>) => {
-    const c = copyFor(data["locale"]);
+  subject: (data: EmailTemplateData) => {
+    const c = copyFor(data["locale"] as string | undefined);
     return (data["isResend"] ? c["subjectResend"] : c["subject"]) as string;
   },
   displayName: "Member claim invitation",

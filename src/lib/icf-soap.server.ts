@@ -271,9 +271,7 @@ async function callSoap(
     headers: {
       "Content-Type": "text/xml; charset=utf-8",
       SOAPAction: `${XWEB_NS}${operation}`,
-      ...(process.env["ICF_RELAY_AUTH"]
-        ? { "X-Relay-Auth": process.env["ICF_RELAY_AUTH"] }
-        : {}),
+      ...(process.env["ICF_RELAY_AUTH"] ? { "X-Relay-Auth": process.env["ICF_RELAY_AUTH"] } : {}),
     },
     body: envelope,
   });

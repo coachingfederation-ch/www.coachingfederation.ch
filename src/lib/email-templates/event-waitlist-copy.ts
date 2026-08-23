@@ -30,9 +30,9 @@ export const WAITLIST_COPY: Record<Locale, WaitlistCopy> = {
     preview: "A place has opened up. Your invitation is held until {deadline}.",
     heading: "A place has opened up",
     greeting: "Hello {name}",
-    intro:
-      "You asked to be told when a place became free at this event. One is now yours to take.",
-    deadline: "This invitation is held for you until {deadline}. After that the place goes to the next person on the list.",
+    intro: "You asked to be told when a place became free at this event. One is now yours to take.",
+    deadline:
+      "This invitation is held for you until {deadline}. After that the place goes to the next person on the list.",
     detailsTitle: "Event details",
     whenLabel: "When",
     locationLabel: "Where",
@@ -49,7 +49,8 @@ export const WAITLIST_COPY: Record<Locale, WaitlistCopy> = {
     greeting: "Hallo {name}",
     intro:
       "Sie wollten erfahren, wenn bei diesem Anlass ein Platz frei wird. Jetzt ist einer für Sie da.",
-    deadline: "Diese Einladung ist bis {deadline} für Sie reserviert. Danach geht der Platz an die nächste Person auf der Liste.",
+    deadline:
+      "Diese Einladung ist bis {deadline} für Sie reserviert. Danach geht der Platz an die nächste Person auf der Liste.",
     detailsTitle: "Angaben zum Anlass",
     whenLabel: "Wann",
     locationLabel: "Wo",
@@ -66,7 +67,8 @@ export const WAITLIST_COPY: Record<Locale, WaitlistCopy> = {
     greeting: "Bonjour {name}",
     intro:
       "Vous souhaitiez être averti·e dès qu'une place se libérerait pour cet événement. Elle est à vous.",
-    deadline: "Cette invitation vous est réservée jusqu'au {deadline}. Ensuite, la place passe à la personne suivante sur la liste.",
+    deadline:
+      "Cette invitation vous est réservée jusqu'au {deadline}. Ensuite, la place passe à la personne suivante sur la liste.",
     detailsTitle: "Détails de l'événement",
     whenLabel: "Quand",
     locationLabel: "Où",
@@ -83,7 +85,8 @@ export const WAITLIST_COPY: Record<Locale, WaitlistCopy> = {
     greeting: "Ciao {name}",
     intro:
       "Avevi chiesto di essere avvisato quando si fosse liberato un posto per questo evento. Ora è tuo.",
-    deadline: "Questo invito è riservato a te fino al {deadline}. Poi il posto passa alla persona successiva in lista.",
+    deadline:
+      "Questo invito è riservato a te fino al {deadline}. Poi il posto passa alla persona successiva in lista.",
     detailsTitle: "Dettagli dell'evento",
     whenLabel: "Quando",
     locationLabel: "Dove",

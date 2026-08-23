@@ -110,7 +110,9 @@ export function EventInvitationsSection({
       if (kind === "resend") {
         const result = await resendEventInvitation({ data: { eventId, invitationId: id } });
         setMessage(
-          result.ok ? t("events.invitations.resent") : t(`events.invitations.error.${result.reason}`),
+          result.ok
+            ? t("events.invitations.resent")
+            : t(`events.invitations.error.${result.reason}`),
         );
       } else {
         await removeEventInvitation({ data: { eventId, invitationId: id } });
@@ -127,7 +129,10 @@ export function EventInvitationsSection({
     <Section title={t("events.invitations.title")} hint={t("events.invitations.hint")}>
       <div className="space-y-4">
         <div>
-          <label className="mb-1 block text-xs font-semibold text-muted-foreground" htmlFor="invite-search">
+          <label
+            className="mb-1 block text-xs font-semibold text-muted-foreground"
+            htmlFor="invite-search"
+          >
             {t("events.invitations.search")}
           </label>
           <input
@@ -187,7 +192,9 @@ export function EventInvitationsSection({
                     <td className="py-2 font-semibold">{row.full_name}</td>
                     <td className="py-2 text-muted-foreground">{row.email}</td>
                     <td className="py-2">
-                      <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${badge[row.status]}`}>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${badge[row.status]}`}
+                      >
                         {t(`events.invitations.state.${row.status}`)}
                       </span>
                     </td>

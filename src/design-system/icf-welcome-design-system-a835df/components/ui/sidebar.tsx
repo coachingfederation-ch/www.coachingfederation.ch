@@ -16,7 +16,12 @@ import {
   SheetTitle,
 } from "@/design-system/icf-welcome-design-system-a835df/components/ui/sheet";
 import { Skeleton } from "@/design-system/icf-welcome-design-system-a835df/components/ui/skeleton";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/design-system/icf-welcome-design-system-a835df/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df/components/ui/tooltip";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;

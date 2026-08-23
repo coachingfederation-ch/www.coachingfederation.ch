@@ -17,7 +17,6 @@ export const navItems = [
 
 export const CARD_SHADOW = "shadow-soft";
 
-
 export function setStoredLocale(l: string) {
   try {
     window.localStorage.setItem("icf-locale", l);

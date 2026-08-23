@@ -3,9 +3,16 @@
  * Exports: Callout, calloutShadeFrom, and re-exports from callout-shades. Consumed by Markdown and MarkdownToolbar.
  */
 import type { ReactNode } from "react";
-import { CALLOUT_ALIASES, type CalloutShade } from "@/design-system/icf-welcome-design-system-a835df/components/callout-shades";
+import {
+  CALLOUT_ALIASES,
+  type CalloutShade,
+} from "@/design-system/icf-welcome-design-system-a835df/components/callout-shades";
 
-export { CALLOUT_SHADES, SHADE_SWATCH, type CalloutShade } from "@/design-system/icf-welcome-design-system-a835df/components/callout-shades";
+export {
+  CALLOUT_SHADES,
+  SHADE_SWATCH,
+  type CalloutShade,
+} from "@/design-system/icf-welcome-design-system-a835df/components/callout-shades";
 
 const STYLES: Record<CalloutShade, { wrap: string; rail: string; chip: string }> = {
   info: {

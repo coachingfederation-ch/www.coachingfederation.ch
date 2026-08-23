@@ -62,7 +62,6 @@ function shape(name: string): SecretShape {
     hasLeadingWhitespace: /^\s/.test(value),
     hasTrailingWhitespace: /\s$/.test(value),
     hasNewline: /[\r\n]/.test(value),
-    // eslint-disable-next-line no-control-regex
     hasNonAscii: /[^\x20-\x7E]/.test(value.replace(/[\r\n\t]/g, "")),
   };
 }
@@ -100,9 +99,7 @@ async function attempt(
       headers: {
         "Content-Type": "text/xml; charset=utf-8",
         SOAPAction: `${XWEB_NS}Authenticate`,
-        ...(process.env["ICF_RELAY_AUTH"]
-          ? { "X-Relay-Auth": process.env["ICF_RELAY_AUTH"] }
-          : {}),
+        ...(process.env["ICF_RELAY_AUTH"] ? { "X-Relay-Auth": process.env["ICF_RELAY_AUTH"] } : {}),
       },
       body: envelope,
       signal: AbortSignal.timeout(TIMEOUT_MS),

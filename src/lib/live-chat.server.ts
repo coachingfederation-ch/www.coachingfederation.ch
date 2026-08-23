@@ -152,9 +152,7 @@ export async function endConversation(
 
 /** Retention job: drop ended conversations (messages cascade) after 30 days. */
 export async function purgeOldConversations(): Promise<{ deleted: number }> {
-  const cutoff = new Date(
-    Date.now() - TRANSCRIPT_RETENTION_DAYS * 86_400_000,
-  ).toISOString();
+  const cutoff = new Date(Date.now() - TRANSCRIPT_RETENTION_DAYS * 86_400_000).toISOString();
   const { data, error } = await supabaseAdmin
     .from("live_chat_conversations")
     .delete()

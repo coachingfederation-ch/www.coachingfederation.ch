@@ -12,8 +12,7 @@ type Body = Record<string, unknown>;
 const str = (value: unknown, max: number) =>
   typeof value === "string" ? value.trim().slice(0, max) : "";
 
-const isUuid = (value: unknown) =>
-  typeof value === "string" && /^[0-9a-f-]{36}$/i.test(value);
+const isUuid = (value: unknown) => typeof value === "string" && /^[0-9a-f-]{36}$/i.test(value);
 
 export const Route = createFileRoute("/api/public/live-chat")({
   server: {
@@ -34,9 +33,8 @@ export const Route = createFileRoute("/api/public/live-chat")({
           return Response.json({ online });
         }
 
-        const { checkRateLimit, clientIp, rateLimitResponse } = await import(
-          "@/lib/rate-limit.server"
-        );
+        const { checkRateLimit, clientIp, rateLimitResponse } =
+          await import("@/lib/rate-limit.server");
 
         if (action === "start") {
           const verdict = await checkRateLimit("live-chat-start", `ip:${clientIp(request)}`, [

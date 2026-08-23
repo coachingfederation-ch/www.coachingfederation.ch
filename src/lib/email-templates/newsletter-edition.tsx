@@ -24,7 +24,7 @@ import {
 import logoNegativeAsset from "@/assets/icf-horizontal-negative.png.asset.json";
 import { SITE_URL } from "@/i18n/config";
 import { blockImagePreset } from "@/lib/block-image";
-import type { TemplateEntry } from "./registry";
+import type { EmailTemplateData, TemplateEntry } from "./registry";
 
 export interface NewsletterEmailBlock {
   id: string;
@@ -38,7 +38,6 @@ export interface NewsletterEmailBlock {
   imageAspect?: string | null;
   sources?: { label: string; url?: string | null }[];
 }
-
 
 export interface NewsletterEditionEmailProps {
   title?: string;
@@ -145,7 +144,6 @@ export const NewsletterEditionEmail = ({
                   ))}
                 </Text>
               ) : null}
-
             </Section>
           ))}
         </Section>
@@ -227,7 +225,7 @@ const markdownStyles = {
 
 export const template: TemplateEntry = {
   component: NewsletterEditionEmail,
-  subject: (data: Record<string, any>) =>
+  subject: (data: EmailTemplateData) =>
     `${data["title"] ?? "Chapter newsletter"}${data["issueLabel"] ? ` — ${data["issueLabel"]}` : ""}`,
   displayName: "Newsletter edition",
   previewData: {
@@ -244,7 +242,8 @@ export const template: TemplateEntry = {
       {
         id: "demo-2",
         title: "Upcoming events",
-        content: "- Peer coaching circle, Zürich — 12 March\n- Romandie meetup, Lausanne — 26 March",
+        content:
+          "- Peer coaching circle, Zürich — 12 March\n- Romandie meetup, Lausanne — 26 March",
         sources: [{ label: "Chapter events", url: "https://new.coachingfederation.ch/events" }],
       },
     ],

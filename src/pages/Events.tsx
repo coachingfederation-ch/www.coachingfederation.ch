@@ -64,9 +64,7 @@ function FilterSelect({
 }) {
   return (
     <label className="block">
-      <span className="section-label mb-1.5 block">
-        {label}
-      </span>
+      <span className="section-label mb-1.5 block">{label}</span>
       <select className={selectClass} value={value} onChange={(e) => onChange(e.target.value)}>
         <option value="">{anyLabel}</option>
         {options.map((o) => (
@@ -105,9 +103,7 @@ function WhereSelect({
 }) {
   return (
     <label className="block">
-      <span className="section-label mb-1.5 block">
-        {label}
-      </span>
+      <span className="section-label mb-1.5 block">{label}</span>
       <select className={selectClass} value={value} onChange={(e) => onChange(e.target.value)}>
         <option value="">{anyLabel}</option>
         <optgroup label={regionGroupLabel}>
@@ -143,7 +139,8 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
   const community = search.community ?? "";
   const lang = search.lang ?? "";
   const format = search.format ?? "";
-  const audience = search.audience === "members" || search.audience === "open" ? search.audience : "";
+  const audience =
+    search.audience === "members" || search.audience === "open" ? search.audience : "";
   const hasFacetFilters = Boolean(category || region || community || lang || format || audience);
 
   // Communities are derived from the rows on the page: a community with nothing
@@ -235,9 +232,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
           <div className="mx-auto max-w-7xl px-8">
             <div className="flex flex-wrap items-end gap-4">
               <div>
-                <span className="section-label mb-1.5 block">
-                  {t("events.filters.when")}
-                </span>
+                <span className="section-label mb-1.5 block">{t("events.filters.when")}</span>
                 <div
                   className="inline-flex rounded-full border border-border bg-card p-1"
                   role="group"
@@ -371,7 +366,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                         {tag}
                       </span>
                     ))}
-{featured.is_internal ? (
+                    {featured.is_internal ? (
                       <span className="inline-flex items-center rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
                         {t("events.tag.membersOnly")}
                       </span>

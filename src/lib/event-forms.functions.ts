@@ -263,7 +263,8 @@ export const saveEventForm = createServerFn({ method: "POST" })
           .insert(row)
           .select("id")
           .maybeSingle();
-        if (error || !inserted) throw new Error(error?.message ?? "The question could not be saved.");
+        if (error || !inserted)
+          throw new Error(error?.message ?? "The question could not be saved.");
         ids.push((inserted as { id: string }).id);
       }
     }
@@ -348,7 +349,9 @@ export const getFormResults = createServerFn({ method: "POST" })
         ? Promise.resolve({ data: [] })
         : context.supabase
             .from("event_form_recipients")
-            .select("id, registration_id, email, locale, status, sent_at, reminder_sent_at, completed_at")
+            .select(
+              "id, registration_id, email, locale, status, sent_at, reminder_sent_at, completed_at",
+            )
             .eq("form_id", data.formId),
       isRegistration
         ? Promise.resolve({ data: [] })

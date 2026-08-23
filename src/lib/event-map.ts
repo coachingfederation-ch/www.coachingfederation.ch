@@ -87,7 +87,8 @@ export function eventMap(value: string | null | undefined): EventMap | null {
   }
 
   const query = isUrl(raw) ? queryFromUrl(raw) : raw;
-  const search = (q: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+  const search = (q: string) =>
+    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
 
   if (!query) return { embedSrc: null, linkHref: raw };
   return {

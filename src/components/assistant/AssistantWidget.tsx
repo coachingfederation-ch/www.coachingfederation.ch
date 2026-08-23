@@ -16,7 +16,6 @@ import {
 import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message";
 import {
   PromptInput,
-  
   PromptInputSubmit,
   PromptInputTextarea,
 } from "@/components/ai-elements/prompt-input";
@@ -243,7 +242,6 @@ export function AssistantWidget() {
     };
   }, [open]);
 
-
   // Poll the volunteer count so the launcher can promise a human only when one
   // is actually there. Cheap (a single integer) and paused while hidden.
   useEffect(() => {
@@ -378,7 +376,6 @@ export function AssistantWidget() {
           }
           className="fixed inset-x-0 bottom-[var(--assistant-sheet-bottom)] z-50 flex h-[var(--assistant-sheet-height)] flex-col overflow-hidden border border-border bg-card shadow-2xl sm:inset-x-auto sm:bottom-5 sm:right-5 sm:h-[min(80vh,40rem)] sm:w-[26rem] sm:rounded-2xl"
         >
-
           <header className="flex items-start justify-between gap-3 bg-hero px-4 py-3 text-hero-foreground">
             <div>
               <p className="font-display text-base font-semibold">{t("assistant.title")}</p>
@@ -408,157 +405,157 @@ export function AssistantWidget() {
             <LiveChatPanel onBack={() => setLiveChat(false)} pagePath={path} />
           ) : (
             <>
-          <Conversation className="flex-1">
-            <ConversationContent className="gap-4 px-4 py-4">
-              {messages.length === 0 && (
-                <div className="space-y-3">
-                  <p className="text-sm text-muted-foreground">{t("assistant.empty")}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {suggestions.map((suggestion) => (
-                      <button
-                        key={suggestion}
-                        type="button"
-                        onClick={() => void sendMessage({ text: suggestion })}
-                        className="rounded-full border border-border px-3 py-1.5 text-xs text-foreground transition-colors hover:bg-accent"
-                      >
-                        {suggestion}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <Conversation className="flex-1">
+                <ConversationContent className="gap-4 px-4 py-4">
+                  {messages.length === 0 && (
+                    <div className="space-y-3">
+                      <p className="text-sm text-muted-foreground">{t("assistant.empty")}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {suggestions.map((suggestion) => (
+                          <button
+                            key={suggestion}
+                            type="button"
+                            onClick={() => void sendMessage({ text: suggestion })}
+                            className="rounded-full border border-border px-3 py-1.5 text-xs text-foreground transition-colors hover:bg-accent"
+                          >
+                            {suggestion}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-              {messages.map((message) => {
-                const text = textOf(message);
-                const usedTool = message.parts.some(isToolPart);
-                if (!text && !usedTool) return null;
-                const interactionId = turnIds[message.id];
-                return (
-                  <Message key={message.id} from={message.role}>
-                    <MessageContent
-                      className={cn(
-                        message.role === "user"
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-transparent p-0 text-foreground",
-                      )}
-                    >
-                      {message.role === "assistant" ? (
-                        <div
-                          onClickCapture={(event) => {
-                            // A click on the contact address is the signal that
-                            // the referral actually landed.
-                            const anchor = (event.target as HTMLElement).closest("a");
-                            const href = anchor?.getAttribute("href") ?? "";
-                            if (interactionId && href && isContactHref(href)) {
-                              sendSignal({ interactionId, contactClicked: true });
-                            }
-                          }}
+                  {messages.map((message) => {
+                    const text = textOf(message);
+                    const usedTool = message.parts.some(isToolPart);
+                    if (!text && !usedTool) return null;
+                    const interactionId = turnIds[message.id];
+                    return (
+                      <Message key={message.id} from={message.role}>
+                        <MessageContent
+                          className={cn(
+                            message.role === "user"
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-transparent p-0 text-foreground",
+                          )}
                         >
-                          {!text && usedTool && (
-                            <Shimmer className="text-sm">{t("assistant.searching")}</Shimmer>
-                          )}
-                          {text && (
-                            <MessageResponse
-                              components={markdownComponents}
-                              linkSafety={{ enabled: false }}
-                              className="text-sm leading-relaxed [&_a]:cursor-pointer [&_a]:font-medium [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 [&_li]:my-0.5 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:space-y-1 [&_ol]:pl-5 [&_p]:my-2 [&_strong]:font-semibold [&_ul]:my-2 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5"
+                          {message.role === "assistant" ? (
+                            <div
+                              onClickCapture={(event) => {
+                                // A click on the contact address is the signal that
+                                // the referral actually landed.
+                                const anchor = (event.target as HTMLElement).closest("a");
+                                const href = anchor?.getAttribute("href") ?? "";
+                                if (interactionId && href && isContactHref(href)) {
+                                  sendSignal({ interactionId, contactClicked: true });
+                                }
+                              }}
                             >
-                              {text}
-                            </MessageResponse>
-                          )}
-                          {text && interactionId && (
-                            <div className="mt-2 flex items-center gap-2">
-                              {feedbackGiven[interactionId] ? (
-                                <span className="text-[11px] text-muted-foreground">
-                                  {t("assistant.feedback.thanks")}
-                                </span>
-                              ) : (
-                                <>
-                                  <span className="text-[11px] text-muted-foreground">
-                                    {t("assistant.feedback.question")}
-                                  </span>
-                                  {(["helpful", "not_helpful"] as const).map((value) => (
-                                    <button
-                                      key={value}
-                                      type="button"
-                                      aria-label={t(
-                                        `assistant.feedback.${value === "helpful" ? "yes" : "no"}`,
-                                      )}
-                                      onClick={() => {
-                                        setFeedbackGiven((prev) => ({
-                                          ...prev,
-                                          [interactionId]: value,
-                                        }));
-                                        sendSignal({ interactionId, feedback: value });
-                                      }}
-                                      className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                                    >
-                                      {value === "helpful" ? (
-                                        <ThumbsUp className="size-3.5" aria-hidden="true" />
-                                      ) : (
-                                        <ThumbsDown className="size-3.5" aria-hidden="true" />
-                                      )}
-                                    </button>
-                                  ))}
-                                </>
+                              {!text && usedTool && (
+                                <Shimmer className="text-sm">{t("assistant.searching")}</Shimmer>
+                              )}
+                              {text && (
+                                <MessageResponse
+                                  components={markdownComponents}
+                                  linkSafety={{ enabled: false }}
+                                  className="text-sm leading-relaxed [&_a]:cursor-pointer [&_a]:font-medium [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 [&_li]:my-0.5 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:space-y-1 [&_ol]:pl-5 [&_p]:my-2 [&_strong]:font-semibold [&_ul]:my-2 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5"
+                                >
+                                  {text}
+                                </MessageResponse>
+                              )}
+                              {text && interactionId && (
+                                <div className="mt-2 flex items-center gap-2">
+                                  {feedbackGiven[interactionId] ? (
+                                    <span className="text-[11px] text-muted-foreground">
+                                      {t("assistant.feedback.thanks")}
+                                    </span>
+                                  ) : (
+                                    <>
+                                      <span className="text-[11px] text-muted-foreground">
+                                        {t("assistant.feedback.question")}
+                                      </span>
+                                      {(["helpful", "not_helpful"] as const).map((value) => (
+                                        <button
+                                          key={value}
+                                          type="button"
+                                          aria-label={t(
+                                            `assistant.feedback.${value === "helpful" ? "yes" : "no"}`,
+                                          )}
+                                          onClick={() => {
+                                            setFeedbackGiven((prev) => ({
+                                              ...prev,
+                                              [interactionId]: value,
+                                            }));
+                                            sendSignal({ interactionId, feedback: value });
+                                          }}
+                                          className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                        >
+                                          {value === "helpful" ? (
+                                            <ThumbsUp className="size-3.5" aria-hidden="true" />
+                                          ) : (
+                                            <ThumbsDown className="size-3.5" aria-hidden="true" />
+                                          )}
+                                        </button>
+                                      ))}
+                                    </>
+                                  )}
+                                </div>
                               )}
                             </div>
+                          ) : (
+                            <p className="whitespace-pre-wrap text-sm">{text}</p>
                           )}
-                        </div>
-                      ) : (
-                        <p className="whitespace-pre-wrap text-sm">{text}</p>
-                      )}
-                    </MessageContent>
-                  </Message>
-                );
-              })}
+                        </MessageContent>
+                      </Message>
+                    );
+                  })}
 
-              {status === "submitted" && (
-                <Shimmer className="text-sm">{t("assistant.thinking")}</Shimmer>
-              )}
-              {error && (
-                <p role="alert" className="text-sm text-destructive">
-                  {t("assistant.error")}
-                </p>
-              )}
-            </ConversationContent>
-            <ConversationScrollButton />
-          </Conversation>
+                  {status === "submitted" && (
+                    <Shimmer className="text-sm">{t("assistant.thinking")}</Shimmer>
+                  )}
+                  {error && (
+                    <p role="alert" className="text-sm text-destructive">
+                      {t("assistant.error")}
+                    </p>
+                  )}
+                </ConversationContent>
+                <ConversationScrollButton />
+              </Conversation>
 
-          <div className="border-t border-border p-3">
-            {/* Single-line composer that grows with the text; the send button
+              <div className="border-t border-border p-3">
+                {/* Single-line composer that grows with the text; the send button
                 sits inside the field so the bar stays one row tall. */}
-            <PromptInput className="relative" onSubmit={(_message, event) => submit(event)}>
-              <PromptInputTextarea
-                ref={textareaRef}
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-                placeholder={t("assistant.placeholder")}
-                rows={1}
-                className="max-h-40 min-h-11 py-2.5 pr-14"
-              />
-              <PromptInputSubmit
-                status={status}
-                disabled={!busy && input.trim().length === 0}
-                onStop={stop}
-                className="absolute bottom-1.5 right-1.5 z-10 size-11 sm:size-9"
-              />
-            </PromptInput>
+                <PromptInput className="relative" onSubmit={(_message, event) => submit(event)}>
+                  <PromptInputTextarea
+                    ref={textareaRef}
+                    value={input}
+                    onChange={(event) => setInput(event.target.value)}
+                    placeholder={t("assistant.placeholder")}
+                    rows={1}
+                    className="max-h-40 min-h-11 py-2.5 pr-14"
+                  />
+                  <PromptInputSubmit
+                    status={status}
+                    disabled={!busy && input.trim().length === 0}
+                    onStop={stop}
+                    className="absolute bottom-1.5 right-1.5 z-10 size-11 sm:size-9"
+                  />
+                </PromptInput>
 
-            <p className="mt-2 text-[11px] leading-snug text-muted-foreground">
-              {t("assistant.disclaimer")}
-            </p>
-            {volunteersOnline > 0 && (
-              <button
-                type="button"
-                onClick={() => setLiveChat(true)}
-                className="mt-2 inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-full border border-border px-3 text-xs font-semibold text-foreground transition-colors hover:bg-secondary"
-              >
-                <span className="size-2 rounded-full bg-emerald-500" aria-hidden="true" />
-                {t("live-chat.handover")}
-              </button>
-            )}
-          </div>
+                <p className="mt-2 text-[11px] leading-snug text-muted-foreground">
+                  {t("assistant.disclaimer")}
+                </p>
+                {volunteersOnline > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setLiveChat(true)}
+                    className="mt-2 inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-full border border-border px-3 text-xs font-semibold text-foreground transition-colors hover:bg-secondary"
+                  >
+                    <span className="size-2 rounded-full bg-emerald-500" aria-hidden="true" />
+                    {t("live-chat.handover")}
+                  </button>
+                )}
+              </div>
             </>
           )}
         </div>

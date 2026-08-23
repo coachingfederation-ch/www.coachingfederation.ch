@@ -18,5 +18,9 @@ export const Route = createFileRoute("/communities/$slug")({
     ),
     links: localeLinkTags(`/communities/${params.slug}`, "en"),
   }),
-  component: () => <CommunityDetailPage slug={Route.useParams().slug} />,
+  component: CommunityPage,
 });
+
+function CommunityPage() {
+  return <CommunityDetailPage slug={Route.useParams().slug} />;
+}

@@ -112,7 +112,6 @@ export default function AboutPage() {
               <Button asChild variant="inverse-ghost" size="pill">
                 <a href="#contact">{t("about.cta.contact")}</a>
               </Button>
-
             </div>
           </div>
         </section>

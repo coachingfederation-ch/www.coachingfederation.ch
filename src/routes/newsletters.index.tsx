@@ -17,8 +17,7 @@ export const Route = createFileRoute("/newsletters/")({
       { property: "og:title", content: "Newsletter archive — The Switzerland Chapter of ICF" },
       {
         property: "og:description",
-        content:
-          "Read past editions of the monthly newsletter of The Switzerland Chapter of ICF.",
+        content: "Read past editions of the monthly newsletter of The Switzerland Chapter of ICF.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

@@ -14,12 +14,43 @@ import { formatIssueDate } from "@/lib/newsletters";
 
 /** Page copy kept local: four short strings, no locale-file churn. */
 const COPY = {
-  en: { eyebrow: "Chapter newsletter", title: "Newsletter archive", lede: "Every monthly edition of our chapter newsletter, in one place.", empty: "No editions have been published yet.", loading: "Loading…", notFound: "This edition is not available.", back: "Back to the archive" },
-  de: { eyebrow: "Chapter-Newsletter", title: "Newsletter-Archiv", lede: "Alle monatlichen Ausgaben unseres Chapter-Newsletters an einem Ort.", empty: "Es wurden noch keine Ausgaben veröffentlicht.", loading: "Wird geladen…", notFound: "Diese Ausgabe ist nicht verfügbar.", back: "Zurück zum Archiv" },
-  fr: { eyebrow: "Newsletter du chapitre", title: "Archives de la newsletter", lede: "Toutes les éditions mensuelles de notre newsletter, au même endroit.", empty: "Aucune édition n'a encore été publiée.", loading: "Chargement…", notFound: "Cette édition n'est pas disponible.", back: "Retour aux archives" },
-  it: { eyebrow: "Newsletter del chapter", title: "Archivio della newsletter", lede: "Tutte le edizioni mensili della nostra newsletter, in un unico posto.", empty: "Non è ancora stata pubblicata nessuna edizione.", loading: "Caricamento…", notFound: "Questa edizione non è disponibile.", back: "Torna all'archivio" },
+  en: {
+    eyebrow: "Chapter newsletter",
+    title: "Newsletter archive",
+    lede: "Every monthly edition of our chapter newsletter, in one place.",
+    empty: "No editions have been published yet.",
+    loading: "Loading…",
+    notFound: "This edition is not available.",
+    back: "Back to the archive",
+  },
+  de: {
+    eyebrow: "Chapter-Newsletter",
+    title: "Newsletter-Archiv",
+    lede: "Alle monatlichen Ausgaben unseres Chapter-Newsletters an einem Ort.",
+    empty: "Es wurden noch keine Ausgaben veröffentlicht.",
+    loading: "Wird geladen…",
+    notFound: "Diese Ausgabe ist nicht verfügbar.",
+    back: "Zurück zum Archiv",
+  },
+  fr: {
+    eyebrow: "Newsletter du chapitre",
+    title: "Archives de la newsletter",
+    lede: "Toutes les éditions mensuelles de notre newsletter, au même endroit.",
+    empty: "Aucune édition n'a encore été publiée.",
+    loading: "Chargement…",
+    notFound: "Cette édition n'est pas disponible.",
+    back: "Retour aux archives",
+  },
+  it: {
+    eyebrow: "Newsletter del chapter",
+    title: "Archivio della newsletter",
+    lede: "Tutte le edizioni mensili della nostra newsletter, in un unico posto.",
+    empty: "Non è ancora stata pubblicata nessuna edizione.",
+    loading: "Caricamento…",
+    notFound: "Questa edizione non è disponibile.",
+    back: "Torna all'archivio",
+  },
 } as const;
-
 
 interface ArchiveRow {
   id: string;
@@ -42,15 +73,14 @@ async function fetchEditions(): Promise<ArchiveRow[]> {
 export default function NewslettersPage() {
   const { locale } = useI18n();
   const copy = COPY[locale as keyof typeof COPY] ?? COPY.en;
-  const { data, isLoading } = useQuery({ queryKey: ["newsletter-archive"], queryFn: fetchEditions });
+  const { data, isLoading } = useQuery({
+    queryKey: ["newsletter-archive"],
+    queryFn: fetchEditions,
+  });
 
   return (
     <>
-      <CompactHero
-        eyebrow={copy.eyebrow}
-        title={copy.title}
-        lede={copy.lede}
-      />
+      <CompactHero eyebrow={copy.eyebrow} title={copy.title} lede={copy.lede} />
       <main id="main" className="bg-background">
         <div className="mx-auto max-w-4xl px-6 py-16">
           {isLoading ? (

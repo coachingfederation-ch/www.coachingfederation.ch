@@ -32,7 +32,6 @@ import {
 } from "@/lib/roles.functions";
 import { GRANTABLE_ROLES, type GrantableRole } from "@/lib/role-model";
 
-
 export const Route = createFileRoute("/_staff/roles")({
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, ADMIN_ONLY),
   head: () => ({
@@ -356,14 +355,9 @@ function RolesPage() {
         </div>
 
         {inviteOpen ? (
-          <form
-            onSubmit={sendInvite}
-            className="mt-4 rounded-2xl border border-border bg-card p-5"
-          >
+          <form onSubmit={sendInvite} className="mt-4 rounded-2xl border border-border bg-card p-5">
             <h3 className="text-sm font-semibold">{t("roles.inviteTitle")}</h3>
-            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-              {t("roles.inviteIntro")}
-            </p>
+            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{t("roles.inviteIntro")}</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               <label className="text-sm">
                 <span className="mb-1 block font-semibold">{t("roles.inviteName")}</span>
@@ -502,10 +496,7 @@ function RolesPage() {
                             </button>
                             <button
                               onClick={() =>
-                                void withdrawInvite(
-                                  a.authUserId,
-                                  a.name ?? a.email ?? a.authUserId,
-                                )
+                                void withdrawInvite(a.authUserId, a.name ?? a.email ?? a.authUserId)
                               }
                               disabled={pending === `account:${a.authUserId}:invite`}
                               className="rounded-full border border-destructive/40 px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-50"
@@ -538,10 +529,7 @@ function RolesPage() {
                           ) : (
                             <button
                               onClick={() =>
-                                void revokeAccount(
-                                  a.authUserId,
-                                  a.name ?? a.email ?? a.authUserId,
-                                )
+                                void revokeAccount(a.authUserId, a.name ?? a.email ?? a.authUserId)
                               }
                               disabled={pending === `account:${a.authUserId}:delete`}
                               className="rounded-full bg-destructive px-3 py-1.5 text-xs font-semibold text-destructive-foreground hover:opacity-90 disabled:opacity-50"

@@ -15,7 +15,11 @@ import {
   Info,
 } from "lucide-react";
 import { useCms } from "@/i18n/cms";
-import { Popover, PopoverContent, PopoverTrigger } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df";
 import { CALLOUT_SHADES, SHADE_SWATCH, type CalloutShade } from "@/components/callout";
 
 const EMOJIS = ["💡", "⭐", "⚠️", "✅", "📌", "🎯", "❤️", "🔍"];

@@ -35,7 +35,7 @@ re-sync. To rotate: update the `private.app_config` row and the env var together
 
 1. Pull the member feed over SOAP from netFORUM xWeb.
 2. **Feed sanity check.** If the feed is more than `feed_drop_threshold_pct`
-   smaller than the current *active* member count, abort without writing. A
+   smaller than the current _active_ member count, abort without writing. A
    truncated or failing feed would otherwise deactivate the entire membership in
    one pass — the check exists because that failure is silent and catastrophic.
    An empty feed always aborts and cannot be overridden.
@@ -56,7 +56,6 @@ writing.
 
 The pipeline itself, the safety guards, the grace period and the `/integration`
 panel are documented in full in `docs/member-sync.md`.
-
 
 ## The weekly Europe Pulse scan
 
@@ -79,7 +78,6 @@ lapses and renewals are routine; immediate deletion would destroy
 member-authored profile content over an administrative gap. Anonymisation is an
 admin action, never automatic — the full state machine is in
 `docs/member-sync.md`.
-
 
 ## Go-live: the shape of the migration
 

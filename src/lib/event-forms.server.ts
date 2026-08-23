@@ -485,7 +485,13 @@ export async function buildFormResponsesCsv(formId: string) {
           .eq("status", "confirmed")
           .order("created_at", { ascending: true })
           .then(({ data }) => ({
-            data: ((data ?? []) as { id: string; answers: Record<string, string> | null; created_at: string }[])
+            data: (
+              (data ?? []) as {
+                id: string;
+                answers: Record<string, string> | null;
+                created_at: string;
+              }[]
+            )
               .filter((r) => r.answers && Object.keys(r.answers).length > 0)
               .map((r) => ({
                 registration_id: r.id,
@@ -501,30 +507,31 @@ export async function buildFormResponsesCsv(formId: string) {
 
   const ids = ((rows ?? []) as { registration_id: string }[]).map((r) => r.registration_id);
   const { data: regs } = ids.length
-    ? await supabaseAdmin
-        .from("event_registrations")
-        .select("id, full_name, email")
-        .in("id", ids)
+    ? await supabaseAdmin.from("event_registrations").select("id, full_name, email").in("id", ids)
     : { data: [] as { id: string; full_name: string; email: string }[] };
   const people = new Map(
     ((regs ?? []) as { id: string; full_name: string; email: string }[]).map((r) => [r.id, r]),
   );
 
   const header = ["attendee", "email", "submitted_at", ...questions.map((q) => q.label)];
-  const lines = ((rows ?? []) as { registration_id: string; answers: Record<string, string>; submitted_at: string }[]).map(
-    (row) => {
-      const person = people.get(row.registration_id);
-      const answers = row.answers ?? {};
-      return [
-        person?.full_name ?? "",
-        person?.email ?? "",
-        row.submitted_at,
-        ...questions.map((q) => displayAnswer(q, answers[q.key] ?? "")),
-      ]
-        .map(cell)
-        .join(",");
-    },
-  );
+  const lines = (
+    (rows ?? []) as {
+      registration_id: string;
+      answers: Record<string, string>;
+      submitted_at: string;
+    }[]
+  ).map((row) => {
+    const person = people.get(row.registration_id);
+    const answers = row.answers ?? {};
+    return [
+      person?.full_name ?? "",
+      person?.email ?? "",
+      row.submitted_at,
+      ...questions.map((q) => displayAnswer(q, answers[q.key] ?? "")),
+    ]
+      .map(cell)
+      .join(",");
+  });
 
   return {
     filename: `form-responses-${(form?.name ?? "form").toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${new Date().toISOString().slice(0, 10)}.csv`,

@@ -136,10 +136,7 @@ export function MarkedText({
         name={name}
         preserveRatio={false}
         render={render}
-        className={cn(
-          "absolute inset-x-0 -bottom-1 h-[0.28em] w-full text-accent",
-          markClassName,
-        )}
+        className={cn("absolute inset-x-0 -bottom-1 h-[0.28em] w-full text-accent", markClassName)}
       />
     </span>
   );

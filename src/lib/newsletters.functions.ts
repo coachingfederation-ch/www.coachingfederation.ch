@@ -46,7 +46,8 @@ export const getNewsletterFn = createServerFn({ method: "GET" })
   .handler(async ({ data, context }) => {
     const ctx = context as AuthedContext;
     const client = await assertStaff(ctx);
-    const { loadNewsletterEditorData, newsletterPermissions } = await import("./newsletters.server");
+    const { loadNewsletterEditorData, newsletterPermissions } =
+      await import("./newsletters.server");
     const result = await loadNewsletterEditorData(client, data.id);
     const roles = await callerRoles(ctx);
     return {
@@ -64,7 +65,12 @@ export const createNewsletterFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) =>
     z
-      .object({ issueDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional() })
+      .object({
+        issueDate: z
+          .string()
+          .regex(/^\d{4}-\d{2}-\d{2}$/)
+          .optional(),
+      })
       .parse(data ?? {}),
   )
   .handler(async ({ data, context }) => {
@@ -124,7 +130,6 @@ export const saveNewsletterBlockFn = createServerFn({ method: "POST" })
           .max(3)
           .nullable()
           .optional(),
-
       })
       .parse(data),
   )
@@ -159,7 +164,9 @@ export const reorderNewsletterBlocksFn = createServerFn({ method: "POST" })
 export const addNewsletterBlockFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) =>
-    idSchema.extend({ blockType: z.enum(ADDABLE_BLOCK_TYPES as unknown as [string, ...string[]]) }).parse(data),
+    idSchema
+      .extend({ blockType: z.enum(ADDABLE_BLOCK_TYPES as unknown as [string, ...string[]]) })
+      .parse(data),
   )
   .handler(async ({ data, context }) => {
     const ctx = context as AuthedContext;
@@ -199,9 +206,8 @@ export const transitionNewsletterFn = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const ctx = context as AuthedContext;
     const client = await assertStaff(ctx);
-    const { transitionNewsletter, loadNewsletterEditorData, newsletterPermissions } = await import(
-      "./newsletters.server"
-    );
+    const { transitionNewsletter, loadNewsletterEditorData, newsletterPermissions } =
+      await import("./newsletters.server");
     const { newsletter } = await loadNewsletterEditorData(client, data.id);
     const roles = await callerRoles(ctx);
     const permissions = newsletterPermissions(
@@ -237,9 +243,7 @@ export const deleteNewsletterFn = createServerFn({ method: "POST" })
 /** Regenerate the AI-assembled blocks of one edition. */
 export const regenerateNewsletterFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) =>
-    idSchema.extend({ force: z.boolean().default(true) }).parse(data),
-  )
+  .inputValidator((data) => idSchema.extend({ force: z.boolean().default(true) }).parse(data))
   .handler(async ({ data, context }) => {
     await assertStaff(context as AuthedContext);
     const [{ supabaseAdmin }, { refreshNewsletterBlocks }] = await Promise.all([

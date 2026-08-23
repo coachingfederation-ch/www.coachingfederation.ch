@@ -156,9 +156,10 @@ async function claimSend(registrationId: string, force: boolean) {
     .from("event_registrations")
     .update({ confirmation_status: "sending", confirmation_error: null })
     .eq("id", registrationId);
-  const { data } = await (force
-    ? query.in("confirmation_status", ["not_sent", "failed", "sent"])
-    : query.in("confirmation_status", ["not_sent", "failed"])
+  const { data } = await (
+    force
+      ? query.in("confirmation_status", ["not_sent", "failed", "sent"])
+      : query.in("confirmation_status", ["not_sent", "failed"])
   ).select("id");
   return (data ?? []).length > 0;
 }
@@ -302,7 +303,9 @@ export async function sendRegistrationConfirmation(
         tierName,
         memberPrice: segment === "member",
         nonMemberPrice: segment === "non_member",
-        amount: isPaid ? formatAmount(registration.amount_cents, registration.currency, locale) : null,
+        amount: isPaid
+          ? formatAmount(registration.amount_cents, registration.currency, locale)
+          : null,
         reference: registration.stripe_session_id ?? registration.id,
         answers,
         organiserEmail,

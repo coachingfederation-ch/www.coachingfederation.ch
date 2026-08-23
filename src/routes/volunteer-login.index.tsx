@@ -122,9 +122,7 @@ function VolunteerScanLoginPage() {
         <h1 className="mt-3 text-2xl font-bold text-foreground">
           {t("live-chat.volunteer.scanTitle")}
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {t("live-chat.volunteer.scanIntro")}
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t("live-chat.volunteer.scanIntro")}</p>
 
         {reason === "expired" && phase === "idle" ? (
           <p className="mt-3 rounded-2xl bg-accent/15 px-4 py-3 text-sm text-foreground">
@@ -135,8 +133,12 @@ function VolunteerScanLoginPage() {
         <div className="mt-5 flex-1">
           {phase === "scanning" && (
             <div className="overflow-hidden rounded-2xl border border-border bg-hero">
-              {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-              <video ref={videoRef} muted playsInline className="aspect-square w-full object-cover" />
+              <video
+                ref={videoRef}
+                muted
+                playsInline
+                className="aspect-square w-full object-cover"
+              />
             </div>
           )}
           <canvas ref={canvasRef} className="hidden" />

@@ -24,7 +24,7 @@ import {
 import logoNegativeAsset from "@/assets/icf-horizontal-negative.png.asset.json";
 import logoWhiteAsset from "@/assets/icf-horizontal-white.png.asset.json";
 import { SITE_URL } from "@/i18n/config";
-import type { TemplateEntry } from "./registry";
+import type { EmailTemplateData, TemplateEntry } from "./registry";
 
 export interface InternalInvitationProps {
   inviteUrl?: string;
@@ -92,10 +92,10 @@ const Email = ({
               </Button>
             </Section>
 
+            <Text style={muted}>This link works once and expires in {expiresInHours} hours.</Text>
             <Text style={muted}>
-              This link works once and expires in {expiresInHours} hours.
+              If the button does not work, copy this address into your browser:
             </Text>
-            <Text style={muted}>If the button does not work, copy this address into your browser:</Text>
             <Text style={urlText}>
               <Link href={inviteUrl} style={{ color: "#2B379B" }}>
                 {inviteUrl}
@@ -133,7 +133,7 @@ const Email = ({
 
 export const template = {
   component: Email,
-  subject: (data: Record<string, any>) =>
+  subject: (data: EmailTemplateData) =>
     data["isResend"]
       ? "Your new internal account activation link"
       : "Activate your internal account",

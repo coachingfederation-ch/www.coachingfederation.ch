@@ -141,28 +141,19 @@
         "date": "Jeu 17 sep 2026",
         "city": "Zürich",
         "title": "Coaching Perspectives Conference 2026",
-        "tags": [
-          "EN · DE",
-          "Leadership"
-        ]
+        "tags": ["EN · DE", "Leadership"]
       },
       {
         "date": "Mar 6 oct 2026",
         "city": "Online",
         "title": "AI & Coaching: What Stays Human?",
-        "tags": [
-          "EN",
-          "Webinaire"
-        ]
+        "tags": ["EN", "Webinaire"]
       },
       {
         "date": "Jeu 12 nov 2026",
         "city": "Lausanne",
         "title": "Soirée Coaching: Bâtir une culture de coaching",
-        "tags": [
-          "FR",
-          "Réseautage"
-        ]
+        "tags": ["FR", "Réseautage"]
       }
     ]
   },

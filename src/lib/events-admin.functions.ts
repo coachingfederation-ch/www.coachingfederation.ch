@@ -596,7 +596,6 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
     if (source.status !== "published")
       throw new Error("Publish this event before creating repeat dates.");
 
-
     const dates = expandRecurrence(source.starts_at as string, data.rule);
     if (dates.length === 0) return { created: 0, skipped: 0 };
 

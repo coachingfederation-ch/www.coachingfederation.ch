@@ -113,7 +113,9 @@ function foldLine(line: string) {
 export function buildEventIcs(input: CalendarEventInput): string {
   const start = new Date(input.startsAt);
   if (Number.isNaN(start.getTime())) throw new Error("Invalid event start");
-  const end = input.endsAt ? new Date(input.endsAt) : new Date(start.getTime() + DEFAULT_DURATION_MS);
+  const end = input.endsAt
+    ? new Date(input.endsAt)
+    : new Date(start.getTime() + DEFAULT_DURATION_MS);
   if (Number.isNaN(end.getTime()) || end.getTime() <= start.getTime()) {
     end.setTime(start.getTime() + DEFAULT_DURATION_MS);
   }
@@ -184,7 +186,9 @@ export function googleCalendarUrl(input: {
   endsAt: string | null;
 }) {
   const start = new Date(input.startsAt);
-  const end = input.endsAt ? new Date(input.endsAt) : new Date(start.getTime() + DEFAULT_DURATION_MS);
+  const end = input.endsAt
+    ? new Date(input.endsAt)
+    : new Date(start.getTime() + DEFAULT_DURATION_MS);
   const params = new URLSearchParams({
     action: "TEMPLATE",
     text: input.title,

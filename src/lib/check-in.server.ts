@@ -104,7 +104,9 @@ export async function loadTicket(token: string): Promise<TicketView | null> {
 
   const { data: eventRow } = await supabaseAdmin
     .from("events")
-    .select(`${EVENT_COLUMNS}, practical_notes, practical_notes_de, practical_notes_fr, practical_notes_it`)
+    .select(
+      `${EVENT_COLUMNS}, practical_notes, practical_notes_de, practical_notes_fr, practical_notes_it`,
+    )
     .eq("id", registration.event_id)
     .maybeSingle();
   if (!eventRow) return null;
@@ -120,7 +122,8 @@ export async function loadTicket(token: string): Promise<TicketView | null> {
       .select("name, name_de, name_fr, name_it")
       .eq("id", registration.tier_id)
       .maybeSingle();
-    if (tier) tierName = localisedText(tier as unknown as Record<string, string | null>, "name", locale);
+    if (tier)
+      tierName = localisedText(tier as unknown as Record<string, string | null>, "name", locale);
   }
 
   return {

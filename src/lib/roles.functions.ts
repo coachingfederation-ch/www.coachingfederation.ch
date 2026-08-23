@@ -262,7 +262,6 @@ export const revokeAccountStaffRoles = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-
 const inviteSchema = z.object({
   email: z.string().email().max(200),
   displayName: z.string().trim().min(2).max(120),
@@ -289,9 +288,8 @@ export const inviteInternalAccount = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     await assertAdmin(context);
     const { getRequestUrl } = await import("@tanstack/react-start/server");
-    const { createOrAttachInternalAccount, deliverInternalInvitation } = await import(
-      "./internal-accounts.server"
-    );
+    const { createOrAttachInternalAccount, deliverInternalInvitation } =
+      await import("./internal-accounts.server");
 
     const { authUserId } = await createOrAttachInternalAccount({
       email: data.email,

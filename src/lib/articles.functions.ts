@@ -99,7 +99,11 @@ export const changeArticleStatus = createServerFn({ method: "POST" })
     const client = await assertStaff(context);
     const { transitionArticle, loadArticlePermissions } = await import("./articles.server");
     const { id, ...transition } = data;
-    const { data: row } = await client.from("articles").select("created_by").eq("id", id).maybeSingle();
+    const { data: row } = await client
+      .from("articles")
+      .select("created_by")
+      .eq("id", id)
+      .maybeSingle();
     const permissions = await loadArticlePermissions(
       context.userId,
       await callerIsAdmin(context),

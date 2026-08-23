@@ -7,11 +7,11 @@ and remove volunteers from the CMS.
 
 Three surfaces:
 
-| Surface           | Route                     | Who                                     |
-| ----------------- | ------------------------- | --------------------------------------- |
-| Visitor widget    | site-wide launcher        | Anonymous public visitors               |
-| Volunteer console | `/volunteer-chat`         | Signed-in, activated volunteers         |
-| Volunteer admin   | `/manage/live-chat`       | Platform admins / administrators        |
+| Surface           | Route               | Who                              |
+| ----------------- | ------------------- | -------------------------------- |
+| Visitor widget    | site-wide launcher  | Anonymous public visitors        |
+| Volunteer console | `/volunteer-chat`   | Signed-in, activated volunteers  |
+| Volunteer admin   | `/manage/live-chat` | Platform admins / administrators |
 
 ## Data model
 
@@ -19,14 +19,14 @@ All tables are `live_chat_*`, all with RLS and explicit grants. **No table
 grants anything to `anon`** — the visitor is anonymous and reaches the data only
 through the server.
 
-| Table                        | Holds                                                                          |
-| ---------------------------- | ------------------------------------------------------------------------------ |
-| `live_chat_volunteers`       | Activated members (`user_id`, display name, who activated them).                |
-| `live_chat_presence`         | One row per volunteer: `is_online`, `last_seen_at` heartbeat.                   |
-| `live_chat_conversations`    | Visitor name, optional email, locale, page path, `visitor_key_hash`, status.    |
-| `live_chat_messages`         | `sender` (`visitor` / `volunteer` / `system`), body, timestamp.                 |
-| `live_chat_login_tokens`     | Hashed, single-use, 10-minute QR sign-in codes.                                 |
-| `live_chat_push_subscriptions` | Web Push endpoints per volunteer.                                             |
+| Table                          | Holds                                                                        |
+| ------------------------------ | ---------------------------------------------------------------------------- |
+| `live_chat_volunteers`         | Activated members (`user_id`, display name, who activated them).             |
+| `live_chat_presence`           | One row per volunteer: `is_online`, `last_seen_at` heartbeat.                |
+| `live_chat_conversations`      | Visitor name, optional email, locale, page path, `visitor_key_hash`, status. |
+| `live_chat_messages`           | `sender` (`visitor` / `volunteer` / `system`), body, timestamp.              |
+| `live_chat_login_tokens`       | Hashed, single-use, 10-minute QR sign-in codes.                              |
+| `live_chat_push_subscriptions` | Web Push endpoints per volunteer.                                            |
 
 `public.live_chat_online_count()` is a security-definer function so "is anyone
 on duty?" can be answered without exposing presence rows. Presence itself is
@@ -130,14 +130,14 @@ that the conversation is handled by a chapter volunteer and kept for 30 days.
 
 ## Module map
 
-| Module                                | Responsibility                                              |
-| ------------------------------------- | ----------------------------------------------------------- |
-| `live-chat.server.ts`                 | Visitor side: key hashing, start/send/read/end, purge.      |
-| `live-chat-volunteers.server/.functions.ts` | Activation, eligibility, opt-out, volunteer status.   |
-| `volunteer-qr.server/.functions.ts`   | Mint and redeem QR sign-in tokens.                          |
-| `volunteer-qr-signin.ts`              | Client-side redeem + `verifyOtp` helper.                    |
-| `live-chat-push.server/.functions.ts` | Push subscriptions and waiting-visitor fan-out.             |
-| `volunteer-notifications.ts`          | In-console chime and permission handling.                   |
+| Module                                      | Responsibility                                         |
+| ------------------------------------------- | ------------------------------------------------------ |
+| `live-chat.server.ts`                       | Visitor side: key hashing, start/send/read/end, purge. |
+| `live-chat-volunteers.server/.functions.ts` | Activation, eligibility, opt-out, volunteer status.    |
+| `volunteer-qr.server/.functions.ts`         | Mint and redeem QR sign-in tokens.                     |
+| `volunteer-qr-signin.ts`                    | Client-side redeem + `verifyOtp` helper.               |
+| `live-chat-push.server/.functions.ts`       | Push subscriptions and waiting-visitor fan-out.        |
+| `volunteer-notifications.ts`                | In-console chime and permission handling.              |
 
 Copy lives in `src/i18n/locales/{en,de,fr,it}/live-chat.json`; CMS labels in
 `cms.json`.

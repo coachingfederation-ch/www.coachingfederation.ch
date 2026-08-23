@@ -68,9 +68,7 @@ export function EventWaitlistForm({
     <form onSubmit={submit} className="mt-4 rounded-xl bg-secondary px-3 py-4">
       <p className="text-sm font-semibold">{t("events.detail.waitlist.title")}</p>
       <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-        {t(
-          soldOutTier ? "events.detail.waitlist.introTier" : "events.detail.waitlist.intro",
-        )}
+        {t(soldOutTier ? "events.detail.waitlist.introTier" : "events.detail.waitlist.intro")}
       </p>
 
       <label className="mt-4 block text-xs font-semibold" htmlFor="waitlist-name">

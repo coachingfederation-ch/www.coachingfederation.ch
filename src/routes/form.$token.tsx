@@ -118,9 +118,7 @@ function FollowUpFormRoute() {
             onSubmit={onSubmit}
             className={`mt-6 space-y-4 rounded-2xl border border-border bg-card p-6 ${CARD_SHADOW}`}
           >
-            {form.intro ? (
-              <p className="text-sm text-muted-foreground">{form.intro}</p>
-            ) : null}
+            {form.intro ? <p className="text-sm text-muted-foreground">{form.intro}</p> : null}
 
             <FormQuestionFields
               questions={form.questions}

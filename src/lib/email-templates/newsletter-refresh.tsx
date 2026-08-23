@@ -20,7 +20,7 @@ import {
 } from "@react-email/components";
 import logoNegativeAsset from "@/assets/icf-horizontal-negative.png.asset.json";
 import { SITE_URL } from "@/i18n/config";
-import type { TemplateEntry } from "./registry";
+import type { EmailTemplateData, TemplateEntry } from "./registry";
 
 export interface NewsletterRefreshProps {
   recipientName?: string;
@@ -84,7 +84,11 @@ const container: React.CSSProperties = {
 };
 const banner: React.CSSProperties = { backgroundColor: "#212251", padding: "24px 32px" };
 const content: React.CSSProperties = { padding: "32px" };
-const headingStyle: React.CSSProperties = { color: "#212251", fontSize: "22px", margin: "0 0 16px" };
+const headingStyle: React.CSSProperties = {
+  color: "#212251",
+  fontSize: "22px",
+  margin: "0 0 16px",
+};
 const lede: React.CSSProperties = { color: "#4b4d70", fontSize: "15px", lineHeight: "24px" };
 const muted: React.CSSProperties = { color: "#6b6d8c", fontSize: "13px", lineHeight: "20px" };
 const button: React.CSSProperties = {
@@ -98,7 +102,7 @@ const button: React.CSSProperties = {
 
 export const template: TemplateEntry = {
   component: Email,
-  subject: (data: Record<string, any>) =>
+  subject: (data: EmailTemplateData) =>
     `Newsletter draft refreshed — ${data["changedBlocks"] ?? 0} block(s) updated`,
   displayName: "Newsletter refresh notice",
   previewData: { recipientName: "Alex", changedBlocks: 3 },

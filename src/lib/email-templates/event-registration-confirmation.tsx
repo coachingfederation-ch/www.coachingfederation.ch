@@ -79,8 +79,7 @@ const BrushUnderline = () => (
 
 const main = {
   backgroundColor: BONE,
-  fontFamily:
-    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
+  fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
   color: INK,
   margin: 0,
   padding: "24px 0",
@@ -234,99 +233,93 @@ const Email = ({
           </Section>
 
           <Section style={content}>
-          <Heading style={heading}>{paid ? copy.headingPaid : copy.headingFree}</Heading>
-          <div style={{ marginBottom: "24px" }}>
-            <BrushUnderline />
-          </div>
-          <Text style={paragraph}>
-            {fill(copy.greeting, { name: attendeeName })},
-          </Text>
-          <Text style={paragraph}>{paid ? copy.introPaid : copy.introFree}</Text>
+            <Heading style={heading}>{paid ? copy.headingPaid : copy.headingFree}</Heading>
+            <div style={{ marginBottom: "24px" }}>
+              <BrushUnderline />
+            </div>
+            <Text style={paragraph}>{fill(copy.greeting, { name: attendeeName })},</Text>
+            <Text style={paragraph}>{paid ? copy.introPaid : copy.introFree}</Text>
 
-          <Section style={panel}>
-            <Text style={sectionTitle}>{copy.detailsTitle}</Text>
-            <Text style={{ ...value, fontSize: "17px", fontWeight: 700 }}>{eventTitle}</Text>
-            {eventSummary ? <Text style={value}>{eventSummary}</Text> : null}
-            <Row title={copy.whenLabel}>{when}</Row>
-            <Row title={copy.locationLabel}>{location}</Row>
-            {onlineUrl ? (
-              <Row title={copy.onlineLabel}>
-                <Link href={onlineUrl} style={link}>
-                  {onlineUrl}
-                </Link>
-              </Row>
-            ) : null}
-            {tierName ? <Row title={copy.ticketLabel}>{tierName}</Row> : null}
-            {paid && amount ? (
-              <>
-                <Row title={copy.amountLabel}>
-                  {amount} — {copy.paymentConfirmed}
+            <Section style={panel}>
+              <Text style={sectionTitle}>{copy.detailsTitle}</Text>
+              <Text style={{ ...value, fontSize: "17px", fontWeight: 700 }}>{eventTitle}</Text>
+              {eventSummary ? <Text style={value}>{eventSummary}</Text> : null}
+              <Row title={copy.whenLabel}>{when}</Row>
+              <Row title={copy.locationLabel}>{location}</Row>
+              {onlineUrl ? (
+                <Row title={copy.onlineLabel}>
+                  <Link href={onlineUrl} style={link}>
+                    {onlineUrl}
+                  </Link>
                 </Row>
-                <Row title={copy.referenceLabel}>{reference}</Row>
+              ) : null}
+              {tierName ? <Row title={copy.ticketLabel}>{tierName}</Row> : null}
+              {paid && amount ? (
+                <>
+                  <Row title={copy.amountLabel}>
+                    {amount} — {copy.paymentConfirmed}
+                  </Row>
+                  <Row title={copy.referenceLabel}>{reference}</Row>
+                </>
+              ) : null}
+              {paid && memberPrice ? <Text style={value}>{copy.memberPriceNote}</Text> : null}
+              {paid && nonMemberPrice ? <Text style={value}>{copy.nonMemberPriceNote}</Text> : null}
+              <Text style={{ ...value, margin: "4px 0 0" }}>
+                <Link href={eventUrl} style={link}>
+                  {copy.viewEvent}
+                </Link>
+              </Text>
+            </Section>
+
+            <Section style={{ margin: "28px 0 4px" }}>
+              <Button style={button} href={eventUrl}>
+                {copy.viewEvent} →
+              </Button>
+            </Section>
+
+            {answers.length > 0 ? (
+              <>
+                <Hr style={rule} />
+                <Text style={sectionTitle}>{copy.answersTitle}</Text>
+                {answers.map((a) => (
+                  <Row key={a.label} title={a.label}>
+                    {a.value}
+                  </Row>
+                ))}
               </>
             ) : null}
-            {paid && memberPrice ? <Text style={value}>{copy.memberPriceNote}</Text> : null}
-            {paid && nonMemberPrice ? (
-              <Text style={value}>{copy.nonMemberPriceNote}</Text>
+
+            {calendarUrl || googleUrl || outlookUrl ? (
+              <>
+                <Hr style={rule} />
+                <Text style={sectionTitle}>{copy.calendarTitle}</Text>
+                <Text style={paragraph}>{copy.calendarIntro}</Text>
+                <Text style={paragraph}>
+                  {calendarUrl ? (
+                    <Link href={calendarUrl} style={link}>
+                      {copy.addToCalendar}
+                    </Link>
+                  ) : null}
+                  {calendarUrl && googleUrl ? " · " : null}
+                  {googleUrl ? (
+                    <Link href={googleUrl} style={link}>
+                      {copy.addToGoogle}
+                    </Link>
+                  ) : null}
+                  {(calendarUrl || googleUrl) && outlookUrl ? " · " : null}
+                  {outlookUrl ? (
+                    <Link href={outlookUrl} style={link}>
+                      {copy.addToOutlook}
+                    </Link>
+                  ) : null}
+                </Text>
+              </>
             ) : null}
-            <Text style={{ ...value, margin: "4px 0 0" }}>
-              <Link href={eventUrl} style={link}>
-                {copy.viewEvent}
-              </Link>
-            </Text>
-          </Section>
 
-          <Section style={{ margin: "28px 0 4px" }}>
-            <Button style={button} href={eventUrl}>
-              {copy.viewEvent} →
-            </Button>
-          </Section>
-
-          {answers.length > 0 ? (
-            <>
-              <Hr style={rule} />
-              <Text style={sectionTitle}>{copy.answersTitle}</Text>
-              {answers.map((a) => (
-                <Row key={a.label} title={a.label}>
-                  {a.value}
-                </Row>
-              ))}
-            </>
-          ) : null}
-
-          {calendarUrl || googleUrl || outlookUrl ? (
-            <>
-              <Hr style={rule} />
-              <Text style={sectionTitle}>{copy.calendarTitle}</Text>
-              <Text style={paragraph}>{copy.calendarIntro}</Text>
-              <Text style={paragraph}>
-                {calendarUrl ? (
-                  <Link href={calendarUrl} style={link}>
-                    {copy.addToCalendar}
-                  </Link>
-                ) : null}
-                {calendarUrl && googleUrl ? " · " : null}
-                {googleUrl ? (
-                  <Link href={googleUrl} style={link}>
-                    {copy.addToGoogle}
-                  </Link>
-                ) : null}
-                {(calendarUrl || googleUrl) && outlookUrl ? " · " : null}
-                {outlookUrl ? (
-                  <Link href={outlookUrl} style={link}>
-                    {copy.addToOutlook}
-                  </Link>
-                ) : null}
-              </Text>
-            </>
-          ) : null}
-
-          <Hr style={rule} />
-          <Text style={footer}>
-            {fill(copy.questions, { email: organiserEmail })}
-          </Text>
-          <Text style={footer}>{signoffLine}</Text>
-          <Text style={footer}>{signoffName}</Text>
+            <Hr style={rule} />
+            <Text style={footer}>{fill(copy.questions, { email: organiserEmail })}</Text>
+            <Text style={footer}>{signoffLine}</Text>
+            <Text style={footer}>{signoffName}</Text>
           </Section>
 
           <Section style={pageFooter}>

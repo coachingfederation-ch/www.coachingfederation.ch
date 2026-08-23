@@ -16,7 +16,11 @@ import {
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { useI18n } from "@/i18n";
 import { localizePath, SITE_URL } from "@/i18n/config";
-import { googleCalendarUrl, outlookCalendarUrl, type CalendarLinkInput } from "@/lib/event-calendar";
+import {
+  googleCalendarUrl,
+  outlookCalendarUrl,
+  type CalendarLinkInput,
+} from "@/lib/event-calendar";
 import { eventPlace, type PublicEvent } from "@/lib/events";
 
 /** Markdown noise never belongs in a calendar description. */
@@ -42,13 +46,13 @@ export function AddToCalendarMenu({
 
   const eventUrl = `${SITE_URL}${localizePath(`/events/${event.slug}`, locale)}`;
   const place =
-    event.location_mode === "online"
-      ? event.online_url
-      : eventPlace(event, t("events.tag.online"));
+    event.location_mode === "online" ? event.online_url : eventPlace(event, t("events.tag.online"));
 
   const link: CalendarLinkInput = {
     title: event.title ?? "",
-    details: [toPlainText(event.summary ?? event.description), eventUrl].filter(Boolean).join("\n\n"),
+    details: [toPlainText(event.summary ?? event.description), eventUrl]
+      .filter(Boolean)
+      .join("\n\n"),
     location: place,
     startsAt: event.starts_at,
     endsAt: event.ends_at,

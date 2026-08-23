@@ -12,7 +12,10 @@
 import * as React from "react";
 import { Logo } from "@/design-system/icf-welcome-design-system-a835df/components/brand/Logo";
 import { cn } from "@/design-system/icf-welcome-design-system-a835df/lib/utils";
-import { defaultLinkComponent, type SiteLinkComponent } from "@/design-system/icf-welcome-design-system-a835df/components/chrome/SiteHeader";
+import {
+  defaultLinkComponent,
+  type SiteLinkComponent,
+} from "@/design-system/icf-welcome-design-system-a835df/components/chrome/SiteHeader";
 
 export type SiteFooterLink = {
   label: string;

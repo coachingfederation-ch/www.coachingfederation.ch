@@ -85,6 +85,9 @@ export function sanitizeBlockCrop(value: unknown): BlockImageCrop {
 }
 
 /** Defensive read of a persisted `image_marks` value. */
-export function sanitizeBlockMarks(aspect: string | null | undefined, value: unknown): PlacedMark[] {
+export function sanitizeBlockMarks(
+  aspect: string | null | undefined,
+  value: unknown,
+): PlacedMark[] {
   return blockImagePlacement(aspect).sanitize(value) ?? [];
 }

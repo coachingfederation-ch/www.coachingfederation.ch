@@ -65,9 +65,7 @@ export function VolunteeringPage() {
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
           {t("member.volunteering.eyebrow")}
         </p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">
-          {t("member.volunteering.title")}
-        </h1>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight">{t("member.volunteering.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
           {t("member.volunteering.intro")}
         </p>
@@ -88,7 +86,9 @@ export function VolunteeringPage() {
                 <p className="mt-1 text-sm text-muted-foreground">{description}</p>
                 <blockquote className="mt-4 border-l-4 border-primary pl-4">
                   <p className="text-sm italic text-foreground">&ldquo;{quote}&rdquo;</p>
-                  <footer className="mt-1 text-xs text-muted-foreground">&mdash; {attribution}</footer>
+                  <footer className="mt-1 text-xs text-muted-foreground">
+                    &mdash; {attribution}
+                  </footer>
                 </blockquote>
               </section>
             );
@@ -136,11 +136,7 @@ export function VolunteeringPage() {
                 </p>
                 <h3 className="mt-1 text-base font-bold">{event.title}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{event.timeRange}</p>
-                <Link
-                  to="/events/$slug"
-                  params={{ slug: event.slug }}
-                  className={CTA}
-                >
+                <Link to="/events/$slug" params={{ slug: event.slug }} className={CTA}>
                   {t("member.volunteering.onboarding.cta")}
                   <ArrowRight className="h-4 w-4" aria-hidden />
                 </Link>
@@ -172,11 +168,7 @@ export function VolunteeringPage() {
                 {data.director.name}
                 {data.director.role ? ` — ${data.director.role}` : null}
               </p>
-              <a
-                href={`mailto:${data.director.email}`}
-                target="_top"
-                className={CTA}
-              >
+              <a href={`mailto:${data.director.email}`} target="_top" className={CTA}>
                 {t("member.volunteering.contact.cta")}
                 <Mail className="h-4 w-4" aria-hidden />
               </a>
@@ -186,7 +178,11 @@ export function VolunteeringPage() {
               <p className="text-sm text-muted-foreground">
                 {t("member.volunteering.contact.fallback")}
               </p>
-              <a href={`mailto:${data?.contactEmail || "office@coachingfederation.ch"}`} target="_top" className={CTA}>
+              <a
+                href={`mailto:${data?.contactEmail || "office@coachingfederation.ch"}`}
+                target="_top"
+                className={CTA}
+              >
                 {t("member.volunteering.contact.cta")}
                 <Mail className="h-4 w-4" aria-hidden />
               </a>

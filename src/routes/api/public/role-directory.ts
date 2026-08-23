@@ -60,10 +60,7 @@ export const Route = createFileRoute("/api/public/role-directory")({
         }
 
         const members = [...byEmail].map(([email, roles]) => ({ email, roles: [...roles] }));
-        return Response.json(
-          { members },
-          { headers: { "cache-control": "no-store" } },
-        );
+        return Response.json({ members }, { headers: { "cache-control": "no-store" } });
       },
     },
   },

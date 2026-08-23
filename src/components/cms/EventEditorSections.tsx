@@ -265,7 +265,6 @@ export function EventRepeatSection({
   const dates = enabled ? expandRecurrence(event.starts_at, rule) : [];
   const patchRule = (next: Partial<RecurrenceRule>) => setRule({ ...rule, ...next });
 
-
   return (
     <Section title={t("events.repeat.section")} hint={t("events.repeat.hint")}>
       <label className="flex items-center gap-2 text-sm">
@@ -378,7 +377,6 @@ export function EventRepeatSection({
                 : `${t("events.repeat.create")} (${dates.length})`}
             </Button>
           </div>
-
         </>
       ) : null}
     </Section>

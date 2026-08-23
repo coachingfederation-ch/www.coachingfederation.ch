@@ -14,6 +14,8 @@ export default tseslint.config(
       ".output",
       ".vinxi",
       "src/routes/mcp.ts",
+      // Vendored design-system copy: replaced wholesale on every library update.
+      "src/design-system/**",
       "**/list-tools.ts",
       "**/invoke-tool/*.ts",
       "**/oauth-protected-resource.ts",
