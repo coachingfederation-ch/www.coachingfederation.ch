@@ -27,6 +27,7 @@ import { EventWaitlistSection } from "@/components/cms/EventWaitlistSection";
 import { EventInvitationsSection } from "@/components/cms/EventInvitationsSection";
 import { EventFormsSection } from "@/components/cms/EventFormsSection";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
+import { takeWizardExtras } from "@/lib/event-wizard-extras";
 import { useCms } from "@/i18n/cms";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
 import {
@@ -86,6 +87,16 @@ function EventEditor() {
   const [communities, setCommunities] = useState<{ id: string; name: string }[]>([]);
   // Tier names feed the attendee filter and the add-attendee dialog.
   const [tiers, setTiers] = useState<{ id: string; name: string }[]>([]);
+  // Optional panels. An event that already repeats or already applies for CCE
+  // shows them on its own; otherwise they follow the wizard's answers, and
+  // afterwards the toggles above the form.
+  const [extras, setExtras] = useState({ repeat: false, forms: false, cce: false });
+
+  useEffect(() => {
+    const handed = takeWizardExtras(id);
+    if (handed) setExtras(handed);
+  }, [id]);
+
 
   useEffect(() => {
     void Promise.all([
@@ -273,6 +284,13 @@ function EventEditor() {
         ? t("events.repeat.needsSave")
         : null;
 
+  // A stored rule or an active application is proof the panel is needed; the
+  // toggles above the form cover everything else.
+  const storedRecurrence = (event as { recurrence?: unknown }).recurrence ?? null;
+  const showRepeat = extras.repeat || Boolean(storedRecurrence);
+  const showCce = extras.cce || Boolean(event.cce_enabled);
+
+
 
   return (
     <Shell>
@@ -285,8 +303,43 @@ function EventEditor() {
         </button>
         <h1 className="mt-4 text-2xl font-bold tracking-tight">{event.title}</h1>
 
+        {/* Extras row: the optional halves of the editor stay out of the way
+            until this event actually needs them. */}
+        <div className="mt-4 flex flex-wrap gap-4 rounded-2xl border border-border bg-card px-5 py-3 text-sm">
+          <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            {t("events.wizard.step.extras")}
+          </span>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={showRepeat}
+              onChange={(e) => setExtras({ ...extras, repeat: e.target.checked })}
+              disabled={Boolean(storedRecurrence)}
+            />
+            <span>{t("events.wizard.extras.repeat")}</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={showCce}
+              onChange={(e) => setExtras({ ...extras, cce: e.target.checked })}
+              disabled={Boolean(event.cce_enabled)}
+            />
+            <span>{t("events.wizard.extras.cce")}</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={extras.forms}
+              onChange={(e) => setExtras({ ...extras, forms: e.target.checked })}
+            />
+            <span>{t("events.wizard.extras.forms")}</span>
+          </label>
+        </div>
+
         {message ? <p className="mt-3 text-sm text-teal-foreground">{message}</p> : null}
         {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
+
 
         <EventDetailsSection
           event={event}
@@ -317,18 +370,21 @@ function EventEditor() {
 
         <EventLocationSection event={event} patch={patch} t={t} />
 
-        <EventCceSection
-          eventId={event.id}
-          startsAt={event.starts_at}
-          endsAt={event.ends_at}
-          timezone={event.timezone ?? "Europe/Zurich"}
-          defaultContactName=""
-          defaultContactEmail=""
-          defaultFacilitator=""
-          enabled={Boolean(event.cce_enabled)}
-          onEnabledChange={(next) => patch({ cce_enabled: next })}
-          t={t}
-        />
+        {showCce ? (
+          <EventCceSection
+            eventId={event.id}
+            startsAt={event.starts_at}
+            endsAt={event.ends_at}
+            timezone={event.timezone ?? "Europe/Zurich"}
+            defaultContactName=""
+            defaultContactEmail=""
+            defaultFacilitator=""
+            enabled={Boolean(event.cce_enabled)}
+            onEnabledChange={(next) => patch({ cce_enabled: next })}
+            t={t}
+          />
+        ) : null}
+
 
         <EventPublishingSection
           event={event}
@@ -365,7 +421,7 @@ function EventEditor() {
               event.registration_mode !== "rsvp_invited" ? (
                 <EventWaitlistSection eventId={event.id} t={t} />
               ) : null}
-              <EventFormsSection eventId={event.id} t={t} />
+              {extras.forms ? <EventFormsSection eventId={event.id} t={t} /> : null}
             </>
           }
           t={t}
@@ -373,25 +429,28 @@ function EventEditor() {
 
         {/* Last step: occurrences are copied from the stored row, so this only
             unlocks once the event is published and nothing is left unsaved. */}
-        <EventRepeatSection
-          event={event}
-          t={t}
-          canCreate={canCreateOccurrences}
-          blockedReason={repeatBlockedReason}
-          onGenerate={async (rule) => {
-            setMessage(null);
-            setError(null);
-            try {
-              const res = await generateEventOccurrences({ data: { id: event.id, rule } });
-              setMessage(
-                `${t("events.repeat.created")} ${res.created}${res.skipped ? ` · ${t("events.repeat.skipped")} ${res.skipped}` : ""}`,
-              );
-              await load();
-            } catch (e) {
-              setError(e instanceof Error ? e.message : t("events.saveError"));
-            }
-          }}
-        />
+        {showRepeat ? (
+          <EventRepeatSection
+            event={event}
+            t={t}
+            canCreate={canCreateOccurrences}
+            blockedReason={repeatBlockedReason}
+            onGenerate={async (rule) => {
+              setMessage(null);
+              setError(null);
+              try {
+                const res = await generateEventOccurrences({ data: { id: event.id, rule } });
+                setMessage(
+                  `${t("events.repeat.created")} ${res.created}${res.skipped ? ` · ${t("events.repeat.skipped")} ${res.skipped}` : ""}`,
+                );
+                await load();
+              } catch (e) {
+                setError(e instanceof Error ? e.message : t("events.saveError"));
+              }
+            }}
+          />
+        ) : null}
+
 
 
 

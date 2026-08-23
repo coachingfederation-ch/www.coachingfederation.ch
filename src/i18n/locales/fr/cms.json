@@ -1436,6 +1436,67 @@
     "fieldInternal": "Réservé aux membres",
     "tag": {
       "membersOnly": "Réservé aux membres"
+    },
+    "wizard": {
+      "title": "Nouvel événement",
+      "intro": "Réponds à quelques questions : nous n'affichons que les champs utiles. Tout se peaufine ensuite dans l'éditeur complet.",
+      "progress": "Étapes",
+      "back": "Retour",
+      "next": "Continuer",
+      "aiFailed": "Le brouillon IA n'a pas pu être créé.",
+      "step": {
+        "basics": "Bases",
+        "where": "Où",
+        "who": "Participation",
+        "extras": "Options",
+        "content": "Contenu",
+        "review": "Vérifier"
+      },
+      "basics": {
+        "title": "Quoi et quand ?",
+        "hint": "Le titre et l'heure de début suffisent pour commencer.",
+        "titlePlaceholder": "Le coaching en organisation — session du soir"
+      },
+      "where": {
+        "title": "Où se déroule-t-il ?",
+        "hint": "Nous ne demandons que les détails liés à ton format.",
+        "inPersonHint": "Un lieu en Suisse.",
+        "onlineHint": "Un lien de réunion uniquement.",
+        "hybridHint": "Un lieu et un lien de réunion."
+      },
+      "who": {
+        "title": "Qui peut participer ?",
+        "hint": "Cela détermine si nous parlons de places, de billets ou d'une liste d'invités.",
+        "noneHint": "Information seulement — pas d'inscription.",
+        "rsvpHint": "Tout le monde peut s'inscrire.",
+        "membersHint": "Les membres s'inscrivent en étant connectés.",
+        "ticketsHint": "Tarifs payants, avec prix membre.",
+        "invitedHint": "Seuls les membres invités peuvent s'inscrire."
+      },
+      "extras": {
+        "title": "Autre chose ?",
+        "hint": "N'active que ce dont cet événement a besoin. Chaque réponse ouvre son panneau dans l'éditeur.",
+        "repeat": "Cet événement se répète",
+        "repeatHint": "Créer le même événement à plusieurs dates par la suite.",
+        "cce": "Demander des crédits CCE",
+        "cceHint": "Préparer une demande ICF de Continuing Coach Education.",
+        "forms": "Poser des questions personnalisées",
+        "formsHint": "Recueillir des réponses supplémentaires à l'inscription."
+      },
+      "content": {
+        "title": "Présente-le",
+        "hint": "Un court résumé et une description. Les deux peuvent être rédigés puis modifiés.",
+        "draft": "Rédiger avec l'IA",
+        "drafting": "Rédaction…"
+      },
+      "review": {
+        "title": "Prêt à créer",
+        "hint": "Vérifie l'essentiel, puis enregistre un brouillon ou publie tout de suite.",
+        "saveDraft": "Enregistrer le brouillon",
+        "publish": "Publier maintenant",
+        "afterHint": "L'éditeur complet s'ouvre ensuite — hôtes, traductions, design du hero et billets s'y trouvent.",
+        "noExtras": "Aucune"
+      }
     }
   },
   "eventTranslations": {

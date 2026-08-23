@@ -101,6 +101,7 @@ import { Route as ApiPublicRoleDirectoryRouteImport } from './routes/api/public/
 import { Route as ApiPublicRoleGrantsArchiveRouteImport } from './routes/api/public/role-grants-archive'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
+import { Route as StaffManageEventsNewRouteImport } from './routes/_staff/manage.events.new'
 import { Route as StaffManageNewslettersIndexRouteImport } from './routes/_staff/manage.newsletters.index'
 import { Route as StaffManageNewslettersIdRouteImport } from './routes/_staff/manage.newsletters.$id'
 import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/calendar.$file'
@@ -578,6 +579,11 @@ const StaffManageEventsIdRoute = StaffManageEventsIdRouteImport.update({
   path: '/manage/events/$id',
   getParentRoute: () => StaffRouteRoute,
 } as any)
+const StaffManageEventsNewRoute = StaffManageEventsNewRouteImport.update({
+  id: '/manage/events/new',
+  path: '/manage/events/new',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
 const StaffManageNewslettersIndexRoute =
   StaffManageNewslettersIndexRouteImport.update({
     id: '/manage/newsletters/',
@@ -732,6 +738,7 @@ export interface FileRoutesByFullPath {
   '/articles/': typeof StaffArticlesIndexRoute
   '/members/': typeof StaffMembersIndexRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
+  '/manage/events/new': typeof StaffManageEventsNewRoute
   '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
@@ -831,6 +838,7 @@ export interface FileRoutesByTo {
   '/articles': typeof StaffArticlesIndexRoute
   '/members': typeof StaffMembersIndexRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
+  '/manage/events/new': typeof StaffManageEventsNewRoute
   '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
@@ -937,6 +945,7 @@ export interface FileRoutesById {
   '/_staff/articles/': typeof StaffArticlesIndexRoute
   '/_staff/members/': typeof StaffMembersIndexRoute
   '/_staff/manage/events/$id': typeof StaffManageEventsIdRoute
+  '/_staff/manage/events/new': typeof StaffManageEventsNewRoute
   '/_staff/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
@@ -1042,6 +1051,7 @@ export interface FileRouteTypes {
     | '/articles/'
     | '/members/'
     | '/manage/events/$id'
+    | '/manage/events/new'
     | '/manage/newsletters/$id'
     | '/api/public/calendar/$file'
     | '/api/public/event-calendar/$file'
@@ -1141,6 +1151,7 @@ export interface FileRouteTypes {
     | '/articles'
     | '/members'
     | '/manage/events/$id'
+    | '/manage/events/new'
     | '/manage/newsletters/$id'
     | '/api/public/calendar/$file'
     | '/api/public/event-calendar/$file'
@@ -1246,6 +1257,7 @@ export interface FileRouteTypes {
     | '/_staff/articles/'
     | '/_staff/members/'
     | '/_staff/manage/events/$id'
+    | '/_staff/manage/events/new'
     | '/_staff/manage/newsletters/$id'
     | '/api/public/calendar/$file'
     | '/api/public/event-calendar/$file'
@@ -1962,6 +1974,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageEventsIdRouteImport
       parentRoute: typeof StaffRouteRoute
     }
+    '/_staff/manage/events/new': {
+      id: '/_staff/manage/events/new'
+      path: '/manage/events/new'
+      fullPath: '/manage/events/new'
+      preLoaderRoute: typeof StaffManageEventsNewRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/_staff/manage/newsletters/': {
       id: '/_staff/manage/newsletters/'
       path: '/manage/newsletters'
@@ -2149,6 +2168,7 @@ interface StaffRouteRouteChildren {
   StaffMembersIdRoute: typeof StaffMembersIdRoute
   StaffMembersIndexRoute: typeof StaffMembersIndexRoute
   StaffManageEventsIdRoute: typeof StaffManageEventsIdRoute
+  StaffManageEventsNewRoute: typeof StaffManageEventsNewRoute
   StaffManageNewslettersIdRoute: typeof StaffManageNewslettersIdRoute
   StaffManageEventsIndexRoute: typeof StaffManageEventsIndexRoute
   StaffManageNewslettersIndexRoute: typeof StaffManageNewslettersIndexRoute
@@ -2173,6 +2193,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffMembersIdRoute: StaffMembersIdRoute,
   StaffMembersIndexRoute: StaffMembersIndexRoute,
   StaffManageEventsIdRoute: StaffManageEventsIdRoute,
+  StaffManageEventsNewRoute: StaffManageEventsNewRoute,
   StaffManageNewslettersIdRoute: StaffManageNewslettersIdRoute,
   StaffManageEventsIndexRoute: StaffManageEventsIndexRoute,
   StaffManageNewslettersIndexRoute: StaffManageNewslettersIndexRoute,

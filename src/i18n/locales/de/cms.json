@@ -1436,6 +1436,67 @@
     "fieldInternal": "Nur für Mitglieder",
     "tag": {
       "membersOnly": "Nur für Mitglieder"
+    },
+    "wizard": {
+      "title": "Neuer Event",
+      "intro": "Beantworte ein paar Fragen — wir zeigen nur die Felder, die dazu passen. Alles Weitere lässt sich danach im vollen Editor verfeinern.",
+      "progress": "Schritte",
+      "back": "Zurück",
+      "next": "Weiter",
+      "aiFailed": "Der KI-Entwurf konnte nicht erstellt werden.",
+      "step": {
+        "basics": "Basis",
+        "where": "Wo",
+        "who": "Teilnahme",
+        "extras": "Extras",
+        "content": "Inhalt",
+        "review": "Prüfen"
+      },
+      "basics": {
+        "title": "Was und wann?",
+        "hint": "Titel und Startzeit genügen für den Anfang.",
+        "titlePlaceholder": "Coaching in Organisationen — Abendsession"
+      },
+      "where": {
+        "title": "Wo findet er statt?",
+        "hint": "Wir fragen nur nach den Angaben, die dein Format braucht.",
+        "inPersonHint": "Ein Veranstaltungsort in der Schweiz.",
+        "onlineHint": "Nur ein Meeting-Link.",
+        "hybridHint": "Ein Ort und ein Meeting-Link."
+      },
+      "who": {
+        "title": "Wer kann teilnehmen?",
+        "hint": "Das entscheidet, ob wir nach Plätzen, Tickets oder einer Gästeliste fragen.",
+        "noneHint": "Nur Information — niemand meldet sich an.",
+        "rsvpHint": "Alle können sich anmelden.",
+        "membersHint": "Mitglieder melden sich angemeldet an.",
+        "ticketsHint": "Bezahlte Stufen mit Mitgliederpreis.",
+        "invitedHint": "Nur eingeladene Mitglieder können sich anmelden."
+      },
+      "extras": {
+        "title": "Noch etwas?",
+        "hint": "Aktiviere nur, was dieser Event braucht. Jede Antwort schaltet ihr Panel im Editor frei.",
+        "repeat": "Dieser Event wiederholt sich",
+        "repeatHint": "Denselben Event später an mehreren Daten anlegen.",
+        "cce": "CCE-Credits beantragen",
+        "cceHint": "Einen ICF-Antrag für Continuing Coach Education vorbereiten.",
+        "forms": "Eigene Fragen stellen",
+        "formsHint": "Bei der Anmeldung zusätzliche Antworten sammeln."
+      },
+      "content": {
+        "title": "Erzähl davon",
+        "hint": "Eine kurze Zusammenfassung und eine Beschreibung. Beides kann entworfen und danach bearbeitet werden.",
+        "draft": "Mit KI entwerfen",
+        "drafting": "Schreibt…"
+      },
+      "review": {
+        "title": "Bereit zum Anlegen",
+        "hint": "Prüfe das Wesentliche und speichere einen Entwurf oder publiziere direkt.",
+        "saveDraft": "Als Entwurf speichern",
+        "publish": "Jetzt publizieren",
+        "afterHint": "Danach öffnet der volle Editor — Hosts, Übersetzungen, Hero-Design und Tickets sind dort.",
+        "noExtras": "Keine"
+      }
     }
   },
   "eventTranslations": {
