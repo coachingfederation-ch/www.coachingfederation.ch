@@ -309,8 +309,12 @@ export {
   MARK_ALIAS_NAMES,
   MARK_CATEGORY_LABELS,
   MARK_NAMES,
+  configureMarkUrls,
+  markUrl,
   resolveMarkName,
 } from "./components/brush/marks";
+export type { MarkUrlResolver } from "./components/brush/marks";
+export { loadMarkSvg, sanitizeMarkSvg } from "./components/brush/mark-svg";
 export type {
   MarkAlias,
   MarkCategory,
@@ -318,6 +322,7 @@ export type {
   MarkNameOrAlias,
   MarkSpec,
 } from "./components/brush/marks";
+
 export { Logo } from "./components/brand/Logo";
 export type { LogoProps, LogoSize } from "./components/brand/Logo";
 export { LOGOS, LOGO_MIN_SIZE, LOGO_NAMES } from "./components/brand/logos";

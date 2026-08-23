@@ -233,7 +233,7 @@ import { BreadcrumbSeparator } from "@/design-system/icf-welcome-design-system-a
 import { BrushMark } from "@/design-system/icf-welcome-design-system-a835df"
 ```
 
-Paints one hand-drawn ICF mark, tinted only by currentColor so a colour token is the only way to colour it. Accepts canonical names (Arrow01) and short aliases (arrow1, highlight1, stroke4, legacy star). Default render="mask"; pass render="inline" when the DOM is rasterised to a canvas, since masked backgrounds do not survive that. Always decorative and aria-hidden.
+Paints one hand-drawn ICF mark, tinted only by currentColor so a colour token is the only way to colour it. Accepts canonical names (Arrow01, CircularMark02) and short aliases (arrow1, highlight1, stroke4, circle2/circular2, legacy star). Artwork ships inside the library and is served same-origin through the bundler; repoint it with configureMarkUrls() if it must come from elsewhere, and use loadMarkSvg(name) when a canvas renderer needs the sanitised SVG string instead of a component. Default render="mask"; pass render="inline" when the DOM is rasterised to a canvas, since masked backgrounds do not survive that. Always decorative and aria-hidden.
 
 **Props:**
 
@@ -261,11 +261,25 @@ const markName = resolveMarkName(stored.mark);
 return markName ? <BrushMark name={markName} className="h-10 text-primary" /> : null;
 ```
 
+_Drawing a mark straight onto a canvas_
+```tsx
+const svg = await loadMarkSvg("circular2");
+const image = new Image();
+image.src = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+```
+
+_Serving artwork from your own path_
+```tsx
+configureMarkUrls((name) => `/brand/marks/${name}.svg`);
+```
+
 **Avoid:**
 
 - Colouring a mark with a raw hex or a background-image of pre-coloured artwork.
 - Giving a mark meaning — it is decorative and aria-hidden, so never use one as the only carrier of information.
 - Sizing a mark with max-h/max-w only: a masked span has no intrinsic size and collapses to 0x0. Set an explicit axis.
+- Re-implementing the fetch-and-sanitise step locally: use loadMarkSvg so the per-URL cache is shared with inline rendering.
+- Hardcoding an artwork URL, or calling configureMarkUrls after marks have already rendered.
 
 ### Button
 

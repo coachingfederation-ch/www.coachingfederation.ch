@@ -74,10 +74,18 @@ Behaviours: Forward Thinking, Excellence, Humanity.
   matches `DropdownMenuItem`. Use the real `DropdownMenu` when Radix keyboard
   semantics are needed.
 - `BrushMark` accepts short lowercase aliases (`arrow1`, `highlight1`, `stroke4`,
-  legacy `star`) as well as canonical names; enumerate with `MARK_ALIASES` and
-  normalise stored values with `resolveMarkName()`. Pass `render="inline"` when
-  the DOM is rasterised to a canvas (share-card export) — masks do not survive
-  that; artwork is fetched lazily per mark in both modes.
+  `circle2` / `circular2`, legacy `star`) as well as canonical names; enumerate
+  with `MARK_ALIASES` and normalise stored values with `resolveMarkName()`. Pass
+  `render="inline"` when the DOM is rasterised to a canvas (share-card export) —
+  masks do not survive that; artwork is fetched lazily per mark in both modes.
+- Mark artwork ships inside the library and resolves through the bundler, so it
+  is served same-origin (a canvas that draws it stays untainted). Never hardcode
+  an artwork URL: read `MARKS[name].url`, or call `configureMarkUrls()` once at
+  start-up to serve the artwork from your own path. When a renderer needs the
+  markup rather than a component, `await loadMarkSvg(name)` returns the same
+  sanitised, `currentColor`-painted SVG through the same per-URL cache — do not
+  re-implement the fetch-and-sanitise step locally.
+
 - Import everything from the design system's barrel (`src/index.ts` of the copied
   library folder) — `Callout`, `CALLOUT_SHADES`, `CalloutShade`,
   `CALLOUT_ALIASES` and `SHADE_SWATCH` are all exported there. Do not keep local

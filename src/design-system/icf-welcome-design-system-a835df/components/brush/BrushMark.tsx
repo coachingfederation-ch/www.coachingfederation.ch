@@ -6,7 +6,8 @@
  *
  * - `render="mask"` (default) paints the artwork with `mask-image`. Cheapest,
  *   cached by the browser like any image.
- * - `render="inline"` fetches the SVG once per mark and inlines it with
+ * - `render="inline"` fetches the SVG once per mark (via `loadMarkSvg`) and
+ *   inlines it with
  *   `fill="currentColor"`. Needed when the DOM is rasterised to a canvas
  *   (`html-to-image` share cards), which does not reproduce masked backgrounds.
  *
@@ -17,6 +18,7 @@
 import * as React from "react";
 import { cn } from "@/design-system/icf-welcome-design-system-a835df/lib/utils";
 import { MARKS, resolveMarkName, type MarkNameOrAlias } from "./marks";
+import { loadMarkSvgFromUrl } from "./mark-svg";
 
 export type BrushMarkRender = "mask" | "inline";
 
@@ -31,41 +33,6 @@ export type BrushMarkProps = Omit<React.ComponentPropsWithoutRef<"span">, "child
   /** Rendering strategy. Use `"inline"` for DOM-to-canvas export. */
   render?: BrushMarkRender;
 };
-
-/** One in-flight/settled fetch per artwork URL, shared across instances. */
-const inlineCache = new Map<string, Promise<string>>();
-
-/**
- * Strips anything executable or externally-referencing from fetched artwork and
- * forces the paint to `currentColor`, so the token guarantee still holds.
- */
-function sanitizeSvg(source: string): string {
-  return source
-    .replace(/<\?xml[^>]*\?>/gi, "")
-    .replace(/<!DOCTYPE[^>]*>/gi, "")
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
-    .replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, "")
-    .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "")
-    .replace(/\s(?:fill|stroke)\s*=\s*("[^"]*"|'[^']*')/gi, (match) =>
-      /none/i.test(match) ? match : match.replace(/=.*/, '="currentColor"'),
-    )
-    .replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/gi, "")
-    .trim();
-}
-
-function fetchInlineSvg(url: string): Promise<string> {
-  let pending = inlineCache.get(url);
-  if (!pending) {
-    pending = fetch(url)
-      .then((response) => {
-        if (!response.ok) throw new Error(`Failed to load mark: ${response.status}`);
-        return response.text();
-      })
-      .then(sanitizeSvg);
-    inlineCache.set(url, pending);
-  }
-  return pending;
-}
 
 export function BrushMark({
   name,
@@ -85,7 +52,7 @@ export function BrushMark({
       return;
     }
     let active = true;
-    fetchInlineSvg(mark.url)
+    loadMarkSvgFromUrl(mark.url)
       .then((svg) => {
         if (active) setMarkup(svg);
       })
