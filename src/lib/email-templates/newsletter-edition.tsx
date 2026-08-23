@@ -30,6 +30,10 @@ export interface NewsletterEmailBlock {
   title: string;
   content: string;
   featuredImageUrl?: string | null;
+  imageAlt?: string | null;
+  imageSource?: string | null;
+  imageCreditName?: string | null;
+  imageCreditUrl?: string | null;
   sources?: { label: string; url?: string | null }[];
 }
 
@@ -81,12 +85,29 @@ export const NewsletterEditionEmail = ({
                 {block.title}
               </Heading>
               {block.featuredImageUrl ? (
-                <Img
-                  src={block.featuredImageUrl}
-                  alt=""
-                  width={536}
-                  style={{ borderRadius: "16px", margin: "0 0 16px", width: "100%" }}
-                />
+                <>
+                  <Img
+                    src={block.featuredImageUrl}
+                    alt={block.imageAlt ?? ""}
+                    width={536}
+                    style={{ borderRadius: "16px", margin: "0 0 8px", width: "100%" }}
+                  />
+                  {block.imageSource === "ai" ? (
+                    <Text style={credit}>AI generated image</Text>
+                  ) : block.imageCreditName ? (
+                    <Text style={credit}>
+                      {"Photo by "}
+                      {block.imageCreditUrl ? (
+                        <Link href={block.imageCreditUrl} style={sourceLink}>
+                          {block.imageCreditName}
+                        </Link>
+                      ) : (
+                        block.imageCreditName
+                      )}
+                      {" on Unsplash"}
+                    </Text>
+                  ) : null}
+                </>
               ) : null}
               {block.content?.trim() ? (
                 <Markdown markdownCustomStyles={markdownStyles}>{block.content}</Markdown>
@@ -160,6 +181,8 @@ const blockHeading: React.CSSProperties = {
 };
 const lede: React.CSSProperties = { color: "#4b4d70", fontSize: "15px", lineHeight: "24px" };
 const muted: React.CSSProperties = { color: "#6b6d8c", fontSize: "13px", lineHeight: "20px" };
+// Derived from `muted` so the caption never introduces a second grey value.
+const credit: React.CSSProperties = { ...muted, fontSize: "12px", margin: "0 0 16px" };
 const sourceLink: React.CSSProperties = { color: "#2B379B", textDecoration: "underline" };
 const footer: React.CSSProperties = {
   backgroundColor: "#212251",

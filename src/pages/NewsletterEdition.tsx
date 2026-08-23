@@ -10,6 +10,7 @@ import { CompactHero, SiteFooter } from "@/components/site-chrome";
 import { supabase } from "@/integrations/supabase/client";
 import { LocaleLink, useI18n } from "@/i18n";
 import { formatIssueDate } from "@/lib/newsletters";
+import { AiPhoto } from "@/design-system/icf-welcome-design-system-a835df";
 
 /** Page copy kept local: four short strings, no locale-file churn. */
 const COPY = {
@@ -25,6 +26,11 @@ interface EditionBlock {
   title: string;
   content: string;
   position: number;
+  featured_image_url: string | null;
+  image_alt: string | null;
+  image_source: string | null;
+  image_credit_name: string | null;
+  image_credit_url: string | null;
 }
 
 async function fetchEdition(slug: string) {
@@ -40,7 +46,9 @@ async function fetchEdition(slug: string) {
 
   const { data: blocks, error: blockError } = await supabase
     .from("newsletter_blocks")
-    .select("id, title, content, position")
+    .select(
+      "id, title, content, position, featured_image_url, image_alt, image_source, image_credit_name, image_credit_url",
+    )
     .eq("newsletter_id", edition.id)
     .eq("enabled", true)
     .order("position", { ascending: true });
@@ -96,6 +104,38 @@ export default function NewsletterEditionPage() {
           {data.blocks.map((block) => (
             <section key={block.id}>
               <h2 className="font-heading text-2xl text-foreground">{block.title}</h2>
+              {block.featured_image_url ? (
+                block.image_source === "ai" ? (
+                  <AiPhoto
+                    src={block.featured_image_url}
+                    alt={block.image_alt ?? block.title}
+                    className="mt-4 w-full rounded-2xl object-cover"
+                  />
+                ) : (
+                  <figure className="mt-4">
+                    <img
+                      src={block.featured_image_url}
+                      alt={block.image_alt ?? ""}
+                      loading="lazy"
+                      className="w-full rounded-2xl object-cover"
+                    />
+                    {block.image_credit_name ? (
+                      <figcaption className="mt-2 text-xs text-muted-foreground">
+                        Photo by{" "}
+                        <a
+                          href={block.image_credit_url ?? "#"}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline underline-offset-2"
+                        >
+                          {block.image_credit_name}
+                        </a>{" "}
+                        on Unsplash
+                      </figcaption>
+                    ) : null}
+                  </figure>
+                )
+              ) : null}
               <div className="mt-3">
                 <Markdown>{block.content}</Markdown>
               </div>

@@ -99,6 +99,10 @@ export interface NewsletterBlockRow {
   source_refs: SourceRef[];
   source_fingerprint: string | null;
   featured_image_url: string | null;
+  image_alt: string | null;
+  image_source: "unsplash" | "upload" | "url" | "ai" | null;
+  image_credit_name: string | null;
+  image_credit_url: string | null;
   generated_at: string | null;
   created_by: string | null;
   created_at: string;

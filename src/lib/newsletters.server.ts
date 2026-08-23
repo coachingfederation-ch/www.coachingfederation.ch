@@ -134,6 +134,10 @@ export async function saveBlock(
     note?: string | null;
     enabled?: boolean;
     featured_image_url?: string | null;
+    image_alt?: string | null;
+    image_source?: string | null;
+    image_credit_name?: string | null;
+    image_credit_url?: string | null;
   },
 ) {
   const { error } = await client.from("newsletter_blocks").update(patch as never).eq("id", blockId);
@@ -312,6 +316,10 @@ export async function renderNewsletterEmail(client: Client, id: string): Promise
           title: b.title,
           content: b.content ?? "",
           featuredImageUrl: b.featured_image_url,
+          imageAlt: b.image_alt,
+          imageSource: b.image_source,
+          imageCreditName: b.image_credit_name,
+          imageCreditUrl: b.image_credit_url,
           sources: b.source_refs ?? [],
         })),
     }),

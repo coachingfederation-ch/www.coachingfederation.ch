@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowDown, ArrowUp, Eye, RefreshCw, Sparkles, Trash2 } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
+import { BlockImageField } from "@/components/cms/BlockImageField";
 import { NewsletterPreviewDialog } from "@/components/cms/NewsletterPreviewDialog";
 import { ARTICLE_ROLES, requireStaffAccess } from "@/lib/staff-guard";
 import {
@@ -26,6 +27,7 @@ import {
   addNewsletterBlockFn,
   deleteNewsletterBlockFn,
   discardNewsletterBlockFn,
+  generateNewsletterBlockImageFn,
   getNewsletterFn,
   regenerateNewsletterBlockFn,
   regenerateNewsletterFn,
@@ -70,6 +72,9 @@ function BlockCard({
   onMove,
   onSave,
   onRegenerate,
+  onGenerateImage,
+  generatingImage,
+  imageError,
   onDiscard,
   onDelete,
   busy,
@@ -80,6 +85,9 @@ function BlockCard({
   onMove: (direction: -1 | 1) => void;
   onSave: (patch: Partial<NewsletterBlockRow>) => void;
   onRegenerate: () => void;
+  onGenerateImage: () => void;
+  generatingImage: boolean;
+  imageError: string | null;
   onDiscard: () => void;
   onDelete: () => void;
   busy: boolean;
@@ -170,6 +178,15 @@ function BlockCard({
           />
         </div>
 
+        <BlockImageField
+          block={block}
+          onSave={onSave}
+          onGenerate={onGenerateImage}
+          generating={generatingImage}
+          generateError={imageError}
+        />
+
+
         <MarkdownEditor
           value={content}
           onChange={setContent}
@@ -238,6 +255,7 @@ function NewsletterEditor() {
   const discard = useServerFn(discardNewsletterBlockFn);
   const regenerate = useServerFn(regenerateNewsletterFn);
   const regenerateBlock = useServerFn(regenerateNewsletterBlockFn);
+  const generateImage = useServerFn(generateNewsletterBlockImageFn);
   const transition = useServerFn(transitionNewsletterFn);
 
   const queryKey = ["newsletter", id];
@@ -265,6 +283,12 @@ function NewsletterEditor() {
   });
   const regenerateOne = useMutation({
     mutationFn: (blockId: string) => regenerateBlock({ data: { blockId } }),
+    onSuccess: invalidate,
+  });
+  // Tracked per block so one card's spinner and error never bleed into another.
+  const [imageBlockId, setImageBlockId] = useState<string | null>(null);
+  const imageMutation = useMutation({
+    mutationFn: (blockId: string) => generateImage({ data: { blockId } }),
     onSuccess: invalidate,
   });
   const transitionMutation = useMutation({
@@ -424,6 +448,16 @@ function NewsletterEditor() {
               onMove={(direction) => move(index, direction)}
               onSave={(patch) => blockMutation.mutate({ blockId: block.id, patch })}
               onRegenerate={() => regenerateOne.mutate(block.id)}
+              onGenerateImage={() => {
+                setImageBlockId(block.id);
+                imageMutation.mutate(block.id);
+              }}
+              generatingImage={imageMutation.isPending && imageBlockId === block.id}
+              imageError={
+                imageBlockId === block.id
+                  ? ((imageMutation.error as Error | null)?.message ?? null)
+                  : null
+              }
               onDiscard={() => discardMutation.mutate(block.id)}
               onDelete={() => deleteMutation.mutate(block.id)}
             />

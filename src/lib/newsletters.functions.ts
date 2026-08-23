@@ -100,6 +100,10 @@ export const saveNewsletterBlockFn = createServerFn({ method: "POST" })
         note: z.string().max(2000).nullable().optional(),
         enabled: z.boolean().optional(),
         featured_image_url: z.string().max(2000).nullable().optional(),
+        image_alt: z.string().max(300).nullable().optional(),
+        image_source: z.enum(["unsplash", "upload", "url", "ai"]).nullable().optional(),
+        image_credit_name: z.string().max(200).nullable().optional(),
+        image_credit_url: z.string().max(2000).nullable().optional(),
       })
       .parse(data),
   )
@@ -108,6 +112,16 @@ export const saveNewsletterBlockFn = createServerFn({ method: "POST" })
     const { saveBlock } = await import("./newsletters.server");
     const { blockId, ...patch } = data;
     return saveBlock(client, blockId, patch);
+  });
+
+/** Draw an illustration for one block from its own text (AI, disclosed). */
+export const generateNewsletterBlockImageFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => blockIdSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const client = await assertStaff(context as AuthedContext);
+    const { generateBlockImage } = await import("./newsletter-images.server");
+    return generateBlockImage(client, data.blockId);
   });
 
 export const reorderNewsletterBlocksFn = createServerFn({ method: "POST" })
