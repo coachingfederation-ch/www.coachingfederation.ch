@@ -94,10 +94,14 @@ export async function generateBlockImage(client: Client, blockId: string) {
     .from("newsletter_blocks")
     .update({
       featured_image_url: url,
+      // The generated file is also the framing source, so the editor can crop
+      // and mark it afterwards without regenerating.
+      image_original_url: url,
       image_source: "ai",
       image_credit_name: null,
       image_credit_url: null,
       image_alt: `AI generated illustration for “${block.title}”`,
+
     })
     .eq("id", blockId);
   if (saveError) throw saveError;

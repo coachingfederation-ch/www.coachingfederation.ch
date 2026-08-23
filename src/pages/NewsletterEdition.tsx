@@ -10,6 +10,7 @@ import { CompactHero, SiteFooter } from "@/components/site-chrome";
 import { supabase } from "@/integrations/supabase/client";
 import { LocaleLink, useI18n } from "@/i18n";
 import { formatIssueDate } from "@/lib/newsletters";
+import { blockImagePreset } from "@/lib/block-image";
 import { AiPhoto } from "@/design-system/icf-welcome-design-system-a835df";
 
 /** Page copy kept local: four short strings, no locale-file churn. */
@@ -31,6 +32,7 @@ interface EditionBlock {
   image_source: string | null;
   image_credit_name: string | null;
   image_credit_url: string | null;
+  image_aspect: string | null;
 }
 
 async function fetchEdition(slug: string) {
@@ -47,7 +49,7 @@ async function fetchEdition(slug: string) {
   const { data: blocks, error: blockError } = await supabase
     .from("newsletter_blocks")
     .select(
-      "id, title, content, position, featured_image_url, image_alt, image_source, image_credit_name, image_credit_url",
+      "id, title, content, position, featured_image_url, image_alt, image_source, image_credit_name, image_credit_url, image_aspect",
     )
     .eq("newsletter_id", edition.id)
     .eq("enabled", true)
@@ -109,6 +111,8 @@ export default function NewsletterEditionPage() {
                   <AiPhoto
                     src={block.featured_image_url}
                     alt={block.image_alt ?? block.title}
+                    width={blockImagePreset(block.image_aspect).width}
+                    height={blockImagePreset(block.image_aspect).height}
                     className="mt-4 w-full rounded-2xl object-cover"
                   />
                 ) : (
@@ -117,8 +121,11 @@ export default function NewsletterEditionPage() {
                       src={block.featured_image_url}
                       alt={block.image_alt ?? ""}
                       loading="lazy"
+                      width={blockImagePreset(block.image_aspect).width}
+                      height={blockImagePreset(block.image_aspect).height}
                       className="w-full rounded-2xl object-cover"
                     />
+
                     {block.image_credit_name ? (
                       <figcaption className="mt-2 text-xs text-muted-foreground">
                         Photo by{" "}

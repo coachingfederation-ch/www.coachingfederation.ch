@@ -6,6 +6,8 @@
  * here, so a block type can never drift between the CMS and generation.
  */
 
+import type { PlacedMark } from "./mark-placement";
+
 export type NewsletterStatus = "draft" | "review" | "scheduled" | "published" | "unpublished";
 
 export type NewsletterBlockType =
@@ -103,6 +105,12 @@ export interface NewsletterBlockRow {
   image_source: "unsplash" | "upload" | "url" | "ai" | null;
   image_credit_name: string | null;
   image_credit_url: string | null;
+  /** Uncropped source, kept so the framing stays re-editable. */
+  image_original_url: string | null;
+  image_aspect: string | null;
+  image_crop: { xPct: number; yPct: number; zoom: number } | null;
+  image_marks: PlacedMark[] | null;
+
   generated_at: string | null;
   created_by: string | null;
   created_at: string;
