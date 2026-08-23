@@ -1436,6 +1436,67 @@
     "fieldInternal": "Solo per membri",
     "tag": {
       "membersOnly": "Solo per membri"
+    },
+    "wizard": {
+      "title": "Nuovo evento",
+      "intro": "Rispondi a poche domande: mostriamo solo i campi utili. Tutto il resto si rifinisce poi nell'editor completo.",
+      "progress": "Passaggi",
+      "back": "Indietro",
+      "next": "Continua",
+      "aiFailed": "Non è stato possibile creare la bozza AI.",
+      "step": {
+        "basics": "Base",
+        "where": "Dove",
+        "who": "Partecipazione",
+        "extras": "Extra",
+        "content": "Contenuto",
+        "review": "Verifica"
+      },
+      "basics": {
+        "title": "Cosa e quando?",
+        "hint": "Titolo e orario di inizio bastano per iniziare.",
+        "titlePlaceholder": "Il coaching nelle organizzazioni — sessione serale"
+      },
+      "where": {
+        "title": "Dove si svolge?",
+        "hint": "Chiediamo solo i dettagli richiesti dal formato scelto.",
+        "inPersonHint": "Una sede in Svizzera.",
+        "onlineHint": "Solo un link alla riunione.",
+        "hybridHint": "Una sede e un link alla riunione."
+      },
+      "who": {
+        "title": "Chi può partecipare?",
+        "hint": "Determina se parliamo di posti, biglietti o lista di invitati.",
+        "noneHint": "Solo informazione — nessuna iscrizione.",
+        "rsvpHint": "Tutti possono iscriversi.",
+        "membersHint": "I soci si iscrivono dopo l'accesso.",
+        "ticketsHint": "Tariffe a pagamento, con prezzo soci.",
+        "invitedHint": "Solo i soci invitati possono iscriversi."
+      },
+      "extras": {
+        "title": "Altro?",
+        "hint": "Attiva solo ciò che serve a questo evento. Ogni risposta apre il relativo pannello nell'editor.",
+        "repeat": "Questo evento si ripete",
+        "repeatHint": "Creare lo stesso evento in più date in seguito.",
+        "cce": "Richiedere crediti CCE",
+        "cceHint": "Preparare una domanda ICF di Continuing Coach Education.",
+        "forms": "Fare domande personalizzate",
+        "formsHint": "Raccogliere risposte aggiuntive all'iscrizione."
+      },
+      "content": {
+        "title": "Raccontalo",
+        "hint": "Un breve riassunto e una descrizione. Entrambi possono essere redatti e poi modificati.",
+        "draft": "Bozza con AI",
+        "drafting": "Scrittura…"
+      },
+      "review": {
+        "title": "Pronto per la creazione",
+        "hint": "Controlla l'essenziale, poi salva una bozza o pubblica subito.",
+        "saveDraft": "Salva come bozza",
+        "publish": "Pubblica ora",
+        "afterHint": "Poi si apre l'editor completo: host, traduzioni, hero design e biglietti sono lì.",
+        "noExtras": "Nessuno"
+      }
     }
   },
   "eventTranslations": {

@@ -1436,6 +1436,67 @@
     "fieldInternal": "For members only",
     "tag": {
       "membersOnly": "Members only"
+    },
+    "wizard": {
+      "title": "New event",
+      "intro": "Answer a few questions and we only show the fields that apply. You can refine everything in the full editor afterwards.",
+      "progress": "Steps",
+      "back": "Back",
+      "next": "Continue",
+      "aiFailed": "The AI draft could not be created.",
+      "step": {
+        "basics": "Basics",
+        "where": "Where",
+        "who": "Who can join",
+        "extras": "Extras",
+        "content": "Content",
+        "review": "Review"
+      },
+      "basics": {
+        "title": "What and when?",
+        "hint": "Title and start time are all we need to begin.",
+        "titlePlaceholder": "Coaching in organisations — evening session"
+      },
+      "where": {
+        "title": "Where does it happen?",
+        "hint": "We only ask for the details your format needs.",
+        "inPersonHint": "A venue in Switzerland.",
+        "onlineHint": "A meeting link only.",
+        "hybridHint": "A venue and a meeting link."
+      },
+      "who": {
+        "title": "Who can join?",
+        "hint": "This decides whether we ask about seats, tickets or a guest list.",
+        "noneHint": "Information only — nobody signs up.",
+        "rsvpHint": "Anyone can sign up.",
+        "membersHint": "Members sign in to register.",
+        "ticketsHint": "Paid tiers, with member pricing.",
+        "invitedHint": "Only invited members can register."
+      },
+      "extras": {
+        "title": "Anything else?",
+        "hint": "Turn on only what this event needs. Each answer unlocks its panel in the editor.",
+        "repeat": "This event repeats",
+        "repeatHint": "Create the same event on several dates later on.",
+        "cce": "Apply for CCE credits",
+        "cceHint": "Prepare an ICF Continuing Coach Education application.",
+        "forms": "Ask custom questions",
+        "formsHint": "Collect extra answers when people register."
+      },
+      "content": {
+        "title": "Tell people about it",
+        "hint": "A short summary and a description. Both can be drafted for you and edited afterwards.",
+        "draft": "Draft with AI",
+        "drafting": "Writing…"
+      },
+      "review": {
+        "title": "Ready to create",
+        "hint": "Check the essentials, then save a draft or publish right away.",
+        "saveDraft": "Save as draft",
+        "publish": "Publish now",
+        "afterHint": "The full editor opens next — hosts, translations, hero design and tickets live there.",
+        "noExtras": "None"
+      }
     }
   },
   "eventTranslations": {
