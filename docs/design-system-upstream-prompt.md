@@ -66,26 +66,40 @@ on teal cards, `!text-primary` where the default happens to fit.
 inherit `currentColor` and leave colour to the surrounding surface. If a default colour
 must stay, please add a neutral companion (`btn-mono-muted` or similar).
 
-### 4. `BrushMark`: short-name aliases and an inline-SVG mode
+### 4. `BrushMark`: the last three things blocking a full migration
 
-The library ships the same 30 HQ artworks we use, so this is close to adoptable — two
-things block it:
+Thank you — the short-name aliases (`MARK_ALIASES`, `resolveMarkName`) and the
+`render="inline"` mode we asked for previously both shipped, and `MARKS` exposing the
+source `width`/`height` is exactly what our placement editors needed.
 
-- **Naming.** `BrushMark` addresses `Arrow01`, `TextHighlighMark01`,
-  `ThinnerStrokeMark04`. Our CMS persists short lowercase names in stored hero and
-  article mark placements (`arrow1`, `highlight1`, `stroke4`, plus a legacy `star`
-  alias for `Star01`). Please accept those aliases in `name` and export the alias map
-  and the resulting name union, so a placement editor can enumerate marks and stored
-  values keep resolving.
-- **Rasterisation.** `BrushMark` paints with CSS `mask-image` against an asset URL.
-  We rasterise a LinkedIn share card from the DOM with `html-to-image`, which does not
-  reliably reproduce masked backgrounds, so those marks come out blank. Please add an
-  opt-in inline-SVG rendering mode (for example `render="inline"`), which fetches the
-  artwork and inlines it with `fill="currentColor"` — same tinting guarantee, but it
-  survives DOM-to-canvas export.
+We still keep `src/components/marks.tsx` locally, because three gaps remain. All three
+are small, and closing them lets us delete that component and re-point ~20 consumers.
+
+- **One missing alias family.** Our CMS persisted the ring marks as `circular1`,
+  `circular2`, `circular3` long before the library existed; `MARK_ALIASES` maps
+  `circle1/2/3` instead. Stored placements in `newsletter_blocks.image_marks`, article
+  mark placements and LinkedIn card visuals therefore resolve to nothing. Please add
+  `circular1/2/3` as additional aliases for `CircularMark01/02/03`, the same way `star`
+  is kept as a legacy alias for `Star01`. Alias parity turns a data migration into a
+  no-op for every consumer that has ever stored a mark name.
+- **No awaitable artwork loader.** `render="inline"` covers DOM-to-canvas export via
+  `html-to-image`, but we have two paths that draw to a `canvas` directly rather than
+  rasterising the DOM: the newsletter block-image flattener and the LinkedIn share-card
+  renderer. Both need the SVG *string*, not a React element. Please export the loader
+  that `render="inline"` already uses internally, for example
+  `loadMarkSvg(name: MarkNameOrAlias): Promise<string>`, returning the same sanitised,
+  `currentColor`-forced markup with the existing per-URL cache. This is an extraction of
+  `fetchInlineSvg`, not new behaviour.
+- **Artwork origin.** `MARKS[*].url` points at absolute CDN URLs. We deliver every
+  asset same-origin for Swiss data-protection reasons (the same reason our fonts are
+  self-hosted), and an external origin also risks tainting the export canvas in the two
+  rasterisers above. Please either ship the raw `.svg` files alongside the
+  `.asset.json` pointers so a bundler can resolve them, or document a supported way to
+  repoint `MARKS[*].url` at self-hosted copies.
 
 Loading behaviour matters: the raw artworks are 120–500 KB each, so whichever mode is
 used must stay lazy / per-mark rather than eagerly bundling all 30.
+
 
 ### 5. A dropdown / menu-row recipe
 
