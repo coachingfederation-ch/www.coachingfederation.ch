@@ -355,7 +355,8 @@
       "send": "Envoyer l'invitation",
       "resend": "Renvoyer l'invitation",
       "result": "Résultat :"
-    }
+    },
+    "colPilot": "Pilote"
   },
   "integration": {
     "title": "Statut de l'intégration",
@@ -502,7 +503,35 @@
     "credLeading": "espace en début",
     "credTrailing": "espace en fin",
     "credNewline": "contient un saut de ligne",
-    "credNonAscii": "contient un caractère non standard"
+    "credNonAscii": "contient un caractère non standard",
+    "campaignTitle": "Vagues d'invitation",
+    "campaignLoading": "Chargement de la campagne…",
+    "campaignBody": "Invite les membres à activer leur compte par vagues quotidiennes limitées — les membres pilotes d'abord, puis par date d'adhésion. Des rappels partent vers les membres sans compte.",
+    "campaignRemaining": "Restants",
+    "campaignInvited": "Invités",
+    "campaignClaimed": "Activés",
+    "campaignReminders": "Rappels à envoyer",
+    "campaignCap": "Par jour",
+    "campaignReminderDays": "Rappel après (jours)",
+    "campaignReminderOn": "Envoyer des rappels",
+    "campaignStart": "Démarrer la campagne",
+    "campaignPause": "Mettre en pause",
+    "campaignRelease": "Envoyer la vague du jour",
+    "campaignStartConfirm": "Envoyer les invitations par vagues quotidiennes ?",
+    "campaignReleaseConfirm": "Envoyer la vague du jour maintenant ?",
+    "campaignReleased": "Vague envoyée — messages :",
+    "campaignSkipped": "Rien envoyé —",
+    "campaignLastRun": "Dernière vague :",
+    "campaignRanToday": "la vague du jour est déjà partie",
+    "campaignRedirected": "Les e-mails sont redirigés vers",
+    "campaignStatus.idle": "Non démarrée",
+    "campaignStatus.running": "En cours",
+    "campaignStatus.paused": "En pause",
+    "campaignStatus.completed": "Terminée",
+    "campaignGate.test_mode": "Bloqué : l'intégration est encore en mode test.",
+    "campaignGate.cutover_in_progress": "Bloqué : une bascule est en cours.",
+    "campaignGate.claim_closed": "Bloqué : l'activation des comptes est encore fermée.",
+    "campaignGate.emails_suppressed": "Bloqué : les e-mails membres sont supprimés, sans boîte de test."
   },
   "member": {
     "title": "Mon profil de coach",

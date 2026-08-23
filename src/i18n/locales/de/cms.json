@@ -355,7 +355,8 @@
       "send": "Einladung senden",
       "resend": "Einladung erneut senden",
       "result": "Ergebnis:"
-    }
+    },
+    "colPilot": "Pilot"
   },
   "integration": {
     "title": "Integrationsstatus",
@@ -502,7 +503,35 @@
     "credLeading": "führendes Leerzeichen",
     "credTrailing": "abschliessendes Leerzeichen",
     "credNewline": "enthält einen Zeilenumbruch",
-    "credNonAscii": "enthält ein nicht standardmässiges Zeichen"
+    "credNonAscii": "enthält ein nicht standardmässiges Zeichen",
+    "campaignTitle": "Einladungswellen",
+    "campaignLoading": "Kampagne wird geladen…",
+    "campaignBody": "Lädt Mitglieder in begrenzten Tageswellen ein, ihr Konto zu übernehmen — Pilotmitglieder zuerst, danach nach Eintrittsdatum. Erinnerungen gehen an Mitglieder ohne Konto.",
+    "campaignRemaining": "Offen",
+    "campaignInvited": "Eingeladen",
+    "campaignClaimed": "Übernommen",
+    "campaignReminders": "Erinnerungen fällig",
+    "campaignCap": "Pro Tag",
+    "campaignReminderDays": "Erinnerung nach (Tagen)",
+    "campaignReminderOn": "Erinnerungen senden",
+    "campaignStart": "Kampagne starten",
+    "campaignPause": "Kampagne pausieren",
+    "campaignRelease": "Heutige Welle senden",
+    "campaignStartConfirm": "Einladungen in Tageswellen senden?",
+    "campaignReleaseConfirm": "Heutige Welle jetzt senden?",
+    "campaignReleased": "Welle gesendet — Nachrichten:",
+    "campaignSkipped": "Nichts gesendet —",
+    "campaignLastRun": "Letzte Welle:",
+    "campaignRanToday": "heutige Welle ist bereits raus",
+    "campaignRedirected": "E-Mails werden umgeleitet an",
+    "campaignStatus.idle": "Nicht gestartet",
+    "campaignStatus.running": "Läuft",
+    "campaignStatus.paused": "Pausiert",
+    "campaignStatus.completed": "Abgeschlossen",
+    "campaignGate.test_mode": "Blockiert: die Integration ist noch im Testmodus.",
+    "campaignGate.cutover_in_progress": "Blockiert: ein Cutover läuft.",
+    "campaignGate.claim_closed": "Blockiert: die Kontoübernahme ist noch geschlossen.",
+    "campaignGate.emails_suppressed": "Blockiert: Mitglieder-E-Mails sind unterdrückt, ohne Testpostfach."
   },
   "member": {
     "title": "Mein Coach-Profil",
