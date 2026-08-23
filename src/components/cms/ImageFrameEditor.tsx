@@ -96,7 +96,7 @@ export function ImageFrameEditor({
       <MarkPlacementCanvas
         marks={marks}
         onChange={onMarksChange}
-        placement={blockImagePlacement(aspect)}
+        placement={placement}
         width={width}
         height={height}
         labels={{
@@ -135,7 +135,27 @@ export function ImageFrameEditor({
             }}
           />
         </div>
+        {/*
+         * The canvas only draws selection chrome; the artwork itself belongs to
+         * the preview, exactly as the LinkedIn card renders its own marks. Kept
+         * pointer-transparent so the chrome above stays draggable.
+         */}
+        {marks.map((mark) => (
+          <Mark
+            key={mark.id}
+            name={mark.name}
+            className="pointer-events-none absolute"
+            style={{
+              left: `${mark.xPct}%`,
+              top: `${mark.yPct}%`,
+              width: `${mark.sizePct}%`,
+              height: `${placement.heightPct(mark.sizePct)}%`,
+              color: mark.color,
+            }}
+          />
+        ))}
       </MarkPlacementCanvas>
+
 
       <div className="space-y-1">
         <Label htmlFor="block-image-zoom">Zoom</Label>
