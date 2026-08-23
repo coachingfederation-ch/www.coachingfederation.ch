@@ -12,11 +12,11 @@ Run prettier/eslint autofix across the repo, including `src/integrations/supabas
 ## Phase 3 — manual fixes (behaviour-preserving)
 - **`no-explicit-any` (11)**: introduce proper types in the email-template layer — a shared props/payload type in `registry.ts` and `send-email.ts`, per-template `Props` interfaces for `event-reminder`, `internal-invitation`, `member-claim-invitation`, `newsletter-edition`, `newsletter-refresh`; typed row shapes in `newsletter-generation.server.ts` and `registrations-export.server.ts`. If any of these would need a runtime change to type cleanly, that file is left as-is and reported.
 - **`rules-of-hooks` (2)**: in `src/routes/communities.$slug.tsx` and `src/routes/$locale/communities.$slug.tsx`, lift the inline arrow into a capitalised `CommunityPage` component and pass it to `component:`.
-- **`exhaustive-deps` (3)** in `src/components/coaches/directory/useCoachDirectoryFilters.ts`: hoist the `lookup` helper out of the hook body (it only depends on its argument and `locale`) so both `useMemo`s can list honest dependencies. Same results, same render behaviour.
+- **`exhaustive-deps` (3)** in `src/components/coaches/directory/useCoachDirectoryFilters.ts`: keep `lookup` inside the hook — it closes over `locale` — and wrap it in `useCallback` with `[locale]` deps so both `useMemo`s can list honest dependencies (falling back to a scoped eslint-disable with a comment if that shifts anything). Same results, same render behaviour.
 - **`react-refresh/only-export-components` warnings** outside the design system: fix only where a constant or hook can be moved to a sibling file with no architectural change (e.g. `prompt-input.tsx`). `i18n/index.tsx` and `auth-screen.tsx` are left alone if the split would touch app structure; any skipped file is listed in the final report.
 
 ## Phase 4 — verification
-`eslint .` clean (remaining warnings enumerated), `tsgo` typecheck clean, production build succeeds, `bun run format` a no-op, and a browser smoke check of `/communities/<slug>` and `/volunteer-login` (camera page renders, manual-code form intact).
+`eslint .` clean (remaining warnings enumerated), `npx tsc --noEmit` clean, production build succeeds, `bun run format` a no-op, and a browser smoke check of `/communities/<slug>` and `/volunteer-login` (camera page renders, manual-code form intact).
 
 ## PR note
 
