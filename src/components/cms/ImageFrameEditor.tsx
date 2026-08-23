@@ -42,9 +42,11 @@ export function ImageFrameEditor({
   onMarksChange: (next: PlacedMark[]) => void;
 }) {
   const preset = blockImagePreset(aspect);
+  const placement = blockImagePlacement(aspect);
   const scale = PREVIEW_WIDTH / preset.width;
   const width = PREVIEW_WIDTH;
   const height = Math.round(preset.height * scale);
+
 
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);
   const dragRef = useRef<{ x: number; y: number; crop: BlockImageCrop } | null>(null);
