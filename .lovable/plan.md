@@ -6,7 +6,7 @@ A monthly newsletter, composed from an ordered list of blocks, sitting next to t
 
 - **Project updates (ICFS Aspire)** ships as an editor-filled block with a note that a live Aspire feed follows later. No invented data shape.
 - **Friday refresh notification**: email to accounts holding `editor` or `publisher`, through the existing transactional email pipeline.
-- **Preview**: staff-only. Published editions are archived in the database; no public newsletter route in this iteration.
+- **Preview**: staff-only inside the CMS. Published editions are additionally readable on a public newsletter archive under `/insights`, added as a navigation option alongside `/europe-pulse` — locale-prefixed routes `/newsletters` (archive list) and `/newsletters/$issue` (single edition), rendering enabled blocks in order with their own `head()` metadata. Read through a narrow public view exposing published editions only.
 
 ## Data model
 
