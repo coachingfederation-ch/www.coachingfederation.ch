@@ -253,6 +253,7 @@ function NewsletterEditor() {
   const discard = useServerFn(discardNewsletterBlockFn);
   const regenerate = useServerFn(regenerateNewsletterFn);
   const regenerateBlock = useServerFn(regenerateNewsletterBlockFn);
+  const generateImage = useServerFn(generateNewsletterBlockImageFn);
   const transition = useServerFn(transitionNewsletterFn);
 
   const queryKey = ["newsletter", id];
