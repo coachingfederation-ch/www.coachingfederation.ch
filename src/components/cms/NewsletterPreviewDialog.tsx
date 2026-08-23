@@ -45,7 +45,7 @@ export function NewsletterPreviewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex h-[90vh] max-w-4xl flex-col">
+      <DialogContent className="flex h-dvh max-w-4xl flex-col">
         <DialogHeader>
           <DialogTitle>Email preview</DialogTitle>
           <DialogDescription>
@@ -83,8 +83,10 @@ export function NewsletterPreviewDialog({
               title="Newsletter email preview"
               sandbox=""
               srcDoc={data?.html ?? ""}
-              className="h-full w-full rounded-xl border border-border bg-card"
-              style={{ maxWidth: width === "mobile" ? 390 : 680 }}
+              className={
+                "h-full w-full rounded-xl border border-border bg-card " +
+                (width === "mobile" ? "max-w-sm" : "max-w-2xl")
+              }
             />
           )}
         </div>
