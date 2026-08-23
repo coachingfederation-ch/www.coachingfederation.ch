@@ -446,6 +446,16 @@ function NewsletterEditor() {
               onMove={(direction) => move(index, direction)}
               onSave={(patch) => blockMutation.mutate({ blockId: block.id, patch })}
               onRegenerate={() => regenerateOne.mutate(block.id)}
+              onGenerateImage={() => {
+                setImageBlockId(block.id);
+                imageMutation.mutate(block.id);
+              }}
+              generatingImage={imageMutation.isPending && imageBlockId === block.id}
+              imageError={
+                imageBlockId === block.id
+                  ? ((imageMutation.error as Error | null)?.message ?? null)
+                  : null
+              }
               onDiscard={() => discardMutation.mutate(block.id)}
               onDelete={() => deleteMutation.mutate(block.id)}
             />
