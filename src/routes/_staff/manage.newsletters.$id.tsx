@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowDown, ArrowUp, Eye, RefreshCw, Sparkles, Trash2 } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
+import { BlockImageField } from "@/components/cms/BlockImageField";
 import { NewsletterPreviewDialog } from "@/components/cms/NewsletterPreviewDialog";
 import { ARTICLE_ROLES, requireStaffAccess } from "@/lib/staff-guard";
 import {
