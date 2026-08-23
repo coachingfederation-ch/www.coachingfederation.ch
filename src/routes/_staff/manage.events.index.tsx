@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CalendarDays, Plus, X } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { useCms } from "@/i18n/cms";
-import { createEvent, listManagedEvents } from "@/lib/events-admin.functions";
+import { listManagedEvents } from "@/lib/events-admin.functions";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -72,7 +72,6 @@ function ManageEventsPage() {
   const search = Route.useSearch();
   const [rows, setRows] = useState<Row[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     listManagedEvents()
@@ -169,42 +168,9 @@ function ManageEventsPage() {
     search.q || search.category || search.community || search.host || search.city || search.status,
   );
 
-  /** A new event starts as a dated draft so the required fields are never empty. */
-  const startDraft = async () => {
-    setCreating(true);
-    try {
-      const start = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-      start.setHours(18, 30, 0, 0);
-      const { id } = await createEvent({
-        data: {
-          title: t("events.untitled"),
-          slug: `event-${Date.now().toString(36)}`,
-          summary: null,
-          description: null,
-          language: "en",
-          starts_at: start.toISOString(),
-          ends_at: null,
-          timezone: "Europe/Zurich",
-          location_mode: "in_person",
-          venue_name: null,
-          city: null,
-          online_url: null,
-          image_url: null,
-          capacity: null,
-          registration_mode: "rsvp",
-          registration_opens_at: null,
-          registration_closes_at: null,
-          guest_registration_allowed: true,
-          is_featured: false,
-          is_internal: false,
-        },
-      });
-      void navigate({ to: "/manage/events/$id", params: { id } });
-    } catch {
-      setError(t("events.saveError"));
-      setCreating(false);
-    }
-  };
+  // Creating an event runs through the guided wizard at /manage/events/new,
+  // which writes the row once every branching question is answered.
+
 
   return (
     <Shell>
@@ -215,13 +181,13 @@ function ManageEventsPage() {
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("events.intro")}</p>
           </div>
           <button
-            onClick={() => void startDraft()}
-            disabled={creating}
+            onClick={() => void navigate({ to: "/manage/events/new" })}
             className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] disabled:opacity-50"
           >
             <Plus className="h-4 w-4" />
             {t("events.new")}
           </button>
+
         </header>
 
         {error ? (
