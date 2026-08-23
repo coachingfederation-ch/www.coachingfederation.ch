@@ -9,7 +9,7 @@
  */
 import { useEffect, useState } from "react";
 import { Send } from "lucide-react";
-import { Checkbox, Input } from "@/design-system/icf-welcome-design-system-a835df";
+import { Button, Checkbox, Input } from "@/design-system/icf-welcome-design-system-a835df";
 import {
   getClaimCampaign,
   releaseClaimWave,
@@ -19,11 +19,6 @@ import {
 type Overview = Awaited<ReturnType<typeof getClaimCampaign>>;
 
 const CARD = "rounded-2xl border border-border bg-card p-5";
-const BTN =
-  "rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-95 disabled:opacity-50";
-const BTN_SECONDARY =
-  "rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50";
-
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="rounded-xl border border-border p-3">
@@ -169,8 +164,8 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
 
       <div className="mt-4 flex flex-wrap gap-2">
         {campaign.status === "running" ? (
-          <button
-            className={BTN_SECONDARY}
+          <Button
+            variant="outline"
             disabled={busy}
             onClick={() =>
               void run(async () => {
@@ -180,10 +175,9 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
             }
           >
             {t("integration.campaignPause")}
-          </button>
+          </Button>
         ) : (
-          <button
-            className={BTN}
+          <Button
             disabled={busy || !canSend}
             onClick={() => {
               if (!window.confirm(t("integration.campaignStartConfirm"))) return;
@@ -194,11 +188,11 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
             }}
           >
             {t("integration.campaignStart")}
-          </button>
+          </Button>
         )}
 
-        <button
-          className={BTN_SECONDARY}
+        <Button
+          variant="outline"
           disabled={busy || !canSend || campaign.status !== "running" || data.ranToday}
           onClick={() => {
             if (!window.confirm(t("integration.campaignReleaseConfirm"))) return;
@@ -212,7 +206,7 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
         >
           <Send className="mr-2 inline h-3.5 w-3.5" />
           {t("integration.campaignRelease")}
-        </button>
+        </Button>
       </div>
 
       <p className="mt-3 text-xs text-muted-foreground">
