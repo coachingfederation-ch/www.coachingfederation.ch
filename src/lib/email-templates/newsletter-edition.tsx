@@ -181,12 +181,8 @@ const blockHeading: React.CSSProperties = {
 };
 const lede: React.CSSProperties = { color: "#4b4d70", fontSize: "15px", lineHeight: "24px" };
 const muted: React.CSSProperties = { color: "#6b6d8c", fontSize: "13px", lineHeight: "20px" };
-const credit: React.CSSProperties = {
-  color: "#6b6d8c",
-  fontSize: "12px",
-  lineHeight: "18px",
-  margin: "0 0 16px",
-};
+// Derived from `muted` so the caption never introduces a second grey value.
+const credit: React.CSSProperties = { ...muted, fontSize: "12px", margin: "0 0 16px" };
 const sourceLink: React.CSSProperties = { color: "#2B379B", textDecoration: "underline" };
 const footer: React.CSSProperties = {
   backgroundColor: "#212251",
