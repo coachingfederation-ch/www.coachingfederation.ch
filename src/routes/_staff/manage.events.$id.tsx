@@ -72,6 +72,8 @@ function EventEditor() {
   const { t } = useCms();
   const navigate = useNavigate();
   const [event, setEvent] = useState<Managed | null>(null);
+  const [baseline, setBaseline] = useState<string | null>(null);
+
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
