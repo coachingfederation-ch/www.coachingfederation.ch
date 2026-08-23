@@ -70,4 +70,4 @@ Both runs are bounded (fixed block roster), take a lease row so two runs never o
 
 **Risks & rollback** — Additive only; no existing table or route changes. Rolling back the code leaves the tables unused and harmless; the cron jobs must be unscheduled separately. Gateway spend is bounded by the fixed block roster and the fingerprint skip.
 
-**Follow-ups / known debt** — Brevo delivery and send configuration; live ICFS Aspire project feed; public newsletter archive route; per-recipient personalization; the advertising feature behind the two ad stubs.
+**Follow-ups / known debt** — Brevo delivery and send configuration; live ICFS Aspire project feed; per-recipient personalization; the advertising feature behind the two ad stubs.
