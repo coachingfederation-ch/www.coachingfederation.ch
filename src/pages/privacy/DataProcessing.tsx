@@ -2,7 +2,7 @@
  * Privacy policy section 3: categories of personal data processed.
  * Exports: DataProcessingSection. Rendered by src/pages/Privacy.tsx inside the Privacy Policy section.
  */
-import { ExternalLink, InfoCallout } from "./shared";
+import { ExternalLink } from "./shared";
 
 export function DataProcessingSection() {
   return (
@@ -64,8 +64,11 @@ export function DataProcessingSection() {
           <ul className="list-disc space-y-1 pl-5 text-foreground/80">
             <li>Email address</li>
             <li>Subscription date and status</li>
-            <li>[Confirm: any additional fields collected at signup, e.g., name, interests]</li>
           </ul>
+          <p className="text-foreground/80">
+            Only the email address is collected at signup; no additional fields (such as name or
+            interests) are collected.
+          </p>
         </div>
 
         <div className="space-y-4">
@@ -103,15 +106,14 @@ export function DataProcessingSection() {
             <li>Coaching focus areas</li>
             <li>Links to external profiles (e.g., website, LinkedIn), if provided by the member</li>
           </ul>
-          <InfoCallout>
-            <p>
-              <strong>Item to confirm before publishing:</strong> Verify the exact opt-in / opt-out
-              mechanism for directory profile visibility. Do members explicitly consent to
-              publication, is it a default that can be deactivated, or is it tied to ICF membership
-              status? The privacy policy must accurately describe the actual mechanism. Mark this
-              section with the confirmed behaviour before publishing.
-            </p>
-          </InfoCallout>
+          <p className="text-foreground/80">
+            A coach&apos;s profile appears publicly only when the member themselves sets its
+            visibility to &quot;published&quot;. Profiles are created as unpublished drafts and
+            never become public on their own; members can hide or remove their profile at any time.
+            Publication additionally requires that the member is an active ICF member with a valid
+            credential. We therefore do not publish any profile without the member&apos;s own
+            action.
+          </p>
         </div>
 
         <div className="space-y-4">
@@ -120,22 +122,14 @@ export function DataProcessingSection() {
           <ul className="list-disc space-y-1 pl-5 text-foreground/80">
             <li>Name</li>
             <li>Email address</li>
-            <li>
-              [Confirm: additional registration fields, e.g., organisation, dietary requirements,
-              accessibility needs]
-            </li>
             <li>Registration status and payment information, if applicable</li>
           </ul>
-          <InfoCallout>
-            <p>
-              <strong>Sensitive data in event registration:</strong> If dietary requirements or
-              accessibility needs are collected, these may reveal information about health,
-              religion, or other sensitive personal data under Art. 5 lit. c DSG. If collected, the
-              following must apply: the fields are voluntary, used solely for event organisation,
-              access-restricted to event organisers, and deleted shortly after the event unless
-              retention is legally required. This should be explicitly stated in the final policy.
-            </p>
-          </InfoCallout>
+          <p className="text-foreground/80">
+            Beyond name and email, event registration collects no personal identifiable data.
+            Individual event forms may include further fields, but these do not collect personal
+            data. We do not collect dietary requirements, accessibility needs, or any other category
+            of sensitive personal data (Art. 5 lit. c DSG) during event registration.
+          </p>
         </div>
 
         <div className="space-y-4">
@@ -160,9 +154,14 @@ export function DataProcessingSection() {
             an automated nightly synchronisation. This includes:
           </p>
           <ul className="list-disc space-y-1 pl-5 text-foreground/80">
-            <li>Member identification data</li>
-            <li>Membership status and credentials</li>
-            <li>[Confirm: the exact data fields received from ICF Global]</li>
+            <li>ICF member number (internal member identifier)</li>
+            <li>First name, last name, and full name</li>
+            <li>Email address and phone number</li>
+            <li>City and country of residence</li>
+            <li>Organisation (if provided in the ICF record)</li>
+            <li>Membership type and membership status</li>
+            <li>Membership join date and expiration date</li>
+            <li>Credential (ACC, PCC or MCC) and credential award/expiry dates</li>
           </ul>
           <p className="text-foreground/80">
             This data is processed to maintain accurate member records and directory profiles.

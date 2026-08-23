@@ -2,7 +2,7 @@
  * Privacy policy section 5: recipients of personal data (hosting, platform, sub-processors).
  * Exports: ThirdPartiesSection. Rendered by src/pages/Privacy.tsx inside the Privacy Policy section.
  */
-import { ExternalLink, InfoCallout, MailLink } from "./shared";
+import { ExternalLink, MailLink } from "./shared";
 
 export function ThirdPartiesSection() {
   return (
@@ -28,11 +28,10 @@ export function ThirdPartiesSection() {
               EU/EEA is recognised as having an adequate level of data protection under Swiss law.
             </li>
             <li>
-              <strong>Cloudflare</strong> — provides the edge runtime and content delivery network
-              (CDN) for the current website deployment. The site is being migrated from Cloudflare
-              to Lovable. [Confirm: whether Cloudflare services (CDN, WAF, DNS) will remain in front
-              of the Lovable deployment or will be fully retired after migration. If retained, list
-              which Cloudflare services remain and their data processing locations.]
+              <strong>Cloudflare</strong> — provides edge routing, DNS, and Workers (content
+              delivery network) as part of the Lovable hosting platform, serving the site over
+              Cloudflare&apos;s global edge network. Cloudflare is a sub-processor of Lovable; its
+              data processing is covered by Lovable&apos;s data processing agreement.
             </li>
           </ul>
         </div>
@@ -45,8 +44,7 @@ export function ThirdPartiesSection() {
             The Switzerland Chapter of ICF website is hosted and operated on the{" "}
             <strong>Lovable</strong> platform (Lovable Labs Incorporated, a US company). Lovable
             provides the web application hosting, development tools, and deployment infrastructure
-            for coachingfederation.ch. The site is being migrated from a previous Cloudflare-based
-            deployment to Lovable.
+            for coachingfederation.ch.
           </p>
           <p className="text-foreground/80">
             Lovable processes personal data as a <strong>data processor</strong> on behalf of The
@@ -78,15 +76,14 @@ export function ThirdPartiesSection() {
               Customer Data — including the website&apos;s database, authentication, file storage,
               and application data — on Supabase infrastructure. Supabase is a sub-processor of
               Lovable, accessed through Lovable Cloud. The Switzerland Chapter of ICF does not have
-              a direct contractual relationship with Supabase. If Lovable&apos;s AI Gateway is used,
-              data may also be transmitted to third-party AI providers (OpenAI, Google Gemini,
-              models via OpenRouter).
+              a direct contractual relationship with Supabase. We use Lovable&apos;s AI Gateway,
+              which transmits data to third-party AI providers (currently OpenAI).
             </li>
             <li>
-              <strong>Sub-processors:</strong> Lovable engages sub-processors including Supabase
-              (hosting), Stripe (payments), PostHog and Google Analytics (analytics for the Lovable
-              platform), TikTok, Facebook/Meta, and Google Ads (marketing for the Lovable platform).
-              The full list is available at{" "}
+              <strong>Sub-processors:</strong> Lovable engages sub-processors including Google Cloud
+              Platform (hosting), Cloudflare (edge routing, DNS and CDN), Supabase (database and
+              authentication), Stripe (payments), and OpenAI (AI Gateway). The full list is
+              available at{" "}
               <ExternalLink href="https://trust.lovable.dev">trust.lovable.dev</ExternalLink>.
             </li>
             <li>
@@ -107,60 +104,18 @@ export function ThirdPartiesSection() {
             </li>
             <li>
               <strong>Cookies on the Lovable platform:</strong> Lovable uses cookies on its own
-              platform (PostHog, Google Analytics, TikTok, Facebook/Meta, Google Ads). These cookies
-              affect the Lovable platform itself.
+              platform (PostHog, Google Analytics, TikTok, Facebook/Meta, Google Ads). These apply
+              only to site administrators using the Lovable editor and are not set for visitors of
+              coachingfederation.ch.
             </li>
           </ul>
-          <InfoCallout>
-            <p className="font-semibold text-foreground">Items to confirm before publishing:</p>
-            <ol className="mt-2 list-decimal space-y-1 pl-5">
-              <li>
-                <strong>Lovable plan type</strong> — Confirm which Lovable plan The Switzerland
-                Chapter of ICF is on (Free, Pro, Business, or Enterprise). Business/Enterprise plans
-                include a Data Processing Agreement (DPA); Free/Pro plans do not. A DPA should be in
-                place with Lovable as a processor.
-              </li>
-              <li>
-                <strong>Migration status</strong> — Confirm whether the migration from Cloudflare to
-                Lovable is complete. During the transition, both platforms may process data. Update
-                the privacy policy to reflect the final production setup once migration is complete.
-              </li>
-              <li>
-                <strong>Lovable Cloud vs. direct Supabase</strong> — Confirmed: Supabase is accessed
-                through Lovable Cloud. Supabase is a sub-processor of Lovable, and The Switzerland
-                Chapter of ICF does not have a direct contractual relationship with Supabase. Data
-                residency: Europe (Ireland) — the EU/EEA is recognised as adequate under Swiss law.
-              </li>
-              <li>
-                <strong>AI Gateway</strong> — Confirm whether Lovable&apos;s AI Gateway is used on
-                the live site. If so, data may be transmitted to OpenAI, Google, and OpenRouter.
-              </li>
-              <li>
-                <strong>Lovable cookies on live site</strong> — Conduct a cookie audit on the live
-                coachingfederation.ch site once migrated to Lovable to determine whether any Lovable
-                platform cookies (PostHog, Google Analytics, TikTok, Facebook/Meta, Google Ads) are
-                present.
-              </li>
-              <li>
-                <strong>Cloudflare retirement</strong> — If Cloudflare is being retired, confirm
-                that no Cloudflare services remain active (CDN, WAF, DNS) or list which Cloudflare
-                services are still used in front of the Lovable deployment.
-              </li>
-              <li>
-                <strong>Sub-processor review</strong> — Review Lovable&apos;s full sub-processor
-                list at{" "}
-                <ExternalLink href="https://trust.lovable.dev">
-                  https://trust.lovable.dev
-                </ExternalLink>{" "}
-                and ensure alignment with The Switzerland Chapter of ICF&apos;s data processing
-                needs.
-              </li>
-              <li>
-                <strong>DPA</strong> — Ensure a Data Processing Agreement is in place with Lovable.
-                If on a Free/Pro plan, request a DPA or upgrade to a plan that includes one.
-              </li>
-            </ol>
-          </InfoCallout>
+          <p className="text-foreground/80">
+            We operate on Lovable&apos;s <strong>Business plan</strong>, which includes a Data
+            Processing Agreement (DPA) with Lovable. We have reviewed Lovable&apos;s full
+            sub-processor list at{" "}
+            <ExternalLink href="https://trust.lovable.dev">trust.lovable.dev</ExternalLink> and
+            verified that it aligns with our data processing needs.
+          </p>
         </div>
 
         <div className="space-y-4">
@@ -168,33 +123,33 @@ export function ThirdPartiesSection() {
             c) Email and communication providers
           </h4>
           <p className="text-foreground/80">
-            [Confirm: which email service provider is used for sending newsletters and transactional
-            emails — e.g., Mailchimp, Brevo, SendGrid, Resend, or other. List the provider name and
-            processing location.]
+            We use <strong>MailerLite</strong> (MailerLite Ltd, Lithuania) to send our newsletter
+            and transactional emails. MailerLite processes data on servers within the European Union
+            (Germany), provides a Data Processing Addendum, and the EU/EEA is recognised as having
+            an adequate level of data protection under Swiss law.
           </p>
         </div>
 
         <div className="space-y-4">
-          <h4 className="text-base font-semibold tracking-tight">
-            d) Analytics providers
-          </h4>
+          <h4 className="text-base font-semibold tracking-tight">d) Analytics providers</h4>
           <p className="text-foreground/80">
             We use Plausible Analytics (Plausible Insights OÜ, Estonia) to understand how this
             website is used. Plausible is cookieless and privacy-focused: it records aggregated page
             views and a small number of goals (for example a deck download, an event registration or
             an article share) without cookies, without cross-site tracking and without storing
             personal data or full IP addresses. No individual visitor can be identified, and the
-            data is processed on servers in the European Union.
+            data is processed on servers in the European Union. We use no other analytics or
+            tracking tools.
           </p>
         </div>
 
         <div className="space-y-4">
           <h4 className="text-base font-semibold tracking-tight">e) ICF Global</h4>
           <p className="text-foreground/80">
-            Member data is exchanged with ICF Global through an automated integration. This includes
-            receiving member data from ICF Global and potentially sending profile updates back.
-            [Confirm: the direction of data flow and the specific data shared with ICF Global, and
-            where ICF Global processes this data.]
+            We receive member data from ICF Global through an automated nightly synchronisation; we
+            do not send profile data back. This data is processed by ICF Global in the United
+            States, where ICF Global&apos;s member records are administered by its association
+            management company, Associations International (Lexington, Kentucky, USA).
           </p>
         </div>
 
@@ -203,8 +158,10 @@ export function ThirdPartiesSection() {
             f) Payment providers (if applicable)
           </h4>
           <p className="text-foreground/80">
-            [Confirm: if event registration or other services involve payments, list the payment
-            provider (e.g., Stripe, PayPal, TWINT) and its processing location.]
+            Payments for event registrations are processed by <strong>Stripe</strong> (Stripe, Inc.,
+            a US company). Stripe is also a sub-processor of Lovable for Lovable&apos;s own billing.
+            Payment data is processed by Stripe under its data processing agreement, with transfers
+            covered by standard contractual clauses.
           </p>
         </div>
 
@@ -226,27 +183,25 @@ export function ThirdPartiesSection() {
             external font requests are made.
           </p>
           <p className="text-foreground/80">
-            The following third-party services may be used on the website:
+            The following third-party services are used on the website:
           </p>
           <ul className="list-disc space-y-1 pl-5 text-foreground/80">
-            <li>[Confirm: Embedded maps (e.g., Google Maps, Mapbox)]</li>
-            <li>[Confirm: Video embeds (e.g., YouTube, Vimeo)]</li>
-            <li>[Confirm: Social media embeds or plugins (e.g., LinkedIn, X/Twitter, Facebook)]</li>
             <li>
-              [Confirm: CAPTCHA / bot protection (e.g., Google reCAPTCHA, hCaptcha, Cloudflare
-              Turnstile)]
+              <strong>Google Maps</strong> — used to display location and map data on event pages
             </li>
-            <li>[Confirm: Image services (e.g., Unsplash API used by the CMS image picker)]</li>
-            <li>[Confirm: Newsletter tracking pixels (open / click tracking)]</li>
+            <li>
+              <strong>Unsplash</strong> — used by the CMS image picker to source images
+            </li>
           </ul>
           <p className="text-foreground/80">
-            <strong>Note on analytics:</strong> No analytics or tracking tools were detected on the
-            Lovable-hosted demo as of July 2026. If analytics are added before launch, they must be
-            listed here with their data processing details. Lovable&apos;s own platform analytics
-            (PostHog, Google Analytics, TikTok, Facebook/Meta, Google Ads) apply to the Lovable
-            editor at lovable.dev, not to visitors of coachingfederation.ch — unless Lovable injects
-            tracking into deployed sites. [Confirm: whether Lovable injects any platform-level
-            tracking into deployed sites.]
+            We do not use video embeds, social media embeds or plugins, CAPTCHA / bot protection, or
+            newsletter tracking pixels.
+          </p>
+          <p className="text-foreground/80">
+            We use Plausible Analytics (see Section 5d), which is cookieless and does not track
+            individuals. We use no other analytics or tracking tools. Lovable&apos;s own platform
+            analytics (PostHog, Google Analytics, TikTok, Facebook/Meta, Google Ads) apply to the
+            Lovable editor at lovable.dev, not to visitors of coachingfederation.ch.
           </p>
           <p className="text-foreground/80">We do not sell personal data to third parties.</p>
         </div>

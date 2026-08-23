@@ -18,11 +18,11 @@ export function RetentionSection() {
           rows={[
             [
               "Technical data (logs)",
-              "[Confirm: e.g., 30–90 days for access logs; longer for security logs]",
+              "In accordance with our data processing agreement: Lovable retains log data for up to 90 days; customer data is deleted within 30 days after termination",
             ],
             [
               "Contact enquiries",
-              "For the duration of the enquiry and [Confirm: e.g., 12 months] thereafter for follow-up",
+              "For the duration of the enquiry and 3 months thereafter for follow-up",
             ],
             [
               "Newsletter subscriptions",
@@ -30,7 +30,7 @@ export function RetentionSection() {
             ],
             [
               "Member account data",
-              "For the duration of ICF membership; deleted or anonymised [Confirm: e.g., 30 days] after membership ends",
+              "For the duration of ICF membership; deleted or anonymised 90 days after membership ends",
             ],
             [
               "Coach directory profiles",
@@ -38,11 +38,11 @@ export function RetentionSection() {
             ],
             [
               "Event registration data",
-              "For the duration of the event and [Confirm: e.g., 12 months] thereafter for accounting and follow-up",
+              "For the duration of the event and 12 months thereafter for accounting and follow-up",
             ],
             [
               "CMS/staff user data",
-              "For the duration of the user&apos;s role; deleted [Confirm: e.g., 30 days] after access is revoked",
+              "For the duration of the user&apos;s role; deleted 90 days after access is revoked",
             ],
             [
               "ICF Global integration data",

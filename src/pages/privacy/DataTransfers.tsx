@@ -2,7 +2,7 @@
  * Privacy policy section 6: international data transfers outside Switzerland.
  * Exports: DataTransfersSection. Rendered by src/pages/Privacy.tsx inside the Privacy Policy section.
  */
-import { ExternalLink, InfoCallout, Table } from "./shared";
+import { Table } from "./shared";
 
 export function DataTransfersSection() {
   return (
@@ -45,12 +45,25 @@ export function DataTransfersSection() {
               "Sub-processor of Lovable; covered by Lovable&apos;s DPA. EU/EEA recognised as adequate under Swiss DSG",
             ],
             [
-              "Cloudflare (if retained post-migration)",
+              "Cloudflare",
               "Global network",
-              "[Confirm: transfer mechanism]",
+              "Edge routing, DNS and Workers (CDN). Sub-processor of Lovable; covered by Lovable&apos;s DPA",
             ],
-            ["Newsletter/email provider", "[Confirm]", "[Confirm]"],
-            ["ICF Global", "[Confirm]", "[Confirm]"],
+            [
+              "MailerLite",
+              "European Union (Germany)",
+              "EU/EEA recognised as adequate under Swiss DSG; MailerLite Data Processing Addendum",
+            ],
+            [
+              "Stripe",
+              "United States",
+              "Standard Contractual Clauses; Stripe data processing agreement",
+            ],
+            [
+              "ICF Global",
+              "United States (administered by Associations International)",
+              "Contractual safeguards / standard contractual clauses",
+            ],
           ]}
         />
         <p className="text-foreground/80">
@@ -66,33 +79,6 @@ export function DataTransfersSection() {
           <li>Binding corporate rules (where applicable)</li>
           <li>Specific exceptions under Art. 16 para. 2 DSG</li>
         </ul>
-        <InfoCallout>
-          <p>
-            <strong>Item to confirm before publishing:</strong> The specific countries to which
-            personal data may be transferred must be listed here, along with the safeguards applied
-            for each transfer. Key services to verify:
-          </p>
-          <ul className="mt-2 list-disc space-y-1 pl-5">
-            <li>Supabase: data residency region</li>
-            <li>Cloudflare: data processing locations and any applicable transfer mechanisms</li>
-            <li>
-              Lovable (if still active): transfers to the United States; Lovable uses EU SCCs
-              (Module 2), UK Addendum, and Swiss Addendum — see{" "}
-              <ExternalLink href="https://lovable.dev/privacy">Lovable Privacy Policy</ExternalLink>
-            </li>
-            <li>
-              Lovable sub-processors: review the list at{" "}
-              <ExternalLink href="https://trust.lovable.dev">
-                https://trust.lovable.dev
-              </ExternalLink>{" "}
-              for additional transfer locations
-            </li>
-            <li>Newsletter/email provider: processing location</li>
-            <li>Analytics provider (if any): processing location</li>
-            <li>ICF Global: where member data is stored and processed</li>
-            <li>Payment provider (if any): processing location</li>
-          </ul>
-        </InfoCallout>
       </div>
     </>
   );

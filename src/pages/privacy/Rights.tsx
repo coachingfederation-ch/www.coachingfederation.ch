@@ -101,8 +101,8 @@ export function RightsSection() {
           <li>Regular security reviews of our systems</li>
           <li>Data stored in a managed database with row-level security policies</li>
           <li>
-            [Confirm: any additional specific security measures, e.g., penetration testing, audit
-            certifications, incident response procedures]
+            Data hosted on SOC 2 Type II and ISO 27001 certified infrastructure provided by our
+            hosting platform (see Section 5b)
           </li>
         </ul>
         <p className="text-foreground/80">

@@ -2,7 +2,7 @@
  * Privacy policy section 8: cookies and similar technologies.
  * Exports: CookiesSection. Rendered by src/pages/Privacy.tsx inside the Privacy Policy section.
  */
-import { ExternalLink, InfoCallout, Table } from "./shared";
+import { ExternalLink, InfoCallout } from "./shared";
 
 export function CookiesSection() {
   return (
@@ -12,69 +12,38 @@ export function CookiesSection() {
           8. Cookies and similar technologies
         </h3>
         <p className="text-foreground/80">
-          Our website uses cookies and similar technologies for technical purposes. The EDÖB
-          provides guidance on the use of cookies and similar technologies under the DSG and the
-          Telecommunications Act (TCA) ({" "}
+          Our website does not set any cookies. The EDÖB provides guidance on the use of cookies and
+          similar technologies under the DSG and the Telecommunications Act (TCA) ({" "}
           <ExternalLink href="https://www.edoeb.admin.ch/dam/de/sd-web/brLL9rM3ny9d/Leitfaden%20des%20ED%C3%96B%20betreffend%20Datenbearbeitungen%20mittels%20Cookies%20und%20%C3%A4hnlichen%20Technologien%20V.%201.1%20vom%2006.10.2025_DE.pdf">
             EDÖB cookie guidelines
           </ExternalLink>
           ).
         </p>
-        <InfoCallout>
-          <p>
-            <strong>Item to confirm before publishing:</strong> Some features described in this
-            privacy policy may be gated or not yet active at launch (e.g., member account claiming,
-            member-facing email). The final published policy must accurately reflect only the
-            features that are live. Remove or adjust sections for features that are not yet active.
-            The EDÖB warns against vague formulations such as &quot;we may process data in such or
-            such a way&quot; — the policy must match actual data processing.
-          </p>
-        </InfoCallout>
-
-        <h4 className="text-base font-semibold tracking-tight">Cookies we use</h4>
-        <Table
-          headers={["Cookie / technology", "Purpose", "Duration", "Consent"]}
-          rows={[
-            [
-              "[Confirm: Session cookies]",
-              "Essential for website functionality (e.g., login, language selection)",
-              "Session",
-              "Not required",
-            ],
-            [
-              "[Confirm: Authentication cookies]",
-              "User login and session management",
-              "[Confirm: duration]",
-              "Not required",
-            ],
-            [
-              "Plausible Analytics",
-              "Aggregated website statistics (page views and a small number of goals such as downloads and shares). Cookieless, EU-hosted, no personal data and no cross-site tracking",
-              "No cookie is set",
-              "Not required",
-            ],
-            [
-              "[Confirm: Any other cookies]",
-              "[Confirm: purpose]",
-              "[Confirm: duration]",
-              "[Confirm]",
-            ],
-          ]}
-        />
-
-        <h4 className="text-base font-semibold tracking-tight">Managing cookies</h4>
         <p className="text-foreground/80">
-          You can control and delete cookies through your browser settings. Please note that
-          disabling essential cookies may affect the functionality of the website.
+          <strong>Plausible Analytics</strong>, our only analytics service, is cookieless: it
+          records aggregated page views and a small number of goals without setting cookies, without
+          cross-site tracking and without identifying individual visitors (see Section 5d).
+        </p>
+        <p className="text-foreground/80">
+          For a small number of technical functions we use your browser&apos;s{" "}
+          <strong>local storage</strong> (localStorage and sessionStorage) rather than cookies:
+          remembering your language preference, saving draft content while you write (CMS editor,
+          event registration), keeping chat history for the assistant widget, and remembering
+          dismissed notices. This data stays in your browser. We do not use these technologies for
+          tracking or advertising, and we do not use fingerprinting or similar techniques.
         </p>
         <InfoCallout>
           <p>
-            <strong>Item to confirm before publishing:</strong> A complete cookie audit must be
-            conducted to list all cookies and similar technologies actually set by the website,
-            including those set by third-party services. If consent is required for non-essential
-            cookies, a consent management mechanism must be implemented and described here.
+            Because we set no non-essential cookies and use no tracking or advertising technologies,
+            no cookie consent banner is required. If cookies or tracking are introduced in the
+            future, this policy will be updated and a consent mechanism implemented.
           </p>
         </InfoCallout>
+
+        <h4 className="text-base font-semibold tracking-tight">Managing cookies and site data</h4>
+        <p className="text-foreground/80">
+          You can control and delete cookies and site data through your browser settings.
+        </p>
       </div>
     </>
   );

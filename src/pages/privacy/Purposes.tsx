@@ -62,8 +62,10 @@ export function PurposesSection() {
             </li>
             <li>
               <strong>Coach directory profiles</strong> are published as part of the member&apos;s
-              participation in the association, subject to the member&apos;s visibility settings.
-              [Confirm: the exact consent / opt-in mechanism]
+              participation in the association, subject to the member&apos;s visibility settings. A
+              profile is published only when the member sets its visibility to
+              &quot;published&quot;; profiles default to unpublished, and members can hide or remove
+              their profile at any time.
             </li>
             <li>
               <strong>Technical data processing</strong> is necessary for the operation and security
@@ -111,8 +113,8 @@ export function PurposesSection() {
             you visit the website (see Section 3a).
           </li>
           <li>
-            <strong>From service providers</strong> — [Confirm: if any data is received from event
-            platforms, payment providers, or other third-party services.]
+            <strong>From service providers</strong> — ICF Global (member records through the nightly
+            synchronisation) and MailerLite (newsletter signups made via the website).
           </li>
         </ul>
         <p className="text-foreground/80">
