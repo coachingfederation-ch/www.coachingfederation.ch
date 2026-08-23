@@ -20,7 +20,8 @@
     "governance": "Governance",
     "chatInsights": "Chat Agent Insights",
     "knowledge": "Conoscenze dell'assistente",
-    "liveChat": "Chat dal vivo"
+    "liveChat": "Chat dal vivo",
+    "newsletters": "Newsletter"
   },
   "auth": {
     "signInSub": "Accedi per continuare",
