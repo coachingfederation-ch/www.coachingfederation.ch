@@ -410,21 +410,20 @@ function Join() {
             {t("home.join.subtitle")}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="https://coachingfederation.org/about/icf-membership/individual-membership/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-10 items-center rounded-full bg-hero-foreground px-5 text-sm font-semibold text-primary transition hover:bg-hero-foreground/90"
-            >
-              {t("home.join.becomeMember")}
-            </a>
-            <LocaleLink
-              to="/for-coaches"
-              hash="credentials"
-              className="inline-flex h-10 items-center rounded-full border border-hero-foreground/30 px-5 text-sm font-semibold text-hero-foreground transition hover:bg-hero-foreground/10"
-            >
-              {t("home.join.exploreCredentials")}
-            </LocaleLink>
+            <Button asChild variant="inverse" size="pill">
+              <a
+                href="https://coachingfederation.org/about/icf-membership/individual-membership/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("home.join.becomeMember")}
+              </a>
+            </Button>
+            <Button asChild variant="inverse-ghost" size="pill">
+              <LocaleLink to="/for-coaches" hash="credentials">
+                {t("home.join.exploreCredentials")}
+              </LocaleLink>
+            </Button>
           </div>
         </div>
         <div className="rounded-2xl border border-hero-foreground/15 bg-hero-foreground/5 p-6 backdrop-blur">
