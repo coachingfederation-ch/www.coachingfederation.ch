@@ -133,5 +133,7 @@ you would rather consumers use, so we can drop the shims?
 
 1. `Button` inverse variants (unblocks the most visible hand-written markup)
 2. `eyebrow` / `btn-mono` colour neutrality (removes ~20 `!important` overrides)
-3. `BrushMark` aliases + inline mode (retires a 120-line local component)
+3. `BrushMark` `circular*` aliases + `loadMarkSvg` + self-hostable artwork (retires a
+   120-line local component and ~20 local call sites)
+
 4. Menu-row recipe (small)
