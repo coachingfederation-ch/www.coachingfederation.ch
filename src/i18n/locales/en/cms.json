@@ -524,14 +524,18 @@
     "campaignLastRun": "Last wave:",
     "campaignRanToday": "today's wave already went out",
     "campaignRedirected": "Emails are redirected to",
-    "campaignStatus.idle": "Not started",
-    "campaignStatus.running": "Running",
-    "campaignStatus.paused": "Paused",
-    "campaignStatus.completed": "Completed",
-    "campaignGate.test_mode": "Blocked: the integration is still in test mode.",
-    "campaignGate.cutover_in_progress": "Blocked: a cutover is in progress.",
-    "campaignGate.claim_closed": "Blocked: account claiming is still closed.",
-    "campaignGate.emails_suppressed": "Blocked: member email is suppressed with no redirect inbox."
+    "campaignStatus": {
+      "idle": "Not started",
+      "running": "Running",
+      "paused": "Paused",
+      "completed": "Completed"
+    },
+    "campaignGate": {
+      "test_mode": "Blocked: the integration is still in test mode.",
+      "cutover_in_progress": "Blocked: a cutover is in progress.",
+      "claim_closed": "Blocked: account claiming is still closed.",
+      "emails_suppressed": "Blocked: member email is suppressed with no redirect inbox."
+    }
   },
   "member": {
     "title": "My coach profile",

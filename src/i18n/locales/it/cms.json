@@ -524,14 +524,18 @@
     "campaignLastRun": "Ultima ondata:",
     "campaignRanToday": "l'ondata di oggi è già partita",
     "campaignRedirected": "Le e-mail sono reindirizzate a",
-    "campaignStatus.idle": "Non avviata",
-    "campaignStatus.running": "In corso",
-    "campaignStatus.paused": "In pausa",
-    "campaignStatus.completed": "Completata",
-    "campaignGate.test_mode": "Bloccato: l'integrazione è ancora in modalità test.",
-    "campaignGate.cutover_in_progress": "Bloccato: è in corso un cutover.",
-    "campaignGate.claim_closed": "Bloccato: l'attivazione degli account è ancora chiusa.",
-    "campaignGate.emails_suppressed": "Bloccato: le e-mail ai membri sono sospese, senza casella di test."
+    "campaignStatus": {
+      "idle": "Non avviata",
+      "running": "In corso",
+      "paused": "In pausa",
+      "completed": "Completata"
+    },
+    "campaignGate": {
+      "test_mode": "Bloccato: l'integrazione è ancora in modalità test.",
+      "cutover_in_progress": "Bloccato: è in corso un cutover.",
+      "claim_closed": "Bloccato: l'attivazione degli account è ancora chiusa.",
+      "emails_suppressed": "Bloccato: le e-mail ai membri sono sospese, senza casella di test."
+    }
   },
   "member": {
     "title": "Il mio profilo coach",
