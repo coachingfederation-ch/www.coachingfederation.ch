@@ -25,6 +25,11 @@ interface EditionBlock {
   title: string;
   content: string;
   position: number;
+  featured_image_url: string | null;
+  image_alt: string | null;
+  image_source: string | null;
+  image_credit_name: string | null;
+  image_credit_url: string | null;
 }
 
 async function fetchEdition(slug: string) {
@@ -40,7 +45,9 @@ async function fetchEdition(slug: string) {
 
   const { data: blocks, error: blockError } = await supabase
     .from("newsletter_blocks")
-    .select("id, title, content, position")
+    .select(
+      "id, title, content, position, featured_image_url, image_alt, image_source, image_credit_name, image_credit_url",
+    )
     .eq("newsletter_id", edition.id)
     .eq("enabled", true)
     .order("position", { ascending: true });
