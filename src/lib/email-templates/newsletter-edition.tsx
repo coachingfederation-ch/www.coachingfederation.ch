@@ -30,6 +30,10 @@ export interface NewsletterEmailBlock {
   title: string;
   content: string;
   featuredImageUrl?: string | null;
+  imageAlt?: string | null;
+  imageSource?: string | null;
+  imageCreditName?: string | null;
+  imageCreditUrl?: string | null;
   sources?: { label: string; url?: string | null }[];
 }
 
