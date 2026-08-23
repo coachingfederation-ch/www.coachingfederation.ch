@@ -452,12 +452,6 @@ function EventEditor() {
         />
 
         <UnsplashPicker
-
-
-
-
-
-        <UnsplashPicker
           open={pickerOpen}
           onOpenChange={setPickerOpen}
           onPick={(pick: UnsplashPick) =>
