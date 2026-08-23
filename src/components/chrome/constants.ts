@@ -17,8 +17,6 @@ export const navItems = [
 
 export const CARD_SHADOW = "shadow-soft";
 
-export const MENU_ITEM =
-  "block min-h-11 px-4 py-3 text-left text-[12px] font-semibold leading-5 text-foreground/80 hover:bg-muted hover:text-foreground";
 
 export function setStoredLocale(l: string) {
   try {
