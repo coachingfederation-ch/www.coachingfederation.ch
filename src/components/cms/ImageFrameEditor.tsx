@@ -9,6 +9,8 @@
  */
 import { useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { MarkPlacementCanvas } from "@/components/cms/MarkPlacementCanvas";
+import { Mark } from "@/components/marks";
+
 import { drawGeometry } from "@/lib/block-image-render";
 import {
   BLOCK_IMAGE_PRESETS,
@@ -42,9 +44,11 @@ export function ImageFrameEditor({
   onMarksChange: (next: PlacedMark[]) => void;
 }) {
   const preset = blockImagePreset(aspect);
+  const placement = blockImagePlacement(aspect);
   const scale = PREVIEW_WIDTH / preset.width;
   const width = PREVIEW_WIDTH;
   const height = Math.round(preset.height * scale);
+
 
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);
   const dragRef = useRef<{ x: number; y: number; crop: BlockImageCrop } | null>(null);
@@ -96,7 +100,7 @@ export function ImageFrameEditor({
       <MarkPlacementCanvas
         marks={marks}
         onChange={onMarksChange}
-        placement={blockImagePlacement(aspect)}
+        placement={placement}
         width={width}
         height={height}
         labels={{
@@ -135,7 +139,27 @@ export function ImageFrameEditor({
             }}
           />
         </div>
+        {/*
+         * The canvas only draws selection chrome; the artwork itself belongs to
+         * the preview, exactly as the LinkedIn card renders its own marks. Kept
+         * pointer-transparent so the chrome above stays draggable.
+         */}
+        {marks.map((mark) => (
+          <Mark
+            key={mark.id}
+            name={mark.name}
+            className="pointer-events-none absolute"
+            style={{
+              left: `${mark.xPct}%`,
+              top: `${mark.yPct}%`,
+              width: `${mark.sizePct}%`,
+              height: `${placement.heightPct(mark.sizePct)}%`,
+              color: mark.color,
+            }}
+          />
+        ))}
       </MarkPlacementCanvas>
+
 
       <div className="space-y-1">
         <Label htmlFor="block-image-zoom">Zoom</Label>
