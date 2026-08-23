@@ -1,8 +1,9 @@
 /**
- * Internal invitation landing (/staff-invite?token_hash=…).
+ * Internal invitation landing (/staff-invite?token=…).
  *
- * The invited staff account arrives here with no session. The recovery hash
- * from the invitation email establishes the Supabase session in this browser,
+ * The invited staff account arrives here with no session. The emailed token is
+ * ours (24 hours, single use); the server validates it and mints a fresh
+ * one-time recovery hash on the spot, which establishes the session here,
  * the invitee sets a password, and we mark the invitation accepted before
  * handing over to whatever their roles allow. Copy is English: internal
  * chapter administration runs in English, like the invitation email itself.
@@ -11,14 +12,14 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { completeInternalInvitation } from "@/lib/roles.functions";
+import { completeInternalInvitation, exchangeInternalInvite } from "@/lib/roles.functions";
 import { AuthCard } from "@/components/auth/auth-screen";
 import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 
 export const Route = createFileRoute("/staff-invite")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>) => ({
-    token_hash: typeof search["token_hash"] === "string" ? search["token_hash"] : "",
+    token: typeof search["token"] === "string" ? search["token"] : "",
   }),
   head: () => ({
     meta: [
@@ -30,7 +31,7 @@ export const Route = createFileRoute("/staff-invite")({
 });
 
 function StaffInvitePage() {
-  const { token_hash: tokenHash } = Route.useSearch();
+  const { token } = Route.useSearch();
   const navigate = useNavigate();
   const [phase, setPhase] = useState<"verifying" | "ready" | "expired" | "saving">("verifying");
   const [password, setPassword] = useState("");
@@ -40,6 +41,15 @@ function StaffInvitePage() {
   useEffect(() => {
     let cancelled = false;
     void (async () => {
+      if (!token) {
+        setPhase("expired");
+        return;
+      }
+      // Our token carries the 24-hour promise; the Supabase hash is minted now
+      // so its own (shorter) lifetime never expires before the invitee arrives.
+      const exchanged = await exchangeInternalInvite({ data: { token } }).catch(() => null);
+      if (cancelled) return;
+      const tokenHash = exchanged?.tokenHash;
       if (!tokenHash) {
         setPhase("expired");
         return;
@@ -54,7 +64,7 @@ function StaffInvitePage() {
     return () => {
       cancelled = true;
     };
-  }, [tokenHash]);
+  }, [token]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
