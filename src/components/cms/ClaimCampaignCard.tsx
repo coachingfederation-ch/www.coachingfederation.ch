@@ -9,6 +9,7 @@
  */
 import { useEffect, useState } from "react";
 import { Send } from "lucide-react";
+import { Checkbox, Input } from "@/design-system/icf-welcome-design-system-a835df";
 import {
   getClaimCampaign,
   releaseClaimWave,
@@ -110,7 +111,7 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
       <div className="mt-4 flex flex-wrap items-end gap-3">
         <label className="text-xs font-semibold">
           <span className="block text-muted-foreground">{t("integration.campaignCap")}</span>
-          <input
+          <Input
             type="number"
             min={1}
             max={500}
@@ -124,13 +125,13 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
                 return t("integration.saved");
               });
             }}
-            className="mt-1 w-24 rounded-full border border-border bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/20"
+            className="mt-1 w-24"
           />
         </label>
 
         <label className="text-xs font-semibold">
           <span className="block text-muted-foreground">{t("integration.campaignReminderDays")}</span>
-          <input
+          <Input
             type="number"
             min={1}
             max={60}
@@ -146,17 +147,16 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
                 return t("integration.saved");
               });
             }}
-            className="mt-1 w-24 rounded-full border border-border bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/20"
+            className="mt-1 w-24"
           />
         </label>
 
         <label className="flex items-center gap-2 pb-2 text-xs font-semibold">
-          <input
-            type="checkbox"
+          <Checkbox
             checked={campaign.reminder_enabled}
             disabled={busy}
-            onChange={(e) => {
-              const checked = e.target.checked;
+            onCheckedChange={(value) => {
+              const checked = value === true;
               void run(async () => {
                 await updateClaimCampaign({ data: { reminder_enabled: checked } });
                 return t("integration.saved");

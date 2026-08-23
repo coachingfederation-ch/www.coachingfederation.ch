@@ -9,6 +9,7 @@ import { requireStaffAccess, ADMIN_ONLY } from "@/lib/staff-guard";
 import { useEffect, useMemo, useState } from "react";
 import { Download, Search } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
+import { Checkbox } from "@/design-system/icf-welcome-design-system-a835df";
 import { useCms } from "@/i18n/cms";
 import {
   exportMembersCsv,
@@ -295,10 +296,9 @@ function MembersPage() {
                       })()}
                     </td>
                     <td className="px-4 py-2">
-                      <input
-                        type="checkbox"
+                      <Checkbox
                         checked={pilotIds.has(row.id)}
-                        onChange={(e) => void togglePilot(row.id, e.target.checked)}
+                        onCheckedChange={(value) => void togglePilot(row.id, value === true)}
                         aria-label={t("members.colPilot")}
                       />
                     </td>
