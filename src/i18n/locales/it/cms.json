@@ -355,7 +355,8 @@
       "send": "Invia invito",
       "resend": "Reinvia invito",
       "result": "Risultato:"
-    }
+    },
+    "colPilot": "Pilota"
   },
   "integration": {
     "title": "Stato dell'integrazione",
@@ -502,7 +503,39 @@
     "credLeading": "spazio iniziale",
     "credTrailing": "spazio finale",
     "credNewline": "contiene un'interruzione di riga",
-    "credNonAscii": "contiene un carattere non standard"
+    "credNonAscii": "contiene un carattere non standard",
+    "campaignTitle": "Ondate di invito",
+    "campaignLoading": "Caricamento campagna…",
+    "campaignBody": "Invita i membri ad attivare il proprio account in ondate giornaliere limitate — prima i membri pilota, poi per data di adesione. I promemoria vanno a chi non ha ancora attivato.",
+    "campaignRemaining": "Rimanenti",
+    "campaignInvited": "Invitati",
+    "campaignClaimed": "Attivati",
+    "campaignReminders": "Promemoria da inviare",
+    "campaignCap": "Al giorno",
+    "campaignReminderDays": "Promemoria dopo (giorni)",
+    "campaignReminderOn": "Invia promemoria",
+    "campaignStart": "Avvia campagna",
+    "campaignPause": "Metti in pausa",
+    "campaignRelease": "Invia l'ondata di oggi",
+    "campaignStartConfirm": "Inviare gli inviti in ondate giornaliere?",
+    "campaignReleaseConfirm": "Inviare ora l'ondata di oggi?",
+    "campaignReleased": "Ondata inviata — messaggi:",
+    "campaignSkipped": "Nulla inviato —",
+    "campaignLastRun": "Ultima ondata:",
+    "campaignRanToday": "l'ondata di oggi è già partita",
+    "campaignRedirected": "Le e-mail sono reindirizzate a",
+    "campaignStatus": {
+      "idle": "Non avviata",
+      "running": "In corso",
+      "paused": "In pausa",
+      "completed": "Completata"
+    },
+    "campaignGate": {
+      "test_mode": "Bloccato: l'integrazione è ancora in modalità test.",
+      "cutover_in_progress": "Bloccato: è in corso un cutover.",
+      "claim_closed": "Bloccato: l'attivazione degli account è ancora chiusa.",
+      "emails_suppressed": "Bloccato: le e-mail ai membri sono sospese, senza casella di test."
+    }
   },
   "member": {
     "title": "Il mio profilo coach",

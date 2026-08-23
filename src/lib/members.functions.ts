@@ -293,3 +293,61 @@ export const unbindMemberAccount = createServerFn({ method: "POST" })
     await unbindMemberAuthUser(userId, data.memberId);
     return { ok: true };
   });
+
+/** Read model behind the claim-campaign card on /integration (admin only). */
+export const getClaimCampaign = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { loadCampaignOverview } = await import("./member-claim/waves.server");
+    return await loadCampaignOverview();
+  });
+
+/** Start, pause, or retune the daily claim-invitation waves (admin only). */
+export const updateClaimCampaign = createServerFn({ method: "POST" })
+  .inputValidator((input) =>
+    z
+      .object({
+        status: z.enum(["idle", "running", "paused", "completed"]).optional(),
+        daily_cap: z.number().int().min(1).max(500).optional(),
+        reminder_enabled: z.boolean().optional(),
+        reminder_after_days: z.number().int().min(1).max(60).optional(),
+      })
+      .parse(input),
+  )
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context, data }) => {
+    const userId = await assertAdmin(context);
+    const { updateCampaign } = await import("./member-claim/waves.server");
+    return await updateCampaign(userId, data);
+  });
+
+/** Releases today's wave immediately instead of waiting for the nightly job. */
+export const releaseClaimWave = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const userId = await assertAdmin(context);
+    const { runClaimWave } = await import("./member-claim/waves.server");
+    return await runClaimWave({ trigger: "manual", actorUserId: userId });
+  });
+
+/** Members flagged for the first wave (board, volunteers, testers). */
+export const getClaimPilotMembers = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { loadPilotMemberIds } = await import("./member-claim/waves.server");
+    return await loadPilotMemberIds();
+  });
+
+export const setClaimPilotMember = createServerFn({ method: "POST" })
+  .inputValidator((input) =>
+    z.object({ memberId: z.string().uuid(), pilot: z.boolean() }).parse(input),
+  )
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context, data }) => {
+    const userId = await assertAdmin(context);
+    const { setPilotMember } = await import("./member-claim/waves.server");
+    await setPilotMember(userId, data.memberId, data.pilot);
+    return { ok: true };
+  });

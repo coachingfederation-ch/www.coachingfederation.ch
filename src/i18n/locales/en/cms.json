@@ -355,7 +355,8 @@
       "send": "Send invitation",
       "resend": "Resend invitation",
       "result": "Result:"
-    }
+    },
+    "colPilot": "Pilot"
   },
   "integration": {
     "title": "Integration status",
@@ -502,7 +503,39 @@
     "credLeading": "leading whitespace",
     "credTrailing": "trailing whitespace",
     "credNewline": "contains a line break",
-    "credNonAscii": "contains a non-standard character"
+    "credNonAscii": "contains a non-standard character",
+    "campaignTitle": "Claim invitation waves",
+    "campaignLoading": "Loading campaign…",
+    "campaignBody": "Invites members to claim their account in bounded daily waves — pilot members first, then by membership start date. Reminders go to members who have not claimed.",
+    "campaignRemaining": "Remaining",
+    "campaignInvited": "Invited",
+    "campaignClaimed": "Claimed",
+    "campaignReminders": "Reminders due",
+    "campaignCap": "Per day",
+    "campaignReminderDays": "Reminder after (days)",
+    "campaignReminderOn": "Send reminders",
+    "campaignStart": "Start campaign",
+    "campaignPause": "Pause campaign",
+    "campaignRelease": "Release today's wave",
+    "campaignStartConfirm": "Start sending claim invitations in daily waves?",
+    "campaignReleaseConfirm": "Send today's wave now?",
+    "campaignReleased": "Wave sent — messages:",
+    "campaignSkipped": "Nothing sent —",
+    "campaignLastRun": "Last wave:",
+    "campaignRanToday": "today's wave already went out",
+    "campaignRedirected": "Emails are redirected to",
+    "campaignStatus": {
+      "idle": "Not started",
+      "running": "Running",
+      "paused": "Paused",
+      "completed": "Completed"
+    },
+    "campaignGate": {
+      "test_mode": "Blocked: the integration is still in test mode.",
+      "cutover_in_progress": "Blocked: a cutover is in progress.",
+      "claim_closed": "Blocked: account claiming is still closed.",
+      "emails_suppressed": "Blocked: member email is suppressed with no redirect inbox."
+    }
   },
   "member": {
     "title": "My coach profile",

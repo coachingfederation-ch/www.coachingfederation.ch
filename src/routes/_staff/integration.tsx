@@ -12,6 +12,7 @@ import { Shell } from "@/components/cms/Shell";
 import { ContentOwnershipPanel } from "@/components/cms/ContentOwnershipPanel";
 import { LinkedInPageSettings } from "@/components/cms/LinkedInPageSettings";
 import { SyncRunDetail } from "@/components/cms/SyncRunDetail";
+import { ClaimCampaignCard } from "@/components/cms/ClaimCampaignCard";
 import { useCms } from "@/i18n/cms";
 import {
   fetchIntegrationConfig,
@@ -635,6 +636,7 @@ function IntegrationPageBody() {
             </section>
 
             <GatesCard config={config} busy={busy !== null} act={act} t={t} />
+            <ClaimCampaignCard t={t} />
 
             <section className={CARD}>
               <h2 className="text-sm font-bold">{t("integration.actions")}</h2>

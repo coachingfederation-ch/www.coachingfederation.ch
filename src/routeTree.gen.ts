@@ -90,6 +90,7 @@ import { Route as StaffManageLiveChatRouteImport } from './routes/_staff/manage.
 import { Route as StaffMembersIndexRouteImport } from './routes/_staff/members.index'
 import { Route as StaffMembersIdRouteImport } from './routes/_staff/members.$id'
 import { Route as ApiPublicChatSignalRouteImport } from './routes/api/public/chat-signal'
+import { Route as ApiPublicClaimWavesRouteImport } from './routes/api/public/claim-waves'
 import { Route as ApiPublicEuropePulseScanRouteImport } from './routes/api/public/europe-pulse-scan'
 import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public/event-reminders'
 import { Route as ApiPublicLiveChatRouteImport } from './routes/api/public/live-chat'
@@ -519,6 +520,11 @@ const ApiPublicChatSignalRoute = ApiPublicChatSignalRouteImport.update({
   path: '/api/public/chat-signal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicClaimWavesRoute = ApiPublicClaimWavesRouteImport.update({
+  id: '/api/public/claim-waves',
+  path: '/api/public/claim-waves',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicEuropePulseScanRoute =
   ApiPublicEuropePulseScanRouteImport.update({
     id: '/api/public/europe-pulse-scan',
@@ -711,6 +717,7 @@ export interface FileRoutesByFullPath {
   '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/members/$id': typeof StaffMembersIdRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
+  '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
@@ -809,6 +816,7 @@ export interface FileRoutesByTo {
   '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/members/$id': typeof StaffMembersIdRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
+  '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
@@ -914,6 +922,7 @@ export interface FileRoutesById {
   '/_staff/manage/live-chat': typeof StaffManageLiveChatRoute
   '/_staff/members/$id': typeof StaffMembersIdRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
+  '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
@@ -1018,6 +1027,7 @@ export interface FileRouteTypes {
     | '/manage/live-chat'
     | '/members/$id'
     | '/api/public/chat-signal'
+    | '/api/public/claim-waves'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-reminders'
     | '/api/public/live-chat'
@@ -1116,6 +1126,7 @@ export interface FileRouteTypes {
     | '/manage/live-chat'
     | '/members/$id'
     | '/api/public/chat-signal'
+    | '/api/public/claim-waves'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-reminders'
     | '/api/public/live-chat'
@@ -1220,6 +1231,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/live-chat'
     | '/_staff/members/$id'
     | '/api/public/chat-signal'
+    | '/api/public/claim-waves'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-reminders'
     | '/api/public/live-chat'
@@ -1288,6 +1300,7 @@ export interface RootRouteChildren {
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicChatSignalRoute: typeof ApiPublicChatSignalRoute
+  ApiPublicClaimWavesRoute: typeof ApiPublicClaimWavesRoute
   ApiPublicEuropePulseScanRoute: typeof ApiPublicEuropePulseScanRoute
   ApiPublicEventRemindersRoute: typeof ApiPublicEventRemindersRoute
   ApiPublicLiveChatRoute: typeof ApiPublicLiveChatRoute
@@ -1872,6 +1885,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicChatSignalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/claim-waves': {
+      id: '/api/public/claim-waves'
+      path: '/api/public/claim-waves'
+      fullPath: '/api/public/claim-waves'
+      preLoaderRoute: typeof ApiPublicClaimWavesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/europe-pulse-scan': {
       id: '/api/public/europe-pulse-scan'
       path: '/api/public/europe-pulse-scan'
@@ -2231,6 +2251,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicChatSignalRoute: ApiPublicChatSignalRoute,
+  ApiPublicClaimWavesRoute: ApiPublicClaimWavesRoute,
   ApiPublicEuropePulseScanRoute: ApiPublicEuropePulseScanRoute,
   ApiPublicEventRemindersRoute: ApiPublicEventRemindersRoute,
   ApiPublicLiveChatRoute: ApiPublicLiveChatRoute,

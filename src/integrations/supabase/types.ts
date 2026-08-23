@@ -2787,6 +2787,96 @@ export type Database = {
         }
         Relationships: []
       }
+      member_claim_campaign: {
+        Row: {
+          created_at: string
+          daily_cap: number
+          id: boolean
+          last_run_at: string | null
+          last_run_on: string | null
+          last_run_sent: number
+          lease_until: string | null
+          paused_reason: string | null
+          reminder_after_days: number
+          reminder_enabled: boolean
+          started_at: string | null
+          status: string
+          total_invited: number
+          total_reminders: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          daily_cap?: number
+          id?: boolean
+          last_run_at?: string | null
+          last_run_on?: string | null
+          last_run_sent?: number
+          lease_until?: string | null
+          paused_reason?: string | null
+          reminder_after_days?: number
+          reminder_enabled?: boolean
+          started_at?: string | null
+          status?: string
+          total_invited?: number
+          total_reminders?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          daily_cap?: number
+          id?: boolean
+          last_run_at?: string | null
+          last_run_on?: string | null
+          last_run_sent?: number
+          lease_until?: string | null
+          paused_reason?: string | null
+          reminder_after_days?: number
+          reminder_enabled?: boolean
+          started_at?: string | null
+          status?: string
+          total_invited?: number
+          total_reminders?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      member_claim_pilot: {
+        Row: {
+          added_at: string
+          added_by: string | null
+          member_id: string
+        }
+        Insert: {
+          added_at?: string
+          added_by?: string | null
+          member_id: string
+        }
+        Update: {
+          added_at?: string
+          added_by?: string | null
+          member_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_claim_pilot_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: true
+            referencedRelation: "coach_directory_public"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "member_claim_pilot_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: true
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       member_directory_profiles: {
         Row: {
           approach: string | null

@@ -9,8 +9,15 @@ import { requireStaffAccess, ADMIN_ONLY } from "@/lib/staff-guard";
 import { useEffect, useMemo, useState } from "react";
 import { Download, Search } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
+import { Checkbox } from "@/design-system/icf-welcome-design-system-a835df";
 import { useCms } from "@/i18n/cms";
-import { exportMembersCsv, getMemberClaimStatuses, listMembers } from "@/lib/members.functions";
+import {
+  exportMembersCsv,
+  getClaimPilotMembers,
+  getMemberClaimStatuses,
+  listMembers,
+  setClaimPilotMember,
+} from "@/lib/members.functions";
 import { directoryEligibilityReason } from "@/lib/directory-eligibility";
 
 export const Route = createFileRoute("/_staff/members/")({
@@ -38,7 +45,7 @@ type MemberRow = {
 
 type MemberClaimStatus = "claimed" | "invited" | "expired" | "never";
 
-type SortKey = keyof MemberRow | "claim_status";
+type SortKey = keyof MemberRow | "claim_status" | "pilot";
 
 const COLUMNS: { key: SortKey; labelKey: string }[] = [
   { key: "full_name", labelKey: "members.colName" },
@@ -48,6 +55,7 @@ const COLUMNS: { key: SortKey; labelKey: string }[] = [
   { key: "activity_state", labelKey: "members.colState" },
   { key: "credential_expires_on", labelKey: "members.colEligibility" },
   { key: "claim_status", labelKey: "members.colClaim" },
+  { key: "pilot", labelKey: "members.colPilot" },
   { key: "last_synced_at", labelKey: "members.colSynced" },
 ];
 
@@ -59,6 +67,8 @@ function MembersPage() {
   const [query, setQuery] = useState("");
   const [state, setState] = useState("all");
   const [claimStatuses, setClaimStatuses] = useState<Record<string, MemberClaimStatus>>({});
+  // Pilot flag: members invited in the very first claim wave (board, volunteers).
+  const [pilotIds, setPilotIds] = useState<Set<string>>(new Set());
   const [sort, setSort] = useState<{ key: SortKey; asc: boolean }>({
     key: "full_name",
     asc: true,
@@ -81,6 +91,32 @@ function MembersPage() {
       .catch(() => setClaimStatuses({}));
   }, []);
 
+  useEffect(() => {
+    getClaimPilotMembers()
+      .then((ids) => setPilotIds(new Set(ids as string[])))
+      .catch(() => setPilotIds(new Set()));
+  }, []);
+
+  const togglePilot = async (memberId: string, pilot: boolean) => {
+    setPilotIds((prev) => {
+      const next = new Set(prev);
+      if (pilot) next.add(memberId);
+      else next.delete(memberId);
+      return next;
+    });
+    try {
+      await setClaimPilotMember({ data: { memberId, pilot } });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+      setPilotIds((prev) => {
+        const next = new Set(prev);
+        if (pilot) next.delete(memberId);
+        else next.add(memberId);
+        return next;
+      });
+    }
+  };
+
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
     const filtered = rows.filter((row) => {
@@ -94,12 +130,16 @@ function MembersPage() {
       const read = (row: MemberRow) =>
         sort.key === "claim_status"
           ? (claimStatuses[row.id] ?? "never")
-          : String(row[sort.key as keyof MemberRow] ?? "");
+          : sort.key === "pilot"
+            ? pilotIds.has(row.id)
+              ? "0"
+              : "1"
+            : String(row[sort.key as keyof MemberRow] ?? "");
       const av = read(a);
       const bv = read(b);
       return sort.asc ? av.localeCompare(bv) : bv.localeCompare(av);
     });
-  }, [rows, query, state, sort, claimStatuses]);
+  }, [rows, query, state, sort, claimStatuses, pilotIds]);
 
   const handleExport = async () => {
     setExporting(true);
@@ -254,6 +294,13 @@ function MembersPage() {
                           </span>
                         );
                       })()}
+                    </td>
+                    <td className="px-4 py-2">
+                      <Checkbox
+                        checked={pilotIds.has(row.id)}
+                        onCheckedChange={(value) => void togglePilot(row.id, value === true)}
+                        aria-label={t("members.colPilot")}
+                      />
                     </td>
                     <td className="px-4 py-2 text-muted-foreground">
                       {row.last_synced_at ? new Date(row.last_synced_at).toLocaleDateString() : "—"}
