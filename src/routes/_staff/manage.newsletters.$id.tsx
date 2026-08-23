@@ -283,6 +283,12 @@ function NewsletterEditor() {
     mutationFn: (blockId: string) => regenerateBlock({ data: { blockId } }),
     onSuccess: invalidate,
   });
+  // Tracked per block so one card's spinner and error never bleed into another.
+  const [imageBlockId, setImageBlockId] = useState<string | null>(null);
+  const imageMutation = useMutation({
+    mutationFn: (blockId: string) => generateImage({ data: { blockId } }),
+    onSuccess: invalidate,
+  });
   const transitionMutation = useMutation({
     mutationFn: (action: "submit" | "return_to_draft" | "publish" | "unpublish") =>
       transition({ data: { id, action } }),
