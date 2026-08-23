@@ -3661,6 +3661,10 @@ export type Database = {
           featured_image_url: string | null
           generated_at: string | null
           id: string
+          image_alt: string | null
+          image_credit_name: string | null
+          image_credit_url: string | null
+          image_source: string | null
           newsletter_id: string
           note: string | null
           position: number
@@ -3678,6 +3682,10 @@ export type Database = {
           featured_image_url?: string | null
           generated_at?: string | null
           id?: string
+          image_alt?: string | null
+          image_credit_name?: string | null
+          image_credit_url?: string | null
+          image_source?: string | null
           newsletter_id: string
           note?: string | null
           position?: number
@@ -3695,6 +3703,10 @@ export type Database = {
           featured_image_url?: string | null
           generated_at?: string | null
           id?: string
+          image_alt?: string | null
+          image_credit_name?: string | null
+          image_credit_url?: string | null
+          image_source?: string | null
           newsletter_id?: string
           note?: string | null
           position?: number
