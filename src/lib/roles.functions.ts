@@ -423,3 +423,25 @@ export const completeInternalInvitation = createServerFn({ method: "POST" })
     await markInternalAccountAccepted(context.userId);
     return { ok: true };
   });
+
+/**
+ * Exchanges the emailed invitation token for a one-time Supabase hash.
+ *
+ * Public by necessity — the invitee has no session yet — so it is rate limited
+ * per caller and outcome-neutral: every failure returns the same shape, never
+ * revealing whether an address was invited.
+ */
+export const exchangeInternalInvite = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => z.object({ token: z.string().min(1).max(200) }).parse(input))
+  .handler(async ({ data }) => {
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const { checkRateLimit, clientIp } = await import("./rate-limit.server");
+    const verdict = await checkRateLimit("internal-invite-exchange", clientIp(getRequest()), [
+      { windowSeconds: 60, max: 10 },
+      { windowSeconds: 3600, max: 60 },
+    ]);
+    if (!verdict.allowed) return { tokenHash: null as string | null };
+
+    const { exchangeInternalInviteToken } = await import("./internal-accounts.server");
+    return { tokenHash: await exchangeInternalInviteToken(data.token) };
+  });
