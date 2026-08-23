@@ -17,7 +17,7 @@ import type { MarkName } from "@/design-system/icf-welcome-design-system-a835df/
 // also re-exports the library's own showcase chrome, whose links point at
 // routes that only exist in the design-system project.
 import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
-import { Button } from "@/design-system/icf-welcome-design-system-a835df";
+import { Button, Input } from "@/design-system/icf-welcome-design-system-a835df";
 import { SiteHeaderBar, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SponsorMarquee, type SponsorItem } from "@/components/home/SponsorMarquee";
 import { useI18n, LocaleLink } from "@/i18n";
@@ -439,21 +439,18 @@ function Join() {
             <label htmlFor="home-newsletter-email" className="sr-only">
               {t("common.form.emailLabel")}
             </label>
-            <input
+            <Input
               id="home-newsletter-email"
               name="email"
               autoComplete="email"
               type="email"
               required
               placeholder={t("home.join.emailPlaceholder")}
-              className="h-10 w-full rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-4 text-sm text-hero-foreground placeholder:text-hero-foreground/70 outline-none focus:border-hero-foreground/60"
+              className="w-full rounded-full border-hero-foreground/20 bg-hero-foreground/10 text-hero-foreground placeholder:text-hero-foreground/70"
             />
-            <button
-              type="submit"
-              className="h-10 rounded-full bg-hero-foreground px-5 text-sm font-semibold text-primary transition hover:bg-hero-foreground/90"
-            >
+            <Button type="submit" variant="inverse" size="pill">
               {t("home.join.subscribe")}
-            </button>
+            </Button>
           </form>
         </div>
       </div>

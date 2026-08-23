@@ -256,3 +256,13 @@ export const regenerateNewsletterBlockFn = createServerFn({ method: "POST" })
     if (writeError) throw writeError;
     return { generated: true as const, content: generated.content };
   });
+
+/** Staff-only email preview of an edition, returned as a standalone HTML doc. */
+export const previewNewsletterFn = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => idSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const client = await assertStaff(context as AuthedContext);
+    const { renderNewsletterEmail } = await import("./newsletters.server");
+    return { html: await renderNewsletterEmail(client, data.id) };
+  });

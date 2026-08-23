@@ -9,13 +9,13 @@ import { Link } from "@tanstack/react-router";
 import { ChevronDown, User } from "lucide-react";
 import {
   Button,
+  MenuRow,
   SiteHeader,
   type SiteLinkComponent,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { LocaleLink, useI18n } from "@/i18n";
 import {
   CARD_SHADOW,
-  MENU_ITEM,
   navItems,
   signOutHere,
   useDismissable,
@@ -68,21 +68,20 @@ function AccountControl() {
             CARD_SHADOW
           }
         >
-          <Link to="/my-profile" onClick={close} className={MENU_ITEM}>
-            {t("common.nav.myProfile")}
-          </Link>
-          {roles.isEditor && (
-            <Link to="/articles" onClick={close} className={MENU_ITEM}>
-              {t("common.nav.insightsCms")}
+          <MenuRow asChild>
+            <Link to="/my-profile" onClick={close}>
+              {t("common.nav.myProfile")}
             </Link>
+          </MenuRow>
+          {roles.isEditor && (
+            <MenuRow asChild>
+              <Link to="/articles" onClick={close}>
+                {t("common.nav.insightsCms")}
+              </Link>
+            </MenuRow>
           )}
-          <button
-            type="button"
-            onClick={() => void signOutHere()}
-            className={MENU_ITEM + " w-full"}
-          >
-            {t("common.nav.signOut")}
-          </button>
+          <MenuRow onClick={() => void signOutHere()}>{t("common.nav.signOut")}</MenuRow>
+
         </div>
       )}
     </div>
