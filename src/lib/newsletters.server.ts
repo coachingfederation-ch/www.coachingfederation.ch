@@ -284,3 +284,36 @@ export async function deleteNewsletter(client: Client, id: string) {
   if (error) throw error;
   return { ok: true as const };
 }
+
+/**
+ * Render one edition to email HTML, exactly as a recipient would receive it.
+ *
+ * Only enabled blocks are included, in position order. Used by the staff
+ * preview today and by the send path later, so the two can never drift.
+ */
+export async function renderNewsletterEmail(client: Client, id: string): Promise<string> {
+  const { newsletter, blocks } = await loadNewsletterEditorData(client, id);
+  if (!newsletter) throw new Error("newsletter not found");
+
+  const [{ render }, { NewsletterEditionEmail }, { formatIssueDate }] = await Promise.all([
+    import("@react-email/render"),
+    import("./email-templates/newsletter-edition"),
+    import("./newsletters"),
+  ]);
+
+  return render(
+    NewsletterEditionEmail({
+      title: newsletter.title,
+      issueLabel: formatIssueDate(newsletter.issue_date, newsletter.language || "en"),
+      blocks: blocks
+        .filter((b) => b.enabled)
+        .map((b) => ({
+          id: b.id,
+          title: b.title,
+          content: b.content ?? "",
+          featuredImageUrl: b.featured_image_url,
+          sources: b.source_refs ?? [],
+        })),
+    }),
+  );
+}
