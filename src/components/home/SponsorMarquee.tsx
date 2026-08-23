@@ -55,8 +55,8 @@ function SponsorCard({
 
       <div className="relative flex flex-1 flex-col p-7">
         <div className="flex items-center gap-2">
-          <span aria-hidden="true" className="h-[2px] w-4 bg-hero-accent" />
-          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-hero-accent">
+          <span aria-hidden="true" className="h-[2px] w-4 bg-accent" />
+          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
             {item.category}
           </p>
         </div>
@@ -69,12 +69,12 @@ function SponsorCard({
             {cta}
             <span
               aria-hidden="true"
-              className="absolute -bottom-1 left-0 h-[2px] w-0 bg-hero-accent transition-all duration-300 group-hover/card:w-full"
+              className="absolute -bottom-1 left-0 h-[2px] w-0 bg-accent transition-all duration-300 group-hover/card:w-full"
             />
           </span>
           <span
             aria-hidden="true"
-            className="grid h-8 w-8 place-items-center rounded-full border border-white/25 transition-colors duration-300 group-hover/card:border-hero-accent"
+            className="grid h-8 w-8 place-items-center rounded-full border border-white/25 transition-colors duration-300 group-hover/card:border-accent"
           >
             →
           </span>
