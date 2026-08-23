@@ -85,12 +85,29 @@ export const NewsletterEditionEmail = ({
                 {block.title}
               </Heading>
               {block.featuredImageUrl ? (
-                <Img
-                  src={block.featuredImageUrl}
-                  alt=""
-                  width={536}
-                  style={{ borderRadius: "16px", margin: "0 0 16px", width: "100%" }}
-                />
+                <>
+                  <Img
+                    src={block.featuredImageUrl}
+                    alt={block.imageAlt ?? ""}
+                    width={536}
+                    style={{ borderRadius: "16px", margin: "0 0 8px", width: "100%" }}
+                  />
+                  {block.imageSource === "ai" ? (
+                    <Text style={credit}>AI generated image</Text>
+                  ) : block.imageCreditName ? (
+                    <Text style={credit}>
+                      {"Photo by "}
+                      {block.imageCreditUrl ? (
+                        <Link href={block.imageCreditUrl} style={sourceLink}>
+                          {block.imageCreditName}
+                        </Link>
+                      ) : (
+                        block.imageCreditName
+                      )}
+                      {" on Unsplash"}
+                    </Text>
+                  ) : null}
+                </>
               ) : null}
               {block.content?.trim() ? (
                 <Markdown markdownCustomStyles={markdownStyles}>{block.content}</Markdown>
