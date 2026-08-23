@@ -9,13 +9,13 @@ import { Link } from "@tanstack/react-router";
 import { ChevronDown, User } from "lucide-react";
 import {
   Button,
+  MenuRow,
   SiteHeader,
   type SiteLinkComponent,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { LocaleLink, useI18n } from "@/i18n";
 import {
   CARD_SHADOW,
-  MENU_ITEM,
   navItems,
   signOutHere,
   useDismissable,
