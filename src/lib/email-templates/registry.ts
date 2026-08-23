@@ -4,11 +4,21 @@
  */
 import type { ComponentType } from "react";
 
+/** Props handed to a template at render time — one flat, template-specific bag. */
+export type EmailTemplateData = Record<string, unknown>;
+
+/**
+ * Each template declares its own prop shape, so the registry stores them
+ * type-erased (`never` props accept every concrete component) and the render
+ * sites widen back to `EmailTemplateData` when passing the data bag.
+ */
+export type EmailTemplateComponent = ComponentType<never>;
+
 export interface TemplateEntry {
-  component: ComponentType<any>;
-  subject: string | ((data: Record<string, any>) => string);
+  component: EmailTemplateComponent;
+  subject: string | ((data: EmailTemplateData) => string);
   displayName?: string;
-  previewData?: Record<string, any>;
+  previewData?: EmailTemplateData;
   /** Fixed recipient — overrides caller-provided recipientEmail when set. */
   to?: string;
 }

@@ -17,12 +17,7 @@ import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import { BlockImageField } from "@/components/cms/BlockImageField";
 import { NewsletterPreviewDialog } from "@/components/cms/NewsletterPreviewDialog";
 import { ARTICLE_ROLES, requireStaffAccess } from "@/lib/staff-guard";
-import {
-  Button,
-  Input,
-  Label,
-  Switch,
-} from "@/design-system/icf-welcome-design-system-a835df";
+import { Button, Input, Label, Switch } from "@/design-system/icf-welcome-design-system-a835df";
 import {
   addNewsletterBlockFn,
   deleteNewsletterBlockFn,
@@ -157,12 +152,7 @@ function BlockCard({
               <RefreshCw className="h-4 w-4" />
             </Button>
           ) : null}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onDelete}
-            aria-label="Remove this block"
-          >
+          <Button variant="ghost" size="icon" onClick={onDelete} aria-label="Remove this block">
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
@@ -185,7 +175,6 @@ function BlockCard({
           generating={generatingImage}
           generateError={imageError}
         />
-
 
         <MarkdownEditor
           value={content}
@@ -465,7 +454,11 @@ function NewsletterEditor() {
         </ul>
 
         <div className="mt-6 flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => addMutation.mutate("specific_content")}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => addMutation.mutate("specific_content")}
+          >
             Add content block
           </Button>
           <Button variant="outline" size="sm" onClick={() => addMutation.mutate("advertisement")}>
@@ -475,7 +468,6 @@ function NewsletterEditor() {
 
         <NewsletterPreviewDialog id={id} open={previewOpen} onOpenChange={setPreviewOpen} />
       </div>
-
     </Shell>
   );
 }

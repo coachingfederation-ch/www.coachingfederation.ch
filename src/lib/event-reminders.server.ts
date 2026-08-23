@@ -75,7 +75,9 @@ export async function sendReminder(
 ): Promise<{ status: "sent" | "skipped" | "failed"; reason?: string }> {
   const { data: registration } = await supabaseAdmin
     .from("event_registrations")
-    .select("id, event_id, email, full_name, locale, status, payment_status, refund_status, tier_id")
+    .select(
+      "id, event_id, email, full_name, locale, status, payment_status, refund_status, tier_id",
+    )
     .eq("id", registrationId)
     .maybeSingle();
   if (!registration) return { status: "skipped", reason: "not_found" };
@@ -147,9 +149,7 @@ export async function sendReminder(
     // Release the claim so the next run can retry this attendee.
     await supabaseAdmin
       .from("event_registrations")
-      .update(
-        stage === "week" ? { reminder_7d_sent_at: null } : { reminder_1d_sent_at: null },
-      )
+      .update(stage === "week" ? { reminder_7d_sent_at: null } : { reminder_1d_sent_at: null })
       .eq("id", registrationId);
     return { status: "failed", reason: message.slice(0, 200) };
   }

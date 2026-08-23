@@ -124,7 +124,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // Home-screen install for the volunteer chat console (see manifest).
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
-      { rel: "icon", type: "image/png", href: "/favicon-dark.png", media: "(prefers-color-scheme: dark)" },
+      {
+        rel: "icon",
+        type: "image/png",
+        href: "/favicon-dark.png",
+        media: "(prefers-color-scheme: dark)",
+      },
       { rel: "apple-touch-icon", href: "/app-icon-192.png" },
       // Fonts are self-hosted and delivered same-origin by the design system
       // stylesheet (@font-face in the imported design-system CSS, served as

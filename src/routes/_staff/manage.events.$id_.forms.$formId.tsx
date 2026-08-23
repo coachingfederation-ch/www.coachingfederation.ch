@@ -34,7 +34,12 @@ type Results = {
   questions: PublicFormQuestion[];
   eligible: number;
   recipients: { id: string; email: string; status: string; sent_at: string | null }[];
-  responses: { id: string; registration_id: string; answers: Record<string, string>; submitted_at: string }[];
+  responses: {
+    id: string;
+    registration_id: string;
+    answers: Record<string, string>;
+    submitted_at: string;
+  }[];
   attendees: { id: string; full_name: string; email: string }[];
 };
 
@@ -67,7 +72,9 @@ function FormResultsPage() {
     setError(null);
     try {
       const outcome = await sendFollowUpForm({ data: { formId, mode } });
-      setMessage(`${outcome.sent} ${t("events.forms.sentLabel")} · ${outcome.skipped} skipped · ${outcome.failed} failed`);
+      setMessage(
+        `${outcome.sent} ${t("events.forms.sentLabel")} · ${outcome.skipped} skipped · ${outcome.failed} failed`,
+      );
       await load();
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -100,10 +107,16 @@ function FormResultsPage() {
   return (
     <Shell>
       <div className="mx-auto max-w-5xl px-6 py-10">
-        <Link to="/manage/events/$id" params={{ id }} className="text-sm font-semibold text-primary underline underline-offset-4">
+        <Link
+          to="/manage/events/$id"
+          params={{ id }}
+          className="text-sm font-semibold text-primary underline underline-offset-4"
+        >
           ← {t("events.forms.backToEvent")}
         </Link>
-        <h1 className="mt-3 font-display text-2xl font-bold tracking-tight">{data?.form.name ?? ""}</h1>
+        <h1 className="mt-3 font-display text-2xl font-bold tracking-tight">
+          {data?.form.name ?? ""}
+        </h1>
 
         {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
         {message ? <p className="mt-3 text-sm text-muted-foreground">{message}</p> : null}
@@ -111,10 +124,20 @@ function FormResultsPage() {
         <div className="mt-4 flex flex-wrap gap-2">
           {isRegistration ? null : (
             <>
-              <button type="button" disabled={busy} className={buttonClass} onClick={() => void send("invite")}>
+              <button
+                type="button"
+                disabled={busy}
+                className={buttonClass}
+                onClick={() => void send("invite")}
+              >
                 {t("events.forms.sendInvites")}
               </button>
-              <button type="button" disabled={busy} className={buttonClass} onClick={() => void send("reminder")}>
+              <button
+                type="button"
+                disabled={busy}
+                className={buttonClass}
+                onClick={() => void send("reminder")}
+              >
                 {t("events.forms.sendReminders")}
               </button>
             </>
@@ -127,13 +150,14 @@ function FormResultsPage() {
         <p className="mt-4 text-sm text-muted-foreground">
           {isRegistration ? (
             <>
-              {data?.eligible ?? 0} {t("events.forms.registrationsLabel")} · {data?.responses.length ?? 0}{" "}
-              {t("events.forms.answeredLabel")}
+              {data?.eligible ?? 0} {t("events.forms.registrationsLabel")} ·{" "}
+              {data?.responses.length ?? 0} {t("events.forms.answeredLabel")}
             </>
           ) : (
             <>
-              {data?.eligible ?? 0} {t("events.forms.eligibleLabel")} · {data?.recipients.length ?? 0}{" "}
-              {t("events.forms.sentLabel")} · {data?.responses.length ?? 0} {t("events.forms.responsesLabel")}
+              {data?.eligible ?? 0} {t("events.forms.eligibleLabel")} ·{" "}
+              {data?.recipients.length ?? 0} {t("events.forms.sentLabel")} ·{" "}
+              {data?.responses.length ?? 0} {t("events.forms.responsesLabel")}
             </>
           )}
         </p>

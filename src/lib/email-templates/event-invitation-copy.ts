@@ -29,7 +29,8 @@ export const INVITATION_COPY: Record<Locale, InvitationCopy> = {
     preview: "A personal invitation from The Switzerland Chapter of ICF.",
     heading: "You are invited",
     greeting: "Hello {name}",
-    intro: "We would be glad to welcome you to this event, and have kept a place on the guest list for you.",
+    intro:
+      "We would be glad to welcome you to this event, and have kept a place on the guest list for you.",
     personal:
       "This invitation is personal: the link below is yours alone and works once. Please do not pass it on.",
     detailsTitle: "Event details",

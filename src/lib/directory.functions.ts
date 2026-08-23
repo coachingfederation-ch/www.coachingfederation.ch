@@ -102,10 +102,10 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
     // alphabetical page, so every published coach gets exposure.
     const facetsActive = Boolean(
       data.regions?.length ||
-        data.languages?.length ||
-        data.specialisations?.length ||
-        data.formats?.length ||
-        data.credentials?.length,
+      data.languages?.length ||
+      data.specialisations?.length ||
+      data.formats?.length ||
+      data.credentials?.length,
     );
     if (data.sample && !facetsActive && page === 0) {
       let idQuery = supabasePublic

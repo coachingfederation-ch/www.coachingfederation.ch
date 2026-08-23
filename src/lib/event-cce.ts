@@ -32,11 +32,7 @@ export const CCE_STATUSES: CceStatus[] = [
 export const CCE_APPROVER_STATUSES: CceStatus[] = ["submitted", "approved", "declined"];
 
 export const CCE_DELIVERY_METHODS: CceDelivery[] = ["in_person", "teleclass", "webinar"];
-export const CCE_CATEGORIES: CceCategory[] = [
-  "core_competency",
-  "resource_development",
-  "break",
-];
+export const CCE_CATEGORIES: CceCategory[] = ["core_competency", "resource_development", "break"];
 
 /** Credential vocabulary for the facilitator field. */
 export const CCE_CREDENTIALS = ["ACC", "PCC", "MCC", "none"] as const;
@@ -211,7 +207,8 @@ export function validateCce(input: {
     need(draft.attendance_monitoring, "cce.field.attendanceMonitoring");
     need(draft.content_rationale, "cce.field.contentRationale");
     if (!draft.delivery_method) missing.push("cce.field.deliveryMethod");
-    if (rows.filter((r) => r.cce_category !== "break").length === 0) missing.push("cce.field.schedule");
+    if (rows.filter((r) => r.cce_category !== "break").length === 0)
+      missing.push("cce.field.schedule");
   }
 
   const scheduleMinutes = creditMinutes(rows);

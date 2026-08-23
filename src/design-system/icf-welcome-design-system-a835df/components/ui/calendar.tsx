@@ -5,7 +5,10 @@ import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react
 import { DayButton, DayPicker, getDefaultClassNames } from "react-day-picker";
 
 import { cn } from "@/design-system/icf-welcome-design-system-a835df/lib/utils";
-import { Button, buttonVariants } from "@/design-system/icf-welcome-design-system-a835df/components/ui/button";
+import {
+  Button,
+  buttonVariants,
+} from "@/design-system/icf-welcome-design-system-a835df/components/ui/button";
 
 function Calendar({
   className,

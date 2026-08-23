@@ -137,7 +137,12 @@ const button = {
 };
 const pageFooter = { backgroundColor: INK, padding: "24px 32px", textAlign: "center" as const };
 const pageFooterText = { fontSize: "12px", color: "#ffffff", opacity: 0.6, margin: 0 };
-const footerLogoStyle = { display: "block", margin: "0 auto 12px", outline: "none", border: "none" };
+const footerLogoStyle = {
+  display: "block",
+  margin: "0 auto 12px",
+  outline: "none",
+  border: "none",
+};
 
 function Row({ title, children }: { title: string; children: React.ReactNode }) {
   return (

@@ -52,7 +52,8 @@ export const REMINDER_COPY: Record<Locale, ReminderCopy> = {
     ticketTitle: "Your ticket",
     ticketIntro: "Show this code at the door. You can also open your ticket page.",
     openTicket: "Open my ticket",
-    cannotCome: "If you can no longer come, please let us know at {email} so we can offer your place to someone else.",
+    cannotCome:
+      "If you can no longer come, please let us know at {email} so we can offer your place to someone else.",
     viewEvent: "View the event page",
     questions: "Questions? Write to us at {email}.",
     signoff: "Warm regards,\nThe Switzerland Chapter of ICF",
@@ -76,7 +77,8 @@ export const REMINDER_COPY: Record<Locale, ReminderCopy> = {
     ticketTitle: "Ihr Ticket",
     ticketIntro: "Zeigen Sie diesen Code am Eingang. Sie können auch Ihre Ticketseite öffnen.",
     openTicket: "Mein Ticket öffnen",
-    cannotCome: "Falls Sie nicht mehr teilnehmen können, schreiben Sie uns bitte an {email}, damit wir Ihren Platz weitergeben können.",
+    cannotCome:
+      "Falls Sie nicht mehr teilnehmen können, schreiben Sie uns bitte an {email}, damit wir Ihren Platz weitergeben können.",
     viewEvent: "Zur Anlassseite",
     questions: "Fragen? Schreiben Sie uns an {email}.",
     signoff: "Herzliche Grüsse,\nThe Switzerland Chapter of ICF",
@@ -100,7 +102,8 @@ export const REMINDER_COPY: Record<Locale, ReminderCopy> = {
     ticketTitle: "Votre billet",
     ticketIntro: "Présentez ce code à l'entrée. Vous pouvez aussi ouvrir la page de votre billet.",
     openTicket: "Ouvrir mon billet",
-    cannotCome: "Si vous ne pouvez plus venir, écrivez-nous à {email} afin que nous puissions proposer votre place à quelqu'un d'autre.",
+    cannotCome:
+      "Si vous ne pouvez plus venir, écrivez-nous à {email} afin que nous puissions proposer votre place à quelqu'un d'autre.",
     viewEvent: "Voir la page de l'événement",
     questions: "Des questions ? Écrivez-nous à {email}.",
     signoff: "Avec nos cordiales salutations,\nThe Switzerland Chapter of ICF",
@@ -122,9 +125,11 @@ export const REMINDER_COPY: Record<Locale, ReminderCopy> = {
     ticketLabel: "Biglietto",
     notesTitle: "Buono a sapersi",
     ticketTitle: "Il tuo biglietto",
-    ticketIntro: "Mostra questo codice all'ingresso. Puoi anche aprire la pagina del tuo biglietto.",
+    ticketIntro:
+      "Mostra questo codice all'ingresso. Puoi anche aprire la pagina del tuo biglietto.",
     openTicket: "Apri il mio biglietto",
-    cannotCome: "Se non puoi più partecipare, scrivici a {email} così possiamo offrire il tuo posto a qualcun altro.",
+    cannotCome:
+      "Se non puoi più partecipare, scrivici a {email} così possiamo offrire il tuo posto a qualcun altro.",
     viewEvent: "Vai alla pagina dell'evento",
     questions: "Domande? Scrivici a {email}.",
     signoff: "Cordiali saluti,\nThe Switzerland Chapter of ICF",

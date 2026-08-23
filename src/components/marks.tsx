@@ -91,8 +91,6 @@ export async function loadMarkSvg(name: MarkName): Promise<string | undefined> {
   return load(name);
 }
 
-
-
 export function Mark({
   name,
   className,

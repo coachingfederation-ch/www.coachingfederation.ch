@@ -9,12 +9,7 @@
 import { ArrowUpRight, CalendarDays } from "lucide-react";
 import { CARD_SHADOW } from "@/components/site-chrome";
 import { LocaleLink, useI18n } from "@/i18n";
-import {
-  eventPlace,
-  formatEventDate,
-  formatEventTimeRange,
-  type PublicEvent,
-} from "@/lib/events";
+import { eventPlace, formatEventDate, formatEventTimeRange, type PublicEvent } from "@/lib/events";
 
 type CommunityEvent = PublicEvent & { resolvedLocale?: string };
 

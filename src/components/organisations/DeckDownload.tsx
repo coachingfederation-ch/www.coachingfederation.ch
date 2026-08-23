@@ -62,9 +62,7 @@ export function DeckDownload() {
           <p className="text-lg font-semibold tracking-tight">
             {t("organisations.deck.download.doneTitle")}
           </p>
-          <p className="text-sm text-foreground/80">
-            {t("organisations.deck.download.doneBody")}
-          </p>
+          <p className="text-sm text-foreground/80">{t("organisations.deck.download.doneBody")}</p>
           <a
             href={deck.url}
             download={deck.original_filename}

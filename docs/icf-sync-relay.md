@@ -22,13 +22,13 @@ So a small reverse proxy on a GCP instance with a static IPv4 address owns the
 whitelistable egress. All sync traffic is Lovable → relay → ICF, and ICF sees
 one stable source IP.
 
-| Component | Value |
-| --------- | ----- |
-| Egress IP (whitelisted by ICF) | `34.121.79.30` |
-| Current TLS hostname | `34.121.79.30.nip.io` (Let's Encrypt, auto-renewed) |
-| Planned DNS name | `relay.coachingfederation.ch` |
-| Relay software | nginx passthrough on GCP `e2-micro`, Debian 12 |
-| Lovable env | `ICF_SOAP_*_BASE_URL` → relay, `ICF_RELAY_AUTH` → shared secret |
+| Component                      | Value                                                           |
+| ------------------------------ | --------------------------------------------------------------- |
+| Egress IP (whitelisted by ICF) | `34.121.79.30`                                                  |
+| Current TLS hostname           | `34.121.79.30.nip.io` (Let's Encrypt, auto-renewed)             |
+| Planned DNS name               | `relay.coachingfederation.ch`                                   |
+| Relay software                 | nginx passthrough on GCP `e2-micro`, Debian 12                  |
+| Lovable env                    | `ICF_SOAP_*_BASE_URL` → relay, `ICF_RELAY_AUTH` → shared secret |
 
 ## Request flow
 

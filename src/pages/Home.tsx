@@ -427,7 +427,9 @@ function Join() {
           </div>
         </div>
         <div className="rounded-2xl border border-hero-foreground/15 bg-hero-foreground/5 p-6 backdrop-blur">
-          <h3 className="text-xl font-semibold tracking-tight text-hero-foreground">{t("home.join.newsletterTitle")}</h3>
+          <h3 className="text-xl font-semibold tracking-tight text-hero-foreground">
+            {t("home.join.newsletterTitle")}
+          </h3>
           <p className="mt-2 text-sm leading-relaxed text-hero-foreground/85">
             {t("home.join.newsletterSubtitle")}
           </p>

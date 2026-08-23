@@ -16,15 +16,15 @@ before adding a new file.
 
 ### Member data and the ICF pipeline
 
-| Module                                       | Responsibility                                                                                                                                                                  |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Module                                       | Responsibility                                                                                                                                                                                             |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `member-sync.server.ts`                      | The import engine: pull the ICF feed, normalise, diff, create/update/deactivate, demote profiles that lost eligibility. The most operationally sensitive module in the project. See `docs/member-sync.md`. |
-| `icf-soap.server.ts`                         | SOAP/xWeb client for netFORUM. Credentials read inside handlers.                                                                                                                |
-| `integration-config.server.ts`               | Loads the single `integration_config` row (TEST vs LIVE, email suppression, claim gate).                                                                                        |
-| `member-profile.server.ts` / `.functions.ts` | Member self-service profile: validation, cleaning, the guarded publish path.                                                                                                    |
-| `member-claim.server.ts`                     | Account claim token state machine — hashing, expiry, attempt limiting, single use.                                                                                              |
-| `member-email.server.ts`                     | Email dispatch. Currently logs every intended send and delivers nothing; see operations doc.                                                                                    |
-| `member-translations.*`                      | Per-locale coach profile content: translatable field list, derived states, AI translation and the member RPC surface. See `docs/member-translations.md`.                        |
+| `icf-soap.server.ts`                         | SOAP/xWeb client for netFORUM. Credentials read inside handlers.                                                                                                                                           |
+| `integration-config.server.ts`               | Loads the single `integration_config` row (TEST vs LIVE, email suppression, claim gate).                                                                                                                   |
+| `member-profile.server.ts` / `.functions.ts` | Member self-service profile: validation, cleaning, the guarded publish path.                                                                                                                               |
+| `member-claim.server.ts`                     | Account claim token state machine — hashing, expiry, attempt limiting, single use.                                                                                                                         |
+| `member-email.server.ts`                     | Email dispatch. Currently logs every intended send and delivers nothing; see operations doc.                                                                                                               |
+| `member-translations.*`                      | Per-locale coach profile content: translatable field list, derived states, AI translation and the member RPC surface. See `docs/member-translations.md`.                                                   |
 
 ### Insights CMS
 

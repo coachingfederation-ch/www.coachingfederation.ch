@@ -85,7 +85,7 @@ are small, and closing them lets us delete that component and re-point ~20 consu
 - **No awaitable artwork loader.** `render="inline"` covers DOM-to-canvas export via
   `html-to-image`, but we have two paths that draw to a `canvas` directly rather than
   rasterising the DOM: the newsletter block-image flattener and the LinkedIn share-card
-  renderer. Both need the SVG *string*, not a React element. Please export the loader
+  renderer. Both need the SVG _string_, not a React element. Please export the loader
   that `render="inline"` already uses internally, for example
   `loadMarkSvg(name: MarkNameOrAlias): Promise<string>`, returning the same sanitised,
   `currentColor`-forced markup with the existing per-URL cache. This is an extraction of
@@ -99,7 +99,6 @@ are small, and closing them lets us delete that component and re-point ~20 consu
 
 Loading behaviour matters: the raw artworks are 120–500 KB each, so whichever mode is
 used must stay lazy / per-mark rather than eagerly bundling all 30.
-
 
 ### 5. A dropdown / menu-row recipe
 
@@ -119,7 +118,7 @@ We keep `src/components/callout.tsx` and `callout-shades.ts` locally as re-expor
 over your versions (identical apart from import paths). Is there a canonical import path
 you would rather consumers use, so we can drop the shims?
 
-### What we are explicitly *not* asking for
+### What we are explicitly _not_ asking for
 
 - Photography or imagery — we generate our own AI photography and mark it with `AiPhoto`
   / `AiBadge` as the library requires.

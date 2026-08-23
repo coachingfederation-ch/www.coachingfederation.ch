@@ -24,7 +24,8 @@ const STYLE =
   "never surreal or glossy. No text, no letters, no logos, no watermarks.";
 
 function messageFor(status: number, body: string): string {
-  if (status === 402) return "AI credits are exhausted for this workspace. Add credits and try again.";
+  if (status === 402)
+    return "AI credits are exhausted for this workspace. Add credits and try again.";
   if (status === 403) return "Image generation is blocked by workspace policy.";
   if (status === 429) return "The image service is rate limited right now. Try again in a moment.";
   if (status === 400) {
@@ -44,7 +45,8 @@ export async function generateBlockImage(client: Client, blockId: string) {
   if (!block) throw new Error("This block no longer exists.");
 
   const text = String(block.content ?? "").trim();
-  if (!text) throw new Error("Write or generate the block text first — the image is drawn from it.");
+  if (!text)
+    throw new Error("Write or generate the block text first — the image is drawn from it.");
 
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("AI service is not configured");
@@ -101,7 +103,6 @@ export async function generateBlockImage(client: Client, blockId: string) {
       image_credit_name: null,
       image_credit_url: null,
       image_alt: `AI generated illustration for “${block.title}”`,
-
     })
     .eq("id", blockId);
   if (saveError) throw saveError;

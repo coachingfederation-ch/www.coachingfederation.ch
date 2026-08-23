@@ -15,7 +15,13 @@ import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
 import { useMyRoles } from "@/lib/roles";
 import { getEventCce, recordEventCceOutcome, setEventCceStatus } from "@/lib/event-cce.functions";
-import { buildCceSummary, scheduleHours, summaryToText, type SummaryEvent, type SummaryItem } from "@/lib/event-cce-summary";
+import {
+  buildCceSummary,
+  scheduleHours,
+  summaryToText,
+  type SummaryEvent,
+  type SummaryItem,
+} from "@/lib/event-cce-summary";
 import { JOTFORM_MANUAL_FIELDS, jotformUrl } from "@/lib/event-cce-jotform";
 import type { CceApplication, CceScheduleRow, CceStatus } from "@/lib/event-cce";
 
@@ -77,7 +83,9 @@ function CceReviewPage() {
       setSubmittedAt(a?.submitted_at ?? "");
       setReference(a?.jotform_reference ?? "");
       setDecisionAt(a?.decision_at ?? "");
-      setDecision(a?.status === "approved" ? "approved" : a?.status === "declined" ? "declined" : "none");
+      setDecision(
+        a?.status === "approved" ? "approved" : a?.status === "declined" ? "declined" : "none",
+      );
       setCcHours(a?.approved_cc_hours != null ? String(a.approved_cc_hours) : "");
       setRdHours(a?.approved_rd_hours != null ? String(a.approved_rd_hours) : "");
       setNotes(a?.decision_notes ?? "");
@@ -162,7 +170,9 @@ function CceReviewPage() {
         <h1 className="mt-4 text-2xl font-bold tracking-tight">{t("cce.review.title")}</h1>
         <p className="mt-1 text-sm text-muted-foreground">{event?.title}</p>
 
-        {loading ? <p className="mt-6 text-sm text-muted-foreground">{t("events.loading")}</p> : null}
+        {loading ? (
+          <p className="mt-6 text-sm text-muted-foreground">{t("events.loading")}</p>
+        ) : null}
         {message ? <p className="mt-4 text-sm text-teal-foreground">{message}</p> : null}
         {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
 

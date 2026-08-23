@@ -74,7 +74,6 @@ export function ContactForm() {
             <Button type="submit" size="pill" className="w-full">
               {t("about.contact.send")}
             </Button>
-
           </div>
 
           <p className="mt-4 text-center text-xs text-muted-foreground">

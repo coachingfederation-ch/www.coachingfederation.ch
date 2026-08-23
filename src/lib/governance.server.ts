@@ -7,10 +7,7 @@
  * storage path is signed here; a signing failure degrades to "no link" rather
  * than failing the page.
  */
-import {
-  GOVERNANCE_DOCUMENT_BUCKET,
-  GOVERNANCE_DOCUMENT_TTL_SECONDS,
-} from "./storage";
+import { GOVERNANCE_DOCUMENT_BUCKET, GOVERNANCE_DOCUMENT_TTL_SECONDS } from "./storage";
 import type { GovernanceCategory, GovernanceDocument } from "./governance";
 
 const COLUMNS =

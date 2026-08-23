@@ -15,12 +15,43 @@ import { AiPhoto } from "@/design-system/icf-welcome-design-system-a835df";
 
 /** Page copy kept local: four short strings, no locale-file churn. */
 const COPY = {
-  en: { eyebrow: "Chapter newsletter", title: "Newsletter archive", lede: "Every monthly edition of our chapter newsletter, in one place.", empty: "No editions have been published yet.", loading: "Loading…", notFound: "This edition is not available.", back: "Back to the archive" },
-  de: { eyebrow: "Chapter-Newsletter", title: "Newsletter-Archiv", lede: "Alle monatlichen Ausgaben unseres Chapter-Newsletters an einem Ort.", empty: "Es wurden noch keine Ausgaben veröffentlicht.", loading: "Wird geladen…", notFound: "Diese Ausgabe ist nicht verfügbar.", back: "Zurück zum Archiv" },
-  fr: { eyebrow: "Newsletter du chapitre", title: "Archives de la newsletter", lede: "Toutes les éditions mensuelles de notre newsletter, au même endroit.", empty: "Aucune édition n'a encore été publiée.", loading: "Chargement…", notFound: "Cette édition n'est pas disponible.", back: "Retour aux archives" },
-  it: { eyebrow: "Newsletter del chapter", title: "Archivio della newsletter", lede: "Tutte le edizioni mensili della nostra newsletter, in un unico posto.", empty: "Non è ancora stata pubblicata nessuna edizione.", loading: "Caricamento…", notFound: "Questa edizione non è disponibile.", back: "Torna all'archivio" },
+  en: {
+    eyebrow: "Chapter newsletter",
+    title: "Newsletter archive",
+    lede: "Every monthly edition of our chapter newsletter, in one place.",
+    empty: "No editions have been published yet.",
+    loading: "Loading…",
+    notFound: "This edition is not available.",
+    back: "Back to the archive",
+  },
+  de: {
+    eyebrow: "Chapter-Newsletter",
+    title: "Newsletter-Archiv",
+    lede: "Alle monatlichen Ausgaben unseres Chapter-Newsletters an einem Ort.",
+    empty: "Es wurden noch keine Ausgaben veröffentlicht.",
+    loading: "Wird geladen…",
+    notFound: "Diese Ausgabe ist nicht verfügbar.",
+    back: "Zurück zum Archiv",
+  },
+  fr: {
+    eyebrow: "Newsletter du chapitre",
+    title: "Archives de la newsletter",
+    lede: "Toutes les éditions mensuelles de notre newsletter, au même endroit.",
+    empty: "Aucune édition n'a encore été publiée.",
+    loading: "Chargement…",
+    notFound: "Cette édition n'est pas disponible.",
+    back: "Retour aux archives",
+  },
+  it: {
+    eyebrow: "Newsletter del chapter",
+    title: "Archivio della newsletter",
+    lede: "Tutte le edizioni mensili della nostra newsletter, in un unico posto.",
+    empty: "Non è ancora stata pubblicata nessuna edizione.",
+    loading: "Caricamento…",
+    notFound: "Questa edizione non è disponibile.",
+    back: "Torna all'archivio",
+  },
 } as const;
-
 
 interface EditionBlock {
   id: string;
@@ -71,9 +102,7 @@ export default function NewsletterEditionPage() {
   if (isLoading) {
     return (
       <main id="main" className="bg-background">
-        <div className="mx-auto max-w-3xl px-6 py-24 text-muted-foreground">
-          {copy.loading}
-        </div>
+        <div className="mx-auto max-w-3xl px-6 py-24 text-muted-foreground">{copy.loading}</div>
       </main>
     );
   }

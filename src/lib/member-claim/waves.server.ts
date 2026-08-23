@@ -129,7 +129,9 @@ type MemberRow = {
 async function loadEligibleMembers(): Promise<MemberRow[]> {
   const { data, error } = await supabaseAdmin
     .from("members")
-    .select("id, email, first_name, auth_user_id, activity_state, last_synced_at, membership_join_date")
+    .select(
+      "id, email, first_name, auth_user_id, activity_state, last_synced_at, membership_join_date",
+    )
     .is("auth_user_id", null)
     .eq("activity_state", "active")
     .not("email", "is", null)
@@ -338,8 +340,7 @@ export async function runClaimWave(options: {
     }
 
     const sentTotal = invited + reminded + suppressed;
-    const exhausted =
-      !paused && queue.invites.length + queue.reminders.length <= batch.length;
+    const exhausted = !paused && queue.invites.length + queue.reminders.length <= batch.length;
 
     await releaseLease({
       status: paused ? "paused" : exhausted ? "completed" : "running",
@@ -390,10 +391,7 @@ export async function updateCampaign(
     if (!current.started_at) values.started_at = new Date().toISOString();
   }
 
-  const { error } = await supabaseAdmin
-    .from("member_claim_campaign")
-    .update(values)
-    .eq("id", true);
+  const { error } = await supabaseAdmin.from("member_claim_campaign").update(values).eq("id", true);
   if (error) throw error;
 
   await supabaseAdmin.from("member_sync_events").insert({

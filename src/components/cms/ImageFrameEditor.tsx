@@ -49,7 +49,6 @@ export function ImageFrameEditor({
   const width = PREVIEW_WIDTH;
   const height = Math.round(preset.height * scale);
 
-
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);
   const dragRef = useRef<{ x: number; y: number; crop: BlockImageCrop } | null>(null);
 
@@ -159,7 +158,6 @@ export function ImageFrameEditor({
           />
         ))}
       </MarkPlacementCanvas>
-
 
       <div className="space-y-1">
         <Label htmlFor="block-image-zoom">Zoom</Label>

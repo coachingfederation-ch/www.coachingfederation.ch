@@ -122,18 +122,18 @@ actually succeeded; otherwise it says the chapter will be in touch.
 
 ## Where things live
 
-| Module                                        | Responsibility                                      |
-| --------------------------------------------- | --------------------------------------------------- |
-| `tickets.ts` / `tickets.functions.ts`         | Client-safe types, public read endpoints            |
-| `tickets.server.ts`                           | Membership, pricing, holds, registration, checkout  |
-| `refunds.server.ts`                           | Stripe refunds, idempotent, outcome written to row  |
-| `event-confirmation.server.ts`                | Confirmation email + shared formatting helpers      |
-| `event-cancellation.server.ts`                | Cancellation notice + chapter copy                  |
-| `event-calendar.ts`, `api/public/calendar.$file` | RFC 5545 `.ics` generation and hosting           |
-| `events-admin.functions.ts`                   | Staff: tiers, attendee list, cancel, retry refund   |
-| `components/events/EventRegistrationPanel.tsx`| Public registration + member price unlock           |
-| `components/events/PaymentOverlay.tsx`        | Embedded Checkout modal, resume-payment state       |
-| `components/cms/EventEditorSections.tsx`      | Tier editor, attendee table, cancel dialog          |
+| Module                                           | Responsibility                                     |
+| ------------------------------------------------ | -------------------------------------------------- |
+| `tickets.ts` / `tickets.functions.ts`            | Client-safe types, public read endpoints           |
+| `tickets.server.ts`                              | Membership, pricing, holds, registration, checkout |
+| `refunds.server.ts`                              | Stripe refunds, idempotent, outcome written to row |
+| `event-confirmation.server.ts`                   | Confirmation email + shared formatting helpers     |
+| `event-cancellation.server.ts`                   | Cancellation notice + chapter copy                 |
+| `event-calendar.ts`, `api/public/calendar.$file` | RFC 5545 `.ics` generation and hosting             |
+| `events-admin.functions.ts`                      | Staff: tiers, attendee list, cancel, retry refund  |
+| `components/events/EventRegistrationPanel.tsx`   | Public registration + member price unlock          |
+| `components/events/PaymentOverlay.tsx`           | Embedded Checkout modal, resume-payment state      |
+| `components/cms/EventEditorSections.tsx`         | Tier editor, attendee table, cancel dialog         |
 
 ## Security notes
 

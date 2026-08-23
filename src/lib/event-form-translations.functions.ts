@@ -145,9 +145,7 @@ export const translateEventForm = createServerFn({ method: "POST" })
             // Length mismatch means the mapping is untrustworthy: keep English.
             options:
               options.length === question.options.length
-                ? question.options.map(
-                    (value, i) => (options[i] ?? "").toString().trim() || value,
-                  )
+                ? question.options.map((value, i) => (options[i] ?? "").toString().trim() || value)
                 : question.options,
             scaleLow: clean(q?.scaleLow, question.scaleLow),
             scaleHigh: clean(q?.scaleHigh, question.scaleHigh),

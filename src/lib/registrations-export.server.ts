@@ -27,6 +27,26 @@ const BASE_COLUMNS = [
   "notes",
 ] as const;
 
+/** The registration columns this export selects, as returned by the query. */
+interface ExportRow {
+  full_name: string | null;
+  email: string | null;
+  status: string | null;
+  payment_status: string | null;
+  amount_cents: number | null;
+  currency: string | null;
+  tier_id: string | null;
+  discount_code_text: string | null;
+  locale: string | null;
+  created_at: string;
+  checked_in_at: string | null;
+  confirmation_status: string | null;
+  refund_status: string | null;
+  created_by_staff: boolean | null;
+  notes: string | null;
+  answers: Record<string, string> | null;
+}
+
 function cell(value: unknown): string {
   if (value === null || value === undefined) return "";
   let s = String(value);
@@ -57,11 +77,13 @@ export async function buildRegistrationsCsv(
     formId ? loadFormQuestions(formId) : Promise.resolve([]),
   ]);
 
-  const tierNames = new Map(((tiers ?? []) as { id: string; name: string }[]).map((t) => [t.id, t.name]));
+  const tierNames = new Map(
+    ((tiers ?? []) as { id: string; name: string }[]).map((t) => [t.id, t.name]),
+  );
   const asked = questions.filter((q) => q.type !== "heading");
   const header = [...BASE_COLUMNS, ...asked.map((q) => q.label)];
 
-  const lines = ((rows ?? []) as Record<string, any>[]).map((r) => {
+  const lines = ((rows ?? []) as ExportRow[]).map((r) => {
     const answers = (r.answers ?? {}) as Record<string, string>;
     const values = [
       r.full_name,

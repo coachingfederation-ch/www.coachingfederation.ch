@@ -743,10 +743,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Piloter des projets",
-            "Être reconnu par ICFS pour avoir mené des initiatives"
-          ]
+          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
         },
         "status": {
           "title": "Status",

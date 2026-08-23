@@ -37,7 +37,7 @@ it on the Roles screen (`/roles`) through the per-account detail panel
 (`src/components/cms/RoleDetailPanel.tsx`); the manageable set is
 `MANAGED_ROLES` in `src/lib/role-model.ts`. Editing and publishing are
 deliberately different grants: an editor writes, a publisher signs off. The
-role is *not* derived from the operational structure — an `op_assignments` row
+role is _not_ derived from the operational structure — an `op_assignments` row
 in Communication & Marketing grants nothing by itself.
 
 Publishers reach the editorial screens like editors: `ARTICLE_ROLES` in
@@ -55,11 +55,11 @@ the table below. `created_by` is the account that
 created the record, deliberately distinct from the `author_id` shown to
 readers: a ghost-written piece is still blocked for the person who typed it.
 
-| Actor                        | submit | publish own | publish other's | unpublish |
-| ---------------------------- | ------ | ----------- | --------------- | --------- |
-| Contributor / editor         | yes    | no          | no              | no        |
-| Publisher                    | yes    | no          | yes             | yes       |
-| Admin                        | yes    | yes         | yes             | yes       |
+| Actor                | submit | publish own | publish other's | unpublish |
+| -------------------- | ------ | ----------- | --------------- | --------- |
+| Contributor / editor | yes    | no          | no              | no        |
+| Publisher            | yes    | no          | yes             | yes       |
+| Admin                | yes    | yes         | yes             | yes       |
 
 ## Enforced twice, on purpose
 
@@ -116,21 +116,22 @@ wiring it up.
 
 ## Where things live
 
-| Concern                       | File                                        |
-| ----------------------------- | ------------------------------------------- |
-| State machine, permissions    | `src/lib/articles.server.ts`                |
-| RPC wrappers for the client   | `src/lib/articles.functions.ts`             |
-| Editor UI and transitions     | `src/routes/_staff/articles.$id.tsx`        |
-| Status pill, sidebar metadata | `src/components/cms/ArticleMetaSidebar.tsx` |
-| Index filters and labels      | `src/routes/_staff/articles.index.tsx`      |
+| Concern                       | File                                                                    |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| State machine, permissions    | `src/lib/articles.server.ts`                                            |
+| RPC wrappers for the client   | `src/lib/articles.functions.ts`                                         |
+| Editor UI and transitions     | `src/routes/_staff/articles.$id.tsx`                                    |
+| Status pill, sidebar metadata | `src/components/cms/ArticleMetaSidebar.tsx`                             |
+| Index filters and labels      | `src/routes/_staff/articles.index.tsx`                                  |
 | Role grants and detail panel  | `src/routes/_staff/roles.tsx`, `src/components/cms/RoleDetailPanel.tsx` |
-| Role model and staff routing  | `src/lib/role-model.ts`, `src/lib/staff-guard.ts` |
-| Database guard                | `tg_articles_publish_guard` on `articles`   |
+| Role model and staff routing  | `src/lib/role-model.ts`, `src/lib/staff-guard.ts`                       |
+| Database guard                | `tg_articles_publish_guard` on `articles`                               |
 
 Status labels and action wording are translated in
 `src/i18n/locales/<lang>/cms.json` (`editor.*` for the article screen,
 `roles.*` for the Roles screen); adding a status means adding a string in all
 four languages, not just English.
+
 ## Sharing to LinkedIn
 
 A published article can be pushed to the chapter's LinkedIn company page from

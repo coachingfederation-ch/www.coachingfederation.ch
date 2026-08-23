@@ -120,7 +120,10 @@ export async function saveNewsletterMeta(
   id: string,
   patch: { title: string; language: string },
 ) {
-  const { error } = await client.from("newsletters").update(patch as never).eq("id", id);
+  const { error } = await client
+    .from("newsletters")
+    .update(patch as never)
+    .eq("id", id);
   if (error) throw error;
   return { ok: true as const };
 }
@@ -142,10 +145,12 @@ export async function saveBlock(
     image_aspect?: string | null;
     image_crop?: { xPct: number; yPct: number; zoom: number } | null;
     image_marks?: unknown;
-
   },
 ) {
-  const { error } = await client.from("newsletter_blocks").update(patch as never).eq("id", blockId);
+  const { error } = await client
+    .from("newsletter_blocks")
+    .update(patch as never)
+    .eq("id", blockId);
   if (error) throw error;
   return { ok: true as const };
 }
@@ -260,7 +265,9 @@ export async function transitionNewsletter(
     (transition.action === "publish" || transition.action === "schedule") &&
     !permissions.canPublish
   ) {
-    throw new Error("You created this newsletter — another publisher has to review and publish it.");
+    throw new Error(
+      "You created this newsletter — another publisher has to review and publish it.",
+    );
   }
 
   const firstPublished = row.first_published_at;
@@ -283,7 +290,10 @@ export async function transitionNewsletter(
     };
   } else patch = { status: "unpublished", scheduled_at: null };
 
-  const { error } = await client.from("newsletters").update(patch as never).eq("id", id);
+  const { error } = await client
+    .from("newsletters")
+    .update(patch as never)
+    .eq("id", id);
   if (error) throw error;
   return patch;
 }

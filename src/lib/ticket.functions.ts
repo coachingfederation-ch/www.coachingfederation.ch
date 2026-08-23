@@ -12,7 +12,14 @@ import { z } from "zod";
 export const getTicket = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) =>
     z
-      .object({ token: z.string().trim().min(16).max(64).regex(/^[A-Za-z0-9_-]+$/) })
+      .object({
+        token: z
+          .string()
+          .trim()
+          .min(16)
+          .max(64)
+          .regex(/^[A-Za-z0-9_-]+$/),
+      })
       .parse(input),
   )
   .handler(async ({ data }) => {

@@ -364,9 +364,7 @@ export async function listInternalStaffAccounts(): Promise<InternalStaffAccount[
     .from("internal_accounts")
     .select("auth_user_id, display_name, email, invited_at, accepted_at")
     .is("revoked_at", null);
-  const inviteByUser = new Map(
-    (invited ?? []).map((row) => [row.auth_user_id as string, row]),
-  );
+  const inviteByUser = new Map((invited ?? []).map((row) => [row.auth_user_id as string, row]));
   for (const id of inviteByUser.keys()) if (!byUser.has(id)) byUser.set(id, []);
 
   if (!byUser.size) return [];

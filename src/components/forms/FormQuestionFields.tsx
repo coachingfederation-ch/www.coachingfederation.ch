@@ -6,11 +6,7 @@
  * or behave differently depending on where it is shown. Conditions are
  * evaluated here and re-checked server-side before anything is stored.
  */
-import {
-  MULTI_SEPARATOR,
-  isQuestionVisible,
-  type PublicFormQuestion,
-} from "@/lib/event-forms";
+import { MULTI_SEPARATOR, isQuestionVisible, type PublicFormQuestion } from "@/lib/event-forms";
 
 export function FormQuestionFields({
   questions,
@@ -112,9 +108,7 @@ export function FormQuestionFields({
                             ? [...picked, option]
                             : picked.filter((v) => v !== option);
                           update(
-                            question.options
-                              .filter((o) => next.includes(o))
-                              .join(MULTI_SEPARATOR),
+                            question.options.filter((o) => next.includes(o)).join(MULTI_SEPARATOR),
                           );
                         }}
                       />

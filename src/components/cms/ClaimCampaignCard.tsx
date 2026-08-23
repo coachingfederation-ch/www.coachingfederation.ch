@@ -10,11 +10,7 @@
 import { useEffect, useState } from "react";
 import { Send } from "lucide-react";
 import { Button, Checkbox, Input } from "@/design-system/icf-welcome-design-system-a835df";
-import {
-  getClaimCampaign,
-  releaseClaimWave,
-  updateClaimCampaign,
-} from "@/lib/members.functions";
+import { getClaimCampaign, releaseClaimWave, updateClaimCampaign } from "@/lib/members.functions";
 
 type Overview = Awaited<ReturnType<typeof getClaimCampaign>>;
 
@@ -116,7 +112,9 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
               const value = Number(e.target.value);
               if (!Number.isFinite(value) || value === campaign.daily_cap) return;
               void run(async () => {
-                await updateClaimCampaign({ data: { daily_cap: Math.min(500, Math.max(1, value)) } });
+                await updateClaimCampaign({
+                  data: { daily_cap: Math.min(500, Math.max(1, value)) },
+                });
                 return t("integration.saved");
               });
             }}
@@ -125,7 +123,9 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
         </label>
 
         <label className="text-xs font-semibold">
-          <span className="block text-muted-foreground">{t("integration.campaignReminderDays")}</span>
+          <span className="block text-muted-foreground">
+            {t("integration.campaignReminderDays")}
+          </span>
           <Input
             type="number"
             min={1}
@@ -137,7 +137,7 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
               if (!Number.isFinite(value) || value === campaign.reminder_after_days) return;
               void run(async () => {
                 await updateClaimCampaign({
-                    data: { reminder_after_days: Math.min(60, Math.max(1, value)) },
+                  data: { reminder_after_days: Math.min(60, Math.max(1, value)) },
                 });
                 return t("integration.saved");
               });

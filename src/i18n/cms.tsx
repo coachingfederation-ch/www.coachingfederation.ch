@@ -45,6 +45,6 @@ export function useCms() {
     locale,
     setLocale: setCmsLocale,
     t: (key: string) => t(`cms.${key}`),
-    tList: <T = Record<string, string>>(key: string) => tList<T>(`cms.${key}`),
+    tList: <T = Record<string, string>,>(key: string) => tList<T>(`cms.${key}`),
   };
 }

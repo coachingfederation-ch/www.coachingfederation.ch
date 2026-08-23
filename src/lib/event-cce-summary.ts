@@ -40,8 +40,7 @@ export function buildCceSummary(
   const place =
     event.location_mode === "online"
       ? text(event.online_url)
-      : [event.venue_name, event.city].filter(Boolean).join(", ") ||
-        text(event.online_url);
+      : [event.venue_name, event.city].filter(Boolean).join(", ") || text(event.online_url);
 
   const cc = Number(app?.core_competency_hours ?? 0);
   const rd = Number(app?.resource_development_hours ?? 0);
@@ -72,9 +71,10 @@ export function buildCceSummary(
     { key: "contactEmail", value: text(app?.contact_email) },
     {
       key: "primaryFacilitator",
-      value: [app?.primary_facilitator_name, app?.primary_facilitator_credential]
-        .filter(Boolean)
-        .join(" · ") || dash,
+      value:
+        [app?.primary_facilitator_name, app?.primary_facilitator_credential]
+          .filter(Boolean)
+          .join(" · ") || dash,
     },
     { key: "additionalFacilitators", value: text(app?.additional_facilitators) },
     { key: "targetAudience", value: text(app?.target_audience) },
@@ -89,9 +89,9 @@ export function buildCceSummary(
     { key: "schedule", value: schedule || dash },
     {
       key: "supportingMaterial",
-      value: [app?.supporting_material_url, app?.supporting_material_note]
-        .filter(Boolean)
-        .join(" — ") || dash,
+      value:
+        [app?.supporting_material_url, app?.supporting_material_note].filter(Boolean).join(" — ") ||
+        dash,
     },
   ];
 }

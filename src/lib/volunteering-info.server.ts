@@ -51,8 +51,7 @@ export async function loadVolunteeringInfo(
   if (projectError) throw projectError;
 
   const projectName = project ? localizedName(project, locale) : "Volunteering";
-  const contactEmail =
-    project?.public_contact_email || project?.contact_email || FALLBACK_EMAIL;
+  const contactEmail = project?.public_contact_email || project?.contact_email || FALLBACK_EMAIL;
 
   let director: VolunteerDirector | null = null;
 

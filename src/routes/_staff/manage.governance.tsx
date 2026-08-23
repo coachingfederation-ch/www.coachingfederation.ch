@@ -49,8 +49,6 @@ const LANGUAGES = ["en", "de", "fr", "it"] as const;
 const COLUMNS =
   "id, title, description, category, year, language, file_path, external_url, file_size_bytes, mime_type, is_published, sort_order";
 
-
-
 function GovernanceCmsPage() {
   const { t } = useCms();
   const [rows, setRows] = useState<Row[]>([]);
@@ -276,7 +274,12 @@ function GovernanceCmsPage() {
                   className="min-w-48 flex-1 rounded-lg border border-transparent bg-transparent px-2 py-1 text-sm font-semibold outline-none hover:border-border focus:border-border"
                 />
                 <span className="text-xs text-muted-foreground">
-                  {[row.category, row.year, row.language.toUpperCase(), formatFileSize(row.file_size_bytes)]
+                  {[
+                    row.category,
+                    row.year,
+                    row.language.toUpperCase(),
+                    formatFileSize(row.file_size_bytes),
+                  ]
                     .filter(Boolean)
                     .join(" · ")}
                 </span>

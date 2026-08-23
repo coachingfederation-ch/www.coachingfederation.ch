@@ -79,7 +79,9 @@ export const AiPhoto = React.forwardRef<HTMLImageElement, AiPhotoProps>(
         <AiBadge label={badgeLabel} className={cn("absolute", BADGE_POSITION[badgePosition])} />
       </div>
       {caption ? (
-        <figcaption className="mt-3 text-[13px] leading-[1.6] text-muted-foreground">{caption}</figcaption>
+        <figcaption className="mt-3 text-[13px] leading-[1.6] text-muted-foreground">
+          {caption}
+        </figcaption>
       ) : null}
     </figure>
   ),

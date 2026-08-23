@@ -104,9 +104,7 @@ export function CultureSurvey() {
       <div
         className={
           "mx-auto px-8 " +
-          (intro
-            ? "grid max-w-6xl gap-12 lg:grid-cols-2 lg:items-center"
-            : "max-w-4xl")
+          (intro ? "grid max-w-6xl gap-12 lg:grid-cols-2 lg:items-center" : "max-w-4xl")
         }
       >
         <div>

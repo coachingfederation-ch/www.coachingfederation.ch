@@ -108,7 +108,9 @@ async function notifyEditors(newsletterId: string, changed: number) {
     .from("profiles")
     .select("id, email, full_name")
     .in("id", ids);
-  const recipients = ((profiles ?? []) as unknown as { email: string | null; full_name: string | null }[])
+  const recipients = (
+    (profiles ?? []) as unknown as { email: string | null; full_name: string | null }[]
+  )
     .filter((p) => !!p.email)
     .slice(0, 30);
   if (!recipients.length) return;

@@ -15,7 +15,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/design-system/icf-welcome-design-system-a835df";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df";
 import {
   InputGroup,
   InputGroupAddon,
@@ -30,7 +34,11 @@ import {
   SelectValue,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { Spinner } from "@/design-system/icf-welcome-design-system-a835df";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df";
 import { cn } from "@/lib/utils";
 import type { ChatStatus, FileUIPart, SourceDocumentUIPart } from "ai";
 import { CornerDownLeftIcon, ImageIcon, Monitor, PlusIcon, SquareIcon, XIcon } from "lucide-react";

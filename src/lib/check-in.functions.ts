@@ -50,10 +50,7 @@ export const loadCheckInBoard = createServerFn({ method: "POST" })
         .select(BOARD_COLUMNS)
         .eq("event_id", data.eventId)
         .order("full_name", { ascending: true }),
-      context.supabase
-        .from("event_ticket_tiers")
-        .select("id, name")
-        .eq("event_id", data.eventId),
+      context.supabase.from("event_ticket_tiers").select("id, name").eq("event_id", data.eventId),
     ]);
     if (error) throw new Error(error.message);
 
@@ -74,9 +71,7 @@ export const loadCheckInBoard = createServerFn({ method: "POST" })
 /** Idempotent: the database returns "already" instead of a second attendance. */
 export const checkInAttendee = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) =>
-    z.object({ registrationId: z.string().uuid() }).parse(input),
-  )
+  .inputValidator((input: unknown) => z.object({ registrationId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => runCheckIn(context, data.registrationId));
 
 /** Scan path: resolves the ticket code, then runs the same guarded routine. */
@@ -86,7 +81,12 @@ export const checkInByToken = createServerFn({ method: "POST" })
     z
       .object({
         eventId: z.string().uuid(),
-        token: z.string().trim().min(16).max(64).regex(/^[A-Za-z0-9_-]+$/),
+        token: z
+          .string()
+          .trim()
+          .min(16)
+          .max(64)
+          .regex(/^[A-Za-z0-9_-]+$/),
       })
       .parse(input),
   )
@@ -106,9 +106,7 @@ export const checkInByToken = createServerFn({ method: "POST" })
 /** Corrects a mistaken scan. Editors and admins only, enforced in the database. */
 export const undoAttendeeCheckIn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) =>
-    z.object({ registrationId: z.string().uuid() }).parse(input),
-  )
+  .inputValidator((input: unknown) => z.object({ registrationId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
     // The routine is service-role only; the caller is verified above and the
@@ -125,9 +123,7 @@ export const undoAttendeeCheckIn = createServerFn({ method: "POST" })
 /** The attendee's own ticket code and QR, for staff to re-share on request. */
 export const getAttendeeTicketLink = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) =>
-    z.object({ registrationId: z.string().uuid() }).parse(input),
-  )
+  .inputValidator((input: unknown) => z.object({ registrationId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
     const { data: row, error } = await context.supabase

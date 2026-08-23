@@ -54,7 +54,6 @@ export async function runMemberSync(options: {
   /** Admin one-off escape hatch: skip the percentage drop guard (never the empty-feed abort). */
   ignoreDropGuard?: boolean;
 }): Promise<SyncResult> {
-
   const config = await loadIntegrationConfigAdmin();
 
   const { data: runRow, error: runError } = await supabaseAdmin

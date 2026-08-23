@@ -54,7 +54,9 @@ export default function ForOrganisationsPage() {
   const orderedProgrammes = useMemo(() => {
     if (!segment) return programmes.map((p, i) => ({ item: p, visual: i }));
     const lead = segmentProgrammeLead[segment];
-    const indices = programmes.map((_, i) => i).sort((a, b) => (a === lead ? -1 : b === lead ? 1 : 0));
+    const indices = programmes
+      .map((_, i) => i)
+      .sort((a, b) => (a === lead ? -1 : b === lead ? 1 : 0));
     return indices.map((i) => ({ item: programmes[i], visual: i }));
   }, [programmes, segment]);
 

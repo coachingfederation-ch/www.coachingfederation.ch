@@ -587,7 +587,12 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
               />
             </Field>
             <div className="flex flex-wrap items-center gap-3">
-              <Button type="button" variant="outline" size="pill" onClick={() => setPickerOpen(true)}>
+              <Button
+                type="button"
+                variant="outline"
+                size="pill"
+                onClick={() => setPickerOpen(true)}
+              >
                 <ImagePlus className="h-4 w-4" />
                 {t("events.chooseUnsplash")}
               </Button>

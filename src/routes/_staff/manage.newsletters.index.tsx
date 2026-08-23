@@ -82,9 +82,7 @@ function NewslettersPage() {
         </header>
 
         {createMutation.error ? (
-          <p className="mb-4 text-sm text-destructive">
-            {(createMutation.error as Error).message}
-          </p>
+          <p className="mb-4 text-sm text-destructive">{(createMutation.error as Error).message}</p>
         ) : null}
 
         <div className="overflow-hidden rounded-2xl border border-border bg-card">

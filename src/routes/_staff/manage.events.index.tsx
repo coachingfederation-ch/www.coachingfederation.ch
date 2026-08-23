@@ -109,7 +109,6 @@ function ManageEventsPage() {
     }
   }, [search, restored]);
 
-
   /** Every filter change also resets paging, so results are never off-screen. */
   const setFilter = (patch: Record<string, string | number>) =>
     void navigate({
@@ -171,7 +170,6 @@ function ManageEventsPage() {
   // Creating an event runs through the guided wizard at /manage/events/new,
   // which writes the row once every branching question is answered.
 
-
   return (
     <Shell>
       <div className="mx-auto max-w-6xl px-10 py-10">
@@ -187,7 +185,6 @@ function ManageEventsPage() {
             <Plus className="h-4 w-4" />
             {t("events.new")}
           </button>
-
         </header>
 
         {error ? (

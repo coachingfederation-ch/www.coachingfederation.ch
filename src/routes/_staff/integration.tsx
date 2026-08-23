@@ -53,7 +53,6 @@ const BTN =
 const BTN_SECONDARY =
   "rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50";
 
-
 function formatDate(value: string | null) {
   return value ? new Date(value).toLocaleString() : "—";
 }
@@ -680,7 +679,6 @@ function IntegrationPageBody() {
                 >
                   {t("integration.cleanup")}
                 </button>
-
               </div>
             </section>
 

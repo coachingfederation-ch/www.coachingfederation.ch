@@ -4,7 +4,7 @@
  * credentials, specialisations, formats, accepting-only, pagination) are
  * local state that drives the server-side query plus client-side narrowing.
  */
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useI18n } from "@/i18n";
@@ -76,15 +76,20 @@ export function useCoachDirectoryFilters() {
   }
 
   const label = (row: VocabRow) => vocabLabel(row, locale);
-  const lookup = (rows: VocabRow[]): LabelLookup => {
-    const map = new Map(rows.map((r) => [r.slug, vocabLabel(r, locale)]));
-    return (slug) => map.get(slug) ?? slug;
-  };
+  // Stays inside the hook because it closes over `locale`; memoised on locale
+  // so the two lookups below can declare honest dependencies.
+  const lookup = useCallback(
+    (rows: VocabRow[]): LabelLookup => {
+      const map = new Map(rows.map((r) => [r.slug, vocabLabel(r, locale)]));
+      return (slug) => map.get(slug) ?? slug;
+    },
+    [locale],
+  );
   const specialisationLabel = useMemo(
     () => lookup(specialisationTerms),
-    [specialisationTerms, locale],
+    [specialisationTerms, lookup],
   );
-  const formatLabel = useMemo(() => lookup(formatTerms), [formatTerms, locale]);
+  const formatLabel = useMemo(() => lookup(formatTerms), [formatTerms, lookup]);
 
   function toggle(list: string[], set: (v: string[]) => void, value: string) {
     setPage(0);

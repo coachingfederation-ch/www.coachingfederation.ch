@@ -743,10 +743,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Lead projects",
-            "Be recognized by ICFS for leading initiatives"
-          ]
+          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
         },
         "status": {
           "title": "Status",

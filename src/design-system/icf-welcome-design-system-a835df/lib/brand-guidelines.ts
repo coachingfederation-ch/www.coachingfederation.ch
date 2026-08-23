@@ -105,7 +105,11 @@ export const VOICE_STAGES = [
 
 /** Formal devices — unconditional, whatever the audience or channel. */
 export const FORMAL_DEVICES = [
-  { label: "Grammatical person", value: "First person plural", note: "Always, to create belonging." },
+  {
+    label: "Grammatical person",
+    value: "First person plural",
+    note: "Always, to create belonging.",
+  },
   {
     label: "Verbal tense",
     value: "Present",
@@ -152,7 +156,10 @@ export const STYLISTIC_DEVICES = [
   {
     name: "Perfect formula",
     body: "Balanced, rhythmic structure. The Triad groups ideas in threes; the Equation borrows mathematical form.",
-    examples: ["Reflect. Reframe. Renew.", "Mindset + Skillset + Action = Your Extraordinary Self."],
+    examples: [
+      "Reflect. Reframe. Renew.",
+      "Mindset + Skillset + Action = Your Extraordinary Self.",
+    ],
   },
   {
     name: "Dear me…",
@@ -233,7 +240,11 @@ export type CombinationRow = {
  * Blue; Yellow on Deep Blue is the one permitted small-text accent.
  */
 export const TEXT_COMBINATIONS: CombinationRow[] = [
-  { background: "Deep Blue", className: "bg-hero", allowed: ["Light Blue", "Yellow", "Bone", "White"] },
+  {
+    background: "Deep Blue",
+    className: "bg-hero",
+    allowed: ["Light Blue", "Yellow", "Bone", "White"],
+  },
   { background: "Blue", className: "bg-primary", allowed: ["Yellow", "Bone", "White"] },
   { background: "Light Blue", className: "bg-highlight", allowed: ["Deep Blue", "Bone", "White"] },
   { background: "Yellow", className: "bg-accent", allowed: ["Deep Blue", "Blue"] },
@@ -316,4 +327,3 @@ export const AI_PHOTOGRAPHY = {
       "Use the AiPhoto component so the badge ships with the image. Deep Blue pill, white label, Chapter Cyan dot, bottom-left by default — move it only to keep it off a face or off busy detail.",
   },
 } as const;
-

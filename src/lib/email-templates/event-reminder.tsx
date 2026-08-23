@@ -26,7 +26,7 @@ import { SITE_URL } from "@/i18n/config";
 import logoNegativeAsset from "@/assets/icf-horizontal-negative.png.asset.json";
 import logoWhiteAsset from "@/assets/icf-horizontal-white.png.asset.json";
 import { REMINDER_COPY, fillReminder } from "./event-reminder-copy";
-import type { TemplateEntry } from "./registry";
+import type { EmailTemplateData, TemplateEntry } from "./registry";
 
 export interface EventReminderProps {
   locale?: Locale;
@@ -64,7 +64,12 @@ const main = {
   margin: 0,
   padding: "24px 0",
 };
-const container = { backgroundColor: BONE, maxWidth: "600px", borderRadius: "4px", overflow: "hidden" };
+const container = {
+  backgroundColor: BONE,
+  maxWidth: "600px",
+  borderRadius: "4px",
+  overflow: "hidden",
+};
 const banner = { backgroundColor: INK, padding: "24px 32px", borderBottom: "4px solid #5778FA" };
 const bannerInner = { display: "flex", alignItems: "center", justifyContent: "space-between" };
 const logoStyle = { display: "block", outline: "none", border: "none", textDecoration: "none" };
@@ -76,7 +81,13 @@ const bannerTag = {
   textTransform: "uppercase" as const,
 };
 const content = { padding: "40px 32px" };
-const heading = { fontSize: "28px", lineHeight: "1.2", margin: "0 0 16px", color: INK, fontWeight: 700 };
+const heading = {
+  fontSize: "28px",
+  lineHeight: "1.2",
+  margin: "0 0 16px",
+  color: INK,
+  fontWeight: 700,
+};
 const paragraph = { fontSize: "15px", lineHeight: "24px", margin: "0 0 14px", color: INK };
 const label = {
   fontSize: "12px",
@@ -117,7 +128,12 @@ const button = {
 };
 const pageFooter = { backgroundColor: INK, padding: "24px 32px", textAlign: "center" as const };
 const pageFooterText = { fontSize: "12px", color: "#ffffff", opacity: 0.6, margin: 0 };
-const footerLogoStyle = { display: "block", margin: "0 auto 12px", outline: "none", border: "none" };
+const footerLogoStyle = {
+  display: "block",
+  margin: "0 auto 12px",
+  outline: "none",
+  border: "none",
+};
 
 function Row({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -201,7 +217,13 @@ const Email = ({
                 <Text style={sectionTitle}>{copy.ticketTitle}</Text>
                 <Text style={paragraph}>{copy.ticketIntro}</Text>
                 {qrUrl ? (
-                  <Img src={qrUrl} alt={copy.ticketTitle} width={180} height={180} style={{ display: "block", margin: "0 0 16px" }} />
+                  <Img
+                    src={qrUrl}
+                    alt={copy.ticketTitle}
+                    width={180}
+                    height={180}
+                    style={{ display: "block", margin: "0 0 16px" }}
+                  />
                 ) : null}
                 <Section style={{ margin: "8px 0 4px" }}>
                   <Button style={button} href={ticketUrl}>
@@ -245,7 +267,7 @@ const Email = ({
 export const template: TemplateEntry = {
   component: Email,
   displayName: "Event reminder",
-  subject: (data: Record<string, any>) => {
+  subject: (data: EmailTemplateData) => {
     const locale = (data?.locale as Locale) ?? "en";
     const copy = REMINDER_COPY[locale] ?? REMINDER_COPY.en;
     const raw = data?.stage === "day" ? copy.subjectDay : copy.subjectWeek;

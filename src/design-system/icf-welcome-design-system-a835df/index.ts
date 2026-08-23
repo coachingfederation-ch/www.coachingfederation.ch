@@ -302,7 +302,11 @@ export {
   PillarCards,
 } from "./components/patterns/StyleGuidePatterns";
 export { BrushMark, MarkedText } from "./components/brush/BrushMark";
-export type { BrushMarkProps, BrushMarkRender, MarkedTextProps } from "./components/brush/BrushMark";
+export type {
+  BrushMarkProps,
+  BrushMarkRender,
+  MarkedTextProps,
+} from "./components/brush/BrushMark";
 export {
   MARKS,
   MARK_ALIASES,

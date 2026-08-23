@@ -135,7 +135,10 @@ export function EventFormsSection({ eventId, t }: { eventId: string; t: (k: stri
         data: {
           eventId,
           kind,
-          name: kind === "registration" ? t("events.forms.registrationName") : t("events.forms.followUpName"),
+          name:
+            kind === "registration"
+              ? t("events.forms.registrationName")
+              : t("events.forms.followUpName"),
         },
       });
       await load();
@@ -255,13 +258,23 @@ function FormEditor({
   const [active, setActive] = useState(true);
   const [intro, setIntro] = useState("");
   const [thankYou, setThankYou] = useState("");
-  const [introTrans, setIntroTrans] = useState<Record<TranslatedLocale, string>>({ de: "", fr: "", it: "" });
-  const [thankYouTrans, setThankYouTrans] = useState<Record<TranslatedLocale, string>>({ de: "", fr: "", it: "" });
+  const [introTrans, setIntroTrans] = useState<Record<TranslatedLocale, string>>({
+    de: "",
+    fr: "",
+    it: "",
+  });
+  const [thankYouTrans, setThankYouTrans] = useState<Record<TranslatedLocale, string>>({
+    de: "",
+    fr: "",
+    it: "",
+  });
   const [questions, setQuestions] = useState<Draft[]>([]);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [copyable, setCopyable] = useState<{ id: string; name: string; events: { title: string } | null }[]>([]);
+  const [copyable, setCopyable] = useState<
+    { id: string; name: string; events: { title: string } | null }[]
+  >([]);
 
   useEffect(() => {
     void (async () => {
@@ -336,7 +349,9 @@ function FormEditor({
       const [row] = next.splice(index, 1);
       next.splice(target, 0, row!);
       // Conditions point at positions, so a move can invalidate them.
-      return next.map((q, i) => (q.condition_index >= i ? { ...q, condition_index: -1, condition_value: "" } : q));
+      return next.map((q, i) =>
+        q.condition_index >= i ? { ...q, condition_index: -1, condition_value: "" } : q,
+      );
     });
 
   /**
@@ -454,7 +469,9 @@ function FormEditor({
           questions: payload,
         },
       });
-      setMessage(translationFailed ? t("events.forms.savedNoTranslation") : t("events.forms.saved"));
+      setMessage(
+        translationFailed ? t("events.forms.savedNoTranslation") : t("events.forms.saved"),
+      );
       await onSaved();
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -465,7 +482,9 @@ function FormEditor({
   const copyFrom = async (sourceId: string) => {
     if (!sourceId) return;
     try {
-      const { questions: rows } = (await getEventForm({ data: { formId: sourceId } })) as unknown as {
+      const { questions: rows } = (await getEventForm({
+        data: { formId: sourceId },
+      })) as unknown as {
         questions: Record<string, unknown>[];
       };
       setQuestions((prev) => [
@@ -510,11 +529,21 @@ function FormEditor({
           <>
             <div>
               <label className="block text-xs font-semibold">{t("events.forms.intro")}</label>
-              <textarea rows={2} value={intro} onChange={(e) => setIntro(e.target.value)} className={inputClass} />
+              <textarea
+                rows={2}
+                value={intro}
+                onChange={(e) => setIntro(e.target.value)}
+                className={inputClass}
+              />
             </div>
             <div>
               <label className="block text-xs font-semibold">{t("events.forms.thankYou")}</label>
-              <textarea rows={2} value={thankYou} onChange={(e) => setThankYou(e.target.value)} className={inputClass} />
+              <textarea
+                rows={2}
+                value={thankYou}
+                onChange={(e) => setThankYou(e.target.value)}
+                className={inputClass}
+              />
             </div>
           </>
         ) : null}
@@ -532,11 +561,15 @@ function FormEditor({
                 onChange={(e) => setIntroTrans((prev) => ({ ...prev, [locale]: e.target.value }))}
                 className={inputClass}
               />
-              <label className="mt-2 block text-xs font-semibold">{t("events.forms.thankYou")}</label>
+              <label className="mt-2 block text-xs font-semibold">
+                {t("events.forms.thankYou")}
+              </label>
               <textarea
                 rows={2}
                 value={thankYouTrans[locale]}
-                onChange={(e) => setThankYouTrans((prev) => ({ ...prev, [locale]: e.target.value }))}
+                onChange={(e) =>
+                  setThankYouTrans((prev) => ({ ...prev, [locale]: e.target.value }))
+                }
                 className={inputClass}
               />
             </div>
@@ -587,7 +620,12 @@ function FormEditor({
             </option>
           ))}
         </select>
-        <button type="button" disabled={saving} className={primaryClass} onClick={() => void save()}>
+        <button
+          type="button"
+          disabled={saving}
+          className={primaryClass}
+          onClick={() => void save()}
+        >
           {saving ? t("events.forms.translatingAndSaving") : t("events.forms.save")}
         </button>
         <button
@@ -687,7 +725,9 @@ function QuestionEditor({
         {TRANSLATED_LOCALES.map((locale) => (
           <div key={locale} className="rounded-xl border border-border p-3">
             <p className="text-xs font-semibold uppercase">{locale}</p>
-            <label className="mt-2 block text-xs font-semibold">{t("events.forms.questionLabel")}</label>
+            <label className="mt-2 block text-xs font-semibold">
+              {t("events.forms.questionLabel")}
+            </label>
             <input
               value={question[`label_${locale}`]}
               onChange={(e) => onPatch({ [`label_${locale}`]: e.target.value } as Partial<Draft>)}
@@ -696,12 +736,16 @@ function QuestionEditor({
             <label className="mt-2 block text-xs font-semibold">{t("events.forms.help")}</label>
             <input
               value={question[`help_text_${locale}`]}
-              onChange={(e) => onPatch({ [`help_text_${locale}`]: e.target.value } as Partial<Draft>)}
+              onChange={(e) =>
+                onPatch({ [`help_text_${locale}`]: e.target.value } as Partial<Draft>)
+              }
               className={inputClass}
             />
             {usesOptions ? (
               <>
-                <label className="mt-2 block text-xs font-semibold">{t("events.forms.options")}</label>
+                <label className="mt-2 block text-xs font-semibold">
+                  {t("events.forms.options")}
+                </label>
                 <textarea
                   rows={3}
                   value={question[`options_${locale}`].join("\n")}
@@ -714,7 +758,9 @@ function QuestionEditor({
             ) : null}
             {question.qtype === "rating" ? (
               <>
-                <label className="mt-2 block text-xs font-semibold">{t("events.forms.scaleLow")}</label>
+                <label className="mt-2 block text-xs font-semibold">
+                  {t("events.forms.scaleLow")}
+                </label>
                 <input
                   value={question[`scale_low_label_${locale}`]}
                   onChange={(e) =>
@@ -722,7 +768,9 @@ function QuestionEditor({
                   }
                   className={inputClass}
                 />
-                <label className="mt-2 block text-xs font-semibold">{t("events.forms.scaleHigh")}</label>
+                <label className="mt-2 block text-xs font-semibold">
+                  {t("events.forms.scaleHigh")}
+                </label>
                 <input
                   value={question[`scale_high_label_${locale}`]}
                   onChange={(e) =>
@@ -738,7 +786,11 @@ function QuestionEditor({
 
       <div className="mt-2">
         <label className="block text-xs font-semibold">{t("events.forms.help")}</label>
-        <input value={question.help_text} onChange={(e) => onPatch({ help_text: e.target.value })} className={inputClass} />
+        <input
+          value={question.help_text}
+          onChange={(e) => onPatch({ help_text: e.target.value })}
+          className={inputClass}
+        />
       </div>
 
       {usesOptions ? (
@@ -769,11 +821,19 @@ function QuestionEditor({
           </div>
           <div>
             <label className="block text-xs font-semibold">{t("events.forms.scaleLow")}</label>
-            <input value={question.scale_low_label} onChange={(e) => onPatch({ scale_low_label: e.target.value })} className={inputClass} />
+            <input
+              value={question.scale_low_label}
+              onChange={(e) => onPatch({ scale_low_label: e.target.value })}
+              className={inputClass}
+            />
           </div>
           <div>
             <label className="block text-xs font-semibold">{t("events.forms.scaleHigh")}</label>
-            <input value={question.scale_high_label} onChange={(e) => onPatch({ scale_high_label: e.target.value })} className={inputClass} />
+            <input
+              value={question.scale_high_label}
+              onChange={(e) => onPatch({ scale_high_label: e.target.value })}
+              className={inputClass}
+            />
           </div>
         </div>
       ) : null}
@@ -784,7 +844,9 @@ function QuestionEditor({
             <label className="block text-xs font-semibold">{t("events.forms.conditionOn")}</label>
             <select
               value={String(question.condition_index)}
-              onChange={(e) => onPatch({ condition_index: Number(e.target.value), condition_value: "" })}
+              onChange={(e) =>
+                onPatch({ condition_index: Number(e.target.value), condition_value: "" })
+              }
               className={inputClass}
             >
               <option value="-1">{t("events.forms.conditionNone")}</option>
@@ -797,7 +859,9 @@ function QuestionEditor({
           </div>
           {question.condition_index >= 0 ? (
             <div>
-              <label className="block text-xs font-semibold">{t("events.forms.conditionValue")}</label>
+              <label className="block text-xs font-semibold">
+                {t("events.forms.conditionValue")}
+              </label>
               <select
                 value={question.condition_value}
                 onChange={(e) => onPatch({ condition_value: e.target.value })}

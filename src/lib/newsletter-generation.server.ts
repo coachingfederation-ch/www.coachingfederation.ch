@@ -39,8 +39,30 @@ export function fingerprint(parts: unknown): string {
   return hash.toString(16).padStart(8, "0");
 }
 
+/**
+ * Minimal structural view of the admin client: only the query surface this
+ * module actually uses. Rows come back untyped and each branch casts them to
+ * the shape it selected, exactly as before.
+ */
+type SourceRow = Record<string, unknown>;
+
+interface SourceResult {
+  data: SourceRow[] | null;
+  count?: number | null;
+  error?: { message: string } | null;
+}
+
+interface SourceQuery extends PromiseLike<SourceResult> {
+  select(columns: string, options?: { count?: "exact"; head?: boolean }): SourceQuery;
+  update(values: Record<string, unknown>): SourceQuery;
+  eq(column: string, value: unknown): SourceQuery;
+  gte(column: string, value: unknown): SourceQuery;
+  order(column: string, options?: { ascending?: boolean }): SourceQuery;
+  limit(count: number): SourceQuery;
+}
+
 type Admin = {
-  from: (table: string) => any;
+  from: (table: string) => SourceQuery;
 };
 
 const SITE = "https://new.coachingfederation.ch";
@@ -95,9 +117,7 @@ export async function collectSources(
       }[];
       if (!rows.length) return EMPTY;
       return {
-        facts: rows.map((r) =>
-          [r.name, r.description, r.cadence_note].filter(Boolean).join(" — "),
-        ),
+        facts: rows.map((r) => [r.name, r.description, r.cadence_note].filter(Boolean).join(" — ")),
         refs: rows.map((r) => ({
           label: r.name,
           url: r.signup_url ?? `${SITE}/about/operational-structure`,
@@ -209,12 +229,7 @@ export async function collectSources(
       if (!rows.length) return EMPTY;
       return {
         facts: rows.map((r) =>
-          [
-            r.title,
-            new Date(r.starts_at).toISOString().slice(0, 10),
-            r.city ?? "online",
-            r.summary,
-          ]
+          [r.title, new Date(r.starts_at).toISOString().slice(0, 10), r.city ?? "online", r.summary]
             .filter(Boolean)
             .join(" — "),
         ),
@@ -299,7 +314,8 @@ export async function generateBlock(
   });
 
   if (response.status === 429) throw new Error("Rate limit reached — please try again shortly.");
-  if (response.status === 402) throw new Error("AI credits exhausted — please top up the workspace.");
+  if (response.status === 402)
+    throw new Error("AI credits exhausted — please top up the workspace.");
   if (!response.ok) throw new Error(`AI service error (${response.status})`);
 
   const payload = (await response.json()) as { choices?: { message?: { content?: string } }[] };

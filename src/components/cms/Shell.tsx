@@ -58,7 +58,12 @@ const nav = [
     icon: Network,
     allowedRoles: PLATFORM_ADMIN,
   },
-  { to: "/manage/europe-pulse", key: "nav.europePulse", icon: Globe2, allowedRoles: PLATFORM_ADMIN },
+  {
+    to: "/manage/europe-pulse",
+    key: "nav.europePulse",
+    icon: Globe2,
+    allowedRoles: PLATFORM_ADMIN,
+  },
   {
     to: "/manage/governance",
     key: "nav.governance",

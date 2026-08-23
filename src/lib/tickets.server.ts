@@ -300,7 +300,8 @@ function failureReason(
   if (message.includes("invited members only")) return { ok: false, reason: "invite_required" };
   if (message.includes("discount code")) return { ok: false, reason: "discount" };
   if (message.includes("tier is full")) return { ok: false, reason: "full" };
-  if (message.includes("a ticket tier must be selected")) return { ok: false, reason: "tier_required" };
+  if (message.includes("a ticket tier must be selected"))
+    return { ok: false, reason: "tier_required" };
   if (message.includes("ticket tier is not available"))
     return { ok: false, reason: "tier_unavailable" };
   if (message.includes("event is full") || message.includes("capacity"))
@@ -322,7 +323,6 @@ function failureReason(
   });
   return { ok: false, reason: "error" };
 }
-
 
 /**
  * One registration, whichever client the caller owns (anonymous for guests,
@@ -380,12 +380,13 @@ export async function submitRegistration(
       : null;
   if (invitedOnly && !guestListInvite) return { ok: false, reason: "invite_required" };
 
-  const invite = !invitedOnly && input.inviteToken
-    ? await (async () => {
-        const { resolveInviteToken } = await import("./waitlist.server");
-        return resolveInviteToken(input.eventId, input.inviteToken!);
-      })()
-    : null;
+  const invite =
+    !invitedOnly && input.inviteToken
+      ? await (async () => {
+          const { resolveInviteToken } = await import("./waitlist.server");
+          return resolveInviteToken(input.eventId, input.inviteToken!);
+        })()
+      : null;
   const email = guestListInvite ? guestListInvite.email : invite ? invite.email : input.email;
   const fullName = guestListInvite ? guestListInvite.fullName : input.fullName;
 

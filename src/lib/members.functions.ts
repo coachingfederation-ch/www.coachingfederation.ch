@@ -36,7 +36,6 @@ export const runSyncNow = createServerFn({ method: "POST" })
     });
   });
 
-
 /** Admin "Clean up": anonymise members past their scheduled deletion date. */
 export const getSyncRunDetail = createServerFn({ method: "POST" })
   .inputValidator((input) => z.object({ runId: z.string().uuid() }).parse(input))
@@ -80,7 +79,6 @@ export const getRelayHealth = createServerFn({ method: "POST" })
     const { loadRelayHealth } = await import("./relay-health.server");
     return await loadRelayHealth();
   });
-
 
 /**
  * Isolated ICF login check (admin only). Runs just the Authenticate step so a

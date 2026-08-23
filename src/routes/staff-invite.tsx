@@ -105,9 +105,7 @@ function StaffInvitePage() {
         title="This invitation link is no longer valid"
         subtitle="Ask a Super Admin to send you a new invitation."
       >
-        <p className="text-sm text-muted-foreground">
-          Links work once and expire after 24 hours.
-        </p>
+        <p className="text-sm text-muted-foreground">Links work once and expire after 24 hours.</p>
       </AuthCard>
     );
   }

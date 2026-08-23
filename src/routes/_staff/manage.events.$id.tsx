@@ -97,7 +97,6 @@ function EventEditor() {
     if (handed) setExtras(handed);
   }, [id]);
 
-
   useEffect(() => {
     void Promise.all([
       fetchVocabulary("cf_event_categories", { activeOnly: true }),
@@ -290,8 +289,6 @@ function EventEditor() {
   const showRepeat = extras.repeat || Boolean(storedRecurrence);
   const showCce = extras.cce || Boolean(event.cce_enabled);
 
-
-
   return (
     <Shell>
       <div className="mx-auto max-w-4xl px-10 py-10">
@@ -340,7 +337,6 @@ function EventEditor() {
         {message ? <p className="mt-3 text-sm text-teal-foreground">{message}</p> : null}
         {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
 
-
         <EventDetailsSection
           event={event}
           patch={patch}
@@ -349,9 +345,6 @@ function EventEditor() {
           communities={communities}
           t={t}
         />
-
-
-
 
         <EventContentSection
           event={event}
@@ -385,7 +378,6 @@ function EventEditor() {
           />
         ) : null}
 
-
         <EventPublishingSection
           event={event}
           patch={patch}
@@ -417,8 +409,7 @@ function EventEditor() {
                 <EventInvitationsSection eventId={event.id} t={t} />
               ) : null}
               {/* A waitlist makes no sense when the guest list is the gate. */}
-              {event.registration_mode !== "none" &&
-              event.registration_mode !== "rsvp_invited" ? (
+              {event.registration_mode !== "none" && event.registration_mode !== "rsvp_invited" ? (
                 <EventWaitlistSection eventId={event.id} t={t} />
               ) : null}
               {extras.forms ? <EventFormsSection eventId={event.id} t={t} /> : null}
