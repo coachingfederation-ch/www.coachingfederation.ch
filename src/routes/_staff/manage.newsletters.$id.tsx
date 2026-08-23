@@ -11,9 +11,10 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowDown, ArrowUp, RefreshCw, Sparkles, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowDown, ArrowUp, Eye, RefreshCw, Sparkles, Trash2 } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
+import { NewsletterPreviewDialog } from "@/components/cms/NewsletterPreviewDialog";
 import { ARTICLE_ROLES, requireStaffAccess } from "@/lib/staff-guard";
 import {
   Button,
@@ -244,6 +245,7 @@ function NewsletterEditor() {
   const invalidate = () => queryClient.invalidateQueries({ queryKey });
 
   const [title, setTitle] = useState("");
+  const [previewOpen, setPreviewOpen] = useState(false);
   useEffect(() => {
     if (data?.newsletter) setTitle(data.newsletter.title);
   }, [data?.newsletter?.title]);
