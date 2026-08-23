@@ -16,7 +16,7 @@ Run prettier/eslint autofix across the repo, including `src/integrations/supabas
 - **`react-refresh/only-export-components` warnings** outside the design system: fix only where a constant or hook can be moved to a sibling file with no architectural change (e.g. `prompt-input.tsx`). `i18n/index.tsx` and `auth-screen.tsx` are left alone if the split would touch app structure; any skipped file is listed in the final report.
 
 ## Phase 4 — verification
-`eslint .` clean (remaining warnings enumerated), `tsgo` typecheck clean, production build succeeds, `bun run format` a no-op, and a browser smoke check of `/communities/<slug>` and `/volunteer-login` (camera page renders, manual-code form intact).
+`eslint .` clean (remaining warnings enumerated), `npx tsc --noEmit` clean, production build succeeds, `bun run format` a no-op, and a browser smoke check of `/communities/<slug>` and `/volunteer-login` (camera page renders, manual-code form intact).
 
 ## PR note
 
