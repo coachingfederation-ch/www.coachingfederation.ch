@@ -64,6 +64,8 @@ import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as FormTokenRouteImport } from './routes/form.$token'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as InsightsIdRouteImport } from './routes/insights.$id'
+import { Route as NewslettersIndexRouteImport } from './routes/newsletters.index'
+import { Route as NewslettersSlugRouteImport } from './routes/newsletters.$slug'
 import { Route as TicketTokenRouteImport } from './routes/ticket.$token'
 import { Route as VolunteerLoginIndexRouteImport } from './routes/volunteer-login.index'
 import { Route as VolunteerLoginTokenRouteImport } from './routes/volunteer-login.$token'
@@ -93,10 +95,13 @@ import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public
 import { Route as ApiPublicLiveChatRouteImport } from './routes/api/public/live-chat'
 import { Route as ApiPublicLiveChatPurgeRouteImport } from './routes/api/public/live-chat-purge'
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
+import { Route as ApiPublicNewsletterRefreshRouteImport } from './routes/api/public/newsletter-refresh'
 import { Route as ApiPublicRoleDirectoryRouteImport } from './routes/api/public/role-directory'
 import { Route as ApiPublicRoleGrantsArchiveRouteImport } from './routes/api/public/role-grants-archive'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
+import { Route as StaffManageNewslettersIndexRouteImport } from './routes/_staff/manage.newsletters.index'
+import { Route as StaffManageNewslettersIdRouteImport } from './routes/_staff/manage.newsletters.$id'
 import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/calendar.$file'
 import { Route as ApiPublicEventCalendarFileRouteImport } from './routes/api/public/event-calendar.$file'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
@@ -383,6 +388,16 @@ const InsightsIdRoute = InsightsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => InsightsRoute,
 } as any)
+const NewslettersIndexRoute = NewslettersIndexRouteImport.update({
+  id: '/newsletters/',
+  path: '/newsletters/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewslettersSlugRoute = NewslettersSlugRouteImport.update({
+  id: '/newsletters/$slug',
+  path: '/newsletters/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TicketTokenRoute = TicketTokenRouteImport.update({
   id: '/ticket/$token',
   path: '/ticket/$token',
@@ -530,6 +545,12 @@ const ApiPublicMemberSyncRoute = ApiPublicMemberSyncRouteImport.update({
   path: '/api/public/member-sync',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicNewsletterRefreshRoute =
+  ApiPublicNewsletterRefreshRouteImport.update({
+    id: '/api/public/newsletter-refresh',
+    path: '/api/public/newsletter-refresh',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicRoleDirectoryRoute = ApiPublicRoleDirectoryRouteImport.update({
   id: '/api/public/role-directory',
   path: '/api/public/role-directory',
@@ -551,6 +572,18 @@ const StaffManageEventsIdRoute = StaffManageEventsIdRouteImport.update({
   path: '/manage/events/$id',
   getParentRoute: () => StaffRouteRoute,
 } as any)
+const StaffManageNewslettersIndexRoute =
+  StaffManageNewslettersIndexRouteImport.update({
+    id: '/manage/newsletters/',
+    path: '/manage/newsletters/',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
+const StaffManageNewslettersIdRoute =
+  StaffManageNewslettersIdRouteImport.update({
+    id: '/manage/newsletters/$id',
+    path: '/manage/newsletters/$id',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
 const ApiPublicCalendarFileRoute = ApiPublicCalendarFileRouteImport.update({
   id: '/api/public/calendar/$file',
   path: '/api/public/calendar/$file',
@@ -652,6 +685,7 @@ export interface FileRoutesByFullPath {
   '/events/$slug': typeof EventsSlugRoute
   '/form/$token': typeof FormTokenRoute
   '/insights/$id': typeof InsightsIdRoute
+  '/newsletters/$slug': typeof NewslettersSlugRoute
   '/ticket/$token': typeof TicketTokenRoute
   '/volunteer-login/$token': typeof VolunteerLoginTokenRoute
   '/$locale/': typeof LocaleIndexRoute
@@ -659,6 +693,7 @@ export interface FileRoutesByFullPath {
   '/communities/': typeof CommunitiesIndexRoute
   '/events/': typeof EventsIndexRoute
   '/insights/': typeof InsightsIndexRoute
+  '/newsletters/': typeof NewslettersIndexRoute
   '/volunteer-login/': typeof VolunteerLoginIndexRoute
   '/$locale/coach/$profileId': typeof LocaleCoachProfileIdRoute
   '/$locale/communities/$slug': typeof LocaleCommunitiesSlugRoute
@@ -681,6 +716,7 @@ export interface FileRoutesByFullPath {
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
+  '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
@@ -689,12 +725,14 @@ export interface FileRoutesByFullPath {
   '/articles/': typeof StaffArticlesIndexRoute
   '/members/': typeof StaffMembersIndexRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
+  '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events/': typeof StaffManageEventsIndexRoute
+  '/manage/newsletters/': typeof StaffManageNewslettersIndexRoute
   '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
@@ -745,6 +783,7 @@ export interface FileRoutesByTo {
   '/events/$slug': typeof EventsSlugRoute
   '/form/$token': typeof FormTokenRoute
   '/insights/$id': typeof InsightsIdRoute
+  '/newsletters/$slug': typeof NewslettersSlugRoute
   '/ticket/$token': typeof TicketTokenRoute
   '/volunteer-login/$token': typeof VolunteerLoginTokenRoute
   '/$locale': typeof LocaleIndexRoute
@@ -752,6 +791,7 @@ export interface FileRoutesByTo {
   '/communities': typeof CommunitiesIndexRoute
   '/events': typeof EventsIndexRoute
   '/insights': typeof InsightsIndexRoute
+  '/newsletters': typeof NewslettersIndexRoute
   '/volunteer-login': typeof VolunteerLoginIndexRoute
   '/$locale/coach/$profileId': typeof LocaleCoachProfileIdRoute
   '/$locale/communities/$slug': typeof LocaleCommunitiesSlugRoute
@@ -774,6 +814,7 @@ export interface FileRoutesByTo {
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
+  '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
   '/$locale/communities': typeof LocaleCommunitiesIndexRoute
@@ -782,12 +823,14 @@ export interface FileRoutesByTo {
   '/articles': typeof StaffArticlesIndexRoute
   '/members': typeof StaffMembersIndexRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
+  '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events': typeof StaffManageEventsIndexRoute
+  '/manage/newsletters': typeof StaffManageNewslettersIndexRoute
   '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
@@ -845,6 +888,7 @@ export interface FileRoutesById {
   '/events/$slug': typeof EventsSlugRoute
   '/form/$token': typeof FormTokenRoute
   '/insights/$id': typeof InsightsIdRoute
+  '/newsletters/$slug': typeof NewslettersSlugRoute
   '/ticket/$token': typeof TicketTokenRoute
   '/volunteer-login/$token': typeof VolunteerLoginTokenRoute
   '/$locale/': typeof LocaleIndexRoute
@@ -852,6 +896,7 @@ export interface FileRoutesById {
   '/communities/': typeof CommunitiesIndexRoute
   '/events/': typeof EventsIndexRoute
   '/insights/': typeof InsightsIndexRoute
+  '/newsletters/': typeof NewslettersIndexRoute
   '/volunteer-login/': typeof VolunteerLoginIndexRoute
   '/$locale/coach/$profileId': typeof LocaleCoachProfileIdRoute
   '/$locale/communities/$slug': typeof LocaleCommunitiesSlugRoute
@@ -874,6 +919,7 @@ export interface FileRoutesById {
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
+  '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
@@ -882,12 +928,14 @@ export interface FileRoutesById {
   '/_staff/articles/': typeof StaffArticlesIndexRoute
   '/_staff/members/': typeof StaffMembersIndexRoute
   '/_staff/manage/events/$id': typeof StaffManageEventsIdRoute
+  '/_staff/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/_staff/manage/events/': typeof StaffManageEventsIndexRoute
+  '/_staff/manage/newsletters/': typeof StaffManageNewslettersIndexRoute
   '/_staff/manage/events/$id_/cce': typeof StaffManageEventsIdCceRoute
   '/_staff/manage/events/$id_/check-in': typeof StaffManageEventsIdCheckInRoute
   '/_staff/manage/events/$id_/reporting': typeof StaffManageEventsIdReportingRoute
@@ -944,6 +992,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/form/$token'
     | '/insights/$id'
+    | '/newsletters/$slug'
     | '/ticket/$token'
     | '/volunteer-login/$token'
     | '/$locale/'
@@ -951,6 +1000,7 @@ export interface FileRouteTypes {
     | '/communities/'
     | '/events/'
     | '/insights/'
+    | '/newsletters/'
     | '/volunteer-login/'
     | '/$locale/coach/$profileId'
     | '/$locale/communities/$slug'
@@ -973,6 +1023,7 @@ export interface FileRouteTypes {
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
+    | '/api/public/newsletter-refresh'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
     | '/$locale/communities/'
@@ -981,12 +1032,14 @@ export interface FileRouteTypes {
     | '/articles/'
     | '/members/'
     | '/manage/events/$id'
+    | '/manage/newsletters/$id'
     | '/api/public/calendar/$file'
     | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/manage/events/'
+    | '/manage/newsletters/'
     | '/manage/events/$id/cce'
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
@@ -1037,6 +1090,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/form/$token'
     | '/insights/$id'
+    | '/newsletters/$slug'
     | '/ticket/$token'
     | '/volunteer-login/$token'
     | '/$locale'
@@ -1044,6 +1098,7 @@ export interface FileRouteTypes {
     | '/communities'
     | '/events'
     | '/insights'
+    | '/newsletters'
     | '/volunteer-login'
     | '/$locale/coach/$profileId'
     | '/$locale/communities/$slug'
@@ -1066,6 +1121,7 @@ export interface FileRouteTypes {
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
+    | '/api/public/newsletter-refresh'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
     | '/$locale/communities'
@@ -1074,12 +1130,14 @@ export interface FileRouteTypes {
     | '/articles'
     | '/members'
     | '/manage/events/$id'
+    | '/manage/newsletters/$id'
     | '/api/public/calendar/$file'
     | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/manage/events'
+    | '/manage/newsletters'
     | '/manage/events/$id/cce'
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
@@ -1136,6 +1194,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/form/$token'
     | '/insights/$id'
+    | '/newsletters/$slug'
     | '/ticket/$token'
     | '/volunteer-login/$token'
     | '/$locale/'
@@ -1143,6 +1202,7 @@ export interface FileRouteTypes {
     | '/communities/'
     | '/events/'
     | '/insights/'
+    | '/newsletters/'
     | '/volunteer-login/'
     | '/$locale/coach/$profileId'
     | '/$locale/communities/$slug'
@@ -1165,6 +1225,7 @@ export interface FileRouteTypes {
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
+    | '/api/public/newsletter-refresh'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
     | '/$locale/communities/'
@@ -1173,12 +1234,14 @@ export interface FileRouteTypes {
     | '/_staff/articles/'
     | '/_staff/members/'
     | '/_staff/manage/events/$id'
+    | '/_staff/manage/newsletters/$id'
     | '/api/public/calendar/$file'
     | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
     | '/lovable/email/transactional/preview'
     | '/_staff/manage/events/'
+    | '/_staff/manage/newsletters/'
     | '/_staff/manage/events/$id_/cce'
     | '/_staff/manage/events/$id_/check-in'
     | '/_staff/manage/events/$id_/reporting'
@@ -1214,11 +1277,13 @@ export interface RootRouteChildren {
   CommunitiesSlugRoute: typeof CommunitiesSlugRoute
   EventsSlugRoute: typeof EventsSlugRoute
   FormTokenRoute: typeof FormTokenRoute
+  NewslettersSlugRoute: typeof NewslettersSlugRoute
   TicketTokenRoute: typeof TicketTokenRoute
   VolunteerLoginTokenRoute: typeof VolunteerLoginTokenRoute
   ClaimIndexRoute: typeof ClaimIndexRoute
   CommunitiesIndexRoute: typeof CommunitiesIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
+  NewslettersIndexRoute: typeof NewslettersIndexRoute
   VolunteerLoginIndexRoute: typeof VolunteerLoginIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -1228,6 +1293,7 @@ export interface RootRouteChildren {
   ApiPublicLiveChatRoute: typeof ApiPublicLiveChatRoute
   ApiPublicLiveChatPurgeRoute: typeof ApiPublicLiveChatPurgeRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
+  ApiPublicNewsletterRefreshRoute: typeof ApiPublicNewsletterRefreshRoute
   ApiPublicRoleDirectoryRoute: typeof ApiPublicRoleDirectoryRoute
   ApiPublicRoleGrantsArchiveRoute: typeof ApiPublicRoleGrantsArchiveRoute
   ApiPublicCalendarFileRoute: typeof ApiPublicCalendarFileRoute
@@ -1624,6 +1690,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InsightsIdRouteImport
       parentRoute: typeof InsightsRoute
     }
+    '/newsletters/': {
+      id: '/newsletters/'
+      path: '/newsletters'
+      fullPath: '/newsletters/'
+      preLoaderRoute: typeof NewslettersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletters/$slug': {
+      id: '/newsletters/$slug'
+      path: '/newsletters/$slug'
+      fullPath: '/newsletters/$slug'
+      preLoaderRoute: typeof NewslettersSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ticket/$token': {
       id: '/ticket/$token'
       path: '/ticket/$token'
@@ -1827,6 +1907,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMemberSyncRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/newsletter-refresh': {
+      id: '/api/public/newsletter-refresh'
+      path: '/api/public/newsletter-refresh'
+      fullPath: '/api/public/newsletter-refresh'
+      preLoaderRoute: typeof ApiPublicNewsletterRefreshRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/role-directory': {
       id: '/api/public/role-directory'
       path: '/api/public/role-directory'
@@ -1853,6 +1940,20 @@ declare module '@tanstack/react-router' {
       path: '/manage/events/$id'
       fullPath: '/manage/events/$id'
       preLoaderRoute: typeof StaffManageEventsIdRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/newsletters/': {
+      id: '/_staff/manage/newsletters/'
+      path: '/manage/newsletters'
+      fullPath: '/manage/newsletters/'
+      preLoaderRoute: typeof StaffManageNewslettersIndexRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/newsletters/$id': {
+      id: '/_staff/manage/newsletters/$id'
+      path: '/manage/newsletters/$id'
+      fullPath: '/manage/newsletters/$id'
+      preLoaderRoute: typeof StaffManageNewslettersIdRouteImport
       parentRoute: typeof StaffRouteRoute
     }
     '/api/public/calendar/$file': {
@@ -2028,7 +2129,9 @@ interface StaffRouteRouteChildren {
   StaffMembersIdRoute: typeof StaffMembersIdRoute
   StaffMembersIndexRoute: typeof StaffMembersIndexRoute
   StaffManageEventsIdRoute: typeof StaffManageEventsIdRoute
+  StaffManageNewslettersIdRoute: typeof StaffManageNewslettersIdRoute
   StaffManageEventsIndexRoute: typeof StaffManageEventsIndexRoute
+  StaffManageNewslettersIndexRoute: typeof StaffManageNewslettersIndexRoute
   StaffManageEventsIdCceRoute: typeof StaffManageEventsIdCceRoute
   StaffManageEventsIdCheckInRoute: typeof StaffManageEventsIdCheckInRoute
   StaffManageEventsIdReportingRoute: typeof StaffManageEventsIdReportingRoute
@@ -2050,7 +2153,9 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffMembersIdRoute: StaffMembersIdRoute,
   StaffMembersIndexRoute: StaffMembersIndexRoute,
   StaffManageEventsIdRoute: StaffManageEventsIdRoute,
+  StaffManageNewslettersIdRoute: StaffManageNewslettersIdRoute,
   StaffManageEventsIndexRoute: StaffManageEventsIndexRoute,
+  StaffManageNewslettersIndexRoute: StaffManageNewslettersIndexRoute,
   StaffManageEventsIdCceRoute: StaffManageEventsIdCceRoute,
   StaffManageEventsIdCheckInRoute: StaffManageEventsIdCheckInRoute,
   StaffManageEventsIdReportingRoute: StaffManageEventsIdReportingRoute,
@@ -2115,11 +2220,13 @@ const rootRouteChildren: RootRouteChildren = {
   CommunitiesSlugRoute: CommunitiesSlugRoute,
   EventsSlugRoute: EventsSlugRoute,
   FormTokenRoute: FormTokenRoute,
+  NewslettersSlugRoute: NewslettersSlugRoute,
   TicketTokenRoute: TicketTokenRoute,
   VolunteerLoginTokenRoute: VolunteerLoginTokenRoute,
   ClaimIndexRoute: ClaimIndexRoute,
   CommunitiesIndexRoute: CommunitiesIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
+  NewslettersIndexRoute: NewslettersIndexRoute,
   VolunteerLoginIndexRoute: VolunteerLoginIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
@@ -2129,6 +2236,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicLiveChatRoute: ApiPublicLiveChatRoute,
   ApiPublicLiveChatPurgeRoute: ApiPublicLiveChatPurgeRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,
+  ApiPublicNewsletterRefreshRoute: ApiPublicNewsletterRefreshRoute,
   ApiPublicRoleDirectoryRoute: ApiPublicRoleDirectoryRoute,
   ApiPublicRoleGrantsArchiveRoute: ApiPublicRoleGrantsArchiveRoute,
   ApiPublicCalendarFileRoute: ApiPublicCalendarFileRoute,

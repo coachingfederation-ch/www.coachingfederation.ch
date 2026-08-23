@@ -39,6 +39,7 @@ const PLATFORM_ADMIN: readonly AppRole[] = ["administrator"];
 
 const nav = [
   { to: "/articles", key: "nav.articles", icon: FileText, allowedRoles: ["editor"] },
+  { to: "/manage/newsletters", key: "nav.newsletters", icon: BookOpen, allowedRoles: ["editor"] },
   { to: "/articles/categories", key: "nav.categories", icon: Tags, allowedRoles: ["editor"] },
   // Organizers see only this item; the shell itself is open to all staff roles.
   { to: "/manage/events", key: "nav.events", icon: CalendarDays, allowedRoles: ["organizer"] },

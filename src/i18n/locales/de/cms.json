@@ -20,7 +20,8 @@
     "governance": "Governance",
     "chatInsights": "Chat-Agent-Insights",
     "knowledge": "Assistenz-Wissen",
-    "liveChat": "Live-Chat"
+    "liveChat": "Live-Chat",
+    "newsletters": "Newsletter"
   },
   "auth": {
     "signInSub": "Melden Sie sich an, um fortzufahren",

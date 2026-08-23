@@ -3651,6 +3651,187 @@ export type Database = {
           },
         ]
       }
+      newsletter_blocks: {
+        Row: {
+          block_type: string
+          content: string
+          created_at: string
+          created_by: string | null
+          enabled: boolean
+          featured_image_url: string | null
+          generated_at: string | null
+          id: string
+          newsletter_id: string
+          note: string | null
+          position: number
+          source_fingerprint: string | null
+          source_refs: Json
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          block_type: string
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          featured_image_url?: string | null
+          generated_at?: string | null
+          id?: string
+          newsletter_id: string
+          note?: string | null
+          position?: number
+          source_fingerprint?: string | null
+          source_refs?: Json
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          block_type?: string
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          featured_image_url?: string | null
+          generated_at?: string | null
+          id?: string
+          newsletter_id?: string
+          note?: string | null
+          position?: number
+          source_fingerprint?: string | null
+          source_refs?: Json
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_blocks_newsletter_id_fkey"
+            columns: ["newsletter_id"]
+            isOneToOne: false
+            referencedRelation: "newsletters"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      newsletter_jobs: {
+        Row: {
+          job_key: string
+          last_detail: Json
+          last_run_at: string | null
+          last_status: string | null
+          lease_until: string | null
+          paused: boolean
+          paused_reason: string | null
+          updated_at: string
+        }
+        Insert: {
+          job_key: string
+          last_detail?: Json
+          last_run_at?: string | null
+          last_status?: string | null
+          lease_until?: string | null
+          paused?: boolean
+          paused_reason?: string | null
+          updated_at?: string
+        }
+        Update: {
+          job_key?: string
+          last_detail?: Json
+          last_run_at?: string | null
+          last_status?: string | null
+          lease_until?: string | null
+          paused?: boolean
+          paused_reason?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      newsletter_send_config: {
+        Row: {
+          created_at: string
+          id: string
+          is_stub: boolean
+          newsletter_id: string
+          note: string | null
+          provider: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_stub?: boolean
+          newsletter_id: string
+          note?: string | null
+          provider?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_stub?: boolean
+          newsletter_id?: string
+          note?: string | null
+          provider?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_send_config_newsletter_id_fkey"
+            columns: ["newsletter_id"]
+            isOneToOne: true
+            referencedRelation: "newsletters"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      newsletters: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          first_published_at: string | null
+          id: string
+          issue_date: string
+          language: string
+          last_refreshed_at: string | null
+          published_at: string | null
+          scheduled_at: string | null
+          slug: string
+          status: Database["public"]["Enums"]["article_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          first_published_at?: string | null
+          id?: string
+          issue_date: string
+          language?: string
+          last_refreshed_at?: string | null
+          published_at?: string | null
+          scheduled_at?: string | null
+          slug: string
+          status?: Database["public"]["Enums"]["article_status"]
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          first_published_at?: string | null
+          id?: string
+          issue_date?: string
+          language?: string
+          last_refreshed_at?: string | null
+          published_at?: string | null
+          scheduled_at?: string | null
+          slug?: string
+          status?: Database["public"]["Enums"]["article_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       op_assignments: {
         Row: {
           created_at: string

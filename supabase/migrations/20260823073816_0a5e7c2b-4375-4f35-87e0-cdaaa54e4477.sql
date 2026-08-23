@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.tg_newsletters_publish_guard() FROM PUBLIC, anon, authenticated;
