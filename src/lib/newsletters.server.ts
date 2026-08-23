@@ -134,6 +134,10 @@ export async function saveBlock(
     note?: string | null;
     enabled?: boolean;
     featured_image_url?: string | null;
+    image_alt?: string | null;
+    image_source?: string | null;
+    image_credit_name?: string | null;
+    image_credit_url?: string | null;
   },
 ) {
   const { error } = await client.from("newsletter_blocks").update(patch as never).eq("id", blockId);
