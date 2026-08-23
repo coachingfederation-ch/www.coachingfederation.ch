@@ -176,6 +176,15 @@ function BlockCard({
           />
         </div>
 
+        <BlockImageField
+          block={block}
+          onSave={onSave}
+          onGenerate={onGenerateImage}
+          generating={generatingImage}
+          generateError={imageError}
+        />
+
+
         <MarkdownEditor
           value={content}
           onChange={setContent}
