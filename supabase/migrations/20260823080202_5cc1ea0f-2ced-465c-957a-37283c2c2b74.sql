@@ -1,0 +1,1 @@
+GRANT EXECUTE ON FUNCTION private.is_article_publisher(uuid) TO authenticated, service_role;
