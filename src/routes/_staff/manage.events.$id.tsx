@@ -72,6 +72,8 @@ function EventEditor() {
   const { t } = useCms();
   const navigate = useNavigate();
   const [event, setEvent] = useState<Managed | null>(null);
+  const [baseline, setBaseline] = useState<string | null>(null);
+
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -102,6 +104,10 @@ function EventEditor() {
   const load = async () => {
     const row = await getManagedEvent({ data: { id } });
     setEvent(row as Managed | null);
+    // Snapshot of the stored row: repeat dates are copied from the database, so
+    // the editor must know whether the form still holds unsaved edits.
+    setBaseline(row ? JSON.stringify(row) : null);
+
     if (row) {
       setRegistrations(await listEventRegistrations({ data: { eventId: id } }));
       if (row.registration_mode === "rsvp_tickets") {
@@ -256,6 +262,18 @@ function EventEditor() {
 
   const confirmed = registrations.filter((r) => r.status === "confirmed").length;
 
+  // Repeat dates copy the stored row, so they only make sense for a published
+  // event whose form holds no pending edits.
+  const dirty = baseline !== null && baseline !== JSON.stringify(event);
+  const canCreateOccurrences = event.status === "published" && !dirty;
+  const repeatBlockedReason =
+    event.status !== "published"
+      ? t("events.repeat.needsPublish")
+      : dirty
+        ? t("events.repeat.needsSave")
+        : null;
+
+
   return (
     <Shell>
       <div className="mx-auto max-w-4xl px-10 py-10">
@@ -279,23 +297,8 @@ function EventEditor() {
           t={t}
         />
 
-        <EventRepeatSection
-          event={event}
-          t={t}
-          onGenerate={async (rule) => {
-            setMessage(null);
-            setError(null);
-            try {
-              const res = await generateEventOccurrences({ data: { id: event.id, rule } });
-              setMessage(
-                `${t("events.repeat.created")} ${res.created}${res.skipped ? ` · ${t("events.repeat.skipped")} ${res.skipped}` : ""}`,
-              );
-              await load();
-            } catch (e) {
-              setError(e instanceof Error ? e.message : t("events.saveError"));
-            }
-          }}
-        />
+
+
 
         <EventContentSection
           event={event}
@@ -367,6 +370,30 @@ function EventEditor() {
           }
           t={t}
         />
+
+        {/* Last step: occurrences are copied from the stored row, so this only
+            unlocks once the event is published and nothing is left unsaved. */}
+        <EventRepeatSection
+          event={event}
+          t={t}
+          canCreate={canCreateOccurrences}
+          blockedReason={repeatBlockedReason}
+          onGenerate={async (rule) => {
+            setMessage(null);
+            setError(null);
+            try {
+              const res = await generateEventOccurrences({ data: { id: event.id, rule } });
+              setMessage(
+                `${t("events.repeat.created")} ${res.created}${res.skipped ? ` · ${t("events.repeat.skipped")} ${res.skipped}` : ""}`,
+              );
+              await load();
+            } catch (e) {
+              setError(e instanceof Error ? e.message : t("events.saveError"));
+            }
+          }}
+        />
+
+
 
         <UnsplashPicker
           open={pickerOpen}

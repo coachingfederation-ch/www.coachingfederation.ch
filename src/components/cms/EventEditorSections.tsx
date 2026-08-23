@@ -17,7 +17,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  Button,
 } from "@/design-system/icf-welcome-design-system-a835df";
+
 import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
 import { EventHeroPreview } from "@/components/cms/EventHeroPreview";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
@@ -237,14 +239,22 @@ export function EventDetailsSection({
  * Repeat panel: turns one event into a series of independent dated copies.
  * Dates are previewed with the very same expander the server uses, so the
  * list staff read is the list that gets created.
+ *
+ * Creating dates is the last step of the editor: the copies are made from the
+ * stored row, so the source event must be published and free of unsaved edits
+ * before staff can spawn a series from it.
  */
 export function EventRepeatSection({
   event,
   onGenerate,
+  canCreate,
+  blockedReason,
   t,
 }: {
   event: Managed;
   onGenerate: (rule: RecurrenceRule) => Promise<void>;
+  canCreate: boolean;
+  blockedReason: string | null;
   t: (k: string) => string;
 }) {
   const stored = (event as { recurrence?: RecurrenceRule | null }).recurrence ?? null;
@@ -254,6 +264,7 @@ export function EventRepeatSection({
 
   const dates = enabled ? expandRecurrence(event.starts_at, rule) : [];
   const patchRule = (next: Partial<RecurrenceRule>) => setRule({ ...rule, ...next });
+
 
   return (
     <Section title={t("events.repeat.section")} hint={t("events.repeat.hint")}>
@@ -344,21 +355,30 @@ export function EventRepeatSection({
             </p>
           )}
 
-          <button
-            type="button"
-            disabled={busy || dates.length === 0}
-            className="mt-4 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
-            onClick={async () => {
-              setBusy(true);
-              try {
-                await onGenerate(rule);
-              } finally {
-                setBusy(false);
-              }
-            }}
-          >
-            {busy ? t("events.repeat.creating") : `${t("events.repeat.create")} (${dates.length})`}
-          </button>
+          {blockedReason ? (
+            <p className="mt-4 text-sm text-muted-foreground">{blockedReason}</p>
+          ) : null}
+
+          <div className="mt-4">
+            <Button
+              type="button"
+              size="pill"
+              disabled={busy || dates.length === 0 || !canCreate}
+              onClick={async () => {
+                setBusy(true);
+                try {
+                  await onGenerate(rule);
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              {busy
+                ? t("events.repeat.creating")
+                : `${t("events.repeat.create")} (${dates.length})`}
+            </Button>
+          </div>
+
         </>
       ) : null}
     </Section>
