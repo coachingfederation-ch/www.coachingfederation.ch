@@ -102,6 +102,10 @@ function EventEditor() {
   const load = async () => {
     const row = await getManagedEvent({ data: { id } });
     setEvent(row as Managed | null);
+    // Snapshot of the stored row: repeat dates are copied from the database, so
+    // the editor must know whether the form still holds unsaved edits.
+    setBaseline(row ? JSON.stringify(row) : null);
+
     if (row) {
       setRegistrations(await listEventRegistrations({ data: { eventId: id } }));
       if (row.registration_mode === "rsvp_tickets") {
