@@ -70,6 +70,9 @@ function BlockCard({
   onMove,
   onSave,
   onRegenerate,
+  onGenerateImage,
+  generatingImage,
+  imageError,
   onDiscard,
   onDelete,
   busy,
@@ -80,6 +83,9 @@ function BlockCard({
   onMove: (direction: -1 | 1) => void;
   onSave: (patch: Partial<NewsletterBlockRow>) => void;
   onRegenerate: () => void;
+  onGenerateImage: () => void;
+  generatingImage: boolean;
+  imageError: string | null;
   onDiscard: () => void;
   onDelete: () => void;
   busy: boolean;
