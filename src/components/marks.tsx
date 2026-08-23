@@ -83,6 +83,16 @@ function load(name: MarkName): Promise<string> | string | undefined {
   });
 }
 
+/**
+ * Awaitable access to one mark's normalised SVG source, for callers that
+ * rasterise marks onto a canvas instead of rendering them into the DOM.
+ */
+export async function loadMarkSvg(name: MarkName): Promise<string | undefined> {
+  return load(name);
+}
+
+
+
 export function Mark({
   name,
   className,

@@ -104,6 +104,27 @@ export const saveNewsletterBlockFn = createServerFn({ method: "POST" })
         image_source: z.enum(["unsplash", "upload", "url", "ai"]).nullable().optional(),
         image_credit_name: z.string().max(200).nullable().optional(),
         image_credit_url: z.string().max(2000).nullable().optional(),
+        image_original_url: z.string().max(2000).nullable().optional(),
+        image_aspect: z.enum(["banner", "landscape", "square", "portrait"]).nullable().optional(),
+        image_crop: z
+          .object({ xPct: z.number(), yPct: z.number(), zoom: z.number() })
+          .nullable()
+          .optional(),
+        image_marks: z
+          .array(
+            z.object({
+              id: z.string().max(64),
+              name: z.string().max(40),
+              xPct: z.number(),
+              yPct: z.number(),
+              sizePct: z.number(),
+              color: z.string().max(9),
+            }),
+          )
+          .max(3)
+          .nullable()
+          .optional(),
+
       })
       .parse(data),
   )

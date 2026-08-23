@@ -138,6 +138,11 @@ export async function saveBlock(
     image_source?: string | null;
     image_credit_name?: string | null;
     image_credit_url?: string | null;
+    image_original_url?: string | null;
+    image_aspect?: string | null;
+    image_crop?: unknown;
+    image_marks?: unknown;
+
   },
 ) {
   const { error } = await client.from("newsletter_blocks").update(patch as never).eq("id", blockId);
@@ -320,6 +325,8 @@ export async function renderNewsletterEmail(client: Client, id: string): Promise
           imageSource: b.image_source,
           imageCreditName: b.image_credit_name,
           imageCreditUrl: b.image_credit_url,
+          imageAspect: b.image_aspect,
+
           sources: b.source_refs ?? [],
         })),
     }),

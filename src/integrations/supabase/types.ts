@@ -3662,8 +3662,12 @@ export type Database = {
           generated_at: string | null
           id: string
           image_alt: string | null
+          image_aspect: string | null
           image_credit_name: string | null
           image_credit_url: string | null
+          image_crop: Json | null
+          image_marks: Json | null
+          image_original_url: string | null
           image_source: string | null
           newsletter_id: string
           note: string | null
@@ -3683,8 +3687,12 @@ export type Database = {
           generated_at?: string | null
           id?: string
           image_alt?: string | null
+          image_aspect?: string | null
           image_credit_name?: string | null
           image_credit_url?: string | null
+          image_crop?: Json | null
+          image_marks?: Json | null
+          image_original_url?: string | null
           image_source?: string | null
           newsletter_id: string
           note?: string | null
@@ -3704,8 +3712,12 @@ export type Database = {
           generated_at?: string | null
           id?: string
           image_alt?: string | null
+          image_aspect?: string | null
           image_credit_name?: string | null
           image_credit_url?: string | null
+          image_crop?: Json | null
+          image_marks?: Json | null
+          image_original_url?: string | null
           image_source?: string | null
           newsletter_id?: string
           note?: string | null

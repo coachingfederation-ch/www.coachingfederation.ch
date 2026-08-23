@@ -23,6 +23,7 @@ import {
 } from "@react-email/components";
 import logoNegativeAsset from "@/assets/icf-horizontal-negative.png.asset.json";
 import { SITE_URL } from "@/i18n/config";
+import { blockImagePreset } from "@/lib/block-image";
 import type { TemplateEntry } from "./registry";
 
 export interface NewsletterEmailBlock {
@@ -34,8 +35,10 @@ export interface NewsletterEmailBlock {
   imageSource?: string | null;
   imageCreditName?: string | null;
   imageCreditUrl?: string | null;
+  imageAspect?: string | null;
   sources?: { label: string; url?: string | null }[];
 }
+
 
 export interface NewsletterEditionEmailProps {
   title?: string;
@@ -86,12 +89,23 @@ export const NewsletterEditionEmail = ({
               </Heading>
               {block.featuredImageUrl ? (
                 <>
-                  <Img
-                    src={block.featuredImageUrl}
-                    alt={block.imageAlt ?? ""}
-                    width={536}
-                    style={{ borderRadius: "16px", margin: "0 0 8px", width: "100%" }}
-                  />
+                  {(() => {
+                    // Explicit pixel dimensions: email clients cannot crop, so
+                    // the picture is already baked to the preset's ratio.
+                    const preset = blockImagePreset(block.imageAspect);
+                    const width = Math.min(536, preset.width);
+                    const height = Math.round((width / preset.width) * preset.height);
+                    return (
+                      <Img
+                        src={block.featuredImageUrl}
+                        alt={block.imageAlt ?? ""}
+                        width={width}
+                        height={height}
+                        style={{ borderRadius: "16px", margin: "0 0 8px" }}
+                      />
+                    );
+                  })()}
+
                   {block.imageSource === "ai" ? (
                     <Text style={credit}>AI generated image</Text>
                   ) : block.imageCreditName ? (
