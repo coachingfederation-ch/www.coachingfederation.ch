@@ -375,11 +375,19 @@ export async function updateCampaign(
     reminder_after_days?: number;
   },
 ): Promise<ClaimCampaign> {
-  const values: Record<string, unknown> = { ...patch, updated_by: actorUserId };
+  const values: {
+    status?: CampaignStatus;
+    daily_cap?: number;
+    reminder_enabled?: boolean;
+    reminder_after_days?: number;
+    updated_by: string;
+    paused_reason?: string | null;
+    started_at?: string;
+  } = { ...patch, updated_by: actorUserId };
   if (patch.status === "running") {
-    values["paused_reason"] = null;
+    values.paused_reason = null;
     const current = await loadCampaign();
-    if (!current.started_at) values["started_at"] = new Date().toISOString();
+    if (!current.started_at) values.started_at = new Date().toISOString();
   }
 
   const { error } = await supabaseAdmin
