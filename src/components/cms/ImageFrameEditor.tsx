@@ -9,6 +9,8 @@
  */
 import { useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { MarkPlacementCanvas } from "@/components/cms/MarkPlacementCanvas";
+import { Mark } from "@/components/marks";
+
 import { drawGeometry } from "@/lib/block-image-render";
 import {
   BLOCK_IMAGE_PRESETS,
