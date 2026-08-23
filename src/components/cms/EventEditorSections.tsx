@@ -353,21 +353,30 @@ export function EventRepeatSection({
             </p>
           )}
 
-          <button
-            type="button"
-            disabled={busy || dates.length === 0}
-            className="mt-4 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
-            onClick={async () => {
-              setBusy(true);
-              try {
-                await onGenerate(rule);
-              } finally {
-                setBusy(false);
-              }
-            }}
-          >
-            {busy ? t("events.repeat.creating") : `${t("events.repeat.create")} (${dates.length})`}
-          </button>
+          {blockedReason ? (
+            <p className="mt-4 text-sm text-muted-foreground">{blockedReason}</p>
+          ) : null}
+
+          <div className="mt-4">
+            <Button
+              type="button"
+              size="pill"
+              disabled={busy || dates.length === 0 || !canCreate}
+              onClick={async () => {
+                setBusy(true);
+                try {
+                  await onGenerate(rule);
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              {busy
+                ? t("events.repeat.creating")
+                : `${t("events.repeat.create")} (${dates.length})`}
+            </Button>
+          </div>
+
         </>
       ) : null}
     </Section>
