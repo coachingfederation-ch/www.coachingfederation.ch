@@ -109,7 +109,8 @@ export const NewsletterEditionEmail = ({
                     </React.Fragment>
                   ))}
                 </Text>
-              )}
+              ) : null}
+
             </Section>
           ))}
         </Section>
