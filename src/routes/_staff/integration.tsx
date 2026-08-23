@@ -635,6 +635,7 @@ function IntegrationPageBody() {
             </section>
 
             <GatesCard config={config} busy={busy !== null} act={act} t={t} />
+            <ClaimCampaignCard t={t} />
 
             <section className={CARD}>
               <h2 className="text-sm font-bold">{t("integration.actions")}</h2>
