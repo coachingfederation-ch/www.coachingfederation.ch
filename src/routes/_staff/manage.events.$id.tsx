@@ -422,34 +422,35 @@ function EventEditor() {
                 <EventWaitlistSection eventId={event.id} t={t} />
               ) : null}
               {extras.forms ? <EventFormsSection eventId={event.id} t={t} /> : null}
+              {/* Repeat lives right after Custom Forms: occurrences are copied
+                  from the stored row, so this only unlocks once the event is
+                  published and nothing is left unsaved. */}
+              {showRepeat ? (
+                <EventRepeatSection
+                  event={event}
+                  t={t}
+                  canCreate={canCreateOccurrences}
+                  blockedReason={repeatBlockedReason}
+                  onGenerate={async (rule) => {
+                    setMessage(null);
+                    setError(null);
+                    try {
+                      const res = await generateEventOccurrences({ data: { id: event.id, rule } });
+                      setMessage(
+                        `${t("events.repeat.created")} ${res.created}${res.skipped ? ` · ${t("events.repeat.skipped")} ${res.skipped}` : ""}`,
+                      );
+                      await load();
+                    } catch (e) {
+                      setError(e instanceof Error ? e.message : t("events.saveError"));
+                    }
+                  }}
+                />
+              ) : null}
             </>
           }
           t={t}
         />
 
-        {/* Last step: occurrences are copied from the stored row, so this only
-            unlocks once the event is published and nothing is left unsaved. */}
-        {showRepeat ? (
-          <EventRepeatSection
-            event={event}
-            t={t}
-            canCreate={canCreateOccurrences}
-            blockedReason={repeatBlockedReason}
-            onGenerate={async (rule) => {
-              setMessage(null);
-              setError(null);
-              try {
-                const res = await generateEventOccurrences({ data: { id: event.id, rule } });
-                setMessage(
-                  `${t("events.repeat.created")} ${res.created}${res.skipped ? ` · ${t("events.repeat.skipped")} ${res.skipped}` : ""}`,
-                );
-                await load();
-              } catch (e) {
-                setError(e instanceof Error ? e.message : t("events.saveError"));
-              }
-            }}
-          />
-        ) : null}
 
 
 
