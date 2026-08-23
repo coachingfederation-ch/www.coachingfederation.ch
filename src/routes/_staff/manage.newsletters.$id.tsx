@@ -27,6 +27,7 @@ import {
   addNewsletterBlockFn,
   deleteNewsletterBlockFn,
   discardNewsletterBlockFn,
+  generateNewsletterBlockImageFn,
   getNewsletterFn,
   regenerateNewsletterBlockFn,
   regenerateNewsletterFn,
