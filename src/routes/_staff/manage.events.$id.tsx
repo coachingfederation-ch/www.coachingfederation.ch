@@ -262,6 +262,18 @@ function EventEditor() {
 
   const confirmed = registrations.filter((r) => r.status === "confirmed").length;
 
+  // Repeat dates copy the stored row, so they only make sense for a published
+  // event whose form holds no pending edits.
+  const dirty = baseline !== null && baseline !== JSON.stringify(event);
+  const canCreateOccurrences = event.status === "published" && !dirty;
+  const repeatBlockedReason =
+    event.status !== "published"
+      ? t("events.repeat.needsPublish")
+      : dirty
+        ? t("events.repeat.needsSave")
+        : null;
+
+
   return (
     <Shell>
       <div className="mx-auto max-w-4xl px-10 py-10">
