@@ -12,6 +12,7 @@ import { Shell } from "@/components/cms/Shell";
 import { ContentOwnershipPanel } from "@/components/cms/ContentOwnershipPanel";
 import { LinkedInPageSettings } from "@/components/cms/LinkedInPageSettings";
 import { SyncRunDetail } from "@/components/cms/SyncRunDetail";
+import { ClaimCampaignCard } from "@/components/cms/ClaimCampaignCard";
 import { useCms } from "@/i18n/cms";
 import {
   fetchIntegrationConfig,
