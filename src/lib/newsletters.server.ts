@@ -140,7 +140,7 @@ export async function saveBlock(
     image_credit_url?: string | null;
     image_original_url?: string | null;
     image_aspect?: string | null;
-    image_crop?: unknown;
+    image_crop?: { xPct: number; yPct: number; zoom: number } | null;
     image_marks?: unknown;
 
   },
