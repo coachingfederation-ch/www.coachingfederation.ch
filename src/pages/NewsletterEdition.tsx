@@ -10,6 +10,7 @@ import { CompactHero, SiteFooter } from "@/components/site-chrome";
 import { supabase } from "@/integrations/supabase/client";
 import { LocaleLink, useI18n } from "@/i18n";
 import { formatIssueDate } from "@/lib/newsletters";
+import { AiPhoto } from "@/design-system/icf-welcome-design-system-a835df";
 
 /** Page copy kept local: four short strings, no locale-file churn. */
 const COPY = {
