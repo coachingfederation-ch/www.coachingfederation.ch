@@ -1078,7 +1078,9 @@
       "creating": "Creating…",
       "created": "Dates created:",
       "skipped": "already existed:",
-      "badge": "Series"
+      "badge": "Series",
+      "needsPublish": "Publish this event before creating repeat dates.",
+      "needsSave": "Save your changes first."
     },
     "colPayment": "Payment",
     "payStatus": {

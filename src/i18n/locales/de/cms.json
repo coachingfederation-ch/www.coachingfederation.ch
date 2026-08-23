@@ -1078,7 +1078,9 @@
       "creating": "Wird erstellt…",
       "created": "Erstellte Termine:",
       "skipped": "bereits vorhanden:",
-      "badge": "Serie"
+      "badge": "Serie",
+      "needsPublish": "Veröffentliche dieses Event, bevor du Wiederholungstermine erstellst.",
+      "needsSave": "Speichere zuerst deine Änderungen."
     },
     "colPayment": "Zahlung",
     "payStatus": {
