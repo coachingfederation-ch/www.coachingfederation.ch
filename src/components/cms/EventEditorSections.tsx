@@ -237,14 +237,22 @@ export function EventDetailsSection({
  * Repeat panel: turns one event into a series of independent dated copies.
  * Dates are previewed with the very same expander the server uses, so the
  * list staff read is the list that gets created.
+ *
+ * Creating dates is the last step of the editor: the copies are made from the
+ * stored row, so the source event must be published and free of unsaved edits
+ * before staff can spawn a series from it.
  */
 export function EventRepeatSection({
   event,
   onGenerate,
+  canCreate,
+  blockedReason,
   t,
 }: {
   event: Managed;
   onGenerate: (rule: RecurrenceRule) => Promise<void>;
+  canCreate: boolean;
+  blockedReason: string | null;
   t: (k: string) => string;
 }) {
   const stored = (event as { recurrence?: RecurrenceRule | null }).recurrence ?? null;
@@ -254,6 +262,7 @@ export function EventRepeatSection({
 
   const dates = enabled ? expandRecurrence(event.starts_at, rule) : [];
   const patchRule = (next: Partial<RecurrenceRule>) => setRule({ ...rule, ...next });
+
 
   return (
     <Section title={t("events.repeat.section")} hint={t("events.repeat.hint")}>
