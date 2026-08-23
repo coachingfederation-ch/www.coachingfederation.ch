@@ -178,7 +178,7 @@ export const transitionNewsletterFn = createServerFn({ method: "POST" })
     if (data.action === "schedule" && !data.scheduledAt) {
       throw new Error("Pick a date and time to schedule this edition.");
     }
-    return transitionNewsletter(
+    const patch = await transitionNewsletter(
       client,
       data.id,
       data.action === "schedule"
@@ -186,6 +186,8 @@ export const transitionNewsletterFn = createServerFn({ method: "POST" })
         : { action: data.action },
       permissions,
     );
+    // Narrow to a serializable shape: TanStack rejects Record<string, unknown>.
+    return { status: String(patch.status ?? "") };
   });
 
 export const deleteNewsletterFn = createServerFn({ method: "POST" })
