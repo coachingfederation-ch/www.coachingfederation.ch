@@ -120,7 +120,7 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
               const value = Number(e.target.value);
               if (!Number.isFinite(value) || value === campaign.daily_cap) return;
               void run(async () => {
-                await updateClaimCampaign({ daily_cap: Math.min(500, Math.max(1, value)) });
+                await updateClaimCampaign({ data: { daily_cap: Math.min(500, Math.max(1, value)) } });
                 return t("integration.saved");
               });
             }}
@@ -141,7 +141,7 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
               if (!Number.isFinite(value) || value === campaign.reminder_after_days) return;
               void run(async () => {
                 await updateClaimCampaign({
-                  reminder_after_days: Math.min(60, Math.max(1, value)),
+                    data: { reminder_after_days: Math.min(60, Math.max(1, value)) },
                 });
                 return t("integration.saved");
               });
@@ -158,7 +158,7 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
             onChange={(e) => {
               const checked = e.target.checked;
               void run(async () => {
-                await updateClaimCampaign({ reminder_enabled: checked });
+                await updateClaimCampaign({ data: { reminder_enabled: checked } });
                 return t("integration.saved");
               });
             }}
@@ -174,7 +174,7 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
             disabled={busy}
             onClick={() =>
               void run(async () => {
-                await updateClaimCampaign({ status: "paused" });
+                await updateClaimCampaign({ data: { status: "paused" } });
                 return t("integration.saved");
               })
             }
@@ -188,7 +188,7 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
             onClick={() => {
               if (!window.confirm(t("integration.campaignStartConfirm"))) return;
               void run(async () => {
-                await updateClaimCampaign({ status: "running" });
+                await updateClaimCampaign({ data: { status: "running" } });
                 return t("integration.saved");
               });
             }}
