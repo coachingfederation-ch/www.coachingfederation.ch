@@ -438,7 +438,10 @@ function NewsletterEditor() {
             Add advertisement slot
           </Button>
         </div>
+
+        <NewsletterPreviewDialog id={id} open={previewOpen} onOpenChange={setPreviewOpen} />
       </div>
+
     </Shell>
   );
 }
