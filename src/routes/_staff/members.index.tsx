@@ -10,7 +10,13 @@ import { useEffect, useMemo, useState } from "react";
 import { Download, Search } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { useCms } from "@/i18n/cms";
-import { exportMembersCsv, getMemberClaimStatuses, listMembers } from "@/lib/members.functions";
+import {
+  exportMembersCsv,
+  getClaimPilotMembers,
+  getMemberClaimStatuses,
+  listMembers,
+  setClaimPilotMember,
+} from "@/lib/members.functions";
 import { directoryEligibilityReason } from "@/lib/directory-eligibility";
 
 export const Route = createFileRoute("/_staff/members/")({
