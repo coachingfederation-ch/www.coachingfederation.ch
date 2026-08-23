@@ -356,6 +356,10 @@ function NewsletterEditor() {
         </div>
 
         <div className="mb-6 flex flex-wrap items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => setPreviewOpen(true)}>
+            <Eye className="h-4 w-4" />
+            Preview
+          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -365,6 +369,7 @@ function NewsletterEditor() {
             <Sparkles className="h-4 w-4" />
             {regenerateAll.isPending ? "Regenerating…" : "Regenerate all AI blocks"}
           </Button>
+
           {edition.status === "draft" || edition.status === "unpublished" ? (
             <Button size="sm" onClick={() => transitionMutation.mutate("submit")}>
               Submit for review
