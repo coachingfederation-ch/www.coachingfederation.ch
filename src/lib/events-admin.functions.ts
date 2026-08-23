@@ -591,6 +591,11 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
       .maybeSingle();
     if (loadError) throw new Error(loadError.message);
     if (!source) throw new Error("Event not found.");
+    // A series is only spawned from a finished event: the copies are made from
+    // the stored row, so an unpublished source would propagate a half-edited one.
+    if (source.status !== "published")
+      throw new Error("Publish this event before creating repeat dates.");
+
 
     const dates = expandRecurrence(source.starts_at as string, data.rule);
     if (dates.length === 0) return { created: 0, skipped: 0 };
