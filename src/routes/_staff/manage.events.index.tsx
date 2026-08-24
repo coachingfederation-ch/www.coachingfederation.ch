@@ -10,6 +10,7 @@ import { z } from "zod";
 import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
 import { useEffect, useMemo, useState } from "react";
 import { CalendarDays, Plus, X } from "lucide-react";
+import { Checkbox } from "@/design-system/icf-welcome-design-system-a835df";
 import { Shell } from "@/components/cms/Shell";
 import { useCms } from "@/i18n/cms";
 import { listManagedEvents } from "@/lib/events-admin.functions";
@@ -143,6 +144,13 @@ function ManageEventsPage() {
     };
   }, [rows]);
 
+  // Status is an *exclusion* filter: the `status` search param holds a
+  // comma-separated list of statuses to hide. Empty means show everything —
+  // every status is active by default, so the list never starts filtered.
+  const excludedStatuses: string[] = search.status
+    ? search.status.split(",").filter(Boolean)
+    : [];
+
   const filtered = useMemo(() => {
     const term = search.q.trim().toLowerCase();
     return (rows ?? [])
@@ -155,11 +163,11 @@ function ManageEventsPage() {
           const isOnline = !row.city || row.city.trim().toLowerCase() === "online";
           if (search.city === ONLINE_CITY ? !isOnline : row.city !== search.city) return false;
         }
-        if (search.status && row.status !== search.status) return false;
+        if (excludedStatuses.includes(row.status)) return false;
         return true;
       })
       .sort((a, b) => a.starts_at.localeCompare(b.starts_at));
-  }, [rows, search]);
+  }, [rows, search, excludedStatuses]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const page = Math.min(Math.max(1, search.page), pageCount);
@@ -243,11 +251,15 @@ function ManageEventsPage() {
                   : []),
               ]}
             />
-            <FilterSelect
+            <StatusFilter
               label={t("events.colStatus")}
-              allLabel={t("events.filters.allStatuses")}
-              value={search.status}
-              onChange={(v) => setFilter({ status: v })}
+              excluded={excludedStatuses}
+              onToggle={(status, active) => {
+                const next = active
+                  ? excludedStatuses.filter((s) => s !== status)
+                  : [...excludedStatuses, status];
+                setFilter({ status: next.join(",") });
+              }}
               options={["draft", "published", "cancelled"].map(
                 (s) => [s, t(`events.status.${s}`)] as [string, string],
               )}
@@ -412,6 +424,40 @@ function ManageEventsPage() {
         ) : null}
       </div>
     </Shell>
+  );
+}
+
+function StatusFilter({
+  label,
+  excluded,
+  onToggle,
+  options,
+}: {
+  label: string;
+  excluded: string[];
+  onToggle: (status: string, active: boolean) => void;
+  options: [string, string][];
+}) {
+  return (
+    <fieldset className="flex min-w-[150px] flex-col gap-1">
+      <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        {label}
+      </span>
+      <div className="flex flex-wrap gap-3">
+        {options.map(([status, name]) => {
+          const active = !excluded.includes(status);
+          return (
+            <label key={status} className="flex items-center gap-1.5 text-sm">
+              <Checkbox
+                checked={active}
+                onCheckedChange={(checked) => onToggle(status, checked === true)}
+              />
+              {name}
+            </label>
+          );
+        })}
+      </div>
+    </fieldset>
   );
 }
 
