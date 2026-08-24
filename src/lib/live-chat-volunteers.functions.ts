@@ -71,3 +71,23 @@ export const leaveLiveChatVolunteers = createServerFn({ method: "POST" })
       .eq("user_id", context.userId);
     return { ok: true };
   });
+
+/** Register an iOS APNs device token for the signed-in volunteer. */
+export const registerApnsDeviceToken = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ token: z.string().min(1).max(400) }).parse(input))
+  .handler(async ({ context, data }) => {
+    const { saveApnsSubscription } = await import("./live-chat-apns.server");
+    await saveApnsSubscription(context.userId, data.token);
+    return { ok: true };
+  });
+
+/** Unregister an iOS APNs device token (sign-out / wrapper teardown). */
+export const unregisterApnsDeviceToken = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ token: z.string().min(1).max(400) }).parse(input))
+  .handler(async ({ context, data }) => {
+    const { removeApnsSubscription } = await import("./live-chat-apns.server");
+    await removeApnsSubscription(context.userId, data.token);
+    return { ok: true };
+  });
