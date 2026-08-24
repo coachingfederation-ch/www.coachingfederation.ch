@@ -635,76 +635,7 @@ function VolunteerChatPage() {
             ))}
           </div>
         </section>
-
-        <p className="text-[11px] text-muted-foreground">{t("live-chat.volunteer.keepOpen")}</p>
-
-        <NotificationRow
-          state={pushState}
-          busy={pushBusy}
-          onToggle={() => void togglePush()}
-          t={t}
-        />
       </div>
     </div>
-  );
-}
-
-/**
- * Push opt-in. On iOS the browser only exposes push once the site has been
- * added to the home screen, so we say that instead of showing a dead switch.
- */
-function NotificationRow({
-  state,
-  busy,
-  onToggle,
-  t,
-}: {
-  state: "on" | "off" | "blocked";
-  busy: boolean;
-  onToggle: () => void;
-  t: (key: string) => string;
-}) {
-  const [supported, setSupported] = useState(true);
-  const [standalone, setStandalone] = useState(true);
-
-  useEffect(() => {
-    setSupported(pushSupported());
-    setStandalone(isStandalone());
-  }, []);
-
-  return (
-    <section className="mx-auto mt-4 max-w-md rounded-2xl border border-border bg-card p-4">
-      <p className="flex items-center gap-2 text-sm font-semibold text-foreground">
-        {state === "on" ? (
-          <Bell className="size-4 text-primary" aria-hidden="true" />
-        ) : (
-          <BellOff className="size-4 text-muted-foreground" aria-hidden="true" />
-        )}
-        {t("live-chat.volunteer.alertsTitle")}
-      </p>
-      <p className="mt-1 text-xs text-muted-foreground">
-        {!supported
-          ? t("live-chat.volunteer.alertsInstallFirst")
-          : state === "blocked"
-            ? t("live-chat.volunteer.alertsBlocked")
-            : t("live-chat.volunteer.alertsBody")}
-      </p>
-      {supported && state !== "blocked" && (
-        <button
-          type="button"
-          onClick={onToggle}
-          disabled={busy}
-          className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-4 text-sm font-semibold text-foreground disabled:opacity-60"
-        >
-          {busy && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
-          {state === "on" ? t("live-chat.volunteer.alertsOff") : t("live-chat.volunteer.alertsOn")}
-        </button>
-      )}
-      {supported && !standalone && (
-        <p className="mt-2 text-[11px] text-muted-foreground">
-          {t("live-chat.volunteer.alertsInstallHint")}
-        </p>
-      )}
-    </section>
   );
 }
