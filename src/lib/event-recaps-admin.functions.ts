@@ -57,7 +57,14 @@ const fileInput = z.object({
     .max(40),
 });
 
-/** Creates the recap row on first open so the editor always has an id. */
+/**
+ * Creates the recap row on first open so the editor always has an id.
+ *
+ * Atomic on purpose: two overlapping calls (a re-fired load effect, a save that
+ * starts before the load resolved) used to both read "no row" and both insert,
+ * and the unique index on event_id rejected the loser with a raw Postgres
+ * error. Insert-ignore-then-read means both callers end up on the same row.
+ */
 async function ensureRecap(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   supabase: any,
@@ -76,18 +83,33 @@ async function ensureRecap(
     .select("language")
     .eq("id", eventId)
     .maybeSingle();
-  const { data, error } = await supabase
+
+  const { data: inserted, error } = await supabase
     .from("event_recaps")
-    .insert({
-      event_id: eventId,
-      language: (event?.language as string | undefined) ?? "en",
-      created_by: userId,
-    })
+    .upsert(
+      {
+        event_id: eventId,
+        language: (event?.language as string | undefined) ?? "en",
+        created_by: userId,
+      },
+      { onConflict: "event_id", ignoreDuplicates: true },
+    )
     .select("id")
-    .single();
+    .maybeSingle();
   if (error) throw new Error(error.message);
-  return data.id as string;
+  if (inserted?.id) return inserted.id as string;
+
+  // Someone else won the race — read their row.
+  const { data: raced, error: readError } = await supabase
+    .from("event_recaps")
+    .select("id")
+    .eq("event_id", eventId)
+    .maybeSingle();
+  if (readError) throw new Error(readError.message);
+  if (!raced?.id) throw new Error("Could not open the recap for this event.");
+  return raced.id as string;
 }
+
 
 /** The recap, its gallery, its attachments and its translations, for staff. */
 export const getManagedRecap = createServerFn({ method: "POST" })
