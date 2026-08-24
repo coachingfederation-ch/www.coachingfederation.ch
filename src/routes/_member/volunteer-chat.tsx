@@ -197,6 +197,25 @@ function VolunteerChatPage() {
     void loadLists();
   }, [loadLists]);
 
+  // iOS wrapper: re-register the APNs token when the app returns to the
+  // foreground (the token can rotate). Skipped when nothing changed.
+  useEffect(() => {
+    if (!userId) return;
+    const onFocus = () => {
+      const token = window.__icfPushToken;
+      if (token) void registerApnsDeviceToken({ data: { token } }).catch(() => undefined);
+    };
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [userId]);
+
+  // iOS wrapper: opened from a push notification — surface the waiting request.
+  useEffect(() => {
+    if (window.__icfPushPayload?.action === "openWaitingChat") {
+      void loadLists();
+    }
+  }, [loadLists]);
+
   // Heartbeat: a volunteer who closes the page drops offline within 90s.
   useEffect(() => {
     if (!userId || !online) return;
