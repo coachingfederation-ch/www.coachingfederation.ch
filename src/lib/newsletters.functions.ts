@@ -50,14 +50,22 @@ export const getNewsletterFn = createServerFn({ method: "GET" })
       await import("./newsletters.server");
     const result = await loadNewsletterEditorData(client, data.id);
     const roles = await callerRoles(ctx);
+    const isAdmin = roles.includes("admin") || roles.includes("administrator");
+    const createdBy = result.newsletter?.created_by ?? null;
     return {
       ...result,
-      permissions: newsletterPermissions(
-        ctx.userId,
-        roles.includes("admin") || roles.includes("administrator"),
-        roles.includes("admin") || roles.includes("administrator") || roles.includes("editor"),
-        result.newsletter?.created_by ?? null,
-      ),
+      permissions: {
+        ...newsletterPermissions(
+          ctx.userId,
+          isAdmin,
+          isAdmin || roles.includes("editor"),
+          createdBy,
+        ),
+        // Sending is the `publisher` role specifically, and keeps the four-eye
+        // rule: the creator cannot dispatch their own edition.
+        canSend:
+          isAdmin || (roles.includes("publisher") && !(createdBy && createdBy === ctx.userId)),
+      },
     };
   });
 
