@@ -105,18 +105,6 @@ function VolunteerChatPage() {
     waitingCountRef.current = waiting.length;
   }, [waiting.length]);
 
-  const togglePush = useCallback(async () => {
-    setPushBusy(true);
-    if (pushState === "on") {
-      await disablePush().catch(() => undefined);
-      setPushState("off");
-    } else {
-      const next = await enablePush().catch(() => "error" as const);
-      setPushState(next === "on" ? "on" : next === "blocked" ? "blocked" : "off");
-    }
-    setPushBusy(false);
-  }, [pushState]);
-
   // Identify the volunteer, confirm the activation and prefill the display name.
   useEffect(() => {
     void (async () => {
