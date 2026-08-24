@@ -19,10 +19,12 @@ import { RECAP_AUDIENCES, formatFileSize, recapAssetPath } from "@/lib/event-rec
 import type { RecapAudience } from "@/lib/event-recaps";
 import {
   getManagedRecap,
+  previewRecapThanksEmail,
   publishRecapToLinkedIn,
   saveRecap,
   saveRecapFiles,
   saveRecapPhotos,
+  sendRecapThanksEmail,
   setRecapStatus,
   translateRecap,
 } from "@/lib/event-recaps-admin.functions";
