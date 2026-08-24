@@ -1500,6 +1500,9 @@
     },
     "recap": {
       "title": "After event recap",
+      "collapsedHint": "Available after the event date.",
+      "collapsedNote": "This section unlocks once the event date has passed. You can expand it early if you need to.",
+      "expand": "Expand",
       "hint": "The story, the gallery and the downloads shown on the public event page once you publish them.",
       "loading": "Loading the recap…",
       "loadError": "Could not load the recap.",

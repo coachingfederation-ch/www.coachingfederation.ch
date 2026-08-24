@@ -1500,6 +1500,9 @@
     },
     "recap": {
       "title": "Rétrospective après l'événement",
+      "collapsedHint": "Disponible après la date de l'événement.",
+      "collapsedNote": "Cette section se déverrouille après la date de l'événement. Vous pouvez l'ouvrir en avance si nécessaire.",
+      "expand": "Déplier",
       "hint": "Le texte, la galerie et les téléchargements affichés sur la page publique une fois publiés.",
       "loading": "Chargement de la rétrospective…",
       "loadError": "Impossible de charger la rétrospective.",

@@ -1500,6 +1500,9 @@
     },
     "recap": {
       "title": "Rückblick nach dem Anlass",
+      "collapsedHint": "Verfügbar nach dem Anlassdatum.",
+      "collapsedNote": "Dieser Bereich wird nach dem Anlassdatum freigeschaltet. Sie können ihn vorzeitig öffnen, falls nötig.",
+      "expand": "Ausklappen",
       "hint": "Text, Galerie und Downloads, die nach dem Publizieren auf der öffentlichen Anlassseite erscheinen.",
       "loading": "Rückblick wird geladen…",
       "loadError": "Der Rückblick konnte nicht geladen werden.",
