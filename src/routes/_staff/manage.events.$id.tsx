@@ -437,6 +437,9 @@ function EventEditor() {
                   }}
                 />
               ) : null}
+              {/* The recap closes the loop: last panel, because it is written
+                  after the event has actually happened. */}
+              <EventRecapEditor eventId={event.id} t={(key) => t(`events.${key}`)} />
             </>
           }
           t={t}
