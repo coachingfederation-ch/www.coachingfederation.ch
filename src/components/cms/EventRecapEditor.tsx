@@ -595,13 +595,16 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
         </h3>
         <p className="mt-1 text-xs text-muted-foreground">{t("recap.thanksHint")}</p>
         <p className="mt-2 text-sm text-foreground">
-          {t("recap.thanksAudience", { total: thanks.total, pending: thanks.pending })}
+          {t("recap.thanksAudience")
+            .replace("{total}", String(thanks.total))
+            .replace("{pending}", String(thanks.pending))}
         </p>
         {thanksLastSent ? (
           <p className="mt-1 text-xs text-muted-foreground">
-            {t("recap.thanksLastSent", {
-              date: new Date(thanksLastSent).toLocaleString("de-CH"),
-            })}
+            {t("recap.thanksLastSent").replace(
+              "{date}",
+              new Date(thanksLastSent).toLocaleString("de-CH"),
+            )}
           </p>
         ) : null}
         <textarea
