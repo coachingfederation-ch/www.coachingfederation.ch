@@ -52,7 +52,6 @@ export interface NewsletterEditionEmailProps {
   unsubscribeUrl?: string;
 }
 
-
 function assetUrl(path: string, baseUrl?: string) {
   if (/^https?:\/\//i.test(path)) return path;
   return `${(baseUrl || SITE_URL).replace(/\/$/, "")}${path}`;
@@ -65,7 +64,6 @@ export const NewsletterEditionEmail = ({
   baseUrl,
   unsubscribeUrl = "{$unsubscribe}",
 }: NewsletterEditionEmailProps) => (
-
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>{`${title}${issueLabel ? ` — ${issueLabel}` : ""}`}</Preview>
@@ -170,7 +168,6 @@ export const NewsletterEditionEmail = ({
             </Link>
           </Text>
         </Section>
-
       </Container>
     </Body>
   </Html>
@@ -233,7 +230,6 @@ const footerUnsubscribe: React.CSSProperties = {
   fontSize: "12px",
   textDecoration: "underline",
 };
-
 
 const markdownStyles = {
   h1: { color: "#212251", fontSize: "20px", lineHeight: "26px" },

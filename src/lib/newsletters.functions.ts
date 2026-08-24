@@ -388,4 +388,3 @@ export const sendNewsletterFn = createServerFn({ method: "POST" })
     const { sendCampaign } = await import("./newsletter-send.server");
     return sendCampaign(data.id, data.scheduledFor ?? null);
   });
-

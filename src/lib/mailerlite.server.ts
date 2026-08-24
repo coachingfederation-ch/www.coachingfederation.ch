@@ -52,7 +52,8 @@ async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
 
   const text = await response.text();
   const body = text ? safeJson(text) : null;
-  if (!response.ok) throw new MailerLiteError(mailerLiteMessage(response.status, body), response.status);
+  if (!response.ok)
+    throw new MailerLiteError(mailerLiteMessage(response.status, body), response.status);
   return (body ?? {}) as T;
 }
 
@@ -172,10 +173,7 @@ async function timezoneId(name: string): Promise<string | null> {
  * Scheduling needs a MailerLite timezone id; when the lookup fails we do not
  * silently fall back to an instant send — the caller sees the error instead.
  */
-export async function sendCampaign(
-  campaignId: string,
-  scheduledFor?: Date | null,
-): Promise<void> {
+export async function sendCampaign(campaignId: string, scheduledFor?: Date | null): Promise<void> {
   if (!scheduledFor) {
     await call(`/campaigns/${encodeURIComponent(campaignId)}/schedule`, {
       method: "POST",

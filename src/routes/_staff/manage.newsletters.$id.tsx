@@ -475,7 +475,6 @@ function NewsletterEditor() {
         />
 
         <NewsletterPreviewDialog id={id} open={previewOpen} onOpenChange={setPreviewOpen} />
-
       </div>
     </Shell>
   );

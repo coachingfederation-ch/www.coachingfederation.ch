@@ -76,12 +76,13 @@ async function ensureConfig(newsletterId: string): Promise<ConfigRow> {
 
   // Concurrent editors can both reach this point; ignore the duplicate and
   // re-read rather than failing the panel with a unique-violation.
-  await db
-    .from("newsletter_send_config")
-    .upsert({ newsletter_id: newsletterId, provider: "mailerlite", is_stub: false }, {
+  await db.from("newsletter_send_config").upsert(
+    { newsletter_id: newsletterId, provider: "mailerlite", is_stub: false },
+    {
       onConflict: "newsletter_id",
       ignoreDuplicates: true,
-    });
+    },
+  );
   const { data: created } = await db
     .from("newsletter_send_config")
     .select(SELECT)
@@ -151,7 +152,8 @@ export async function pushCampaign(
   input: PushInput,
 ): Promise<{ campaignId: string }> {
   const current = await ensureConfig(input.newsletterId);
-  if (current.sent_at) throw new Error("This edition was already sent — it cannot be pushed again.");
+  if (current.sent_at)
+    throw new Error("This edition was already sent — it cannot be pushed again.");
 
   const html = await renderNewsletterEmail(client, input.newsletterId);
   assertAbsoluteImages(html);
@@ -198,14 +200,12 @@ export async function sendCampaign(
   scheduledFor: string | null,
 ): Promise<SendState> {
   const current = await ensureConfig(newsletterId);
-  if (!current.campaign_id)
-    throw new Error("Push the edition to MailerLite first, then send it.");
+  if (!current.campaign_id) throw new Error("Push the edition to MailerLite first, then send it.");
   if (current.sent_at) throw new Error("This edition was already sent.");
 
   const when = scheduledFor ? new Date(scheduledFor) : null;
   if (when && Number.isNaN(when.getTime())) throw new Error("That schedule time is not valid.");
-  if (when && when.getTime() < Date.now())
-    throw new Error("Pick a schedule time in the future.");
+  if (when && when.getTime() < Date.now()) throw new Error("Pick a schedule time in the future.");
 
   const ml = await import("./mailerlite.server");
   try {

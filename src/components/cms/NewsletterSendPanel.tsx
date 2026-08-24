@@ -60,7 +60,10 @@ export function NewsletterSendPanel({
   const send = useServerFn(sendNewsletterFn);
 
   const stateKey = ["newsletter-send", id];
-  const { data: state } = useQuery({ queryKey: stateKey, queryFn: () => getState({ data: { id } }) });
+  const { data: state } = useQuery({
+    queryKey: stateKey,
+    queryFn: () => getState({ data: { id } }),
+  });
   const { data: groupData } = useQuery({
     queryKey: ["mailerlite-groups"],
     queryFn: () => listGroups(),
