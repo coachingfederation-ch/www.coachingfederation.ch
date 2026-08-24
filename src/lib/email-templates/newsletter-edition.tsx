@@ -44,6 +44,12 @@ export interface NewsletterEditionEmailProps {
   issueLabel?: string;
   blocks?: NewsletterEmailBlock[];
   baseUrl?: string;
+  /**
+   * Unsubscribe target. Defaults to MailerLite's `{$unsubscribe}` placeholder:
+   * custom-HTML campaigns are rejected without it. The staff preview passes a
+   * plain "#" so the literal placeholder never shows up in a preview.
+   */
+  unsubscribeUrl?: string;
 }
 
 function assetUrl(path: string, baseUrl?: string) {
@@ -56,6 +62,7 @@ export const NewsletterEditionEmail = ({
   issueLabel = "",
   blocks = [],
   baseUrl,
+  unsubscribeUrl = "{$unsubscribe}",
 }: NewsletterEditionEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
@@ -155,6 +162,11 @@ export const NewsletterEditionEmail = ({
           <Link href={(baseUrl || SITE_URL).replace(/\/$/, "")} style={footerLink}>
             coachingfederation.ch
           </Link>
+          <Text style={footerText}>
+            <Link href={unsubscribeUrl} style={footerUnsubscribe}>
+              Unsubscribe
+            </Link>
+          </Text>
         </Section>
       </Container>
     </Body>
@@ -210,6 +222,13 @@ const footerLink: React.CSSProperties = {
   color: "#EFCB30",
   fontSize: "13px",
   textDecoration: "none",
+};
+// Legally required, so it stays legible rather than hidden: white, underlined,
+// one step smaller than the chapter line above it.
+const footerUnsubscribe: React.CSSProperties = {
+  color: "#ffffff",
+  fontSize: "12px",
+  textDecoration: "underline",
 };
 
 const markdownStyles = {

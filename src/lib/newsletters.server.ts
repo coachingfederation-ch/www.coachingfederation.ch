@@ -308,9 +308,15 @@ export async function deleteNewsletter(client: Client, id: string) {
  * Render one edition to email HTML, exactly as a recipient would receive it.
  *
  * Only enabled blocks are included, in position order. Used by the staff
- * preview today and by the send path later, so the two can never drift.
+ * preview and by the MailerLite push, so the two can never drift. The preview
+ * passes `unsubscribeUrl: "#"` so MailerLite's `{$unsubscribe}` placeholder —
+ * which the real send needs — never shows up as literal text on screen.
  */
-export async function renderNewsletterEmail(client: Client, id: string): Promise<string> {
+export async function renderNewsletterEmail(
+  client: Client,
+  id: string,
+  options: { unsubscribeUrl?: string } = {},
+): Promise<string> {
   const { newsletter, blocks } = await loadNewsletterEditorData(client, id);
   if (!newsletter) throw new Error("newsletter not found");
 
@@ -324,6 +330,8 @@ export async function renderNewsletterEmail(client: Client, id: string): Promise
     NewsletterEditionEmail({
       title: newsletter.title,
       issueLabel: formatIssueDate(newsletter.issue_date, newsletter.language || "en"),
+      ...(options.unsubscribeUrl ? { unsubscribeUrl: options.unsubscribeUrl } : {}),
+
       blocks: blocks
         .filter((b) => b.enabled)
         .map((b) => ({

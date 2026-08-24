@@ -16,6 +16,8 @@ import { Shell } from "@/components/cms/Shell";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import { BlockImageField } from "@/components/cms/BlockImageField";
 import { NewsletterPreviewDialog } from "@/components/cms/NewsletterPreviewDialog";
+import { NewsletterSendPanel } from "@/components/cms/NewsletterSendPanel";
+
 import { ARTICLE_ROLES, requireStaffAccess } from "@/lib/staff-guard";
 import { Button, Input, Label, Switch } from "@/design-system/icf-welcome-design-system-a835df";
 import {
@@ -465,6 +467,12 @@ function NewsletterEditor() {
             Add advertisement slot
           </Button>
         </div>
+
+        <NewsletterSendPanel
+          id={id}
+          defaultSubject={edition.title}
+          canSend={data.permissions.canPublish}
+        />
 
         <NewsletterPreviewDialog id={id} open={previewOpen} onOpenChange={setPreviewOpen} />
       </div>

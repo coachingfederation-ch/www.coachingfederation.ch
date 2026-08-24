@@ -303,5 +303,88 @@ export const previewNewsletterFn = createServerFn({ method: "GET" })
   .handler(async ({ data, context }) => {
     const client = await assertStaff(context as AuthedContext);
     const { renderNewsletterEmail } = await import("./newsletters.server");
-    return { html: await renderNewsletterEmail(client, data.id) };
+    // "#" keeps MailerLite's {$unsubscribe} placeholder out of the preview.
+    return { html: await renderNewsletterEmail(client, data.id, { unsubscribeUrl: "#" }) };
+  });
+
+/**
+ * Sending is irreversible, so it is gated on the publish roles rather than on
+ * staff membership — the same bar the four-eye publish transition uses.
+ */
+async function assertPublisher(context: AuthedContext) {
+  const client = await assertStaff(context);
+  const roles = await callerRoles(context);
+  const allowed = ["admin", "administrator", "publisher"];
+  if (!roles.some((role) => allowed.includes(role)))
+    throw new Error("Only publishers can send the newsletter.");
+  return client;
+}
+
+/** Current MailerLite send state for one edition. */
+export const getNewsletterSendStateFn = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => idSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    await assertStaff(context as AuthedContext);
+    const { getSendState } = await import("./newsletter-send.server");
+    return getSendState(data.id);
+  });
+
+/** MailerLite audience groups, for the group picker. */
+export const listMailerLiteGroupsFn = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertStaff(context as AuthedContext);
+    const { listGroups } = await import("./mailerlite.server");
+    try {
+      return { groups: await listGroups(), error: null as string | null };
+    } catch (err) {
+      // A missing key or provider outage must not blank the editor.
+      return {
+        groups: [],
+        error: err instanceof Error ? err.message : "MailerLite is unavailable.",
+      };
+    }
+  });
+
+const pushSchema = z.object({
+  id: z.string().uuid(),
+  groupId: z.string().min(1).max(64),
+  groupName: z.string().min(1).max(200),
+  subject: z.string().min(3).max(200),
+  fromName: z.string().min(2).max(120),
+  fromEmail: z.string().email().max(200),
+});
+
+/** Creates or refreshes the MailerLite draft campaign for this edition. */
+export const pushNewsletterToMailerLiteFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => pushSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const client = await assertPublisher(context as AuthedContext);
+    const { pushCampaign, getSendState } = await import("./newsletter-send.server");
+    await pushCampaign(client, {
+      newsletterId: data.id,
+      groupId: data.groupId,
+      groupName: data.groupName,
+      subject: data.subject,
+      fromName: data.fromName,
+      fromEmail: data.fromEmail,
+    });
+    return getSendState(data.id);
+  });
+
+const sendSchema = z.object({
+  id: z.string().uuid(),
+  scheduledFor: z.string().datetime().nullable().optional(),
+});
+
+/** Sends (or schedules) the pushed campaign. Irreversible. */
+export const sendNewsletterFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => sendSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    await assertPublisher(context as AuthedContext);
+    const { sendCampaign } = await import("./newsletter-send.server");
+    return sendCampaign(data.id, data.scheduledFor ?? null);
   });
