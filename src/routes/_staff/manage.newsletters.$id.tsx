@@ -471,7 +471,8 @@ function NewsletterEditor() {
         <NewsletterSendPanel
           id={id}
           defaultSubject={edition.title}
-          canSend={data.permissions.canPublish}
+          canSend={data.permissions.canSend}
+          status={edition.status}
         />
 
         <NewsletterPreviewDialog id={id} open={previewOpen} onOpenChange={setPreviewOpen} />

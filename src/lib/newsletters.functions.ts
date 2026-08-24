@@ -14,7 +14,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertStaff as assertStaffRole, type AuthedContext } from "./authz";
-import { ADDABLE_BLOCK_TYPES } from "./newsletters";
+import { ADDABLE_BLOCK_TYPES, isNewsletterSendable } from "./newsletters";
 
 async function assertStaff(context: AuthedContext) {
   await assertStaffRole(context);
@@ -50,14 +50,22 @@ export const getNewsletterFn = createServerFn({ method: "GET" })
       await import("./newsletters.server");
     const result = await loadNewsletterEditorData(client, data.id);
     const roles = await callerRoles(ctx);
+    const isAdmin = roles.includes("admin") || roles.includes("administrator");
+    const createdBy = result.newsletter?.created_by ?? null;
     return {
       ...result,
-      permissions: newsletterPermissions(
-        ctx.userId,
-        roles.includes("admin") || roles.includes("administrator"),
-        roles.includes("admin") || roles.includes("administrator") || roles.includes("editor"),
-        result.newsletter?.created_by ?? null,
-      ),
+      permissions: {
+        ...newsletterPermissions(
+          ctx.userId,
+          isAdmin,
+          isAdmin || roles.includes("editor"),
+          createdBy,
+        ),
+        // Sending is the `publisher` role specifically, and keeps the four-eye
+        // rule: the creator cannot dispatch their own edition.
+        canSend:
+          isAdmin || (roles.includes("publisher") && !(createdBy && createdBy === ctx.userId)),
+      },
     };
   });
 
@@ -309,14 +317,32 @@ export const previewNewsletterFn = createServerFn({ method: "GET" })
 
 /**
  * Sending is irreversible, so it is gated on the publish roles rather than on
- * staff membership — the same bar the four-eye publish transition uses.
+ * staff membership — the same bar the four-eye publish transition uses. The UI
+ * disables the panel too, but this check is the actual boundary: it also
+ * refuses editions that have not been submitted for review, and refuses a
+ * publisher sending their own edition (admins may override).
  */
-async function assertPublisher(context: AuthedContext) {
+async function assertPublisher(context: AuthedContext, newsletterId: string) {
   const client = await assertStaff(context);
   const roles = await callerRoles(context);
-  const allowed = ["admin", "administrator", "publisher"];
-  if (!roles.some((role) => allowed.includes(role)))
+  const isAdmin = roles.includes("admin") || roles.includes("administrator");
+  if (!isAdmin && !roles.includes("publisher"))
     throw new Error("Only publishers can send the newsletter.");
+
+  const { data, error } = await client
+    .from("newsletters")
+    .select("status, created_by")
+    .eq("id", newsletterId)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) throw new Error("Newsletter not found.");
+
+  const row = data as { status: string; created_by: string | null };
+  if (!isNewsletterSendable(row.status))
+    throw new Error("This edition must be submitted for review before it can be sent.");
+  if (!isAdmin && row.created_by && row.created_by === context.userId)
+    throw new Error("A publisher cannot send an edition they created themselves.");
+
   return client;
 }
 
@@ -361,7 +387,7 @@ export const pushNewsletterToMailerLiteFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => pushSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const client = await assertPublisher(context as AuthedContext);
+    const client = await assertPublisher(context as AuthedContext, data.id);
     const { pushCampaign, getSendState } = await import("./newsletter-send.server");
     await pushCampaign(client, {
       newsletterId: data.id,
@@ -384,7 +410,7 @@ export const sendNewsletterFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => sendSchema.parse(data))
   .handler(async ({ data, context }) => {
-    await assertPublisher(context as AuthedContext);
+    await assertPublisher(context as AuthedContext, data.id);
     const { sendCampaign } = await import("./newsletter-send.server");
     return sendCampaign(data.id, data.scheduledFor ?? null);
   });
