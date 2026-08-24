@@ -188,5 +188,25 @@
     "allAudiences": "Tutti",
     "audienceOpen": "Aperto a tutti",
     "audienceMembers": "Solo per membri"
+  },
+  "recap": {
+    "eyebrow": "Dopo l'evento",
+    "defaultHeadline": "Com'è andata",
+    "gallery": "Galleria fotografica",
+    "openPhoto": "Apri la foto",
+    "closePhoto": "Chiudi la foto",
+    "downloads": {
+      "title": "Download",
+      "loading": "Stiamo preparando i link…",
+      "preparing": "Preparazione del download…",
+      "allPhotos": "Scarica tutte le foto ({n})",
+      "signIn": "Accedi con l'account usato per l'iscrizione per scaricare foto e file.",
+      "notEntitled": "Questi download sono riservati a chi ha partecipato a questo evento.",
+      "audience": {
+        "attendees": "Disponibile per chi ha partecipato a questo evento.",
+        "members": "Disponibile per i membri di The Switzerland Chapter of ICF e per chi ha partecipato.",
+        "public": "Disponibile per tutti."
+      }
+    }
   }
 }
