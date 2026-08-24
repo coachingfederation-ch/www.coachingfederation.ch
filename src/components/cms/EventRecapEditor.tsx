@@ -74,7 +74,20 @@ async function webRendition(file: File): Promise<Blob> {
   );
 }
 
-export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: string) => string }) {
+export function EventRecapEditor({
+  eventId,
+  eventStartsAt,
+  t,
+}: {
+  eventId: string;
+  eventStartsAt: string;
+  t: (key: string) => string;
+}) {
+  // The recap is post-event editorial work, so the panel stays collapsed
+  // (title-only) until the event date has passed. Staff can expand it early.
+  const eventPassed = new Date(eventStartsAt).getTime() < Date.now();
+  const [expanded, setExpanded] = useState(eventPassed);
+
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<"draft" | "published">("draft");
   const [language, setLanguage] = useState("en");
@@ -159,9 +172,11 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
 
   // `t` is not a stable reference, so it stays out of the dependency list and
   // a ref guards against a second load starting while one is still in flight —
-  // overlapping loads used to race on creating the recap row.
+  // overlapping loads used to race on creating the recap row. The load is also
+  // gated on `expanded` so we never fetch post-event data for a collapsed panel.
   const loadingRef = useRef(false);
   useEffect(() => {
+    if (!expanded) return;
     if (loadingRef.current) return;
     loadingRef.current = true;
     load()
@@ -173,7 +188,7 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
         loadingRef.current = false;
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [load]);
+  }, [load, expanded]);
 
   const run = async (key: string, action: () => Promise<void>, done?: string) => {
     setBusy(key);
@@ -255,6 +270,21 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
     [next[index], next[target]] = [next[target]!, next[index]!];
     setPhotos(next);
   };
+
+  if (!expanded) {
+    return (
+      <Section title={t("recap.title")} hint={t("recap.collapsedHint")}>
+        <p className="text-sm text-muted-foreground">{t("recap.collapsedNote")}</p>
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          className="mt-3 rounded-full border border-border px-4 py-2 text-sm font-semibold text-primary"
+        >
+          {t("recap.expand")}
+        </button>
+      </Section>
+    );
+  }
 
   if (loading) {
     return (

@@ -1500,6 +1500,9 @@
     },
     "recap": {
       "title": "Resoconto dopo l'evento",
+      "collapsedHint": "Disponibile dopo la data dell'evento.",
+      "collapsedNote": "Questa sezione si sblocca dopo la data dell'evento. Puoi aprirla in anticipo se necessario.",
+      "expand": "Espandi",
       "hint": "Testo, galleria e download mostrati sulla pagina pubblica dell'evento una volta pubblicati.",
       "loading": "Caricamento del resoconto…",
       "loadError": "Impossibile caricare il resoconto.",
