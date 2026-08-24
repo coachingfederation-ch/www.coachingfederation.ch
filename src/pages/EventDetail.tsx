@@ -28,6 +28,9 @@ import type { EventHost } from "@/lib/event-hosts";
 import { eventMap } from "@/lib/event-map";
 import { useTrackView } from "@/lib/plausible";
 import { getMyRegistration } from "@/lib/events.functions";
+import { EventRecap } from "@/components/events/EventRecap";
+import type { PublicRecap } from "@/lib/event-recaps";
+import { SITE_URL, localizePath } from "@/i18n/config";
 
 /*
  * Decoration for the hero band. The marks are picked from the event slug
