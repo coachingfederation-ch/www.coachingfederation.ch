@@ -145,12 +145,24 @@ export function EventRecapEditor({
     setLoading(false);
   }, [eventId]);
 
+  // `t` is not a stable reference, so it stays out of the dependency list and
+  // a ref guards against a second load starting while one is still in flight —
+  // overlapping loads used to race on creating the recap row.
+  const loadingRef = useRef(false);
   useEffect(() => {
-    load().catch((e) => {
-      setError(e instanceof Error ? e.message : t("recap.loadError"));
-      setLoading(false);
-    });
-  }, [load, t]);
+    if (loadingRef.current) return;
+    loadingRef.current = true;
+    load()
+      .catch((e) => {
+        setError(friendlyError(e, "recap.loadError"));
+        setLoading(false);
+      })
+      .finally(() => {
+        loadingRef.current = false;
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [load]);
+
 
   const run = async (key: string, action: () => Promise<void>, done?: string) => {
     setBusy(key);
