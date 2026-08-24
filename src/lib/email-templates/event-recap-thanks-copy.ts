@@ -76,8 +76,8 @@ export const RECAP_THANKS_COPY: Record<Locale, RecapThanksCopy> = {
     galleryIntro: "Il racconto e le foto della giornata sono sul nostro sito.",
     cta: "Guarda le foto e il racconto",
     fallback: "Se il pulsante non funziona, apri questo link: {url}",
-    linkedinIntro: "Abbiamo condiviso i momenti salienti anche su LinkedIn — sentiti libero di
- condividerli.",
+    linkedinIntro:
+      "Abbiamo condiviso i momenti salienti anche su LinkedIn — sentiti libero di condividerli.",
     linkedinCta: "Vai al post su LinkedIn",
     questions: "Domande? Scrivici a {email}.",
     signoff: "Cordiali saluti,\nThe Switzerland Chapter of ICF",
