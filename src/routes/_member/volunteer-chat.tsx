@@ -17,7 +17,7 @@
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Bell, BellOff, ChevronDown, Loader2, Radio, Users, X } from "lucide-react";
+import { ChevronDown, Loader2, Radio, Users, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { cn } from "@/lib/utils";
@@ -26,14 +26,7 @@ import {
   registerApnsDeviceToken,
   unregisterApnsDeviceToken,
 } from "@/lib/live-chat-volunteers.functions";
-import {
-  currentPushState,
-  disablePush,
-  enablePush,
-  isStandalone,
-  playWaitingChime,
-  pushSupported,
-} from "@/lib/volunteer-notifications";
+import { playWaitingChime } from "@/lib/volunteer-notifications";
 
 /** iOS wrapper bridge (injected only inside the native app shell). */
 type IcfPushPayload = { action?: string };
