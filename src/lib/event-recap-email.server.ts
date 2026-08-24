@@ -18,7 +18,8 @@ import {
   type EventRow,
 } from "./event-confirmation.server";
 
-const EVENT_COLUMNS = "id, slug, title, summary, description, language, community_id, status";
+const EVENT_COLUMNS =
+  "id, slug, title, summary, description, language, timezone, starts_at, ends_at, location_mode, venue_name, city, online_url, community_id, status";
 
 export type RecapThanksAudience = { total: number; pending: number };
 
