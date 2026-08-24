@@ -132,7 +132,6 @@ export function isNewsletterSendable(status: string): boolean {
   return (NEWSLETTER_SENDABLE_STATUSES as readonly string[]).includes(status);
 }
 
-
 /** `2026-03-01` → `newsletter-2026-03`. Stable per issue month. */
 export function issueSlug(issueDate: string): string {
   return `newsletter-${issueDate.slice(0, 7)}`;
