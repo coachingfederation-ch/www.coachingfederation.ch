@@ -99,6 +99,14 @@ export function EventRecapEditor({
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  /** Raw Postgres constraint text never reaches staff. */
+  const friendlyError = (e: unknown, fallbackKey: string) => {
+    const raw = e instanceof Error ? e.message : "";
+    if (!raw || /duplicate key value|unique constraint/i.test(raw)) return t(fallbackKey);
+    return raw;
+  };
+
+
   const load = useCallback(async () => {
     const data = await getManagedRecap({ data: { eventId } });
     const recap = data.recap as {
