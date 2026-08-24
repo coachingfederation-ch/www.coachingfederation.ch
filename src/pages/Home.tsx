@@ -11,13 +11,8 @@ import adRetreats from "@/assets/ads/ad-retreats.jpg";
 import adMentoring from "@/assets/ads/ad-mentoring.jpg";
 import heroImg from "@/assets/hero-coaching.jpg";
 import leadershipImg from "@/assets/leadership-team.jpg";
-import { BrushMark as Mark } from "@/design-system/icf-welcome-design-system-a835df/components/brush/BrushMark";
-import type { MarkName } from "@/design-system/icf-welcome-design-system-a835df/components/brush/marks";
-// Imported from the component module rather than the library index: the index
-// also re-exports the library's own showcase chrome, whose links point at
-// routes that only exist in the design-system project.
-import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
-import { Button, Input } from "@/design-system/icf-welcome-design-system-a835df";
+import { AiBadge, BrushMark as Mark, Button, Input } from "@/design-system/icf-welcome-design-system-a835df";
+import type { MarkName } from "@/design-system/icf-welcome-design-system-a835df";
 import { SiteHeaderBar, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SponsorMarquee, type SponsorItem } from "@/components/home/SponsorMarquee";
 import { useI18n, LocaleLink } from "@/i18n";
@@ -42,7 +37,7 @@ function HeroHeader() {
               <span className="text-accent">{t("home.hero.titleAccent")}</span>
               {t("home.hero.titlePost")}
             </h1>
-            <p className="mt-6 max-w-xl text-[17px] leading-[1.65] text-hero-foreground/85">
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-hero-foreground/85">
               {t("home.hero.subtitle")}
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -100,7 +95,7 @@ function Audiences() {
             <>
               <p className="section-label">{a.eyebrow}</p>
               <h3 className="mt-3 text-xl font-semibold text-foreground">{a.title}</h3>
-              <p className="mt-3 flex-1 text-sm leading-[1.65] text-muted-foreground">{a.desc}</p>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{a.desc}</p>
               <span className="mt-7 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
                 {a.cta}
                 <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
@@ -150,7 +145,7 @@ function WhyCredentialed() {
         <p className="eyebrow">{t("home.pillars.eyebrow")}</p>
         <div className="mt-5 grid gap-10 md:grid-cols-2 md:items-end">
           <h2 className="display-lg text-foreground">{t("home.pillars.title")}</h2>
-          <p className="text-[17px] leading-[1.7] text-muted-foreground">
+          <p className="text-lg leading-relaxed text-muted-foreground">
             {t("home.pillars.subtitle")}
           </p>
         </div>
@@ -164,7 +159,7 @@ function WhyCredentialed() {
                 {String(i + 1).padStart(2, "0")}
               </span>
               <h3 className="mt-5 text-lg font-semibold text-foreground">{p.title}</h3>
-              <p className="mt-3 text-sm leading-[1.7] text-muted-foreground">{p.desc}</p>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{p.desc}</p>
             </div>
           ))}
         </div>
@@ -348,7 +343,7 @@ function Events() {
                   {e.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="inline-flex items-center rounded-full border border-border bg-chip px-2.5 py-1 text-[11px] font-semibold text-chip-foreground"
+                      className="inline-flex items-center rounded-full border border-border bg-chip px-2.5 py-1 text-xs font-semibold text-chip-foreground"
                     >
                       {tag}
                     </span>
