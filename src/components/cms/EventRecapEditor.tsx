@@ -72,13 +72,7 @@ async function webRendition(file: File): Promise<Blob> {
   );
 }
 
-export function EventRecapEditor({
-  eventId,
-  t,
-}: {
-  eventId: string;
-  t: (key: string) => string;
-}) {
+export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: string) => string }) {
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<"draft" | "published">("draft");
   const [language, setLanguage] = useState("en");
@@ -105,7 +99,6 @@ export function EventRecapEditor({
     if (!raw || /duplicate key value|unique constraint/i.test(raw)) return t(fallbackKey);
     return raw;
   };
-
 
   const load = useCallback(async () => {
     const data = await getManagedRecap({ data: { eventId } });
@@ -170,7 +163,6 @@ export function EventRecapEditor({
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [load]);
-
 
   const run = async (key: string, action: () => Promise<void>, done?: string) => {
     setBusy(key);
@@ -557,7 +549,9 @@ export function EventRecapEditor({
               run(
                 "linkedin",
                 async () => {
-                  await publishRecapToLinkedIn({ data: { eventId, commentary: commentary.trim() } });
+                  await publishRecapToLinkedIn({
+                    data: { eventId, commentary: commentary.trim() },
+                  });
                   await load();
                 },
                 t("recap.linkedinPosted"),

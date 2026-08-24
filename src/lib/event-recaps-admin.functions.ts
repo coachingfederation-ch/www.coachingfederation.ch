@@ -110,7 +110,6 @@ async function ensureRecap(
   return raced.id as string;
 }
 
-
 /** The recap, its gallery, its attachments and its translations, for staff. */
 export const getManagedRecap = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -369,9 +368,7 @@ export const translateRecap = createServerFn({ method: "POST" })
 export const publishRecapToLinkedIn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
-    eventInput
-      .extend({ commentary: z.string().trim().min(1).max(3000) })
-      .parse(data),
+    eventInput.extend({ commentary: z.string().trim().min(1).max(3000) }).parse(data),
   )
   .handler(async ({ data, context }) => {
     const { assertLinkedInPublisher } = await import("./linkedin-authz");
