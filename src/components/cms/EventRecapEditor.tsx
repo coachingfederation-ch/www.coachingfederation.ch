@@ -74,7 +74,20 @@ async function webRendition(file: File): Promise<Blob> {
   );
 }
 
-export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: string) => string }) {
+export function EventRecapEditor({
+  eventId,
+  eventStartsAt,
+  t,
+}: {
+  eventId: string;
+  eventStartsAt: string;
+  t: (key: string) => string;
+}) {
+  // The recap is post-event editorial work, so the panel stays collapsed
+  // (title-only) until the event date has passed. Staff can expand it early.
+  const eventPassed = new Date(eventStartsAt).getTime() < Date.now();
+  const [expanded, setExpanded] = useState(eventPassed);
+
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<"draft" | "published">("draft");
   const [language, setLanguage] = useState("en");
