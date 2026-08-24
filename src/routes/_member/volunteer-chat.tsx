@@ -151,6 +151,21 @@ function VolunteerChatPage() {
         .maybeSingle();
       setName(row?.display_name || status.displayName || (user.email ?? "").split("@")[0] || "");
       setOnline(Boolean(row?.is_online));
+
+      // iOS wrapper: register the APNs device token and hand the access token
+      // to the native bridge so it can poll for waiting chats in the background.
+      const token = window.__icfPushToken;
+      if (token) {
+        await registerApnsDeviceToken({ data: { token } }).catch(() => undefined);
+      }
+      const bridge = window.webkit?.messageHandlers?.nativeBridge;
+      if (bridge) {
+        const { data: session } = await supabase.auth.getSession();
+        bridge.postMessage({
+          type: "authState",
+          token: session.session?.access_token ?? null,
+        });
+      }
     })();
   }, []);
 
