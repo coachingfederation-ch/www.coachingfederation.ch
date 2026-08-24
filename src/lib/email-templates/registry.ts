@@ -30,6 +30,7 @@ import { template as eventWaitlistInvitation } from "./event-waitlist-invitation
 import { template as eventInvitation } from "./event-invitation";
 import { template as eventReminder } from "./event-reminder";
 import { template as eventFollowUpInvitation } from "./event-follow-up-invitation";
+import { template as eventRecapThanks } from "./event-recap-thanks";
 import { template as internalInvitation } from "./internal-invitation";
 import { template as newsletterRefresh } from "./newsletter-refresh";
 import { template as newsletterEdition } from "./newsletter-edition";
