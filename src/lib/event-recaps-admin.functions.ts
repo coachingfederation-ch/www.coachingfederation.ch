@@ -123,7 +123,7 @@ export const getManagedRecap = createServerFn({ method: "POST" })
         context.supabase
           .from("event_recaps")
           .select(
-            "id, event_id, status, language, headline, body, downloads_audience, published_at, content_updated_at",
+            "id, event_id, status, language, headline, body, downloads_audience, published_at, content_updated_at, recap_email_last_sent_at",
           )
           .eq("id", recapId)
           .single(),
@@ -154,6 +154,7 @@ export const getManagedRecap = createServerFn({ method: "POST" })
     );
 
     const { latestRecapLinkedInPost } = await import("./event-recap-linkedin.server");
+    const { recapThanksAudience } = await import("./event-recap-email.server");
 
     return {
       recap,
@@ -164,6 +165,7 @@ export const getManagedRecap = createServerFn({ method: "POST" })
       files: files ?? [],
       translations: translations ?? [],
       linkedin: await latestRecapLinkedInPost(recapId),
+      thanks: await recapThanksAudience(data.eventId),
     };
   });
 
@@ -389,4 +391,50 @@ export const publishRecapToLinkedIn = createServerFn({ method: "POST" })
       commentary: data.commentary,
       userId,
     });
+  });
+
+const noteInput = eventInput.extend({
+  personalNote: z.string().trim().max(400).nullable().default(null),
+});
+
+/**
+ * Mails the thank-you note to every attendee who has not had it yet.
+ * Irreversible, so the recap must be published first — the send module
+ * re-checks that as well.
+ */
+export const sendRecapThanksEmail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => noteInput.parse(data))
+  .handler(async ({ data, context }) => {
+    await assertOrganizer(context);
+    // The recap row is read through the caller's client first: if the rules do
+    // not let them see this event's recap, the admin-powered send never starts.
+    const { data: recap, error } = await context.supabase
+      .from("event_recaps")
+      .select("id, status")
+      .eq("event_id", data.eventId)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!recap) throw new Error("There is no recap for this event yet.");
+    if (recap.status !== "published")
+      throw new Error("Publish the recap before mailing the attendees.");
+
+    const { sendRecapThanks } = await import("./event-recap-email.server");
+    return sendRecapThanks(data.eventId, data.personalNote);
+  });
+
+/** Sends the same mail to the signed-in staff member only. */
+export const previewRecapThanksEmail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    noteInput.extend({ locale: z.enum(["de", "fr", "it", "en"]).default("en") }).parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    await assertOrganizer(context);
+    const to = (context.claims as { email?: string }).email;
+    if (!to) throw new Error("Your account has no email address to preview to.");
+
+    const { previewRecapThanks } = await import("./event-recap-email.server");
+    const result = await previewRecapThanks(data.eventId, to, data.locale, data.personalNote);
+    return { ...result, to };
   });

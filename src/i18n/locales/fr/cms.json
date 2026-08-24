@@ -1542,7 +1542,18 @@
       "linkedinPublish": "Publier le carrousel",
       "linkedinPosting": "Publication…",
       "linkedinPosted": "Publié sur LinkedIn.",
-      "linkedinView": "Voir la publication"
+      "linkedinView": "Voir la publication",
+      "thanks": "E-mail de remerciement aux participants",
+      "thanksHint": "Un court message avec le lien vers le récit, une fois par personne. Publiez d'abord le récit.",
+      "thanksAudience": "{total} participants, {pending} restent à contacter.",
+      "thanksLastSent": "Dernier envoi {date}.",
+      "thanksNotePlaceholder": "Ligne personnelle facultative, au-dessus du lien…",
+      "thanksConfirm": "Envoyer l'e-mail de remerciement à {count} participants maintenant ?",
+      "thanksSend": "Envoyer l'e-mail de remerciement",
+      "thanksSending": "Envoi…",
+      "thanksPreview": "M'envoyer un aperçu",
+      "thanksPreviewSent": "Aperçu envoyé à {email}.",
+      "thanksResult": "Envoyés {sent}, échecs {failed}, restants {remaining}."
     }
   },
   "eventTranslations": {

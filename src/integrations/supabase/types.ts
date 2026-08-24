@@ -1999,6 +1999,7 @@ export type Database = {
           id: string
           language: Database["public"]["Enums"]["article_lang"]
           published_at: string | null
+          recap_email_last_sent_at: string | null
           status: string
           updated_at: string
         }
@@ -2013,6 +2014,7 @@ export type Database = {
           id?: string
           language?: Database["public"]["Enums"]["article_lang"]
           published_at?: string | null
+          recap_email_last_sent_at?: string | null
           status?: string
           updated_at?: string
         }
@@ -2027,6 +2029,7 @@ export type Database = {
           id?: string
           language?: Database["public"]["Enums"]["article_lang"]
           published_at?: string | null
+          recap_email_last_sent_at?: string | null
           status?: string
           updated_at?: string
         }
@@ -2080,6 +2083,7 @@ export type Database = {
           notes: string | null
           payment_environment: string | null
           payment_status: Database["public"]["Enums"]["event_payment_status"]
+          recap_email_sent_at: string | null
           refund_amount_cents: number
           refund_error: string | null
           refund_status: string
@@ -2125,6 +2129,7 @@ export type Database = {
           notes?: string | null
           payment_environment?: string | null
           payment_status?: Database["public"]["Enums"]["event_payment_status"]
+          recap_email_sent_at?: string | null
           refund_amount_cents?: number
           refund_error?: string | null
           refund_status?: string
@@ -2170,6 +2175,7 @@ export type Database = {
           notes?: string | null
           payment_environment?: string | null
           payment_status?: Database["public"]["Enums"]["event_payment_status"]
+          recap_email_sent_at?: string | null
           refund_amount_cents?: number
           refund_error?: string | null
           refund_status?: string

@@ -19,10 +19,12 @@ import { RECAP_AUDIENCES, formatFileSize, recapAssetPath } from "@/lib/event-rec
 import type { RecapAudience } from "@/lib/event-recaps";
 import {
   getManagedRecap,
+  previewRecapThanksEmail,
   publishRecapToLinkedIn,
   saveRecap,
   saveRecapFiles,
   saveRecapPhotos,
+  sendRecapThanksEmail,
   setRecapStatus,
   translateRecap,
 } from "@/lib/event-recaps-admin.functions";
@@ -88,6 +90,12 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
     error_message: string | null;
   } | null>(null);
   const [commentary, setCommentary] = useState("");
+  const [thanks, setThanks] = useState<{ total: number; pending: number }>({
+    total: 0,
+    pending: 0,
+  });
+  const [thanksLastSent, setThanksLastSent] = useState<string | null>(null);
+  const [personalNote, setPersonalNote] = useState("");
 
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -108,12 +116,15 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
       headline: string | null;
       body: string | null;
       downloads_audience: RecapAudience;
+      recap_email_last_sent_at: string | null;
     };
     setStatus(recap.status);
     setLanguage(recap.language);
     setHeadline(recap.headline ?? "");
     setBody(recap.body ?? "");
     setAudience(recap.downloads_audience);
+    setThanksLastSent(recap.recap_email_last_sent_at ?? null);
+    setThanks((data.thanks as { total: number; pending: number }) ?? { total: 0, pending: 0 });
     setPhotos(
       (data.photos as Record<string, unknown>[]).map((p) => ({
         id: p["id"] as string,
@@ -574,6 +585,89 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
           {linkedin?.status === "failed" && linkedin.error_message ? (
             <span className="text-xs text-destructive">{linkedin.error_message}</span>
           ) : null}
+        </div>
+      </div>
+
+      {/* Thank-you email to the attendees */}
+      <div className="mt-8 border-t border-border pt-6">
+        <h3 className="text-sm font-bold uppercase tracking-wide text-muted-foreground">
+          {t("recap.thanks")}
+        </h3>
+        <p className="mt-1 text-xs text-muted-foreground">{t("recap.thanksHint")}</p>
+        <p className="mt-2 text-sm text-foreground">
+          {t("recap.thanksAudience")
+            .replace("{total}", String(thanks.total))
+            .replace("{pending}", String(thanks.pending))}
+        </p>
+        {thanksLastSent ? (
+          <p className="mt-1 text-xs text-muted-foreground">
+            {t("recap.thanksLastSent").replace(
+              "{date}",
+              new Date(thanksLastSent).toLocaleString("de-CH"),
+            )}
+          </p>
+        ) : null}
+        <textarea
+          value={personalNote}
+          onChange={(e) => setPersonalNote(e.target.value)}
+          rows={3}
+          maxLength={400}
+          placeholder={t("recap.thanksNotePlaceholder")}
+          className="mt-3 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+        />
+        <div className="mt-2 flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            disabled={busy !== null || status !== "published" || thanks.pending === 0}
+            onClick={() => {
+              if (
+                !window.confirm(t("recap.thanksConfirm").replace("{count}", String(thanks.pending)))
+              )
+                return;
+              void run(
+                "thanks",
+                async () => {
+                  const result = await sendRecapThanksEmail({
+                    data: { eventId, personalNote: personalNote.trim() || null },
+                  });
+                  await load();
+                  setMessage(
+                    t("recap.thanksResult")
+                      .replace("{sent}", String(result.sent))
+                      .replace("{failed}", String(result.failed))
+                      .replace("{remaining}", String(result.remaining)),
+                  );
+                },
+                undefined,
+              );
+            }}
+            className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+          >
+            {busy === "thanks" ? t("recap.thanksSending") : t("recap.thanksSend")}
+          </button>
+          <button
+            type="button"
+            disabled={busy !== null || status !== "published"}
+            onClick={() =>
+              run("thanks-preview", async () => {
+                const result = await previewRecapThanksEmail({
+                  data: {
+                    eventId,
+                    personalNote: personalNote.trim() || null,
+                    locale: (["de", "fr", "it", "en"].includes(language) ? language : "en") as
+                      | "de"
+                      | "fr"
+                      | "it"
+                      | "en",
+                  },
+                });
+                setMessage(t("recap.thanksPreviewSent").replace("{email}", result.to));
+              })
+            }
+            className="rounded-full border border-input px-5 py-2 text-sm font-semibold disabled:opacity-60"
+          >
+            {busy === "thanks-preview" ? t("recap.thanksSending") : t("recap.thanksPreview")}
+          </button>
         </div>
       </div>
     </Section>
