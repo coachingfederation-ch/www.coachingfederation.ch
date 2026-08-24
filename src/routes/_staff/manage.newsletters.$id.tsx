@@ -16,6 +16,8 @@ import { Shell } from "@/components/cms/Shell";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import { BlockImageField } from "@/components/cms/BlockImageField";
 import { NewsletterPreviewDialog } from "@/components/cms/NewsletterPreviewDialog";
+import { NewsletterSendPanel } from "@/components/cms/NewsletterSendPanel";
+
 import { ARTICLE_ROLES, requireStaffAccess } from "@/lib/staff-guard";
 import { Button, Input, Label, Switch } from "@/design-system/icf-welcome-design-system-a835df";
 import {
