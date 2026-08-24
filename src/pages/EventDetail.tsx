@@ -28,6 +28,9 @@ import type { EventHost } from "@/lib/event-hosts";
 import { eventMap } from "@/lib/event-map";
 import { useTrackView } from "@/lib/plausible";
 import { getMyRegistration } from "@/lib/events.functions";
+import { EventRecap } from "@/components/events/EventRecap";
+import type { PublicRecap } from "@/lib/event-recaps";
+import { SITE_URL, localizePath } from "@/i18n/config";
 
 /*
  * Decoration for the hero band. The marks are picked from the event slug
@@ -79,7 +82,7 @@ export function EventFallback({ titleKey, bodyKey }: { titleKey: string; bodyKey
 export default function EventDetailPage({
   event,
 }: {
-  event: PublicEvent & { hosts?: EventHost[] };
+  event: PublicEvent & { hosts?: EventHost[]; recap?: PublicRecap | null };
 }) {
   const { t, locale } = useI18n();
   useTrackView("Event View", event.slug ?? event.id ?? "", {
@@ -304,6 +307,18 @@ export default function EventDetailPage({
             {past ? null : <AddToCalendarMenu event={event} className="mt-4" />}
           </div>
         </div>
+
+        {/* The recap only exists once the chapter published one, which is what
+            turns a finished event into an editorial page. */}
+        {event.recap ? (
+          <EventRecap
+            recap={event.recap}
+            eventId={event.id!}
+            eventTitle={event.title ?? ""}
+            shareUrl={`${SITE_URL}${localizePath(`/events/${event.slug ?? ""}`, locale)}`}
+            signedIn={signedIn}
+          />
+        ) : null}
       </main>
       <SiteFooter />
     </div>

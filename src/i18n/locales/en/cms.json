@@ -743,7 +743,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
+          "items": [
+            "Lead projects",
+            "Be recognized by ICFS for leading initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1494,6 +1497,52 @@
         "afterHint": "The full editor opens next — hosts, translations, hero design and tickets live there.",
         "noExtras": "None"
       }
+    },
+    "recap": {
+      "title": "After event recap",
+      "hint": "The story, the gallery and the downloads shown on the public event page once you publish them.",
+      "loading": "Loading the recap…",
+      "loadError": "Could not load the recap.",
+      "saveError": "Could not save the recap.",
+      "saved": "Recap saved.",
+      "saving": "Saving…",
+      "save": "Save recap",
+      "status": {
+        "draft": "Draft",
+        "published": "Published"
+      },
+      "publish": "Publish recap",
+      "unpublish": "Withdraw recap",
+      "fieldHeadline": "Headline",
+      "fieldBody": "Story",
+      "fieldAudience": "Who may download the originals",
+      "audience": {
+        "attendees": "Attendees of this event",
+        "members": "All members (and attendees)",
+        "public": "Everyone"
+      },
+      "gallery": "Photo gallery",
+      "galleryHint": "Each picture is stored twice: a web version for the page and the original for the download bundle.",
+      "addPhotos": "Add photos",
+      "uploading": "Uploading…",
+      "fieldCaption": "Caption",
+      "fieldAlt": "Alt text",
+      "fieldAi": "AI generated",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "remove": "Remove",
+      "files": "Files",
+      "filesHint": "Slides, handouts and similar. Only downloadable by the audience selected above.",
+      "addFiles": "Add files",
+      "translations": "Translations",
+      "translated": "Translation saved.",
+      "linkedin": "Publish to LinkedIn",
+      "linkedinHint": "Posts the gallery as a carousel on the chapter page. Publish the recap first.",
+      "linkedinPlaceholder": "Write the post text…",
+      "linkedinPublish": "Publish carousel",
+      "linkedinPosting": "Publishing…",
+      "linkedinPosted": "Posted to LinkedIn.",
+      "linkedinView": "View the post"
     }
   },
   "eventTranslations": {

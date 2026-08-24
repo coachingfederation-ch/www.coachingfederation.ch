@@ -56,3 +56,26 @@ export const PROFILE_IMAGE_PREVIEW_TTL_SECONDS = 60 * 60;
  * the stand-in for a public bucket or an image proxy. See docs/tech-debt.md.
  */
 export const ARTICLE_IMAGE_TTL_SECONDS = 60 * 60 * 24 * 365 * 10;
+
+/**
+ * Event media: recap galleries and attendee downloads. Private bucket — the
+ * web-sized gallery pictures are signed server-side for everyone, the original
+ * photos and the attachments only after an entitlement check.
+ */
+export const EVENT_MEDIA_BUCKET = "event-media";
+
+/**
+ * Recap gallery pictures: 24h.
+ *
+ * Signed on every render of the event page, so a day-long window is generous
+ * while keeping links from outliving an unpublish.
+ */
+export const EVENT_RECAP_PHOTO_TTL_SECONDS = 60 * 60 * 24;
+
+/**
+ * Gated downloads (original photos, attachments): 10 minutes.
+ *
+ * Minted for one click by a caller we just verified as an attendee or member,
+ * so the link must not be shareable in any meaningful way.
+ */
+export const EVENT_RECAP_DOWNLOAD_TTL_SECONDS = 10 * 60;

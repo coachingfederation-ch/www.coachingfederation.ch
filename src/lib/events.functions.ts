@@ -234,11 +234,17 @@ export const getPublicEvent = createServerFn({ method: "GET" })
     if (!event) return null;
 
     const { loadEventHosts } = await import("./event-hosts.server");
-    const hosts = event.id ? await loadEventHosts(event.id) : [];
-
+    const { loadPublicRecap } = await import("./event-recaps.server");
     const locale = data.locale ?? "en";
+    // The recap travels with the event so the "after event" story is server
+    // rendered — it is editorial content and has to be indexable.
+    const [hosts, recap] = await Promise.all([
+      event.id ? loadEventHosts(event.id) : Promise.resolve([]),
+      event.id ? loadPublicRecap(supabase, event.id, locale) : Promise.resolve(null),
+    ]);
+
     if (!event.id || event.language === locale) {
-      return { ...event, hosts, resolvedLocale: event.language ?? locale };
+      return { ...event, hosts, recap, resolvedLocale: event.language ?? locale };
     }
     const { data: tr } = await supabase
       .from("event_translations")
@@ -246,7 +252,11 @@ export const getPublicEvent = createServerFn({ method: "GET" })
       .eq("event_id", event.id)
       .eq("locale", locale)
       .maybeSingle();
-    return { ...applyTranslation(event, (tr as EventTranslation | null) ?? undefined), hosts };
+    return {
+      ...applyTranslation(event, (tr as EventTranslation | null) ?? undefined),
+      hosts,
+      recap,
+    };
   });
 
 /**

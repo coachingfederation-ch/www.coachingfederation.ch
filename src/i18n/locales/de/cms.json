@@ -743,7 +743,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
+          "items": [
+            "Projekte leiten",
+            "Von ICFS für die Leitung von Initiativen anerkannt werden"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1494,6 +1497,52 @@
         "afterHint": "Danach öffnet der volle Editor — Hosts, Übersetzungen, Hero-Design und Tickets sind dort.",
         "noExtras": "Keine"
       }
+    },
+    "recap": {
+      "title": "Rückblick nach dem Anlass",
+      "hint": "Text, Galerie und Downloads, die nach dem Publizieren auf der öffentlichen Anlassseite erscheinen.",
+      "loading": "Rückblick wird geladen…",
+      "loadError": "Der Rückblick konnte nicht geladen werden.",
+      "saveError": "Der Rückblick konnte nicht gespeichert werden.",
+      "saved": "Rückblick gespeichert.",
+      "saving": "Wird gespeichert…",
+      "save": "Rückblick speichern",
+      "status": {
+        "draft": "Entwurf",
+        "published": "Publiziert"
+      },
+      "publish": "Rückblick publizieren",
+      "unpublish": "Rückblick zurückziehen",
+      "fieldHeadline": "Titel",
+      "fieldBody": "Text",
+      "fieldAudience": "Wer darf die Originale herunterladen",
+      "audience": {
+        "attendees": "Teilnehmende dieses Anlasses",
+        "members": "Alle Mitglieder (und Teilnehmende)",
+        "public": "Alle"
+      },
+      "gallery": "Fotogalerie",
+      "galleryHint": "Jedes Bild wird zweimal gespeichert: eine Webversion für die Seite und das Original für den Download.",
+      "addPhotos": "Fotos hinzufügen",
+      "uploading": "Wird hochgeladen…",
+      "fieldCaption": "Bildlegende",
+      "fieldAlt": "Alternativtext",
+      "fieldAi": "KI-generiert",
+      "moveUp": "Nach oben",
+      "moveDown": "Nach unten",
+      "remove": "Entfernen",
+      "files": "Dateien",
+      "filesHint": "Folien, Unterlagen und Ähnliches. Nur für das oben gewählte Publikum herunterladbar.",
+      "addFiles": "Dateien hinzufügen",
+      "translations": "Übersetzungen",
+      "translated": "Übersetzung gespeichert.",
+      "linkedin": "Auf LinkedIn publizieren",
+      "linkedinHint": "Publiziert die Galerie als Karussell auf der Chapter-Seite. Publizieren Sie zuerst den Rückblick.",
+      "linkedinPlaceholder": "Text für den Beitrag schreiben…",
+      "linkedinPublish": "Karussell publizieren",
+      "linkedinPosting": "Wird publiziert…",
+      "linkedinPosted": "Auf LinkedIn publiziert.",
+      "linkedinView": "Beitrag ansehen"
     }
   },
   "eventTranslations": {

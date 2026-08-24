@@ -1808,6 +1808,245 @@ export type Database = {
           },
         ]
       }
+      event_recap_files: {
+        Row: {
+          content_type: string | null
+          created_at: string
+          filename: string
+          id: string
+          label: string | null
+          path: string
+          recap_id: string
+          size_bytes: number | null
+          sort_order: number
+        }
+        Insert: {
+          content_type?: string | null
+          created_at?: string
+          filename: string
+          id?: string
+          label?: string | null
+          path: string
+          recap_id: string
+          size_bytes?: number | null
+          sort_order?: number
+        }
+        Update: {
+          content_type?: string | null
+          created_at?: string
+          filename?: string
+          id?: string
+          label?: string | null
+          path?: string
+          recap_id?: string
+          size_bytes?: number | null
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_recap_files_recap_id_fkey"
+            columns: ["recap_id"]
+            isOneToOne: false
+            referencedRelation: "event_recaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_recap_linkedin_posts: {
+        Row: {
+          commentary: string
+          created_at: string
+          created_by: string | null
+          error_message: string | null
+          id: string
+          image_count: number
+          linkedin_post_url: string | null
+          linkedin_post_urn: string | null
+          posted_at: string | null
+          recap_id: string
+          status: Database["public"]["Enums"]["linkedin_post_status"]
+          updated_at: string
+        }
+        Insert: {
+          commentary: string
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          id?: string
+          image_count?: number
+          linkedin_post_url?: string | null
+          linkedin_post_urn?: string | null
+          posted_at?: string | null
+          recap_id: string
+          status?: Database["public"]["Enums"]["linkedin_post_status"]
+          updated_at?: string
+        }
+        Update: {
+          commentary?: string
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          id?: string
+          image_count?: number
+          linkedin_post_url?: string | null
+          linkedin_post_urn?: string | null
+          posted_at?: string | null
+          recap_id?: string
+          status?: Database["public"]["Enums"]["linkedin_post_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_recap_linkedin_posts_recap_id_fkey"
+            columns: ["recap_id"]
+            isOneToOne: false
+            referencedRelation: "event_recaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_recap_photos: {
+        Row: {
+          alt: string | null
+          caption: string | null
+          created_at: string
+          id: string
+          is_ai: boolean
+          original_path: string | null
+          recap_id: string
+          sort_order: number
+          web_path: string
+        }
+        Insert: {
+          alt?: string | null
+          caption?: string | null
+          created_at?: string
+          id?: string
+          is_ai?: boolean
+          original_path?: string | null
+          recap_id: string
+          sort_order?: number
+          web_path: string
+        }
+        Update: {
+          alt?: string | null
+          caption?: string | null
+          created_at?: string
+          id?: string
+          is_ai?: boolean
+          original_path?: string | null
+          recap_id?: string
+          sort_order?: number
+          web_path?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_recap_photos_recap_id_fkey"
+            columns: ["recap_id"]
+            isOneToOne: false
+            referencedRelation: "event_recaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_recap_translations: {
+        Row: {
+          body: string | null
+          headline: string | null
+          locale: Database["public"]["Enums"]["article_lang"]
+          manually_edited: boolean
+          recap_id: string
+          source_updated_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          headline?: string | null
+          locale: Database["public"]["Enums"]["article_lang"]
+          manually_edited?: boolean
+          recap_id: string
+          source_updated_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          headline?: string | null
+          locale?: Database["public"]["Enums"]["article_lang"]
+          manually_edited?: boolean
+          recap_id?: string
+          source_updated_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_recap_translations_recap_id_fkey"
+            columns: ["recap_id"]
+            isOneToOne: false
+            referencedRelation: "event_recaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_recaps: {
+        Row: {
+          body: string | null
+          content_updated_at: string
+          created_at: string
+          created_by: string | null
+          downloads_audience: Database["public"]["Enums"]["event_recap_audience"]
+          event_id: string
+          headline: string | null
+          id: string
+          language: Database["public"]["Enums"]["article_lang"]
+          published_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          content_updated_at?: string
+          created_at?: string
+          created_by?: string | null
+          downloads_audience?: Database["public"]["Enums"]["event_recap_audience"]
+          event_id: string
+          headline?: string | null
+          id?: string
+          language?: Database["public"]["Enums"]["article_lang"]
+          published_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          content_updated_at?: string
+          created_at?: string
+          created_by?: string | null
+          downloads_audience?: Database["public"]["Enums"]["event_recap_audience"]
+          event_id?: string
+          headline?: string | null
+          id?: string
+          language?: Database["public"]["Enums"]["article_lang"]
+          published_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_recaps_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: true
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_recaps_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: true
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_registrations: {
         Row: {
           amount_cents: number
@@ -4771,6 +5010,7 @@ export type Database = {
         | "separate_conference_process"
       event_location_mode: "in_person" | "online" | "hybrid"
       event_payment_status: "not_required" | "pending" | "paid" | "expired"
+      event_recap_audience: "attendees" | "members" | "public"
       event_registration_mode:
         | "none"
         | "rsvp"
@@ -4963,6 +5203,7 @@ export const Constants = {
       ],
       event_location_mode: ["in_person", "online", "hybrid"],
       event_payment_status: ["not_required", "pending", "paid", "expired"],
+      event_recap_audience: ["attendees", "members", "public"],
       event_registration_mode: [
         "none",
         "rsvp",

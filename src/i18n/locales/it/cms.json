@@ -743,7 +743,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
+          "items": [
+            "Guidare progetti",
+            "Essere riconosciuti da ICFS per aver guidato iniziative"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1494,6 +1497,52 @@
         "afterHint": "Poi si apre l'editor completo: host, traduzioni, hero design e biglietti sono lì.",
         "noExtras": "Nessuno"
       }
+    },
+    "recap": {
+      "title": "Resoconto dopo l'evento",
+      "hint": "Testo, galleria e download mostrati sulla pagina pubblica dell'evento una volta pubblicati.",
+      "loading": "Caricamento del resoconto…",
+      "loadError": "Impossibile caricare il resoconto.",
+      "saveError": "Impossibile salvare il resoconto.",
+      "saved": "Resoconto salvato.",
+      "saving": "Salvataggio…",
+      "save": "Salva il resoconto",
+      "status": {
+        "draft": "Bozza",
+        "published": "Pubblicato"
+      },
+      "publish": "Pubblica il resoconto",
+      "unpublish": "Ritira il resoconto",
+      "fieldHeadline": "Titolo",
+      "fieldBody": "Testo",
+      "fieldAudience": "Chi può scaricare gli originali",
+      "audience": {
+        "attendees": "Chi ha partecipato a questo evento",
+        "members": "Tutti i membri (e i partecipanti)",
+        "public": "Tutti"
+      },
+      "gallery": "Galleria fotografica",
+      "galleryHint": "Ogni immagine viene salvata due volte: una versione web per la pagina e l'originale per il download.",
+      "addPhotos": "Aggiungi foto",
+      "uploading": "Caricamento…",
+      "fieldCaption": "Didascalia",
+      "fieldAlt": "Testo alternativo",
+      "fieldAi": "Generata con IA",
+      "moveUp": "Sposta su",
+      "moveDown": "Sposta giù",
+      "remove": "Rimuovi",
+      "files": "File",
+      "filesHint": "Slide, dispense e simili. Scaricabili solo dal pubblico scelto sopra.",
+      "addFiles": "Aggiungi file",
+      "translations": "Traduzioni",
+      "translated": "Traduzione salvata.",
+      "linkedin": "Pubblica su LinkedIn",
+      "linkedinHint": "Pubblica la galleria come carosello sulla pagina del chapter. Pubblica prima il resoconto.",
+      "linkedinPlaceholder": "Scrivi il testo del post…",
+      "linkedinPublish": "Pubblica il carosello",
+      "linkedinPosting": "Pubblicazione…",
+      "linkedinPosted": "Pubblicato su LinkedIn.",
+      "linkedinView": "Vedi il post"
     }
   },
   "eventTranslations": {

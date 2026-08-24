@@ -26,6 +26,7 @@ import { EventDiscountCodesSection } from "@/components/cms/EventDiscountCodesSe
 import { EventWaitlistSection } from "@/components/cms/EventWaitlistSection";
 import { EventInvitationsSection } from "@/components/cms/EventInvitationsSection";
 import { EventFormsSection } from "@/components/cms/EventFormsSection";
+import { EventRecapEditor } from "@/components/cms/EventRecapEditor";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { takeWizardExtras } from "@/lib/event-wizard-extras";
 import { useCms } from "@/i18n/cms";
@@ -437,6 +438,9 @@ function EventEditor() {
                   }}
                 />
               ) : null}
+              {/* The recap closes the loop: last panel, because it is written
+                  after the event has actually happened. */}
+              <EventRecapEditor eventId={event.id} t={(key) => t(`events.${key}`)} />
             </>
           }
           t={t}

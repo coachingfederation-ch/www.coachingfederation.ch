@@ -743,7 +743,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
+          "items": [
+            "Piloter des projets",
+            "Être reconnu par ICFS pour avoir mené des initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1494,6 +1497,52 @@
         "afterHint": "L'éditeur complet s'ouvre ensuite — hôtes, traductions, design du hero et billets s'y trouvent.",
         "noExtras": "Aucune"
       }
+    },
+    "recap": {
+      "title": "Rétrospective après l'événement",
+      "hint": "Le texte, la galerie et les téléchargements affichés sur la page publique une fois publiés.",
+      "loading": "Chargement de la rétrospective…",
+      "loadError": "Impossible de charger la rétrospective.",
+      "saveError": "Impossible d'enregistrer la rétrospective.",
+      "saved": "Rétrospective enregistrée.",
+      "saving": "Enregistrement…",
+      "save": "Enregistrer la rétrospective",
+      "status": {
+        "draft": "Brouillon",
+        "published": "Publiée"
+      },
+      "publish": "Publier la rétrospective",
+      "unpublish": "Retirer la rétrospective",
+      "fieldHeadline": "Titre",
+      "fieldBody": "Texte",
+      "fieldAudience": "Qui peut télécharger les originaux",
+      "audience": {
+        "attendees": "Personnes présentes à cet événement",
+        "members": "Tous les membres (et les personnes présentes)",
+        "public": "Tout le monde"
+      },
+      "gallery": "Galerie photos",
+      "galleryHint": "Chaque image est stockée deux fois : une version web pour la page et l'original pour le téléchargement.",
+      "addPhotos": "Ajouter des photos",
+      "uploading": "Téléversement…",
+      "fieldCaption": "Légende",
+      "fieldAlt": "Texte alternatif",
+      "fieldAi": "Générée par IA",
+      "moveUp": "Monter",
+      "moveDown": "Descendre",
+      "remove": "Supprimer",
+      "files": "Fichiers",
+      "filesHint": "Diapositives, documents et similaires. Téléchargeables uniquement par le public choisi ci-dessus.",
+      "addFiles": "Ajouter des fichiers",
+      "translations": "Traductions",
+      "translated": "Traduction enregistrée.",
+      "linkedin": "Publier sur LinkedIn",
+      "linkedinHint": "Publie la galerie en carrousel sur la page du chapitre. Publiez d'abord la rétrospective.",
+      "linkedinPlaceholder": "Rédigez le texte de la publication…",
+      "linkedinPublish": "Publier le carrousel",
+      "linkedinPosting": "Publication…",
+      "linkedinPosted": "Publié sur LinkedIn.",
+      "linkedinView": "Voir la publication"
     }
   },
   "eventTranslations": {
