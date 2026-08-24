@@ -307,6 +307,18 @@ export default function EventDetailPage({
             {past ? null : <AddToCalendarMenu event={event} className="mt-4" />}
           </div>
         </div>
+
+        {/* The recap only exists once the chapter published one, which is what
+            turns a finished event into an editorial page. */}
+        {event.recap ? (
+          <EventRecap
+            recap={event.recap}
+            eventId={event.id!}
+            eventTitle={event.title ?? ""}
+            shareUrl={`${SITE_URL}${localizePath(`/events/${event.slug ?? ""}`, locale)}`}
+            signedIn={signedIn}
+          />
+        ) : null}
       </main>
       <SiteFooter />
     </div>
