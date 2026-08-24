@@ -663,7 +663,7 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
                       | "en",
                   },
                 });
-                setMessage(t("recap.thanksPreviewSent", { email: result.to }));
+                setMessage(t("recap.thanksPreviewSent").replace("{email}", result.to));
               })
             }
             className="rounded-full border border-input px-5 py-2 text-sm font-semibold disabled:opacity-60"
