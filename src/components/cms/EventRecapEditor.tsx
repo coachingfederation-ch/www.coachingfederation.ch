@@ -9,7 +9,7 @@
  * stored twice: a web-sized rendition for the page and the untouched original
  * for the download bundle.
  */
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Loader2, Trash2 } from "lucide-react";
 import { Section } from "./EventEditorSections";
 import { MarkdownEditor } from "./MarkdownEditor";
@@ -72,13 +72,7 @@ async function webRendition(file: File): Promise<Blob> {
   );
 }
 
-export function EventRecapEditor({
-  eventId,
-  t,
-}: {
-  eventId: string;
-  t: (key: string) => string;
-}) {
+export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: string) => string }) {
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<"draft" | "published">("draft");
   const [language, setLanguage] = useState("en");
@@ -98,6 +92,13 @@ export function EventRecapEditor({
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  /** Raw Postgres constraint text never reaches staff. */
+  const friendlyError = (e: unknown, fallbackKey: string) => {
+    const raw = e instanceof Error ? e.message : "";
+    if (!raw || /duplicate key value|unique constraint/i.test(raw)) return t(fallbackKey);
+    return raw;
+  };
 
   const load = useCallback(async () => {
     const data = await getManagedRecap({ data: { eventId } });
@@ -145,12 +146,23 @@ export function EventRecapEditor({
     setLoading(false);
   }, [eventId]);
 
+  // `t` is not a stable reference, so it stays out of the dependency list and
+  // a ref guards against a second load starting while one is still in flight —
+  // overlapping loads used to race on creating the recap row.
+  const loadingRef = useRef(false);
   useEffect(() => {
-    load().catch((e) => {
-      setError(e instanceof Error ? e.message : t("recap.loadError"));
-      setLoading(false);
-    });
-  }, [load, t]);
+    if (loadingRef.current) return;
+    loadingRef.current = true;
+    load()
+      .catch((e) => {
+        setError(friendlyError(e, "recap.loadError"));
+        setLoading(false);
+      })
+      .finally(() => {
+        loadingRef.current = false;
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [load]);
 
   const run = async (key: string, action: () => Promise<void>, done?: string) => {
     setBusy(key);
@@ -160,7 +172,7 @@ export function EventRecapEditor({
       await action();
       if (done) setMessage(done);
     } catch (e) {
-      setError(e instanceof Error ? e.message : t("recap.saveError"));
+      setError(friendlyError(e, "recap.saveError"));
     } finally {
       setBusy(null);
     }
@@ -537,7 +549,9 @@ export function EventRecapEditor({
               run(
                 "linkedin",
                 async () => {
-                  await publishRecapToLinkedIn({ data: { eventId, commentary: commentary.trim() } });
+                  await publishRecapToLinkedIn({
+                    data: { eventId, commentary: commentary.trim() },
+                  });
                   await load();
                 },
                 t("recap.linkedinPosted"),
