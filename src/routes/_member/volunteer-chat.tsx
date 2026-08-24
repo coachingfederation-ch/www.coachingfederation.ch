@@ -21,7 +21,11 @@ import { Bell, BellOff, ChevronDown, Loader2, Radio, Users, X } from "lucide-rea
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { cn } from "@/lib/utils";
-import { getMyVolunteerStatus } from "@/lib/live-chat-volunteers.functions";
+import {
+  getMyVolunteerStatus,
+  registerApnsDeviceToken,
+  unregisterApnsDeviceToken,
+} from "@/lib/live-chat-volunteers.functions";
 import {
   currentPushState,
   disablePush,
@@ -30,6 +34,20 @@ import {
   playWaitingChime,
   pushSupported,
 } from "@/lib/volunteer-notifications";
+
+/** iOS wrapper bridge (injected only inside the native app shell). */
+type IcfPushPayload = { action?: string };
+declare global {
+  interface Window {
+    __icfPushToken?: string;
+    __icfPushPayload?: IcfPushPayload;
+    webkit?: {
+      messageHandlers?: {
+        nativeBridge?: { postMessage: (message: unknown) => void };
+      };
+    };
+  }
+}
 
 export const Route = createFileRoute("/_member/volunteer-chat")({
   head: () => ({
