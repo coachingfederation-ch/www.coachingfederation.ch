@@ -145,18 +145,20 @@ function ManageEventsPage() {
 
   const filtered = useMemo(() => {
     const term = search.q.trim().toLowerCase();
-    return (rows ?? []).filter((row) => {
-      if (term && !row.title.toLowerCase().includes(term)) return false;
-      if (search.category && row.category_id !== search.category) return false;
-      if (search.community && row.community_id !== search.community) return false;
-      if (search.host && !row.hosts.some((h) => h.id === search.host)) return false;
-      if (search.city) {
-        const isOnline = !row.city || row.city.trim().toLowerCase() === "online";
-        if (search.city === ONLINE_CITY ? !isOnline : row.city !== search.city) return false;
-      }
-      if (search.status && row.status !== search.status) return false;
-      return true;
-    });
+    return (rows ?? [])
+      .filter((row) => {
+        if (term && !row.title.toLowerCase().includes(term)) return false;
+        if (search.category && row.category_id !== search.category) return false;
+        if (search.community && row.community_id !== search.community) return false;
+        if (search.host && !row.hosts.some((h) => h.id === search.host)) return false;
+        if (search.city) {
+          const isOnline = !row.city || row.city.trim().toLowerCase() === "online";
+          if (search.city === ONLINE_CITY ? !isOnline : row.city !== search.city) return false;
+        }
+        if (search.status && row.status !== search.status) return false;
+        return true;
+      })
+      .sort((a, b) => b.starts_at.localeCompare(a.starts_at));
   }, [rows, search]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
