@@ -90,6 +90,14 @@ export async function startConversation(input: {
     // A push outage must never stop a visitor from queueing.
   }
 
+  // Best effort: wake volunteers on iOS via APNs, parallel to web push.
+  try {
+    const { notifyWaitingVisitorApns } = await import("./live-chat-apns.server");
+    await notifyWaitingVisitorApns(input.name.slice(0, 80));
+  } catch {
+    // An APNs outage must never stop a visitor from queueing.
+  }
+
   return { conversationId: data.id, visitorKey };
 }
 
