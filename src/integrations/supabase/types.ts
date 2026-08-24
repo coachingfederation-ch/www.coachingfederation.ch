@@ -2796,6 +2796,27 @@ export type Database = {
         }
         Relationships: []
       }
+      live_chat_apns_subscriptions: {
+        Row: {
+          created_at: string
+          device_token: string
+          platform: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          device_token: string
+          platform?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          device_token?: string
+          platform?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       live_chat_conversations: {
         Row: {
           accepted_at: string | null

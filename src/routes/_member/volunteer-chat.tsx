@@ -21,7 +21,11 @@ import { Bell, BellOff, ChevronDown, Loader2, Radio, Users, X } from "lucide-rea
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { cn } from "@/lib/utils";
-import { getMyVolunteerStatus } from "@/lib/live-chat-volunteers.functions";
+import {
+  getMyVolunteerStatus,
+  registerApnsDeviceToken,
+  unregisterApnsDeviceToken,
+} from "@/lib/live-chat-volunteers.functions";
 import {
   currentPushState,
   disablePush,
@@ -30,6 +34,20 @@ import {
   playWaitingChime,
   pushSupported,
 } from "@/lib/volunteer-notifications";
+
+/** iOS wrapper bridge (injected only inside the native app shell). */
+type IcfPushPayload = { action?: string };
+declare global {
+  interface Window {
+    __icfPushToken?: string;
+    __icfPushPayload?: IcfPushPayload;
+    webkit?: {
+      messageHandlers?: {
+        nativeBridge?: { postMessage: (message: unknown) => void };
+      };
+    };
+  }
+}
 
 export const Route = createFileRoute("/_member/volunteer-chat")({
   head: () => ({
@@ -133,6 +151,21 @@ function VolunteerChatPage() {
         .maybeSingle();
       setName(row?.display_name || status.displayName || (user.email ?? "").split("@")[0] || "");
       setOnline(Boolean(row?.is_online));
+
+      // iOS wrapper: register the APNs device token and hand the access token
+      // to the native bridge so it can poll for waiting chats in the background.
+      const token = window.__icfPushToken;
+      if (token) {
+        await registerApnsDeviceToken({ data: { token } }).catch(() => undefined);
+      }
+      const bridge = window.webkit?.messageHandlers?.nativeBridge;
+      if (bridge) {
+        const { data: session } = await supabase.auth.getSession();
+        bridge.postMessage({
+          type: "authState",
+          token: session.session?.access_token ?? null,
+        });
+      }
     })();
   }, []);
 
@@ -162,6 +195,25 @@ function VolunteerChatPage() {
 
   useEffect(() => {
     void loadLists();
+  }, [loadLists]);
+
+  // iOS wrapper: re-register the APNs token when the app returns to the
+  // foreground (the token can rotate). Skipped when nothing changed.
+  useEffect(() => {
+    if (!userId) return;
+    const onFocus = () => {
+      const token = window.__icfPushToken;
+      if (token) void registerApnsDeviceToken({ data: { token } }).catch(() => undefined);
+    };
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [userId]);
+
+  // iOS wrapper: opened from a push notification — surface the waiting request.
+  useEffect(() => {
+    if (window.__icfPushPayload?.action === "openWaitingChat") {
+      void loadLists();
+    }
   }, [loadLists]);
 
   // Heartbeat: a volunteer who closes the page drops offline within 90s.
