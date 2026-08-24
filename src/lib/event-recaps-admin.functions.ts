@@ -154,6 +154,7 @@ export const getManagedRecap = createServerFn({ method: "POST" })
     );
 
     const { latestRecapLinkedInPost } = await import("./event-recap-linkedin.server");
+    const { recapThanksAudience } = await import("./event-recap-email.server");
 
     return {
       recap,
@@ -164,6 +165,7 @@ export const getManagedRecap = createServerFn({ method: "POST" })
       files: files ?? [],
       translations: translations ?? [],
       linkedin: await latestRecapLinkedInPost(recapId),
+      thanks: await recapThanksAudience(data.eventId),
     };
   });
 
