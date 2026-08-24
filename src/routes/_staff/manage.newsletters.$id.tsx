@@ -466,7 +466,14 @@ function NewsletterEditor() {
           </Button>
         </div>
 
+        <NewsletterSendPanel
+          id={id}
+          defaultSubject={edition.title}
+          canSend={data.permissions.canPublish}
+        />
+
         <NewsletterPreviewDialog id={id} open={previewOpen} onOpenChange={setPreviewOpen} />
+
       </div>
     </Shell>
   );
