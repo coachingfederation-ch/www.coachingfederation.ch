@@ -1542,7 +1542,18 @@
       "linkedinPublish": "Karussell publizieren",
       "linkedinPosting": "Wird publiziert…",
       "linkedinPosted": "Auf LinkedIn publiziert.",
-      "linkedinView": "Beitrag ansehen"
+      "linkedinView": "Beitrag ansehen",
+      "thanks": "Dankes-E-Mail an die Teilnehmenden",
+      "thanksHint": "Eine kurze Nachricht mit dem Link zum Rückblick, einmal pro Person. Publizieren Sie zuerst den Rückblick.",
+      "thanksAudience": "{{total}} Teilnehmende, {{pending}} noch nicht angeschrieben.",
+      "thanksLastSent": "Zuletzt versendet {{date}}.",
+      "thanksNotePlaceholder": "Optionale persönliche Zeile, erscheint über dem Link…",
+      "thanksConfirm": "Die Dankes-E-Mail jetzt an {{count}} Teilnehmende senden?",
+      "thanksSend": "Dankes-E-Mail senden",
+      "thanksSending": "Wird gesendet…",
+      "thanksPreview": "Vorschau an mich senden",
+      "thanksPreviewSent": "Vorschau an {{email}} gesendet.",
+      "thanksResult": "Gesendet {{sent}}, fehlgeschlagen {{failed}}, offen {{remaining}}."
     }
   },
   "eventTranslations": {

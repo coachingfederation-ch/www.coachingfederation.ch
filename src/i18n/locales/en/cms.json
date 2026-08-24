@@ -1542,7 +1542,18 @@
       "linkedinPublish": "Publish carousel",
       "linkedinPosting": "Publishing…",
       "linkedinPosted": "Posted to LinkedIn.",
-      "linkedinView": "View the post"
+      "linkedinView": "View the post",
+      "thanks": "Thank-you email to attendees",
+      "thanksHint": "A short note with the link to the recap page, sent once per attendee. Publish the recap first.",
+      "thanksAudience": "{{total}} attendees, {{pending}} still to be mailed.",
+      "thanksLastSent": "Last sent {{date}}.",
+      "thanksNotePlaceholder": "Optional personal line, added above the recap link…",
+      "thanksConfirm": "Send the thank-you email to {{count}} attendees now?",
+      "thanksSend": "Send thank-you email",
+      "thanksSending": "Sending…",
+      "thanksPreview": "Send me a preview",
+      "thanksPreviewSent": "Preview sent to {{email}}.",
+      "thanksResult": "Sent {{sent}}, failed {{failed}}, still to be mailed {{remaining}}."
     }
   },
   "eventTranslations": {
