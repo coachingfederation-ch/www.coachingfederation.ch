@@ -82,7 +82,7 @@ export function EventFallback({ titleKey, bodyKey }: { titleKey: string; bodyKey
 export default function EventDetailPage({
   event,
 }: {
-  event: PublicEvent & { hosts?: EventHost[] };
+  event: PublicEvent & { hosts?: EventHost[]; recap?: PublicRecap | null };
 }) {
   const { t, locale } = useI18n();
   useTrackView("Event View", event.slug ?? event.id ?? "", {
