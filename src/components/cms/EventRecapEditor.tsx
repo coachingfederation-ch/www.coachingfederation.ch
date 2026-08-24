@@ -180,7 +180,7 @@ export function EventRecapEditor({
       await action();
       if (done) setMessage(done);
     } catch (e) {
-      setError(e instanceof Error ? e.message : t("recap.saveError"));
+      setError(friendlyError(e, "recap.saveError"));
     } finally {
       setBusy(null);
     }
