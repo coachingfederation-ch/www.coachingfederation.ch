@@ -117,6 +117,22 @@ export interface NewsletterBlockRow {
   updated_at: string;
 }
 
+/**
+ * An edition may only reach MailerLite once it has been submitted for review —
+ * a draft nobody looked at must never be pushable. Shared by the panel and the
+ * server gate so both agree on one rule.
+ */
+export const NEWSLETTER_SENDABLE_STATUSES: readonly NewsletterStatus[] = [
+  "review",
+  "scheduled",
+  "published",
+];
+
+export function isNewsletterSendable(status: string): boolean {
+  return (NEWSLETTER_SENDABLE_STATUSES as readonly string[]).includes(status);
+}
+
+
 /** `2026-03-01` → `newsletter-2026-03`. Stable per issue month. */
 export function issueSlug(issueDate: string): string {
   return `newsletter-${issueDate.slice(0, 7)}`;
