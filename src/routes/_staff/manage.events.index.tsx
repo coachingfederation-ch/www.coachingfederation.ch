@@ -425,6 +425,43 @@ function ManageEventsPage() {
   );
 }
 
+function StatusFilter({
+  label,
+  excluded,
+  onToggle,
+  options,
+}: {
+  label: string;
+  excluded: string[];
+  onToggle: (status: string, active: boolean) => void;
+  options: string[];
+}) {
+  return (
+    <fieldset className="flex min-w-[150px] flex-col gap-1">
+      <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        {label}
+      </span>
+      <div className="flex flex-wrap gap-3">
+        {options.map((status) => {
+          const active = !excluded.includes(status);
+          return (
+            <label
+              key={status}
+              className="flex items-center gap-1.5 text-sm"
+            >
+              <Checkbox
+                checked={active}
+                onCheckedChange={(checked) => onToggle(status, checked === true)}
+              />
+              {status}
+            </label>
+          );
+        })}
+      </div>
+    </fieldset>
+  );
+}
+
 function FilterSelect({
   label,
   allLabel,
