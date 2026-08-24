@@ -271,6 +271,21 @@ export function EventRecapEditor({
     setPhotos(next);
   };
 
+  if (!expanded) {
+    return (
+      <Section title={t("recap.title")} hint={t("recap.collapsedHint")}>
+        <p className="text-sm text-muted-foreground">{t("recap.collapsedNote")}</p>
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          className="mt-3 rounded-full border border-border px-4 py-2 text-sm font-semibold text-primary"
+        >
+          {t("recap.expand")}
+        </button>
+      </Section>
+    );
+  }
+
   if (loading) {
     return (
       <Section title={t("recap.title")}>
