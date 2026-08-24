@@ -38,6 +38,7 @@ import {
   pushNewsletterToMailerLiteFn,
   sendNewsletterFn,
 } from "@/lib/newsletters.functions";
+import { isNewsletterSendable } from "@/lib/newsletters";
 
 function errorMessage(error: unknown): string | null {
   if (!error) return null;
@@ -48,10 +49,13 @@ export function NewsletterSendPanel({
   id,
   defaultSubject,
   canSend,
+  status,
 }: {
   id: string;
   defaultSubject: string;
   canSend: boolean;
+  /** Edition status — the panel stays inert until it reaches review. */
+  status: string;
 }) {
   const queryClient = useQueryClient();
   const getState = useServerFn(getNewsletterSendStateFn);
@@ -103,6 +107,10 @@ export function NewsletterSendPanel({
   const currentFromName = fromName ?? state.fromName ?? state.defaultFromName;
   const currentFromEmail = fromEmail ?? state.fromEmail ?? state.defaultFromEmail;
   const sent = Boolean(state.sentAt);
+  // A draft nobody reviewed must never reach MailerLite; the server enforces
+  // the same rule, this only keeps the controls honest.
+  const needsReview = !isNewsletterSendable(status);
+  const locked = sent || needsReview;
   const ready =
     Boolean(currentGroupId) &&
     currentSubject.trim().length > 2 &&
@@ -133,7 +141,7 @@ export function NewsletterSendPanel({
             <Select
               value={currentGroupId}
               onValueChange={setGroupId}
-              disabled={sent || groups.length === 0}
+              disabled={locked || groups.length === 0}
             >
               <SelectTrigger id="ml-group">
                 <SelectValue placeholder="Choose a group" />
@@ -154,7 +162,7 @@ export function NewsletterSendPanel({
               id="ml-subject"
               value={currentSubject}
               onChange={(event) => setSubject(event.target.value)}
-              disabled={sent}
+              disabled={locked}
             />
           </div>
 
@@ -164,7 +172,7 @@ export function NewsletterSendPanel({
               id="ml-from-name"
               value={currentFromName}
               onChange={(event) => setFromName(event.target.value)}
-              disabled={sent}
+              disabled={locked}
             />
           </div>
 
@@ -175,7 +183,7 @@ export function NewsletterSendPanel({
               type="email"
               value={currentFromEmail}
               onChange={(event) => setFromEmail(event.target.value)}
-              disabled={sent}
+              disabled={locked}
               placeholder="newsletter@coachingfederation.ch"
             />
           </div>
@@ -185,7 +193,7 @@ export function NewsletterSendPanel({
           <Button
             variant="outline"
             size="sm"
-            disabled={!canSend || !ready || sent || pushMutation.isPending}
+            disabled={!canSend || !ready || locked || pushMutation.isPending}
             onClick={() =>
               pushMutation.mutate({
                 groupId: currentGroupId,
@@ -211,13 +219,13 @@ export function NewsletterSendPanel({
               type="datetime-local"
               value={scheduleAt}
               onChange={(event) => setScheduleAt(event.target.value)}
-              disabled={sent}
+              disabled={locked}
             />
           </div>
 
           <Button
             size="sm"
-            disabled={!canSend || !state.campaignId || sent || sendMutation.isPending}
+            disabled={!canSend || !state.campaignId || locked || sendMutation.isPending}
             onClick={() => setConfirmOpen(true)}
           >
             <Send className="h-4 w-4" />
@@ -237,9 +245,14 @@ export function NewsletterSendPanel({
               : "Push the edition first — MailerLite keeps the exact layout of the preview."}
         </p>
 
+        {needsReview ? (
+          <p className="text-sm text-muted-foreground">
+            Submit this edition for review before it can be pushed or sent.
+          </p>
+        ) : null}
         {!canSend ? (
           <p className="text-sm text-muted-foreground">
-            Only publishers can push and send an edition.
+            Only publishers can push and send an edition, and never one they wrote themselves.
           </p>
         ) : null}
         {problem ? <p className="text-sm text-destructive">{problem}</p> : null}
