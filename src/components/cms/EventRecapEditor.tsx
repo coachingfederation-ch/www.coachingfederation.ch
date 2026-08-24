@@ -587,7 +587,6 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
           ) : null}
         </div>
       </div>
-      </div>
 
       {/* Thank-you email to the attendees */}
       <div className="mt-8 border-t border-border pt-6">
