@@ -211,11 +211,7 @@ export async function previewRecapThanks(
   const { sendTemplateEmail } = await import("./email-templates/send-email");
   const outcome = await sendTemplateEmail("event-recap-thanks", to, {
     replyTo: context.organiserEmail,
-    templateData: await templateData(
-      context,
-      { full_name: null, locale },
-      personalNote,
-    ),
+    templateData: await templateData(context, { full_name: null, locale }, personalNote),
   });
   return { sent: outcome.sent };
 }

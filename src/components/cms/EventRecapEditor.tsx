@@ -621,9 +621,7 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
             disabled={busy !== null || status !== "published" || thanks.pending === 0}
             onClick={() => {
               if (
-                !window.confirm(
-                  t("recap.thanksConfirm").replace("{count}", String(thanks.pending)),
-                )
+                !window.confirm(t("recap.thanksConfirm").replace("{count}", String(thanks.pending)))
               )
                 return;
               void run(
