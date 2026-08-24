@@ -96,15 +96,8 @@ function VolunteerChatPage() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
-  const [pushState, setPushState] = useState<"on" | "off" | "blocked">("off");
-  const [pushBusy, setPushBusy] = useState(false);
   const waitingCountRef = useRef(0);
   const [lastEnded, setLastEnded] = useState<{ id: string; name: string } | null>(null);
-
-  useEffect(() => {
-    if (!pushSupported()) return;
-    void currentPushState().then(setPushState);
-  }, []);
 
   // A new arrival while the console is open gets a chime as well as the badge.
   useEffect(() => {
