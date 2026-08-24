@@ -620,7 +620,12 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
             type="button"
             disabled={busy !== null || status !== "published" || thanks.pending === 0}
             onClick={() => {
-              if (!window.confirm(t("recap.thanksConfirm", { count: thanks.pending }))) return;
+              if (
+                !window.confirm(
+                  t("recap.thanksConfirm").replace("{count}", String(thanks.pending)),
+                )
+              )
+                return;
               void run(
                 "thanks",
                 async () => {
@@ -629,11 +634,10 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
                   });
                   await load();
                   setMessage(
-                    t("recap.thanksResult", {
-                      sent: result.sent,
-                      failed: result.failed,
-                      remaining: result.remaining,
-                    }),
+                    t("recap.thanksResult")
+                      .replace("{sent}", String(result.sent))
+                      .replace("{failed}", String(result.failed))
+                      .replace("{remaining}", String(result.remaining)),
                   );
                 },
                 undefined,
