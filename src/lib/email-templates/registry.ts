@@ -51,6 +51,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "event-invitation": eventInvitation,
   "event-reminder": eventReminder,
   "event-follow-up-invitation": eventFollowUpInvitation,
+  "event-recap-thanks": eventRecapThanks,
   "internal-invitation": internalInvitation,
   "newsletter-refresh": newsletterRefresh,
   "newsletter-edition": newsletterEdition,
