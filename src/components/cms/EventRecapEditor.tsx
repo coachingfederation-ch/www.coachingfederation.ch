@@ -88,6 +88,12 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
     error_message: string | null;
   } | null>(null);
   const [commentary, setCommentary] = useState("");
+  const [thanks, setThanks] = useState<{ total: number; pending: number }>({
+    total: 0,
+    pending: 0,
+  });
+  const [thanksLastSent, setThanksLastSent] = useState<string | null>(null);
+  const [personalNote, setPersonalNote] = useState("");
 
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
