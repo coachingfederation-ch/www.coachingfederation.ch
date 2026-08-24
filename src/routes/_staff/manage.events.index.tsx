@@ -158,7 +158,7 @@ function ManageEventsPage() {
         if (search.status && row.status !== search.status) return false;
         return true;
       })
-      .sort((a, b) => b.starts_at.localeCompare(a.starts_at));
+      .sort((a, b) => a.starts_at.localeCompare(b.starts_at));
   }, [rows, search]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
