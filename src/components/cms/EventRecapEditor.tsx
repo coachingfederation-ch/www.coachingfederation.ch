@@ -114,12 +114,15 @@ export function EventRecapEditor({ eventId, t }: { eventId: string; t: (key: str
       headline: string | null;
       body: string | null;
       downloads_audience: RecapAudience;
+      recap_email_last_sent_at: string | null;
     };
     setStatus(recap.status);
     setLanguage(recap.language);
     setHeadline(recap.headline ?? "");
     setBody(recap.body ?? "");
     setAudience(recap.downloads_audience);
+    setThanksLastSent(recap.recap_email_last_sent_at ?? null);
+    setThanks((data.thanks as { total: number; pending: number }) ?? { total: 0, pending: 0 });
     setPhotos(
       (data.photos as Record<string, unknown>[]).map((p) => ({
         id: p["id"] as string,
