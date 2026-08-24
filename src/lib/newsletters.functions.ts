@@ -14,7 +14,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertStaff as assertStaffRole, type AuthedContext } from "./authz";
-import { ADDABLE_BLOCK_TYPES } from "./newsletters";
+import { ADDABLE_BLOCK_TYPES, isNewsletterSendable } from "./newsletters";
 
 async function assertStaff(context: AuthedContext) {
   await assertStaffRole(context);
@@ -379,7 +379,7 @@ export const pushNewsletterToMailerLiteFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => pushSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const client = await assertPublisher(context as AuthedContext);
+    const client = await assertPublisher(context as AuthedContext, data.id);
     const { pushCampaign, getSendState } = await import("./newsletter-send.server");
     await pushCampaign(client, {
       newsletterId: data.id,
@@ -402,7 +402,7 @@ export const sendNewsletterFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => sendSchema.parse(data))
   .handler(async ({ data, context }) => {
-    await assertPublisher(context as AuthedContext);
+    await assertPublisher(context as AuthedContext, data.id);
     const { sendCampaign } = await import("./newsletter-send.server");
     return sendCampaign(data.id, data.scheduledFor ?? null);
   });
