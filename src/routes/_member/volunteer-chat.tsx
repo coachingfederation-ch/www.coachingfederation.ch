@@ -450,12 +450,6 @@ function VolunteerChatPage() {
               />
             </label>
           </section>
-          <NotificationRow
-            state={pushState}
-            busy={pushBusy}
-            onToggle={() => void togglePush()}
-            t={t}
-          />
         </div>
         <div className={FOOTER}>
           <button
