@@ -4110,30 +4110,63 @@ export type Database = {
       }
       newsletter_send_config: {
         Row: {
+          campaign_id: string | null
           created_at: string
+          from_email: string | null
+          from_name: string | null
+          group_id: string | null
+          group_name: string | null
           id: string
           is_stub: boolean
+          last_error: string | null
+          last_pushed_at: string | null
           newsletter_id: string
           note: string | null
           provider: string
+          recipient_count: number | null
+          scheduled_for: string | null
+          sent_at: string | null
+          subject: string | null
           updated_at: string
         }
         Insert: {
+          campaign_id?: string | null
           created_at?: string
+          from_email?: string | null
+          from_name?: string | null
+          group_id?: string | null
+          group_name?: string | null
           id?: string
           is_stub?: boolean
+          last_error?: string | null
+          last_pushed_at?: string | null
           newsletter_id: string
           note?: string | null
           provider?: string
+          recipient_count?: number | null
+          scheduled_for?: string | null
+          sent_at?: string | null
+          subject?: string | null
           updated_at?: string
         }
         Update: {
+          campaign_id?: string | null
           created_at?: string
+          from_email?: string | null
+          from_name?: string | null
+          group_id?: string | null
+          group_name?: string | null
           id?: string
           is_stub?: boolean
+          last_error?: string | null
+          last_pushed_at?: string | null
           newsletter_id?: string
           note?: string | null
           provider?: string
+          recipient_count?: number | null
+          scheduled_for?: string | null
+          sent_at?: string | null
+          subject?: string | null
           updated_at?: string
         }
         Relationships: [
