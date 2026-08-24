@@ -17,7 +17,7 @@
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Bell, BellOff, ChevronDown, Loader2, Radio, Users, X } from "lucide-react";
+import { ChevronDown, Loader2, Radio, Users, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { cn } from "@/lib/utils";
@@ -26,14 +26,7 @@ import {
   registerApnsDeviceToken,
   unregisterApnsDeviceToken,
 } from "@/lib/live-chat-volunteers.functions";
-import {
-  currentPushState,
-  disablePush,
-  enablePush,
-  isStandalone,
-  playWaitingChime,
-  pushSupported,
-} from "@/lib/volunteer-notifications";
+import { playWaitingChime } from "@/lib/volunteer-notifications";
 
 /** iOS wrapper bridge (injected only inside the native app shell). */
 type IcfPushPayload = { action?: string };
@@ -103,33 +96,14 @@ function VolunteerChatPage() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
-  const [pushState, setPushState] = useState<"on" | "off" | "blocked">("off");
-  const [pushBusy, setPushBusy] = useState(false);
   const waitingCountRef = useRef(0);
   const [lastEnded, setLastEnded] = useState<{ id: string; name: string } | null>(null);
-
-  useEffect(() => {
-    if (!pushSupported()) return;
-    void currentPushState().then(setPushState);
-  }, []);
 
   // A new arrival while the console is open gets a chime as well as the badge.
   useEffect(() => {
     if (waiting.length > waitingCountRef.current) playWaitingChime();
     waitingCountRef.current = waiting.length;
   }, [waiting.length]);
-
-  const togglePush = useCallback(async () => {
-    setPushBusy(true);
-    if (pushState === "on") {
-      await disablePush().catch(() => undefined);
-      setPushState("off");
-    } else {
-      const next = await enablePush().catch(() => "error" as const);
-      setPushState(next === "on" ? "on" : next === "blocked" ? "blocked" : "off");
-    }
-    setPushBusy(false);
-  }, [pushState]);
 
   // Identify the volunteer, confirm the activation and prefill the display name.
   useEffect(() => {
@@ -476,12 +450,6 @@ function VolunteerChatPage() {
               />
             </label>
           </section>
-          <NotificationRow
-            state={pushState}
-            busy={pushBusy}
-            onToggle={() => void togglePush()}
-            t={t}
-          />
         </div>
         <div className={FOOTER}>
           <button
@@ -667,76 +635,7 @@ function VolunteerChatPage() {
             ))}
           </div>
         </section>
-
-        <p className="text-[11px] text-muted-foreground">{t("live-chat.volunteer.keepOpen")}</p>
-
-        <NotificationRow
-          state={pushState}
-          busy={pushBusy}
-          onToggle={() => void togglePush()}
-          t={t}
-        />
       </div>
     </div>
-  );
-}
-
-/**
- * Push opt-in. On iOS the browser only exposes push once the site has been
- * added to the home screen, so we say that instead of showing a dead switch.
- */
-function NotificationRow({
-  state,
-  busy,
-  onToggle,
-  t,
-}: {
-  state: "on" | "off" | "blocked";
-  busy: boolean;
-  onToggle: () => void;
-  t: (key: string) => string;
-}) {
-  const [supported, setSupported] = useState(true);
-  const [standalone, setStandalone] = useState(true);
-
-  useEffect(() => {
-    setSupported(pushSupported());
-    setStandalone(isStandalone());
-  }, []);
-
-  return (
-    <section className="mx-auto mt-4 max-w-md rounded-2xl border border-border bg-card p-4">
-      <p className="flex items-center gap-2 text-sm font-semibold text-foreground">
-        {state === "on" ? (
-          <Bell className="size-4 text-primary" aria-hidden="true" />
-        ) : (
-          <BellOff className="size-4 text-muted-foreground" aria-hidden="true" />
-        )}
-        {t("live-chat.volunteer.alertsTitle")}
-      </p>
-      <p className="mt-1 text-xs text-muted-foreground">
-        {!supported
-          ? t("live-chat.volunteer.alertsInstallFirst")
-          : state === "blocked"
-            ? t("live-chat.volunteer.alertsBlocked")
-            : t("live-chat.volunteer.alertsBody")}
-      </p>
-      {supported && state !== "blocked" && (
-        <button
-          type="button"
-          onClick={onToggle}
-          disabled={busy}
-          className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-4 text-sm font-semibold text-foreground disabled:opacity-60"
-        >
-          {busy && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
-          {state === "on" ? t("live-chat.volunteer.alertsOff") : t("live-chat.volunteer.alertsOn")}
-        </button>
-      )}
-      {supported && !standalone && (
-        <p className="mt-2 text-[11px] text-muted-foreground">
-          {t("live-chat.volunteer.alertsInstallHint")}
-        </p>
-      )}
-    </section>
   );
 }
