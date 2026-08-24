@@ -147,7 +147,7 @@ function ManageEventsPage() {
   // Status is an *exclusion* filter: the `status` search param holds a
   // comma-separated list of statuses to hide. Empty means show everything —
   // every status is active by default, so the list never starts filtered.
-  const excludedStatuses = search.status
+  const excludedStatuses: string[] = search.status
     ? search.status.split(",").filter(Boolean)
     : [];
 
