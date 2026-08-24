@@ -123,7 +123,7 @@ export const getManagedRecap = createServerFn({ method: "POST" })
         context.supabase
           .from("event_recaps")
           .select(
-            "id, event_id, status, language, headline, body, downloads_audience, published_at, content_updated_at",
+            "id, event_id, status, language, headline, body, downloads_audience, published_at, content_updated_at, recap_email_last_sent_at",
           )
           .eq("id", recapId)
           .single(),
