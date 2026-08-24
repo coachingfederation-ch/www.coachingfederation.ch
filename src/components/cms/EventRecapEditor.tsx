@@ -172,9 +172,11 @@ export function EventRecapEditor({
 
   // `t` is not a stable reference, so it stays out of the dependency list and
   // a ref guards against a second load starting while one is still in flight —
-  // overlapping loads used to race on creating the recap row.
+  // overlapping loads used to race on creating the recap row. The load is also
+  // gated on `expanded` so we never fetch post-event data for a collapsed panel.
   const loadingRef = useRef(false);
   useEffect(() => {
+    if (!expanded) return;
     if (loadingRef.current) return;
     loadingRef.current = true;
     load()
@@ -186,7 +188,7 @@ export function EventRecapEditor({
         loadingRef.current = false;
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [load]);
+  }, [load, expanded]);
 
   const run = async (key: string, action: () => Promise<void>, done?: string) => {
     setBusy(key);
