@@ -1545,15 +1545,15 @@
       "linkedinView": "Vedi il post",
       "thanks": "E-mail di ringraziamento ai partecipanti",
       "thanksHint": "Un breve messaggio con il link al racconto, una volta per persona. Pubblica prima il racconto.",
-      "thanksAudience": "{{total}} partecipanti, {{pending}} ancora da contattare.",
-      "thanksLastSent": "Ultimo invio {{date}}.",
+      "thanksAudience": "{total} partecipanti, {pending} ancora da contattare.",
+      "thanksLastSent": "Ultimo invio {date}.",
       "thanksNotePlaceholder": "Riga personale facoltativa, sopra il link…",
-      "thanksConfirm": "Inviare ora l'e-mail di ringraziamento a {{count}} partecipanti?",
+      "thanksConfirm": "Inviare ora l'e-mail di ringraziamento a {count} partecipanti?",
       "thanksSend": "Invia e-mail di ringraziamento",
       "thanksSending": "Invio…",
       "thanksPreview": "Inviami un'anteprima",
-      "thanksPreviewSent": "Anteprima inviata a {{email}}.",
-      "thanksResult": "Inviate {{sent}}, non riuscite {{failed}}, rimanenti {{remaining}}."
+      "thanksPreviewSent": "Anteprima inviata a {email}.",
+      "thanksResult": "Inviate {sent}, non riuscite {failed}, rimanenti {remaining}."
     }
   },
   "eventTranslations": {
