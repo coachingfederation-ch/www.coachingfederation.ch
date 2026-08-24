@@ -260,7 +260,9 @@ function ManageEventsPage() {
                   : [...excludedStatuses, status];
                 setFilter({ status: next.join(",") });
               }}
-              options={["draft", "published", "cancelled"]}
+              options={["draft", "published", "cancelled"].map(
+                (s) => [s, t(`events.status.${s}`)] as [string, string],
+              )}
             />
           </div>
 
@@ -434,7 +436,7 @@ function StatusFilter({
   label: string;
   excluded: string[];
   onToggle: (status: string, active: boolean) => void;
-  options: string[];
+  options: [string, string][];
 }) {
   return (
     <fieldset className="flex min-w-[150px] flex-col gap-1">
@@ -442,18 +444,15 @@ function StatusFilter({
         {label}
       </span>
       <div className="flex flex-wrap gap-3">
-        {options.map((status) => {
+        {options.map(([status, name]) => {
           const active = !excluded.includes(status);
           return (
-            <label
-              key={status}
-              className="flex items-center gap-1.5 text-sm"
-            >
+            <label key={status} className="flex items-center gap-1.5 text-sm">
               <Checkbox
                 checked={active}
                 onCheckedChange={(checked) => onToggle(status, checked === true)}
               />
-              {status}
+              {name}
             </label>
           );
         })}
