@@ -396,7 +396,6 @@ function IntegrationPage() {
  */
 function CredentialCheckCard({ t }: { t: (key: string) => string }) {
   const [result, setResult] = useState<{
-  const [result, setResult] = useState<{
     checkedAt: string;
     mode: string;
     ok: boolean;
