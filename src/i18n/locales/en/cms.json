@@ -40,7 +40,20 @@
     "internalSignIn": "Internal admin sign-in",
     "staffTitle": "Internal sign-in",
     "staffSub": "For The Switzerland Chapter of ICF staff and administrators.",
-    "backToMemberSignIn": "← Back to member sign-in"
+    "backToMemberSignIn": "← Back to member sign-in",
+    "forgotPassword": "Forgot your password?",
+    "forgotTitle": "Reset your password",
+    "forgotSub": "Enter the email address registered with your account and we will send you a reset link.",
+    "forgotSubmit": "Send reset link",
+    "forgotSent": "If an account exists for that address, a reset link is on its way. The link is valid for a limited time.",
+    "resetTitle": "Choose a new password",
+    "resetSub": "Pick a password with at least eight characters.",
+    "resetChecking": "Checking your reset link…",
+    "resetLinkInvalid": "This reset link is no longer valid. Request a new one.",
+    "resetSubmit": "Save new password",
+    "resetMismatch": "The two passwords do not match.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password"
   },
   "list": {
     "title": "Articles",
@@ -745,7 +758,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
+          "items": [
+            "Lead projects",
+            "Be recognized by ICFS for leading initiatives"
+          ]
         },
         "status": {
           "title": "Status",

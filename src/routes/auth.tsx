@@ -44,6 +44,12 @@ function AuthPage() {
         </Link>
       </p>
 
+      <p className="mt-2 text-center text-xs text-muted-foreground">
+        <Link to="/forgot-password" className="hover:underline">
+          {t("auth.forgotPassword")}
+        </Link>
+      </p>
+
       <p className="mt-6 text-center text-xs text-muted-foreground">
         <Link to="/staff-sign-in" search={{ next }} className="hover:underline">
           {t("auth.internalSignIn")}

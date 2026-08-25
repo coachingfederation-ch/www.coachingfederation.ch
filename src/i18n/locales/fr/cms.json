@@ -40,7 +40,20 @@
     "internalSignIn": "Connexion administration interne",
     "staffTitle": "Connexion interne",
     "staffSub": "Pour le personnel et les administrateurs de The Switzerland Chapter of ICF.",
-    "backToMemberSignIn": "← Retour à la connexion membre"
+    "backToMemberSignIn": "← Retour à la connexion membre",
+    "forgotPassword": "Mot de passe oublié ?",
+    "forgotTitle": "Réinitialiser votre mot de passe",
+    "forgotSub": "Saisissez l’adresse e-mail de votre compte et nous vous enverrons un lien de réinitialisation.",
+    "forgotSubmit": "Envoyer le lien",
+    "forgotSent": "Si un compte existe pour cette adresse, un lien est en route. Le lien est valable pour une durée limitée.",
+    "resetTitle": "Choisir un nouveau mot de passe",
+    "resetSub": "Choisissez un mot de passe d’au moins huit caractères.",
+    "resetChecking": "Vérification de votre lien…",
+    "resetLinkInvalid": "Ce lien n’est plus valable. Demandez-en un nouveau.",
+    "resetSubmit": "Enregistrer le mot de passe",
+    "resetMismatch": "Les deux mots de passe ne correspondent pas.",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le nouveau mot de passe"
   },
   "list": {
     "title": "Articles",
@@ -745,7 +758,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
+          "items": [
+            "Piloter des projets",
+            "Être reconnu par ICFS pour avoir mené des initiatives"
+          ]
         },
         "status": {
           "title": "Status",

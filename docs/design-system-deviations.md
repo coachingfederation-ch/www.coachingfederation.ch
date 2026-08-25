@@ -123,9 +123,10 @@ pipeline resolves computed custom properties reliably.
 
 ## Not deviations (recorded so audits do not re-open them)
 
-- **`src/components/callout.tsx` / `callout-shades.ts`** — byte-identical to the design
-  system files apart from the import path. They are compatibility re-export shims for
-  existing call sites, not a fork.
+- **Callouts** — the former local `src/components/callout.tsx` / `callout-shades.ts`
+  shims have been deleted; markdown rendering, the markdown toolbar and the remark
+  plugin import `Callout`, `calloutShadeFrom`, `CALLOUT_SHADES`, `SHADE_SWATCH` and
+  `CALLOUT_ALIASES` from the design-system barrel.
 - **`src/components/chrome/*`** — thin data wrappers around the design system's
   `SiteHeader` / `SiteFooter` shells, exactly as the library intends. The only local
   style constant left is `MENU_ITEM` (a dropdown row recipe the library does not ship).

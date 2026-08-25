@@ -40,7 +40,20 @@
     "internalSignIn": "Interne Admin-Anmeldung",
     "staffTitle": "Interne Anmeldung",
     "staffSub": "Für Mitarbeitende und Administratoren von The Switzerland Chapter of ICF.",
-    "backToMemberSignIn": "← Zurück zur Mitglieder-Anmeldung"
+    "backToMemberSignIn": "← Zurück zur Mitglieder-Anmeldung",
+    "forgotPassword": "Passwort vergessen?",
+    "forgotTitle": "Passwort zurücksetzen",
+    "forgotSub": "Geben Sie die E-Mail-Adresse Ihres Kontos ein, und wir senden Ihnen einen Link zum Zurücksetzen.",
+    "forgotSubmit": "Link senden",
+    "forgotSent": "Falls ein Konto für diese Adresse besteht, ist ein Link unterwegs. Der Link ist begrenzt gültig.",
+    "resetTitle": "Neues Passwort wählen",
+    "resetSub": "Wählen Sie ein Passwort mit mindestens acht Zeichen.",
+    "resetChecking": "Ihr Link wird geprüft…",
+    "resetLinkInvalid": "Dieser Link ist nicht mehr gültig. Fordern Sie einen neuen an.",
+    "resetSubmit": "Passwort speichern",
+    "resetMismatch": "Die beiden Passwörter stimmen nicht überein.",
+    "newPassword": "Neues Passwort",
+    "confirmPassword": "Neues Passwort bestätigen"
   },
   "list": {
     "title": "Artikel",
@@ -745,7 +758,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
+          "items": [
+            "Projekte leiten",
+            "Von ICFS für die Leitung von Initiativen anerkannt werden"
+          ]
         },
         "status": {
           "title": "Status",
