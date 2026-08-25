@@ -447,9 +447,23 @@ function CredentialCheckCard({ t }: { t: (key: string) => string }) {
     <section className={CARD}>
       <h2 className="text-sm font-bold">{t("integration.credTitle")}</h2>
       <p className="mt-1 text-xs text-muted-foreground">{t("integration.credBody")}</p>
-      <button className={BTN + " mt-3"} disabled={checking} onClick={() => void check()}>
-        {checking ? t("integration.credChecking") : t("integration.credCheck")}
-      </button>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button
+          className={BTN}
+          disabled={checking !== null}
+          onClick={() => void check("test")}
+        >
+          {checking === "test" ? t("integration.credChecking") : t("integration.credCheckTest")}
+        </button>
+        <button
+          className={BTN}
+          disabled={checking !== null}
+          onClick={() => void check("live")}
+        >
+          {checking === "live" ? t("integration.credChecking") : t("integration.credCheckLive")}
+        </button>
+      </div>
+
       {failure ? <p className="mt-3 text-xs text-destructive">{failure}</p> : null}
       {result ? (
         <div className="mt-4 space-y-4">
