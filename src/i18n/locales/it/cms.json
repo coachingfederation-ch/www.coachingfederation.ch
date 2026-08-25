@@ -492,6 +492,8 @@
     "credTitle": "Verifica delle credenziali ICF",
     "credBody": "Esegue solo il passaggio di login ICF, dallo stesso runtime della sincronizzazione notturna. Permette di distinguere un segreto incollato male o un endpoint di login errato da un account disattivato da ICF. Nessun valore delle credenziali viene mostrato o registrato.",
     "credCheck": "Verifica le credenziali ICF",
+    "credCheckTest": "Verifica le credenziali TEST",
+    "credCheckLive": "Verifica le credenziali LIVE",
     "credChecking": "Verifica in corso…",
     "credOk": "Login riuscito in modalità",
     "credFailed": "Login rifiutato in modalità",

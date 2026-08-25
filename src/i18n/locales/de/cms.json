@@ -492,6 +492,8 @@
     "credTitle": "ICF-Zugangsdaten prüfen",
     "credBody": "Führt nur den ICF-Anmeldeschritt aus, aus derselben Laufzeitumgebung wie der nächtliche Sync. So lässt sich ein falsch eingefügtes Secret oder ein falscher Anmelde-Endpunkt von einem durch ICF deaktivierten Konto unterscheiden. Es wird nie ein Zugangswert angezeigt oder protokolliert.",
     "credCheck": "ICF-Zugangsdaten prüfen",
+    "credCheckTest": "TEST-Zugangsdaten prüfen",
+    "credCheckLive": "LIVE-Zugangsdaten prüfen",
     "credChecking": "Wird geprüft …",
     "credOk": "Anmeldung erfolgreich im Modus",
     "credFailed": "Anmeldung abgelehnt im Modus",
