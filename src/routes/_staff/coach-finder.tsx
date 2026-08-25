@@ -138,6 +138,23 @@ function CoachFinderSettingsPage() {
                 />
               </label>
             </section>
+
+            <section className="rounded-2xl border border-border bg-card p-5">
+              <h2 className="text-sm font-bold">{t("finder.eligibility.title")}</h2>
+              <div className="mt-3 flex items-start gap-3">
+                <Switch
+                  id="allow-non-credentialed"
+                  checked={config.allow_non_credentialed}
+                  onCheckedChange={(checked) => void patch({ allow_non_credentialed: checked })}
+                />
+                <label htmlFor="allow-non-credentialed" className="text-sm">
+                  {t("finder.eligibility.allowNonCredentialed")}
+                  <span className="mt-1 block text-xs text-muted-foreground">
+                    {t("finder.eligibility.allowNonCredentialedHint")}
+                  </span>
+                </label>
+              </div>
+            </section>
           </div>
         )}
       </div>
