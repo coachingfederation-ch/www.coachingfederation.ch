@@ -268,13 +268,15 @@ async function callSoap(
   <soap:Body>${bodyXml}</soap:Body>
 </soap:Envelope>`;
 
+  const headers: Record<string, string> = {
+    "Content-Type": "text/xml; charset=utf-8",
+    SOAPAction: `${XWEB_NS}${operation}`,
+    ...relayAuthHeaders(),
+  };
+
   const response = await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "text/xml; charset=utf-8",
-      SOAPAction: `${XWEB_NS}${operation}`,
-      ...(process.env["ICF_RELAY_AUTH"] ? { "X-Relay-Auth": process.env["ICF_RELAY_AUTH"] } : {}),
-    },
+    headers,
     body: envelope,
   });
 
