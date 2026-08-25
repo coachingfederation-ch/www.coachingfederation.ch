@@ -15,6 +15,14 @@ import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
 import { resolveProfileLocale } from "./member-translations";
 import type { Locale } from "@/i18n/config";
+import {
+  applyFacets,
+  isIdListSort,
+  normaliseSort,
+  orderProfileIds,
+  shuffleWithSeed,
+} from "./directory-sort";
+
 
 const localeSchema = z.enum(["en", "de", "fr", "it"]);
 
