@@ -71,9 +71,13 @@ token.
 
 The relay itself is locked down:
 
-- The SOAP location requires the `X-Relay-Auth` header to match the shared
-  secret (value in `~/Documents/Hermes/icf-relay/.relay-auth`, mirrored in the
-  Lovable env as `ICF_RELAY_AUTH`). Requests without it get 403.
+- The SOAP location requires the `X-Relay-Auth` header to carry a valid
+  short-lived JWT. The app signs it per request with HS256 using the shared
+  signing key (value in `~/Documents/Hermes/icf-relay/.relay-auth`, mirrored in
+  the Lovable env as `ICF_RELAY_AUTH`); claims are `sub: icf-sync`, `iat`, and
+  `exp` five minutes out. The relay verifies signature and expiry; requests
+  without a valid token get 403. No static secret is ever transmitted, so a
+  captured header expires within minutes.
 - Port 80 serves only Let's Encrypt ACME challenges, everything else 404.
 - SSH is reachable only over the Tailnet (Tailscale), not the public internet.
 - The GCP firewall allows TCP 80/443 only.
@@ -85,13 +89,11 @@ The relay itself is locked down:
   of the shared secret.
 - The full two-step flow (Authenticate then ExecuteMethod) was verified end to
   end through the relay, returning the member feed.
+- Signing lives in `src/lib/relay-auth.server.ts` (`relayAuthHeaders()`), used by
+  both the sync client and the credential diagnostic.
 
 ## Roadmap
 
-Two hardening steps are queued once the sync is stable:
-
-1. Give the relay a proper DNS name (`relay.coachingfederation.ch`) and reissue
-   the certificate for it. The ICF allowlist IP `34.121.79.30` does not change.
-2. Replace the static shared secret with short-lived JWTs: the Lovable app
-   signs a token (short expiry), and the relay verifies signature plus expiry
-   before proxying. This bounds the damage if the signing key leaks.
+One hardening step is queued once the sync is stable: give the relay a proper
+DNS name (`relay.coachingfederation.ch`) and reissue the certificate for it. The
+ICF allowlist IP `34.121.79.30` does not change.

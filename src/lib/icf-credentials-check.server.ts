@@ -6,7 +6,7 @@
  * account on ICF's side.
  *
  * The diagnostic is now routed through the hardened fixed-egress relay. Every
- * SOAP request must carry the `X-Relay-Auth` header (from `ICF_RELAY_AUTH`).
+ * SOAP request must carry an `X-Relay-Auth` JWT signed with `ICF_RELAY_AUTH`.
  * When that env var is empty/unset the relay returns 403, so the diagnostic
  * short-circuits and reports "relay auth not configured" instead of a generic
  * 403.
@@ -17,6 +17,7 @@
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { soapCredentials } from "./icf-soap.server";
+import { relayAuthHeaders } from "./relay-auth.server";
 import { loadIntegrationConfigAdmin } from "./integration-config.server";
 import type { IntegrationMode } from "./integration";
 
@@ -78,9 +79,9 @@ function escapeXml(value: string): string {
  * rather than throwing, because the caller wants to compare the original
  * credentials with a trimmed variant.
  *
- * The relay requires `X-Relay-Auth` on every request; the header is added when
- * `ICF_RELAY_AUTH` is set (the diagnostic already short-circuits when it is
- * missing, so by the time we reach this function the header is always present).
+ * The relay requires a signed `X-Relay-Auth` JWT on every request; the header is
+ * added when `ICF_RELAY_AUTH` is set (the diagnostic already short-circuits when
+ * it is missing, so by the time we reach this function it is always present).
  */
 async function attempt(
   label: string,
@@ -99,7 +100,7 @@ async function attempt(
       headers: {
         "Content-Type": "text/xml; charset=utf-8",
         SOAPAction: `${XWEB_NS}Authenticate`,
-        ...(process.env["ICF_RELAY_AUTH"] ? { "X-Relay-Auth": process.env["ICF_RELAY_AUTH"] } : {}),
+        ...relayAuthHeaders(),
       },
       body: envelope,
       signal: AbortSignal.timeout(TIMEOUT_MS),
