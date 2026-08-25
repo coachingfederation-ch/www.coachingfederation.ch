@@ -36,8 +36,10 @@ paths are derived from the one value.
 
 ICF only accepts requests from a whitelisted IP, and this app has no stable
 outbound IPv4 address. All traffic therefore goes through a small reverse proxy
-with a fixed address. When `ICF_RELAY_AUTH` is set, every SOAP request carries it
-as an `X-Relay-Auth` header; without the variable the header is simply omitted, so
+with a fixed address. When `ICF_RELAY_AUTH` is set, every SOAP request carries a
+freshly signed, short-lived HS256 JWT (5 min, `sub: icf-sync`) in the
+`X-Relay-Auth` header — the env var is the signing key, never the transmitted
+value. Without the variable the header is simply omitted, so
 the same code works with or without the relay. **The relay, its access control and
 the header-forwarding pitfall are documented in `docs/icf-sync-relay.md`.**
 
