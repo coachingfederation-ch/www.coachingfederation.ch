@@ -85,12 +85,19 @@ export const getRelayHealth = createServerFn({ method: "POST" })
  * failing sync can be attributed to a secret, an endpoint, or the ICF account.
  */
 export const checkIcfCredentials = createServerFn({ method: "POST" })
+  .inputValidator((input) =>
+    z
+      .object({ mode: z.enum(["test", "live"]).optional() })
+      .optional()
+      .parse(input),
+  )
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
+  .handler(async ({ data, context }) => {
     const userId = await assertAdmin(context);
     const { checkIcfCredentials: run } = await import("./icf-credentials-check.server");
-    return await run(userId);
+    return await run(userId, data?.mode);
   });
+
 
 /** One-time TEST -> LIVE cutover (admin only, irreversible). */
 export const executeCutover = createServerFn({ method: "POST" })
