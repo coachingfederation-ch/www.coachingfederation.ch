@@ -79,3 +79,38 @@ export function orderProfileIds(
     )
     .map((r) => r.profile_id);
 }
+
+export type DirectoryFacets = {
+  services?: string[];
+  regions?: string[];
+  languages?: string[];
+  specialisations?: string[];
+  formats?: string[];
+  credentials?: string[];
+};
+
+type FacetQuery<T> = {
+  overlaps(column: string, value: readonly string[]): T;
+  in(column: string, value: readonly string[]): T;
+};
+
+/**
+ * Every list filter is an OR within the facet and an AND across facets, which
+ * is what the wireframe's checkbox groups imply. Shared so the id-list path
+ * and the ranged path can never drift apart.
+ */
+export function applyFacets<T extends FacetQuery<T>>(query: T, data: DirectoryFacets): T {
+  let q = query;
+  if (data.services?.length) q = q.overlaps("services", data.services);
+  if (data.regions?.length) q = q.overlaps("region_slugs", data.regions);
+  if (data.languages?.length) q = q.overlaps("language_slugs", data.languages);
+  if (data.specialisations?.length) q = q.overlaps("specialisation_slugs", data.specialisations);
+  if (data.formats?.length) q = q.overlaps("format_slugs", data.formats);
+  if (data.credentials?.length) {
+    q = q.in(
+      "credential_slug",
+      data.credentials.map((c) => c.toUpperCase()),
+    );
+  }
+  return q;
+}
