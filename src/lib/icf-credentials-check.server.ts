@@ -6,7 +6,7 @@
  * account on ICF's side.
  *
  * The diagnostic is now routed through the hardened fixed-egress relay. Every
- * SOAP request must carry the `X-Relay-Auth` header (from `ICF_RELAY_AUTH`).
+ * SOAP request must carry an `X-Relay-Auth` JWT signed with `ICF_RELAY_AUTH`.
  * When that env var is empty/unset the relay returns 403, so the diagnostic
  * short-circuits and reports "relay auth not configured" instead of a generic
  * 403.
@@ -17,6 +17,7 @@
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { soapCredentials } from "./icf-soap.server";
+import { relayAuthHeaders } from "./relay-auth.server";
 import { loadIntegrationConfigAdmin } from "./integration-config.server";
 import type { IntegrationMode } from "./integration";
 
