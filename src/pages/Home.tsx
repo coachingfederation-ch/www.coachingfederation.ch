@@ -11,7 +11,12 @@ import adRetreats from "@/assets/ads/ad-retreats.jpg";
 import adMentoring from "@/assets/ads/ad-mentoring.jpg";
 import heroImg from "@/assets/hero-coaching.jpg";
 import leadershipImg from "@/assets/leadership-team.jpg";
-import { AiBadge, BrushMark as Mark, Button, Input } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  AiBadge,
+  BrushMark as Mark,
+  Button,
+  Input,
+} from "@/design-system/icf-welcome-design-system-a835df";
 import type { MarkName } from "@/design-system/icf-welcome-design-system-a835df";
 import { SiteHeaderBar, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SponsorMarquee, type SponsorItem } from "@/components/home/SponsorMarquee";
@@ -333,7 +338,7 @@ function Events() {
                 <Mark name={e.mark} className="h-3/5 w-3/5" />
               </div>
               <div className="flex flex-1 flex-col p-6">
-                <p className="btn-mono text-muted-foreground">
+                <p className="btn-mono-muted">
                   {e.date} · {e.city}
                 </p>
                 <h3 className="mt-3 text-lg font-semibold leading-snug tracking-tight text-foreground">

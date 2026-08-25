@@ -250,14 +250,13 @@
   },
   "finder": {
     "title": "Impostazioni del Coach Finder",
-    "subtitle": "Quali modalità di ricerca sono attive, come vengono mostrati i risultati e i limiti tecnici usati dalla sincronizzazione dei membri.",
+    "subtitle": "Quali modalità di ricerca sono attive e come vengono mostrati i risultati.",
     "loading": "Caricamento in corso…",
     "saved": "Salvato",
     "modes": "Modalità di ricerca",
     "label": "Etichetta",
     "display": "Visualizzazione",
     "defaultSort": "Ordinamento predefinito",
-    "tunables": "Limiti tecnici",
     "facets": {
       "coaching": "Coaching",
       "mentoring": "Mentoring",
@@ -270,10 +269,7 @@
       "recent": "Aggiornati di recente"
     },
     "numbers": {
-      "pageSize": "Risultati per pagina",
-      "feedDrop": "Soglia di calo del feed membri (%)",
-      "retention": "Conservazione della cronologia delle importazioni (mesi)",
-      "csvCap": "Limite di righe per l'esportazione CSV"
+      "pageSize": "Risultati per pagina"
     }
   },
   "members": {
@@ -551,6 +547,14 @@
       "cutover_in_progress": "Bloccato: è in corso un cutover.",
       "claim_closed": "Bloccato: l'attivazione degli account è ancora chiusa.",
       "emails_suppressed": "Bloccato: le e-mail ai membri sono sospese, senza casella di test."
+    },
+    "limitsTitle": "Limiti tecnici",
+    "limitsBody": "Valori di regolazione usati dalla sincronizzazione dei membri e dalle sue esportazioni.",
+    "limitsLoading": "Caricamento…",
+    "limits": {
+      "feedDrop": "Soglia di calo del feed membri (%)",
+      "retention": "Conservazione della cronologia delle importazioni (mesi)",
+      "csvCap": "Limite di righe per l'esportazione CSV"
     }
   },
   "member": {
@@ -759,10 +763,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Guidare progetti",
-            "Essere riconosciuti da ICFS per aver guidato iniziative"
-          ]
+          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
         },
         "status": {
           "title": "Status",

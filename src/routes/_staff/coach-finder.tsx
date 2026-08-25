@@ -9,6 +9,7 @@ import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
 import { useEffect, useState } from "react";
 import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
+import { Input } from "@/design-system/icf-welcome-design-system-a835df";
 import { useCms } from "@/i18n/cms";
 import { getCoachFinderConfigForStaff } from "@/lib/coach-finder-config.functions";
 import { type CoachFinderConfig } from "@/lib/vocabularies";
@@ -28,13 +29,6 @@ const FACETS = [
   { enabled: "coaching_enabled", label: "coaching_label", key: "coaching" },
   { enabled: "mentoring_enabled", label: "mentoring_label", key: "mentoring" },
   { enabled: "supervision_enabled", label: "supervision_label", key: "supervision" },
-] as const;
-
-const NUMBERS = [
-  { field: "page_size", key: "pageSize" },
-  { field: "feed_drop_threshold_pct", key: "feedDrop" },
-  { field: "snapshot_retention_months", key: "retention" },
-  { field: "csv_export_row_cap", key: "csvCap" },
 ] as const;
 
 const INPUT =
@@ -128,29 +122,21 @@ function CoachFinderSettingsPage() {
                   <option value="recent">{t("finder.sort.recent")}</option>
                 </select>
               </label>
-            </section>
-
-            <section className="rounded-2xl border border-border bg-card p-5">
-              <h2 className="text-sm font-bold">{t("finder.tunables")}</h2>
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                {NUMBERS.map((n) => (
-                  <label key={n.field} className="text-xs text-muted-foreground">
-                    {t(`finder.numbers.${n.key}`)}
-                    <input
-                      type="number"
-                      min={1}
-                      value={config[n.field]}
-                      onChange={(e) =>
-                        setConfig((prev) =>
-                          prev ? { ...prev, [n.field]: Number(e.target.value) } : prev,
-                        )
-                      }
-                      onBlur={(e) => void patch({ [n.field]: Number(e.target.value) })}
-                      className={INPUT + " mt-1 w-full"}
-                    />
-                  </label>
-                ))}
-              </div>
+              <label className="mt-3 block text-xs text-muted-foreground">
+                {t("finder.numbers.pageSize")}
+                <Input
+                  type="number"
+                  min={1}
+                  value={config.page_size}
+                  onChange={(e) =>
+                    setConfig((prev) =>
+                      prev ? { ...prev, page_size: Number(e.target.value) } : prev,
+                    )
+                  }
+                  onBlur={(e) => void patch({ page_size: Number(e.target.value) })}
+                  className="mt-1 w-56"
+                />
+              </label>
             </section>
           </div>
         )}
