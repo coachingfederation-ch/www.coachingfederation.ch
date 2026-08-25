@@ -109,6 +109,8 @@ export type PublicCoachFinderConfig = {
   supervision_label: string;
   default_sort: string;
   page_size: number;
+  /** Chapter-wide: may members without a valid ACC/PCC/MCC list themselves? */
+  allow_non_credentialed: boolean;
 };
 
 /** Full row, including internal tuning. Staff-only; read via a server function. */
@@ -120,7 +122,7 @@ export type CoachFinderConfig = PublicCoachFinderConfig & {
 
 /** The columns `anon` and `authenticated` are granted SELECT on. */
 export const PUBLIC_CONFIG_COLUMNS =
-  "coaching_enabled, mentoring_enabled, supervision_enabled, coaching_label, mentoring_label, supervision_label, default_sort, page_size";
+  "coaching_enabled, mentoring_enabled, supervision_enabled, coaching_label, mentoring_label, supervision_label, default_sort, page_size, allow_non_credentialed";
 
 export async function fetchCoachFinderConfig(): Promise<PublicCoachFinderConfig | null> {
   const { data, error } = await supabase
