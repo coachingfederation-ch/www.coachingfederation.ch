@@ -30,7 +30,6 @@ const FACETS = [
   { enabled: "supervision_enabled", label: "supervision_label", key: "supervision" },
 ] as const;
 
-
 const INPUT =
   "rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring/20";
 

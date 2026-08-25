@@ -71,7 +71,9 @@ export function SyncLimitsCard() {
                 min={1}
                 value={config[n.field]}
                 onChange={(e) =>
-                  setConfig((prev) => (prev ? { ...prev, [n.field]: Number(e.target.value) } : prev))
+                  setConfig((prev) =>
+                    prev ? { ...prev, [n.field]: Number(e.target.value) } : prev,
+                  )
                 }
                 onBlur={(e) => void patch({ [n.field]: Number(e.target.value) })}
                 className={INPUT + " mt-1 w-full"}
