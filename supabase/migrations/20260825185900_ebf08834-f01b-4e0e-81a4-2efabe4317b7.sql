@@ -1,0 +1,1 @@
+UPDATE public.coach_finder_config SET default_sort = 'random', updated_at = now() WHERE default_sort IS DISTINCT FROM 'random';
