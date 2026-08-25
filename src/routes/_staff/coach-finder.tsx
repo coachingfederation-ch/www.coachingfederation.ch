@@ -9,7 +9,7 @@ import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
 import { useEffect, useState } from "react";
 import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
-import { Input } from "@/design-system/icf-welcome-design-system-a835df";
+import { Input, Switch } from "@/design-system/icf-welcome-design-system-a835df";
 import { useCms } from "@/i18n/cms";
 import { getCoachFinderConfigForStaff } from "@/lib/coach-finder-config.functions";
 import { type CoachFinderConfig } from "@/lib/vocabularies";
