@@ -121,7 +121,9 @@ function CoachFinderSettingsPage() {
                   onChange={(e) => void patch({ default_sort: e.target.value })}
                   className={INPUT + " mt-1 block w-56"}
                 >
+                  <option value="random">{t("finder.sort.random")}</option>
                   <option value="name">{t("finder.sort.name")}</option>
+
                   <option value="credential">{t("finder.sort.credential")}</option>
                   <option value="recent">{t("finder.sort.recent")}</option>
                 </select>
