@@ -79,7 +79,8 @@
     "accepting": "Nimmt neue Klienten an",
     "waitlist": "Nur Warteliste",
     "credentialSince": "Zertifiziert seit {year}",
-    "viewProfile": "Profil anzeigen"
+    "viewProfile": "Profil anzeigen",
+    "noAccreditation": "Keine ICF-Akkreditierung"
   },
   "formats": {
     "in-person": "Vor Ort",

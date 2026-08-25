@@ -79,7 +79,8 @@
     "accepting": "Disponibile per nuovi clienti",
     "waitlist": "Solo lista d'attesa",
     "credentialSince": "Credenziale dal {year}",
-    "viewProfile": "Vedi profilo"
+    "viewProfile": "Vedi profilo",
+    "noAccreditation": "Senza accreditamento ICF"
   },
   "formats": {
     "in-person": "In presenza",

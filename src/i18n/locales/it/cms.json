@@ -270,6 +270,11 @@
     },
     "numbers": {
       "pageSize": "Risultati per pagina"
+    },
+    "eligibility": {
+      "title": "Idoneità alla directory",
+      "allowNonCredentialed": "Consenti i membri senza accreditamento",
+      "allowNonCredentialedHint": "I membri attivi o nel periodo di tolleranza possono pubblicare un profilo anche senza una credenziale ACC, PCC o MCC valida. I membri con iscrizione inattiva non possono mai. I coach accreditati restano per primi in ogni ordinamento."
     }
   },
   "members": {
@@ -763,7 +768,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
+          "items": [
+            "Guidare progetti",
+            "Essere riconosciuti da ICFS per aver guidato iniziative"
+          ]
         },
         "status": {
           "title": "Status",
