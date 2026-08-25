@@ -83,15 +83,39 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
     const pageSize = config?.page_size ?? 12;
     const page = data.page ?? 0;
 
-    const sort = config?.default_sort ?? "name";
+    const sort = normaliseSort(config?.default_sort);
+    const seed = data.seed ?? 1;
 
     const query = applyFacets(
       supabasePublic.from("coach_directory_public").select("*", { count: "exact" }),
       data,
     );
 
-
     const locale = (data.locale ?? "en") as Locale;
+
+    const withImages = async (rows: DirectoryEntry[]) => {
+      const signed = await signProfileImages(
+        rows.map((e) => e.profile_image_path).filter((p): p is string => !!p),
+      );
+      for (const entry of rows) {
+        entry.image_url = entry.profile_image_path
+          ? (signed.get(entry.profile_image_path) ?? null)
+          : null;
+      }
+      return rows.map((entry) => resolveProfileLocale(entry, locale));
+    };
+
+    /** Fetches the given profiles and restores the order of `ids`. */
+    const fetchInOrder = async (ids: string[]) => {
+      const { data: rows, error } = await supabasePublic
+        .from("coach_directory_public")
+        .select("*")
+        .in("profile_id", ids);
+      if (error) throw error;
+      const entries = (rows ?? []) as DirectoryEntry[];
+      entries.sort((a, b) => ids.indexOf(a.profile_id!) - ids.indexOf(b.profile_id!));
+      return entries;
+    };
 
     // Unfiltered first view: show a random showcase instead of the first
     // alphabetical page, so every published coach gets exposure.
@@ -111,34 +135,14 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
       if (idError) throw idError;
 
       const ids = (idRows ?? []).map((r) => r.profile_id).filter((id): id is string => !!id);
-      for (let i = ids.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [ids[i], ids[j]] = [ids[j]!, ids[i]!];
-      }
-      const picked = ids.slice(0, data.sample);
+      const picked = shuffleWithSeed(ids, seed).slice(0, data.sample);
       if (!picked.length) {
         return { entries: [], total: idCount ?? 0, page: 0, pageSize: data.sample, sampled: true };
       }
 
-      const { data: sampleRows, error: sampleError } = await supabasePublic
-        .from("coach_directory_public")
-        .select("*")
-        .in("profile_id", picked);
-      if (sampleError) throw sampleError;
-
-      const sampled = (sampleRows ?? []) as DirectoryEntry[];
-      // Preserve the shuffled order the ids were picked in.
-      sampled.sort((a, b) => picked.indexOf(a.profile_id!) - picked.indexOf(b.profile_id!));
-      const sampleSigned = await signProfileImages(
-        sampled.map((e) => e.profile_image_path).filter((p): p is string => !!p),
-      );
-      for (const entry of sampled) {
-        entry.image_url = entry.profile_image_path
-          ? (sampleSigned.get(entry.profile_image_path) ?? null)
-          : null;
-      }
+      const sampled = await fetchInOrder(picked);
       return {
-        entries: sampled.map((entry) => resolveProfileLocale(entry, locale)),
+        entries: await withImages(sampled),
         total: idCount ?? sampled.length,
         page: 0,
         pageSize: data.sample,
@@ -146,34 +150,58 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
       };
     }
 
+    // `random` and `credential` cannot be expressed as a PostgREST order
+    // clause, so the matching ids are ordered here and the page sliced from
+    // that list. Everything else is ordered by the database.
+    if (isIdListSort(sort)) {
+      const idQuery = applyFacets(
+        supabasePublic
+          .from("coach_directory_public")
+          .select("profile_id, credential_slug, full_name", { count: "exact" }),
+        data,
+      );
+      const { data: idRows, error: idError, count: idCount } = await idQuery;
+      if (idError) throw idError;
+
+      const ordered = orderProfileIds(idRows ?? [], sort, seed);
+      const pageIds = ordered.slice(page * pageSize, page * pageSize + pageSize);
+      if (!pageIds.length) {
+        return { entries: [], total: idCount ?? ordered.length, page, pageSize, sampled: false };
+      }
+
+      const rows = await fetchInOrder(pageIds);
+      return {
+        entries: await withImages(rows),
+        total: idCount ?? ordered.length,
+        page,
+        pageSize,
+        sampled: false,
+      };
+    }
+
+    const ranged =
+      sort === "recent"
+        ? query
+            .order("updated_at", { ascending: false, nullsFirst: false })
+            .order("full_name", { ascending: true })
+        : query.order("full_name", { ascending: true });
+
     const {
       data: rows,
       error,
       count,
-    } = await query
-      .order("full_name", { ascending: true })
-      .range(page * pageSize, page * pageSize + pageSize - 1);
+    } = await ranged.range(page * pageSize, page * pageSize + pageSize - 1);
     if (error) throw error;
 
-    // Sign only the images of the rows on this page.
-    const entries = (rows ?? []) as DirectoryEntry[];
-    const signed = await signProfileImages(
-      entries.map((e) => e.profile_image_path).filter((p): p is string => !!p),
-    );
-    for (const entry of entries) {
-      entry.image_url = entry.profile_image_path
-        ? (signed.get(entry.profile_image_path) ?? null)
-        : null;
-    }
-
     return {
-      entries: entries.map((entry) => resolveProfileLocale(entry, locale)),
+      entries: await withImages((rows ?? []) as DirectoryEntry[]),
       total: count ?? 0,
       page,
       pageSize,
       sampled: false,
     };
   });
+
 
 /**
  * Public read-only coach detail. The view is queried first: if it returns no
