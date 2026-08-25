@@ -429,7 +429,6 @@ function CredentialCheckCard({ t }: { t: (key: string) => string }) {
     }
   };
 
-
   const flags = (s: {
     hasLeadingWhitespace: boolean;
     hasTrailingWhitespace: boolean;
@@ -448,18 +447,10 @@ function CredentialCheckCard({ t }: { t: (key: string) => string }) {
       <h2 className="text-sm font-bold">{t("integration.credTitle")}</h2>
       <p className="mt-1 text-xs text-muted-foreground">{t("integration.credBody")}</p>
       <div className="mt-3 flex flex-wrap gap-2">
-        <button
-          className={BTN}
-          disabled={checking !== null}
-          onClick={() => void check("test")}
-        >
+        <button className={BTN} disabled={checking !== null} onClick={() => void check("test")}>
           {checking === "test" ? t("integration.credChecking") : t("integration.credCheckTest")}
         </button>
-        <button
-          className={BTN}
-          disabled={checking !== null}
-          onClick={() => void check("live")}
-        >
+        <button className={BTN} disabled={checking !== null} onClick={() => void check("live")}>
           {checking === "live" ? t("integration.credChecking") : t("integration.credCheckLive")}
         </button>
       </div>

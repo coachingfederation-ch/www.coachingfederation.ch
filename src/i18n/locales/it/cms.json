@@ -745,10 +745,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Guidare progetti",
-            "Essere riconosciuti da ICFS per aver guidato iniziative"
-          ]
+          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
         },
         "status": {
           "title": "Status",
