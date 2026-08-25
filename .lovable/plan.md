@@ -44,4 +44,5 @@ Assumption: the grace period is opened by the same switch — there is no separa
 - **Backend / Schema** — one migration: new config column, updated `member_is_directory_eligible`, updated publish guard, redefined `coach_directory_public` (grants unchanged).
 - **Testing & Verification** — switch off = current behaviour (credentialed only); switch on = active and grace non-credentialed members can publish, inactive still blocked at trigger level; directory ordering checked in all four sort modes with paging; member editor and staff member screen show the right block reason.
 - **Risks & Rollback** — blast radius is the Coach Finder read path and the publish gate. Rollback = set the switch off (instant); the migration is safe to leave in place if code is reverted, since the default reproduces today's rules.
-- **Follow-ups** — no separate grace-period control; no card badge distinguishing non-credentialed coaches, and the credential filter still lists ACC/PCC/MCC only.
+- **Included** — coaches without a valid credential carry a neutral "No ICF Accreditation" badge on the directory card and profile header, in place of the ACC/PCC/MCC badge, localised in en/de/fr/it.
+- **Follow-ups** — no separate grace-period control; the credential filter still lists ACC/PCC/MCC only.
