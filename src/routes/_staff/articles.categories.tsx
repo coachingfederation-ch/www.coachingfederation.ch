@@ -12,6 +12,7 @@ import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
 import { slugify, type CategoryRow } from "@/lib/articles";
 import { useCms } from "@/i18n/cms";
+import { translateTaxonomyLabels } from "@/lib/label-translations.functions";
 
 export const Route = createFileRoute("/_staff/articles/categories")({
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, CATEGORY_ROLES),
@@ -33,6 +34,7 @@ function CategoriesPage() {
   const [newName, setNewName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [translating, setTranslating] = useState<string | null>(null);
 
   const load = async () => {
     const { data } = await supabase
@@ -57,18 +59,50 @@ function CategoriesPage() {
     if (!name) return;
     setBusy(true);
     setError(null);
-    const { error: err } = await supabase.from("categories").insert({
-      name,
-      slug: slugify(name) || `category-${Date.now()}`,
-      sort_order: rows.length,
-    });
-    setBusy(false);
+    const { data: created, error: err } = await supabase
+      .from("categories")
+      .insert({
+        name,
+        slug: slugify(name) || `category-${Date.now()}`,
+        sort_order: rows.length,
+      })
+      .select("id")
+      .maybeSingle();
     if (err) {
+      setBusy(false);
       setError(err.message);
       return;
     }
     setNewName("");
+    // Creation must never block on the AI call: the row already exists, so a
+    // translation failure only leaves the locale fields empty.
+    if (created?.id) await fillTranslations(created.id, name, {});
+    setBusy(false);
     await load();
+  };
+
+  /** Fill only the locale fields that are still empty — manual wording wins. */
+  const fillTranslations = async (id: string, name: string, current: Partial<CategoryRow>) => {
+    setTranslating(id);
+    try {
+      const [labels] = await translateTaxonomyLabels({
+        data: { scope: "category", names: [name] },
+      });
+      if (!labels) throw new Error("empty");
+      const values: Partial<CategoryRow> = {};
+      for (const l of ["de", "fr", "it"] as const) {
+        const key = `name_${l}` as const;
+        if (!current[key]) values[key] = labels[l];
+      }
+      if (Object.keys(values).length === 0) return;
+      const { error: err } = await supabase.from("categories").update(values).eq("id", id);
+      if (err) throw new Error(err.message);
+      setRows((prev) => prev.map((r) => (r.id === id ? { ...r, ...values } : r)));
+    } catch {
+      setError(t("taxonomy.translateFailed"));
+    } finally {
+      setTranslating(null);
+    }
   };
 
   const patch = async (id: string, values: Partial<CategoryRow>) => {
@@ -136,6 +170,14 @@ function CategoriesPage() {
                 <span className="text-xs text-muted-foreground">
                   {counts[row.id] ?? 0} {t("categories.articles")}
                 </span>
+                <button
+                  type="button"
+                  onClick={() => void fillTranslations(row.id, row.name, row)}
+                  disabled={translating === row.id}
+                  className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-muted-foreground hover:text-foreground disabled:opacity-60"
+                >
+                  {translating === row.id ? t("taxonomy.translating") : t("taxonomy.translate")}
+                </button>
                 <button
                   onClick={() => void remove(row)}
                   className="rounded-lg p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
