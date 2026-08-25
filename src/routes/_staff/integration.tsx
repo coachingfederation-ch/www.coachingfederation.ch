@@ -414,17 +414,22 @@ function CredentialCheckCard({ t }: { t: (key: string) => string }) {
   } | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
 
-  const check = async () => {
-    setChecking(true);
+  // The mode is an explicit choice, not the configured integration mode: the
+  // LIVE account must be verifiable while the site is still running on TEST.
+  const [checking, setChecking] = useState<"test" | "live" | null>(null);
+
+  const check = async (mode: "test" | "live") => {
+    setChecking(mode);
     setFailure(null);
     try {
-      setResult(await checkIcfCredentials());
+      setResult(await checkIcfCredentials({ data: { mode } }));
     } catch (err) {
       setFailure(err instanceof Error ? err.message : String(err));
     } finally {
-      setChecking(false);
+      setChecking(null);
     }
   };
+
 
   const flags = (s: {
     hasLeadingWhitespace: boolean;
