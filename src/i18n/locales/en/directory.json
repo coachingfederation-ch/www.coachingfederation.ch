@@ -79,7 +79,8 @@
     "accepting": "Accepting new clients",
     "waitlist": "Waitlist only",
     "credentialSince": "Credentialed since {year}",
-    "viewProfile": "View profile"
+    "viewProfile": "View profile",
+    "noAccreditation": "No ICF accreditation"
   },
   "formats": {
     "in-person": "In person",

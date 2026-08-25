@@ -270,6 +270,11 @@
     },
     "numbers": {
       "pageSize": "Résultats par page"
+    },
+    "eligibility": {
+      "title": "Éligibilité à l’annuaire",
+      "allowNonCredentialed": "Autoriser les membres sans accréditation",
+      "allowNonCredentialedHint": "Les membres actifs ou en période de grâce peuvent publier un profil même sans accréditation ACC, PCC ou MCC valable. Les membres dont l’adhésion est inactive ne le peuvent jamais. Les coachs accrédités restent en tête de chaque tri."
     }
   },
   "members": {
@@ -763,7 +768,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
+          "items": [
+            "Piloter des projets",
+            "Être reconnu par ICFS pour avoir mené des initiatives"
+          ]
         },
         "status": {
           "title": "Status",

@@ -69,9 +69,15 @@ export function CoachProfileHero({
               <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
                 {name}
               </h1>
-              {profile.credential_slug && (
-                <span className="inline-flex h-6 items-center rounded-full bg-hero-foreground/15 px-2.5 text-[11px] font-bold tracking-wider">
-                  {profile.credential_slug.toUpperCase()}
+              {profile.has_directory_credential ? (
+                profile.credential_slug && (
+                  <span className="inline-flex h-6 items-center rounded-full bg-hero-foreground/15 px-2.5 text-xs font-bold tracking-wider">
+                    {profile.credential_slug.toUpperCase()}
+                  </span>
+                )
+              ) : (
+                <span className="inline-flex h-6 items-center rounded-full bg-hero-foreground/15 px-2.5 text-xs font-bold tracking-wider">
+                  {t("directory.card.noAccreditation")}
                 </span>
               )}
             </div>

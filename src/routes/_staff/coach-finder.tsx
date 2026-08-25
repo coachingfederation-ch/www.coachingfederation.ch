@@ -9,7 +9,7 @@ import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
 import { useEffect, useState } from "react";
 import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
-import { Input } from "@/design-system/icf-welcome-design-system-a835df";
+import { Input, Switch } from "@/design-system/icf-welcome-design-system-a835df";
 import { useCms } from "@/i18n/cms";
 import { getCoachFinderConfigForStaff } from "@/lib/coach-finder-config.functions";
 import { type CoachFinderConfig } from "@/lib/vocabularies";
@@ -137,6 +137,23 @@ function CoachFinderSettingsPage() {
                   className="mt-1 w-56"
                 />
               </label>
+            </section>
+
+            <section className="rounded-2xl border border-border bg-card p-5">
+              <h2 className="text-sm font-bold">{t("finder.eligibility.title")}</h2>
+              <div className="mt-3 flex items-start gap-3">
+                <Switch
+                  id="allow-non-credentialed"
+                  checked={config.allow_non_credentialed}
+                  onCheckedChange={(checked) => void patch({ allow_non_credentialed: checked })}
+                />
+                <label htmlFor="allow-non-credentialed" className="text-sm">
+                  {t("finder.eligibility.allowNonCredentialed")}
+                  <span className="mt-1 block text-xs text-muted-foreground">
+                    {t("finder.eligibility.allowNonCredentialedHint")}
+                  </span>
+                </label>
+              </div>
             </section>
           </div>
         )}

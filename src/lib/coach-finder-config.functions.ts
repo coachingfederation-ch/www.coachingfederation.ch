@@ -26,7 +26,7 @@ export const getCoachFinderConfigForStaff = createServerFn({ method: "POST" })
     const { data, error } = await supabaseAdmin
       .from("coach_finder_config")
       .select(
-        "coaching_enabled, mentoring_enabled, supervision_enabled, coaching_label, mentoring_label, supervision_label, default_sort, page_size, feed_drop_threshold_pct, snapshot_retention_months, csv_export_row_cap",
+        "coaching_enabled, mentoring_enabled, supervision_enabled, coaching_label, mentoring_label, supervision_label, default_sort, page_size, allow_non_credentialed, feed_drop_threshold_pct, snapshot_retention_months, csv_export_row_cap",
       )
       .maybeSingle();
     if (error) throw new Error(error.message);

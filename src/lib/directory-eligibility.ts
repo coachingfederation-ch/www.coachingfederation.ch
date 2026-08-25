@@ -58,22 +58,48 @@ export function hasDirectoryCredential(member: MemberEligibilityFacts): boolean 
   return new Date(`${member.credential_expires_on}T23:59:59Z`).getTime() >= Date.now();
 }
 
-export function isDirectoryEligible(member: MemberEligibilityFacts): boolean {
-  return isActiveMember(member) && hasDirectoryCredential(member);
+/**
+ * Chapter-wide relaxation of the credential rule, mirroring
+ * `coach_finder_config.allow_non_credentialed` and the SQL function
+ * `public.directory_allows_non_credentialed()`.
+ *
+ * With the switch off the historic rule stands: active membership plus a valid
+ * ACC/PCC/MCC. With it on, the grace period also counts as participating and
+ * the credential is no longer required — an inactive membership never is.
+ * Default `false` everywhere, so a caller that does not know about the switch
+ * keeps today's behaviour.
+ */
+export type DirectoryRules = { allowNonCredentialed?: boolean };
+
+function participates(member: MemberEligibilityFacts, rules: DirectoryRules): boolean {
+  if (isActiveMember(member)) return true;
+  return Boolean(rules.allowNonCredentialed) && member.activity_state === "grace";
+}
+
+export function isDirectoryEligible(
+  member: MemberEligibilityFacts,
+  rules: DirectoryRules = {},
+): boolean {
+  return participates(member, rules) && (hasDirectoryCredential(member) || !!rules.allowNonCredentialed);
 }
 
 export function isDirectoryVisible(
   member: MemberEligibilityFacts,
   visibility: MemberVisibility | string | null,
+  rules: DirectoryRules = {},
 ): boolean {
-  return isDirectoryEligible(member) && visibility === "published";
+  return isDirectoryEligible(member, rules) && visibility === "published";
 }
 
 export type EligibilityReason = "eligible" | "inactive" | "no_credential" | "credential_expired";
 
 /** Why a member is (not) eligible — drives admin and Member Area messaging. */
-export function directoryEligibilityReason(member: MemberEligibilityFacts): EligibilityReason {
-  if (!isActiveMember(member)) return "inactive";
+export function directoryEligibilityReason(
+  member: MemberEligibilityFacts,
+  rules: DirectoryRules = {},
+): EligibilityReason {
+  if (!participates(member, rules)) return "inactive";
+  if (rules.allowNonCredentialed) return "eligible";
   const slug = (member.credential_slug ?? "").toUpperCase();
   if (!(DIRECTORY_CREDENTIAL_SLUGS as readonly string[]).includes(slug)) return "no_credential";
   if (!hasDirectoryCredential(member)) return "credential_expired";
@@ -81,12 +107,16 @@ export function directoryEligibilityReason(member: MemberEligibilityFacts): Elig
 }
 
 /** Visibility a system-driven reconcile must force, or null to leave as-is. */
-export function enforcedVisibility(member: MemberEligibilityFacts): MemberVisibility | null {
-  const reason = directoryEligibilityReason(member);
+export function enforcedVisibility(
+  member: MemberEligibilityFacts,
+  rules: DirectoryRules = {},
+): MemberVisibility | null {
+  const reason = directoryEligibilityReason(member, rules);
   if (reason === "inactive") return "hidden_inactive";
   if (reason === "no_credential" || reason === "credential_expired") return "hidden_no_credential";
   return null;
 }
+
 
 /**
  * Why a profile may not be published right now, or null when it may.

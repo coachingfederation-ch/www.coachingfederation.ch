@@ -20,7 +20,6 @@ import {
   isIdListSort,
   normaliseSort,
   orderProfileIds,
-  shuffleWithSeed,
 } from "./directory-sort";
 
 
@@ -86,13 +85,17 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
 
     const { data: config } = await supabasePublic
       .from("coach_finder_config")
-      .select("page_size, default_sort")
+      .select("page_size, default_sort, allow_non_credentialed")
       .maybeSingle();
     const pageSize = config?.page_size ?? 12;
     const page = data.page ?? 0;
 
     const sort = normaliseSort(config?.default_sort);
     const seed = data.seed ?? 1;
+    // With non-credentialed listings enabled, credentialed coaches lead every
+    // sort mode — which no PostgREST order clause can express, so all modes go
+    // through the id-list path.
+    const eligibleFirst = Boolean(config?.allow_non_credentialed);
 
     const query = applyFacets(
       supabasePublic.from("coach_directory_public").select("*", { count: "exact" }),
@@ -137,13 +140,15 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
     if (data.sample && !facetsActive && page === 0) {
       let idQuery = supabasePublic
         .from("coach_directory_public")
-        .select("profile_id", { count: "exact" });
+        .select("profile_id, has_directory_credential", { count: "exact" });
       if (data.services?.length) idQuery = idQuery.overlaps("services", data.services);
       const { data: idRows, error: idError, count: idCount } = await idQuery;
       if (idError) throw idError;
 
-      const ids = (idRows ?? []).map((r) => r.profile_id).filter((id): id is string => !!id);
-      const picked = shuffleWithSeed(ids, seed).slice(0, data.sample);
+      const picked = orderProfileIds(idRows ?? [], "random", seed, { eligibleFirst }).slice(
+        0,
+        data.sample,
+      );
       if (!picked.length) {
         return { entries: [], total: idCount ?? 0, page: 0, pageSize: data.sample, sampled: true };
       }
@@ -160,18 +165,21 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
 
     // `random` and `credential` cannot be expressed as a PostgREST order
     // clause, so the matching ids are ordered here and the page sliced from
-    // that list. Everything else is ordered by the database.
-    if (isIdListSort(sort)) {
+    // that list. Everything else is ordered by the database — unless
+    // credentialed coaches must lead, which no order clause can express either.
+    if (isIdListSort(sort) || eligibleFirst) {
       const idQuery = applyFacets(
         supabasePublic
           .from("coach_directory_public")
-          .select("profile_id, credential_slug, full_name", { count: "exact" }),
+          .select("profile_id, credential_slug, full_name, updated_at, has_directory_credential", {
+            count: "exact",
+          }),
         data,
       );
       const { data: idRows, error: idError, count: idCount } = await idQuery;
       if (idError) throw idError;
 
-      const ordered = orderProfileIds(idRows ?? [], sort, seed);
+      const ordered = orderProfileIds(idRows ?? [], sort, seed, { eligibleFirst });
       const pageIds = ordered.slice(page * pageSize, page * pageSize + pageSize);
       if (!pageIds.length) {
         return { entries: [], total: idCount ?? ordered.length, page, pageSize, sampled: false };

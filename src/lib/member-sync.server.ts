@@ -372,6 +372,11 @@ export async function reconcileDirectoryVisibility(runId: string | null): Promis
     );
   if (error) throw error;
 
+  // Read once: the switch is chapter-wide, so a whole reconcile pass settles
+  // against the same rule the database trigger will apply.
+  const { directoryRules } = await import("./directory-config.server");
+  const rules = await directoryRules();
+
   let demoted = 0;
   let restored = 0;
 
@@ -383,7 +388,7 @@ export async function reconcileDirectoryVisibility(runId: string | null): Promis
   }[]) {
     if (row.visibility === "hidden_admin") continue;
     const facts = row.members;
-    const forced = enforcedVisibility(facts);
+    const forced = enforcedVisibility(facts, rules);
     const next =
       forced ??
       (row.visibility === "hidden_inactive" || row.visibility === "hidden_no_credential"

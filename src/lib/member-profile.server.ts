@@ -179,11 +179,14 @@ export async function loadMyMemberProfile(userId: string): Promise<MyMemberProfi
     links = (linkRows ?? []) as MemberProfileLink[];
   }
 
+  const { directoryRules } = await import("./directory-config.server");
+  const rules = await directoryRules();
+
   return {
     member: member as MyMemberProfile["member"],
     eligibility: {
-      eligible: isDirectoryEligible(member),
-      reason: directoryEligibilityReason(member),
+      eligible: isDirectoryEligible(member, rules),
+      reason: directoryEligibilityReason(member, rules),
     },
     profile: profile
       ? ({ ...profile, ...facets, links } as unknown as MyMemberProfile["profile"])
@@ -342,8 +345,9 @@ export async function updateMyMemberProfile(
           .eq("profile_id", profile.id);
         regionCount = count ?? 0;
       }
+      const { directoryRules } = await import("./directory-config.server");
       const blocked = publishBlockReason({
-        eligible: isDirectoryEligible(member),
+        eligible: isDirectoryEligible(member, await directoryRules()),
         regionCount,
       });
       if (blocked === "ineligible") throw new Error("Not directory-eligible.");

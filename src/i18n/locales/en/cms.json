@@ -270,6 +270,11 @@
     },
     "numbers": {
       "pageSize": "Results per page"
+    },
+    "eligibility": {
+      "title": "Directory eligibility",
+      "allowNonCredentialed": "Enable non-eligible members",
+      "allowNonCredentialedHint": "Members in the active or grace period may publish a profile even without a valid ACC, PCC or MCC credential. Members with an inactive membership never can. Credentialed coaches stay first in every sort order."
     }
   },
   "members": {
@@ -763,7 +768,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
+          "items": [
+            "Lead projects",
+            "Be recognized by ICFS for leading initiatives"
+          ]
         },
         "status": {
           "title": "Status",

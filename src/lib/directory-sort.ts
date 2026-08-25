@@ -55,7 +55,24 @@ export type SortableRow = {
   profile_id: string | null;
   credential_slug?: string | null;
   full_name?: string | null;
+  updated_at?: string | null;
+  has_directory_credential?: boolean | null;
 };
+
+export type OrderOptions = {
+  /**
+   * When the chapter lets members without a valid credential list themselves,
+   * credentialed coaches still come first in every mode; the chosen sort then
+   * orders each group. Every mode therefore has to be resolved here, not by a
+   * PostgREST `.order()` clause.
+   */
+  eligibleFirst?: boolean;
+};
+
+/** Credentialed coaches sort ahead of non-credentialed ones. */
+function eligibilityRank(row: SortableRow): number {
+  return row.has_directory_credential === false ? 1 : 0;
+}
 
 /**
  * Turns the full matching row set into the ordered id list for `sort`, from
@@ -65,20 +82,40 @@ export function orderProfileIds(
   rows: SortableRow[],
   sort: DirectorySort,
   seed: number,
+  options: OrderOptions = {},
 ): string[] {
-  const ids = rows.map((r) => r.profile_id).filter((id): id is string => !!id);
-  if (sort === "random") return shuffleWithSeed(ids, seed);
+  const withId = rows.filter((r): r is SortableRow & { profile_id: string } => !!r.profile_id);
 
-  // credential: rank first, then name so the order is stable across requests.
-  return [...rows]
-    .filter((r): r is SortableRow & { profile_id: string } => !!r.profile_id)
-    .sort(
-      (a, b) =>
-        credentialRank(a.credential_slug) - credentialRank(b.credential_slug) ||
-        (a.full_name ?? "").localeCompare(b.full_name ?? ""),
-    )
-    .map((r) => r.profile_id);
+  const inSort = (list: (SortableRow & { profile_id: string })[]): string[] => {
+    if (sort === "random") {
+      return shuffleWithSeed(
+        list.map((r) => r.profile_id),
+        seed,
+      );
+    }
+    const byName = (a: SortableRow, b: SortableRow) =>
+      (a.full_name ?? "").localeCompare(b.full_name ?? "");
+    return [...list]
+      .sort((a, b) => {
+        if (sort === "credential") {
+          return credentialRank(a.credential_slug) - credentialRank(b.credential_slug) || byName(a, b);
+        }
+        if (sort === "recent") {
+          return (b.updated_at ?? "").localeCompare(a.updated_at ?? "") || byName(a, b);
+        }
+        return byName(a, b);
+      })
+      .map((r) => r.profile_id);
+  };
+
+  if (!options.eligibleFirst) return inSort(withId);
+
+  return [
+    ...inSort(withId.filter((r) => eligibilityRank(r) === 0)),
+    ...inSort(withId.filter((r) => eligibilityRank(r) === 1)),
+  ];
 }
+
 
 export type DirectoryFacets = {
   services?: string[];

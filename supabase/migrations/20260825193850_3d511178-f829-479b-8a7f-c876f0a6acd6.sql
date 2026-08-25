@@ -1,0 +1,1 @@
+GRANT SELECT (allow_non_credentialed) ON public.coach_finder_config TO anon, authenticated;

@@ -270,6 +270,11 @@
     },
     "numbers": {
       "pageSize": "Ergebnisse pro Seite"
+    },
+    "eligibility": {
+      "title": "Verzeichnis-Berechtigung",
+      "allowNonCredentialed": "Mitglieder ohne Akkreditierung zulassen",
+      "allowNonCredentialedHint": "Mitglieder mit aktiver Mitgliedschaft oder in der Nachfrist dürfen ein Profil veröffentlichen, auch ohne gültige ACC-, PCC- oder MCC-Akkreditierung. Mitglieder mit inaktiver Mitgliedschaft nie. Akkreditierte Coaches bleiben in jeder Sortierung zuvorderst."
     }
   },
   "members": {
@@ -763,7 +768,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
+          "items": [
+            "Projekte leiten",
+            "Von ICFS für die Leitung von Initiativen anerkannt werden"
+          ]
         },
         "status": {
           "title": "Status",

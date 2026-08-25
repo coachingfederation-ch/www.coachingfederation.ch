@@ -100,13 +100,15 @@ function MemberDetailPage() {
   const publishBlocked = useMemo(() => {
     if (!facts) return null;
     const reason = publishBlockReason({
-      eligible: isDirectoryEligible(facts),
+      eligible: isDirectoryEligible(facts, {
+        allowNonCredentialed: detail?.allowNonCredentialed,
+      }),
       regionCount: selectedRegions.length,
     });
     if (reason === "ineligible") return t("members.detail.blockedIneligible");
     if (reason === "no_region") return t("members.detail.blockedNoRegion");
     return null;
-  }, [facts, selectedRegions, t]);
+  }, [facts, detail?.allowNonCredentialed, selectedRegions, t]);
 
   const save = async () => {
     setStatus("saving");

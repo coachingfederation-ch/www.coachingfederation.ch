@@ -749,6 +749,7 @@ export type Database = {
       }
       coach_finder_config: {
         Row: {
+          allow_non_credentialed: boolean
           coaching_enabled: boolean
           coaching_label: string
           created_at: string
@@ -765,6 +766,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          allow_non_credentialed?: boolean
           coaching_enabled?: boolean
           coaching_label?: string
           created_at?: string
@@ -781,6 +783,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          allow_non_credentialed?: boolean
           coaching_enabled?: boolean
           coaching_label?: string
           created_at?: string
@@ -5011,6 +5014,7 @@ export type Database = {
         Args: { _actor: string; _registration_id: string }
         Returns: Json
       }
+      directory_allows_non_credentialed: { Args: never; Returns: boolean }
       live_chat_online_count: { Args: never; Returns: number }
       member_has_directory_credential: {
         Args: { _credential_expires_on: string; _credential_slug: string }
