@@ -4,7 +4,7 @@
  */
 import { visit } from "unist-util-visit";
 import type { Root, Blockquote, Paragraph, Text } from "mdast";
-import { CALLOUT_ALIASES } from "@/components/callout-shades";
+import { CALLOUT_ALIASES } from "@/design-system/icf-welcome-design-system-a835df";
 
 /** `[!info] 💡` — shade marker plus an optional leading emoji. */
 const MARKER = /^\[!([a-z]+)\][ \t]*/i;

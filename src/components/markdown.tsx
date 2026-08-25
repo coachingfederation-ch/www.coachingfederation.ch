@@ -4,7 +4,7 @@
  */
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Callout, calloutShadeFrom } from "@/components/callout";
+import { Callout, calloutShadeFrom } from "@/design-system/icf-welcome-design-system-a835df";
 import { remarkCallout } from "@/lib/remark-callout";
 
 /** Renders article body markdown with site-token styling. Raw HTML is not allowed. */

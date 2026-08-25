@@ -19,12 +19,14 @@ import { Route as EuropePulseRouteImport } from './routes/europe-pulse'
 import { Route as FindACoachRouteImport } from './routes/find-a-coach'
 import { Route as ForCoachesRouteImport } from './routes/for-coaches'
 import { Route as ForOrganisationsRouteImport } from './routes/for-organisations'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as GovernanceRouteImport } from './routes/governance'
 import { Route as ImprintRouteImport } from './routes/imprint'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as NoAccessRouteImport } from './routes/no-access'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as StaffInviteRouteImport } from './routes/staff-invite'
 import { Route as StaffSignInRouteImport } from './routes/staff-sign-in'
@@ -108,6 +110,8 @@ import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/c
 import { Route as ApiPublicEventCalendarFileRouteImport } from './routes/api/public/event-calendar.$file'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicTicketQrTokenRouteImport } from './routes/api/public/ticket-qr.$token'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as StaffManageEventsIdCceRouteImport } from './routes/_staff/manage.events.$id_.cce'
 import { Route as StaffManageEventsIdCheckInRouteImport } from './routes/_staff/manage.events.$id_.check-in'
@@ -162,6 +166,11 @@ const ForOrganisationsRoute = ForOrganisationsRouteImport.update({
   path: '/for-organisations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GovernanceRoute = GovernanceRouteImport.update({
   id: '/governance',
   path: '/governance',
@@ -190,6 +199,11 @@ const NoAccessRoute = NoAccessRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -618,6 +632,16 @@ const ApiPublicTicketQrTokenRoute = ApiPublicTicketQrTokenRouteImport.update({
   path: '/api/public/ticket-qr/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
@@ -657,12 +681,14 @@ export interface FileRoutesByFullPath {
   '/find-a-coach': typeof FindACoachRoute
   '/for-coaches': typeof ForCoachesRoute
   '/for-organisations': typeof ForOrganisationsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/governance': typeof GovernanceRoute
   '/imprint': typeof ImprintRoute
   '/insights': typeof InsightsRouteWithChildren
   '/mcp': typeof McpRoute
   '/no-access': typeof NoAccessRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-invite': typeof StaffInviteRoute
   '/staff-sign-in': typeof StaffSignInRoute
@@ -744,6 +770,8 @@ export interface FileRoutesByFullPath {
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events/': typeof StaffManageEventsIndexRoute
   '/manage/newsletters/': typeof StaffManageNewslettersIndexRoute
@@ -760,11 +788,13 @@ export interface FileRoutesByTo {
   '/find-a-coach': typeof FindACoachRoute
   '/for-coaches': typeof ForCoachesRoute
   '/for-organisations': typeof ForOrganisationsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/governance': typeof GovernanceRoute
   '/imprint': typeof ImprintRoute
   '/mcp': typeof McpRoute
   '/no-access': typeof NoAccessRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-invite': typeof StaffInviteRoute
   '/staff-sign-in': typeof StaffSignInRoute
@@ -844,6 +874,8 @@ export interface FileRoutesByTo {
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/events': typeof StaffManageEventsIndexRoute
   '/manage/newsletters': typeof StaffManageNewslettersIndexRoute
@@ -864,12 +896,14 @@ export interface FileRoutesById {
   '/find-a-coach': typeof FindACoachRoute
   '/for-coaches': typeof ForCoachesRoute
   '/for-organisations': typeof ForOrganisationsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/governance': typeof GovernanceRoute
   '/imprint': typeof ImprintRoute
   '/insights': typeof InsightsRouteWithChildren
   '/mcp': typeof McpRoute
   '/no-access': typeof NoAccessRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-invite': typeof StaffInviteRoute
   '/staff-sign-in': typeof StaffSignInRoute
@@ -951,6 +985,8 @@ export interface FileRoutesById {
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/_staff/manage/events/': typeof StaffManageEventsIndexRoute
   '/_staff/manage/newsletters/': typeof StaffManageNewslettersIndexRoute
@@ -970,12 +1006,14 @@ export interface FileRouteTypes {
     | '/find-a-coach'
     | '/for-coaches'
     | '/for-organisations'
+    | '/forgot-password'
     | '/governance'
     | '/imprint'
     | '/insights'
     | '/mcp'
     | '/no-access'
     | '/privacy'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/staff-invite'
     | '/staff-sign-in'
@@ -1057,6 +1095,8 @@ export interface FileRouteTypes {
     | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
     | '/manage/events/'
     | '/manage/newsletters/'
@@ -1073,11 +1113,13 @@ export interface FileRouteTypes {
     | '/find-a-coach'
     | '/for-coaches'
     | '/for-organisations'
+    | '/forgot-password'
     | '/governance'
     | '/imprint'
     | '/mcp'
     | '/no-access'
     | '/privacy'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/staff-invite'
     | '/staff-sign-in'
@@ -1157,6 +1199,8 @@ export interface FileRouteTypes {
     | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
     | '/manage/events'
     | '/manage/newsletters'
@@ -1176,12 +1220,14 @@ export interface FileRouteTypes {
     | '/find-a-coach'
     | '/for-coaches'
     | '/for-organisations'
+    | '/forgot-password'
     | '/governance'
     | '/imprint'
     | '/insights'
     | '/mcp'
     | '/no-access'
     | '/privacy'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/staff-invite'
     | '/staff-sign-in'
@@ -1263,6 +1309,8 @@ export interface FileRouteTypes {
     | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
     | '/_staff/manage/events/'
     | '/_staff/manage/newsletters/'
@@ -1283,12 +1331,14 @@ export interface RootRouteChildren {
   FindACoachRoute: typeof FindACoachRoute
   ForCoachesRoute: typeof ForCoachesRoute
   ForOrganisationsRoute: typeof ForOrganisationsRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   GovernanceRoute: typeof GovernanceRoute
   ImprintRoute: typeof ImprintRoute
   InsightsRoute: typeof InsightsRouteWithChildren
   McpRoute: typeof McpRoute
   NoAccessRoute: typeof NoAccessRoute
   PrivacyRoute: typeof PrivacyRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StaffInviteRoute: typeof StaffInviteRoute
   StaffSignInRoute: typeof StaffSignInRoute
@@ -1325,6 +1375,8 @@ export interface RootRouteChildren {
   ApiPublicEventCalendarFileRoute: typeof ApiPublicEventCalendarFileRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicTicketQrTokenRoute: typeof ApiPublicTicketQrTokenRoute
+  LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
+  LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
@@ -1400,6 +1452,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForOrganisationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/governance': {
       id: '/governance'
       path: '/governance'
@@ -1440,6 +1499,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -2023,6 +2089,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicTicketQrTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/preview': {
       id: '/lovable/email/transactional/preview'
       path: '/lovable/email/transactional/preview'
@@ -2242,12 +2322,14 @@ const rootRouteChildren: RootRouteChildren = {
   FindACoachRoute: FindACoachRoute,
   ForCoachesRoute: ForCoachesRoute,
   ForOrganisationsRoute: ForOrganisationsRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   GovernanceRoute: GovernanceRoute,
   ImprintRoute: ImprintRoute,
   InsightsRoute: InsightsRouteWithChildren,
   McpRoute: McpRoute,
   NoAccessRoute: NoAccessRoute,
   PrivacyRoute: PrivacyRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StaffInviteRoute: StaffInviteRoute,
   StaffSignInRoute: StaffSignInRoute,
@@ -2285,6 +2367,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicEventCalendarFileRoute: ApiPublicEventCalendarFileRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicTicketQrTokenRoute: ApiPublicTicketQrTokenRoute,
+  LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
+  LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
