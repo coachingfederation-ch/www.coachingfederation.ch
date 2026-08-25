@@ -9,6 +9,7 @@ import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
 import { useEffect, useState } from "react";
 import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
+import { Input } from "@/design-system/icf-welcome-design-system-a835df";
 import { useCms } from "@/i18n/cms";
 import { getCoachFinderConfigForStaff } from "@/lib/coach-finder-config.functions";
 import { type CoachFinderConfig } from "@/lib/vocabularies";
@@ -123,7 +124,7 @@ function CoachFinderSettingsPage() {
               </label>
               <label className="mt-3 block text-xs text-muted-foreground">
                 {t("finder.numbers.pageSize")}
-                <input
+                <Input
                   type="number"
                   min={1}
                   value={config.page_size}
@@ -133,7 +134,7 @@ function CoachFinderSettingsPage() {
                     )
                   }
                   onBlur={(e) => void patch({ page_size: Number(e.target.value) })}
-                  className={INPUT + " mt-1 block w-56"}
+                  className="mt-1 w-56"
                 />
               </label>
             </section>

@@ -7,15 +7,13 @@
  * staff-gated server function and written back on blur.
  */
 import { useEffect, useState } from "react";
+import { Input } from "@/design-system/icf-welcome-design-system-a835df";
 import { useCms } from "@/i18n/cms";
 import { supabase } from "@/integrations/supabase/client";
 import { getCoachFinderConfigForStaff } from "@/lib/coach-finder-config.functions";
 import { type CoachFinderConfig } from "@/lib/vocabularies";
 
 const CARD = "rounded-2xl border border-border bg-card p-5";
-const INPUT =
-  "rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring/20";
-
 const NUMBERS = [
   { field: "feed_drop_threshold_pct", key: "feedDrop" },
   { field: "snapshot_retention_months", key: "retention" },
@@ -66,7 +64,7 @@ export function SyncLimitsCard() {
           {NUMBERS.map((n) => (
             <label key={n.field} className="text-xs text-muted-foreground">
               {t(`integration.limits.${n.key}`)}
-              <input
+              <Input
                 type="number"
                 min={1}
                 value={config[n.field]}
@@ -76,7 +74,7 @@ export function SyncLimitsCard() {
                   )
                 }
                 onBlur={(e) => void patch({ [n.field]: Number(e.target.value) })}
-                className={INPUT + " mt-1 w-full"}
+                className="mt-1"
               />
             </label>
           ))}
