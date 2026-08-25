@@ -27,9 +27,8 @@ export const translateTaxonomyLabels = createServerFn({ method: "POST" })
     if (data.scope === "vocabulary") await assertPlatformAdmin(context);
     else await assertEditor(context);
 
-    const { translateLabels, CATEGORY_LABEL_HINT, VOCABULARY_LABEL_HINT } = await import(
-      "./label-translations.server"
-    );
+    const { translateLabels, CATEGORY_LABEL_HINT, VOCABULARY_LABEL_HINT } =
+      await import("./label-translations.server");
     return translateLabels(
       data.names,
       data.scope === "vocabulary" ? VOCABULARY_LABEL_HINT : CATEGORY_LABEL_HINT,

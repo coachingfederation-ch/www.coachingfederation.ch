@@ -2018,5 +2018,10 @@
     "noVolunteers": "Nessuna persona volontaria attivata.",
     "never": "Mai",
     "recent": "Poco fa"
+  },
+  "taxonomy": {
+    "translate": "Traduci",
+    "translating": "Traduzione in corso…",
+    "translateFailed": "Non è stato possibile tradurre automaticamente le etichette — puoi inserirle a mano."
   }
 }

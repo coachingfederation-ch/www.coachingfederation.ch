@@ -2018,5 +2018,10 @@
     "noVolunteers": "Aucune personne bénévole activée.",
     "never": "Jamais",
     "recent": "À l'instant"
+  },
+  "taxonomy": {
+    "translate": "Traduire",
+    "translating": "Traduction en cours…",
+    "translateFailed": "Les libellés n'ont pas pu être traduits automatiquement — vous pouvez les saisir à la main."
   }
 }
