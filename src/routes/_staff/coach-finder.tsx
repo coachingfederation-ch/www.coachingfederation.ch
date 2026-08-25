@@ -122,29 +122,21 @@ function CoachFinderSettingsPage() {
                   <option value="recent">{t("finder.sort.recent")}</option>
                 </select>
               </label>
-            </section>
-
-            <section className="rounded-2xl border border-border bg-card p-5">
-              <h2 className="text-sm font-bold">{t("finder.tunables")}</h2>
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                {NUMBERS.map((n) => (
-                  <label key={n.field} className="text-xs text-muted-foreground">
-                    {t(`finder.numbers.${n.key}`)}
-                    <input
-                      type="number"
-                      min={1}
-                      value={config[n.field]}
-                      onChange={(e) =>
-                        setConfig((prev) =>
-                          prev ? { ...prev, [n.field]: Number(e.target.value) } : prev,
-                        )
-                      }
-                      onBlur={(e) => void patch({ [n.field]: Number(e.target.value) })}
-                      className={INPUT + " mt-1 w-full"}
-                    />
-                  </label>
-                ))}
-              </div>
+              <label className="mt-3 block text-xs text-muted-foreground">
+                {t("finder.numbers.pageSize")}
+                <input
+                  type="number"
+                  min={1}
+                  value={config.page_size}
+                  onChange={(e) =>
+                    setConfig((prev) =>
+                      prev ? { ...prev, page_size: Number(e.target.value) } : prev,
+                    )
+                  }
+                  onBlur={(e) => void patch({ page_size: Number(e.target.value) })}
+                  className={INPUT + " mt-1 block w-56"}
+                />
+              </label>
             </section>
           </div>
         )}
