@@ -395,7 +395,7 @@ function IntegrationPage() {
  * credentials, the endpoint, or the ICF account?" without ever showing a value.
  */
 function CredentialCheckCard({ t }: { t: (key: string) => string }) {
-  const [checking, setChecking] = useState(false);
+  const [result, setResult] = useState<{
   const [result, setResult] = useState<{
     checkedAt: string;
     mode: string;
