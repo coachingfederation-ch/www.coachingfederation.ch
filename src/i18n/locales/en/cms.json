@@ -264,6 +264,7 @@
       "supervision": "Supervision"
     },
     "sort": {
+      "random": "Random",
       "name": "Name",
       "credential": "Credential",
       "recent": "Recently updated"

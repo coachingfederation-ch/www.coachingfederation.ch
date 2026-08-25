@@ -119,12 +119,15 @@ export function useCoachDirectoryFilters() {
     formats.length > 0 ||
     acceptingOnly;
 
-  // Unfiltered first view: ask the server for a random showcase of 8.
+  // Unfiltered first view: ask the server for a random showcase of 8. The seed
+  // travels with every request so a randomly sorted directory keeps one order
+  // for the whole visit, including while paging and filtering.
   const sampled = !dirty && page === 0;
   const queryInput = useMemo(
-    () => (sampled ? { ...filters, sample: 8, seed: shuffleSeed } : filters),
+    () => ({ ...filters, seed: shuffleSeed, ...(sampled ? { sample: 8 } : {}) }),
     [filters, sampled, shuffleSeed],
   );
+
 
   const { data, isPending, isError } = useQuery({
     queryKey: ["coach-directory", queryInput],
