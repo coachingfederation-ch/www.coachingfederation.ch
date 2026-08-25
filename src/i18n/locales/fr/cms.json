@@ -250,14 +250,13 @@
   },
   "finder": {
     "title": "Paramètres du Coach Finder",
-    "subtitle": "Modes de recherche actifs, affichage des résultats et limites techniques utilisées par la synchronisation des membres.",
+    "subtitle": "Modes de recherche actifs et affichage des résultats.",
     "loading": "Chargement…",
     "saved": "Enregistré",
     "modes": "Modes de recherche",
     "label": "Libellé",
     "display": "Affichage",
     "defaultSort": "Tri par défaut",
-    "tunables": "Limites techniques",
     "facets": {
       "coaching": "Coaching",
       "mentoring": "Mentorat",
@@ -270,10 +269,7 @@
       "recent": "Récemment mis à jour"
     },
     "numbers": {
-      "pageSize": "Résultats par page",
-      "feedDrop": "Seuil de baisse du flux de membres (%)",
-      "retention": "Rétention de l'historique d'importation (mois)",
-      "csvCap": "Limite de lignes d'exportation CSV"
+      "pageSize": "Résultats par page"
     }
   },
   "members": {
@@ -551,6 +547,14 @@
       "cutover_in_progress": "Bloqué : une bascule est en cours.",
       "claim_closed": "Bloqué : l'activation des comptes est encore fermée.",
       "emails_suppressed": "Bloqué : les e-mails membres sont supprimés, sans boîte de test."
+    },
+    "limitsTitle": "Limites techniques",
+    "limitsBody": "Valeurs de réglage utilisées par la synchronisation des membres et ses exports.",
+    "limitsLoading": "Chargement…",
+    "limits": {
+      "feedDrop": "Seuil de baisse du flux de membres (%)",
+      "retention": "Rétention de l'historique d'importation (mois)",
+      "csvCap": "Limite de lignes d'exportation CSV"
     }
   },
   "member": {

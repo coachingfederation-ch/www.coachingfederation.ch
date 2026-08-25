@@ -250,14 +250,13 @@
   },
   "finder": {
     "title": "Coach Finder Einstellungen",
-    "subtitle": "Welche Finder-Modi aktiv sind, wie Ergebnisse angezeigt werden und technische Limiten für die Mitgliedersynchronisation.",
+    "subtitle": "Welche Finder-Modi aktiv sind und wie Ergebnisse angezeigt werden.",
     "loading": "Wird geladen…",
     "saved": "Gespeichert",
     "modes": "Finder-Modi",
     "label": "Bezeichnung",
     "display": "Anzeige",
     "defaultSort": "Standard-Sortierung",
-    "tunables": "Technische Limiten",
     "facets": {
       "coaching": "Coaching",
       "mentoring": "Mentoring",
@@ -270,10 +269,7 @@
       "recent": "Kürzlich aktualisiert"
     },
     "numbers": {
-      "pageSize": "Ergebnisse pro Seite",
-      "feedDrop": "Mitglieder-Feed Drop-Schwellenwert (%)",
-      "retention": "Aufbewahrungsdauer Import-Historie (Monate)",
-      "csvCap": "Zeilenlimit CSV-Export"
+      "pageSize": "Ergebnisse pro Seite"
     }
   },
   "members": {
@@ -551,6 +547,14 @@
       "cutover_in_progress": "Blockiert: ein Cutover läuft.",
       "claim_closed": "Blockiert: die Kontoübernahme ist noch geschlossen.",
       "emails_suppressed": "Blockiert: Mitglieder-E-Mails sind unterdrückt, ohne Testpostfach."
+    },
+    "limitsTitle": "Technische Limiten",
+    "limitsBody": "Einstellwerte für die Mitgliedersynchronisation und deren Exporte.",
+    "limitsLoading": "Wird geladen…",
+    "limits": {
+      "feedDrop": "Mitglieder-Feed Drop-Schwellenwert (%)",
+      "retention": "Aufbewahrungsdauer Import-Historie (Monate)",
+      "csvCap": "Zeilenlimit CSV-Export"
     }
   },
   "member": {
