@@ -100,14 +100,16 @@ export function CoachDirectory() {
         )}
         <div className="grid gap-10 lg:grid-cols-[280px_1fr] lg:items-start">
           <div className="lg:sticky lg:top-8">
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="pill"
               onClick={() => setShowFilters((v) => !v)}
               aria-expanded={showFilters}
-              className="mb-4 inline-flex h-10 items-center rounded-full border border-border bg-card px-5 text-sm font-semibold text-foreground lg:hidden"
+              className="mb-4 lg:hidden"
             >
               {t("directory.filters.toggle")}
-            </button>
+            </Button>
             <div className={showFilters ? "block" : "hidden lg:block"}>{filterPanel}</div>
           </div>
 
