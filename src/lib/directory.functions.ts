@@ -107,23 +107,13 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
     const pageSize = config?.page_size ?? 12;
     const page = data.page ?? 0;
 
-    let query = supabasePublic.from("coach_directory_public").select("*", { count: "exact" });
+    const sort = config?.default_sort ?? "name";
 
-    // Every list filter is an OR within the facet and an AND across facets,
-    // which is what the wireframe's checkbox groups imply.
-    if (data.services?.length) query = query.overlaps("services", data.services);
-    if (data.regions?.length) query = query.overlaps("region_slugs", data.regions);
-    if (data.languages?.length) query = query.overlaps("language_slugs", data.languages);
-    if (data.specialisations?.length) {
-      query = query.overlaps("specialisation_slugs", data.specialisations);
-    }
-    if (data.formats?.length) query = query.overlaps("format_slugs", data.formats);
-    if (data.credentials?.length) {
-      query = query.in(
-        "credential_slug",
-        data.credentials.map((c) => c.toUpperCase()),
-      );
-    }
+    const query = applyFacets(
+      supabasePublic.from("coach_directory_public").select("*", { count: "exact" }),
+      data,
+    );
+
 
     const locale = (data.locale ?? "en") as Locale;
 
