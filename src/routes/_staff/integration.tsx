@@ -13,6 +13,7 @@ import { ContentOwnershipPanel } from "@/components/cms/ContentOwnershipPanel";
 import { LinkedInPageSettings } from "@/components/cms/LinkedInPageSettings";
 import { SyncRunDetail } from "@/components/cms/SyncRunDetail";
 import { ClaimCampaignCard } from "@/components/cms/ClaimCampaignCard";
+import { SyncLimitsCard } from "@/components/cms/SyncLimitsCard";
 import { useCms } from "@/i18n/cms";
 import {
   fetchIntegrationConfig,
@@ -694,6 +695,8 @@ function IntegrationPageBody() {
             <RelayHealthCard t={t} />
             <CredentialCheckCard t={t} />
             <OutboundIpCard t={t} />
+
+            <SyncLimitsCard />
 
             <ContentOwnershipPanel />
 
