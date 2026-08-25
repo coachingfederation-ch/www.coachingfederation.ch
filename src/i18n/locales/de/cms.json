@@ -2018,5 +2018,10 @@
     "noVolunteers": "Noch keine Freiwilligen aktiviert.",
     "never": "Nie",
     "recent": "Gerade eben"
+  },
+  "taxonomy": {
+    "translate": "Übersetzen",
+    "translating": "Wird übersetzt…",
+    "translateFailed": "Die Bezeichnungen konnten nicht automatisch übersetzt werden — Sie können sie von Hand ergänzen."
   }
 }

@@ -2018,5 +2018,10 @@
     "noVolunteers": "No volunteers activated yet.",
     "never": "Never",
     "recent": "Recent"
+  },
+  "taxonomy": {
+    "translate": "Translate",
+    "translating": "Translating…",
+    "translateFailed": "Labels could not be translated automatically — you can add them by hand."
   }
 }

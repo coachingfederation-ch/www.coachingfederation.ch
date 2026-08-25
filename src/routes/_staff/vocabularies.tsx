@@ -11,6 +11,7 @@ import { Plus, Trash2, ArrowDown, ArrowUp } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
+import { translateTaxonomyLabels } from "@/lib/label-translations.functions";
 import {
   VOCAB_COLUMNS,
   VOCAB_DESCRIPTORS,
@@ -37,6 +38,7 @@ function VocabulariesPage() {
   const [newName, setNewName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [translating, setTranslating] = useState<string | null>(null);
 
   const load = async (target: VocabTable) => {
     const { data, error: err } = await supabase
@@ -60,18 +62,50 @@ function VocabulariesPage() {
     if (!name) return;
     setBusy(true);
     setError(null);
-    const { error: err } = await supabase.from(table).insert({
-      name,
-      slug: slugifyVocab(name) || `term-${Date.now()}`,
-      sort_order: (rows.at(-1)?.sort_order ?? 0) + 10,
-    });
-    setBusy(false);
+    const { data: created, error: err } = await supabase
+      .from(table)
+      .insert({
+        name,
+        slug: slugifyVocab(name) || `term-${Date.now()}`,
+        sort_order: (rows.at(-1)?.sort_order ?? 0) + 10,
+      })
+      .select("id")
+      .maybeSingle();
     if (err) {
+      setBusy(false);
       setError(err.message);
       return;
     }
     setNewName("");
+    // The term exists already — a failing AI call only leaves the locale
+    // fields empty, it never blocks creation.
+    if (created?.id) await fillTranslations(created.id, name, {});
+    setBusy(false);
     await load(table);
+  };
+
+  /** Fill only the locale fields that are still empty — manual wording wins. */
+  const fillTranslations = async (id: string, name: string, current: Partial<VocabRow>) => {
+    setTranslating(id);
+    try {
+      const [labels] = await translateTaxonomyLabels({
+        data: { scope: "vocabulary", names: [name] },
+      });
+      if (!labels) throw new Error("empty");
+      const values: Partial<VocabRow> = {};
+      for (const l of ["de", "fr", "it"] as const) {
+        const key = `name_${l}` as const;
+        if (!current[key]) values[key] = labels[l];
+      }
+      if (Object.keys(values).length === 0) return;
+      const { error: err } = await supabase.from(table).update(values).eq("id", id);
+      if (err) throw new Error(err.message);
+      setRows((prev) => prev.map((r) => (r.id === id ? { ...r, ...values } : r)));
+    } catch {
+      setError(t("taxonomy.translateFailed"));
+    } finally {
+      setTranslating(null);
+    }
   };
 
   const patch = async (id: string, values: Partial<VocabRow>) => {
@@ -192,6 +226,14 @@ function VocabulariesPage() {
                   className="rounded-lg p-1.5 text-muted-foreground hover:bg-secondary disabled:opacity-30"
                 >
                   <ArrowDown className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void fillTranslations(row.id, row.name, row)}
+                  disabled={translating === row.id}
+                  className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-muted-foreground hover:text-foreground disabled:opacity-60"
+                >
+                  {translating === row.id ? t("taxonomy.translating") : t("taxonomy.translate")}
                 </button>
                 <button
                   onClick={() => void remove(row)}
