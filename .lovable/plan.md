@@ -1,29 +1,42 @@
-# Auto-translate Categories and Vocabularies labels
+# Coach Finder: make "Random" a real default sort
 
-Today the operational structure auto-translates new labels into DE, FR and IT, but the two taxonomy screens do not: adding an Insights category or a Coach Finder term stores only the English name and leaves the three language fields empty.
+Verified current behaviour before planning:
+
+- `coach_finder_config.default_sort` is read in `src/lib/directory.functions.ts` (line 76) but never used — every result page is ordered `full_name` ascending (line 159).
+- Random ordering exists only for one narrow case: the unfiltered first view asks for a showcase of eight (`sample: 8`), and the server shuffles ids for that request only. Any filter, or page 2, falls back to alphabetical.
+- The CMS select on Coach Finder offers only Name, Credential and Recently updated — there is no Random option, and Credential / Recently updated do nothing either.
+
+So random is not implemented as a sort; it is a one-off showcase. This plan makes the setting real.
 
 ## What changes
 
-- Adding a category on **Articles → Categories** auto-fills its German, French and Italian names.
-- Adding a term on any **Vocabularies** tab (regions, specialisations, credentials, formats, languages, availability, client types, experience bands, event categories) does the same.
-- Each existing row gets a small "Translate" action that fills only the language fields that are still empty, so manual wording is never overwritten.
-- All translated values stay fully editable in the existing DE/FR/IT inputs.
-- If the AI call fails or is slow, the row is still created with its English name and an inline notice explains that translations were not filled — creation never blocks.
+- The Coach Finder settings screen gains a **Random** option for the default sort, and it becomes the chapter default.
+- With Random selected, the public directory lists coaches in a shuffled order instead of alphabetically — every published coach gets equal exposure, not just names starting with A.
+- The shuffle is stable while a visitor browses: paging, filtering and re-rendering keep the same order, and a fresh visit produces a new one.
+- The other options start working too: Name (A–Z), Credential (MCC, PCC, ACC, then name), Recently updated (newest first).
 
 ## Technical notes
 
-- Extract the existing prompt/parse logic from `src/lib/ops-label-translations.functions.ts` into a shared server helper `src/lib/label-translations.server.ts` (one batched `google/gemini-3-flash-preview` call, JSON-only, short sentence-case labels, ICF/ACC/PCC/MCC and Swiss place names untranslated). `translateOpsLabels` keeps its current behaviour and signature by calling the helper.
-- New server function `translateTaxonomyLabels` in `src/lib/label-translations.functions.ts`, taking `{ scope: "category" | "vocabulary", names: string[] }`. Gate: `assertEditor` for `category` (Categories is an Editor screen) and `assertPlatformAdmin` for `vocabulary`. The vocabulary prompt gets a hint that terms are directory taxonomy labels (region, credential, coaching format, language).
-- The function returns translations only; `articles.categories.tsx` and `vocabularies.tsx` write them through their existing RLS-scoped `supabase` client, so table policies remain the real boundary.
-- In both routes: `add()` inserts the row, then patches `name_de` / `name_fr` / `name_it`; a per-row "Translate" button calls the same function for one name and patches only empty fields.
-- New CMS strings `taxonomy.translate`, `taxonomy.translating`, `taxonomy.translateFailed` in `src/i18n/locales/{en,de,fr,it}/cms.json`.
-- No schema change: `name_de` / `name_fr` / `name_it` already exist on `categories` and every `cf_*` table.
+- Add `"random"` to the option list in `src/routes/_staff/coach-finder.tsx` and a `finder.sort.random` string in `cms.json` for en/de/fr/it.
+- `queryCoachDirectory` in `src/lib/directory.functions.ts` applies the configured sort to the ranged branch instead of the hardcoded `.order("full_name")`:
+  - `name` → `full_name` asc
+  - `recent` → `updated_at` desc, `full_name` asc as tiebreak
+  - `credential` → order by `credential_slug` rank then `full_name`
+  - `random` → seeded shuffle (below)
+- Seeded random: the client already generates a per-mount `shuffleSeed` in `useCoachDirectoryFilters.ts` and the input schema already accepts `seed`. Extend that so the seed is always sent (not just for the showcase). Server-side, when the effective sort is `random`, fetch the matching `profile_id` list, shuffle it with a small seeded PRNG derived from `seed`, slice the requested page, then fetch and re-order those rows — the same technique the existing showcase branch uses, but deterministic and page-aware.
+- Keep the existing `sample` showcase branch as is; it stays the unfiltered hero case.
+- Data change: set `coach_finder_config.default_sort` to `random` in a small migration so the live site picks it up without a manual edit.
+- No schema change beyond that value; `default_sort` is already a text column.
+
+## Still pending from the previous request
+
+Auto-translation for Categories and Vocabularies has not been implemented yet. It can follow as a separate change once this one is approved.
 
 ## PR note
 
-- **Summary** — Auto-translate Insights category and Coach Finder vocabulary labels into DE/FR/IT on creation, plus an on-demand per-row translate action, reusing the operational-structure translation path.
-- **Changes** — Backend: shared label-translation helper, new `translateTaxonomyLabels` server function; UI: translate-on-add and per-row translate in the Categories and Vocabularies screens; i18n: three new CMS strings per locale.
-- **Backend / schema changes** — None.
-- **Testing & verification** — Add a category as an Editor and a term on several vocabulary tabs as an Administrator, confirming all three languages fill; edit a translated label and confirm it persists; run "Translate" on a row with one language already filled and confirm that value is untouched; force an AI failure and confirm the row is still created with an inline notice.
-- **Risks & rollback** — Low, additive. Each creation costs one AI call. Rollback by removing the calls; existing rows unaffected.
-- **Follow-ups / known debt** — No bulk backfill for existing rows; the per-row action covers them one at a time.
+- **Summary** — Makes `coach_finder_config.default_sort` actually drive public directory ordering and adds a Random option, set as the new default.
+- **Changes** — Backend: sort handling and a seeded random branch in `queryCoachDirectory`; UI: Random option in the Coach Finder settings select, seed always passed from the directory hook; i18n: one new CMS string per locale; migration: set the config value to `random`.
+- **Backend / schema changes** — One data-only migration setting `default_sort = 'random'`. No structural change.
+- **Testing & verification** — Switch the setting through all four values and confirm the public list order changes; page through results and confirm no coach repeats or disappears under Random; apply filters and confirm the order stays stable; reload and confirm a different order.
+- **Risks & rollback** — Contained to directory ordering. Random paging fetches an id list per query, so watch response time as the directory grows. Rollback by restoring the hardcoded name order and setting the config back to `name`.
+- **Follow-ups / known debt** — If the directory grows large, move the seeded shuffle into a database-side ordering expression instead of fetching the id list in the server function.
