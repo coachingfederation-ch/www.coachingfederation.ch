@@ -492,6 +492,8 @@
     "credTitle": "Vérification des identifiants ICF",
     "credBody": "Exécute uniquement l’étape de connexion ICF, depuis le même environnement que la synchronisation nocturne. Cela permet de distinguer un secret mal collé ou un mauvais point d’accès d’un compte désactivé par ICF. Aucune valeur d’identifiant n’est affichée ni journalisée.",
     "credCheck": "Vérifier les identifiants ICF",
+    "credCheckTest": "Vérifier les identifiants TEST",
+    "credCheckLive": "Vérifier les identifiants LIVE",
     "credChecking": "Vérification…",
     "credOk": "Connexion réussie en mode",
     "credFailed": "Connexion refusée en mode",
@@ -743,10 +745,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Piloter des projets",
-            "Être reconnu par ICFS pour avoir mené des initiatives"
-          ]
+          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
         },
         "status": {
           "title": "Status",

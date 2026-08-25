@@ -395,7 +395,6 @@ function IntegrationPage() {
  * credentials, the endpoint, or the ICF account?" without ever showing a value.
  */
 function CredentialCheckCard({ t }: { t: (key: string) => string }) {
-  const [checking, setChecking] = useState(false);
   const [result, setResult] = useState<{
     checkedAt: string;
     mode: string;
@@ -414,15 +413,19 @@ function CredentialCheckCard({ t }: { t: (key: string) => string }) {
   } | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
 
-  const check = async () => {
-    setChecking(true);
+  // The mode is an explicit choice, not the configured integration mode: the
+  // LIVE account must be verifiable while the site is still running on TEST.
+  const [checking, setChecking] = useState<"test" | "live" | null>(null);
+
+  const check = async (mode: "test" | "live") => {
+    setChecking(mode);
     setFailure(null);
     try {
-      setResult(await checkIcfCredentials());
+      setResult(await checkIcfCredentials({ data: { mode } }));
     } catch (err) {
       setFailure(err instanceof Error ? err.message : String(err));
     } finally {
-      setChecking(false);
+      setChecking(null);
     }
   };
 
@@ -443,9 +446,15 @@ function CredentialCheckCard({ t }: { t: (key: string) => string }) {
     <section className={CARD}>
       <h2 className="text-sm font-bold">{t("integration.credTitle")}</h2>
       <p className="mt-1 text-xs text-muted-foreground">{t("integration.credBody")}</p>
-      <button className={BTN + " mt-3"} disabled={checking} onClick={() => void check()}>
-        {checking ? t("integration.credChecking") : t("integration.credCheck")}
-      </button>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button className={BTN} disabled={checking !== null} onClick={() => void check("test")}>
+          {checking === "test" ? t("integration.credChecking") : t("integration.credCheckTest")}
+        </button>
+        <button className={BTN} disabled={checking !== null} onClick={() => void check("live")}>
+          {checking === "live" ? t("integration.credChecking") : t("integration.credCheckLive")}
+        </button>
+      </div>
+
       {failure ? <p className="mt-3 text-xs text-destructive">{failure}</p> : null}
       {result ? (
         <div className="mt-4 space-y-4">

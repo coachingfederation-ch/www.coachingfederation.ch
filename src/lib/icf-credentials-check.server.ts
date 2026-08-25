@@ -129,10 +129,18 @@ async function attempt(
  * netFORUMXML.asmx, so Signon.asmx is no longer probed (it produced a misleading
  * relay-level 404).
  */
-export async function checkIcfCredentials(actorUserId: string): Promise<CredentialCheckResult> {
+/**
+ * @param modeOverride check a specific credential set (e.g. verify LIVE while
+ * the integration is still running in TEST). Defaults to the configured mode.
+ */
+export async function checkIcfCredentials(
+  actorUserId: string,
+  modeOverride?: IntegrationMode,
+): Promise<CredentialCheckResult> {
   const config = await loadIntegrationConfigAdmin();
-  const mode = config.mode;
+  const mode = modeOverride ?? config.mode;
   const prefix = mode === "live" ? "ICF_SOAP_LIVE" : "ICF_SOAP_TEST";
+
   const secrets = [
     shape(`${prefix}_BASE_URL`),
     shape(`${prefix}_USERNAME`),

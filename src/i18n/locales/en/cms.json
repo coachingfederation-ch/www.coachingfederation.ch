@@ -492,6 +492,8 @@
     "credTitle": "ICF credentials check",
     "credBody": "Runs only the ICF login step, from the same runtime as the nightly sync. Use it to tell a mis-pasted secret or a wrong login endpoint apart from an account ICF has disabled. No credential value is ever shown or logged.",
     "credCheck": "Check ICF credentials",
+    "credCheckTest": "Check TEST credentials",
+    "credCheckLive": "Check LIVE credentials",
     "credChecking": "Checking…",
     "credOk": "Login succeeded in mode",
     "credFailed": "Login rejected in mode",
@@ -743,10 +745,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Lead projects",
-            "Be recognized by ICFS for leading initiatives"
-          ]
+          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
         },
         "status": {
           "title": "Status",
