@@ -48,7 +48,8 @@ export function MemberSyncStatusPanel({
   visibility: MemberVisibility | null;
   t: (k: string) => string;
 }) {
-  const reason = directoryEligibilityReason(detail.member);
+  const rules = { allowNonCredentialed: detail.allowNonCredentialed };
+  const reason = directoryEligibilityReason(detail.member, rules);
   return (
     <>
       <section className="mt-6 rounded-2xl border border-border bg-card p-5">
@@ -95,10 +96,13 @@ export function MemberSyncStatusPanel({
             label={t("members.detail.hasCredential")}
             on={hasDirectoryCredential(detail.member)}
           />
-          <Flag label={t("members.detail.isEligible")} on={isDirectoryEligible(detail.member)} />
+          <Flag
+            label={t("members.detail.isEligible")}
+            on={isDirectoryEligible(detail.member, rules)}
+          />
           <Flag
             label={t("members.detail.isVisible")}
-            on={isDirectoryVisible(detail.member, visibility)}
+            on={isDirectoryVisible(detail.member, visibility, rules)}
           />
         </div>
         <p className="mt-3 text-xs text-muted-foreground">{t(`members.eligibility.${reason}`)}</p>

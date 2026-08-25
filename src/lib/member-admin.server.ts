@@ -57,6 +57,8 @@ export async function syncAccountProfileName(
 }
 
 export type MemberDetail = {
+  /** Coach Finder switch, so the screen explains the rule that is actually in force. */
+  allowNonCredentialed: boolean;
   member: {
     id: string;
     cst_recno: string;
@@ -144,7 +146,11 @@ export async function loadMemberDetail(memberId: string): Promise<MemberDetail> 
     regionIds = (regions ?? []).map((row) => row.region_id as string);
   }
 
+  const { directoryRules } = await import("./directory-config.server");
+  const rules = await directoryRules();
+
   return {
+    allowNonCredentialed: rules.allowNonCredentialed,
     member: member as unknown as MemberDetail["member"],
     profile: profile
       ? ({ ...profile, region_ids: regionIds } as unknown as MemberDetail["profile"])
