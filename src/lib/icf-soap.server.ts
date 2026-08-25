@@ -5,11 +5,13 @@
  * integration mode, so a single runtime can point at TEST or LIVE without a
  * code change.
  *
- * Optional `ICF_RELAY_AUTH` is a shared-secret for a fixed-egress relay. It is
- * never logged and should only be set in production/deployed environments. When
- * empty or unset, no relay header is sent, so local/dev runs keep working.
+ * Optional `ICF_RELAY_AUTH` is the HS256 signing key for a fixed-egress relay:
+ * each request carries a freshly signed, short-lived JWT in `X-Relay-Auth`. It
+ * is never logged and should only be set in production/deployed environments.
+ * When empty or unset, no relay header is sent, so local/dev runs keep working.
  */
 import { XMLParser } from "fast-xml-parser";
+import { relayAuthHeaders } from "./relay-auth.server";
 import type { IntegrationMode } from "./integration";
 
 export type NormalizedMember = {
