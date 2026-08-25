@@ -114,9 +114,17 @@ export function CoachCard({
           </p>
         </div>
         <div className="ml-auto flex shrink-0 flex-col items-end gap-1.5">
-          {entry.credential_slug && (
-            <span className="inline-flex h-6 items-center rounded-full bg-primary px-2.5 text-[11px] font-bold tracking-wider text-primary-foreground">
-              {entry.credential_slug.toUpperCase()}
+          {entry.has_directory_credential ? (
+            entry.credential_slug && (
+              <span className="inline-flex h-6 items-center rounded-full bg-primary px-2.5 text-[11px] font-bold tracking-wider text-primary-foreground">
+                {entry.credential_slug.toUpperCase()}
+              </span>
+            )
+          ) : (
+            // Neutral, factual: the chapter may list members without a valid
+            // ACC/PCC/MCC, and the card has to say so plainly.
+            <span className="inline-flex h-6 items-center rounded-full bg-muted px-2.5 text-[11px] font-bold tracking-wider text-muted-foreground">
+              {t("directory.card.noAccreditation")}
             </span>
           )}
         </div>
