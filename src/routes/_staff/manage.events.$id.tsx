@@ -340,9 +340,11 @@ function EventEditor() {
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
-              checked={extras.forms}
+              checked={showForms}
               onChange={(e) => setExtras({ ...extras, forms: e.target.checked })}
+              disabled={hasForms}
             />
+
             <span>{t("events.wizard.extras.forms")}</span>
           </label>
         </div>
