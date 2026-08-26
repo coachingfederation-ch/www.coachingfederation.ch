@@ -92,3 +92,22 @@ export function displayEventStatus(status: string, startsAt: string): DisplayEve
   if (status === "published" && hasEventStarted(startsAt)) return "passed";
   return status as DisplayEventStatus;
 }
+
+/** Events without an end time count as live for two hours after the start. */
+const LIVE_FALLBACK_MS = 2 * 60 * 60 * 1000;
+
+/**
+ * True while the event is actually running. Derived from the timestamps, so it
+ * needs no stored state — pass `now` to recompute on a ticker.
+ */
+export function isLiveEvent(
+  startsAt: string | null,
+  endsAt: string | null,
+  now: number = Date.now(),
+): boolean {
+  if (!startsAt) return false;
+  const start = new Date(startsAt).getTime();
+  if (Number.isNaN(start) || start > now) return false;
+  const end = endsAt ? new Date(endsAt).getTime() : start + LIVE_FALLBACK_MS;
+  return now < end;
+}
