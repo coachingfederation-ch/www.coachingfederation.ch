@@ -768,10 +768,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Projekte leiten",
-            "Von ICFS für die Leitung von Initiativen anerkannt werden"
-          ]
+          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
         },
         "status": {
           "title": "Status",
@@ -1005,7 +1002,8 @@
       "draft": "Entwurf",
       "published": "Veröffentlicht",
       "cancelled": "Abgesagt",
-      "archived": "Archiviert"
+      "archived": "Archiviert",
+      "passed": "Vergangen"
     },
     "backToList": "Alle Events",
     "publish": "Veröffentlichen",

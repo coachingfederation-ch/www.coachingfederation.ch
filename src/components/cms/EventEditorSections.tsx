@@ -23,6 +23,7 @@ import {
 import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
 import { EventHeroPreview } from "@/components/cms/EventHeroPreview";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
+import { displayEventStatus, hasEventStarted } from "@/lib/events";
 import type { getManagedEvent, listEventRegistrations } from "@/lib/events-admin.functions";
 import { exportEventRegistrations } from "@/lib/events-admin.functions";
 import {
@@ -627,6 +628,9 @@ export function EventPublishingSection({
   // Attendee desk filters. Local UI state only — the underlying list is
   // already loaded, so filtering client-side keeps the table responsive.
   const [filters, setFilters] = React.useState<AttendeeFilters>(EMPTY_FILTERS);
+  // Derived, not stored: a started event is "passed" and its lifecycle actions
+  // (unpublish, cancel) are withdrawn.
+  const started = hasEventStarted(event.starts_at);
   const [addOpen, setAddOpen] = React.useState(false);
   const [exporting, setExporting] = React.useState(false);
   // The attendee awaiting a cancellation confirmation, if any.
@@ -732,7 +736,9 @@ export function EventPublishingSection({
         >
           {saving ? t("events.saving") : t("events.save")}
         </button>
-        {event.status === "published" ? (
+        {/* A started event is history: unpublishing or cancelling it would
+            rewrite something attendees already lived through. */}
+        {started ? null : event.status === "published" ? (
           <button
             onClick={() => void changeStatus("draft")}
             className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
@@ -747,13 +753,17 @@ export function EventPublishingSection({
             {t("events.publish")}
           </button>
         )}
-        <button
-          onClick={() => void changeStatus("cancelled")}
-          className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
-        >
-          {t("events.cancelEvent")}
-        </button>
-        <span className="text-xs text-muted-foreground">{t(`events.status.${event.status}`)}</span>
+        {started ? null : (
+          <button
+            onClick={() => void changeStatus("cancelled")}
+            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
+          >
+            {t("events.cancelEvent")}
+          </button>
+        )}
+        <span className="text-xs text-muted-foreground">
+          {t(`events.status.${displayEventStatus(event.status, event.starts_at)}`)}
+        </span>
       </div>
 
       <h2 className="mt-12 text-lg font-semibold tracking-tight">{t("events.attendees")}</h2>

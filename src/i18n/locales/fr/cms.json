@@ -768,10 +768,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Piloter des projets",
-            "Être reconnu par ICFS pour avoir mené des initiatives"
-          ]
+          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
         },
         "status": {
           "title": "Status",
@@ -1005,7 +1002,8 @@
       "draft": "Brouillon",
       "published": "Publié",
       "cancelled": "Annulé",
-      "archived": "Archivé"
+      "archived": "Archivé",
+      "passed": "Passé"
     },
     "backToList": "Tous les événements",
     "publish": "Publier",

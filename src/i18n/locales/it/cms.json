@@ -768,10 +768,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Guidare progetti",
-            "Essere riconosciuti da ICFS per aver guidato iniziative"
-          ]
+          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
         },
         "status": {
           "title": "Status",
@@ -1005,7 +1002,8 @@
       "draft": "Bozza",
       "published": "Pubblicato",
       "cancelled": "Annullato",
-      "archived": "Archiviato"
+      "archived": "Archiviato",
+      "passed": "Passato"
     },
     "backToList": "Tutti gli eventi",
     "publish": "Pubblica",

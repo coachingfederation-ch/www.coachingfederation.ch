@@ -14,6 +14,7 @@ import { Checkbox } from "@/design-system/icf-welcome-design-system-a835df";
 import { Shell } from "@/components/cms/Shell";
 import { useCms } from "@/i18n/cms";
 import { listManagedEvents } from "@/lib/events-admin.functions";
+import { displayEventStatus } from "@/lib/events";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -58,6 +59,7 @@ const STATUS_STYLE: Record<string, string> = {
   published: "bg-teal-soft text-teal-foreground",
   cancelled: "bg-secondary text-muted-foreground",
   archived: "bg-secondary text-muted-foreground",
+  passed: "bg-secondary text-muted-foreground",
 };
 
 type EventsSearch = z.infer<typeof searchSchema>;
@@ -147,9 +149,7 @@ function ManageEventsPage() {
   // Status is an *exclusion* filter: the `status` search param holds a
   // comma-separated list of statuses to hide. Empty means show everything —
   // every status is active by default, so the list never starts filtered.
-  const excludedStatuses: string[] = search.status
-    ? search.status.split(",").filter(Boolean)
-    : [];
+  const excludedStatuses: string[] = search.status ? search.status.split(",").filter(Boolean) : [];
 
   const filtered = useMemo(() => {
     const term = search.q.trim().toLowerCase();
@@ -163,7 +163,8 @@ function ManageEventsPage() {
           const isOnline = !row.city || row.city.trim().toLowerCase() === "online";
           if (search.city === ONLINE_CITY ? !isOnline : row.city !== search.city) return false;
         }
-        if (excludedStatuses.includes(row.status)) return false;
+        // Filter on the status staff actually see, so "passed" is selectable.
+        if (excludedStatuses.includes(displayEventStatus(row.status, row.starts_at))) return false;
         return true;
       })
       .sort((a, b) => a.starts_at.localeCompare(b.starts_at));
@@ -260,7 +261,7 @@ function ManageEventsPage() {
                   : [...excludedStatuses, status];
                 setFilter({ status: next.join(",") });
               }}
-              options={["draft", "published", "cancelled"].map(
+              options={["draft", "published", "passed", "cancelled"].map(
                 (s) => [s, t(`events.status.${s}`)] as [string, string],
               )}
             />
@@ -365,9 +366,9 @@ function ManageEventsPage() {
                     <td className="px-4 py-3 text-muted-foreground">{row.community_name ?? "—"}</td>
                     <td className="px-4 py-3">
                       <span
-                        className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${STATUS_STYLE[row.status] ?? ""}`}
+                        className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${STATUS_STYLE[displayEventStatus(row.status, row.starts_at)] ?? ""}`}
                       >
-                        {t(`events.status.${row.status}`)}
+                        {t(`events.status.${displayEventStatus(row.status, row.starts_at)}`)}
                       </span>
                     </td>
                   </tr>

@@ -768,10 +768,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Lead projects",
-            "Be recognized by ICFS for leading initiatives"
-          ]
+          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
         },
         "status": {
           "title": "Status",
@@ -1005,7 +1002,8 @@
       "draft": "Draft",
       "published": "Published",
       "cancelled": "Cancelled",
-      "archived": "Archived"
+      "archived": "Archived",
+      "passed": "Passed"
     },
     "backToList": "All events",
     "publish": "Publish",
