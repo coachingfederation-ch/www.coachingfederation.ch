@@ -264,3 +264,60 @@ export async function postRecapCarousel(input: {
     throw new Error(message);
   }
 }
+
+/** Tones the post editor offers; the prompt is the only place they differ. */
+const TONE_HINTS: Record<string, string> = {
+  warm: "Warm and human. Thank the people who came, name what the room felt like.",
+  professional: "Professional and factual. Lead with what was covered and what people took away.",
+  celebratory: "Celebratory and energetic, still grounded — no hype, no invented claims.",
+};
+
+/**
+ * Drafts the LinkedIn commentary for a recap. Falls back to the recap's own
+ * headline plus the public link when the AI gateway is unavailable, so the
+ * editor always opens with usable text.
+ */
+export async function draftRecapCommentary(input: {
+  headline: string;
+  body: string;
+  eventTitle: string;
+  recapUrl: string;
+  tone: string;
+}): Promise<string> {
+  const fallback = [input.headline || input.eventTitle, "", input.recapUrl]
+    .join("\n")
+    .slice(0, 3000);
+  const apiKey = process.env["LOVABLE_API_KEY"];
+  if (!apiKey) return fallback;
+
+  const prompt = [
+    "Write ONE LinkedIn post for The Switzerland Chapter of ICF about an event that has just taken place.",
+    TONE_HINTS[input.tone] ?? TONE_HINTS["warm"],
+    "One short hook line, then two or three short lines of substance, then an invitation to read the recap, then the link on its own line.",
+    "At most 1200 characters. At most one emoji. At most three hashtags on the final line.",
+    "American English, active voice, Oxford comma. No invented statistics, quotes or claims.",
+    "Reply with the post text only — no quotes, no markdown, no labels.",
+    "",
+    `EVENT: ${input.eventTitle}`,
+    `RECAP HEADLINE: ${input.headline}`,
+    `RECAP STORY: ${input.body.slice(0, 4000)}`,
+    `LINK: ${input.recapUrl}`,
+  ].join("\n");
+
+  try {
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "google/gemini-3.6-flash",
+        messages: [{ role: "user", content: prompt }],
+      }),
+    });
+    if (!res.ok) return fallback;
+    const body = (await res.json()) as { choices?: { message?: { content?: string } }[] };
+    const text = body.choices?.[0]?.message?.content?.trim();
+    return text ? text.slice(0, 3000) : fallback;
+  } catch {
+    return fallback;
+  }
+}
