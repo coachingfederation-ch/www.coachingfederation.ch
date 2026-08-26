@@ -94,6 +94,7 @@ import { Route as StaffMembersIdRouteImport } from './routes/_staff/members.$id'
 import { Route as ApiPublicChatSignalRouteImport } from './routes/api/public/chat-signal'
 import { Route as ApiPublicClaimWavesRouteImport } from './routes/api/public/claim-waves'
 import { Route as ApiPublicEuropePulseScanRouteImport } from './routes/api/public/europe-pulse-scan'
+import { Route as ApiPublicEventFollowUpsRouteImport } from './routes/api/public/event-follow-ups'
 import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public/event-reminders'
 import { Route as ApiPublicLiveChatRouteImport } from './routes/api/public/live-chat'
 import { Route as ApiPublicLiveChatPurgeRouteImport } from './routes/api/public/live-chat-purge'
@@ -546,6 +547,11 @@ const ApiPublicEuropePulseScanRoute =
     path: '/api/public/europe-pulse-scan',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicEventFollowUpsRoute = ApiPublicEventFollowUpsRouteImport.update({
+  id: '/api/public/event-follow-ups',
+  path: '/api/public/event-follow-ups',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicEventRemindersRoute = ApiPublicEventRemindersRouteImport.update({
   id: '/api/public/event-reminders',
   path: '/api/public/event-reminders',
@@ -751,6 +757,7 @@ export interface FileRoutesByFullPath {
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
+  '/api/public/event-follow-ups': typeof ApiPublicEventFollowUpsRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
@@ -855,6 +862,7 @@ export interface FileRoutesByTo {
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
+  '/api/public/event-follow-ups': typeof ApiPublicEventFollowUpsRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
@@ -966,6 +974,7 @@ export interface FileRoutesById {
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
+  '/api/public/event-follow-ups': typeof ApiPublicEventFollowUpsRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
@@ -1076,6 +1085,7 @@ export interface FileRouteTypes {
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
     | '/api/public/europe-pulse-scan'
+    | '/api/public/event-follow-ups'
     | '/api/public/event-reminders'
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
@@ -1180,6 +1190,7 @@ export interface FileRouteTypes {
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
     | '/api/public/europe-pulse-scan'
+    | '/api/public/event-follow-ups'
     | '/api/public/event-reminders'
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
@@ -1290,6 +1301,7 @@ export interface FileRouteTypes {
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
     | '/api/public/europe-pulse-scan'
+    | '/api/public/event-follow-ups'
     | '/api/public/event-reminders'
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
@@ -1364,6 +1376,7 @@ export interface RootRouteChildren {
   ApiPublicChatSignalRoute: typeof ApiPublicChatSignalRoute
   ApiPublicClaimWavesRoute: typeof ApiPublicClaimWavesRoute
   ApiPublicEuropePulseScanRoute: typeof ApiPublicEuropePulseScanRoute
+  ApiPublicEventFollowUpsRoute: typeof ApiPublicEventFollowUpsRoute
   ApiPublicEventRemindersRoute: typeof ApiPublicEventRemindersRoute
   ApiPublicLiveChatRoute: typeof ApiPublicLiveChatRoute
   ApiPublicLiveChatPurgeRoute: typeof ApiPublicLiveChatPurgeRoute
@@ -1977,6 +1990,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicEuropePulseScanRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/event-follow-ups': {
+      id: '/api/public/event-follow-ups'
+      path: '/api/public/event-follow-ups'
+      fullPath: '/api/public/event-follow-ups'
+      preLoaderRoute: typeof ApiPublicEventFollowUpsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/event-reminders': {
       id: '/api/public/event-reminders'
       path: '/api/public/event-reminders'
@@ -2356,6 +2376,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicChatSignalRoute: ApiPublicChatSignalRoute,
   ApiPublicClaimWavesRoute: ApiPublicClaimWavesRoute,
   ApiPublicEuropePulseScanRoute: ApiPublicEuropePulseScanRoute,
+  ApiPublicEventFollowUpsRoute: ApiPublicEventFollowUpsRoute,
   ApiPublicEventRemindersRoute: ApiPublicEventRemindersRoute,
   ApiPublicLiveChatRoute: ApiPublicLiveChatRoute,
   ApiPublicLiveChatPurgeRoute: ApiPublicLiveChatPurgeRoute,
