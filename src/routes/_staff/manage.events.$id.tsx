@@ -26,6 +26,8 @@ import { EventDiscountCodesSection } from "@/components/cms/EventDiscountCodesSe
 import { EventWaitlistSection } from "@/components/cms/EventWaitlistSection";
 import { EventInvitationsSection } from "@/components/cms/EventInvitationsSection";
 import { EventFormsSection } from "@/components/cms/EventFormsSection";
+import { listEventForms } from "@/lib/event-forms.functions";
+
 import { EventRecapEditor } from "@/components/cms/EventRecapEditor";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { takeWizardExtras } from "@/lib/event-wizard-extras";
@@ -92,11 +94,21 @@ function EventEditor() {
   // shows them on its own; otherwise they follow the wizard's answers, and
   // afterwards the toggles above the form.
   const [extras, setExtras] = useState({ repeat: false, forms: false, cce: false });
+  // Stored forms are their own proof the panel is needed — the toggle itself is
+  // view state and does not survive a reload.
+  const [hasForms, setHasForms] = useState(false);
 
   useEffect(() => {
     const handed = takeWizardExtras(id);
     if (handed) setExtras(handed);
   }, [id]);
+
+  useEffect(() => {
+    listEventForms({ data: { eventId: id } })
+      .then((rows) => setHasForms((rows ?? []).length > 0))
+      .catch(() => undefined);
+  }, [id]);
+
 
   useEffect(() => {
     void Promise.all([
@@ -288,6 +300,8 @@ function EventEditor() {
   // toggles above the form cover everything else.
   const storedRecurrence = (event as { recurrence?: unknown }).recurrence ?? null;
   const showRepeat = extras.repeat || Boolean(storedRecurrence);
+  const showForms = extras.forms || hasForms;
+
   const showCce = extras.cce || Boolean(event.cce_enabled);
 
   return (
@@ -328,9 +342,11 @@ function EventEditor() {
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
-              checked={extras.forms}
+              checked={showForms}
               onChange={(e) => setExtras({ ...extras, forms: e.target.checked })}
+              disabled={hasForms}
             />
+
             <span>{t("events.wizard.extras.forms")}</span>
           </label>
         </div>
@@ -413,7 +429,7 @@ function EventEditor() {
               {event.registration_mode !== "none" && event.registration_mode !== "rsvp_invited" ? (
                 <EventWaitlistSection eventId={event.id} t={t} />
               ) : null}
-              {extras.forms ? <EventFormsSection eventId={event.id} t={t} /> : null}
+              {showForms ? <EventFormsSection eventId={event.id} t={t} /> : null}
               {/* Repeat lives right after Custom Forms: occurrences are copied
                   from the stored row, so this only unlocks once the event is
                   published and nothing is left unsaved. */}
