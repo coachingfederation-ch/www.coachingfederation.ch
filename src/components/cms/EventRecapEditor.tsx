@@ -299,29 +299,9 @@ export function EventRecapEditor({
       {message ? <p className="mb-3 text-sm text-teal-foreground">{message}</p> : null}
       {error ? <p className="mb-3 text-sm text-destructive">{error}</p> : null}
 
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="rounded-full border border-border px-3 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          {t(`recap.status.${status}`)}
-        </span>
-        <button
-          type="button"
-          className="btn-mono text-primary"
-          disabled={busy !== null}
-          onClick={() =>
-            run(
-              "status",
-              async () => {
-                const next = status === "published" ? "draft" : "published";
-                await setRecapStatus({ data: { eventId, status: next } });
-                setStatus(next);
-              },
-              t("recap.saved"),
-            )
-          }
-        >
-          {status === "published" ? t("recap.unpublish") : t("recap.publish")}
-        </button>
-      </div>
+      {/* Status and the publish/withdraw action live with "Save recap" in the
+          action bar below the fields, so the panel reads top-down: edit, then act. */}
+
 
       <label className="mt-5 block text-sm font-medium">
         {t("recap.fieldHeadline")}
