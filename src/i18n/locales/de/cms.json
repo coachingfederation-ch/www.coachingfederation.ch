@@ -768,7 +768,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
+          "items": [
+            "Projekte leiten",
+            "Von ICFS für die Leitung von Initiativen anerkannt werden"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1304,7 +1307,10 @@
       "translatingAndSaving": "Übersetzen und speichern…",
       "translationHint": "Deutsch, Französisch und Italienisch werden beim Speichern automatisch übersetzt. Passen Sie den Wortlaut hier jederzeit an.",
       "registrationsLabel": "Registrierungen",
-      "answeredLabel": "beantwortet"
+      "answeredLabel": "beantwortet",
+      "autoSend": "Nach dem Event automatisch senden",
+      "autoSendHint": "Geht 15 Minuten nach dem Ende des Events raus, mit einer Erinnerung drei Tage später an alle, die noch nicht geantwortet haben.",
+      "autoSentOn": "Automatisch gesendet am"
     },
     "searchAttendees": "Suche",
     "searchAttendeesPlaceholder": "Name oder E-Mail",

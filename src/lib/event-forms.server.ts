@@ -366,8 +366,141 @@ export async function sendFollowUp(
     }
   }
 
+  // A completed invitation run — manual or automatic — closes the automatic
+  // invitation window for this form, so the scheduled run can never send a
+  // second invitation to the same people.
+  if (mode === "invite" && !onlyRegistrationId) {
+    await supabaseAdmin
+      .from("event_forms")
+      .update({ auto_sent_at: new Date().toISOString() })
+      .eq("id", formId)
+      .is("auto_sent_at", null);
+  }
+
   return outcome;
 }
+
+/** Minutes after an event ends before the follow-up invitation goes out. */
+const FOLLOW_UP_DELAY_MINUTES = 15;
+/** Days after the invitation before the single automatic reminder goes out. */
+const FOLLOW_UP_REMINDER_DAYS = 3;
+/** Fallback duration for events that carry no end time. */
+const ASSUMED_EVENT_HOURS = 2;
+
+export type AutomationOutcome = {
+  invited: SendOutcome & { forms: number };
+  reminded: SendOutcome & { forms: number };
+};
+
+/**
+ * Scheduled pass over follow-up forms: invites attendees once the event has
+ * been over for {@link FOLLOW_UP_DELAY_MINUTES}, then reminds the people who
+ * have not answered after {@link FOLLOW_UP_REMINDER_DAYS}.
+ *
+ * Every guard is idempotent: `event_forms.auto_sent_at` / `auto_reminder_at`
+ * close the form-level window, the recipient row's `sent_at` /
+ * `reminder_sent_at` close the person-level one, and the mail helper's
+ * idempotency key closes the send itself. A repeated tick sends nothing.
+ */
+export async function runFollowUpSends(now = new Date()): Promise<AutomationOutcome> {
+  const out: AutomationOutcome = {
+    invited: { forms: 0, sent: 0, skipped: 0, failed: 0 },
+    reminded: { forms: 0, sent: 0, skipped: 0, failed: 0 },
+  };
+
+  const { data: formRows } = await supabaseAdmin
+    .from("event_forms")
+    .select(
+      "id, event_id, auto_sent_at, auto_reminder_at, events!inner(status, starts_at, ends_at)",
+    )
+    .eq("kind", "follow_up")
+    .eq("is_active", true)
+    .eq("auto_send", true)
+    .eq("events.status", "published");
+
+  type Row = {
+    id: string;
+    auto_sent_at: string | null;
+    auto_reminder_at: string | null;
+    events: { starts_at: string; ends_at: string | null } | null;
+  };
+
+  for (const row of (formRows ?? []) as unknown as Row[]) {
+    const ev = row.events;
+    if (!ev) continue;
+    const ended = ev.ends_at
+      ? new Date(ev.ends_at)
+      : new Date(new Date(ev.starts_at).getTime() + ASSUMED_EVENT_HOURS * 3_600_000);
+    if (Number.isNaN(ended.getTime())) continue;
+
+    if (!row.auto_sent_at) {
+      if (now.getTime() < ended.getTime() + FOLLOW_UP_DELAY_MINUTES * 60_000) continue;
+      try {
+        const result = await sendFollowUp(row.id, "invite");
+        out.invited.forms += 1;
+        out.invited.sent += result.sent;
+        out.invited.skipped += result.skipped;
+        out.invited.failed += result.failed;
+      } catch (error) {
+        out.invited.failed += 1;
+        console.error("follow-up auto invite failed", row.id, error);
+      }
+      continue;
+    }
+
+    if (row.auto_reminder_at) continue;
+
+    // Reminder pass: only people who were invited long enough ago, have not
+    // answered, and have never been reminded.
+    const cutoff = new Date(
+      now.getTime() - FOLLOW_UP_REMINDER_DAYS * 24 * 3_600_000,
+    ).toISOString();
+    const { data: pending } = await supabaseAdmin
+      .from("event_form_recipients")
+      .select("registration_id, sent_at, reminder_sent_at, status")
+      .eq("form_id", row.id)
+      .eq("status", "sent")
+      .is("reminder_sent_at", null)
+      .lte("sent_at", cutoff);
+
+    const targets = (pending ?? []) as { registration_id: string }[];
+    if (targets.length === 0) {
+      // Nothing left to chase: close the reminder window so the form drops out
+      // of the scheduled pass entirely.
+      const { data: anyPending } = await supabaseAdmin
+        .from("event_form_recipients")
+        .select("id")
+        .eq("form_id", row.id)
+        .eq("status", "sent")
+        .is("reminder_sent_at", null)
+        .limit(1);
+      if ((anyPending ?? []).length === 0) {
+        await supabaseAdmin
+          .from("event_forms")
+          .update({ auto_reminder_at: now.toISOString() })
+          .eq("id", row.id)
+          .is("auto_reminder_at", null);
+      }
+      continue;
+    }
+
+    out.reminded.forms += 1;
+    for (const target of targets) {
+      try {
+        const result = await sendFollowUp(row.id, "reminder", target.registration_id);
+        out.reminded.sent += result.sent;
+        out.reminded.skipped += result.skipped;
+        out.reminded.failed += result.failed;
+      } catch (error) {
+        out.reminded.failed += 1;
+        console.error("follow-up auto reminder failed", row.id, error);
+      }
+    }
+  }
+
+  return out;
+}
+
 
 export type ResolvedFollowUp = {
   state: "open" | "completed";

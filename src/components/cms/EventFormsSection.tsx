@@ -256,6 +256,8 @@ function FormEditor({
   const showTexts = kind === "follow_up";
   const [name, setName] = useState("");
   const [active, setActive] = useState(true);
+  const [autoSend, setAutoSend] = useState(true);
+  const [autoSentAt, setAutoSentAt] = useState<string | null>(null);
   const [intro, setIntro] = useState("");
   const [thankYou, setThankYou] = useState("");
   const [introTrans, setIntroTrans] = useState<Record<TranslatedLocale, string>>({
@@ -285,6 +287,8 @@ function FormEditor({
         };
         setName(String(form["name"] ?? ""));
         setActive(Boolean(form["is_active"]));
+        setAutoSend(form["auto_send"] === undefined ? true : Boolean(form["auto_send"]));
+        setAutoSentAt((form["auto_sent_at"] as string | null) ?? null);
         setIntro(String(form["intro"] ?? ""));
         setThankYou(String(form["thank_you"] ?? ""));
         setIntroTrans({
@@ -458,6 +462,7 @@ function FormEditor({
           formId,
           name,
           is_active: active,
+          auto_send: autoSend,
           intro: showTexts ? intro || null : null,
           intro_de: showTexts ? intros.de || null : null,
           intro_fr: showTexts ? intros.fr || null : null,
@@ -525,6 +530,23 @@ function FormEditor({
           <input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} />
           {t("events.forms.active")}
         </label>
+        {showTexts ? (
+          <div className="sm:col-span-2">
+            <label className="flex items-center gap-2 text-xs font-semibold">
+              <input
+                type="checkbox"
+                checked={autoSend}
+                onChange={(e) => setAutoSend(e.target.checked)}
+              />
+              {t("events.forms.autoSend")}
+            </label>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {autoSentAt
+                ? `${t("events.forms.autoSentOn")} ${new Date(autoSentAt).toLocaleString()}`
+                : t("events.forms.autoSendHint")}
+            </p>
+          </div>
+        ) : null}
         {showTexts ? (
           <>
             <div>

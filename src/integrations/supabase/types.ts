@@ -1601,6 +1601,9 @@ export type Database = {
       }
       event_forms: {
         Row: {
+          auto_reminder_at: string | null
+          auto_send: boolean
+          auto_sent_at: string | null
           created_at: string
           event_id: string
           id: string
@@ -1618,6 +1621,9 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          auto_reminder_at?: string | null
+          auto_send?: boolean
+          auto_sent_at?: string | null
           created_at?: string
           event_id: string
           id?: string
@@ -1635,6 +1641,9 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          auto_reminder_at?: string | null
+          auto_send?: boolean
+          auto_sent_at?: string | null
           created_at?: string
           event_id?: string
           id?: string
