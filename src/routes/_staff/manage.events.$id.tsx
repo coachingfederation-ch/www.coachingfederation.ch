@@ -26,6 +26,8 @@ import { EventDiscountCodesSection } from "@/components/cms/EventDiscountCodesSe
 import { EventWaitlistSection } from "@/components/cms/EventWaitlistSection";
 import { EventInvitationsSection } from "@/components/cms/EventInvitationsSection";
 import { EventFormsSection } from "@/components/cms/EventFormsSection";
+import { listEventForms } from "@/lib/event-forms.functions";
+
 import { EventRecapEditor } from "@/components/cms/EventRecapEditor";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { takeWizardExtras } from "@/lib/event-wizard-extras";
