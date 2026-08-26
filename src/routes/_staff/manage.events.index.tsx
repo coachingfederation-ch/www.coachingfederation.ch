@@ -14,7 +14,8 @@ import { Checkbox } from "@/design-system/icf-welcome-design-system-a835df";
 import { Shell } from "@/components/cms/Shell";
 import { useCms } from "@/i18n/cms";
 import { listManagedEvents } from "@/lib/events-admin.functions";
-import { displayEventStatus } from "@/lib/events";
+import { displayEventStatus, isLiveEvent } from "@/lib/events";
+import { useNowMinute } from "@/hooks/use-now-minute";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
