@@ -44,9 +44,9 @@ export const Route = createFileRoute("/form/$token")({
 
 function FormFallback() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <SiteHeaderBar compact />
-      <main className="mx-auto max-w-2xl px-6 py-24">
+      <main className="flex-1 mx-auto max-w-2xl px-6 py-24">
         <h1 className="font-display text-3xl font-bold tracking-tight">This link is not valid</h1>
         <p className="mt-3 text-muted-foreground">
           The form may have closed. Write to office@coachingfederation.ch and we will help.
@@ -91,9 +91,9 @@ function FollowUpFormRoute() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <SiteHeaderBar compact />
-      <main className="mx-auto max-w-2xl px-6 py-16">
+      <main className="flex-1 mx-auto max-w-2xl px-6 py-16">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
           {form.eventTitle}
         </p>

@@ -41,9 +41,9 @@ export const Route = createFileRoute("/ticket/$token")({
 
 function TicketFallback() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <SiteHeaderBar compact />
-      <main className="mx-auto max-w-2xl px-6 py-24">
+      <main className="flex-1 mx-auto max-w-2xl px-6 py-24">
         <h1 className="font-display text-3xl font-bold tracking-tight">Ticket not found</h1>
         <p className="mt-3 text-muted-foreground">
           This ticket link is no longer valid. If your registration was cancelled, the ticket stops
@@ -61,9 +61,9 @@ function TicketRoute() {
   const unpaid = ticket.paymentStatus === "pending" || ticket.paymentStatus === "expired";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <SiteHeaderBar compact />
-      <main className="mx-auto max-w-2xl px-6 py-14">
+      <main className="flex-1 mx-auto max-w-2xl px-6 py-14">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
           {ticket.tierName ?? "Registration"}
         </p>
