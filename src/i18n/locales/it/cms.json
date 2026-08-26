@@ -1348,7 +1348,12 @@
       "resultAlready": "Già registrato",
       "resultIneligible": "Check-in non possibile",
       "resultWrongEvent": "Biglietto per un altro evento",
-      "resultUnknown": "Biglietto sconosciuto"
+      "resultUnknown": "Biglietto sconosciuto",
+      "openOnPhone": "Apri lo scanner sul telefono",
+      "openOnPhoneHint": "Scansiona questo codice con la fotocamera del telefono. Su quel telefono devi aver effettuato l'accesso con il tuo account dello staff.",
+      "showQr": "Mostra il codice QR",
+      "copyLink": "Copia il link",
+      "copied": "Link copiato"
     },
     "reporting": {
       "open": "Report",

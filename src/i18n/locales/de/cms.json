@@ -1348,7 +1348,12 @@
       "resultAlready": "Bereits eingecheckt",
       "resultIneligible": "Check-in nicht möglich",
       "resultWrongEvent": "Ticket für einen anderen Event",
-      "resultUnknown": "Unbekanntes Ticket"
+      "resultUnknown": "Unbekanntes Ticket",
+      "openOnPhone": "Scanner auf dem Handy öffnen",
+      "openOnPhoneHint": "Scannen Sie diesen Code mit der Handykamera. Auf diesem Handy müssen Sie mit Ihrem Staff-Konto angemeldet sein.",
+      "showQr": "QR-Code anzeigen",
+      "copyLink": "Link kopieren",
+      "copied": "Link kopiert"
     },
     "reporting": {
       "open": "Auswertung",
