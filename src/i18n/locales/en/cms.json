@@ -1586,7 +1586,34 @@
       "thanksSending": "Sending…",
       "thanksPreview": "Send me a preview",
       "thanksPreviewSent": "Preview sent to {email}.",
-      "thanksResult": "Sent {sent}, failed {failed}, still to be mailed {remaining}."
+      "thanksResult": "Sent {sent}, failed {failed}, still to be mailed {remaining}.",
+      "post": {
+        "open": "Open post editor",
+        "title": "Social post editor",
+        "hint": "Compose the commentary and the carousel, then publish to the chapter page.",
+        "commentary": "Post text",
+        "toneLabel": "Tone",
+        "tone": {
+          "warm": "Warm",
+          "professional": "Professional",
+          "celebratory": "Celebratory"
+        },
+        "draftWithAi": "Draft with AI",
+        "cover": "Start with a branded cover slide",
+        "coverNote": "The cover slide is generated from the recap headline when you publish.",
+        "coverKicker": "Event recap",
+        "slides": "Carousel slides",
+        "slidesHint": "{count} of {max} gallery photos selected.",
+        "addSlide": "Add this photo to the carousel",
+        "preview": "Preview",
+        "previewEmpty": "Your post text appears here.",
+        "slideOf": "{index} / {total}",
+        "previous": "Previous slide",
+        "next": "Next slide",
+        "pageName": "The Switzerland Chapter of ICF",
+        "saveDraft": "Save draft",
+        "publish": "Publish post"
+      }
     }
   },
   "eventTranslations": {

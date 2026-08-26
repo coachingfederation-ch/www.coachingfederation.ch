@@ -18,10 +18,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { EVENT_MEDIA_BUCKET } from "@/lib/storage";
 import { RECAP_AUDIENCES, formatFileSize, recapAssetPath } from "@/lib/event-recaps";
 import type { RecapAudience } from "@/lib/event-recaps";
+import { RecapPostEditor, type RecapPostDraft } from "./RecapPostEditor";
 import {
   getManagedRecap,
   previewRecapThanksEmail,
-  publishRecapToLinkedIn,
   saveRecap,
   saveRecapFiles,
   saveRecapPhotos,
@@ -78,10 +78,12 @@ async function webRendition(file: File): Promise<Blob> {
 export function EventRecapEditor({
   eventId,
   eventStartsAt,
+  eventTitle,
   t,
 }: {
   eventId: string;
   eventStartsAt: string;
+  eventTitle?: string;
   t: (key: string) => string;
 }) {
   // The recap is post-event editorial work, so the panel stays collapsed
@@ -103,7 +105,8 @@ export function EventRecapEditor({
     linkedin_post_url: string | null;
     error_message: string | null;
   } | null>(null);
-  const [commentary, setCommentary] = useState("");
+  const [postEditorOpen, setPostEditorOpen] = useState(false);
+  const [postDraft, setPostDraft] = useState<RecapPostDraft | null>(null);
   const [thanks, setThanks] = useState<{ total: number; pending: number }>({
     total: 0,
     pending: 0,
@@ -131,6 +134,7 @@ export function EventRecapEditor({
       body: string | null;
       downloads_audience: RecapAudience;
       recap_email_last_sent_at: string | null;
+      linkedin_draft: RecapPostDraft | null;
     };
     setStatus(recap.status);
     setLanguage(recap.language);
@@ -138,6 +142,7 @@ export function EventRecapEditor({
     setBody(recap.body ?? "");
     setAudience(recap.downloads_audience);
     setThanksLastSent(recap.recap_email_last_sent_at ?? null);
+    setPostDraft(recap.linkedin_draft ?? null);
     setThanks((data.thanks as { total: number; pending: number }) ?? { total: 0, pending: 0 });
     setPhotos(
       (data.photos as Record<string, unknown>[]).map((p) => ({
@@ -573,40 +578,16 @@ export function EventRecapEditor({
         </div>
       </div>
 
-      {/* LinkedIn carousel */}
+      {/* Social post — composed in its own editor so the carousel can be previewed */}
       <div className="mt-8 border-t border-border pt-6">
         <h3 className="text-sm font-bold uppercase tracking-wide text-muted-foreground">
           {t("recap.linkedin")}
         </h3>
         <p className="mt-1 text-xs text-muted-foreground">{t("recap.linkedinHint")}</p>
-        <textarea
-          value={commentary}
-          onChange={(e) => setCommentary(e.target.value)}
-          rows={5}
-          maxLength={3000}
-          placeholder={t("recap.linkedinPlaceholder")}
-          className="mt-3 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-        />
-        <div className="mt-2 flex flex-wrap items-center gap-3">
-          <button
-            type="button"
-            disabled={busy !== null || commentary.trim().length === 0 || status !== "published"}
-            onClick={() =>
-              run(
-                "linkedin",
-                async () => {
-                  await publishRecapToLinkedIn({
-                    data: { eventId, commentary: commentary.trim() },
-                  });
-                  await load();
-                },
-                t("recap.linkedinPosted"),
-              )
-            }
-            className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
-          >
-            {busy === "linkedin" ? t("recap.linkedinPosting") : t("recap.linkedinPublish")}
-          </button>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <Button type="button" variant="outline" onClick={() => setPostEditorOpen(true)}>
+            {t("recap.post.open")}
+          </Button>
           {linkedin?.linkedin_post_url ? (
             <a
               href={linkedin.linkedin_post_url}
@@ -621,7 +602,25 @@ export function EventRecapEditor({
             <span className="text-xs text-destructive">{linkedin.error_message}</span>
           ) : null}
         </div>
+        <RecapPostEditor
+          open={postEditorOpen}
+          onOpenChange={setPostEditorOpen}
+          eventId={eventId}
+          eventTitle={eventTitle ?? ""}
+          headline={headline}
+          meta={new Date(eventStartsAt).toLocaleDateString(language, {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+          photos={photos}
+          draft={postDraft}
+          canPublish={status === "published"}
+          onPosted={load}
+          t={t}
+        />
       </div>
+
 
       {/* Thank-you email to the attendees */}
       <div className="mt-8 border-t border-border pt-6">

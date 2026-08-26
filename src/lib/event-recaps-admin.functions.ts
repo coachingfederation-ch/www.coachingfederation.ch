@@ -123,7 +123,7 @@ export const getManagedRecap = createServerFn({ method: "POST" })
         context.supabase
           .from("event_recaps")
           .select(
-            "id, event_id, status, language, headline, body, downloads_audience, published_at, content_updated_at, recap_email_last_sent_at",
+            "id, event_id, status, language, headline, body, downloads_audience, published_at, content_updated_at, recap_email_last_sent_at, linkedin_draft",
           )
           .eq("id", recapId)
           .single(),
@@ -370,7 +370,18 @@ export const translateRecap = createServerFn({ method: "POST" })
 export const publishRecapToLinkedIn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
-    eventInput.extend({ commentary: z.string().trim().min(1).max(3000) }).parse(data),
+    eventInput
+      .extend({
+        commentary: z.string().trim().min(1).max(3000),
+        slideIds: z.array(z.string().uuid()).max(9).optional(),
+        coverDataUrl: z
+          .string()
+          .regex(/^data:image\/(png|jpeg);base64,/)
+          .max(8_000_000)
+          .nullable()
+          .optional(),
+      })
+      .parse(data),
   )
   .handler(async ({ data, context }) => {
     const { assertLinkedInPublisher } = await import("./linkedin-authz");
@@ -390,6 +401,8 @@ export const publishRecapToLinkedIn = createServerFn({ method: "POST" })
       recapId: recap.id as string,
       commentary: data.commentary,
       userId,
+      ...(data.slideIds ? { slideIds: data.slideIds } : {}),
+      coverDataUrl: data.coverDataUrl ?? null,
     });
   });
 
@@ -437,4 +450,70 @@ export const previewRecapThanksEmail = createServerFn({ method: "POST" })
     const { previewRecapThanks } = await import("./event-recap-email.server");
     const result = await previewRecapThanks(data.eventId, to, data.locale, data.personalNote);
     return { ...result, to };
+  });
+
+/**
+ * Persists the social post draft (post text, cover toggle, slide order) so the
+ * editor reopens where the publisher left off. Kept apart from `saveRecap`
+ * because the post is composed in its own dialog, often long after the story
+ * itself was written.
+ */
+export const saveRecapPostDraft = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    eventInput
+      .extend({
+        draft: z.object({
+          commentary: z.string().max(3000),
+          withCover: z.boolean(),
+          slideIds: z.array(z.string().uuid()).max(9),
+        }),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    await assertOrganizer(context);
+    const recapId = await ensureRecap(context.supabase, data.eventId, context.userId);
+    const { error } = await context.supabase
+      .from("event_recaps")
+      .update({ linkedin_draft: data.draft })
+      .eq("id", recapId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+/** AI-drafted post text for the recap, in the requested tone. */
+export const draftRecapPost = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    eventInput
+      .extend({ tone: z.enum(["warm", "professional", "celebratory"]).default("warm") })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    await assertOrganizer(context);
+    const { data: row } = await context.supabase
+      .from("events")
+      .select("slug, title, event_recaps(headline, body, language)")
+      .eq("id", data.eventId)
+      .maybeSingle();
+    if (!row) throw new Error("Event not found.");
+    const recap = (Array.isArray(row.event_recaps) ? row.event_recaps[0] : row.event_recaps) as
+      | { headline: string | null; body: string | null; language: string | null }
+      | null
+      | undefined;
+
+    const { SITE_URL, localizePath, isLocale } = await import("@/i18n/config");
+    const locale = isLocale(recap?.language ?? "en") ? (recap?.language as "de" | "fr" | "it" | "en") : "en";
+    const recapUrl = `${SITE_URL}${localizePath(`/events/${row.slug as string}`, locale)}#recap`;
+
+    const { draftRecapCommentary } = await import("./event-recap-linkedin.server");
+    const commentary = await draftRecapCommentary({
+      headline: recap?.headline ?? "",
+      body: recap?.body ?? "",
+      eventTitle: (row.title as string) ?? "",
+      recapUrl,
+      tone: data.tone,
+    });
+    return { commentary };
   });

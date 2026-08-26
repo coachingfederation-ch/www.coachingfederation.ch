@@ -1586,7 +1586,34 @@
       "thanksSending": "Envoi…",
       "thanksPreview": "M'envoyer un aperçu",
       "thanksPreviewSent": "Aperçu envoyé à {email}.",
-      "thanksResult": "Envoyés {sent}, échecs {failed}, restants {remaining}."
+      "thanksResult": "Envoyés {sent}, échecs {failed}, restants {remaining}.",
+      "post": {
+        "open": "Ouvrir l'éditeur de publication",
+        "title": "Éditeur de publication sociale",
+        "hint": "Composez le texte et le carrousel, puis publiez sur la page du chapitre.",
+        "commentary": "Texte de la publication",
+        "toneLabel": "Ton",
+        "tone": {
+          "warm": "Chaleureux",
+          "professional": "Professionnel",
+          "celebratory": "Festif"
+        },
+        "draftWithAi": "Rédiger avec l'IA",
+        "cover": "Commencer par une diapositive de couverture",
+        "coverNote": "La couverture est générée à partir du titre de la rétrospective lors de la publication.",
+        "coverKicker": "Rétrospective",
+        "slides": "Diapositives du carrousel",
+        "slidesHint": "{count} photo(s) sur {max} sélectionnée(s).",
+        "addSlide": "Ajouter cette photo au carrousel",
+        "preview": "Aperçu",
+        "previewEmpty": "Votre texte apparaît ici.",
+        "slideOf": "{index} / {total}",
+        "previous": "Diapositive précédente",
+        "next": "Diapositive suivante",
+        "pageName": "The Switzerland Chapter of ICF",
+        "saveDraft": "Enregistrer le brouillon",
+        "publish": "Publier"
+      }
     }
   },
   "eventTranslations": {
