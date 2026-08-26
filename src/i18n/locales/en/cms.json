@@ -1003,7 +1003,8 @@
       "published": "Published",
       "cancelled": "Cancelled",
       "archived": "Archived",
-      "passed": "Passed"
+      "passed": "Passed",
+      "live": "Live"
     },
     "backToList": "All events",
     "publish": "Publish",

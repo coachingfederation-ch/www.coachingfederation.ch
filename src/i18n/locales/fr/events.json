@@ -35,7 +35,8 @@
     "hybrid": "Hybride",
     "registration": "Inscription",
     "full": "Complet",
-    "membersOnly": "Réservé aux membres"
+    "membersOnly": "Réservé aux membres",
+    "live": "En direct"
   },
   "detail": {
     "backToEvents": "Tous les événements",

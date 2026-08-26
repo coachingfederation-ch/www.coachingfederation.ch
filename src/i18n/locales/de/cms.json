@@ -1003,7 +1003,8 @@
       "published": "Veröffentlicht",
       "cancelled": "Abgesagt",
       "archived": "Archiviert",
-      "passed": "Vergangen"
+      "passed": "Vergangen",
+      "live": "Live"
     },
     "backToList": "Alle Events",
     "publish": "Veröffentlichen",
