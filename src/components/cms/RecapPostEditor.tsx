@@ -311,11 +311,23 @@ export function RecapPostEditor({
                   slideOf: t("recap.post.slideOf"),
                   previous: t("recap.post.previous"),
                   next: t("recap.post.next"),
+                  rendering: t("recap.post.coverRendering"),
                 }}
               />
             </div>
             {withCover ? (
-              <p className="mt-2 text-xs text-muted-foreground">{t("recap.post.coverNote")}</p>
+              <div className="mt-2 flex flex-wrap items-center gap-3">
+                <p className="text-xs text-muted-foreground">{t("recap.post.coverNote")}</p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={coverPending}
+                  onClick={() => setCoverNonce((n) => n + 1)}
+                >
+                  {t("recap.post.coverRegenerate")}
+                </Button>
+              </div>
             ) : null}
           </div>
         </div>
@@ -341,15 +353,8 @@ export function RecapPostEditor({
             }
             onClick={() =>
               run("publish", async () => {
-                let coverDataUrl: string | null = null;
-                if (withCover && coverRef.current) {
-                  coverDataUrl = await toPng(coverRef.current, {
-                    width: RECAP_COVER_SIZE,
-                    height: RECAP_COVER_SIZE,
-                    pixelRatio: 1,
-                    cacheBust: true,
-                  });
-                }
+                // Reuse the image the publisher just approved in the preview.
+                const cover = withCover ? (coverDataUrl ?? (await renderCover())) : null;
                 await saveRecapPostDraft({ data: { eventId, draft: draftPayload() } });
                 await publishRecapToLinkedIn({
                   data: {
