@@ -87,11 +87,23 @@ function AccountControl() {
   );
 }
 
-export function SiteHeaderBar({ compact = false }: { compact?: boolean }) {
+export function SiteHeaderBar({
+  compact = false,
+  standalone = false,
+}: {
+  compact?: boolean;
+  /**
+   * Defaults to `false` because most pages nest the bar inside their own Deep
+   * Blue band. Pass `standalone` on a page that has no band of its own — a
+   * token page, a standalone form — otherwise the negative lockup and light nav
+   * land on the bone background.
+   */
+  standalone?: boolean;
+}) {
   const { t } = useI18n();
   return (
     <SiteHeader
-      standalone={false}
+      standalone={standalone}
       variant={compact ? "compact" : "hero"}
       className={compact ? "mb-0" : "mb-10"}
       linkComponent={localeLinkComponent}
