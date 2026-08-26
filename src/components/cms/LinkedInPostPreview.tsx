@@ -11,7 +11,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import icfLogo from "@/assets/icf-switzerland-charter-chapter.png.asset.json";
 
-export type PreviewSlide = { id: string; src: string | null; alt: string };
+export type PreviewSlide = {
+  id: string;
+  src: string | null;
+  alt: string;
+  /** Slide artwork is still being rasterised (branded cover). */
+  pending?: boolean;
+};
 
 export function LinkedInPostPreview({
   commentary,
@@ -22,7 +28,7 @@ export function LinkedInPostPreview({
   commentary: string;
   slides: PreviewSlide[];
   pageName: string;
-  labels: { empty: string; slideOf: string; previous: string; next: string };
+  labels: { empty: string; slideOf: string; previous: string; next: string; rendering?: string };
 }) {
   const [index, setIndex] = useState(0);
   const current = slides[Math.min(index, Math.max(slides.length - 1, 0))];
