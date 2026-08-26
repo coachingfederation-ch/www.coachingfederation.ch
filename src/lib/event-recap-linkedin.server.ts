@@ -106,17 +106,44 @@ async function uploadImage(
 
 type GalleryImage = { bytes: ArrayBuffer; contentType: string; altText: string };
 
-/** Reads the web renditions straight out of private storage. */
-async function galleryImages(recapId: string): Promise<GalleryImage[]> {
+/** Decodes the browser-rendered cover slide (a `data:` URL) into bytes. */
+function decodeDataUrl(dataUrl: string): GalleryImage {
+  const match = /^data:([^;,]+);base64,(.+)$/s.exec(dataUrl);
+  if (!match) throw new Error("The cover slide could not be read.");
+  const binary = atob(match[2]!);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+  return {
+    bytes: bytes.buffer,
+    contentType: match[1]!,
+    altText: "The Switzerland Chapter of ICF — event recap",
+  };
+}
+
+/**
+ * Reads the web renditions straight out of private storage. When the editor
+ * hands over an explicit slide order, that order — and that selection — wins;
+ * without one the gallery's own sort order is used.
+ */
+async function galleryImages(recapId: string, slideIds?: string[]): Promise<GalleryImage[]> {
   const db = await admin();
   const { data } = await db
     .from("event_recap_photos")
-    .select("web_path, alt, caption, sort_order")
+    .select("id, web_path, alt, caption, sort_order")
     .eq("recap_id", recapId)
-    .order("sort_order", { ascending: true })
-    .limit(MAX_CAROUSEL_IMAGES);
+    .order("sort_order", { ascending: true });
 
-  const rows = (data ?? []) as { web_path: string; alt: string | null; caption: string | null }[];
+  let rows = (data ?? []) as {
+    id: string;
+    web_path: string;
+    alt: string | null;
+    caption: string | null;
+  }[];
+  if (slideIds?.length) {
+    const byId = new Map(rows.map((row) => [row.id, row]));
+    rows = slideIds.map((id) => byId.get(id)).filter(Boolean) as typeof rows;
+  }
+  rows = rows.slice(0, MAX_CAROUSEL_IMAGES);
   const out: GalleryImage[] = [];
   for (const row of rows) {
     const { data: blob, error } = await db.storage.from(EVENT_MEDIA_BUCKET).download(row.web_path);
@@ -139,6 +166,10 @@ export async function postRecapCarousel(input: {
   recapId: string;
   commentary: string;
   userId: string;
+  /** Explicit slide order picked in the post editor. */
+  slideIds?: string[];
+  /** Branded cover slide rasterised in the browser, posted as slide one. */
+  coverDataUrl?: string | null;
 }): Promise<RecapLinkedInPost> {
   const db = await admin();
   const auth = gatewayAuth();
@@ -152,7 +183,9 @@ export async function postRecapCarousel(input: {
   if (!organizationUrn)
     throw new Error("No LinkedIn company page is configured for the chapter yet.");
 
-  const images = await galleryImages(input.recapId);
+  const gallery = await galleryImages(input.recapId, input.slideIds);
+  const cover = input.coverDataUrl ? [decodeDataUrl(input.coverDataUrl)] : [];
+  const images = [...cover, ...gallery].slice(0, MAX_CAROUSEL_IMAGES);
   if (images.length === 0)
     throw new Error("Add at least one gallery photo before sharing the recap on LinkedIn.");
 
