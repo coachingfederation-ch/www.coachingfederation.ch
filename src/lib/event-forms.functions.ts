@@ -13,7 +13,7 @@ import { assertOrganizer } from "./authz";
 import { FORM_KINDS, QUESTION_TYPES } from "./event-forms";
 
 const FORM_COLUMNS =
-  "id, event_id, kind, name, is_active, intro, intro_de, intro_fr, intro_it, thank_you, thank_you_de, thank_you_fr, thank_you_it, created_at";
+  "id, event_id, kind, name, is_active, auto_send, auto_sent_at, auto_reminder_at, intro, intro_de, intro_fr, intro_it, thank_you, thank_you_de, thank_you_fr, thank_you_it, created_at";
 
 const QUESTION_COLUMNS =
   "id, form_id, question_key, qtype, label, label_de, label_fr, label_it, help_text, help_text_de, help_text_fr, help_text_it, options, options_de, options_fr, options_it, rating_max, scale_low_label, scale_low_label_de, scale_low_label_fr, scale_low_label_it, scale_high_label, scale_high_label_de, scale_high_label_fr, scale_high_label_it, is_required, sort_order, condition_question_id, condition_value";
@@ -164,6 +164,7 @@ export const saveEventForm = createServerFn({ method: "POST" })
         formId: z.string().uuid(),
         name: z.string().trim().min(2).max(120),
         is_active: z.boolean(),
+        auto_send: z.boolean().optional(),
         intro: z.string().trim().max(1000).nullable().optional(),
         intro_de: z.string().trim().max(1000).nullable().optional(),
         intro_fr: z.string().trim().max(1000).nullable().optional(),
@@ -184,6 +185,7 @@ export const saveEventForm = createServerFn({ method: "POST" })
       .update({
         name: data.name,
         is_active: data.is_active,
+        ...(data.auto_send === undefined ? {} : { auto_send: data.auto_send }),
         intro: data.intro || null,
         intro_de: data.intro_de || null,
         intro_fr: data.intro_fr || null,

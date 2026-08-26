@@ -768,7 +768,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
+          "items": [
+            "Lead projects",
+            "Be recognized by ICFS for leading initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1304,7 +1307,10 @@
       "translatingAndSaving": "Translating and saving…",
       "translationHint": "German, French and Italian are translated automatically on save. Edit them here whenever you want different wording.",
       "registrationsLabel": "registrations",
-      "answeredLabel": "answered"
+      "answeredLabel": "answered",
+      "autoSend": "Send automatically after the event",
+      "autoSendHint": "Goes out 15 minutes after the event ends, with one reminder three days later to anyone who has not answered.",
+      "autoSentOn": "Sent automatically on"
     },
     "searchAttendees": "Search",
     "searchAttendeesPlaceholder": "Name or email",

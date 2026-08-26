@@ -768,7 +768,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
+          "items": [
+            "Guidare progetti",
+            "Essere riconosciuti da ICFS per aver guidato iniziative"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1304,7 +1307,10 @@
       "translatingAndSaving": "Traduzione e salvataggio…",
       "translationHint": "Tedesco, francese e italiano vengono tradotti automaticamente al salvataggio. Modifica qui il testo quando vuoi.",
       "registrationsLabel": "registrazioni",
-      "answeredLabel": "risposte ricevute"
+      "answeredLabel": "risposte ricevute",
+      "autoSend": "Invia automaticamente dopo l'evento",
+      "autoSendHint": "Parte 15 minuti dopo la fine dell'evento, con un promemoria tre giorni dopo a chi non ha risposto.",
+      "autoSentOn": "Inviato automaticamente il"
     },
     "searchAttendees": "Ricerca",
     "searchAttendeesPlaceholder": "Nome o e-mail",

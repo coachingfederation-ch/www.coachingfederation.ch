@@ -768,7 +768,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
+          "items": [
+            "Piloter des projets",
+            "Être reconnu par ICFS pour avoir mené des initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1304,7 +1307,10 @@
       "translatingAndSaving": "Traduction et enregistrement…",
       "translationHint": "L'allemand, le français et l'italien sont traduits automatiquement à l'enregistrement. Modifiez la formulation ici quand vous le souhaitez.",
       "registrationsLabel": "inscriptions",
-      "answeredLabel": "répondu"
+      "answeredLabel": "répondu",
+      "autoSend": "Envoyer automatiquement après l'événement",
+      "autoSendHint": "Envoyé 15 minutes après la fin de l'événement, avec un rappel trois jours plus tard aux personnes qui n'ont pas répondu.",
+      "autoSentOn": "Envoyé automatiquement le"
     },
     "searchAttendees": "Recherche",
     "searchAttendeesPlaceholder": "Nom ou e-mail",
