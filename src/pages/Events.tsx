@@ -7,7 +7,14 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Mark, type MarkName } from "@/components/marks";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { LocaleLink, useI18n } from "@/i18n";
-import { eventPlace, formatEventDate, type EventFacetOption, type PublicEvent } from "@/lib/events";
+import {
+  eventPlace,
+  formatEventDate,
+  isLiveEvent,
+  type EventFacetOption,
+  type PublicEvent,
+} from "@/lib/events";
+import { useNowMinute } from "@/hooks/use-now-minute";
 import type { EventsSearch } from "@/lib/events-search";
 
 /**
@@ -129,6 +136,7 @@ function WhereSelect({
 
 export default function EventsPage({ data }: { data: EventsPageData }) {
   const { t, locale } = useI18n();
+  const now = useNowMinute();
   const navigate = useNavigate();
   const search = useSearch({ strict: false }) as EventsSearch;
   const { featured, upcoming, past, categories, regions } = data;
@@ -366,6 +374,12 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                         {tag}
                       </span>
                     ))}
+                    {now !== null && isLiveEvent(featured.starts_at, featured.ends_at, now) ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
+                        <span className="h-1.5 w-1.5 rounded-full bg-warn-foreground" />
+                        {t("events.tag.live")}
+                      </span>
+                    ) : null}
                     {featured.is_internal ? (
                       <span className="inline-flex items-center rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
                         {t("events.tag.membersOnly")}
@@ -450,6 +464,12 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                               {tag}
                             </span>
                           ))}
+                          {now !== null && isLiveEvent(e.starts_at, e.ends_at, now) ? (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
+                              <span className="h-1.5 w-1.5 rounded-full bg-warn-foreground" />
+                              {t("events.tag.live")}
+                            </span>
+                          ) : null}
                           {e.is_internal ? (
                             <span className="inline-flex items-center rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
                               {t("events.tag.membersOnly")}

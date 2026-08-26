@@ -1003,7 +1003,8 @@
       "published": "Publié",
       "cancelled": "Annulé",
       "archived": "Archivé",
-      "passed": "Passé"
+      "passed": "Passé",
+      "live": "En direct"
     },
     "backToList": "Tous les événements",
     "publish": "Publier",

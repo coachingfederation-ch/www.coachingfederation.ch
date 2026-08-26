@@ -6,7 +6,7 @@
  * window, entitlement and price are all enforced server-side.
  */
 import { useQuery } from "@tanstack/react-query";
-import { CalendarDays, Clock, Languages, MapPin, Users } from "lucide-react";
+import { CalendarDays, Clock, Languages, MapPin, Radio, Users } from "lucide-react";
 import { SiteFooter, SiteHeaderBar } from "@/components/site-chrome";
 import { Mark, type MarkName } from "@/components/marks";
 import { Markdown } from "@/components/markdown";
@@ -16,12 +16,14 @@ import { EventRegistrationPanel } from "@/components/events/EventRegistrationPan
 import { AddToCalendarMenu } from "@/components/events/AddToCalendarMenu";
 import { HERO_EVENT_PLACEMENT, sanitizeHeroMarks } from "@/lib/hero-design";
 import { LocaleLink, useI18n } from "@/i18n";
+import { useNowMinute } from "@/hooks/use-now-minute";
 import { supabase } from "@/integrations/supabase/client";
 import {
   eventPlace,
   formatEventDate,
   formatEventTimeRange,
   isPastEvent,
+  isLiveEvent,
   type PublicEvent,
 } from "@/lib/events";
 import type { EventHost } from "@/lib/event-hosts";
@@ -90,6 +92,8 @@ export default function EventDetailPage({
   });
   const tz = event.timezone ?? "Europe/Zurich";
   const past = isPastEvent(event);
+  const now = useNowMinute();
+  const live = now !== null && isLiveEvent(event.starts_at, event.ends_at, now);
   const hosts = event.hosts ?? [];
   const marks = heroMarks(event.slug ?? event.id ?? "");
   // A hand-placed hero arrangement replaces the automatic slug-seeded marks.
@@ -136,6 +140,7 @@ export default function EventDetailPage({
           summary={event.summary}
           imageUrl={event.image_url}
           meta={[
+            ...(live ? [{ id: "live", icon: Radio, label: t("events.tag.live") }] : []),
             {
               id: "date",
               icon: CalendarDays,

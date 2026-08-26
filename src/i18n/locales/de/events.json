@@ -35,7 +35,8 @@
     "hybrid": "Hybrid",
     "registration": "Anmeldung",
     "full": "Ausgebucht",
-    "membersOnly": "Nur für Mitglieder"
+    "membersOnly": "Nur für Mitglieder",
+    "live": "Jetzt live"
   },
   "detail": {
     "backToEvents": "Alle Events",

@@ -14,7 +14,8 @@ import { Checkbox } from "@/design-system/icf-welcome-design-system-a835df";
 import { Shell } from "@/components/cms/Shell";
 import { useCms } from "@/i18n/cms";
 import { listManagedEvents } from "@/lib/events-admin.functions";
-import { displayEventStatus } from "@/lib/events";
+import { displayEventStatus, isLiveEvent } from "@/lib/events";
+import { useNowMinute } from "@/hooks/use-now-minute";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -71,6 +72,7 @@ const isPristine = (s: EventsSearch) =>
 
 function ManageEventsPage() {
   const { t } = useCms();
+  const now = useNowMinute();
   const navigate = useNavigate();
   const search = Route.useSearch();
   const [rows, setRows] = useState<Row[] | null>(null);
@@ -365,10 +367,20 @@ function ManageEventsPage() {
                     <td className="px-4 py-3 text-muted-foreground">{row.category_name ?? "—"}</td>
                     <td className="px-4 py-3 text-muted-foreground">{row.community_name ?? "—"}</td>
                     <td className="px-4 py-3">
-                      <span
-                        className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${STATUS_STYLE[displayEventStatus(row.status, row.starts_at)] ?? ""}`}
-                      >
-                        {t(`events.status.${displayEventStatus(row.status, row.starts_at)}`)}
+                      <span className="inline-flex flex-wrap items-center gap-1.5">
+                        <span
+                          className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${STATUS_STYLE[displayEventStatus(row.status, row.starts_at)] ?? ""}`}
+                        >
+                          {t(`events.status.${displayEventStatus(row.status, row.starts_at)}`)}
+                        </span>
+                        {row.status === "published" &&
+                        now !== null &&
+                        isLiveEvent(row.starts_at, row.ends_at, now) ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
+                            <span className="h-1.5 w-1.5 rounded-full bg-warn-foreground" />
+                            {t("events.status.live")}
+                          </span>
+                        ) : null}
                       </span>
                     </td>
                   </tr>
