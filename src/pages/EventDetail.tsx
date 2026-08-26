@@ -140,9 +140,7 @@ export default function EventDetailPage({
           summary={event.summary}
           imageUrl={event.image_url}
           meta={[
-            ...(live
-              ? [{ id: "live", icon: Radio, label: t("events.tag.live") }]
-              : []),
+            ...(live ? [{ id: "live", icon: Radio, label: t("events.tag.live") }] : []),
             {
               id: "date",
               icon: CalendarDays,
