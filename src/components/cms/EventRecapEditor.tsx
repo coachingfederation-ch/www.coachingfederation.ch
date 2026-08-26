@@ -11,6 +11,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Loader2, Trash2 } from "lucide-react";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { Section } from "./EventEditorSections";
 import { MarkdownEditor } from "./MarkdownEditor";
 import { supabase } from "@/integrations/supabase/client";
@@ -342,8 +343,7 @@ export function EventRecapEditor({
         </span>
         <Button
           type="button"
-          variant={status === "published" ? "pill-ghost" : "pill"}
-          size="pill"
+          variant="outline"
           disabled={busy !== null}
           onClick={() =>
             run(
@@ -361,7 +361,6 @@ export function EventRecapEditor({
         </Button>
         <Button
           type="button"
-          size="pill"
           className="ms-auto"
           disabled={busy !== null}
           onClick={() =>
