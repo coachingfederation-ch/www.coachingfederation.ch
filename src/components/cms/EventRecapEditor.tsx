@@ -11,7 +11,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Loader2, Trash2 } from "lucide-react";
-import { Button } from "@/design-system/icf-welcome-design-system-a835df";
+import { Badge, Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { Section } from "./EventEditorSections";
 import { MarkdownEditor } from "./MarkdownEditor";
 import { supabase } from "@/integrations/supabase/client";
@@ -338,9 +338,9 @@ export function EventRecapEditor({
       {/* Action bar: state and the publish decision on the left, the primary
           save on the right — the panel's own CTA row, not the page's. */}
       <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-border pt-4">
-        <span className="rounded-full border border-border px-3 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <Badge variant={status === "published" ? "default" : "outline"}>
           {t(`recap.status.${status}`)}
-        </span>
+        </Badge>
         <Button
           type="button"
           variant="outline"
