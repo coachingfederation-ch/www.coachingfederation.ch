@@ -72,6 +72,7 @@ const isPristine = (s: EventsSearch) =>
 
 function ManageEventsPage() {
   const { t } = useCms();
+  const now = useNowMinute();
   const navigate = useNavigate();
   const search = Route.useSearch();
   const [rows, setRows] = useState<Row[] | null>(null);
