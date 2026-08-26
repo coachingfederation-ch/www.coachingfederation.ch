@@ -1348,7 +1348,12 @@
       "resultAlready": "Déjà enregistré",
       "resultIneligible": "Enregistrement impossible",
       "resultWrongEvent": "Billet pour un autre événement",
-      "resultUnknown": "Billet inconnu"
+      "resultUnknown": "Billet inconnu",
+      "openOnPhone": "Ouvrir le scanner sur votre téléphone",
+      "openOnPhoneHint": "Scannez ce code avec l'appareil photo de votre téléphone. Vous devez être connecté avec votre compte d'équipe sur ce téléphone.",
+      "showQr": "Afficher le code QR",
+      "copyLink": "Copier le lien",
+      "copied": "Lien copié"
     },
     "reporting": {
       "open": "Rapports",

@@ -1348,7 +1348,12 @@
       "resultAlready": "Already checked in",
       "resultIneligible": "Cannot check in",
       "resultWrongEvent": "Ticket for another event",
-      "resultUnknown": "Unknown ticket"
+      "resultUnknown": "Unknown ticket",
+      "openOnPhone": "Open the scanner on your phone",
+      "openOnPhoneHint": "Scan this code with your phone camera. You need to be signed in with your staff account on that phone.",
+      "showQr": "Show the QR code",
+      "copyLink": "Copy link",
+      "copied": "Link copied"
     },
     "reporting": {
       "open": "Reporting",
