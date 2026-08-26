@@ -120,7 +120,9 @@ export function RecapPostEditor({
   })[];
 
   const slides: PreviewSlide[] = [
-    ...(withCover ? [{ id: "cover", src: null, alt: headline || eventTitle }] : []),
+    ...(withCover
+      ? [{ id: "cover", src: coverDataUrl, alt: coverHeadline, pending: coverPending }]
+      : []),
     ...ordered.map((p) => ({ id: p.id, src: p.preview, alt: p.alt ?? p.caption ?? "" })),
   ];
   const limit = withCover ? MAX_SLIDES - 1 : MAX_SLIDES;
@@ -361,7 +363,7 @@ export function RecapPostEditor({
                     eventId,
                     commentary: commentary.trim(),
                     slideIds: selected.slice(0, limit),
-                    coverDataUrl,
+                    coverDataUrl: cover,
                   },
                 });
                 await onPosted();
