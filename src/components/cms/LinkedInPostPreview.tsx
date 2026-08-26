@@ -7,7 +7,7 @@
  * like. It is a mockup of a third-party surface, not a chapter surface, which
  * is why the frame uses neutral design-system tokens rather than brand bands.
  */
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useState } from "react";
 import icfLogo from "@/assets/icf-switzerland-charter-chapter.png.asset.json";
 
@@ -51,6 +51,11 @@ export function LinkedInPostPreview({
         <div className="relative aspect-square w-full bg-secondary">
           {current?.src ? (
             <img src={current.src} alt={current.alt} className="h-full w-full object-cover" />
+          ) : current?.pending ? (
+            <div className="flex h-full w-full items-center justify-center gap-2 text-sm text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              {labels.rendering}
+            </div>
           ) : null}
           {slides.length > 1 ? (
             <>
