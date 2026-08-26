@@ -92,11 +92,21 @@ function EventEditor() {
   // shows them on its own; otherwise they follow the wizard's answers, and
   // afterwards the toggles above the form.
   const [extras, setExtras] = useState({ repeat: false, forms: false, cce: false });
+  // Stored forms are their own proof the panel is needed — the toggle itself is
+  // view state and does not survive a reload.
+  const [hasForms, setHasForms] = useState(false);
 
   useEffect(() => {
     const handed = takeWizardExtras(id);
     if (handed) setExtras(handed);
   }, [id]);
+
+  useEffect(() => {
+    listEventForms({ data: { eventId: id } })
+      .then((rows) => setHasForms((rows ?? []).length > 0))
+      .catch(() => undefined);
+  }, [id]);
+
 
   useEffect(() => {
     void Promise.all([
