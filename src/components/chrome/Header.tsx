@@ -89,13 +89,14 @@ function AccountControl() {
 
 export function SiteHeaderBar({
   compact = false,
-  standalone = true,
+  standalone = false,
 }: {
   compact?: boolean;
   /**
-   * `false` when the bar is nested inside a page-owned Deep Blue band (see
-   * `CompactHero`). On its own — a token page, a standalone form — it must draw
-   * its own band, or the negative lockup lands on the bone background.
+   * Defaults to `false` because most pages nest the bar inside their own Deep
+   * Blue band. Pass `standalone` on a page that has no band of its own — a
+   * token page, a standalone form — otherwise the negative lockup and light nav
+   * land on the bone background.
    */
   standalone?: boolean;
 }) {
@@ -140,7 +141,7 @@ export function CompactHero({
   return (
     <header className="bg-hero text-hero-foreground">
       <div className="mx-auto max-w-7xl px-5 pt-6 pb-20 sm:px-8">
-        <SiteHeaderBar compact standalone={false} />
+        <SiteHeaderBar compact />
         <div className="mt-14 max-w-3xl">
           <p className="eyebrow !text-accent">{eyebrow}</p>
           <h1 className="display-xl mt-4">{title}</h1>
