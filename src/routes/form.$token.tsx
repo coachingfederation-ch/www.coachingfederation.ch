@@ -93,10 +93,8 @@ function FollowUpFormRoute() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeaderBar compact standalone />
-      <main className="flex-1 mx-auto max-w-2xl px-6 py-16">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-          {form.eventTitle}
-        </p>
+      <main className="flex-1 mx-auto w-full max-w-2xl px-6 py-16">
+        <p className="eyebrow text-muted-foreground">{form.eventTitle}</p>
         <h1 className="mt-2 font-display text-3xl font-bold tracking-tight">
           {done ? "Thank you" : "Your feedback"}
         </h1>
@@ -106,12 +104,11 @@ function FollowUpFormRoute() {
             <p className="text-sm text-muted-foreground">
               {form.thankYou ?? "Thank you — your answers have been recorded."}
             </p>
-            <a
-              href={form.eventUrl}
-              className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-primary underline underline-offset-4"
-            >
-              Back to the event
-            </a>
+            <div className="mt-4">
+              <Button asChild variant="pill-ghost" size="pill">
+                <a href={form.eventUrl}>Back to the event</a>
+              </Button>
+            </div>
           </div>
         ) : (
           <form
@@ -131,15 +128,12 @@ function FollowUpFormRoute() {
 
             {message ? <p className="text-sm text-destructive">{message}</p> : null}
 
-            <button
-              type="submit"
-              disabled={state === "sending"}
-              className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground disabled:opacity-60"
-            >
+            <Button type="submit" variant="pill" size="pill" disabled={state === "sending"}>
               {state === "sending" ? "Sending…" : "Submit"}
-            </button>
+            </Button>
           </form>
         )}
+
       </main>
       <SiteFooter />
     </div>
