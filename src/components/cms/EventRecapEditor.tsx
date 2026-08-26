@@ -11,6 +11,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Loader2, Trash2 } from "lucide-react";
+import { Badge, Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { Section } from "./EventEditorSections";
 import { MarkdownEditor } from "./MarkdownEditor";
 import { supabase } from "@/integrations/supabase/client";
@@ -299,29 +300,9 @@ export function EventRecapEditor({
       {message ? <p className="mb-3 text-sm text-teal-foreground">{message}</p> : null}
       {error ? <p className="mb-3 text-sm text-destructive">{error}</p> : null}
 
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="rounded-full border border-border px-3 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          {t(`recap.status.${status}`)}
-        </span>
-        <button
-          type="button"
-          className="btn-mono text-primary"
-          disabled={busy !== null}
-          onClick={() =>
-            run(
-              "status",
-              async () => {
-                const next = status === "published" ? "draft" : "published";
-                await setRecapStatus({ data: { eventId, status: next } });
-                setStatus(next);
-              },
-              t("recap.saved"),
-            )
-          }
-        >
-          {status === "published" ? t("recap.unpublish") : t("recap.publish")}
-        </button>
-      </div>
+      {/* Status and the publish/withdraw action live with "Save recap" in the
+          action bar below the fields, so the panel reads top-down: edit, then act. */}
+
 
       <label className="mt-5 block text-sm font-medium">
         {t("recap.fieldHeadline")}
@@ -354,11 +335,34 @@ export function EventRecapEditor({
         </select>
       </label>
 
-      <div className="mt-4">
-        <button
+      {/* Action bar: state and the publish decision on the left, the primary
+          save on the right — the panel's own CTA row, not the page's. */}
+      <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-border pt-4">
+        <Badge variant={status === "published" ? "default" : "outline"}>
+          {t(`recap.status.${status}`)}
+        </Badge>
+        <Button
           type="button"
+          variant="outline"
           disabled={busy !== null}
-          className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+          onClick={() =>
+            run(
+              "status",
+              async () => {
+                const next = status === "published" ? "draft" : "published";
+                await setRecapStatus({ data: { eventId, status: next } });
+                setStatus(next);
+              },
+              t("recap.saved"),
+            )
+          }
+        >
+          {status === "published" ? t("recap.unpublish") : t("recap.publish")}
+        </Button>
+        <Button
+          type="button"
+          className="ms-auto"
+          disabled={busy !== null}
           onClick={() =>
             run(
               "save",
@@ -381,8 +385,9 @@ export function EventRecapEditor({
           }
         >
           {busy === "save" ? t("recap.saving") : t("recap.save")}
-        </button>
+        </Button>
       </div>
+
 
       {/* Gallery */}
       <div className="mt-8 border-t border-border pt-6">
