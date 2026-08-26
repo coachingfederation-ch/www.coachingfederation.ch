@@ -6,6 +6,8 @@
  * or a double scan can never produce a second attendance.
  */
 import { createFileRoute, Link } from "@tanstack/react-router";
+import QRCode from "qrcode";
+import { QrCode } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
@@ -156,6 +158,8 @@ function CheckInPage() {
 
         <ResultCard result={result} onDismiss={() => setResult(null)} t={t} />
 
+        <HandOffCard eventId={id} t={t} />
+
         <section className="rounded-2xl border border-border bg-card p-4">
           {scanning ? (
             <Scanner
@@ -247,6 +251,71 @@ function CheckInPage() {
         </section>
       </div>
     </main>
+  );
+}
+
+/**
+ * Hand the door over to a phone: a QR code pointing at this very page.
+ * It carries no token — the phone still has to be signed in as staff — so it is
+ * safe to show on a laptop screen at the venue. Open by default on wide screens
+ * (where the camera is unlikely) and collapsed on phones.
+ */
+function HandOffCard({ eventId, t }: { eventId: string; t: (k: string) => string }) {
+  const [url, setUrl] = useState<string | null>(null);
+  const [qr, setQr] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    // window.location is not available during SSR.
+    const target = `${window.location.origin}/manage/events/${eventId}/check-in`;
+    setUrl(target);
+    setOpen(window.matchMedia("(min-width: 768px)").matches);
+    void QRCode.toDataURL(target, { width: 320, margin: 1 })
+      .then(setQr)
+      .catch(() => setQr(null));
+  }, [eventId]);
+
+  if (!url) return null;
+
+  return (
+    <section className="rounded-2xl border border-border bg-card p-4">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex min-h-11 w-full items-center gap-2 text-left text-sm font-semibold"
+      >
+        <QrCode className="h-4 w-4 shrink-0" />
+        {t("events.checkIn.openOnPhone")}
+      </button>
+
+      {open ? (
+        <div className="mt-3 space-y-3">
+          {qr ? (
+            <img
+              src={qr}
+              alt={t("events.checkIn.showQr")}
+              className="mx-auto h-44 w-44 rounded-xl bg-white p-2"
+            />
+          ) : null}
+          <p className="text-xs text-muted-foreground">{t("events.checkIn.openOnPhoneHint")}</p>
+          <p className="break-all text-xs text-muted-foreground">{url}</p>
+          <button
+            type="button"
+            onClick={() => {
+              void navigator.clipboard?.writeText(url).then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              });
+            }}
+            className="min-h-11 w-full rounded-full border border-border px-5 text-sm font-semibold"
+          >
+            {copied ? t("events.checkIn.copied") : t("events.checkIn.copyLink")}
+          </button>
+        </div>
+      ) : null}
+    </section>
   );
 }
 
