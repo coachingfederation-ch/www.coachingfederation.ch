@@ -1005,7 +1005,8 @@
       "draft": "Draft",
       "published": "Published",
       "cancelled": "Cancelled",
-      "archived": "Archived"
+      "archived": "Archived",
+      "passed": "Passed"
     },
     "backToList": "All events",
     "publish": "Publish",

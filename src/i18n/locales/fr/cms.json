@@ -1005,7 +1005,8 @@
       "draft": "Brouillon",
       "published": "Publié",
       "cancelled": "Annulé",
-      "archived": "Archivé"
+      "archived": "Archivé",
+      "passed": "Passé"
     },
     "backToList": "Tous les événements",
     "publish": "Publier",

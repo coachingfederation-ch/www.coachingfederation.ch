@@ -1005,7 +1005,8 @@
       "draft": "Bozza",
       "published": "Pubblicato",
       "cancelled": "Annullato",
-      "archived": "Archiviato"
+      "archived": "Archiviato",
+      "passed": "Passato"
     },
     "backToList": "Tutti gli eventi",
     "publish": "Pubblica",
