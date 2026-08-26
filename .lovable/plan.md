@@ -1,96 +1,71 @@
-# Full social post editor for event recaps
+# Fix the post-event feedback page chrome
 
-Replace the small "Publish to LinkedIn" block in the recap panel with a proper
-post editor: a full-screen dialog where staff write the copy, arrange the
-carousel, add a branded cover slide, and see exactly how the post will look on
-the chapter page before publishing.
+The feedback page at `/form/$token` renders the site header and footer wrongly:
+the header's white lockup and light nav sit straight on the bone background
+(barely legible), and the footer floats in the middle of the page with an empty
+bone band beneath it.
 
-## What staff will see
+## What's wrong
 
-A single button in the recap panel ("Open post editor") opens a full-screen
-dialog with two columns:
+- `SiteHeaderBar` always renders the design-system header shell with
+  `standalone={false}`, which means "I am already inside a Deep Blue band" — it
+  drops the band and paints only the white/negative lockup and light nav links.
+  That is correct inside `CompactHero`, which supplies the band, but the
+  feedback page (and the ticket page, which has the same defect) places the bar
+  directly on the bone page background, so the white artwork lands on bone.
+- The page wrapper is `min-h-screen` without a column layout, so with a short
+  form the footer sits wherever the content ends instead of at the bottom of
+  the viewport.
 
-**Left — compose**
-- Commentary field with character counter against LinkedIn's 3,000 limit.
-- "Draft with AI" with tone options (Warm, Concise, Celebratory) — generated
-  from the recap headline, body, event title and date; the draft lands in the
-  field and stays fully editable.
-- Cover slide: on by default, showing the branded Deep Blue ICF card (event
-  title + kicker) built with the existing card renderer, with a shuffle for the
-  brush-mark layout and a toggle to drop it.
-- Slides: every gallery photo as a thumbnail with an include checkbox, up/down
-  ordering and an alt-text field. Max nine slides including the cover; the
-  count and the cap are shown. Order here is independent from the page gallery.
+## The fix
 
-**Right — preview**
-- A LinkedIn-shaped post card: chapter avatar, "The Switzerland Chapter of ICF",
-  "Just now", the commentary with LinkedIn's "…see more" truncation, then the
-  carousel with arrows, slide counter and dots.
-- Preview switches between desktop and mobile widths.
-- Footer: status ("Not shared yet" / "Posted on …" with a link / last error),
-  a "Publish to LinkedIn" primary button on the right, disabled with a reason
-  until the recap is published and at least one slide is selected.
+- Give `SiteHeaderBar` a `standalone` prop that defaults to the shell's own
+  band-drawing behaviour, and keep `standalone={false}` only where the bar is
+  nested inside `CompactHero`. On its own, the bar then renders the proper Deep
+  Blue band with the negative lockup — exactly as on every other page.
+- Change the page shells on `/form/$token` (all three states: form, thank-you,
+  invalid link) and `/ticket/$token` to a `flex min-h-screen flex-col` wrapper
+  with `flex-1` on `<main>`, so the footer always sits at the bottom.
+- Tidy the feedback page itself while there: the eyebrow uses the shared
+  `eyebrow` utility rather than a hand-rolled uppercase class, and the card,
+  heading and submit button use the design-system `Card` and `Button` instead
+  of local class strings, matching the ticket page.
 
-Nothing about who may publish changes; the editor is only shown to the same
-staff who can publish today.
+No behaviour, token, or copy changes; palette and typography stay exactly as
+the brand system defines them.
 
 ## Technical notes
 
-- New component `src/components/cms/RecapPostEditor.tsx` (dialog + compose
-  column) with `src/components/cms/LinkedInPostPreview.tsx` for the feed
-  mock-up. `EventRecapEditor.tsx` keeps only the button, status line and the
-  saved commentary; its inline textarea and publish button are removed.
-- The cover slide reuses `LinkedInCard`, `LinkedInMarkEditor`,
-  `linkedin-visuals.ts` and the `html-to-image` rasterisation already used by
-  `LinkedInShareCard`, so the posted cover is exactly the approved artwork.
-- `publishRecapToLinkedIn` gains an ordered `slides` input (photo ids + alt
-  text) and an optional `coverImage` data URL. `postRecapCarousel` in
-  `event-recap-linkedin.server.ts` stops reading photos by `sort_order` and
-  instead downloads the named photos in the given order, prepending the cover
-  when supplied; the nine-image cap is enforced server-side too.
-- Composition state (commentary, chosen slide ids and order, cover on/off,
-  mark layout) is persisted on the recap so reopening the dialog restores the
-  draft. This is a small JSONB column `linkedin_draft` on `event_recaps` via a
-  migration — no new table, no grant or RLS change beyond the existing recap
-  policies.
-- The AI draft is a new server function next to the recap admin functions,
-  using the Lovable AI gateway with the same Gemini model as the other CMS
-  drafting helpers, authorised with the existing publisher check. Gateway
-  402/403/429 responses surface their own message; no silent retries.
-- Copy goes through the existing CMS i18n keys (`recap.*`), DE/FR/IT/EN.
-- Design system only: dialog, buttons, badges, inputs from the ICF library and
-  brand tokens; the LinkedIn preview chrome is a neutral mock-up built from
-  border/muted tokens, not LinkedIn brand colours.
+- `src/components/chrome/Header.tsx`: `SiteHeaderBar({ compact, standalone })`,
+  passing `standalone` through to the design-system `SiteHeader`; `CompactHero`
+  keeps calling it with `standalone={false}`.
+- `src/routes/form.$token.tsx` and `src/routes/ticket.$token.tsx`: wrapper and
+  component swaps only.
+- Verified with a browser pass over a live form token at desktop and mobile
+  widths, checking the header band, footer position on short and long forms,
+  and keyboard focus order.
 
 ## PR note
 
-**Summary** — Turns the one-textarea LinkedIn block in the event recap editor
-into a full social post editor with a live LinkedIn-style preview, ordered
-carousel slides, an optional branded cover slide and AI-drafted copy.
+**Summary** — Fixes the broken site chrome on the public follow-up form and
+ticket pages: the header now draws its Deep Blue band when it is not nested in
+a hero, and the footer is pinned to the bottom of short pages.
 
 **Changes**
-- UI: new `RecapPostEditor` dialog and `LinkedInPostPreview`; recap panel block
-  reduced to a launcher plus status; new `recap.*` i18n keys in four languages.
-- Backend: `publishRecapToLinkedIn` accepts ordered slides and a cover image;
-  `postRecapCarousel` posts exactly those, cover first; new AI draft server
-  function for recap commentary.
-- Schema: `event_recaps.linkedin_draft jsonb` added via migration (nullable,
-  no default rows touched).
+- UI: `SiteHeaderBar` gains a `standalone` prop; `/form/$token` and
+  `/ticket/$token` use a flex column shell with `flex-1` main; feedback form
+  card, heading and submit button moved onto design-system components.
 
-**Backend / schema changes** — one migration adding a nullable JSONB column;
-existing RLS and grants on `event_recaps` cover it, no policy change.
+**Backend / schema changes** — None.
 
-**Testing & verification** — Open the editor on a recap with and without
-gallery photos; check the cap at nine slides, disabled publish reasons, AI
-draft for each tone, draft persistence across reopen, preview truncation and
-carousel paging on desktop and mobile widths, keyboard access to every control.
-A real publish is verified against the chapter page with a two-photo recap,
-checking cover-first order and the stored post URL.
+**Testing & verification** — Open a live feedback link in a signed-out browser
+at 375px and 1440px: header band and lockup legible, nav and language switcher
+readable, footer at the bottom in the form, thank-you and invalid-link states;
+same check on a ticket link; submit path unchanged.
 
-**Risks & rollback** — Blast radius is the recap LinkedIn block; posting logic
-change could reorder a published carousel, so the ordering is verified with one
-real post before hand-off. Reverting the code is safe with the column left in
-place. Existing posted rows are untouched.
+**Risks & rollback** — Blast radius is two public pages plus one header prop
+with a default that preserves current behaviour elsewhere; revert is a plain
+code revert.
 
-**Follow-ups / known debt** — Other channels (Instagram, Facebook) are out of
-scope; scheduling a post for later is not included.
+**Follow-ups / known debt** — The feedback form's single-choice question still
+renders as checkboxes rather than radios; tracked separately.
