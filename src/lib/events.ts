@@ -74,3 +74,21 @@ export function isPastEvent(event: Pick<PublicEvent, "starts_at" | "ends_at">) {
   const end = event.ends_at ?? event.starts_at;
   return end !== null && new Date(end).getTime() < Date.now();
 }
+
+/**
+ * Once an event has started it is history: staff can no longer unpublish or
+ * cancel it, and the CMS shows it as "passed". This is a *derived* state — the
+ * stored status stays draft/published/cancelled — so no migration or backfill
+ * is involved and the rule can never drift out of date.
+ */
+export function hasEventStarted(startsAt: string): boolean {
+  return new Date(startsAt).getTime() <= Date.now();
+}
+
+export type DisplayEventStatus = "draft" | "published" | "cancelled" | "archived" | "passed";
+
+/** Status as staff should see it: published + started reads as "passed". */
+export function displayEventStatus(status: string, startsAt: string): DisplayEventStatus {
+  if (status === "published" && hasEventStarted(startsAt)) return "passed";
+  return status as DisplayEventStatus;
+}
