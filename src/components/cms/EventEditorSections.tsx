@@ -23,6 +23,7 @@ import {
 import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
 import { EventHeroPreview } from "@/components/cms/EventHeroPreview";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
+import { displayEventStatus, hasEventStarted } from "@/lib/events";
 import type { getManagedEvent, listEventRegistrations } from "@/lib/events-admin.functions";
 import { exportEventRegistrations } from "@/lib/events-admin.functions";
 import {
@@ -627,6 +628,9 @@ export function EventPublishingSection({
   // Attendee desk filters. Local UI state only — the underlying list is
   // already loaded, so filtering client-side keeps the table responsive.
   const [filters, setFilters] = React.useState<AttendeeFilters>(EMPTY_FILTERS);
+  // Derived, not stored: a started event is "passed" and its lifecycle actions
+  // (unpublish, cancel) are withdrawn.
+  const started = hasEventStarted(event.starts_at);
   const [addOpen, setAddOpen] = React.useState(false);
   const [exporting, setExporting] = React.useState(false);
   // The attendee awaiting a cancellation confirmation, if any.
