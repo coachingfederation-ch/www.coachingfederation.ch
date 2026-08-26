@@ -146,7 +146,7 @@ export function RecapPostEditor({
                 value={tone}
                 onChange={(e) => setTone(e.target.value as Tone)}
                 className="rounded-full border border-input bg-background px-3 py-1.5 text-sm"
-                aria-label={t("recap.post.tone")}
+                aria-label={t("recap.post.toneLabel")}
               >
                 {TONES.map((value) => (
                   <option key={value} value={value}>
