@@ -7,6 +7,7 @@
  */
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { useState } from "react";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { SiteFooter, SiteHeaderBar, CARD_SHADOW } from "@/components/site-chrome";
 import { FormQuestionFields } from "@/components/forms/FormQuestionFields";
 import { getFollowUpForm, submitFollowUpForm } from "@/lib/event-forms.functions";
@@ -46,7 +47,7 @@ function FormFallback() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeaderBar compact standalone />
-      <main className="flex-1 mx-auto max-w-2xl px-6 py-24">
+      <main className="flex-1 mx-auto w-full max-w-2xl px-6 py-24">
         <h1 className="font-display text-3xl font-bold tracking-tight">This link is not valid</h1>
         <p className="mt-3 text-muted-foreground">
           The form may have closed. Write to office@coachingfederation.ch and we will help.
