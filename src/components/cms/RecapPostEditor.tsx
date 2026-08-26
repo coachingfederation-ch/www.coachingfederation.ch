@@ -8,7 +8,7 @@
  * branded cover slide is rasterised in the browser, exactly like the article
  * card, so the publisher posts the image they approved.
  */
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toPng } from "html-to-image";
 import { ArrowDown, ArrowUp, Loader2 } from "lucide-react";
 import {
@@ -69,6 +69,50 @@ export function RecapPostEditor({
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const coverRef = useRef<HTMLDivElement | null>(null);
+  /** Rasterised cover, shown in the preview and reused when publishing. */
+  const [coverDataUrl, setCoverDataUrl] = useState<string | null>(null);
+  const [coverPending, setCoverPending] = useState(false);
+  /** Bumped to force a redraw; also used to discard stale async results. */
+  const [coverNonce, setCoverNonce] = useState(0);
+
+  const coverHeadline = headline || eventTitle;
+
+  const renderCover = useCallback(async () => {
+    if (!coverRef.current) return null;
+    return await toPng(coverRef.current, {
+      width: RECAP_COVER_SIZE,
+      height: RECAP_COVER_SIZE,
+      pixelRatio: 1,
+      cacheBust: true,
+    });
+  }, []);
+
+  // Draw the branded cover while the editor is open so the publisher previews
+  // the exact image that will be posted. Debounced: headline/meta are typed.
+  useEffect(() => {
+    if (!open || !withCover) {
+      setCoverPending(false);
+      return;
+    }
+    let cancelled = false;
+    setCoverPending(true);
+    const timer = setTimeout(() => {
+      void renderCover()
+        .then((url) => {
+          if (!cancelled) setCoverDataUrl(url);
+        })
+        .catch(() => {
+          if (!cancelled) setCoverDataUrl(null);
+        })
+        .finally(() => {
+          if (!cancelled) setCoverPending(false);
+        });
+    }, 300);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [open, withCover, coverHeadline, meta, coverNonce, renderCover]);
 
   const byId = useMemo(() => new Map(saved.map((p) => [p.id, p])), [saved]);
   const ordered = selected.map((id) => byId.get(id)).filter(Boolean) as (RecapPhoto & {
