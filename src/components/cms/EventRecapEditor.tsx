@@ -18,10 +18,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { EVENT_MEDIA_BUCKET } from "@/lib/storage";
 import { RECAP_AUDIENCES, formatFileSize, recapAssetPath } from "@/lib/event-recaps";
 import type { RecapAudience } from "@/lib/event-recaps";
+import { RecapPostEditor, type RecapPostDraft } from "./RecapPostEditor";
 import {
   getManagedRecap,
   previewRecapThanksEmail,
-  publishRecapToLinkedIn,
   saveRecap,
   saveRecapFiles,
   saveRecapPhotos,
@@ -78,10 +78,12 @@ async function webRendition(file: File): Promise<Blob> {
 export function EventRecapEditor({
   eventId,
   eventStartsAt,
+  eventTitle,
   t,
 }: {
   eventId: string;
   eventStartsAt: string;
+  eventTitle?: string;
   t: (key: string) => string;
 }) {
   // The recap is post-event editorial work, so the panel stays collapsed
@@ -103,7 +105,8 @@ export function EventRecapEditor({
     linkedin_post_url: string | null;
     error_message: string | null;
   } | null>(null);
-  const [commentary, setCommentary] = useState("");
+  const [postEditorOpen, setPostEditorOpen] = useState(false);
+  const [postDraft, setPostDraft] = useState<RecapPostDraft | null>(null);
   const [thanks, setThanks] = useState<{ total: number; pending: number }>({
     total: 0,
     pending: 0,
@@ -131,6 +134,7 @@ export function EventRecapEditor({
       body: string | null;
       downloads_audience: RecapAudience;
       recap_email_last_sent_at: string | null;
+      linkedin_draft: RecapPostDraft | null;
     };
     setStatus(recap.status);
     setLanguage(recap.language);
@@ -138,6 +142,7 @@ export function EventRecapEditor({
     setBody(recap.body ?? "");
     setAudience(recap.downloads_audience);
     setThanksLastSent(recap.recap_email_last_sent_at ?? null);
+    setPostDraft(recap.linkedin_draft ?? null);
     setThanks((data.thanks as { total: number; pending: number }) ?? { total: 0, pending: 0 });
     setPhotos(
       (data.photos as Record<string, unknown>[]).map((p) => ({
