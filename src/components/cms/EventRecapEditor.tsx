@@ -334,11 +334,36 @@ export function EventRecapEditor({
         </select>
       </label>
 
-      <div className="mt-4">
-        <button
+      {/* Action bar: state and the publish decision on the left, the primary
+          save on the right — the panel's own CTA row, not the page's. */}
+      <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-border pt-4">
+        <span className="rounded-full border border-border px-3 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          {t(`recap.status.${status}`)}
+        </span>
+        <Button
           type="button"
+          variant={status === "published" ? "pill-ghost" : "pill"}
+          size="pill"
           disabled={busy !== null}
-          className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+          onClick={() =>
+            run(
+              "status",
+              async () => {
+                const next = status === "published" ? "draft" : "published";
+                await setRecapStatus({ data: { eventId, status: next } });
+                setStatus(next);
+              },
+              t("recap.saved"),
+            )
+          }
+        >
+          {status === "published" ? t("recap.unpublish") : t("recap.publish")}
+        </Button>
+        <Button
+          type="button"
+          size="pill"
+          className="ms-auto"
+          disabled={busy !== null}
           onClick={() =>
             run(
               "save",
@@ -361,8 +386,9 @@ export function EventRecapEditor({
           }
         >
           {busy === "save" ? t("recap.saving") : t("recap.save")}
-        </button>
+        </Button>
       </div>
+
 
       {/* Gallery */}
       <div className="mt-8 border-t border-border pt-6">
