@@ -1,0 +1,1 @@
+ALTER TABLE public.event_recaps ADD COLUMN IF NOT EXISTS linkedin_draft jsonb;

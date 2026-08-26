@@ -2010,6 +2010,7 @@ export type Database = {
           headline: string | null
           id: string
           language: Database["public"]["Enums"]["article_lang"]
+          linkedin_draft: Json | null
           published_at: string | null
           recap_email_last_sent_at: string | null
           status: string
@@ -2025,6 +2026,7 @@ export type Database = {
           headline?: string | null
           id?: string
           language?: Database["public"]["Enums"]["article_lang"]
+          linkedin_draft?: Json | null
           published_at?: string | null
           recap_email_last_sent_at?: string | null
           status?: string
@@ -2040,6 +2042,7 @@ export type Database = {
           headline?: string | null
           id?: string
           language?: Database["public"]["Enums"]["article_lang"]
+          linkedin_draft?: Json | null
           published_at?: string | null
           recap_email_last_sent_at?: string | null
           status?: string
