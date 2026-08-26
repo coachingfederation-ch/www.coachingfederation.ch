@@ -429,7 +429,7 @@ function EventEditor() {
               {event.registration_mode !== "none" && event.registration_mode !== "rsvp_invited" ? (
                 <EventWaitlistSection eventId={event.id} t={t} />
               ) : null}
-              {extras.forms ? <EventFormsSection eventId={event.id} t={t} /> : null}
+              {showForms ? <EventFormsSection eventId={event.id} t={t} /> : null}
               {/* Repeat lives right after Custom Forms: occurrences are copied
                   from the stored row, so this only unlocks once the event is
                   published and nothing is left unsaved. */}
