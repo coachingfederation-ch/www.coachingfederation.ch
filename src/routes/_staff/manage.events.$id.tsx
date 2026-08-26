@@ -300,6 +300,8 @@ function EventEditor() {
   // toggles above the form cover everything else.
   const storedRecurrence = (event as { recurrence?: unknown }).recurrence ?? null;
   const showRepeat = extras.repeat || Boolean(storedRecurrence);
+  const showForms = extras.forms || hasForms;
+
   const showCce = extras.cce || Boolean(event.cce_enabled);
 
   return (
