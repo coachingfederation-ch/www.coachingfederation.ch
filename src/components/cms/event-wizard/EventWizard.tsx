@@ -16,7 +16,13 @@ import {
   Textarea,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { UnsplashPicker, type UnsplashPick } from "@/components/cms/UnsplashPicker";
-import { Field, inputClass, fromLocalInput } from "@/components/cms/EventEditorSections";
+import {
+  Field,
+  inputClass,
+  fromLocalInput,
+  addHoursToLocalInput,
+} from "@/components/cms/EventEditorSections";
+
 import { slugify } from "@/lib/articles";
 import { fetchVocabulary, vocabLabel, type VocabRow } from "@/lib/vocabularies";
 import { createEvent, listCommunityOptions, setEventStatus } from "@/lib/events-admin.functions";
