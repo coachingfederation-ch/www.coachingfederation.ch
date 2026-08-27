@@ -1,9 +1,7 @@
 # Event certificates & attendance — feature spec
 
 Status: **settled** (rev. 2026-08-27b). Companion to `docs/cce-tracker.md`
-and `docs/events-and-ticketing.md`. Sequential Lovable prompts:
-`docs/event-certificates-prompt-1-attendance.md`,
-`-prompt-2-import.md`, `-prompt-3-certificates.md`.
+and `docs/events-and-ticketing.md`.
 
 This replaces [SimpleCert](https://simplecert.net) with a chapter-owned
 certificate + QR verification layer, and proves attendance on online /
@@ -494,14 +492,15 @@ English-only literals in `ticket.$token.tsx` (known debt).
 
 ## 13. Phased delivery
 
-| Phase | Prompt file | Scope |
-| --- | --- | --- |
-| **A** | `event-certificates-prompt-1-attendance.md` | Sessions, self-confirm by ticket token, source column, I’m-here button |
-| **B** | `event-certificates-prompt-2-import.md` | Zoom / Meet CSV + review queue |
-| **C** | `event-certificates-prompt-3-certificates.md` | Staff batch issue, verify/print, email, `event_cce_awards` incl. guests |
+| Phase | Scope |
+| --- | --- |
+| **A** | Sessions, self-confirm by ticket token, source column, I’m-here button |
+| **B** | Zoom / Meet CSV + review queue |
+| **C** | Staff batch issue, verify/print, email, `event_cce_awards` incl. guests |
 
 Review Lovable’s plan against §16 before each build. Do not paste
-tracker prompts as part of this work.
+tracker prompts as part of this work. Write sequential Lovable prompts
+from this spec when it is time to build; they do not live in `docs/`.
 
 ---
 
