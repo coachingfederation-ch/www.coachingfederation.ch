@@ -1376,6 +1376,17 @@
       "copyLink": "Copier le lien",
       "copied": "Lien copié"
     },
+    "attendance": {
+      "title": "Fenêtre de présence",
+      "help": "Pour les événements en ligne et hybrides : ouvrez une fenêtre, affichez le QR code à l'écran partagé, les participants confirment avec leur propre billet.",
+      "open": "Ouvrir la fenêtre de présence",
+      "close": "Fermer la fenêtre",
+      "openUntil": "Ouverte jusqu'à",
+      "showOnScreen": "Afficher à l'écran partagé",
+      "closeProjector": "Fermer le plein écran",
+      "projectorEyebrow": "Participation",
+      "projectorTitle": "Scannez pour confirmer votre présence"
+    },
     "reporting": {
       "open": "Rapports",
       "title": "Rapport de l'événement",
