@@ -4,6 +4,7 @@
  * the locale-prefixed equivalent in src/routes/$locale/insights.index.tsx.
  */
 import { Link } from "@tanstack/react-router";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Mark } from "@/components/marks";
@@ -322,12 +323,9 @@ export default function InsightsPage() {
                 placeholder={t("insights.newsletter.placeholder")}
                 className="h-10 w-full rounded-full border border-white/20 bg-white/10 px-4 text-sm text-white placeholder:text-white/70 outline-none focus:border-white/60"
               />
-              <button
-                type="submit"
-                className="h-10 rounded-full bg-white px-5 text-sm font-semibold text-primary transition hover:bg-white/90"
-              >
+              <Button type="submit" variant="inverse" size="pill">
                 {t("insights.newsletter.cta")}
-              </button>
+              </Button>
             </form>
           </div>
         </section>
