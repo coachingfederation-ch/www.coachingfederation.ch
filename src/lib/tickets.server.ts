@@ -143,7 +143,7 @@ export async function loadEventTicketing(
   const supabase = publicSupabaseClient();
 
   const { loadPublicRegistrationForm } = await import("./event-forms.server");
-  const [{ data: tierRows }, form, membership] = await Promise.all([
+  const [{ data: tierRows }, form, membership, { data: eventRow }] = await Promise.all([
     supabase
       .from("event_ticket_tiers_public")
       .select(
@@ -153,6 +153,7 @@ export async function loadEventTicketing(
       .order("sort_order", { ascending: true }),
     loadPublicRegistrationForm(eventId, locale),
     resolveMembership(userId),
+    supabase.from("events_public").select("guest_passes_allowed").eq("id", eventId).maybeSingle(),
   ]);
 
   const tiers = ((tierRows ?? []) as TierRow[]).map((row) => toPublicTier(row, locale));
@@ -162,6 +163,7 @@ export async function loadEventTicketing(
     questions: form?.questions ?? [],
     membership,
     defaultTierId: defaultTierFor(tiers, membership),
+    guestPassesAllowed: Boolean(eventRow?.guest_passes_allowed),
   };
 }
 

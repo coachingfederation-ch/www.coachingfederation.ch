@@ -5,7 +5,7 @@
  * holds, while granting and revoking happens in the per-account detail panel.
  * That keeps the row readable as the number of rights grows.
  */
-import { CalendarDays, ShieldCheck, Megaphone, SlidersHorizontal } from "lucide-react";
+import { CalendarDays, ShieldCheck, Megaphone, SlidersHorizontal, UserPlus } from "lucide-react";
 import type { listRoleAdminData } from "@/lib/roles.functions";
 
 type MemberRow = Awaited<ReturnType<typeof listRoleAdminData>>["members"][number];
@@ -60,6 +60,12 @@ export function RoleTableRow({
           ) : null}
           {/* Hybrid accounts (member + admin) are listed here, not
               under "Internal accounts" — the badge makes that legible. */}
+          {m.isMembership ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan/15 px-2.5 py-1 text-xs font-semibold text-foreground">
+              <UserPlus className="h-3.5 w-3.5" />
+              {t("roles.membershipBadge")}
+            </span>
+          ) : null}
           {m.isAdmin ? (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground">
               <ShieldCheck className="h-3.5 w-3.5" />

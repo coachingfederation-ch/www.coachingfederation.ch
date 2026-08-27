@@ -17,7 +17,7 @@ import { expandRecurrence, occurrenceSlug, RECURRENCE_FREQUENCIES } from "./recu
 const LIST_COLUMNS =
   "id, series_id, slug, title, summary, language, status, starts_at, ends_at, timezone, location_mode, venue_name, city, capacity, is_featured, is_internal, category_id, region_id, organizer_id, updated_at";
 
-const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, practical_notes, published_at, content_updated_at, hero_marks, cce_enabled`;
+const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, guest_passes_allowed, practical_notes, published_at, content_updated_at, hero_marks, cce_enabled`;
 
 /** One row of the staff events list, enriched with filterable labels. */
 export type ListedEvent = {
@@ -99,6 +99,8 @@ const eventInput = z.object({
   registration_opens_at: z.string().min(1).nullable().optional(),
   registration_closes_at: z.string().min(1).nullable().optional(),
   guest_registration_allowed: z.boolean(),
+  // Members may invite one non-member guest to this event (needs approval).
+  guest_passes_allowed: z.boolean().optional(),
   // Door and joining information, repeated in the reminder emails.
   practical_notes: z.string().trim().max(2000).nullable().optional(),
   is_featured: z.boolean(),
@@ -131,6 +133,7 @@ function normalize(input: z.infer<typeof eventInput>) {
     capacity: input.capacity ?? null,
     practical_notes: blankToNull(input.practical_notes),
     is_internal: input.is_internal ?? false,
+    guest_passes_allowed: input.guest_passes_allowed ?? false,
     category_id: input.category_id ?? null,
     region_id: input.region_id ?? null,
     community_id: input.community_id ?? null,
@@ -638,6 +641,7 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
         capacity: source.capacity,
         registration_mode: source.registration_mode,
         guest_registration_allowed: source.guest_registration_allowed,
+        guest_passes_allowed: source.guest_passes_allowed,
         category_id: source.category_id,
         region_id: source.region_id,
         community_id: source.community_id,

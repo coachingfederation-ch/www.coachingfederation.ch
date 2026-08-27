@@ -103,7 +103,9 @@ function RolesPage() {
             ? row.isEditor
             : role === "organizer"
               ? row.isOrganizer
-              : row.isPublisher;
+              : role === "publisher"
+                ? row.isPublisher
+                : row.isMembership;
     // Full access is never granted or removed on a single stray click.
     if (role === "admin" && !confirmSuperAdmin(held, row.name)) return;
     setPending(`${row.memberId}:${role}`);

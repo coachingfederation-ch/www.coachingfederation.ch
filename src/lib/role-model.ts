@@ -28,6 +28,7 @@ export type AppRole =
   | "editor"
   | "organizer"
   | "publisher"
+  | "membership"
   | "member"
   | "user";
 
@@ -41,7 +42,13 @@ export const STAFF_ROLES: AppRole[] = [
 ];
 
 /** The roles an admin may grant or revoke through the application. */
-export const MANAGED_ROLES = ["administrator", "editor", "organizer", "publisher"] as const;
+export const MANAGED_ROLES = [
+  "administrator",
+  "editor",
+  "organizer",
+  "publisher",
+  "membership",
+] as const;
 export type ManagedRole = (typeof MANAGED_ROLES)[number];
 
 /**
@@ -63,6 +70,8 @@ export type RoleSet = {
   isEditor: boolean;
   isOrganizer: boolean;
   isPublisher: boolean;
+  /** Membership & Engagement: guest passes and member engagement work. */
+  isMembership: boolean;
   isStaff: boolean;
   isMember: boolean;
 };
@@ -74,6 +83,7 @@ export const EMPTY_ROLES: RoleSet = {
   isEditor: false,
   isOrganizer: false,
   isPublisher: false,
+  isMembership: false,
   isStaff: false,
   isMember: false,
 };
@@ -91,6 +101,8 @@ export function toRoleSet(roles: AppRole[]): RoleSet {
     isOrganizer: has("admin") || has("editor") || has("organizer"),
     // Publishing rights are an explicit grant; only admin overrides it.
     isPublisher: has("admin") || has("publisher"),
+    // Membership & Engagement work is also open to the two admin levels.
+    isMembership: has("admin") || has("administrator") || has("membership"),
     isStaff: STAFF_ROLES.some(has),
     isMember: has("member"),
   };

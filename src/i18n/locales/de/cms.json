@@ -768,10 +768,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Projekte leiten",
-            "Von ICFS für die Leitung von Initiativen anerkannt werden"
-          ]
+          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
         },
         "status": {
           "title": "Status",
@@ -937,6 +934,8 @@
     "removeAccess": "Zugriff entfernen",
     "removeConfirm": "Editor-, Organizer- und Publisher-Zugriff für {name} entfernen? Mitgliedschaft und Mitgliederbereich bleiben bestehen.",
     "publisherBadge": "Publisher",
+    "membershipBadge": "Mitgliedschaft & Engagement",
+    "membershipDesc": "Gastpässe freigeben und Gäste nachbetreuen",
     "manage": "Verwalten",
     "close": "Schliessen",
     "rightsTitle": "Zugriffsrechte",
@@ -1142,6 +1141,8 @@
       "translateError": "Tarifnamen konnten nicht automatisch übersetzt werden."
     },
     "fieldAllowNonMembers": "Anmeldung ohne Mitgliedschaft erlauben",
+    "fieldGuestPasses": "Von Mitgliedern eingeladene Gastpässe erlauben",
+    "fieldGuestPassesHelp": "Ein aktives Mitglied kann einen Gast ohne Mitgliedschaft einladen; Mitgliedschaft & Engagement gibt den kostenlosen Platz frei.",
     "colConfirmation": "Bestätigungs-E-Mail",
     "filterAll": "Alle",
     "filterStatus": "Status",

@@ -768,10 +768,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Piloter des projets",
-            "Être reconnu par ICFS pour avoir mené des initiatives"
-          ]
+          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
         },
         "status": {
           "title": "Status",
@@ -937,6 +934,8 @@
     "removeAccess": "Supprimer l'accès",
     "removeConfirm": "Retirer les accès éditeur, organisateur et publisher pour {name} ? L'adhésion et l'espace membre restent inchangés.",
     "publisherBadge": "Publisher",
+    "membershipBadge": "Adhésion et engagement",
+    "membershipDesc": "Approuver les pass invités et assurer le suivi des invités",
     "manage": "Gérer",
     "close": "Fermer",
     "rightsTitle": "Droits d'accès",
@@ -1142,6 +1141,8 @@
       "translateError": "Les noms de tarifs n'ont pas pu être traduits automatiquement."
     },
     "fieldAllowNonMembers": "Autoriser l'inscription sans adhésion",
+    "fieldGuestPasses": "Autoriser les pass invités proposés par les membres",
+    "fieldGuestPassesHelp": "Un membre actif peut inviter une personne non membre ; Adhésion et engagement approuve la place gratuite.",
     "colConfirmation": "E-mail de confirmation",
     "filterAll": "Toutes",
     "filterStatus": "Statut",

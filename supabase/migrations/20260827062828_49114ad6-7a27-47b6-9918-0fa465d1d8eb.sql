@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.tg_guest_pass_guard() FROM PUBLIC, anon, authenticated;

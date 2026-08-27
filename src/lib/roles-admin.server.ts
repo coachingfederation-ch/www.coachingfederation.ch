@@ -22,6 +22,7 @@ export type ClaimedMemberRole = {
   isEditor: boolean;
   isOrganizer: boolean;
   isPublisher: boolean;
+  isMembership: boolean;
   isAdmin: boolean;
 };
 
@@ -77,6 +78,7 @@ export async function listClaimedMemberRoles(): Promise<ClaimedMemberRole[]> {
       isEditor: roles.includes("editor"),
       isOrganizer: roles.includes("organizer"),
       isPublisher: roles.includes("publisher"),
+      isMembership: roles.includes("membership"),
       isAdmin: roles.includes("admin"),
     };
   });

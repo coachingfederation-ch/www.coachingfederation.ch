@@ -33,6 +33,8 @@ export type EventTicketing = {
   membership: MembershipState;
   /** Tier the server will use unless the visitor picks another allowed one. */
   defaultTierId: string | null;
+  /** The event offers member-invited guest passes. */
+  guestPassesAllowed: boolean;
 };
 
 type Localised = {

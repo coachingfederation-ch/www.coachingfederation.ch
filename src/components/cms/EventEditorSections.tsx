@@ -707,6 +707,19 @@ export function EventPublishingSection({
               />
             </Field>
           ) : null}
+          {/* Guest passes only make sense where a seat can actually be taken. */}
+          {event.registration_mode !== "none" ? (
+            <Field label={t("events.fieldGuestPasses")}>
+              <input
+                type="checkbox"
+                checked={event.guest_passes_allowed ?? false}
+                onChange={(e) => patch({ guest_passes_allowed: e.target.checked })}
+              />
+              <p className="mt-1 text-xs text-muted-foreground">
+                {t("events.fieldGuestPassesHelp")}
+              </p>
+            </Field>
+          ) : null}
           <Field label={t("events.fieldRegOpens")}>
             <input
               type="datetime-local"

@@ -274,6 +274,7 @@ const ROLE_LABELS: Record<string, string> = {
   editor: "Editor",
   organizer: "Event organizer",
   publisher: "Publisher",
+  membership: "Membership & Engagement",
 };
 
 /**

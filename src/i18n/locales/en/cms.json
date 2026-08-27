@@ -768,10 +768,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Lead projects",
-            "Be recognized by ICFS for leading initiatives"
-          ]
+          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
         },
         "status": {
           "title": "Status",
@@ -937,6 +934,8 @@
     "removeAccess": "Remove access",
     "removeConfirm": "Remove editor, organizer and publisher access for {name}? They keep their membership and Member Area access.",
     "publisherBadge": "Publisher",
+    "membershipBadge": "Membership & Engagement",
+    "membershipDesc": "Approve guest passes and follow up with guests",
     "manage": "Manage",
     "close": "Close",
     "rightsTitle": "Access rights",
@@ -1142,6 +1141,8 @@
       "translateError": "Tier names could not be translated automatically."
     },
     "fieldAllowNonMembers": "Allow registration without a membership",
+    "fieldGuestPasses": "Allow member-invited guest passes",
+    "fieldGuestPassesHelp": "An active member can invite one non-member guest; Membership & Engagement approves the free seat.",
     "colConfirmation": "Confirmation email",
     "filterAll": "All",
     "filterStatus": "Status",
