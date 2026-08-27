@@ -6,7 +6,8 @@
  * indexed. The QR encodes this same URL, so a door scan and a tap land on the
  * same registration.
  */
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { SiteFooter, SiteHeaderBar } from "@/components/site-chrome";
 import { getTicket } from "@/lib/ticket.functions";
 
