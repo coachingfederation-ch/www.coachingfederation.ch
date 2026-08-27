@@ -345,23 +345,23 @@ export async function submitRegistration(
   // register; the matching database trigger enforces the same rules.
   const { data: eventRow } = await supabaseAdmin
     .from("events")
-    .select("registration_mode, guest_registration_allowed")
+    .select("registration_mode, guest_registration_allowed, tickets_enabled")
     .eq("id", input.eventId)
     .maybeSingle();
   if (!eventRow) return { ok: false, reason: "error" };
   const mode = eventRow.registration_mode;
   if (mode === "none") return { ok: false, reason: "closed" };
-  const membersOnly = mode === "rsvp_members" && !eventRow.guest_registration_allowed;
+  const membersOnly = mode === "rsvp_members";
   const invitedOnly = mode === "rsvp_invited";
 
   const membership = await resolveMembership(userId, input.memberId, rateSubject);
   if (membersOnly && membership !== "member") return { ok: false, reason: "members_only" };
 
-  // Ticket tiers are only offered on ticketed events; other modes register free.
-  const resolved =
-    mode === "rsvp_tickets"
-      ? await resolveChargedTier(input.eventId, input.tierId, membership)
-      : { tier: null };
+  // Tiers are offered whenever the organiser switched tickets on, whoever the
+  // event is open to; without tickets the seat is simply free.
+  const resolved = eventRow.tickets_enabled
+    ? await resolveChargedTier(input.eventId, input.tierId, membership)
+    : { tier: null };
   if ("error" in resolved) return { ok: false, reason: resolved.error };
 
   const answers = await validateAnswers(input.eventId, input.answers);

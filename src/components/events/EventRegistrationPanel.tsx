@@ -286,8 +286,8 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Four registration modes: no registration, public RSVP, members-only RSVP
-  // (with an optional "allow without a membership" flag) and ticketed RSVP.
+  // Two independent axes: who may register (nobody, anyone, active members,
+  // invited members) and whether the organiser offers ticket tiers.
   const mode = event.registration_mode ?? "none";
   const rsvpMode = mode !== "none";
   const ticketMode = event.tickets_enabled === true;
