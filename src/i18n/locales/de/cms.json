@@ -1376,6 +1376,17 @@
       "copyLink": "Link kopieren",
       "copied": "Link kopiert"
     },
+    "attendance": {
+      "title": "Teilnahmefenster",
+      "help": "Für Online- und Hybrid-Events: Fenster öffnen, QR-Code auf dem geteilten Bildschirm zeigen, Teilnehmende bestätigen mit ihrem eigenen Ticket.",
+      "open": "Teilnahmefenster öffnen",
+      "close": "Fenster schliessen",
+      "openUntil": "Offen bis",
+      "showOnScreen": "Auf dem Bildschirm zeigen",
+      "closeProjector": "Vollbild schliessen",
+      "projectorEyebrow": "Teilnahme",
+      "projectorTitle": "Scannen und Teilnahme bestätigen"
+    },
     "reporting": {
       "open": "Auswertung",
       "title": "Event-Auswertung",

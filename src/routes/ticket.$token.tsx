@@ -6,7 +6,8 @@
  * indexed. The QR encodes this same URL, so a door scan and a tap land on the
  * same registration.
  */
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { SiteFooter, SiteHeaderBar } from "@/components/site-chrome";
 import { getTicket } from "@/lib/ticket.functions";
 
@@ -57,6 +58,7 @@ function TicketFallback() {
 
 function TicketRoute() {
   const { ticket } = Route.useLoaderData();
+  const params = Route.useParams();
   const cancelled = ticket.status === "cancelled";
   const unpaid = ticket.paymentStatus === "pending" || ticket.paymentStatus === "expired";
 
@@ -119,6 +121,19 @@ function TicketRoute() {
                   Show this code at the door.
                   {ticket.checkedIn ? " You are already checked in." : ""}
                 </p>
+                {/* Only rendered while an attendance window is actually open —
+                    online attendees confirm from wherever they are. */}
+                {ticket.attendanceSessionToken ? (
+                  <Button variant="pill" size="pill" asChild className="mt-2">
+                    <Link
+                      to="/attend/$token"
+                      params={{ token: ticket.attendanceSessionToken }}
+                      search={{ ticket: params.token, lang: ticket.locale }}
+                    >
+                      I&apos;m here
+                    </Link>
+                  </Button>
+                ) : null}
               </>
             )}
           </div>

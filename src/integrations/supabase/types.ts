@@ -1088,6 +1088,63 @@ export type Database = {
         }
         Relationships: []
       }
+      event_attendance_sessions: {
+        Row: {
+          closed_at: string | null
+          closed_by: string | null
+          created_at: string
+          ends_at: string
+          event_id: string
+          grace_minutes: number
+          id: string
+          public_token: string
+          started_at: string
+          started_by: string
+          updated_at: string
+        }
+        Insert: {
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          ends_at: string
+          event_id: string
+          grace_minutes?: number
+          id?: string
+          public_token: string
+          started_at?: string
+          started_by: string
+          updated_at?: string
+        }
+        Update: {
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          ends_at?: string
+          event_id?: string
+          grace_minutes?: number
+          id?: string
+          public_token?: string
+          started_at?: string
+          started_by?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_attendance_sessions_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_attendance_sessions_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_cce_applications: {
         Row: {
           additional_facilitators: string | null
@@ -2077,6 +2134,10 @@ export type Database = {
           check_in_token: string | null
           checked_in_at: string | null
           checked_in_by: string | null
+          checked_in_session_id: string | null
+          checked_in_source:
+            | Database["public"]["Enums"]["event_check_in_source"]
+            | null
           confirmation_error: string | null
           confirmation_sent_at: string | null
           confirmation_sequence: number
@@ -2123,6 +2184,10 @@ export type Database = {
           check_in_token?: string | null
           checked_in_at?: string | null
           checked_in_by?: string | null
+          checked_in_session_id?: string | null
+          checked_in_source?:
+            | Database["public"]["Enums"]["event_check_in_source"]
+            | null
           confirmation_error?: string | null
           confirmation_sent_at?: string | null
           confirmation_sequence?: number
@@ -2169,6 +2234,10 @@ export type Database = {
           check_in_token?: string | null
           checked_in_at?: string | null
           checked_in_by?: string | null
+          checked_in_session_id?: string | null
+          checked_in_source?:
+            | Database["public"]["Enums"]["event_check_in_source"]
+            | null
           confirmation_error?: string | null
           confirmation_sent_at?: string | null
           confirmation_sequence?: number
@@ -2205,6 +2274,13 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "event_registrations_checked_in_session_fkey"
+            columns: ["checked_in_session_id"]
+            isOneToOne: false
+            referencedRelation: "event_attendance_sessions"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "event_registrations_discount_code_id_fkey"
             columns: ["discount_code_id"]
@@ -5193,11 +5269,23 @@ export type Database = {
       }
     }
     Functions: {
+      attendance_session_status: {
+        Args: { _session_token: string }
+        Returns: Json
+      }
       check_in_registration: {
         Args: { _actor: string; _registration_id: string }
         Returns: Json
       }
+      close_event_attendance_session: {
+        Args: { _event_id: string }
+        Returns: Json
+      }
       directory_allows_non_credentialed: { Args: never; Returns: boolean }
+      get_event_attendance_session: {
+        Args: { _event_id: string }
+        Returns: Json
+      }
       live_chat_online_count: { Args: never; Returns: number }
       member_has_directory_credential: {
         Args: { _credential_expires_on: string; _credential_slug: string }
@@ -5212,6 +5300,14 @@ export type Database = {
       member_is_directory_eligible: {
         Args: { _member_id: string }
         Returns: boolean
+      }
+      open_event_attendance_session: {
+        Args: { _event_id: string; _grace_minutes?: number }
+        Returns: Json
+      }
+      self_check_in_with_ticket: {
+        Args: { _session_token: string; _ticket_token: string }
+        Returns: Json
       }
       undo_check_in: {
         Args: { _actor: string; _registration_id: string }
@@ -5256,6 +5352,7 @@ export type Database = {
         | "declined"
         | "not_required_rd_only"
         | "separate_conference_process"
+      event_check_in_source: "door" | "self_qr" | "import" | "staff"
       event_location_mode: "in_person" | "online" | "hybrid"
       event_payment_status: "not_required" | "pending" | "paid" | "expired"
       event_recap_audience: "attendees" | "members" | "public"
@@ -5450,6 +5547,7 @@ export const Constants = {
         "not_required_rd_only",
         "separate_conference_process",
       ],
+      event_check_in_source: ["door", "self_qr", "import", "staff"],
       event_location_mode: ["in_person", "online", "hybrid"],
       event_payment_status: ["not_required", "pending", "paid", "expired"],
       event_recap_audience: ["attendees", "members", "public"],

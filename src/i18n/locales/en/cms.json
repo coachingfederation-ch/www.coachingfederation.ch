@@ -1376,6 +1376,17 @@
       "copyLink": "Copy link",
       "copied": "Link copied"
     },
+    "attendance": {
+      "title": "Attendance window",
+      "help": "For online and hybrid events: open a window, show the QR on the shared screen, and let attendees confirm with their own ticket.",
+      "open": "Open the attendance window",
+      "close": "Close the window",
+      "openUntil": "Open until",
+      "showOnScreen": "Show on the shared screen",
+      "closeProjector": "Close the full-screen view",
+      "projectorEyebrow": "Attendance",
+      "projectorTitle": "Scan to confirm you were here"
+    },
     "reporting": {
       "open": "Reporting",
       "title": "Event reporting",
