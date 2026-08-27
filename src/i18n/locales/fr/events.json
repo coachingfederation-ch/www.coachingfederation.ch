@@ -209,5 +209,35 @@
         "public": "Disponible pour tout le monde."
       }
     }
+  },
+  "guestPass": {
+    "eyebrow": "Pass invité",
+    "title": "Demander un pass invité",
+    "intro": "En tant que membre, vous pouvez inviter gratuitement une personne non membre à cet événement. Membership & Engagement examine chaque demande et confirme par e-mail.",
+    "membersOnly": "Les pass invité sont réservés aux membres de The Switzerland Chapter of ICF.",
+    "inviterTitle": "Vos coordonnées",
+    "memberNumber": "N° de membre",
+    "fieldName": "Nom complet de l'invité",
+    "fieldEmail": "E-mail de l'invité",
+    "fieldPhone": "Téléphone de l'invité",
+    "fieldLocation": "Lieu de l'invité",
+    "fieldLanguage": "Langue préférée",
+    "fieldCoachingLevel": "Niveau ou parcours de coaching",
+    "fieldFocus": "Domaine d'activité principal",
+    "fieldAssociations": "Autres associations de coaching (facultatif)",
+    "fieldNotes": "Quelque chose à nous signaler ? (facultatif)",
+    "submit": "Envoyer la demande",
+    "saving": "Envoi…",
+    "success": "Merci, votre demande est chez Membership & Engagement. Nous confirmerons par e-mail.",
+    "alreadyRequested": "Vous avez déjà demandé un pass invité pour cet événement.",
+    "privacy": "Nous utilisons ces informations uniquement pour traiter ce pass invité.",
+    "error": {
+      "duplicate": "Une demande existe déjà pour cet invité et cet événement.",
+      "already_used": "Cet invité a déjà utilisé son pass invité.",
+      "not_member": "Les pass invité sont réservés aux membres actifs.",
+      "event_closed": "Les inscriptions sont closes pour cet événement.",
+      "not_allowed": "Cet événement ne propose pas de pass invité.",
+      "error": "Une erreur s'est produite. Veuillez réessayer."
+    }
   }
 }

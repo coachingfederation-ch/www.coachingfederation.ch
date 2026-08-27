@@ -716,6 +716,22 @@
         "browse": "Vedi tutti gli eventi",
         "view": "Vedi evento",
         "online": "Online"
+      },
+      "guestPasses": {
+        "title": "I miei pass ospite",
+        "body": "I pass ospite che hai richiesto per una persona non iscritta. La richiesta si fa nella pagina dell'evento.",
+        "loading": "Caricamento…",
+        "empty": "Non hai ancora richiesto un pass ospite.",
+        "browse": "Vedi i prossimi eventi",
+        "guest": "Ospite",
+        "status": {
+          "pending": "In revisione",
+          "approved": "Approvato",
+          "declined": "Rifiutato",
+          "registered": "Iscritto",
+          "cancelled": "Annullato",
+          "attended": "Partecipato"
+        }
       }
     },
     "volunteering": {
@@ -768,7 +784,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
+          "items": [
+            "Guidare progetti",
+            "Essere riconosciuti da ICFS per aver guidato iniziative"
+          ]
         },
         "status": {
           "title": "Status",

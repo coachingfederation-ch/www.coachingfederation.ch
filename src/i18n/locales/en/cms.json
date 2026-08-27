@@ -716,6 +716,22 @@
         "browse": "See all events",
         "view": "View event",
         "online": "Online"
+      },
+      "guestPasses": {
+        "title": "My guest passes",
+        "body": "Guest passes you requested for a non-member guest. Request one on the event page.",
+        "loading": "Loading…",
+        "empty": "You haven't requested a guest pass yet.",
+        "browse": "See upcoming events",
+        "guest": "Guest",
+        "status": {
+          "pending": "Pending review",
+          "approved": "Approved",
+          "declined": "Declined",
+          "registered": "Registered",
+          "cancelled": "Cancelled",
+          "attended": "Attended"
+        }
       }
     },
     "volunteering": {
@@ -768,7 +784,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
+          "items": [
+            "Lead projects",
+            "Be recognized by ICFS for leading initiatives"
+          ]
         },
         "status": {
           "title": "Status",
