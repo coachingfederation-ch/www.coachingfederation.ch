@@ -5,6 +5,7 @@
  */
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { LocaleLink, useI18n } from "@/i18n";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 
 const GOVERNANCE_URLS: Record<string, string> = {
   "Annual General Meeting (AGM)":
