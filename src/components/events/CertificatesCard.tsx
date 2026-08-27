@@ -139,13 +139,23 @@ export function CertificatesCard({ eventId, t }: Props) {
           <button
             type="button"
             disabled={busy}
-            onClick={() => void run(() => issueCompletionDocuments({ data: { eventId } }))}
+            onClick={issue}
             className={`${buttonPrimary} mt-3`}
           >
             {busy ? t("events.certificates.issuing") : t("events.certificates.issue")}
           </button>
 
+          {result ? (
+            <p className="mt-2 text-xs text-muted-foreground">
+              {t("events.certificates.resultIssued")} {result.issued} ·{" "}
+              {t("events.certificates.resultSkipped")} {result.skipped} ·{" "}
+              {t("events.certificates.resultSent")} {result.sent} ·{" "}
+              {t("events.certificates.resultFailed")} {result.failed}
+            </p>
+          ) : null}
+
           {error ? <p className="mt-2 text-xs text-destructive">{error}</p> : null}
+
 
           <ul className="mt-4 space-y-2">
             {board.rows.length === 0 ? (

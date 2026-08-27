@@ -98,9 +98,7 @@ export const loadCertificateBoard = createServerFn({ method: "POST" })
       checkedIn: checkedIn ?? 0,
       issued: list.filter((r) => r.status === "issued").length,
       revoked: list.filter((r) => r.status === "revoked").length,
-      pendingEmails: list.filter(
-        (r) => r.status === "issued" && r.email_status !== "sent",
-      ).length,
+      pendingEmails: list.filter((r) => r.status === "issued" && r.email_status !== "sent").length,
       rows: list,
     };
   });
@@ -215,9 +213,7 @@ export const listMyCertificates = createServerFn({ method: "POST" })
   .handler(async ({ context }): Promise<MemberCertificate[]> => {
     const { data } = await context.supabase
       .from("event_certificates")
-      .select(
-        "id, serial, public_token, event_title_snapshot, completed_on, cc_hours, rd_hours",
-      )
+      .select("id, serial, public_token, event_title_snapshot, completed_on, cc_hours, rd_hours")
       .eq("status", "issued")
       .order("completed_on", { ascending: false });
     return (data ?? []) as MemberCertificate[];
