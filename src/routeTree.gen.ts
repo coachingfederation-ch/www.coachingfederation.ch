@@ -111,6 +111,7 @@ import { Route as StaffManageEventsNewRouteImport } from './routes/_staff/manage
 import { Route as StaffManageNewslettersIndexRouteImport } from './routes/_staff/manage.newsletters.index'
 import { Route as StaffManageNewslettersIdRouteImport } from './routes/_staff/manage.newsletters.$id'
 import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/calendar.$file'
+import { Route as ApiPublicCertificateQrTokenRouteImport } from './routes/api/public/certificate-qr.$token'
 import { Route as ApiPublicEventCalendarFileRouteImport } from './routes/api/public/event-calendar.$file'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicTicketQrTokenRouteImport } from './routes/api/public/ticket-qr.$token'
@@ -640,6 +641,12 @@ const ApiPublicCalendarFileRoute = ApiPublicCalendarFileRouteImport.update({
   path: '/api/public/calendar/$file',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCertificateQrTokenRoute =
+  ApiPublicCertificateQrTokenRouteImport.update({
+    id: '/api/public/certificate-qr/$token',
+    path: '/api/public/certificate-qr/$token',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicEventCalendarFileRoute =
   ApiPublicEventCalendarFileRouteImport.update({
     id: '/api/public/event-calendar/$file',
@@ -796,6 +803,7 @@ export interface FileRoutesByFullPath {
   '/manage/events/new': typeof StaffManageEventsNewRoute
   '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
+  '/api/public/certificate-qr/$token': typeof ApiPublicCertificateQrTokenRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
@@ -904,6 +912,7 @@ export interface FileRoutesByTo {
   '/manage/events/new': typeof StaffManageEventsNewRoute
   '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
+  '/api/public/certificate-qr/$token': typeof ApiPublicCertificateQrTokenRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
@@ -1019,6 +1028,7 @@ export interface FileRoutesById {
   '/_staff/manage/events/new': typeof StaffManageEventsNewRoute
   '/_staff/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
+  '/api/public/certificate-qr/$token': typeof ApiPublicCertificateQrTokenRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
@@ -1133,6 +1143,7 @@ export interface FileRouteTypes {
     | '/manage/events/new'
     | '/manage/newsletters/$id'
     | '/api/public/calendar/$file'
+    | '/api/public/certificate-qr/$token'
     | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
@@ -1241,6 +1252,7 @@ export interface FileRouteTypes {
     | '/manage/events/new'
     | '/manage/newsletters/$id'
     | '/api/public/calendar/$file'
+    | '/api/public/certificate-qr/$token'
     | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
@@ -1355,6 +1367,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/events/new'
     | '/_staff/manage/newsletters/$id'
     | '/api/public/calendar/$file'
+    | '/api/public/certificate-qr/$token'
     | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
@@ -1424,6 +1437,7 @@ export interface RootRouteChildren {
   ApiPublicRoleDirectoryRoute: typeof ApiPublicRoleDirectoryRoute
   ApiPublicRoleGrantsArchiveRoute: typeof ApiPublicRoleGrantsArchiveRoute
   ApiPublicCalendarFileRoute: typeof ApiPublicCalendarFileRoute
+  ApiPublicCertificateQrTokenRoute: typeof ApiPublicCertificateQrTokenRoute
   ApiPublicEventCalendarFileRoute: typeof ApiPublicEventCalendarFileRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicTicketQrTokenRoute: typeof ApiPublicTicketQrTokenRoute
@@ -2148,6 +2162,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicCalendarFileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/certificate-qr/$token': {
+      id: '/api/public/certificate-qr/$token'
+      path: '/api/public/certificate-qr/$token'
+      fullPath: '/api/public/certificate-qr/$token'
+      preLoaderRoute: typeof ApiPublicCertificateQrTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/event-calendar/$file': {
       id: '/api/public/event-calendar/$file'
       path: '/api/public/event-calendar/$file'
@@ -2449,6 +2470,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicRoleDirectoryRoute: ApiPublicRoleDirectoryRoute,
   ApiPublicRoleGrantsArchiveRoute: ApiPublicRoleGrantsArchiveRoute,
   ApiPublicCalendarFileRoute: ApiPublicCalendarFileRoute,
+  ApiPublicCertificateQrTokenRoute: ApiPublicCertificateQrTokenRoute,
   ApiPublicEventCalendarFileRoute: ApiPublicEventCalendarFileRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicTicketQrTokenRoute: ApiPublicTicketQrTokenRoute,

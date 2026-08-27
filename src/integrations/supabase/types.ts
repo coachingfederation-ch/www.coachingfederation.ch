@@ -1376,6 +1376,94 @@ export type Database = {
           },
         ]
       }
+      event_cce_awards: {
+        Row: {
+          awarded_at: string
+          awarded_by: string
+          cc_hours: number
+          certificate_id: string | null
+          event_id: string
+          id: string
+          member_id: string | null
+          rd_hours: number
+          registration_id: string
+          revoked_at: string | null
+          revoked_by: string | null
+          status: Database["public"]["Enums"]["event_cce_award_status"]
+        }
+        Insert: {
+          awarded_at?: string
+          awarded_by: string
+          cc_hours?: number
+          certificate_id?: string | null
+          event_id: string
+          id?: string
+          member_id?: string | null
+          rd_hours?: number
+          registration_id: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          status?: Database["public"]["Enums"]["event_cce_award_status"]
+        }
+        Update: {
+          awarded_at?: string
+          awarded_by?: string
+          cc_hours?: number
+          certificate_id?: string | null
+          event_id?: string
+          id?: string
+          member_id?: string | null
+          rd_hours?: number
+          registration_id?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          status?: Database["public"]["Enums"]["event_cce_award_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_cce_awards_certificate_id_fkey"
+            columns: ["certificate_id"]
+            isOneToOne: false
+            referencedRelation: "event_certificates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_cce_awards_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_cce_awards_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_cce_awards_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "coach_directory_public"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "event_cce_awards_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_cce_awards_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: true
+            referencedRelation: "event_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_cce_schedule_rows: {
         Row: {
           application_id: string
@@ -1431,6 +1519,121 @@ export type Database = {
             columns: ["application_id"]
             isOneToOne: false
             referencedRelation: "event_cce_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_certificates: {
+        Row: {
+          cc_hours: number | null
+          completed_on: string
+          email_error: string | null
+          email_status: string
+          event_id: string
+          event_title_snapshot: string
+          holder_name: string
+          id: string
+          issued_at: string
+          issued_by: string
+          locale: string
+          member_id: string | null
+          public_token: string
+          rd_hours: number | null
+          registration_id: string
+          revoke_reason: string | null
+          revoked_at: string | null
+          revoked_by: string | null
+          serial: string
+          status: Database["public"]["Enums"]["event_certificate_status"]
+          superseded_by: string | null
+        }
+        Insert: {
+          cc_hours?: number | null
+          completed_on: string
+          email_error?: string | null
+          email_status?: string
+          event_id: string
+          event_title_snapshot: string
+          holder_name: string
+          id?: string
+          issued_at?: string
+          issued_by: string
+          locale: string
+          member_id?: string | null
+          public_token: string
+          rd_hours?: number | null
+          registration_id: string
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          revoked_by?: string | null
+          serial: string
+          status?: Database["public"]["Enums"]["event_certificate_status"]
+          superseded_by?: string | null
+        }
+        Update: {
+          cc_hours?: number | null
+          completed_on?: string
+          email_error?: string | null
+          email_status?: string
+          event_id?: string
+          event_title_snapshot?: string
+          holder_name?: string
+          id?: string
+          issued_at?: string
+          issued_by?: string
+          locale?: string
+          member_id?: string | null
+          public_token?: string
+          rd_hours?: number | null
+          registration_id?: string
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          revoked_by?: string | null
+          serial?: string
+          status?: Database["public"]["Enums"]["event_certificate_status"]
+          superseded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_certificates_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_certificates_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_certificates_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "coach_directory_public"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "event_certificates_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_certificates_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "event_registrations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_certificates_superseded_by_fkey"
+            columns: ["superseded_by"]
+            isOneToOne: false
+            referencedRelation: "event_certificates"
             referencedColumns: ["id"]
           },
         ]
@@ -2652,6 +2855,7 @@ export type Database = {
           cce_approved_cc_hours: number | null
           cce_approved_rd_hours: number | null
           cce_enabled: boolean
+          certificates_enabled: boolean
           city: string | null
           community_id: string | null
           content_updated_at: string
@@ -2699,6 +2903,7 @@ export type Database = {
           cce_approved_cc_hours?: number | null
           cce_approved_rd_hours?: number | null
           cce_enabled?: boolean
+          certificates_enabled?: boolean
           city?: string | null
           community_id?: string | null
           content_updated_at?: string
@@ -2746,6 +2951,7 @@ export type Database = {
           cce_approved_cc_hours?: number | null
           cce_approved_rd_hours?: number | null
           cce_enabled?: boolean
+          certificates_enabled?: boolean
           city?: string | null
           community_id?: string | null
           content_updated_at?: string
@@ -5400,8 +5606,13 @@ export type Database = {
         Returns: Json
       }
       directory_allows_non_credentialed: { Args: never; Returns: boolean }
+      get_certificate_by_token: { Args: { _token: string }; Returns: Json }
       get_event_attendance_session: {
         Args: { _event_id: string }
+        Returns: Json
+      }
+      issue_event_completion: {
+        Args: { _actor: string; _event_id: string }
         Returns: Json
       }
       live_chat_online_count: { Args: never; Returns: number }
@@ -5421,6 +5632,14 @@ export type Database = {
       }
       open_event_attendance_session: {
         Args: { _event_id: string; _grace_minutes?: number }
+        Returns: Json
+      }
+      reissue_event_certificate: {
+        Args: { _actor: string; _certificate_id: string }
+        Returns: Json
+      }
+      revoke_event_certificate: {
+        Args: { _actor: string; _certificate_id: string; _reason?: string }
         Returns: Json
       }
       self_check_in_with_ticket: {
@@ -5466,6 +5685,7 @@ export type Database = {
         | "discarded"
       event_attendance_match_method: "email" | "manual" | "none"
       event_attendance_provider: "zoom" | "google_meet" | "other"
+      event_cce_award_status: "awarded" | "revoked"
       event_cce_category: "core_competency" | "resource_development" | "break"
       event_cce_delivery: "in_person" | "teleclass" | "webinar"
       event_cce_status:
@@ -5478,6 +5698,7 @@ export type Database = {
         | "declined"
         | "not_required_rd_only"
         | "separate_conference_process"
+      event_certificate_status: "issued" | "revoked"
       event_check_in_source: "door" | "self_qr" | "import" | "staff"
       event_location_mode: "in_person" | "online" | "hybrid"
       event_payment_status: "not_required" | "pending" | "paid" | "expired"
@@ -5669,6 +5890,7 @@ export const Constants = {
       ],
       event_attendance_match_method: ["email", "manual", "none"],
       event_attendance_provider: ["zoom", "google_meet", "other"],
+      event_cce_award_status: ["awarded", "revoked"],
       event_cce_category: ["core_competency", "resource_development", "break"],
       event_cce_delivery: ["in_person", "teleclass", "webinar"],
       event_cce_status: [
@@ -5682,6 +5904,7 @@ export const Constants = {
         "not_required_rd_only",
         "separate_conference_process",
       ],
+      event_certificate_status: ["issued", "revoked"],
       event_check_in_source: ["door", "self_qr", "import", "staff"],
       event_location_mode: ["in_person", "online", "hybrid"],
       event_payment_status: ["not_required", "pending", "paid", "expired"],
