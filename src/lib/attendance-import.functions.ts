@@ -245,7 +245,7 @@ export const uploadAttendanceCsv = createServerFn({ method: "POST" })
     if (updateError) throw new Error(updateError.message);
 
     return {
-      import: updated as AttendanceImport,
+      import: updated as unknown as AttendanceImport,
       rows: await readRows(context, importId),
       thresholdMinutes,
       lengthMinutes,
@@ -279,7 +279,7 @@ export const listAttendanceImports = createServerFn({ method: "POST" })
       .order("created_at", { ascending: false })
       .limit(20);
     if (error) throw new Error(error.message);
-    return (rows ?? []) as AttendanceImport[];
+    return (rows ?? []) as unknown as AttendanceImport[];
   });
 
 /** One import with its rows and the threshold that produced them. */
@@ -295,14 +295,14 @@ export const loadAttendanceImport = createServerFn({ method: "POST" })
       .maybeSingle();
     if (error || !row) throw new Error("Import not found");
 
-    const event = await loadManagedEvent(context, (row as AttendanceImport).event_id);
+    const event = await loadManagedEvent(context, (row as unknown as AttendanceImport).event_id);
     const { scheduledLengthMinutes, attendanceThresholdMinutes } = await import(
       "./attendance-import.server"
     );
     const lengthMinutes = scheduledLengthMinutes(event.starts_at, event.ends_at);
 
     return {
-      import: row as AttendanceImport,
+      import: row as unknown as AttendanceImport,
       rows: await readRows(context, data.importId),
       lengthMinutes,
       minPercent: event.attendance_min_percent ?? 80,
@@ -332,7 +332,12 @@ export const setImportRowDecision = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
 
-    const patch: Record<string, unknown> = { apply_decision: data.decision };
+    const patch: {
+      apply_decision: "check_in" | "skip";
+      match_registration_id?: string | null;
+      match_method?: "email" | "manual" | "none";
+      skip_reason?: string | null;
+    } = { apply_decision: data.decision };
     if (data.registrationId !== undefined) {
       if (data.registrationId) {
         // The seat must belong to an event this caller manages; RLS on
