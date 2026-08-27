@@ -239,5 +239,18 @@
       "not_allowed": "Dieses Event bietet keine Gastkarten an.",
       "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
     }
+  },
+  "subscribe": {
+    "action": "Kalender abonnieren",
+    "title": "Unseren Veranstaltungskalender abonnieren",
+    "lede": "Einmal den Link hinzufügen, und unsere Veranstaltungen erscheinen und aktualisieren sich in Ihrem eigenen Kalender.",
+    "scopeFiltered": "Nur meine aktuellen Filter",
+    "scopeAll": "Alle Veranstaltungen des Chapters",
+    "google": "Zu Google Kalender hinzufügen",
+    "webcal": "Zu Apple oder Outlook hinzufügen",
+    "urlLabel": "Adresse des Kalender-Feeds",
+    "copy": "Link kopieren",
+    "copied": "Kopiert",
+    "note": "Der Feed zeigt die kommenden 12 Monate und aktualisiert sich automatisch, meist alle paar Stunden."
   }
 }

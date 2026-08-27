@@ -143,7 +143,7 @@ export function CompactHero({
       <div className="mx-auto max-w-7xl px-5 pt-6 pb-20 sm:px-8">
         <SiteHeaderBar compact />
         <div className="mt-14 max-w-3xl">
-          <p className="eyebrow !text-accent">{eyebrow}</p>
+          <p className="eyebrow-accent">{eyebrow}</p>
           <h1 className="display-xl mt-4">{title}</h1>
           <p className="mt-6 max-w-2xl text-[17px] leading-[1.65] text-hero-foreground/85">
             {lede}

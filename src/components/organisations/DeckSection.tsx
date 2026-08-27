@@ -59,7 +59,7 @@ export function DeckSection() {
     // foreground text and light cards that keep the slide content readable.
     <section className="bg-hero py-24 text-hero-foreground">
       <div className="mx-auto max-w-7xl px-8">
-        <p className="eyebrow !text-hero-foreground">{t("organisations.deck.eyebrow")}</p>
+        <p className="eyebrow-inverse">{t("organisations.deck.eyebrow")}</p>
         <h2 className="mt-3 max-w-2xl display-lg">{t("organisations.deck.title")}</h2>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-hero-foreground/90">
           {t("organisations.deck.lede")}

@@ -97,7 +97,7 @@ export default function AboutPage() {
 
         <section className="bg-hero text-hero-foreground">
           <div className="mx-auto max-w-7xl px-8 py-20 text-center">
-            <p className="eyebrow !text-accent">{t("about.cta.eyebrow")}</p>
+            <p className="eyebrow-accent">{t("about.cta.eyebrow")}</p>
             <h2 className="mx-auto mt-3 max-w-2xl display-lg">{t("about.cta.title")}</h2>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Button asChild variant="inverse" size="pill">

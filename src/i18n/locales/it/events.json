@@ -239,5 +239,18 @@
       "not_allowed": "Questo evento non offre pass ospite.",
       "error": "Qualcosa è andato storto. Riprova."
     }
+  },
+  "subscribe": {
+    "action": "Iscriviti al calendario",
+    "title": "Iscriviti al nostro calendario di eventi",
+    "lede": "Aggiungi il link una volta e i nostri eventi appaiono e si aggiornano nel tuo calendario.",
+    "scopeFiltered": "Solo i miei filtri attuali",
+    "scopeAll": "Tutti gli eventi del chapter",
+    "google": "Aggiungi a Google Calendar",
+    "webcal": "Aggiungi ad Apple o Outlook",
+    "urlLabel": "Indirizzo del feed del calendario",
+    "copy": "Copia il link",
+    "copied": "Copiato",
+    "note": "Il feed mostra i prossimi 12 mesi e si aggiorna automaticamente, di solito ogni poche ore."
   }
 }

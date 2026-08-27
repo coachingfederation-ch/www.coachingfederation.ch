@@ -239,5 +239,18 @@
       "not_allowed": "Cet événement ne propose pas de pass invité.",
       "error": "Une erreur s'est produite. Veuillez réessayer."
     }
+  },
+  "subscribe": {
+    "action": "S’abonner au calendrier",
+    "title": "Abonnez-vous à notre calendrier d’événements",
+    "lede": "Ajoutez le lien une fois, et nos événements apparaissent et se mettent à jour dans votre propre calendrier.",
+    "scopeFiltered": "Seulement mes filtres actuels",
+    "scopeAll": "Tous les événements du chapitre",
+    "google": "Ajouter à Google Agenda",
+    "webcal": "Ajouter à Apple ou Outlook",
+    "urlLabel": "Adresse du flux de calendrier",
+    "copy": "Copier le lien",
+    "copied": "Copié",
+    "note": "Le flux couvre les 12 prochains mois et se met à jour automatiquement, généralement toutes les quelques heures."
   }
 }
