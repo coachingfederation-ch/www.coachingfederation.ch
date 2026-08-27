@@ -41,6 +41,7 @@ import {
 } from "@/lib/recurrence";
 import type { VocabRow } from "@/lib/vocabularies";
 import { vocabLabel } from "@/lib/vocabularies";
+import { ApprovedGuestsPanel } from "@/components/cms/ApprovedGuestsPanel";
 
 export type Managed = NonNullable<Awaited<ReturnType<typeof getManagedEvent>>>;
 export type Registration = Awaited<ReturnType<typeof listEventRegistrations>>[number];
