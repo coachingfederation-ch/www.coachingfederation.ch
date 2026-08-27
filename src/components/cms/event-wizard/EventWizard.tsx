@@ -32,7 +32,7 @@ import { rememberWizardExtras } from "@/lib/event-wizard-extras";
 
 type Language = "de" | "fr" | "it" | "en";
 type LocationMode = "in_person" | "online" | "hybrid";
-type RegistrationMode = "none" | "rsvp" | "rsvp_members" | "rsvp_tickets" | "rsvp_invited";
+type RegistrationMode = "none" | "rsvp" | "rsvp_members" | "rsvp_invited";
 
 type Draft = {
   title: string;
@@ -49,7 +49,8 @@ type Draft = {
   mapLocation: string;
   registrationMode: RegistrationMode;
   capacity: string;
-  guestAllowed: boolean;
+  /** Ticket tiers and discount codes are offered, whoever may register. */
+  ticketsEnabled: boolean;
   isInternal: boolean;
   isFeatured: boolean;
   repeats: boolean;
@@ -146,7 +147,7 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
     mapLocation: "",
     registrationMode: "rsvp",
     capacity: "",
-    guestAllowed: true,
+    ticketsEnabled: false,
     isInternal: false,
     isFeatured: false,
     repeats: false,
@@ -461,31 +462,25 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
           <div className="grid gap-3 sm:grid-cols-2">
             <Choice
               selected={draft.registrationMode === "none"}
-              title={t("events.regMode.none")}
+              title={t("events.registrationOff")}
               hint={t("events.wizard.who.noneHint")}
-              onSelect={() => patch({ registrationMode: "none" })}
+              onSelect={() => patch({ registrationMode: "none", ticketsEnabled: false })}
             />
             <Choice
               selected={draft.registrationMode === "rsvp"}
-              title={t("events.regMode.rsvp")}
+              title={t("events.audience.anyone")}
               hint={t("events.wizard.who.rsvpHint")}
               onSelect={() => patch({ registrationMode: "rsvp" })}
             />
             <Choice
               selected={draft.registrationMode === "rsvp_members"}
-              title={t("events.regMode.rsvpMembers")}
+              title={t("events.audience.members")}
               hint={t("events.wizard.who.membersHint")}
               onSelect={() => patch({ registrationMode: "rsvp_members" })}
             />
             <Choice
-              selected={draft.registrationMode === "rsvp_tickets"}
-              title={t("events.regMode.rsvpTickets")}
-              hint={t("events.wizard.who.ticketsHint")}
-              onSelect={() => patch({ registrationMode: "rsvp_tickets" })}
-            />
-            <Choice
               selected={draft.registrationMode === "rsvp_invited"}
-              title={t("events.regMode.rsvpInvited")}
+              title={t("events.audience.invited")}
               hint={t("events.wizard.who.invitedHint")}
               onSelect={() => patch({ registrationMode: "rsvp_invited" })}
             />
@@ -501,15 +496,13 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
                   onChange={(e) => patch({ capacity: e.target.value })}
                 />
               </Field>
-              {draft.registrationMode === "rsvp" || draft.registrationMode === "rsvp_tickets" ? (
-                <label className="flex items-center gap-2 self-end pb-2 text-sm">
-                  <Checkbox
-                    checked={draft.guestAllowed}
-                    onCheckedChange={(v) => patch({ guestAllowed: v === true })}
-                  />
-                  <span>{t("events.fieldGuests")}</span>
-                </label>
-              ) : null}
+              <label className="flex items-center gap-2 self-end pb-2 text-sm">
+                <Checkbox
+                  checked={draft.ticketsEnabled}
+                  onCheckedChange={(v) => patch({ ticketsEnabled: v === true })}
+                />
+                <span>{t("events.fieldTickets")}</span>
+              </label>
             </div>
           ) : null}
 
@@ -656,11 +649,10 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
               label={t("events.fieldRegistrationMode")}
               value={t(
                 {
-                  none: "events.regMode.none",
-                  rsvp: "events.regMode.rsvp",
-                  rsvp_members: "events.regMode.rsvpMembers",
-                  rsvp_tickets: "events.regMode.rsvpTickets",
-                  rsvp_invited: "events.regMode.rsvpInvited",
+                  none: "events.registrationOff",
+                  rsvp: "events.audience.anyone",
+                  rsvp_members: "events.audience.members",
+                  rsvp_invited: "events.audience.invited",
                 }[draft.registrationMode],
               )}
             />
@@ -765,7 +757,8 @@ function payload(draft: Draft, slug: string) {
     registration_mode: draft.registrationMode,
     registration_opens_at: null,
     registration_closes_at: null,
-    guest_registration_allowed: draft.guestAllowed,
+    guest_registration_allowed: draft.registrationMode !== "rsvp_members",
+    tickets_enabled: draft.ticketsEnabled,
     is_featured: draft.isFeatured,
     is_internal: draft.isInternal,
     category_id: draft.categoryId,
