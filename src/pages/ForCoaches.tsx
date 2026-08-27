@@ -151,12 +151,13 @@ export default function ForCoachesPage() {
               >
                 {t("coaches.join.cta1")}
               </a>
-              <a
-                href="#"
+              <LocaleLink
+                to="/for-coaches"
+                hash="credentials"
                 className="inline-flex h-10 items-center rounded-full border border-white/30 px-5 text-sm font-semibold text-white transition hover:bg-white/10"
               >
                 {t("coaches.join.cta2")}
-              </a>
+              </LocaleLink>
             </div>
           </div>
         </section>
