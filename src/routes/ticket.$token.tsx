@@ -58,6 +58,7 @@ function TicketFallback() {
 
 function TicketRoute() {
   const { ticket } = Route.useLoaderData();
+  const params = Route.useParams();
   const cancelled = ticket.status === "cancelled";
   const unpaid = ticket.paymentStatus === "pending" || ticket.paymentStatus === "expired";
 
