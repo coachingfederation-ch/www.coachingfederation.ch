@@ -56,13 +56,15 @@ function GuestPassesPage() {
 
   return (
     <Shell>
-      {rows === null ? (
-        <div className="flex items-center justify-center py-24 text-muted-foreground">
-          <Loader2 className="animate-spin" />
-        </div>
-      ) : (
-        <GuestPassesDashboard initialRows={rows} />
-      )}
+      <div className="mx-auto max-w-6xl px-6 py-10 sm:px-10">
+        {rows === null ? (
+          <div className="flex items-center justify-center py-24 text-muted-foreground">
+            <Loader2 className="animate-spin" />
+          </div>
+        ) : (
+          <GuestPassesDashboard initialRows={rows} />
+        )}
+      </div>
     </Shell>
   );
 }
