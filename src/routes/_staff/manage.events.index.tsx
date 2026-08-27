@@ -69,7 +69,14 @@ type EventsSearch = z.infer<typeof searchSchema>;
 const FILTER_STORE_KEY = "cms.manage-events.filters";
 
 const isPristine = (s: EventsSearch) =>
-  !s.q && !s.category && !s.community && !s.host && !s.city && !s.credits && !s.status && s.page === 1;
+  !s.q &&
+  !s.category &&
+  !s.community &&
+  !s.host &&
+  !s.city &&
+  !s.credits &&
+  !s.status &&
+  s.page === 1;
 
 function ManageEventsPage() {
   const { t } = useCms();
@@ -182,12 +189,12 @@ function ManageEventsPage() {
   const visible = filtered.slice(start, start + PAGE_SIZE);
   const hasFilters = Boolean(
     search.q ||
-      search.category ||
-      search.community ||
-      search.host ||
-      search.city ||
-      search.credits ||
-      search.status,
+    search.category ||
+    search.community ||
+    search.host ||
+    search.city ||
+    search.credits ||
+    search.status,
   );
 
   // Creating an event runs through the guided wizard at /manage/events/new,
