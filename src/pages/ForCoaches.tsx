@@ -87,7 +87,9 @@ export default function ForCoachesPage() {
                 ))}
               </ul>
               <a
-                href="#"
+                href="https://coachingfederation.org/about/social-responsibility/diversity-inclusion/deib-resources/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-6 inline-flex text-sm font-semibold text-primary hover:underline"
               >
                 {t("coaches.deib.cta")}
