@@ -88,13 +88,7 @@ export function forgetDevice(): void {
  * back to the QR screen, unchanged.
  */
 export async function restoreVolunteerSession(): Promise<boolean> {
-  const token = (() => {
-    try {
-      return store()?.getItem(DEVICE_KEY) ?? null;
-    } catch {
-      return null;
-    }
-  })();
+  const token = readToken();
   if (!token) {
     noteSessionEvent("no session and no device token");
     return false;
