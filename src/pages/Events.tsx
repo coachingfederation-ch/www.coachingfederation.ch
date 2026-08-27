@@ -7,6 +7,7 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Mark, type MarkName } from "@/components/marks";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SubscribeCalendarDialog } from "@/components/events/SubscribeCalendarDialog";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { LocaleLink, useI18n } from "@/i18n";
 import {
   eventPlace,
@@ -506,12 +507,12 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
             <p className="eyebrow-accent">{t("events.cta.eyebrow")}</p>
             <h2 className="mx-auto mt-3 max-w-2xl display-lg">{t("events.cta.title")}</h2>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <LocaleLink
-                to="/about"
-                className="inline-flex h-10 items-center rounded-full bg-white px-5 text-sm font-semibold text-primary transition hover:bg-white/90"
-              >
-                {t("events.cta.propose")}
-              </LocaleLink>
+              <Button asChild variant="inverse" size="pill">
+                {/* Event proposals come in by email — the office triages them. */}
+                <a href="mailto:office@coachingfederation.ch" target="_top">
+                  {t("events.cta.propose")}
+                </a>
+              </Button>
             </div>
           </div>
         </section>
