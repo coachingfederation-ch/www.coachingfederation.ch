@@ -60,7 +60,11 @@ export const loadCertificateBoard = createServerFn({ method: "POST" })
   .handler(async ({ context, data }): Promise<CertificateBoard> => {
     await assertOrganizer(context);
 
-    const [{ data: event }, { data: rows }, { count: checkedIn }] = await Promise.all([
+    const [
+      { data: event, error: eventError },
+      { data: rows, error: rowsError },
+      { count: checkedIn, error: countError },
+    ] = await Promise.all([
       context.supabase
         .from("events")
         .select("certificates_enabled, cce_approved_cc_hours, cce_approved_rd_hours")
@@ -78,7 +82,13 @@ export const loadCertificateBoard = createServerFn({ method: "POST" })
         .not("checked_in_at", "is", null),
     ]);
 
+    // A blocked read must never be rendered as "nothing issued yet" — that is
+    // how a permission problem stayed invisible once already.
+    const failure = eventError ?? rowsError ?? countError;
+    if (failure) throw new Error(failure.message);
+
     const list = (rows ?? []) as StaffCertificateRow[];
+
     return {
       certificatesEnabled: event?.certificates_enabled ?? false,
       ccApproved: {
