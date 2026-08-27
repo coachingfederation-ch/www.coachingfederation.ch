@@ -173,7 +173,10 @@
       },
       {
         "group": "The Switzerland Chapter of ICF",
-        "items": ["Chapter member survey", "Organisational briefing 2026"]
+        "items": [
+          "Chapter member survey",
+          "Organisational briefing 2026"
+        ]
       }
     ],
     "download": {
@@ -471,6 +474,7 @@
   "programmes": {
     "eyebrow": "Featured programmes",
     "title": "Programmes tailored to your context.",
+    "enquirySubject": "Programme enquiry",
     "items": [
       {
         "tag": "Executive coaching",

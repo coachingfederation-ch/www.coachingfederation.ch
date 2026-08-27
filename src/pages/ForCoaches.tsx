@@ -13,6 +13,11 @@ import {
 } from "@/components/coaches/sections";
 import { useI18n, LocaleLink } from "@/i18n";
 
+/** ICF Global membership sign-up — the destination for every "become a member" CTA here. */
+const ICF_MEMBERSHIP_URL =
+  "https://coachingfederation.org/about/icf-membership/individual-membership/";
+
+
 export default function ForCoachesPage() {
   const { t, tList } = useI18n();
   const credentials = tList<{ level: string; hours: string; desc: string }>(
@@ -33,6 +38,7 @@ export default function ForCoachesPage() {
         }
         lede={t("coaches.hero.lede")}
         ctaLabel={t("coaches.hero.cta")}
+        ctaHref={ICF_MEMBERSHIP_URL}
       />
       <main id="main">
         <BenefitGrid />
@@ -86,7 +92,9 @@ export default function ForCoachesPage() {
                 ))}
               </ul>
               <a
-                href="#"
+                href="https://coachingfederation.org/about/social-responsibility/diversity-inclusion/deib-resources/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-6 inline-flex text-sm font-semibold text-primary hover:underline"
               >
                 {t("coaches.deib.cta")}
@@ -120,12 +128,12 @@ export default function ForCoachesPage() {
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
                 {t("coaches.volunteer.desc")}
               </p>
-              <a
-                href="#"
+              <LocaleLink
+                to="/volunteering"
                 className="mt-7 inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
               >
                 {t("coaches.volunteer.cta")}
-              </a>
+              </LocaleLink>
             </div>
             <div className="grid aspect-[4/3] place-items-center rounded-2xl bg-mark-blue text-mark-cream">
               <Mark name="Star01" className="h-1/2 w-1/2" />
@@ -141,19 +149,20 @@ export default function ForCoachesPage() {
             <h2 className="mx-auto mt-3 max-w-2xl display-lg">{t("coaches.join.title")}</h2>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <a
-                href="https://coachingfederation.org/about/icf-membership/individual-membership/"
+                href={ICF_MEMBERSHIP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex h-10 items-center rounded-full bg-white px-5 text-sm font-semibold text-primary transition hover:bg-white/90"
               >
                 {t("coaches.join.cta1")}
               </a>
-              <a
-                href="#"
+              <LocaleLink
+                to="/for-coaches"
+                hash="credentials"
                 className="inline-flex h-10 items-center rounded-full border border-white/30 px-5 text-sm font-semibold text-white transition hover:bg-white/10"
               >
                 {t("coaches.join.cta2")}
-              </a>
+              </LocaleLink>
             </div>
           </div>
         </section>

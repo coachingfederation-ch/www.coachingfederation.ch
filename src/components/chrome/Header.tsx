@@ -130,7 +130,7 @@ export function CompactHero({
   title,
   lede,
   ctaLabel,
-  ctaHref = "#",
+  ctaHref,
   actions,
 }: {
   eyebrow: string;
@@ -151,7 +151,9 @@ export function CompactHero({
           <p className="mt-6 max-w-2xl text-[17px] leading-[1.65] text-hero-foreground/85">
             {lede}
           </p>
-          {ctaLabel && (
+          {/* A CTA without a destination is never rendered — a labelled button that
+              goes nowhere is worse than no button at all. */}
+          {ctaLabel && ctaHref && (
             <div className="mt-9">
               <Button asChild variant="pill" size="pill">
                 <a href={ctaHref}>{ctaLabel} →</a>

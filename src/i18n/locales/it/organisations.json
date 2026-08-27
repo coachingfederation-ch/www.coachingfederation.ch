@@ -173,7 +173,10 @@
       },
       {
         "group": "The Switzerland Chapter of ICF",
-        "items": ["Sondaggio tra i membri del Chapter", "Briefing organizzativo 2026"]
+        "items": [
+          "Sondaggio tra i membri del Chapter",
+          "Briefing organizzativo 2026"
+        ]
       }
     ],
     "download": {
@@ -471,6 +474,7 @@
   "programmes": {
     "eyebrow": "Programmi in evidenza",
     "title": "Programmi su misura per il vostro contesto.",
+    "enquirySubject": "Richiesta programma",
     "items": [
       {
         "tag": "Executive coaching",
