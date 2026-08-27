@@ -55,6 +55,7 @@ import { Route as StaffOperationalStructureRouteImport } from './routes/_staff/o
 import { Route as StaffRolesRouteImport } from './routes/_staff/roles'
 import { Route as StaffVocabulariesRouteImport } from './routes/_staff/vocabularies'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AttendTokenRouteImport } from './routes/attend.$token'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as ClaimIndexRouteImport } from './routes/claim.index'
 import { Route as ClaimTokenRouteImport } from './routes/claim.$token'
@@ -350,6 +351,11 @@ const StaffVocabulariesRoute = StaffVocabulariesRouteImport.update({
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AttendTokenRoute = AttendTokenRouteImport.update({
+  id: '/attend/$token',
+  path: '/attend/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
@@ -735,6 +741,7 @@ export interface FileRoutesByFullPath {
   '/roles': typeof StaffRolesRoute
   '/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
+  '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/claim/$token': typeof ClaimTokenRoute
   '/coach/$profileId': typeof CoachProfileIdRoute
@@ -842,6 +849,7 @@ export interface FileRoutesByTo {
   '/roles': typeof StaffRolesRoute
   '/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
+  '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/claim/$token': typeof ClaimTokenRoute
   '/coach/$profileId': typeof CoachProfileIdRoute
@@ -956,6 +964,7 @@ export interface FileRoutesById {
   '/_staff/roles': typeof StaffRolesRoute
   '/_staff/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
+  '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/claim/$token': typeof ClaimTokenRoute
   '/coach/$profileId': typeof CoachProfileIdRoute
@@ -1069,6 +1078,7 @@ export interface FileRouteTypes {
     | '/roles'
     | '/vocabularies'
     | '/api/chat'
+    | '/attend/$token'
     | '/auth/callback'
     | '/claim/$token'
     | '/coach/$profileId'
@@ -1176,6 +1186,7 @@ export interface FileRouteTypes {
     | '/roles'
     | '/vocabularies'
     | '/api/chat'
+    | '/attend/$token'
     | '/auth/callback'
     | '/claim/$token'
     | '/coach/$profileId'
@@ -1289,6 +1300,7 @@ export interface FileRouteTypes {
     | '/_staff/roles'
     | '/_staff/vocabularies'
     | '/api/chat'
+    | '/attend/$token'
     | '/auth/callback'
     | '/claim/$token'
     | '/coach/$profileId'
@@ -1383,6 +1395,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiChatRoute: typeof ApiChatRoute
+  AttendTokenRoute: typeof AttendTokenRoute
   ClaimTokenRoute: typeof ClaimTokenRoute
   CoachProfileIdRoute: typeof CoachProfileIdRoute
   CommunitiesSlugRoute: typeof CommunitiesSlugRoute
@@ -1741,6 +1754,13 @@ declare module '@tanstack/react-router' {
       path: '/api/chat'
       fullPath: '/api/chat'
       preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/attend/$token': {
+      id: '/attend/$token'
+      path: '/attend/$token'
+      fullPath: '/attend/$token'
+      preLoaderRoute: typeof AttendTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/callback': {
@@ -2400,6 +2420,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiChatRoute: ApiChatRoute,
+  AttendTokenRoute: AttendTokenRoute,
   ClaimTokenRoute: ClaimTokenRoute,
   CoachProfileIdRoute: CoachProfileIdRoute,
   CommunitiesSlugRoute: CommunitiesSlugRoute,

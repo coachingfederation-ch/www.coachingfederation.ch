@@ -119,6 +119,19 @@ function TicketRoute() {
                   Show this code at the door.
                   {ticket.checkedIn ? " You are already checked in." : ""}
                 </p>
+                {/* Only rendered while an attendance window is actually open —
+                    online attendees confirm from wherever they are. */}
+                {ticket.attendanceSessionToken ? (
+                  <Button variant="pill" size="pill" asChild className="mt-2">
+                    <Link
+                      to="/attend/$token"
+                      params={{ token: ticket.attendanceSessionToken }}
+                      search={{ ticket: params.token, lang: ticket.locale }}
+                    >
+                      I&apos;m here
+                    </Link>
+                  </Button>
+                ) : null}
               </>
             )}
           </div>

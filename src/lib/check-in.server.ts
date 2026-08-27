@@ -86,7 +86,49 @@ export type TicketView = {
   locale: string;
   qrUrl: string;
   practicalNotes: string | null;
+  /** Set only while an attendance window is open and the seat may be counted. */
+  attendanceSessionToken: string | null;
 };
+
+/**
+ * The event's open attendance window, if any. A cancelled or unpaid seat never
+ * receives one: the confirm page would refuse it anyway, and offering the
+ * button would read as an invitation.
+ */
+export async function openAttendanceWindowToken(eventId: string): Promise<string | null> {
+  const { data } = await supabaseAdmin
+    .from("event_attendance_sessions")
+    .select("public_token, ends_at")
+    .eq("event_id", eventId)
+    .is("closed_at", null)
+    .gte("ends_at", new Date().toISOString())
+    .order("started_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return data?.public_token ?? null;
+}
+
+export type AttendanceSessionStatus = {
+  open: boolean;
+  endsAt: string;
+  eventTitle: string;
+};
+
+/**
+ * Public status of one attendance window. Carries nothing about attendees —
+ * the confirm page only needs to know whether it may ask for a ticket.
+ */
+export async function loadAttendanceSessionStatus(
+  token: string,
+): Promise<AttendanceSessionStatus | null> {
+  if (!TOKEN_PATTERN.test(token)) return null;
+  const { data, error } = await supabaseAdmin.rpc("attendance_session_status", {
+    _session_token: token,
+  });
+  if (error || !data) return null;
+  const row = data as { open: boolean; ends_at: string; event_title: string };
+  return { open: row.open, endsAt: row.ends_at, eventTitle: row.event_title };
+}
 
 /**
  * The attendee-facing ticket for one code. Public by design (the code is the
@@ -126,6 +168,10 @@ export async function loadTicket(token: string): Promise<TicketView | null> {
       tierName = localisedText(tier as unknown as Record<string, string | null>, "name", locale);
   }
 
+  const eligible =
+    registration.status !== "cancelled" &&
+    (registration.payment_status === "paid" || registration.payment_status === "not_required");
+
   return {
     registrationId: registration.id,
     attendeeName: registration.full_name,
@@ -145,6 +191,10 @@ export async function loadTicket(token: string): Promise<TicketView | null> {
       "practical_notes",
       locale,
     ),
+    attendanceSessionToken:
+      eligible && registration.checked_in_at === null
+        ? await openAttendanceWindowToken(registration.event_id)
+        : null,
   };
 }
 

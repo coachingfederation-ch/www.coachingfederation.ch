@@ -185,3 +185,137 @@ async function runCheckIn(context: any, registrationId: string): Promise<CheckIn
   }
   return { outcome: "not_found" };
 }
+
+/* ---------------------------------------------------------------------------
+ * Attendance windows
+ *
+ * The window is what makes an online audience countable: the organizer shows
+ * one QR on the shared screen, and each attendee still has to present their
+ * own ticket code. Both halves are checked inside the database routines — the
+ * functions below only carry them across.
+ * ------------------------------------------------------------------------ */
+
+export type AttendanceSession = {
+  id: string;
+  public_token: string;
+  ends_at: string;
+  grace_minutes: number;
+};
+
+/** Opens the window, or returns the one already open (idempotent in SQL). */
+export const openAttendanceSession = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z
+      .object({ eventId: z.string().uuid(), graceMinutes: z.number().int().min(0).max(180).optional() })
+      .parse(input),
+  )
+  .handler(async ({ context, data }): Promise<AttendanceSession> => {
+    await assertOrganizer(context);
+    // Run as the caller: the routine authorises on auth.uid().
+    const { data: result, error } = await context.supabase.rpc("open_event_attendance_session", {
+      _event_id: data.eventId,
+      _grace_minutes: data.graceMinutes ?? 30,
+    });
+    if (error) throw new Error(error.message);
+    return result as AttendanceSession;
+  });
+
+export const closeAttendanceSession = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const { error } = await context.supabase.rpc("close_event_attendance_session", {
+      _event_id: data.eventId,
+    });
+    if (error) throw new Error(error.message);
+    return { outcome: "closed" as const };
+  });
+
+export const loadAttendanceSession = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }): Promise<AttendanceSession | null> => {
+    await assertOrganizer(context);
+    const { data: result, error } = await context.supabase.rpc("get_event_attendance_session", {
+      _event_id: data.eventId,
+    });
+    if (error) throw new Error(error.message);
+    return (result as AttendanceSession | null) ?? null;
+  });
+
+export type AttendanceConfirmation =
+  | { outcome: "checked_in"; name: string }
+  | { outcome: "already"; name: string; checkedInAt: string | null }
+  | { outcome: "ineligible"; name: string; reason: string }
+  | { outcome: "wrong_event" }
+  | { outcome: "window_closed" }
+  | { outcome: "not_found" }
+  | { outcome: "rate_limited" };
+
+/**
+ * Public: an attendee confirms presence with the window code plus their own
+ * ticket code. Deliberately unauthenticated — guests have no account, and the
+ * ticket code is the credential. Throttled per IP because it is a public,
+ * token-guessing-shaped endpoint.
+ */
+export const confirmAttendance = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        sessionToken: z.string().trim().min(16).max(64),
+        ticketToken: z.string().trim().min(16).max(64),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }): Promise<AttendanceConfirmation> => {
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const { checkRateLimit, clientIp } = await import("./rate-limit.server");
+    const ip = clientIp(getRequest());
+    const verdict = await checkRateLimit("attendance-confirm", `ip:${ip}`, [
+      { windowSeconds: 300, max: 10 },
+    ]);
+    if (!verdict.allowed) return { outcome: "rate_limited" };
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: result, error } = await supabaseAdmin.rpc("self_check_in_with_ticket", {
+      _session_token: data.sessionToken,
+      _ticket_token: data.ticketToken,
+    });
+    if (error) throw new Error(error.message);
+
+    const row = result as { outcome: string; name?: string; reason?: string; checked_in_at?: string };
+    switch (row.outcome) {
+      case "checked_in":
+        return { outcome: "checked_in", name: row.name ?? "" };
+      case "already":
+        return {
+          outcome: "already",
+          name: row.name ?? "",
+          checkedInAt: row.checked_in_at ?? null,
+        };
+      case "ineligible":
+        return {
+          outcome: "ineligible",
+          name: row.name ?? "",
+          reason: row.reason ?? "ineligible",
+        };
+      case "wrong_event":
+        return { outcome: "wrong_event" };
+      case "window_closed":
+        return { outcome: "window_closed" };
+      default:
+        return { outcome: "not_found" };
+    }
+  });
+
+/** Public: is this attendance window still open? Backs the confirm page. */
+export const getAttendanceWindow = createServerFn({ method: "GET" })
+  .inputValidator((input: unknown) =>
+    z.object({ token: z.string().trim().min(16).max(64) }).parse(input),
+  )
+  .handler(async ({ data }) => {
+    const { loadAttendanceSessionStatus } = await import("./check-in.server");
+    return loadAttendanceSessionStatus(data.token);
+  });
