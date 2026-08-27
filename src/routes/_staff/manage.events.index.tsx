@@ -23,6 +23,7 @@ const searchSchema = z.object({
   community: fallback(z.string(), "").default(""),
   host: fallback(z.string(), "").default(""),
   city: fallback(z.string(), "").default(""),
+  credits: fallback(z.enum(["", "cce", "certificates", "any"]), "").default(""),
   status: fallback(z.string(), "").default(""),
   page: fallback(z.number().int(), 1).default(1),
 });
@@ -68,7 +69,7 @@ type EventsSearch = z.infer<typeof searchSchema>;
 const FILTER_STORE_KEY = "cms.manage-events.filters";
 
 const isPristine = (s: EventsSearch) =>
-  !s.q && !s.category && !s.community && !s.host && !s.city && !s.status && s.page === 1;
+  !s.q && !s.category && !s.community && !s.host && !s.city && !s.credits && !s.status && s.page === 1;
 
 function ManageEventsPage() {
   const { t } = useCms();
@@ -161,6 +162,9 @@ function ManageEventsPage() {
         if (search.category && row.category_id !== search.category) return false;
         if (search.community && row.community_id !== search.community) return false;
         if (search.host && !row.hosts.some((h) => h.id === search.host)) return false;
+        if (search.credits === "cce" && !row.cce_enabled) return false;
+        if (search.credits === "certificates" && !row.certificates_enabled) return false;
+        if (search.credits === "any" && !row.cce_enabled && !row.certificates_enabled) return false;
         if (search.city) {
           const isOnline = !row.city || row.city.trim().toLowerCase() === "online";
           if (search.city === ONLINE_CITY ? !isOnline : row.city !== search.city) return false;
@@ -177,7 +181,13 @@ function ManageEventsPage() {
   const start = (page - 1) * PAGE_SIZE;
   const visible = filtered.slice(start, start + PAGE_SIZE);
   const hasFilters = Boolean(
-    search.q || search.category || search.community || search.host || search.city || search.status,
+    search.q ||
+      search.category ||
+      search.community ||
+      search.host ||
+      search.city ||
+      search.credits ||
+      search.status,
   );
 
   // Creating an event runs through the guided wizard at /manage/events/new,
@@ -254,6 +264,17 @@ function ManageEventsPage() {
                   : []),
               ]}
             />
+            <FilterSelect
+              label={t("events.filters.credits")}
+              allLabel={t("events.filters.allCredits")}
+              value={search.credits}
+              onChange={(v) => setFilter({ credits: v })}
+              options={[
+                ["cce", t("events.filters.cceOnly")],
+                ["certificates", t("events.filters.certificatesOnly")],
+                ["any", t("events.filters.creditsAny")],
+              ]}
+            />
             <StatusFilter
               label={t("events.colStatus")}
               excluded={excludedStatuses}
@@ -283,6 +304,7 @@ function ManageEventsPage() {
                       community: "",
                       host: "",
                       city: "",
+                      credits: "" as const,
                       status: "",
                       page: 1,
                     },
@@ -337,6 +359,11 @@ function ManageEventsPage() {
                       {row.is_internal ? (
                         <span className="ml-2 inline-flex rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-accent-foreground">
                           {t("events.tag.membersOnly")}
+                        </span>
+                      ) : null}
+                      {row.cce_enabled ? (
+                        <span className="ml-2 inline-flex rounded-full bg-highlight px-2 py-0.5 text-[11px] font-semibold text-highlight-foreground">
+                          {t("events.tag.cce")}
                         </span>
                       ) : null}
                       {row.series_id ? (
