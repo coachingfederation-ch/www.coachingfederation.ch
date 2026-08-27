@@ -192,6 +192,7 @@ function EventEditor() {
           guest_registration_allowed: event.guest_registration_allowed,
           guest_passes_allowed: event.guest_passes_allowed ?? false,
           attendance_min_percent: event.attendance_min_percent ?? 80,
+          certificates_enabled: event.certificates_enabled ?? false,
           is_featured: event.is_featured,
           is_internal: event.is_internal ?? false,
           category_id: event.category_id,
