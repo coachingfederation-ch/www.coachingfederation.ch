@@ -8,7 +8,7 @@
  */
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "@/design-system/icf-welcome-design-system-a835df";
+import { Button, Logo } from "@/design-system/icf-welcome-design-system-a835df";
 import { SiteFooter, SiteHeaderBar } from "@/components/site-chrome";
 import { getCertificate } from "@/lib/certificates.functions";
 import type { CertificateView } from "@/lib/certificates.server";
@@ -19,7 +19,6 @@ import {
   type CertificateCopy,
 } from "@/lib/certificate-copy";
 import { LOCALE_ORDER, type Locale } from "@/i18n/config";
-import logoNegative from "@/assets/icf-vertical-negative.svg";
 
 export const Route = createFileRoute("/verify/certificate/$token")({
   loader: async ({ params }) => ({
@@ -184,13 +183,7 @@ function CertificateSheet({
   return (
     <article className="overflow-hidden rounded-3xl border border-border bg-card print:rounded-none print:border-0">
       <header className="bg-hero px-10 py-8 text-hero-foreground">
-        <img
-          src={logoNegative}
-          alt="The Switzerland Chapter of ICF"
-          className="h-20 w-auto"
-          width={120}
-          height={80}
-        />
+        <Logo orientation="vertical" tone="negative" className="h-20 w-auto" />
         <p className="eyebrow eyebrow-accent mt-6">{copy.eyebrow}</p>
       </header>
 
