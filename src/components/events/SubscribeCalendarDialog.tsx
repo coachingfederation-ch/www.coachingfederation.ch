@@ -73,7 +73,7 @@ export function SubscribeCalendarDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant={triggerVariant} size={triggerSize}>
           <CalendarPlus aria-hidden />
           {t("events.subscribe.action")}
         </Button>
