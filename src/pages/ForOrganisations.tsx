@@ -135,7 +135,12 @@ export default function ForOrganisationsPage() {
                 return (
                   <a
                     key={p.tag}
-                    href="#"
+                    // There are no programme detail pages yet, so the honest next
+                    // step is an enquiry to the office with the programme prefilled.
+                    href={`mailto:office@coachingfederation.ch?subject=${encodeURIComponent(
+                      `${t("organisations.programmes.enquirySubject")}: ${p.tag}`,
+                    )}`}
+                    target="_top"
                     className={
                       "group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-0.5 " +
                       CARD_SHADOW
