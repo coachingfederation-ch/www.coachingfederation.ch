@@ -2470,6 +2470,7 @@ export type Database = {
           created_at: string
           description: string | null
           ends_at: string | null
+          guest_passes_allowed: boolean
           guest_registration_allowed: boolean
           hero_marks: Json | null
           id: string
@@ -2515,6 +2516,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           ends_at?: string | null
+          guest_passes_allowed?: boolean
           guest_registration_allowed?: boolean
           hero_marks?: Json | null
           id?: string
@@ -2560,6 +2562,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           ends_at?: string | null
+          guest_passes_allowed?: boolean
           guest_registration_allowed?: boolean
           hero_marks?: Json | null
           id?: string
@@ -2687,6 +2690,143 @@ export type Database = {
           year?: number | null
         }
         Relationships: []
+      }
+      guest_passes: {
+        Row: {
+          converted_member_id: string | null
+          created_at: string
+          decision_at: string | null
+          decision_by: string | null
+          decision_note: string | null
+          event_id: string
+          follow_up_note: string | null
+          follow_up_status: string
+          guest_coaching_level: string | null
+          guest_email: string
+          guest_full_name: string
+          guest_location: string
+          guest_notes: string | null
+          guest_other_associations: string | null
+          guest_phone: string
+          guest_preferred_language: string | null
+          guest_professional_focus: string | null
+          id: string
+          inviting_member_cst_recno: string | null
+          inviting_member_email: string | null
+          inviting_member_id: string | null
+          inviting_member_name: string | null
+          inviting_member_status: string | null
+          registration_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          converted_member_id?: string | null
+          created_at?: string
+          decision_at?: string | null
+          decision_by?: string | null
+          decision_note?: string | null
+          event_id: string
+          follow_up_note?: string | null
+          follow_up_status?: string
+          guest_coaching_level?: string | null
+          guest_email: string
+          guest_full_name: string
+          guest_location: string
+          guest_notes?: string | null
+          guest_other_associations?: string | null
+          guest_phone: string
+          guest_preferred_language?: string | null
+          guest_professional_focus?: string | null
+          id?: string
+          inviting_member_cst_recno?: string | null
+          inviting_member_email?: string | null
+          inviting_member_id?: string | null
+          inviting_member_name?: string | null
+          inviting_member_status?: string | null
+          registration_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          converted_member_id?: string | null
+          created_at?: string
+          decision_at?: string | null
+          decision_by?: string | null
+          decision_note?: string | null
+          event_id?: string
+          follow_up_note?: string | null
+          follow_up_status?: string
+          guest_coaching_level?: string | null
+          guest_email?: string
+          guest_full_name?: string
+          guest_location?: string
+          guest_notes?: string | null
+          guest_other_associations?: string | null
+          guest_phone?: string
+          guest_preferred_language?: string | null
+          guest_professional_focus?: string | null
+          id?: string
+          inviting_member_cst_recno?: string | null
+          inviting_member_email?: string | null
+          inviting_member_id?: string | null
+          inviting_member_name?: string | null
+          inviting_member_status?: string | null
+          registration_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guest_passes_converted_member_id_fkey"
+            columns: ["converted_member_id"]
+            isOneToOne: false
+            referencedRelation: "coach_directory_public"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "guest_passes_converted_member_id_fkey"
+            columns: ["converted_member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guest_passes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guest_passes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guest_passes_inviting_member_id_fkey"
+            columns: ["inviting_member_id"]
+            isOneToOne: false
+            referencedRelation: "coach_directory_public"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "guest_passes_inviting_member_id_fkey"
+            columns: ["inviting_member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guest_passes_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "event_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       integration_config: {
         Row: {
@@ -4898,6 +5038,7 @@ export type Database = {
           community_slug: string | null
           description: string | null
           ends_at: string | null
+          guest_passes_allowed: boolean | null
           guest_registration_allowed: boolean | null
           hero_marks: Json | null
           id: string | null
