@@ -785,7 +785,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
+          "items": [
+            "Guidare progetti",
+            "Essere riconosciuti da ICFS per aver guidato iniziative"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1497,7 +1500,12 @@
       "allStatuses": "Tutti gli stati",
       "clear": "Azzera i filtri",
       "count": "{count} eventi",
-      "noMatches": "Nessun evento corrisponde a questi filtri."
+      "noMatches": "Nessun evento corrisponde a questi filtri.",
+      "credits": "Crediti",
+      "allCredits": "Tutti gli eventi",
+      "cceOnly": "Eventi CCE",
+      "certificatesOnly": "Eventi con certificato",
+      "creditsAny": "Eventi CCE o con certificato"
     },
     "pagination": {
       "range": "{from}–{to} di {total}",
@@ -1534,7 +1542,8 @@
     },
     "fieldInternal": "Solo per membri",
     "tag": {
-      "membersOnly": "Solo per membri"
+      "membersOnly": "Solo per membri",
+      "cce": "CCE"
     },
     "wizard": {
       "title": "Nuovo evento",
