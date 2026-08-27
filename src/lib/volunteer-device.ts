@@ -48,6 +48,14 @@ export function lastSessionNote(): string | null {
   }
 }
 
+function readToken(): string | null {
+  try {
+    return store()?.getItem(DEVICE_KEY) ?? null;
+  } catch {
+    return null;
+  }
+}
+
 /** Ask the server for a device token and keep it on this device. */
 export async function rememberDevice(): Promise<void> {
   const result = await issueVolunteerDeviceToken().catch(() => null);
@@ -58,6 +66,12 @@ export async function rememberDevice(): Promise<void> {
   } catch {
     /* private mode: the QR screen stays the fallback */
   }
+}
+
+/** Mint one only when this device has none, so launches don't pile up rows. */
+export async function ensureDeviceRemembered(): Promise<void> {
+  if (readToken()) return;
+  await rememberDevice();
 }
 
 export function forgetDevice(): void {
