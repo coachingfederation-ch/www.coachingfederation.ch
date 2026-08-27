@@ -20,6 +20,7 @@ import {
   AlertDialogTitle,
   Badge,
   Button,
+  Checkbox,
   Dialog,
   DialogContent,
   DialogFooter,
@@ -399,14 +400,16 @@ export function GuestPassesDashboard({
               />
             </div>
             {followUp?.matchedMemberId ? (
-              <label className="flex items-center gap-2 text-sm text-foreground">
-                <input
-                  type="checkbox"
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="guest-pass-link-member"
                   checked={linkMember}
-                  onChange={(e) => setLinkMember(e.target.checked)}
+                  onCheckedChange={(value) => setLinkMember(value === true)}
                 />
-                {t("guestPasses.followUpDialog.linkMember")}
-              </label>
+                <Label htmlFor="guest-pass-link-member">
+                  {t("guestPasses.followUpDialog.linkMember")}
+                </Label>
+              </div>
             ) : null}
           </div>
           <DialogFooter>
