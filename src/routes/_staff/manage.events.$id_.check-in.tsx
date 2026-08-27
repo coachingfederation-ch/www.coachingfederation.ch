@@ -374,3 +374,168 @@ function ResultCard({
     </button>
   );
 }
+
+/**
+ * Attendance window — the online half of the door.
+ *
+ * The organizer opens a window, puts the projector QR on the shared screen and
+ * closes it when the event ends. The QR names the window only; each attendee
+ * still presents their own ticket code, so a screenshot of the screen cannot
+ * mark anyone present.
+ */
+function AttendanceCard({
+  eventId,
+  t,
+  onChanged,
+}: {
+  eventId: string;
+  t: (k: string) => string;
+  onChanged: () => Promise<void>;
+}) {
+  const [session, setSession] = useState<AttendanceSession | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [projector, setProjector] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const refresh = useCallback(async () => {
+    try {
+      setSession(await loadAttendanceSession({ data: { eventId } }));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not load the attendance window");
+    }
+  }, [eventId]);
+
+  useEffect(() => {
+    void refresh();
+  }, [refresh]);
+
+  const open = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      setSession(await openAttendanceSession({ data: { eventId } }));
+      setProjector(true);
+      await onChanged();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not open the attendance window");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const close = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      await closeAttendanceSession({ data: { eventId } });
+      setSession(null);
+      setProjector(false);
+      await onChanged();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not close the attendance window");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <section className="rounded-2xl border border-border bg-card p-4">
+      <p className="flex items-center gap-2 text-sm font-semibold">
+        <Radio className="h-4 w-4 shrink-0" />
+        {t("events.attendance.title")}
+      </p>
+      <p className="mt-1 text-xs text-muted-foreground">{t("events.attendance.help")}</p>
+
+      {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
+
+      {session ? (
+        <div className="mt-3 space-y-3">
+          <p className="text-xs text-muted-foreground">
+            {t("events.attendance.openUntil")}{" "}
+            <span className="font-semibold text-foreground">
+              {new Date(session.ends_at).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          </p>
+          <button
+            type="button"
+            onClick={() => setProjector(true)}
+            className="min-h-11 w-full rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
+          >
+            {t("events.attendance.showOnScreen")}
+          </button>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => void close()}
+            className="min-h-11 w-full rounded-full border border-border px-5 py-2 text-sm font-semibold disabled:opacity-50"
+          >
+            {t("events.attendance.close")}
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => void open()}
+          className="mt-3 min-h-11 w-full rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+        >
+          {t("events.attendance.open")}
+        </button>
+      )}
+
+      {projector && session ? (
+        <ProjectorView token={session.public_token} t={t} onClose={() => setProjector(false)} />
+      ) : null}
+    </section>
+  );
+}
+
+/** Full-screen QR for the shared screen: nothing but the code and the URL. */
+function ProjectorView({
+  token,
+  t,
+  onClose,
+}: {
+  token: string;
+  t: (k: string) => string;
+  onClose: () => void;
+}) {
+  const [qr, setQr] = useState<string | null>(null);
+  const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    const target = `${window.location.origin}/attend/${token}`;
+    setUrl(target);
+    void QRCode.toDataURL(target, { width: 900, margin: 1 })
+      .then(setQr)
+      .catch(() => setQr(null));
+  }, [token]);
+
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-hero p-8 text-hero-foreground">
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label={t("events.attendance.closeProjector")}
+        className="absolute right-6 top-6 rounded-full border border-hero-foreground/40 p-2"
+      >
+        <X className="h-5 w-5" />
+      </button>
+      <p className="eyebrow eyebrow-accent">{t("events.attendance.projectorEyebrow")}</p>
+      <h2 className="text-center font-heading text-3xl sm:text-5xl">
+        {t("events.attendance.projectorTitle")}
+      </h2>
+      {qr ? (
+        <img
+          src={qr}
+          alt={t("events.attendance.projectorTitle")}
+          className="h-[45vh] w-[45vh] rounded-3xl bg-white p-4"
+        />
+      ) : null}
+      <p className="break-all text-center text-sm text-hero-foreground/80">{url}</p>
+    </div>
+  );
+}
