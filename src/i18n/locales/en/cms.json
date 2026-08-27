@@ -1497,7 +1497,12 @@
       "allStatuses": "All statuses",
       "clear": "Clear filters",
       "count": "{count} events",
-      "noMatches": "No events match these filters."
+      "noMatches": "No events match these filters.",
+      "credits": "Credits",
+      "allCredits": "All events",
+      "cceOnly": "CCE events",
+      "certificatesOnly": "Certificate events",
+      "creditsAny": "CCE or certificate events"
     },
     "pagination": {
       "range": "Showing {from}–{to} of {total}",
@@ -1534,7 +1539,8 @@
     },
     "fieldInternal": "For members only",
     "tag": {
-      "membersOnly": "Members only"
+      "membersOnly": "Members only",
+      "cce": "CCE"
     },
     "wizard": {
       "title": "New event",

@@ -1497,7 +1497,12 @@
       "allStatuses": "Tous les statuts",
       "clear": "Réinitialiser les filtres",
       "count": "{count} événements",
-      "noMatches": "Aucun événement ne correspond à ces filtres."
+      "noMatches": "Aucun événement ne correspond à ces filtres.",
+      "credits": "Crédits",
+      "allCredits": "Tous les événements",
+      "cceOnly": "Événements CCE",
+      "certificatesOnly": "Événements avec certificat",
+      "creditsAny": "Événements CCE ou avec certificat"
     },
     "pagination": {
       "range": "{from}–{to} sur {total}",
@@ -1534,7 +1539,8 @@
     },
     "fieldInternal": "Réservé aux membres",
     "tag": {
-      "membersOnly": "Réservé aux membres"
+      "membersOnly": "Réservé aux membres",
+      "cce": "CCE"
     },
     "wizard": {
       "title": "Nouvel événement",

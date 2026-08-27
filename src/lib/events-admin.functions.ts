@@ -15,9 +15,9 @@ import { HERO_MARK_LIMIT } from "./hero-design";
 import { expandRecurrence, occurrenceSlug, RECURRENCE_FREQUENCIES } from "./recurrence";
 
 const LIST_COLUMNS =
-  "id, series_id, slug, title, summary, language, status, starts_at, ends_at, timezone, location_mode, venue_name, city, capacity, is_featured, is_internal, category_id, region_id, organizer_id, updated_at";
+  "id, series_id, slug, title, summary, language, status, starts_at, ends_at, timezone, location_mode, venue_name, city, capacity, is_featured, is_internal, category_id, region_id, organizer_id, updated_at, cce_enabled, certificates_enabled";
 
-const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, tickets_enabled, guest_passes_allowed, practical_notes, published_at, content_updated_at, hero_marks, cce_enabled, attendance_min_percent, certificates_enabled`;
+const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, tickets_enabled, guest_passes_allowed, practical_notes, published_at, content_updated_at, hero_marks, attendance_min_percent`;
 
 /** One row of the staff events list, enriched with filterable labels. */
 export type ListedEvent = {
@@ -42,6 +42,8 @@ export type ListedEvent = {
   community_id: string | null;
   organizer_id: string | null;
   updated_at: string | null;
+  cce_enabled: boolean;
+  certificates_enabled: boolean;
   category_name: string | null;
   community_name: string | null;
   hosts: { id: string; name: string }[];
