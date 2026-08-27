@@ -236,6 +236,18 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
           </>
         }
         lede={t("events.hero.lede")}
+        actions={
+          <SubscribeCalendarDialog
+            filters={{
+              ...(community ? { community } : {}),
+              ...(category ? { category } : {}),
+              ...(region ? { region } : {}),
+              ...(lang ? { lang } : {}),
+            }}
+            triggerVariant="inverse-ghost"
+            triggerSize="pill"
+          />
+        }
       />
       <main id="main">
         <section className="bg-background py-10">
@@ -310,8 +322,8 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                 />
               </div>
             </div>
-            <div className="mt-4 flex flex-wrap items-center gap-4">
-              {hasFacetFilters ? (
+            {hasFacetFilters ? (
+              <div className="mt-4 flex flex-wrap items-center gap-4">
                 <button
                   type="button"
                   onClick={resetFilters}
@@ -319,16 +331,8 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                 >
                   {t("events.filters.reset")}
                 </button>
-              ) : null}
-              <SubscribeCalendarDialog
-                filters={{
-                  ...(community ? { community } : {}),
-                  ...(category ? { category } : {}),
-                  ...(region ? { region } : {}),
-                  ...(lang ? { lang } : {}),
-                }}
-              />
-            </div>
+              </div>
+            ) : null}
           </div>
         </section>
 

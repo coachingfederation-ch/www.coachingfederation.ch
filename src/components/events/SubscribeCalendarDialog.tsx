@@ -38,7 +38,16 @@ function feedUrl(filters: FeedFilters) {
   return `${SITE_URL}/api/public/events-feed.ics${query ? `?${query}` : ""}`;
 }
 
-export function SubscribeCalendarDialog({ filters }: { filters: FeedFilters }) {
+export function SubscribeCalendarDialog({
+  filters,
+  /** Use "inverse-ghost" when the trigger sits on a Deep Blue band. */
+  triggerVariant = "outline",
+  triggerSize = "sm",
+}: {
+  filters: FeedFilters;
+  triggerVariant?: "outline" | "inverse-ghost";
+  triggerSize?: "sm" | "pill";
+}) {
   const { t } = useI18n();
   const [filtered, setFiltered] = useState(true);
   const [copied, setCopied] = useState(false);
@@ -64,7 +73,7 @@ export function SubscribeCalendarDialog({ filters }: { filters: FeedFilters }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant={triggerVariant} size={triggerSize}>
           <CalendarPlus aria-hidden />
           {t("events.subscribe.action")}
         </Button>
