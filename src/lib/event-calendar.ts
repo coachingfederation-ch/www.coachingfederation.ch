@@ -57,32 +57,32 @@ function zonedParts(date: Date, timeZone: string) {
 }
 
 /** `YYYYMMDDTHHMMSS` in the event's own timezone. */
-function localStamp(date: Date, timeZone: string) {
+export function localStamp(date: Date, timeZone: string) {
   const p = zonedParts(date, timeZone);
   return `${p.year}${pad(p.month)}${pad(p.day)}T${pad(p.hour)}${pad(p.minute)}${pad(p.second)}`;
 }
 
-function utcStamp(date: Date) {
+export function utcStamp(date: Date) {
   return `${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(date.getUTCDate())}T${pad(
     date.getUTCHours(),
   )}${pad(date.getUTCMinutes())}${pad(date.getUTCSeconds())}Z`;
 }
 
 /** Offset of `timeZone` at `date`, in minutes east of UTC. */
-function offsetMinutes(date: Date, timeZone: string) {
+export function offsetMinutes(date: Date, timeZone: string) {
   const p = zonedParts(date, timeZone);
   const asUtc = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
   return Math.round((asUtc - date.getTime()) / 60_000);
 }
 
-function offsetString(minutes: number) {
+export function offsetString(minutes: number) {
   const sign = minutes < 0 ? "-" : "+";
   const abs = Math.abs(minutes);
   return `${sign}${pad(Math.floor(abs / 60))}${pad(abs % 60)}`;
 }
 
 /** RFC 5545 text escaping: backslash, semicolon, comma and newlines. */
-function escapeText(value: string) {
+export function escapeText(value: string) {
   return value
     .replace(/\\/g, "\\\\")
     .replace(/;/g, "\\;")
@@ -91,7 +91,7 @@ function escapeText(value: string) {
 }
 
 /** RFC 5545 caps content lines at 75 octets; fold on the byte boundary. */
-function foldLine(line: string) {
+export function foldLine(line: string) {
   if (line.length <= 73) return line;
   const chunks: string[] = [];
   let rest = line;

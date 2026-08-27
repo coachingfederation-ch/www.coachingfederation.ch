@@ -97,6 +97,7 @@ import { Route as ApiPublicClaimWavesRouteImport } from './routes/api/public/cla
 import { Route as ApiPublicEuropePulseScanRouteImport } from './routes/api/public/europe-pulse-scan'
 import { Route as ApiPublicEventFollowUpsRouteImport } from './routes/api/public/event-follow-ups'
 import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public/event-reminders'
+import { Route as ApiPublicEventsFeedDoticsRouteImport } from './routes/api/public/events-feed[.]ics'
 import { Route as ApiPublicLiveChatRouteImport } from './routes/api/public/live-chat'
 import { Route as ApiPublicLiveChatPurgeRouteImport } from './routes/api/public/live-chat-purge'
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
@@ -563,6 +564,12 @@ const ApiPublicEventRemindersRoute = ApiPublicEventRemindersRouteImport.update({
   path: '/api/public/event-reminders',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicEventsFeedDoticsRoute =
+  ApiPublicEventsFeedDoticsRouteImport.update({
+    id: '/api/public/events-feed.ics',
+    path: '/api/public/events-feed.ics',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicLiveChatRoute = ApiPublicLiveChatRouteImport.update({
   id: '/api/public/live-chat',
   path: '/api/public/live-chat',
@@ -766,6 +773,7 @@ export interface FileRoutesByFullPath {
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-follow-ups': typeof ApiPublicEventFollowUpsRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
+  '/api/public/events-feed.ics': typeof ApiPublicEventsFeedDoticsRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
@@ -872,6 +880,7 @@ export interface FileRoutesByTo {
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-follow-ups': typeof ApiPublicEventFollowUpsRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
+  '/api/public/events-feed.ics': typeof ApiPublicEventsFeedDoticsRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
@@ -985,6 +994,7 @@ export interface FileRoutesById {
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-follow-ups': typeof ApiPublicEventFollowUpsRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
+  '/api/public/events-feed.ics': typeof ApiPublicEventsFeedDoticsRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
@@ -1097,6 +1107,7 @@ export interface FileRouteTypes {
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-follow-ups'
     | '/api/public/event-reminders'
+    | '/api/public/events-feed.ics'
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
@@ -1203,6 +1214,7 @@ export interface FileRouteTypes {
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-follow-ups'
     | '/api/public/event-reminders'
+    | '/api/public/events-feed.ics'
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
@@ -1315,6 +1327,7 @@ export interface FileRouteTypes {
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-follow-ups'
     | '/api/public/event-reminders'
+    | '/api/public/events-feed.ics'
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
@@ -1390,6 +1403,7 @@ export interface RootRouteChildren {
   ApiPublicEuropePulseScanRoute: typeof ApiPublicEuropePulseScanRoute
   ApiPublicEventFollowUpsRoute: typeof ApiPublicEventFollowUpsRoute
   ApiPublicEventRemindersRoute: typeof ApiPublicEventRemindersRoute
+  ApiPublicEventsFeedDoticsRoute: typeof ApiPublicEventsFeedDoticsRoute
   ApiPublicLiveChatRoute: typeof ApiPublicLiveChatRoute
   ApiPublicLiveChatPurgeRoute: typeof ApiPublicLiveChatPurgeRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
@@ -2023,6 +2037,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicEventRemindersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/events-feed.ics': {
+      id: '/api/public/events-feed.ics'
+      path: '/api/public/events-feed.ics'
+      fullPath: '/api/public/events-feed.ics'
+      preLoaderRoute: typeof ApiPublicEventsFeedDoticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/live-chat': {
       id: '/api/public/live-chat'
       path: '/api/public/live-chat'
@@ -2399,6 +2420,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicEuropePulseScanRoute: ApiPublicEuropePulseScanRoute,
   ApiPublicEventFollowUpsRoute: ApiPublicEventFollowUpsRoute,
   ApiPublicEventRemindersRoute: ApiPublicEventRemindersRoute,
+  ApiPublicEventsFeedDoticsRoute: ApiPublicEventsFeedDoticsRoute,
   ApiPublicLiveChatRoute: ApiPublicLiveChatRoute,
   ApiPublicLiveChatPurgeRoute: ApiPublicLiveChatPurgeRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,

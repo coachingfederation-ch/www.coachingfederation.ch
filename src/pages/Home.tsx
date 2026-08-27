@@ -36,7 +36,7 @@ function HeroHeader() {
 
         <div className="grid gap-12 md:grid-cols-[1.05fr_1fr] md:items-center md:gap-16">
           <div className="max-w-2xl">
-            <p className="eyebrow text-accent">{t("home.hero.eyebrow")}</p>
+            <p className="eyebrow-accent">{t("home.hero.eyebrow")}</p>
             <h1 className="display-xl mt-4">
               {t("home.hero.titlePre")}
               <span className="text-accent">{t("home.hero.titleAccent")}</span>
@@ -404,7 +404,7 @@ function Join() {
       />
       <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 py-24 md:grid-cols-[1.2fr_1fr] md:items-center">
         <div>
-          <p className="eyebrow text-accent">{t("home.join.eyebrow")}</p>
+          <p className="eyebrow-accent">{t("home.join.eyebrow")}</p>
           <h2 className="mt-3 display-lg">{t("home.join.title")}</h2>
           <p className="mt-5 max-w-lg text-base leading-relaxed text-hero-foreground/85">
             {t("home.join.subtitle")}

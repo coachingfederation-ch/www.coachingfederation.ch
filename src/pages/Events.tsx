@@ -6,6 +6,7 @@
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Mark, type MarkName } from "@/components/marks";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
+import { SubscribeCalendarDialog } from "@/components/events/SubscribeCalendarDialog";
 import { LocaleLink, useI18n } from "@/i18n";
 import {
   eventPlace,
@@ -308,15 +309,25 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                 />
               </div>
             </div>
-            {hasFacetFilters ? (
-              <button
-                type="button"
-                onClick={resetFilters}
-                className="mt-4 text-sm font-semibold text-primary hover:underline"
-              >
-                {t("events.filters.reset")}
-              </button>
-            ) : null}
+            <div className="mt-4 flex flex-wrap items-center gap-4">
+              {hasFacetFilters ? (
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="text-sm font-semibold text-primary hover:underline"
+                >
+                  {t("events.filters.reset")}
+                </button>
+              ) : null}
+              <SubscribeCalendarDialog
+                filters={{
+                  ...(community ? { community } : {}),
+                  ...(category ? { category } : {}),
+                  ...(region ? { region } : {}),
+                  ...(lang ? { lang } : {}),
+                }}
+              />
+            </div>
           </div>
         </section>
 
@@ -492,7 +503,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
 
         <section className="bg-hero text-hero-foreground">
           <div className="mx-auto max-w-7xl px-8 py-20 text-center">
-            <p className="eyebrow !text-accent">{t("events.cta.eyebrow")}</p>
+            <p className="eyebrow-accent">{t("events.cta.eyebrow")}</p>
             <h2 className="mx-auto mt-3 max-w-2xl display-lg">{t("events.cta.title")}</h2>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <LocaleLink

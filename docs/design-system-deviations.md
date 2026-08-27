@@ -38,23 +38,11 @@ form submit, the Home case-studies link, `size="pill"`). Only the on-dark case d
 
 ---
 
-## 2. `eyebrow` forced to the accent colour on Deep Blue
+## 2. `eyebrow` forced to the accent colour on Deep Blue — resolved
 
-**What deviates** — Section eyebrows on Deep Blue bands force Yellow or white with
-`eyebrow !text-accent` / `eyebrow !text-hero-foreground`.
-
-**Files** — `src/pages/Home.tsx`, `src/pages/About.tsx`, `src/pages/Events.tsx`,
-`src/pages/ForCoaches.tsx`, `src/pages/ForOrganisations.tsx`, `src/pages/Insights.tsx`,
-`src/components/chrome/Header.tsx`, `src/components/organisations/DeckSection.tsx`,
-`src/components/organisations/CultureSurvey.tsx`.
-
-**Why** — The `eyebrow` utility hardcodes `color: var(--color-primary)`, which has no
-usable contrast on Deep Blue. ICF brand rules make Yellow-on-Deep-Blue the one permitted
-small-text accent pairing, so the override restores a sanctioned pairing rather than
-inventing one.
-
-**Revisit when** — `eyebrow` inherits `currentColor`, or the design system ships an
-on-dark / accent variant of it.
+**Resolved** — The design system now ships `eyebrow-accent` (Yellow on Deep Blue) and
+`eyebrow-inverse` (white on Deep Blue). All former `eyebrow !text-accent` /
+`eyebrow !text-hero-foreground` overrides now use those utilities; no deviation remains.
 
 ---
 

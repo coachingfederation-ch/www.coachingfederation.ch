@@ -239,5 +239,18 @@
       "not_allowed": "This event does not offer Guest Passes.",
       "error": "Something went wrong. Please try again."
     }
+  },
+  "subscribe": {
+    "action": "Subscribe to calendar",
+    "title": "Subscribe to our events calendar",
+    "lede": "Add one link once and our events keep appearing and updating in your own calendar.",
+    "scopeFiltered": "Only my current filters",
+    "scopeAll": "All chapter events",
+    "google": "Add to Google Calendar",
+    "webcal": "Add to Apple or Outlook",
+    "urlLabel": "Calendar feed address",
+    "copy": "Copy link",
+    "copied": "Copied",
+    "note": "The feed shows the coming 12 months and refreshes automatically, usually every few hours."
   }
 }
