@@ -21,7 +21,8 @@
     "chatInsights": "Chat-Agent-Insights",
     "knowledge": "Assistenz-Wissen",
     "liveChat": "Live-Chat",
-    "newsletters": "Newsletter"
+    "newsletters": "Newsletter",
+    "guestPasses": "Gastpässe"
   },
   "auth": {
     "signInSub": "Melden Sie sich an, um fortzufahren",
@@ -2090,5 +2091,110 @@
     "translate": "Übersetzen",
     "translating": "Wird übersetzt…",
     "translateFailed": "Die Bezeichnungen konnten nicht automatisch übersetzt werden — Sie können sie von Hand ergänzen."
+  },
+  "guestPasses": {
+    "title": "Gastpässe",
+    "subtitle": "Gastpässe bewilligen, den kostenlosen Platz erstellen und nach dem Anlass nachfassen.",
+    "counts": {
+      "requests": "Anfragen",
+      "approved": "Bewilligt / registriert",
+      "attended": "Teilgenommen",
+      "declined": "Abgelehnt / storniert",
+      "converted": "Mitglied geworden"
+    },
+    "filters": {
+      "label": "Status",
+      "all": "Alle"
+    },
+    "columns": {
+      "member": "Einladendes Mitglied",
+      "guest": "Gast",
+      "event": "Anlass",
+      "status": "Status",
+      "note": "Entscheidnotiz",
+      "followUp": "Nachfassen",
+      "actions": "Aktionen"
+    },
+    "status": {
+      "pending": "Offen",
+      "approved": "Bewilligt",
+      "registered": "Registriert",
+      "attended": "Teilgenommen",
+      "declined": "Abgelehnt",
+      "cancelled": "Storniert"
+    },
+    "followUpStatus": {
+      "none": "Kein Nachfassen",
+      "contacted": "Kontaktiert",
+      "converted": "Mitglied geworden",
+      "closed": "Abgeschlossen"
+    },
+    "actions": {
+      "approve": "Bewilligen",
+      "decline": "Ablehnen",
+      "cancel": "Stornieren",
+      "followUp": "Nachfassen",
+      "save": "Speichern",
+      "close": "Schliessen",
+      "export": "CSV herunterladen"
+    },
+    "dialog": {
+      "approveTitle": "Diesen Gastpass bewilligen?",
+      "approveBody": "Der Gast erhält einen kostenlosen Platz und sein Ticket per E-Mail. Die Community-Leitung und das einladende Mitglied werden informiert.",
+      "declineTitle": "Diesen Gastpass ablehnen?",
+      "declineBody": "Das einladende Mitglied wird informiert. Bitte kurz begründen.",
+      "cancelTitle": "Diesen Gastpass stornieren?",
+      "cancelBody": "Ein bereits erstellter Platz wird freigegeben. Das lässt sich nicht rückgängig machen.",
+      "noteLabel": "Notiz",
+      "notePlaceholder": "Für das einladende Mitglied sichtbar",
+      "confirm": "Bestätigen",
+      "back": "Zurück"
+    },
+    "followUpDialog": {
+      "title": "Nachfassen",
+      "statusLabel": "Status",
+      "noteLabel": "Notiz",
+      "linkMember": "Passenden Mitgliederdatensatz verknüpfen",
+      "matchFound": "Für diese Adresse besteht jetzt eine aktive Mitgliedschaft."
+    },
+    "empty": "Noch keine Gastpässe.",
+    "emptyFiltered": "Keine Gastpässe mit diesem Status.",
+    "toast": {
+      "approved": "Gastpass bewilligt.",
+      "declined": "Gastpass abgelehnt.",
+      "cancelled": "Gastpass storniert.",
+      "saved": "Nachfassen gespeichert.",
+      "error": "Etwas ist schiefgelaufen. Bitte nochmals versuchen."
+    },
+    "memberNumber": "Mitglieds-Nr.",
+    "language": "Bevorzugte Sprache",
+    "phone": "Telefon",
+    "location": "Ort",
+    "leaderPanel": {
+      "title": "Bewilligte Gäste",
+      "description": "Von Mitgliedern eingeladene Gäste für diesen Anlass. Membership & Engagement bewilligt sie.",
+      "invitedBy": "Eingeladen von",
+      "empty": "Keine bewilligten Gäste für diesen Anlass."
+    },
+    "csv": {
+      "event": "Anlass",
+      "eventDate": "Datum",
+      "memberName": "Einladendes Mitglied",
+      "memberEmail": "E-Mail Mitglied",
+      "memberNumber": "Mitgliedsnummer",
+      "guestName": "Gast",
+      "guestEmail": "E-Mail Gast",
+      "guestPhone": "Telefon Gast",
+      "guestLocation": "Ort Gast",
+      "guestLanguage": "Bevorzugte Sprache",
+      "status": "Status",
+      "decisionAt": "Entscheiddatum",
+      "decisionNote": "Entscheidnotiz",
+      "attended": "Teilgenommen",
+      "followUpStatus": "Status Nachfassen",
+      "followUpNote": "Notiz Nachfassen",
+      "converted": "Mitglied geworden",
+      "createdAt": "Angefragt am"
+    }
   }
 }

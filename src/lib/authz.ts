@@ -86,3 +86,14 @@ export async function assertOrganizer(context: AuthedContext): Promise<string> {
   if (!roles.some((r) => allowed.includes(r))) throw new Error("Forbidden");
   return context.userId;
 }
+
+/**
+ * Throws unless the caller may do Membership & Engagement work: the M&E grant
+ * (`membership`) or either admin level. Guest pass decisions run through this.
+ */
+export async function assertMembership(context: AuthedContext): Promise<string> {
+  const roles = await rolesOf(context);
+  const allowed: AppRole[] = ["admin", "administrator", "membership"];
+  if (!roles.some((r) => allowed.includes(r))) throw new Error("Forbidden");
+  return context.userId;
+}

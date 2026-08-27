@@ -21,7 +21,8 @@
     "chatInsights": "Chat Agent Insights",
     "knowledge": "Connaissances de l'assistant",
     "liveChat": "Chat en direct",
-    "newsletters": "Newsletters"
+    "newsletters": "Newsletters",
+    "guestPasses": "Pass invités"
   },
   "auth": {
     "signInSub": "Connectez-vous pour continuer",
@@ -2090,5 +2091,110 @@
     "translate": "Traduire",
     "translating": "Traduction en cours…",
     "translateFailed": "Les libellés n'ont pas pu être traduits automatiquement — vous pouvez les saisir à la main."
+  },
+  "guestPasses": {
+    "title": "Pass invités",
+    "subtitle": "Approuver les pass invités, créer la place offerte et assurer le suivi après l'événement.",
+    "counts": {
+      "requests": "Demandes",
+      "approved": "Approuvés / inscrits",
+      "attended": "Présents",
+      "declined": "Refusés / annulés",
+      "converted": "Devenus membres"
+    },
+    "filters": {
+      "label": "Statut",
+      "all": "Tous"
+    },
+    "columns": {
+      "member": "Membre invitant",
+      "guest": "Invité",
+      "event": "Événement",
+      "status": "Statut",
+      "note": "Note de décision",
+      "followUp": "Suivi",
+      "actions": "Actions"
+    },
+    "status": {
+      "pending": "En attente",
+      "approved": "Approuvé",
+      "registered": "Inscrit",
+      "attended": "Présent",
+      "declined": "Refusé",
+      "cancelled": "Annulé"
+    },
+    "followUpStatus": {
+      "none": "Pas de suivi",
+      "contacted": "Contacté",
+      "converted": "Devenu membre",
+      "closed": "Clos"
+    },
+    "actions": {
+      "approve": "Approuver",
+      "decline": "Refuser",
+      "cancel": "Annuler",
+      "followUp": "Suivi",
+      "save": "Enregistrer",
+      "close": "Fermer",
+      "export": "Télécharger le CSV"
+    },
+    "dialog": {
+      "approveTitle": "Approuver ce pass invité ?",
+      "approveBody": "L'invité reçoit une place offerte et son billet par e-mail. La direction de la communauté et le membre invitant sont informés.",
+      "declineTitle": "Refuser ce pass invité ?",
+      "declineBody": "Le membre invitant est informé. Merci d'indiquer brièvement la raison.",
+      "cancelTitle": "Annuler ce pass invité ?",
+      "cancelBody": "Toute place offerte est libérée. Cette action est définitive.",
+      "noteLabel": "Note",
+      "notePlaceholder": "Visible par le membre invitant",
+      "confirm": "Confirmer",
+      "back": "Retour"
+    },
+    "followUpDialog": {
+      "title": "Suivi",
+      "statusLabel": "Statut",
+      "noteLabel": "Note",
+      "linkMember": "Lier la fiche membre correspondante",
+      "matchFound": "Une adhésion active existe désormais pour cette adresse."
+    },
+    "empty": "Aucun pass invité pour le moment.",
+    "emptyFiltered": "Aucun pass invité avec ce statut.",
+    "toast": {
+      "approved": "Pass invité approuvé.",
+      "declined": "Pass invité refusé.",
+      "cancelled": "Pass invité annulé.",
+      "saved": "Suivi enregistré.",
+      "error": "Une erreur est survenue. Merci de réessayer."
+    },
+    "memberNumber": "N° de membre",
+    "language": "Langue préférée",
+    "phone": "Téléphone",
+    "location": "Lieu",
+    "leaderPanel": {
+      "title": "Invités approuvés",
+      "description": "Invités proposés par des membres pour cet événement. Membership & Engagement les approuve.",
+      "invitedBy": "Invité par",
+      "empty": "Aucun invité approuvé pour cet événement."
+    },
+    "csv": {
+      "event": "Événement",
+      "eventDate": "Date",
+      "memberName": "Membre invitant",
+      "memberEmail": "E-mail du membre",
+      "memberNumber": "Numéro de membre",
+      "guestName": "Invité",
+      "guestEmail": "E-mail de l'invité",
+      "guestPhone": "Téléphone de l'invité",
+      "guestLocation": "Lieu de l'invité",
+      "guestLanguage": "Langue préférée",
+      "status": "Statut",
+      "decisionAt": "Date de décision",
+      "decisionNote": "Note de décision",
+      "attended": "Présent",
+      "followUpStatus": "Statut du suivi",
+      "followUpNote": "Note de suivi",
+      "converted": "Devenu membre",
+      "createdAt": "Demandé le"
+    }
   }
 }

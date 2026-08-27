@@ -39,6 +39,8 @@ export const STAFF_ROLES: AppRole[] = [
   "editor",
   "organizer",
   "publisher",
+  // Membership & Engagement work (guest passes) lives inside the CMS shell.
+  "membership",
 ];
 
 /** The roles an admin may grant or revoke through the application. */

@@ -21,7 +21,8 @@
     "chatInsights": "Chat Agent Insights",
     "knowledge": "Conoscenze dell'assistente",
     "liveChat": "Chat dal vivo",
-    "newsletters": "Newsletter"
+    "newsletters": "Newsletter",
+    "guestPasses": "Pass ospiti"
   },
   "auth": {
     "signInSub": "Accedi per continuare",
@@ -2090,5 +2091,110 @@
     "translate": "Traduci",
     "translating": "Traduzione in corso…",
     "translateFailed": "Non è stato possibile tradurre automaticamente le etichette — puoi inserirle a mano."
+  },
+  "guestPasses": {
+    "title": "Pass ospiti",
+    "subtitle": "Approvare i pass ospiti, creare il posto offerto e dare seguito dopo l'evento.",
+    "counts": {
+      "requests": "Richieste",
+      "approved": "Approvati / iscritti",
+      "attended": "Presenti",
+      "declined": "Rifiutati / annullati",
+      "converted": "Diventati soci"
+    },
+    "filters": {
+      "label": "Stato",
+      "all": "Tutti"
+    },
+    "columns": {
+      "member": "Socio invitante",
+      "guest": "Ospite",
+      "event": "Evento",
+      "status": "Stato",
+      "note": "Nota della decisione",
+      "followUp": "Follow-up",
+      "actions": "Azioni"
+    },
+    "status": {
+      "pending": "In attesa",
+      "approved": "Approvato",
+      "registered": "Iscritto",
+      "attended": "Presente",
+      "declined": "Rifiutato",
+      "cancelled": "Annullato"
+    },
+    "followUpStatus": {
+      "none": "Nessun follow-up",
+      "contacted": "Contattato",
+      "converted": "Diventato socio",
+      "closed": "Chiuso"
+    },
+    "actions": {
+      "approve": "Approva",
+      "decline": "Rifiuta",
+      "cancel": "Annulla",
+      "followUp": "Follow-up",
+      "save": "Salva",
+      "close": "Chiudi",
+      "export": "Scarica il CSV"
+    },
+    "dialog": {
+      "approveTitle": "Approvare questo pass ospite?",
+      "approveBody": "L'ospite riceve un posto offerto e il biglietto via e-mail. La guida della community e il socio invitante vengono informati.",
+      "declineTitle": "Rifiutare questo pass ospite?",
+      "declineBody": "Il socio invitante viene informato. Indica brevemente il motivo.",
+      "cancelTitle": "Annullare questo pass ospite?",
+      "cancelBody": "Un eventuale posto offerto viene liberato. L'operazione è definitiva.",
+      "noteLabel": "Nota",
+      "notePlaceholder": "Visibile al socio invitante",
+      "confirm": "Conferma",
+      "back": "Indietro"
+    },
+    "followUpDialog": {
+      "title": "Follow-up",
+      "statusLabel": "Stato",
+      "noteLabel": "Nota",
+      "linkMember": "Collega la scheda socio corrispondente",
+      "matchFound": "Per questo indirizzo esiste ora un'iscrizione attiva."
+    },
+    "empty": "Nessun pass ospite finora.",
+    "emptyFiltered": "Nessun pass ospite con questo stato.",
+    "toast": {
+      "approved": "Pass ospite approvato.",
+      "declined": "Pass ospite rifiutato.",
+      "cancelled": "Pass ospite annullato.",
+      "saved": "Follow-up salvato.",
+      "error": "Qualcosa è andato storto. Riprova."
+    },
+    "memberNumber": "N. socio",
+    "language": "Lingua preferita",
+    "phone": "Telefono",
+    "location": "Luogo",
+    "leaderPanel": {
+      "title": "Ospiti approvati",
+      "description": "Ospiti invitati dai soci per questo evento. Membership & Engagement li approva.",
+      "invitedBy": "Invitato da",
+      "empty": "Nessun ospite approvato per questo evento."
+    },
+    "csv": {
+      "event": "Evento",
+      "eventDate": "Data",
+      "memberName": "Socio invitante",
+      "memberEmail": "E-mail del socio",
+      "memberNumber": "Numero socio",
+      "guestName": "Ospite",
+      "guestEmail": "E-mail dell'ospite",
+      "guestPhone": "Telefono dell'ospite",
+      "guestLocation": "Luogo dell'ospite",
+      "guestLanguage": "Lingua preferita",
+      "status": "Stato",
+      "decisionAt": "Data della decisione",
+      "decisionNote": "Nota della decisione",
+      "attended": "Presente",
+      "followUpStatus": "Stato follow-up",
+      "followUpNote": "Nota follow-up",
+      "converted": "Diventato socio",
+      "createdAt": "Richiesto il"
+    }
   }
 }
