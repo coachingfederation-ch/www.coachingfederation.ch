@@ -64,9 +64,7 @@ export function AttendanceImportCard({ eventId, attendees, t, onChanged }: Props
     setNotice(null);
     try {
       const content = await file.text();
-      setPreview(
-        await uploadAttendanceCsv({ data: { eventId, filename: file.name, content } }),
-      );
+      setPreview(await uploadAttendanceCsv({ data: { eventId, filename: file.name, content } }));
       await refreshHistory();
     } catch (e) {
       setError(e instanceof Error ? e.message : t("events.attendance.import.uploadFailed"));
@@ -170,8 +168,8 @@ export function AttendanceImportCard({ eventId, attendees, t, onChanged }: Props
         <div className="mt-4 space-y-3">
           <p className="text-xs text-muted-foreground">
             {t("events.attendance.import.threshold")} {preview.thresholdMinutes}{" "}
-            {t("events.attendance.import.minutes")} ({preview.minPercent}% ·{" "}
-            {preview.lengthMinutes} {t("events.attendance.import.minutes")})
+            {t("events.attendance.import.minutes")} ({preview.minPercent}% · {preview.lengthMinutes}{" "}
+            {t("events.attendance.import.minutes")})
           </p>
 
           <div className="overflow-x-auto">
@@ -257,11 +255,7 @@ export function AttendanceImportCard({ eventId, attendees, t, onChanged }: Props
                 <button type="button" className={buttonPrimary} disabled={busy} onClick={apply}>
                   {t("events.attendance.import.apply")} {willCheckIn}
                 </button>
-                <button
-                  type="button"
-                  className={buttonGhost}
-                  onClick={() => setConfirming(false)}
-                >
+                <button type="button" className={buttonGhost} onClick={() => setConfirming(false)}>
                   {t("events.attendance.import.cancel")}
                 </button>
               </div>

@@ -12,10 +12,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertOrganizer } from "./authz";
-import {
-  EVENT_ATTENDANCE_IMPORT_BUCKET,
-  EVENT_ATTENDANCE_IMPORT_TTL_SECONDS,
-} from "./storage";
+import { EVENT_ATTENDANCE_IMPORT_BUCKET, EVENT_ATTENDANCE_IMPORT_TTL_SECONDS } from "./storage";
 
 export type AttendanceImportStats = {
   rows: number;
@@ -296,9 +293,8 @@ export const loadAttendanceImport = createServerFn({ method: "POST" })
     if (error || !row) throw new Error("Import not found");
 
     const event = await loadManagedEvent(context, (row as unknown as AttendanceImport).event_id);
-    const { scheduledLengthMinutes, attendanceThresholdMinutes } = await import(
-      "./attendance-import.server"
-    );
+    const { scheduledLengthMinutes, attendanceThresholdMinutes } =
+      await import("./attendance-import.server");
     const lengthMinutes = scheduledLengthMinutes(event.starts_at, event.ends_at);
 
     return {

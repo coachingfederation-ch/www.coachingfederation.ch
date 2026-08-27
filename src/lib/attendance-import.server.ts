@@ -68,7 +68,11 @@ function detectDelimiter(headerLine: string): string {
 
 /* ------------------------------------------------------------ mapping --- */
 
-const norm = (s: string) => s.toLowerCase().replace(/[\s_]+/g, " ").trim();
+const norm = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[\s_]+/g, " ")
+    .trim();
 
 const ZOOM_NAME = ["name (original name)", "name", "display name", "user name"];
 const ZOOM_EMAIL = ["email", "user email", "email address"];

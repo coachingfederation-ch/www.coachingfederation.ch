@@ -70,8 +70,6 @@ export function addHoursToLocalInput(value: string, hours: number) {
   return toLocalInput(d.toISOString());
 }
 
-
-
 export function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
