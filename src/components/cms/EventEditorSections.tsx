@@ -739,6 +739,14 @@ export function EventPublishingSection({
         </div>
       </Section>
 
+      {/* Who is coming as a guest. Read-only here: the decision belongs to
+          Membership & Engagement, the leader only needs to welcome them. */}
+      {event.guest_passes_allowed ? (
+        <div className="mt-6">
+          <ApprovedGuestsPanel eventId={event.id} />
+        </div>
+      ) : null}
+
       {ticketsSection}
 
       <div className="mt-8 flex flex-wrap items-center gap-3">
