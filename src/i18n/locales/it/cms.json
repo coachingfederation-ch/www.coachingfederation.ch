@@ -811,6 +811,14 @@
         "fallback": "Il Volunteering Director",
         "cta": "Invia e-mail"
       }
+    },
+    "certificates": {
+      "title": "Attestati",
+      "help": "Tutti gli attestati ottenuti ai nostri eventi. Aprine uno per stamparlo di nuovo.",
+      "empty": "Non hai ancora attestati.",
+      "completedOn": "Completato il",
+      "serial": "Numero",
+      "open": "Apri"
     }
   },
   "noAccess": {
@@ -1689,7 +1697,38 @@
         "saveDraft": "Salva bozza",
         "publish": "Pubblica post"
       }
-    }
+    },
+    "certificates": {
+      "title": "Attestati di partecipazione",
+      "help": "Rilascia un attestato a tutte le persone presenti. I partecipanti lo ricevono via e-mail e possono stamparlo da una pagina di verifica.",
+      "disabled": "Gli attestati sono disattivati per questo evento. Attivali nelle impostazioni.",
+      "issue": "Rilascia gli attestati",
+      "issuing": "Rilascio in corso…",
+      "checkedIn": "Presenti",
+      "issued": "Rilasciati",
+      "revoked": "Ritirati",
+      "pendingEmails": "E-mail in sospeso",
+      "hoursNote": "Le ore CCE approvate sono riportate su ogni attestato.",
+      "attendanceOnly": "Solo partecipazione",
+      "colHolder": "Partecipante",
+      "colSerial": "Numero",
+      "colHours": "Ore",
+      "colEmail": "E-mail",
+      "emailSent": "Inviata",
+      "emailNotSent": "Non inviata",
+      "emailSending": "Invio…",
+      "emailFailed": "Non riuscito",
+      "view": "Vedi",
+      "resend": "Invia di nuovo",
+      "reissue": "Rilascia di nuovo",
+      "revoke": "Ritira",
+      "revokeConfirm": "Ritirare questo attestato? La persona viene informata che non è più valido.",
+      "empty": "Nessun attestato per ora.",
+      "failed": "Non ha funzionato. Riprova.",
+      "issuedToast": "{count} attestato/i rilasciato/i."
+    },
+    "fieldCertificates": "Rilascia attestati di partecipazione",
+    "fieldCertificatesHelp": "Se attivo, è possibile rilasciare un attestato a tutte le persone presenti."
   },
   "eventTranslations": {
     "title": "Traduzioni",
