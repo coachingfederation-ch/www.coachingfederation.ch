@@ -87,6 +87,7 @@ import { Route as StaffArticlesNewRouteImport } from './routes/_staff/articles.n
 import { Route as StaffManageChatInsightsRouteImport } from './routes/_staff/manage.chat-insights'
 import { Route as StaffManageEuropePulseRouteImport } from './routes/_staff/manage.europe-pulse'
 import { Route as StaffManageGovernanceRouteImport } from './routes/_staff/manage.governance'
+import { Route as StaffManageGuestPassesRouteImport } from './routes/_staff/manage.guest-passes'
 import { Route as StaffManageKnowledgeRouteImport } from './routes/_staff/manage.knowledge'
 import { Route as StaffManageLiveChatRouteImport } from './routes/_staff/manage.live-chat'
 import { Route as StaffMembersIndexRouteImport } from './routes/_staff/members.index'
@@ -511,6 +512,11 @@ const StaffManageGovernanceRoute = StaffManageGovernanceRouteImport.update({
   path: '/manage/governance',
   getParentRoute: () => StaffRouteRoute,
 } as any)
+const StaffManageGuestPassesRoute = StaffManageGuestPassesRouteImport.update({
+  id: '/manage/guest-passes',
+  path: '/manage/guest-passes',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
 const StaffManageKnowledgeRoute = StaffManageKnowledgeRouteImport.update({
   id: '/manage/knowledge',
   path: '/manage/knowledge',
@@ -751,6 +757,7 @@ export interface FileRoutesByFullPath {
   '/manage/chat-insights': typeof StaffManageChatInsightsRoute
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/manage/governance': typeof StaffManageGovernanceRoute
+  '/manage/guest-passes': typeof StaffManageGuestPassesRoute
   '/manage/knowledge': typeof StaffManageKnowledgeRoute
   '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/members/$id': typeof StaffMembersIdRoute
@@ -856,6 +863,7 @@ export interface FileRoutesByTo {
   '/manage/chat-insights': typeof StaffManageChatInsightsRoute
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/manage/governance': typeof StaffManageGovernanceRoute
+  '/manage/guest-passes': typeof StaffManageGuestPassesRoute
   '/manage/knowledge': typeof StaffManageKnowledgeRoute
   '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/members/$id': typeof StaffMembersIdRoute
@@ -968,6 +976,7 @@ export interface FileRoutesById {
   '/_staff/manage/chat-insights': typeof StaffManageChatInsightsRoute
   '/_staff/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/_staff/manage/governance': typeof StaffManageGovernanceRoute
+  '/_staff/manage/guest-passes': typeof StaffManageGuestPassesRoute
   '/_staff/manage/knowledge': typeof StaffManageKnowledgeRoute
   '/_staff/manage/live-chat': typeof StaffManageLiveChatRoute
   '/_staff/members/$id': typeof StaffMembersIdRoute
@@ -1079,6 +1088,7 @@ export interface FileRouteTypes {
     | '/manage/chat-insights'
     | '/manage/europe-pulse'
     | '/manage/governance'
+    | '/manage/guest-passes'
     | '/manage/knowledge'
     | '/manage/live-chat'
     | '/members/$id'
@@ -1184,6 +1194,7 @@ export interface FileRouteTypes {
     | '/manage/chat-insights'
     | '/manage/europe-pulse'
     | '/manage/governance'
+    | '/manage/guest-passes'
     | '/manage/knowledge'
     | '/manage/live-chat'
     | '/members/$id'
@@ -1295,6 +1306,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/chat-insights'
     | '/_staff/manage/europe-pulse'
     | '/_staff/manage/governance'
+    | '/_staff/manage/guest-passes'
     | '/_staff/manage/knowledge'
     | '/_staff/manage/live-chat'
     | '/_staff/members/$id'
@@ -1941,6 +1953,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageGovernanceRouteImport
       parentRoute: typeof StaffRouteRoute
     }
+    '/_staff/manage/guest-passes': {
+      id: '/_staff/manage/guest-passes'
+      path: '/manage/guest-passes'
+      fullPath: '/manage/guest-passes'
+      preLoaderRoute: typeof StaffManageGuestPassesRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/_staff/manage/knowledge': {
       id: '/_staff/manage/knowledge'
       path: '/manage/knowledge'
@@ -2263,6 +2282,7 @@ interface StaffRouteRouteChildren {
   StaffManageChatInsightsRoute: typeof StaffManageChatInsightsRoute
   StaffManageEuropePulseRoute: typeof StaffManageEuropePulseRoute
   StaffManageGovernanceRoute: typeof StaffManageGovernanceRoute
+  StaffManageGuestPassesRoute: typeof StaffManageGuestPassesRoute
   StaffManageKnowledgeRoute: typeof StaffManageKnowledgeRoute
   StaffManageLiveChatRoute: typeof StaffManageLiveChatRoute
   StaffMembersIdRoute: typeof StaffMembersIdRoute
@@ -2288,6 +2308,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffManageChatInsightsRoute: StaffManageChatInsightsRoute,
   StaffManageEuropePulseRoute: StaffManageEuropePulseRoute,
   StaffManageGovernanceRoute: StaffManageGovernanceRoute,
+  StaffManageGuestPassesRoute: StaffManageGuestPassesRoute,
   StaffManageKnowledgeRoute: StaffManageKnowledgeRoute,
   StaffManageLiveChatRoute: StaffManageLiveChatRoute,
   StaffMembersIdRoute: StaffMembersIdRoute,
