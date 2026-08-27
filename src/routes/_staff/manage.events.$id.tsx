@@ -133,7 +133,7 @@ function EventEditor() {
 
     if (row) {
       setRegistrations(await listEventRegistrations({ data: { eventId: id } }));
-      if (row.registration_mode === "rsvp_tickets") {
+      if (row.tickets_enabled) {
         setTiers(
           (await listEventTiers({ data: { eventId: id } })).map((tier) => ({
             id: tier.id,
@@ -190,6 +190,7 @@ function EventEditor() {
           registration_opens_at: event.registration_opens_at,
           registration_closes_at: event.registration_closes_at,
           guest_registration_allowed: event.guest_registration_allowed,
+          tickets_enabled: event.tickets_enabled ?? false,
           guest_passes_allowed: event.guest_passes_allowed ?? false,
           attendance_min_percent: event.attendance_min_percent ?? 80,
           certificates_enabled: event.certificates_enabled ?? false,
@@ -414,7 +415,7 @@ function EventEditor() {
           reloadRegistrations={() => load().catch(() => setError(t("events.loadError")))}
           ticketsSection={
             <>
-              {event.registration_mode === "rsvp_tickets" ? (
+              {event.tickets_enabled ? (
                 <>
                   <EventTicketsSection eventId={event.id} t={t} />
                   <EventDiscountCodesSection
