@@ -73,6 +73,7 @@ export default function ForOrganisationsPage() {
         }
         lede={t("organisations.hero.lede")}
         ctaLabel={t("organisations.hero.cta")}
+        ctaHref="#organisation-contact"
       />
       <main id="main">
         <ProofBar />
