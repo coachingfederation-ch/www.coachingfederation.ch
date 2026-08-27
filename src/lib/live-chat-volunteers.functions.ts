@@ -44,7 +44,9 @@ export const deactivateLiveChatVolunteer = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     await assertPlatformAdmin(context);
     const { deactivateVolunteer } = await import("./live-chat-volunteers.server");
+    const { revokeDeviceTokens } = await import("./volunteer-device.server");
     await deactivateVolunteer(data.userId);
+    await revokeDeviceTokens(data.userId);
     return { ok: true };
   });
 
@@ -69,6 +71,9 @@ export const leaveLiveChatVolunteers = createServerFn({ method: "POST" })
       .from("live_chat_presence")
       .update({ is_online: false })
       .eq("user_id", context.userId);
+    // Opting out must also end the trust every phone holds for this account.
+    const { revokeDeviceTokens } = await import("./volunteer-device.server");
+    await revokeDeviceTokens(context.userId);
     return { ok: true };
   });
 
