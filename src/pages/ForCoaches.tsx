@@ -123,12 +123,12 @@ export default function ForCoachesPage() {
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
                 {t("coaches.volunteer.desc")}
               </p>
-              <a
-                href="#"
+              <LocaleLink
+                to="/volunteering"
                 className="mt-7 inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
               >
                 {t("coaches.volunteer.cta")}
-              </a>
+              </LocaleLink>
             </div>
             <div className="grid aspect-[4/3] place-items-center rounded-2xl bg-mark-blue text-mark-cream">
               <Mark name="Star01" className="h-1/2 w-1/2" />
