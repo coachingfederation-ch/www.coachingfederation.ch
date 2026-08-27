@@ -5,7 +5,7 @@
  * holds, while granting and revoking happens in the per-account detail panel.
  * That keeps the row readable as the number of rights grows.
  */
-import { CalendarDays, ShieldCheck, Megaphone, SlidersHorizontal } from "lucide-react";
+import { CalendarDays, ShieldCheck, Megaphone, SlidersHorizontal, UserPlus } from "lucide-react";
 import type { listRoleAdminData } from "@/lib/roles.functions";
 
 type MemberRow = Awaited<ReturnType<typeof listRoleAdminData>>["members"][number];
