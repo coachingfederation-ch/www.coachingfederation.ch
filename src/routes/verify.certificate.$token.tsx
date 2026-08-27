@@ -195,7 +195,7 @@ function CertificateSheet({
         <p className="font-heading text-3xl text-foreground">{certificate.holder_name}</p>
 
         <p className="eyebrow mt-8 text-muted-foreground">{copy.eventLabel}</p>
-        <p className="text-lg font-semibold">{certificate.event_title_snapshot}</p>
+        <p className="text-lg font-semibold">{certificate.event_title}</p>
 
         <div className="mt-8 grid gap-6 sm:grid-cols-2">
           <div>

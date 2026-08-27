@@ -112,9 +112,15 @@ export const issueCompletionDocuments = createServerFn({ method: "POST" })
     });
     if (error) throw new Error(error.message);
 
+    const outcome = (result ?? {}) as { issued?: number; skipped?: number };
     const { sendPendingCertificateEmails } = await import("./certificates.server");
     const mail = await sendPendingCertificateEmails(data.eventId);
-    return { ...(result as Record<string, unknown>), ...mail };
+    return {
+      issued: Number(outcome.issued ?? 0),
+      skipped: Number(outcome.skipped ?? 0),
+      sent: mail.sent,
+      failed: mail.failed,
+    };
   });
 
 export const revokeCertificate = createServerFn({ method: "POST" })
@@ -128,7 +134,7 @@ export const revokeCertificate = createServerFn({ method: "POST" })
     const { error } = await context.supabase.rpc("revoke_event_certificate", {
       _certificate_id: data.certificateId,
       _actor: context.userId,
-      _reason: data.reason ?? null,
+      _reason: data.reason ?? undefined,
     });
     if (error) throw new Error(error.message);
 
@@ -155,7 +161,7 @@ export const reissueCertificate = createServerFn({ method: "POST" })
       const { sendCertificateEmail } = await import("./certificates.server");
       await sendCertificateEmail(created, { force: true });
     }
-    return result as Record<string, unknown>;
+    return { certificateId: created ?? null };
   });
 
 /** Resends one certificate email on request, even if it already went out. */

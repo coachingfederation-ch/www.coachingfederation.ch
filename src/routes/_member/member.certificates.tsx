@@ -5,7 +5,7 @@
  */
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useCms } from "@/i18n/cms";
 import { MemberShell } from "@/components/member/MemberShell";
 import { listMyCertificates, type MemberCertificate } from "@/lib/certificates.functions";
 
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/_member/member/certificates")({
 });
 
 function MemberCertificatesPage() {
-  const { t, i18n } = useTranslation("cms");
+  const { t, locale } = useCms();
   const [rows, setRows] = useState<MemberCertificate[] | null>(null);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ function MemberCertificatesPage() {
     };
   }, []);
 
-  const dateFormat = new Intl.DateTimeFormat(i18n.language, {
+  const dateFormat = new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",
