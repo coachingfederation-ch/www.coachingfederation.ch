@@ -233,10 +233,16 @@ export function EventDetailsSection({
               className={inputClass}
               value={toLocalInput(event.starts_at)}
               onChange={(e) =>
-                patch({ starts_at: fromLocalInput(e.target.value) ?? event.starts_at })
+                // Editing the start also proposes an end two hours later; staff
+                // can still overwrite the end afterwards.
+                patch({
+                  starts_at: fromLocalInput(e.target.value) ?? event.starts_at,
+                  ends_at: fromLocalInput(addHoursToLocalInput(e.target.value, 2)),
+                })
               }
             />
           </Field>
+
           <Field label={t("events.fieldEnds")}>
             <input
               type="datetime-local"
