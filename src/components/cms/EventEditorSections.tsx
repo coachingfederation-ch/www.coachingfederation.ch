@@ -691,7 +691,55 @@ export function EventPublishingSection({
   return (
     <>
       <Section title={t("events.section.registration")}>
+        {/* Two independent questions instead of one overloaded mode: does the
+            event take sign-ups at all, and who may sign up. Tickets ride on
+            top of any audience — a members-only event can be ticketed too. */}
         <div className="grid gap-4 sm:grid-cols-2">
+          <Field label={t("events.fieldRegistrationOn")}>
+            <select
+              className={inputClass}
+              value={event.registration_mode === "none" ? "off" : "on"}
+              onChange={(e) =>
+                patch({
+                  registration_mode: e.target.value === "off" ? "none" : "rsvp",
+                  ...(e.target.value === "off" ? { tickets_enabled: false } : {}),
+                })
+              }
+            >
+              <option value="off">{t("events.registrationOff")}</option>
+              <option value="on">{t("events.registrationOn")}</option>
+            </select>
+          </Field>
+          {event.registration_mode !== "none" ? (
+            <Field label={t("events.fieldAudience")}>
+              <select
+                className={inputClass}
+                value={event.registration_mode}
+                onChange={(e) =>
+                  patch({
+                    registration_mode: e.target.value as Managed["registration_mode"],
+                    // The flag now has one meaning only: non-members may
+                    // register. Members-only is the mode itself.
+                    guest_registration_allowed: e.target.value !== "rsvp_members",
+                  })
+                }
+              >
+                <option value="rsvp">{t("events.audience.anyone")}</option>
+                <option value="rsvp_members">{t("events.audience.members")}</option>
+                <option value="rsvp_invited">{t("events.audience.invited")}</option>
+              </select>
+            </Field>
+          ) : null}
+          {event.registration_mode !== "none" ? (
+            <Field label={t("events.fieldTickets")}>
+              <input
+                type="checkbox"
+                checked={event.tickets_enabled ?? false}
+                onChange={(e) => patch({ tickets_enabled: e.target.checked })}
+              />
+              <p className="mt-1 text-xs text-muted-foreground">{t("events.fieldTicketsHelp")}</p>
+            </Field>
+          ) : null}
           <Field label={t("events.fieldCapacity")}>
             <input
               type="number"
@@ -701,31 +749,6 @@ export function EventPublishingSection({
               onChange={(e) => patch({ capacity: e.target.value ? Number(e.target.value) : null })}
             />
           </Field>
-          <Field label={t("events.fieldRegistrationMode")}>
-            <select
-              className={inputClass}
-              value={event.registration_mode}
-              onChange={(e) =>
-                patch({ registration_mode: e.target.value as Managed["registration_mode"] })
-              }
-            >
-              <option value="none">{t("events.regMode.none")}</option>
-              <option value="rsvp">{t("events.regMode.rsvp")}</option>
-              <option value="rsvp_members">{t("events.regMode.rsvpMembers")}</option>
-              <option value="rsvp_tickets">{t("events.regMode.rsvpTickets")}</option>
-              <option value="rsvp_invited">{t("events.regMode.rsvpInvited")}</option>
-            </select>
-          </Field>
-          {/* The membership flag only means anything on a members-only RSVP. */}
-          {event.registration_mode === "rsvp_members" ? (
-            <Field label={t("events.fieldAllowNonMembers")}>
-              <input
-                type="checkbox"
-                checked={event.guest_registration_allowed}
-                onChange={(e) => patch({ guest_registration_allowed: e.target.checked })}
-              />
-            </Field>
-          ) : null}
           {/* Guest passes only make sense where a seat can actually be taken. */}
           {event.registration_mode !== "none" ? (
             <Field label={t("events.fieldGuestPasses")}>
