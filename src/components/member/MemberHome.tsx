@@ -27,6 +27,7 @@ import { getMemberHome } from "@/lib/member-home.functions";
 import { listPublicEvents } from "@/lib/events.functions";
 import { eventPlace, formatEventDate } from "@/lib/events";
 import { LiveChatVolunteerTile } from "./LiveChatVolunteerTile";
+import { GuestPassesCard } from "./GuestPassesCard";
 
 const ENGAGE_URL =
   "https://engage.coachingfederation.org/communities/community-home?CommunityKey=230cb83a-26a7-4ffb-a2c4-fd9309091489";
@@ -173,6 +174,7 @@ export function MemberHome() {
       </div>
 
       <InternalEvents />
+      <GuestPassesCard />
 
       <section className="mt-10">
         <h2 className="text-lg font-bold">{t("member.home.communities.title")}</h2>

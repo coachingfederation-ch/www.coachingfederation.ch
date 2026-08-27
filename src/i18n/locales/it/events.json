@@ -209,5 +209,35 @@
         "public": "Disponibile per tutti."
       }
     }
+  },
+  "guestPass": {
+    "eyebrow": "Pass ospite",
+    "title": "Richiedi un pass ospite",
+    "intro": "Come membro puoi invitare gratuitamente una persona non iscritta a questo evento. Membership & Engagement esamina ogni richiesta e conferma via e-mail.",
+    "membersOnly": "I pass ospite sono riservati ai membri di The Switzerland Chapter of ICF.",
+    "inviterTitle": "I tuoi dati",
+    "memberNumber": "N. socio",
+    "fieldName": "Nome completo dell'ospite",
+    "fieldEmail": "E-mail dell'ospite",
+    "fieldPhone": "Telefono dell'ospite",
+    "fieldLocation": "Dove opera l'ospite",
+    "fieldLanguage": "Lingua preferita",
+    "fieldCoachingLevel": "Livello o percorso di coaching",
+    "fieldFocus": "Principale ambito di attività",
+    "fieldAssociations": "Altre associazioni di coaching (facoltativo)",
+    "fieldNotes": "C'è qualcosa che dovremmo sapere? (facoltativo)",
+    "submit": "Invia richiesta",
+    "saving": "Invio in corso…",
+    "success": "Grazie, la richiesta è presso Membership & Engagement. Confermeremo via e-mail.",
+    "alreadyRequested": "Hai già richiesto un pass ospite per questo evento.",
+    "privacy": "Usiamo questi dati solo per valutare e gestire questo pass ospite.",
+    "error": {
+      "duplicate": "Esiste già una richiesta per questo ospite e questo evento.",
+      "already_used": "Questo ospite ha già usato il proprio pass ospite.",
+      "not_member": "I pass ospite sono riservati ai membri attivi.",
+      "event_closed": "Le iscrizioni per questo evento sono chiuse.",
+      "not_allowed": "Questo evento non offre pass ospite.",
+      "error": "Qualcosa è andato storto. Riprova."
+    }
   }
 }

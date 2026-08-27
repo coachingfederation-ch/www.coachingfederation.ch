@@ -209,5 +209,35 @@
         "public": "Für alle verfügbar."
       }
     }
+  },
+  "guestPass": {
+    "eyebrow": "Gastkarte",
+    "title": "Gastkarte anfragen",
+    "intro": "Als Mitglied können Sie einen Gast ohne Mitgliedschaft kostenlos zu diesem Event einladen. Membership & Engagement prüft jede Anfrage und bestätigt sie per E-Mail.",
+    "membersOnly": "Gastkarten stehen Mitgliedern von The Switzerland Chapter of ICF offen.",
+    "inviterTitle": "Ihre Angaben",
+    "memberNumber": "Mitgliedsnr.",
+    "fieldName": "Name des Gasts",
+    "fieldEmail": "E-Mail des Gasts",
+    "fieldPhone": "Telefon des Gasts",
+    "fieldLocation": "Wo der Gast tätig ist",
+    "fieldLanguage": "Bevorzugte Sprache",
+    "fieldCoachingLevel": "Coaching-Level oder Hintergrund",
+    "fieldFocus": "Haupttätigkeitsbereich",
+    "fieldAssociations": "Weitere Coaching-Verbände (optional)",
+    "fieldNotes": "Gibt es etwas, das wir wissen sollten? (optional)",
+    "submit": "Anfrage senden",
+    "saving": "Wird gesendet…",
+    "success": "Danke, Ihre Anfrage liegt bei Membership & Engagement. Wir bestätigen per E-Mail.",
+    "alreadyRequested": "Sie haben für dieses Event bereits eine Gastkarte angefragt.",
+    "privacy": "Wir verwenden diese Angaben nur zur Prüfung und Verwaltung dieser Gastkarte.",
+    "error": {
+      "duplicate": "Für diesen Gast besteht bereits eine Anfrage zu diesem Event.",
+      "already_used": "Dieser Gast hat seine Gastkarte bereits genutzt.",
+      "not_member": "Gastkarten stehen aktiven Mitgliedern offen.",
+      "event_closed": "Die Anmeldung für dieses Event ist geschlossen.",
+      "not_allowed": "Dieses Event bietet keine Gastkarten an.",
+      "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    }
   }
 }

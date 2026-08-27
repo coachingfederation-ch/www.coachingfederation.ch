@@ -716,6 +716,22 @@
         "browse": "Alle Anlässe ansehen",
         "view": "Anlass ansehen",
         "online": "Online"
+      },
+      "guestPasses": {
+        "title": "Meine Gastkarten",
+        "body": "Gastkarten, die Sie für einen Gast ohne Mitgliedschaft angefragt haben. Anfragen erfolgen auf der Event-Seite.",
+        "loading": "Wird geladen…",
+        "empty": "Sie haben noch keine Gastkarte angefragt.",
+        "browse": "Kommende Events ansehen",
+        "guest": "Gast",
+        "status": {
+          "pending": "In Prüfung",
+          "approved": "Bestätigt",
+          "declined": "Abgelehnt",
+          "registered": "Angemeldet",
+          "cancelled": "Storniert",
+          "attended": "Teilgenommen"
+        }
       }
     },
     "volunteering": {
@@ -768,7 +784,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
+          "items": [
+            "Projekte leiten",
+            "Von ICFS für die Leitung von Initiativen anerkannt werden"
+          ]
         },
         "status": {
           "title": "Status",
