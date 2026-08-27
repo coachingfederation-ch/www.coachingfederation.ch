@@ -937,6 +937,8 @@
     "removeAccess": "Rimuovi accesso",
     "removeConfirm": "Rimuovere l'accesso editor, organizer e publisher per {name}? L'iscrizione e l'area soci restano invariate.",
     "publisherBadge": "Publisher",
+    "membershipBadge": "Adesione e coinvolgimento",
+    "membershipDesc": "Approvare i pass ospiti e seguire gli ospiti",
     "manage": "Gestisci",
     "close": "Chiudi",
     "rightsTitle": "Diritti di accesso",
@@ -1142,6 +1144,8 @@
       "translateError": "Non è stato possibile tradurre automaticamente i nomi delle tariffe."
     },
     "fieldAllowNonMembers": "Consenti iscrizione senza affiliazione",
+    "fieldGuestPasses": "Consenti i pass ospiti invitati dai membri",
+    "fieldGuestPassesHelp": "Un membro attivo può invitare un ospite non membro; Adesione e coinvolgimento approva il posto gratuito.",
     "colConfirmation": "E-mail di conferma",
     "filterAll": "Tutte",
     "filterStatus": "Stato",
