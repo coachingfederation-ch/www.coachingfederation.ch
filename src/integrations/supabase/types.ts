@@ -1088,6 +1088,117 @@ export type Database = {
         }
         Relationships: []
       }
+      event_attendance_import_rows: {
+        Row: {
+          apply_decision: Database["public"]["Enums"]["event_attendance_apply_decision"]
+          duration_minutes: number | null
+          id: string
+          import_id: string
+          joined_at: string | null
+          left_at: string | null
+          match_method: Database["public"]["Enums"]["event_attendance_match_method"]
+          match_registration_id: string | null
+          raw_email: string | null
+          raw_name: string | null
+          skip_reason: string | null
+        }
+        Insert: {
+          apply_decision?: Database["public"]["Enums"]["event_attendance_apply_decision"]
+          duration_minutes?: number | null
+          id?: string
+          import_id: string
+          joined_at?: string | null
+          left_at?: string | null
+          match_method?: Database["public"]["Enums"]["event_attendance_match_method"]
+          match_registration_id?: string | null
+          raw_email?: string | null
+          raw_name?: string | null
+          skip_reason?: string | null
+        }
+        Update: {
+          apply_decision?: Database["public"]["Enums"]["event_attendance_apply_decision"]
+          duration_minutes?: number | null
+          id?: string
+          import_id?: string
+          joined_at?: string | null
+          left_at?: string | null
+          match_method?: Database["public"]["Enums"]["event_attendance_match_method"]
+          match_registration_id?: string | null
+          raw_email?: string | null
+          raw_name?: string | null
+          skip_reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_attendance_import_rows_import_id_fkey"
+            columns: ["import_id"]
+            isOneToOne: false
+            referencedRelation: "event_attendance_imports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_attendance_import_rows_match_registration_id_fkey"
+            columns: ["match_registration_id"]
+            isOneToOne: false
+            referencedRelation: "event_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_attendance_imports: {
+        Row: {
+          created_at: string
+          error: string | null
+          event_id: string
+          id: string
+          original_filename: string
+          provider: Database["public"]["Enums"]["event_attendance_provider"]
+          stats: Json
+          status: Database["public"]["Enums"]["event_attendance_import_status"]
+          storage_path: string
+          uploaded_by: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          event_id: string
+          id?: string
+          original_filename: string
+          provider: Database["public"]["Enums"]["event_attendance_provider"]
+          stats?: Json
+          status?: Database["public"]["Enums"]["event_attendance_import_status"]
+          storage_path: string
+          uploaded_by: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          event_id?: string
+          id?: string
+          original_filename?: string
+          provider?: Database["public"]["Enums"]["event_attendance_provider"]
+          stats?: Json
+          status?: Database["public"]["Enums"]["event_attendance_import_status"]
+          storage_path?: string
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_attendance_imports_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_attendance_imports_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_attendance_sessions: {
         Row: {
           closed_at: string | null
@@ -2535,6 +2646,7 @@ export type Database = {
       }
       events: {
         Row: {
+          attendance_min_percent: number
           capacity: number | null
           category_id: string | null
           cce_approved_cc_hours: number | null
@@ -2581,6 +2693,7 @@ export type Database = {
           venue_name: string | null
         }
         Insert: {
+          attendance_min_percent?: number
           capacity?: number | null
           category_id?: string | null
           cce_approved_cc_hours?: number | null
@@ -2627,6 +2740,7 @@ export type Database = {
           venue_name?: string | null
         }
         Update: {
+          attendance_min_percent?: number
           capacity?: number | null
           category_id?: string | null
           cce_approved_cc_hours?: number | null
@@ -5269,6 +5383,10 @@ export type Database = {
       }
     }
     Functions: {
+      apply_attendance_import: {
+        Args: { _actor: string; _import_id: string }
+        Returns: Json
+      }
       attendance_session_status: {
         Args: { _session_token: string }
         Returns: Json
@@ -5340,6 +5458,14 @@ export type Database = {
         | "unsuccessful"
         | "unknown"
       chat_feedback: "helpful" | "not_helpful"
+      event_attendance_apply_decision: "pending" | "check_in" | "skip"
+      event_attendance_import_status:
+        | "uploaded"
+        | "previewed"
+        | "applied"
+        | "discarded"
+      event_attendance_match_method: "email" | "manual" | "none"
+      event_attendance_provider: "zoom" | "google_meet" | "other"
       event_cce_category: "core_competency" | "resource_development" | "break"
       event_cce_delivery: "in_person" | "teleclass" | "webinar"
       event_cce_status:
@@ -5534,6 +5660,15 @@ export const Constants = {
         "unknown",
       ],
       chat_feedback: ["helpful", "not_helpful"],
+      event_attendance_apply_decision: ["pending", "check_in", "skip"],
+      event_attendance_import_status: [
+        "uploaded",
+        "previewed",
+        "applied",
+        "discarded",
+      ],
+      event_attendance_match_method: ["email", "manual", "none"],
+      event_attendance_provider: ["zoom", "google_meet", "other"],
       event_cce_category: ["core_competency", "resource_development", "break"],
       event_cce_delivery: ["in_person", "teleclass", "webinar"],
       event_cce_status: [

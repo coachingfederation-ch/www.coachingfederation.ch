@@ -79,3 +79,13 @@ export const EVENT_RECAP_PHOTO_TTL_SECONDS = 60 * 60 * 24;
  * so the link must not be shareable in any meaningful way.
  */
 export const EVENT_RECAP_DOWNLOAD_TTL_SECONDS = 10 * 60;
+
+/**
+ * Uploaded Zoom / Google Meet attendance CSVs. Private bucket, keyed by event:
+ * `<event_id>/<import_id>/<filename>`. The files carry attendee email
+ * addresses, so only the staff who manage that event may read them.
+ */
+export const EVENT_ATTENDANCE_IMPORT_BUCKET = "event-attendance-imports";
+
+/** Re-download link for an uploaded attendance file: 10 minutes. */
+export const EVENT_ATTENDANCE_IMPORT_TTL_SECONDS = 10 * 60;

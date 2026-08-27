@@ -70,8 +70,6 @@ export function addHoursToLocalInput(value: string, hours: number) {
   return toLocalInput(d.toISOString());
 }
 
-
-
 export function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
@@ -757,6 +755,31 @@ export function EventPublishingSection({
               onChange={(e) => patch({ registration_closes_at: fromLocalInput(e.target.value) })}
             />
           </Field>
+          {/* Used by the attendance CSV import: the share of the scheduled
+              length an online attendee must be present for. A 15-minute floor
+              applies on top, so a very short session cannot be trivial. */}
+          {event.registration_mode !== "none" ? (
+            <Field label={t("events.attendance.minPercent")}>
+              <input
+                type="number"
+                min={1}
+                max={100}
+                className={inputClass}
+                value={event.attendance_min_percent ?? 80}
+                onChange={(e) =>
+                  patch({
+                    attendance_min_percent: Math.min(
+                      100,
+                      Math.max(1, Number(e.target.value) || 80),
+                    ),
+                  })
+                }
+              />
+              <p className="mt-1 text-xs text-muted-foreground">
+                {t("events.attendance.minPercentHelp")}
+              </p>
+            </Field>
+          ) : null}
         </div>
       </Section>
 
