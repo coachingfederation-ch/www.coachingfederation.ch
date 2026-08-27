@@ -303,7 +303,14 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
                   type="datetime-local"
                   className={inputClass}
                   value={draft.startsLocal}
-                  onChange={(e) => patch({ startsLocal: e.target.value })}
+                  onChange={(e) =>
+                    // The end follows the start by two hours by default.
+                    patch({
+                      startsLocal: e.target.value,
+                      endsLocal: addHoursToLocalInput(e.target.value, 2),
+                    })
+                  }
+
                 />
               </Field>
               <Field label={t("events.fieldEnds")}>
