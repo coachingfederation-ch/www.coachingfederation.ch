@@ -33,6 +33,7 @@ export default function ForCoachesPage() {
         }
         lede={t("coaches.hero.lede")}
         ctaLabel={t("coaches.hero.cta")}
+        ctaHref={ICF_MEMBERSHIP_URL}
       />
       <main id="main">
         <BenefitGrid />
