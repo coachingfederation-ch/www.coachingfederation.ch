@@ -130,7 +130,7 @@ export function CompactHero({
   title,
   lede,
   ctaLabel,
-  ctaHref = "#",
+  ctaHref,
   actions,
 }: {
   eyebrow: string;
