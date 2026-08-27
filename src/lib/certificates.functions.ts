@@ -60,7 +60,11 @@ export const loadCertificateBoard = createServerFn({ method: "POST" })
   .handler(async ({ context, data }): Promise<CertificateBoard> => {
     await assertOrganizer(context);
 
-    const [{ data: event }, { data: rows }, { count: checkedIn }] = await Promise.all([
+    const [
+      { data: event, error: eventError },
+      { data: rows, error: rowsError },
+      { count: checkedIn, error: countError },
+    ] = await Promise.all([
       context.supabase
         .from("events")
         .select("certificates_enabled, cce_approved_cc_hours, cce_approved_rd_hours")
@@ -78,7 +82,13 @@ export const loadCertificateBoard = createServerFn({ method: "POST" })
         .not("checked_in_at", "is", null),
     ]);
 
+    // A blocked read must never be rendered as "nothing issued yet" — that is
+    // how a permission problem stayed invisible once already.
+    const failure = eventError ?? rowsError ?? countError;
+    if (failure) throw new Error(failure.message);
+
     const list = (rows ?? []) as StaffCertificateRow[];
+
     return {
       certificatesEnabled: event?.certificates_enabled ?? false,
       ccApproved: {
@@ -88,9 +98,7 @@ export const loadCertificateBoard = createServerFn({ method: "POST" })
       checkedIn: checkedIn ?? 0,
       issued: list.filter((r) => r.status === "issued").length,
       revoked: list.filter((r) => r.status === "revoked").length,
-      pendingEmails: list.filter(
-        (r) => r.status === "issued" && r.email_status !== "sent",
-      ).length,
+      pendingEmails: list.filter((r) => r.status === "issued" && r.email_status !== "sent").length,
       rows: list,
     };
   });
@@ -205,9 +213,7 @@ export const listMyCertificates = createServerFn({ method: "POST" })
   .handler(async ({ context }): Promise<MemberCertificate[]> => {
     const { data } = await context.supabase
       .from("event_certificates")
-      .select(
-        "id, serial, public_token, event_title_snapshot, completed_on, cc_hours, rd_hours",
-      )
+      .select("id, serial, public_token, event_title_snapshot, completed_on, cc_hours, rd_hours")
       .eq("status", "issued")
       .order("completed_on", { ascending: false });
     return (data ?? []) as MemberCertificate[];

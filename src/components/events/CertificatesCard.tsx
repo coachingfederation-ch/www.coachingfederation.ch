@@ -42,10 +42,15 @@ function emailLabel(status: string, t: Props["t"]) {
   return t("events.certificates.emailNotSent");
 }
 
+type IssueResult = { issued: number; skipped: number; sent: number; failed: number };
+
 export function CertificatesCard({ eventId, t }: Props) {
   const [board, setBoard] = useState<CertificateBoard | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // A run where everybody already holds a certificate is a legitimate no-op;
+  // without this line the button looks broken.
+  const [result, setResult] = useState<IssueResult | null>(null);
 
   const reload = useCallback(async () => {
     try {
@@ -75,7 +80,21 @@ export function CertificatesCard({ eventId, t }: Props) {
     [reload, t],
   );
 
-  if (!board) return null;
+  const issue = useCallback(() => {
+    setResult(null);
+    void run(async () => {
+      setResult((await issueCompletionDocuments({ data: { eventId } })) as IssueResult);
+    });
+  }, [eventId, run]);
+
+  if (!board) {
+    return error ? (
+      <section className="rounded-2xl border border-border bg-card p-4">
+        <p className="text-xs text-destructive">{error}</p>
+      </section>
+    ) : null;
+  }
+
 
   return (
     <section className="rounded-2xl border border-border bg-card p-4">
@@ -120,13 +139,23 @@ export function CertificatesCard({ eventId, t }: Props) {
           <button
             type="button"
             disabled={busy}
-            onClick={() => void run(() => issueCompletionDocuments({ data: { eventId } }))}
+            onClick={issue}
             className={`${buttonPrimary} mt-3`}
           >
             {busy ? t("events.certificates.issuing") : t("events.certificates.issue")}
           </button>
 
+          {result ? (
+            <p className="mt-2 text-xs text-muted-foreground">
+              {t("events.certificates.resultIssued")} {result.issued} ·{" "}
+              {t("events.certificates.resultSkipped")} {result.skipped} ·{" "}
+              {t("events.certificates.resultSent")} {result.sent} ·{" "}
+              {t("events.certificates.resultFailed")} {result.failed}
+            </p>
+          ) : null}
+
           {error ? <p className="mt-2 text-xs text-destructive">{error}</p> : null}
+
 
           <ul className="mt-4 space-y-2">
             {board.rows.length === 0 ? (
