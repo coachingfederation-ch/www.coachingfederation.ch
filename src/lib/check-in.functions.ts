@@ -207,7 +207,10 @@ export const openAttendanceSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
     z
-      .object({ eventId: z.string().uuid(), graceMinutes: z.number().int().min(0).max(180).optional() })
+      .object({
+        eventId: z.string().uuid(),
+        graceMinutes: z.number().int().min(0).max(180).optional(),
+      })
       .parse(input),
   )
   .handler(async ({ context, data }): Promise<AttendanceSession> => {
@@ -285,7 +288,12 @@ export const confirmAttendance = createServerFn({ method: "POST" })
     });
     if (error) throw new Error(error.message);
 
-    const row = result as { outcome: string; name?: string; reason?: string; checked_in_at?: string };
+    const row = result as {
+      outcome: string;
+      name?: string;
+      reason?: string;
+      checked_in_at?: string;
+    };
     switch (row.outcome) {
       case "checked_in":
         return { outcome: "checked_in", name: row.name ?? "" };

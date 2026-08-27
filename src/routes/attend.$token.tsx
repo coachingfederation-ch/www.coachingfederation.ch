@@ -24,8 +24,8 @@ type Search = { ticket?: string; lang?: string };
 
 export const Route = createFileRoute("/attend/$token")({
   validateSearch: (search: Record<string, unknown>): Search => ({
-    ticket: typeof search['ticket'] === "string" ? search['ticket'] : undefined,
-    lang: isLocale(search['lang']) ? search['lang'] : undefined,
+    ticket: typeof search["ticket"] === "string" ? search["ticket"] : undefined,
+    lang: isLocale(search["lang"]) ? search["lang"] : undefined,
   }),
   loader: async ({ params }) => {
     const session = await getAttendanceWindow({ data: { token: params.token } });
@@ -71,7 +71,9 @@ function AttendFallback() {
           const copy = attendanceCopy(locale);
           return (
             <div key={locale}>
-              <h1 className="font-display text-2xl font-bold tracking-tight">{copy.unknownTitle}</h1>
+              <h1 className="font-display text-2xl font-bold tracking-tight">
+                {copy.unknownTitle}
+              </h1>
               <p className="mt-2 text-muted-foreground">{copy.unknownBody}</p>
             </div>
           );

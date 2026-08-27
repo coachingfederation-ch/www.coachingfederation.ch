@@ -150,7 +150,8 @@ const COPY: Record<Locale, AttendanceCopy> = {
     closedBody:
       "L'organizzazione ha chiuso la finestra. Scrivi a office@coachingfederation.ch se la tua presenza deve ancora essere registrata.",
     unknownTitle: "Questo link non è valido",
-    unknownBody: "Il codice può essere scaduto. Scrivi a office@coachingfederation.ch e ti aiutiamo.",
+    unknownBody:
+      "Il codice può essere scaduto. Scrivi a office@coachingfederation.ch e ti aiutiamo.",
     successTitle: "La tua presenza è registrata",
     successBody: "Puoi chiudere questa pagina.",
     alreadyTitle: "La tua presenza era già registrata",
