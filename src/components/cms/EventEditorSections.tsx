@@ -58,6 +58,20 @@ export function fromLocalInput(value: string) {
   return value ? new Date(value).toISOString() : null;
 }
 
+/**
+ * Shifts a `datetime-local` value by whole hours, staying in the same string
+ * shape. Used to derive a default end time from the start staff just typed.
+ */
+export function addHoursToLocalInput(value: string, hours: number) {
+  if (!value) return "";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "";
+  d.setTime(d.getTime() + hours * 3600000);
+  return toLocalInput(d.toISOString());
+}
+
+
+
 export function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
