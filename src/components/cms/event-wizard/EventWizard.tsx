@@ -646,7 +646,7 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
               )}
             />
             <ReviewRow
-              label={t("events.fieldRegistrationMode")}
+              label={t("events.fieldAudience")}
               value={t(
                 {
                   none: "events.registrationOff",

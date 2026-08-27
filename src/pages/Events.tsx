@@ -219,7 +219,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
   const tagsFor = (e: PublicEvent) => [
     (e.language ?? "en").toUpperCase(),
     t(LOCATION_TAG[e.location_mode ?? "in_person"]),
-    ...(e.registration_mode === "rsvp" ? [t("events.tag.registration")] : []),
+    ...(e.registration_mode && e.registration_mode !== "none" ? [t("events.tag.registration")] : []),
   ];
   const dateLine = (e: PublicEvent) =>
     `${formatEventDate(e.starts_at!, locale, e.timezone ?? "Europe/Zurich")} · ${eventPlace(e, t("events.tag.online"))}`;
