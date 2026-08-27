@@ -112,12 +112,17 @@ export const issueCompletionDocuments = createServerFn({ method: "POST" })
     });
     if (error) throw new Error(error.message);
 
-    const outcome = (result ?? {}) as { issued?: number; skipped?: number };
+    // The routine reports its own key names; skips are split by reason.
+    const outcome = (result ?? {}) as {
+      certificates_issued?: number;
+      skipped_already?: number;
+      skipped_ineligible?: number;
+    };
     const { sendPendingCertificateEmails } = await import("./certificates.server");
     const mail = await sendPendingCertificateEmails(data.eventId);
     return {
-      issued: Number(outcome.issued ?? 0),
-      skipped: Number(outcome.skipped ?? 0),
+      issued: Number(outcome.certificates_issued ?? 0),
+      skipped: Number(outcome.skipped_already ?? 0) + Number(outcome.skipped_ineligible ?? 0),
       sent: mail.sent,
       failed: mail.failed,
     };
