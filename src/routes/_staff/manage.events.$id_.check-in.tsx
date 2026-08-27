@@ -7,16 +7,21 @@
  */
 import { createFileRoute, Link } from "@tanstack/react-router";
 import QRCode from "qrcode";
-import { QrCode } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { QrCode, Radio, X } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
 import { parseScannedTicket, type CheckInOutcome } from "@/lib/check-in";
+import { TicketScanner } from "@/components/events/TicketScanner";
 import {
   checkInAttendee,
   checkInByToken,
+  closeAttendanceSession,
+  loadAttendanceSession,
   loadCheckInBoard,
+  openAttendanceSession,
   undoAttendeeCheckIn,
+  type AttendanceSession,
   type CheckInAttendee,
 } from "@/lib/check-in.functions";
 
