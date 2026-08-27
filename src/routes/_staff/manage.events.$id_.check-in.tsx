@@ -13,6 +13,7 @@ import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
 import { parseScannedTicket, type CheckInOutcome } from "@/lib/check-in";
 import { TicketScanner } from "@/components/events/TicketScanner";
+import { AttendanceImportCard } from "@/components/events/AttendanceImportCard";
 import {
   checkInAttendee,
   checkInByToken,
@@ -166,6 +167,13 @@ function CheckInPage() {
         <HandOffCard eventId={id} t={t} />
 
         <AttendanceCard eventId={id} t={t} onChanged={reload} />
+
+        <AttendanceImportCard
+          eventId={id}
+          attendees={board?.attendees ?? []}
+          t={t}
+          onChanged={reload}
+        />
 
         <section className="rounded-2xl border border-border bg-card p-4">
           {scanning ? (
