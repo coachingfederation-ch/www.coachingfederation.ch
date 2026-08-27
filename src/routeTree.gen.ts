@@ -81,6 +81,7 @@ import { Route as LocaleInsightsIndexRouteImport } from './routes/$locale/insigh
 import { Route as LocaleInsightsIdRouteImport } from './routes/$locale/insights.$id'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as MemberMemberCertificatesRouteImport } from './routes/_member/member.certificates'
 import { Route as StaffArticlesIndexRouteImport } from './routes/_staff/articles.index'
 import { Route as StaffArticlesIdRouteImport } from './routes/_staff/articles.$id'
 import { Route as StaffArticlesCategoriesRouteImport } from './routes/_staff/articles.categories'
@@ -486,6 +487,12 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MemberMemberCertificatesRoute =
+  MemberMemberCertificatesRouteImport.update({
+    id: '/certificates',
+    path: '/certificates',
+    getParentRoute: () => MemberMemberRoute,
+  } as any)
 const StaffArticlesIndexRoute = StaffArticlesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -743,7 +750,7 @@ export interface FileRoutesByFullPath {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/member': typeof MemberMemberRoute
+  '/member': typeof MemberMemberRouteWithChildren
   '/my-profile': typeof MemberMyProfileRoute
   '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/volunteering': typeof MemberVolunteeringRoute
@@ -778,6 +785,7 @@ export interface FileRoutesByFullPath {
   '/$locale/insights/$id': typeof LocaleInsightsIdRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/member/certificates': typeof MemberMemberCertificatesRoute
   '/articles/$id': typeof StaffArticlesIdRoute
   '/articles/categories': typeof StaffArticlesCategoriesRoute
   '/articles/new': typeof StaffArticlesNewRoute
@@ -854,7 +862,7 @@ export interface FileRoutesByTo {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/member': typeof MemberMemberRoute
+  '/member': typeof MemberMemberRouteWithChildren
   '/my-profile': typeof MemberMyProfileRoute
   '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/volunteering': typeof MemberVolunteeringRoute
@@ -888,6 +896,7 @@ export interface FileRoutesByTo {
   '/$locale/insights/$id': typeof LocaleInsightsIdRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/member/certificates': typeof MemberMemberCertificatesRoute
   '/articles/$id': typeof StaffArticlesIdRoute
   '/articles/categories': typeof StaffArticlesCategoriesRoute
   '/articles/new': typeof StaffArticlesNewRoute
@@ -970,7 +979,7 @@ export interface FileRoutesById {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/_member/member': typeof MemberMemberRoute
+  '/_member/member': typeof MemberMemberRouteWithChildren
   '/_member/my-profile': typeof MemberMyProfileRoute
   '/_member/volunteer-chat': typeof MemberVolunteerChatRoute
   '/_member/volunteering': typeof MemberVolunteeringRoute
@@ -1005,6 +1014,7 @@ export interface FileRoutesById {
   '/$locale/insights/$id': typeof LocaleInsightsIdRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/_member/member/certificates': typeof MemberMemberCertificatesRoute
   '/_staff/articles/$id': typeof StaffArticlesIdRoute
   '/_staff/articles/categories': typeof StaffArticlesCategoriesRoute
   '/_staff/articles/new': typeof StaffArticlesNewRoute
@@ -1121,6 +1131,7 @@ export interface FileRouteTypes {
     | '/$locale/insights/$id'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/member/certificates'
     | '/articles/$id'
     | '/articles/categories'
     | '/articles/new'
@@ -1231,6 +1242,7 @@ export interface FileRouteTypes {
     | '/$locale/insights/$id'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/member/certificates'
     | '/articles/$id'
     | '/articles/categories'
     | '/articles/new'
@@ -1347,6 +1359,7 @@ export interface FileRouteTypes {
     | '/$locale/insights/$id'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/_member/member/certificates'
     | '/_staff/articles/$id'
     | '/_staff/articles/categories'
     | '/_staff/articles/new'
@@ -1965,6 +1978,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_member/member/certificates': {
+      id: '/_member/member/certificates'
+      path: '/certificates'
+      fullPath: '/member/certificates'
+      preLoaderRoute: typeof MemberMemberCertificatesRouteImport
+      parentRoute: typeof MemberMemberRoute
+    }
     '/_staff/articles/': {
       id: '/_staff/articles/'
       path: '/'
@@ -2318,15 +2338,27 @@ const LocaleRouteRouteWithChildren = LocaleRouteRoute._addFileChildren(
   LocaleRouteRouteChildren,
 )
 
+interface MemberMemberRouteChildren {
+  MemberMemberCertificatesRoute: typeof MemberMemberCertificatesRoute
+}
+
+const MemberMemberRouteChildren: MemberMemberRouteChildren = {
+  MemberMemberCertificatesRoute: MemberMemberCertificatesRoute,
+}
+
+const MemberMemberRouteWithChildren = MemberMemberRoute._addFileChildren(
+  MemberMemberRouteChildren,
+)
+
 interface MemberRouteRouteChildren {
-  MemberMemberRoute: typeof MemberMemberRoute
+  MemberMemberRoute: typeof MemberMemberRouteWithChildren
   MemberMyProfileRoute: typeof MemberMyProfileRoute
   MemberVolunteerChatRoute: typeof MemberVolunteerChatRoute
   MemberVolunteeringRoute: typeof MemberVolunteeringRoute
 }
 
 const MemberRouteRouteChildren: MemberRouteRouteChildren = {
-  MemberMemberRoute: MemberMemberRoute,
+  MemberMemberRoute: MemberMemberRouteWithChildren,
   MemberMyProfileRoute: MemberMyProfileRoute,
   MemberVolunteerChatRoute: MemberVolunteerChatRoute,
   MemberVolunteeringRoute: MemberVolunteeringRoute,
