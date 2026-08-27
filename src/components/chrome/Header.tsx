@@ -131,12 +131,15 @@ export function CompactHero({
   lede,
   ctaLabel,
   ctaHref = "#",
+  actions,
 }: {
   eyebrow: string;
   title: React.ReactNode;
   lede: string;
   ctaLabel?: string;
   ctaHref?: string;
+  /** Optional controls rendered under the lede (e.g. a secondary action). */
+  actions?: React.ReactNode;
 }) {
   return (
     <header className="bg-hero text-hero-foreground">
@@ -155,6 +158,7 @@ export function CompactHero({
               </Button>
             </div>
           )}
+          {actions ? <div className="mt-9 flex flex-wrap gap-3">{actions}</div> : null}
         </div>
       </div>
     </header>
