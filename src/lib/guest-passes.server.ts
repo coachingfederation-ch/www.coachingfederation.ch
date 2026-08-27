@@ -153,3 +153,125 @@ export async function listGuestPassesForEvent(eventId: string): Promise<GuestPas
   if (error) throw new Error(error.message);
   return (data ?? []).map(toRow);
 }
+
+/** Every pass in the pilot, newest first. Membership & Engagement view. */
+export async function listAllGuestPasses(): Promise<GuestPassRow[]> {
+  const { data, error } = await supabaseAdmin
+    .from("guest_passes")
+    .select(SELECT)
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(error.message);
+  return (data ?? []).map(toRow);
+}
+
+/**
+ * The comped seat behind an approved pass.
+ *
+ * Written with the trusted client on purpose: Membership & Engagement decides
+ * chapter-wide and is not necessarily an organizer of this event, so the
+ * caller's own RLS-scoped client would refuse the insert. Every caller has
+ * already passed `assertMembership`.
+ *
+ * Idempotent in both halves: a pass that already carries a `registration_id`
+ * is left alone, and the confirmation email is claimed before it is sent, so a
+ * double click can never produce a second seat or a second ticket.
+ */
+export async function createGuestRegistration(
+  passId: string,
+  actorUserId: string,
+): Promise<{ outcome: "created" | "exists" | "ineligible"; registrationId?: string }> {
+  const { data: pass } = await supabaseAdmin
+    .from("guest_passes")
+    .select(
+      "id, event_id, guest_email, guest_full_name, guest_preferred_language, status, registration_id",
+    )
+    .eq("id", passId)
+    .maybeSingle();
+  if (!pass) return { outcome: "ineligible" };
+  if (pass.registration_id) {
+    return { outcome: "exists", registrationId: pass.registration_id as string };
+  }
+  if (pass.status !== "approved") return { outcome: "ineligible" };
+
+  const email = String(pass.guest_email).trim().toLowerCase();
+
+  // A seat may already exist from a staff-added attendee with the same
+  // address; adopt it rather than double-booking the guest.
+  const { data: existing } = await supabaseAdmin
+    .from("event_registrations")
+    .select("id, status")
+    .eq("event_id", pass.event_id)
+    .eq("email", email)
+    .maybeSingle();
+
+  let registrationId = existing?.status === "confirmed" ? (existing.id as string) : null;
+
+  if (!registrationId) {
+    const { data: event } = await supabaseAdmin
+      .from("events")
+      .select("id, registration_mode")
+      .eq("id", pass.event_id)
+      .maybeSingle();
+    if (!event) return { outcome: "ineligible" };
+
+    // Only a genuinely free tier may be attached; otherwise the seat carries
+    // no tier at all, so nothing can price it later.
+    let tierId: string | null = null;
+    if (event.registration_mode === "rsvp_tickets") {
+      const { data: freeTier } = await supabaseAdmin
+        .from("event_ticket_tiers")
+        .select("id")
+        .eq("event_id", pass.event_id)
+        .eq("is_active", true)
+        .eq("price_cents", 0)
+        .limit(1)
+        .maybeSingle();
+      tierId = (freeTier?.id as string | undefined) ?? null;
+    }
+
+    const { data: inserted, error } = await supabaseAdmin
+      .from("event_registrations")
+      .insert({
+        event_id: pass.event_id,
+        tier_id: tierId,
+        full_name: pass.guest_full_name,
+        email,
+        locale: pass.guest_preferred_language ?? "en",
+        status: "confirmed",
+        payment_status: "not_required",
+        amount_cents: 0,
+        notes: "Guest Pass",
+        created_by_staff: actorUserId,
+      })
+      .select("id")
+      .single();
+    if (error || !inserted) {
+      console.error("[guest-pass] comped registration failed", error?.message);
+      return { outcome: "ineligible" };
+    }
+    registrationId = inserted.id as string;
+  }
+
+  // Claim the pass first: whoever wins this update owns the email send.
+  const { data: claimed } = await supabaseAdmin
+    .from("guest_passes")
+    .update({ registration_id: registrationId, status: "registered" })
+    .eq("id", passId)
+    .is("registration_id", null)
+    .select("id");
+
+  if (!claimed || claimed.length === 0) {
+    return { outcome: "exists", registrationId };
+  }
+
+  try {
+    const { sendRegistrationConfirmation } = await import("./event-confirmation.server");
+    await sendRegistrationConfirmation(registrationId, { force: true });
+  } catch (err) {
+    // The seat is the record; a delivery failure is logged on the registration
+    // row by the sender itself and must never fail the approval.
+    console.error("[guest-pass] ticket email failed", err);
+  }
+
+  return { outcome: "created", registrationId };
+}

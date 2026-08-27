@@ -35,6 +35,8 @@ import { template as internalInvitation } from "./internal-invitation";
 import { template as newsletterRefresh } from "./newsletter-refresh";
 import { template as newsletterEdition } from "./newsletter-edition";
 import { template as guestPassRequest } from "./guest-pass-request";
+import { template as guestPassApproved } from "./guest-pass-approved";
+import { template as guestPassDeclined } from "./guest-pass-declined";
 
 /**
  * Template registry — maps template names to their React Email components.
@@ -57,4 +59,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "newsletter-refresh": newsletterRefresh,
   "newsletter-edition": newsletterEdition,
   "guest-pass-request": guestPassRequest,
+  "guest-pass-approved": guestPassApproved,
+  "guest-pass-declined": guestPassDeclined,
 };

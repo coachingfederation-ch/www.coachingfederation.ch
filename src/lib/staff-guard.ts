@@ -26,11 +26,18 @@ import type { AppRole, RoleSet } from "@/lib/role-model";
  */
 function fallbackFor(
   roles: RoleSet,
-): "/articles" | "/manage/events" | "/vocabularies" | "/member" | "/no-access" {
+):
+  | "/articles"
+  | "/manage/events"
+  | "/manage/guest-passes"
+  | "/vocabularies"
+  | "/member"
+  | "/no-access" {
   if (hasExactRole(roles.roles, "editor")) return "/articles";
   if (hasExactRole(roles.roles, "publisher")) return "/articles";
   if (hasExactRole(roles.roles, "organizer")) return "/manage/events";
   if (hasExactRole(roles.roles, "administrator")) return "/vocabularies";
+  if (hasExactRole(roles.roles, "membership")) return "/manage/guest-passes";
   if (roles.isMember) return "/member";
   return "/no-access";
 }
@@ -71,3 +78,8 @@ export const ARTICLE_ROLES: AppRole[] = ["editor", "publisher"];
 export const CATEGORY_ROLES: AppRole[] = ["editor"];
 /** Event management screens (`/manage/events/*`). */
 export const EVENT_ROLES: AppRole[] = ["organizer"];
+/**
+ * Membership & Engagement screens (`/manage/guest-passes`). Administrators
+ * count as M&E, and Super Admins pass through the admin bypass.
+ */
+export const MEMBERSHIP_ROLES: AppRole[] = ["membership", "administrator"];

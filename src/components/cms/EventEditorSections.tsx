@@ -41,6 +41,7 @@ import {
 } from "@/lib/recurrence";
 import type { VocabRow } from "@/lib/vocabularies";
 import { vocabLabel } from "@/lib/vocabularies";
+import { ApprovedGuestsPanel } from "@/components/cms/ApprovedGuestsPanel";
 
 export type Managed = NonNullable<Awaited<ReturnType<typeof getManagedEvent>>>;
 export type Registration = Awaited<ReturnType<typeof listEventRegistrations>>[number];
@@ -738,6 +739,14 @@ export function EventPublishingSection({
           </Field>
         </div>
       </Section>
+
+      {/* Who is coming as a guest. Read-only here: the decision belongs to
+          Membership & Engagement, the leader only needs to welcome them. */}
+      {event.guest_passes_allowed ? (
+        <div className="mt-6">
+          <ApprovedGuestsPanel eventId={event.id} />
+        </div>
+      ) : null}
 
       {ticketsSection}
 

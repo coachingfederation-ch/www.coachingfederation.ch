@@ -5,6 +5,7 @@
  */
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { LocaleLink, useI18n } from "@/i18n";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 
 const GOVERNANCE_URLS: Record<string, string> = {
   "Annual General Meeting (AGM)":
@@ -37,7 +38,7 @@ export function Governance() {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col justify-between rounded-2xl border border-border/70 bg-card p-6 shadow-[var(--shadow-soft)] transition hover:shadow-[var(--shadow-card)]"
+                className="group flex flex-col justify-between rounded-2xl border border-border/70 bg-card p-6 shadow-soft transition"
               >
                 <div>
                   <h3 className="text-lg font-semibold tracking-tight text-foreground">
@@ -55,13 +56,13 @@ export function Governance() {
         </div>
 
         <div className="mt-10">
-          <LocaleLink
-            to="/governance"
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-          >
-            {t("governance.archiveCta")}
-            <ArrowRight className="h-4 w-4" aria-hidden />
-          </LocaleLink>
+          {/* Light surface, so the design-system button applies as-is. */}
+          <Button asChild variant="default" size="pill">
+            <LocaleLink to="/governance">
+              {t("governance.archiveCta")}
+              <ArrowRight aria-hidden />
+            </LocaleLink>
+          </Button>
         </div>
       </div>
     </section>

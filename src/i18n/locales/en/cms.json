@@ -21,7 +21,8 @@
     "chatInsights": "Chat Agent Insights",
     "knowledge": "Assistant knowledge",
     "liveChat": "Live chat",
-    "newsletters": "Newsletters"
+    "newsletters": "Newsletters",
+    "guestPasses": "Guest passes"
   },
   "auth": {
     "signInSub": "Sign in to continue",
@@ -2090,5 +2091,110 @@
     "translate": "Translate",
     "translating": "Translating…",
     "translateFailed": "Labels could not be translated automatically — you can add them by hand."
+  },
+  "guestPasses": {
+    "title": "Guest passes",
+    "subtitle": "Approve guest passes, create the complimentary seat and follow up after the event.",
+    "counts": {
+      "requests": "Requests",
+      "approved": "Approved / registered",
+      "attended": "Attended",
+      "declined": "Declined / cancelled",
+      "converted": "Converted to member"
+    },
+    "filters": {
+      "label": "Status",
+      "all": "All"
+    },
+    "columns": {
+      "member": "Inviting member",
+      "guest": "Guest",
+      "event": "Event",
+      "status": "Status",
+      "note": "Decision note",
+      "followUp": "Follow-up",
+      "actions": "Actions"
+    },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "registered": "Registered",
+      "attended": "Attended",
+      "declined": "Declined",
+      "cancelled": "Cancelled"
+    },
+    "followUpStatus": {
+      "none": "No follow-up",
+      "contacted": "Contacted",
+      "converted": "Converted",
+      "closed": "Closed"
+    },
+    "actions": {
+      "approve": "Approve",
+      "decline": "Decline",
+      "cancel": "Cancel",
+      "followUp": "Follow-up",
+      "save": "Save",
+      "close": "Close",
+      "export": "Download CSV"
+    },
+    "dialog": {
+      "approveTitle": "Approve this guest pass?",
+      "approveBody": "The guest receives a complimentary seat and their ticket by email. The community leader and the inviting member are notified.",
+      "declineTitle": "Decline this guest pass?",
+      "declineBody": "The inviting member is notified. Please give a short reason.",
+      "cancelTitle": "Cancel this guest pass?",
+      "cancelBody": "Any complimentary seat is released. This cannot be undone.",
+      "noteLabel": "Note",
+      "notePlaceholder": "Visible to the inviting member",
+      "confirm": "Confirm",
+      "back": "Back"
+    },
+    "followUpDialog": {
+      "title": "Follow-up",
+      "statusLabel": "Status",
+      "noteLabel": "Note",
+      "linkMember": "Link the matching member record",
+      "matchFound": "An active member now exists for this address."
+    },
+    "empty": "No guest passes yet.",
+    "emptyFiltered": "No guest passes with this status.",
+    "toast": {
+      "approved": "Guest pass approved.",
+      "declined": "Guest pass declined.",
+      "cancelled": "Guest pass cancelled.",
+      "saved": "Follow-up saved.",
+      "error": "Something went wrong. Please try again."
+    },
+    "memberNumber": "Member no.",
+    "language": "Preferred language",
+    "phone": "Phone",
+    "location": "Location",
+    "leaderPanel": {
+      "title": "Approved guests",
+      "description": "Guests invited by members for this event. Membership & Engagement approves them.",
+      "invitedBy": "Invited by",
+      "empty": "No approved guests for this event."
+    },
+    "csv": {
+      "event": "Event",
+      "eventDate": "Event date",
+      "memberName": "Inviting member",
+      "memberEmail": "Member email",
+      "memberNumber": "Member number",
+      "guestName": "Guest",
+      "guestEmail": "Guest email",
+      "guestPhone": "Guest phone",
+      "guestLocation": "Guest location",
+      "guestLanguage": "Preferred language",
+      "status": "Status",
+      "decisionAt": "Decision date",
+      "decisionNote": "Decision note",
+      "attended": "Attended",
+      "followUpStatus": "Follow-up status",
+      "followUpNote": "Follow-up note",
+      "converted": "Converted to member",
+      "createdAt": "Requested at"
+    }
   }
 }
