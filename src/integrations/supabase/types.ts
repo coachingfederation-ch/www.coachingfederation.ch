@@ -2891,6 +2891,7 @@ export type Database = {
           starts_at: string
           status: Database["public"]["Enums"]["event_status"]
           summary: string | null
+          tickets_enabled: boolean
           timezone: string
           title: string
           updated_at: string
@@ -2939,6 +2940,7 @@ export type Database = {
           starts_at: string
           status?: Database["public"]["Enums"]["event_status"]
           summary?: string | null
+          tickets_enabled?: boolean
           timezone?: string
           title: string
           updated_at?: string
@@ -2987,6 +2989,7 @@ export type Database = {
           starts_at?: string
           status?: Database["public"]["Enums"]["event_status"]
           summary?: string | null
+          tickets_enabled?: boolean
           timezone?: string
           title?: string
           updated_at?: string
@@ -5494,6 +5497,7 @@ export type Database = {
           slug: string | null
           starts_at: string | null
           summary: string | null
+          tickets_enabled: boolean | null
           timezone: string | null
           title: string | null
           updated_at: string | null

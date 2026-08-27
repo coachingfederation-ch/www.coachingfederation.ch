@@ -12,7 +12,7 @@ export type PublicEvent = Database["public"]["Views"]["events_public"]["Row"];
 export type EventRow = Database["public"]["Tables"]["events"]["Row"];
 
 export const PUBLIC_EVENT_COLUMNS =
-  "id, slug, title, summary, description, language, image_url, image_credit_name, image_credit_url, starts_at, ends_at, timezone, location_mode, venue_name, city, online_url, map_location, is_featured, is_internal, registration_mode, capacity, guest_registration_allowed, registration_opens_at, registration_closes_at, registration_count, seats_remaining, is_full, registration_open, category_slug, category_name, region_slug, region_name, community_id, community_slug, community_name, hero_marks, cce_approved_cc_hours, cce_approved_rd_hours, published_at, updated_at";
+  "id, slug, title, summary, description, language, image_url, image_credit_name, image_credit_url, starts_at, ends_at, timezone, location_mode, venue_name, city, online_url, map_location, is_featured, is_internal, registration_mode, capacity, guest_registration_allowed, tickets_enabled, registration_opens_at, registration_closes_at, registration_count, seats_remaining, is_full, registration_open, category_slug, category_name, region_slug, region_name, community_id, community_slug, community_name, hero_marks, cce_approved_cc_hours, cce_approved_rd_hours, published_at, updated_at";
 
 /** A filter option as the public pages consume it: stable slug, localised label. */
 export type EventFacetOption = { slug: string; label: string };

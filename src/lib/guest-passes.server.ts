@@ -209,7 +209,7 @@ export async function createGuestRegistration(
   if (!registrationId) {
     const { data: event } = await supabaseAdmin
       .from("events")
-      .select("id, registration_mode")
+      .select("id, registration_mode, tickets_enabled")
       .eq("id", pass.event_id)
       .maybeSingle();
     if (!event) return { outcome: "ineligible" };
@@ -217,7 +217,7 @@ export async function createGuestRegistration(
     // Only a genuinely free tier may be attached; otherwise the seat carries
     // no tier at all, so nothing can price it later.
     let tierId: string | null = null;
-    if (event.registration_mode === "rsvp_tickets") {
+    if (event.tickets_enabled) {
       const { data: freeTier } = await supabaseAdmin
         .from("event_ticket_tiers")
         .select("id")

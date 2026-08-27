@@ -785,10 +785,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Projekte leiten",
-            "Von ICFS für die Leitung von Initiativen anerkannt werden"
-          ]
+          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
         },
         "status": {
           "title": "Status",
@@ -1057,20 +1054,12 @@
     "fieldImageUrl": "Bild-URL",
     "fieldCapacity": "Kapazität (leer lassen für unbegrenzt)",
     "fieldRegistrationMode": "Anmeldung",
-    "fieldGuests": "Anmeldung ohne Konto erlauben",
     "fieldRegOpens": "Anmeldung öffnet",
     "fieldRegCloses": "Anmeldung schliesst",
     "mode": {
       "inPerson": "Vor Ort",
       "online": "Online",
       "hybrid": "Hybrid"
-    },
-    "regMode": {
-      "rsvp": "Anmeldung (öffentlich)",
-      "none": "Keine Anmeldung",
-      "rsvpMembers": "Anmeldung (Mitglieder)",
-      "rsvpTickets": "Anmeldung (Ticket)",
-      "rsvpInvited": "Anmeldung (eingeladene Mitglieder)"
     },
     "attendees": "Teilnehmende",
     "confirmedSuffix": "bestätigt",
@@ -1168,7 +1157,6 @@
       "loadError": "Tickets konnten nicht geladen werden.",
       "translateError": "Tarifnamen konnten nicht automatisch übersetzt werden."
     },
-    "fieldAllowNonMembers": "Anmeldung ohne Mitgliedschaft erlauben",
     "fieldGuestPasses": "Von Mitgliedern eingeladene Gastpässe erlauben",
     "fieldGuestPassesHelp": "Ein aktives Mitglied kann einen Gast ohne Mitgliedschaft einladen; Mitgliedschaft & Engagement gibt den kostenlosen Platz frei.",
     "colConfirmation": "Bestätigungs-E-Mail",
@@ -1581,7 +1569,6 @@
         "noneHint": "Nur Information — niemand meldet sich an.",
         "rsvpHint": "Alle können sich anmelden.",
         "membersHint": "Mitglieder melden sich angemeldet an.",
-        "ticketsHint": "Bezahlte Stufen mit Mitgliederpreis.",
         "invitedHint": "Nur eingeladene Mitglieder können sich anmelden."
       },
       "extras": {
@@ -1728,7 +1715,18 @@
       "issuedToast": "{count} Bestätigung(en) ausgestellt."
     },
     "fieldCertificates": "Teilnahmebestätigungen ausstellen",
-    "fieldCertificatesHelp": "Wenn aktiv, können Bestätigungen für alle anwesenden Personen ausgestellt werden."
+    "fieldCertificatesHelp": "Wenn aktiv, können Bestätigungen für alle anwesenden Personen ausgestellt werden.",
+    "registrationOff": "Keine Anmeldung",
+    "registrationOn": "Mit Anmeldung",
+    "fieldRegistrationOn": "Anmeldung",
+    "fieldAudience": "Wer kann sich anmelden",
+    "audience": {
+      "anyone": "Alle",
+      "members": "Nur aktive Mitglieder",
+      "invited": "Nur eingeladene Mitglieder"
+    },
+    "fieldTickets": "Tickets anbieten",
+    "fieldTicketsHelp": "Zeigt Ticketkategorien und Rabattcodes. Ohne gespeicherte Kategorie bleibt es eine einfache kostenlose Anmeldung."
   },
   "eventTranslations": {
     "title": "Übersetzungen",

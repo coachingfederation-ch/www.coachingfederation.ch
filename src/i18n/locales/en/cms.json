@@ -785,10 +785,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Lead projects",
-            "Be recognized by ICFS for leading initiatives"
-          ]
+          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
         },
         "status": {
           "title": "Status",
@@ -1057,20 +1054,12 @@
     "fieldImageUrl": "Image URL",
     "fieldCapacity": "Capacity (leave empty for unlimited)",
     "fieldRegistrationMode": "Registration",
-    "fieldGuests": "Allow registration without an account",
     "fieldRegOpens": "Registration opens",
     "fieldRegCloses": "Registration closes",
     "mode": {
       "inPerson": "In-person",
       "online": "Online",
       "hybrid": "Hybrid"
-    },
-    "regMode": {
-      "rsvp": "RSVP (public)",
-      "none": "No registration",
-      "rsvpMembers": "RSVP (members)",
-      "rsvpTickets": "RSVP (ticket)",
-      "rsvpInvited": "RSVP (invited members)"
     },
     "attendees": "Attendees",
     "confirmedSuffix": "confirmed",
@@ -1168,7 +1157,6 @@
       "loadError": "Tickets could not be loaded.",
       "translateError": "Tier names could not be translated automatically."
     },
-    "fieldAllowNonMembers": "Allow registration without a membership",
     "fieldGuestPasses": "Allow member-invited guest passes",
     "fieldGuestPassesHelp": "An active member can invite one non-member guest; Membership & Engagement approves the free seat.",
     "colConfirmation": "Confirmation email",
@@ -1581,7 +1569,6 @@
         "noneHint": "Information only — nobody signs up.",
         "rsvpHint": "Anyone can sign up.",
         "membersHint": "Members sign in to register.",
-        "ticketsHint": "Paid tiers, with member pricing.",
         "invitedHint": "Only invited members can register."
       },
       "extras": {
@@ -1728,7 +1715,18 @@
       "issuedToast": "{count} certificate(s) issued."
     },
     "fieldCertificates": "Issue certificates of completion",
-    "fieldCertificatesHelp": "When on, staff can issue a certificate for everyone who was checked in."
+    "fieldCertificatesHelp": "When on, staff can issue a certificate for everyone who was checked in.",
+    "registrationOff": "No registration",
+    "registrationOn": "People register",
+    "fieldRegistrationOn": "Registration",
+    "fieldAudience": "Who can register",
+    "audience": {
+      "anyone": "Anyone",
+      "members": "Active members only",
+      "invited": "Invited members only"
+    },
+    "fieldTickets": "Offer tickets",
+    "fieldTicketsHelp": "Shows ticket tiers and discount codes. Without a saved tier the event stays a plain free sign-up."
   },
   "eventTranslations": {
     "title": "Translations",
