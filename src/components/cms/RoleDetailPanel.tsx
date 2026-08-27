@@ -9,7 +9,15 @@
  * last remaining Super Admin (the database enforces both rules too).
  */
 import { useEffect, useState } from "react";
-import { CalendarDays, Crown, Megaphone, ShieldCheck, SlidersHorizontal, X } from "lucide-react";
+import {
+  CalendarDays,
+  Crown,
+  Megaphone,
+  ShieldCheck,
+  SlidersHorizontal,
+  UserPlus,
+  X,
+} from "lucide-react";
 import { listAccountRoleAudit, type listRoleAdminData } from "@/lib/roles.functions";
 import type { GrantableRole, ManagedRole } from "@/lib/role-model";
 
@@ -42,13 +50,20 @@ const RIGHTS: { role: ManagedRole; labelKey: string; descKey: string; icon: type
       descKey: "roles.publisherDesc",
       icon: Megaphone,
     },
+    {
+      role: "membership",
+      labelKey: "roles.membershipBadge",
+      descKey: "roles.membershipDesc",
+      icon: UserPlus,
+    },
   ];
 
 function holds(member: MemberRow, role: ManagedRole): boolean {
   if (role === "administrator") return member.isAdministrator;
   if (role === "editor") return member.isEditor;
   if (role === "organizer") return member.isOrganizer;
-  return member.isPublisher;
+  if (role === "publisher") return member.isPublisher;
+  return member.isMembership;
 }
 
 export function RoleDetailPanel({
@@ -90,7 +105,11 @@ export function RoleDetailPanel({
   }, [member.authUserId, pending]);
 
   const hasAnyRight =
-    member.isAdministrator || member.isEditor || member.isOrganizer || member.isPublisher;
+    member.isAdministrator ||
+    member.isEditor ||
+    member.isOrganizer ||
+    member.isPublisher ||
+    member.isMembership;
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
