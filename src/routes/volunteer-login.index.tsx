@@ -17,6 +17,7 @@ import { Camera, Loader2, QrCode } from "lucide-react";
 import jsQR from "jsqr";
 import { useI18n } from "@/i18n";
 import { extractVolunteerToken, signInWithVolunteerToken } from "@/lib/volunteer-qr-signin";
+import { lastSessionNote, rememberDevice } from "@/lib/volunteer-device";
 
 export const Route = createFileRoute("/volunteer-login/")({
   ssr: false,
@@ -66,6 +67,8 @@ function VolunteerScanLoginPage() {
       setPhase("verifying");
       const ok = await signInWithVolunteerToken(token);
       if (ok) {
+        // Trust this device straight away, so this is the last scan for a week.
+        await rememberDevice();
         void navigate({ to: "/volunteer-chat", replace: true });
         return;
       }
@@ -125,9 +128,14 @@ function VolunteerScanLoginPage() {
         <p className="mt-2 text-sm text-muted-foreground">{t("live-chat.volunteer.scanIntro")}</p>
 
         {reason === "expired" && phase === "idle" ? (
-          <p className="mt-3 rounded-2xl bg-accent/15 px-4 py-3 text-sm text-foreground">
-            {t("live-chat.volunteer.sessionExpired")}
-          </p>
+          <>
+            <p className="mt-3 rounded-2xl bg-accent/15 px-4 py-3 text-sm text-foreground">
+              {t("live-chat.volunteer.sessionExpired")}
+            </p>
+            {/* Diagnostics: tells us whether the token was refused or simply
+                absent, instead of guessing why a volunteer landed here. */}
+            <p className="mt-2 text-xs text-muted-foreground">{lastSessionNote() ?? ""}</p>
+          </>
         ) : null}
 
         <div className="mt-5 flex-1">

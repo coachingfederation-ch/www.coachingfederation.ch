@@ -20,15 +20,25 @@ export const Route = createFileRoute("/_member")({
   ssr: false,
   beforeLoad: async ({ context, location }) => {
     const { data } = await supabase.auth.getSession();
-    const user = data.session?.user ?? null;
+    let user = data.session?.user ?? null;
     if (!user) {
       // The installed home-screen app has its own storage container, so it
-      // launches signed out. Send it to the QR scanner rather than a password
-      // form the volunteer probably cannot complete on a phone.
+      // launches signed out. Before sending the volunteer back to the QR
+      // screen, try the seven-day device token this browser may hold — that
+      // is what turns "signed out again" into a silent resume.
       if (location.pathname.startsWith("/volunteer-chat")) {
-        throw redirect({ to: "/volunteer-login", search: { reason: "expired" as const } });
+        const { restoreVolunteerSession } = await import("@/lib/volunteer-device");
+        const restored = await restoreVolunteerSession().catch(() => false);
+        if (restored) {
+          const { data: retry } = await supabase.auth.getSession();
+          user = retry.session?.user ?? null;
+        }
+        if (!user) {
+          throw redirect({ to: "/volunteer-login", search: { reason: "expired" as const } });
+        }
+      } else {
+        throw redirect({ to: "/auth", search: { next: undefined } });
       }
-      throw redirect({ to: "/auth", search: { next: undefined } });
     }
 
     const options = myRolesQueryOptions(user.id);

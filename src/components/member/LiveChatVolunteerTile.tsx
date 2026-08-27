@@ -17,6 +17,7 @@ import {
   leaveLiveChatVolunteers,
 } from "@/lib/live-chat-volunteers.functions";
 import { createVolunteerLoginCode } from "@/lib/volunteer-qr.functions";
+import { forgetDevice } from "@/lib/volunteer-device";
 
 const CARD = "rounded-2xl border border-border bg-card p-6";
 const CTA =
@@ -76,6 +77,7 @@ export function LiveChatVolunteerTile() {
     if (!window.confirm(t("member.home.liveChat.confirmLeave"))) return;
     setBusy(true);
     await leaveLiveChatVolunteers();
+    forgetDevice();
     await queryClient.invalidateQueries({ queryKey: ["live-chat-volunteer-status"] });
     setBusy(false);
   };

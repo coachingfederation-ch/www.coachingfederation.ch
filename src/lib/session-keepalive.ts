@@ -17,6 +17,9 @@ import { supabase } from "@/integrations/supabase/client";
 /** Don't hammer the auth server when visibility flips repeatedly. */
 const MIN_INTERVAL_MS = 60_000;
 
+/** Proactive renewal while the console stays open. */
+const RENEW_INTERVAL_MS = 20 * 60_000;
+
 export function useSessionKeepAlive() {
   useEffect(() => {
     let lastRun = 0;
@@ -38,8 +41,13 @@ export function useSessionKeepAlive() {
 
     document.addEventListener("visibilitychange", refresh);
     window.addEventListener("online", refresh);
+    // A console left open all shift also renews on a timer: the access token
+    // lives an hour, so a proactive refresh well inside that window keeps the
+    // stored session fresh even without a visibility change.
+    const timer = window.setInterval(refresh, RENEW_INTERVAL_MS);
     return () => {
       cancelled = true;
+      window.clearInterval(timer);
       document.removeEventListener("visibilitychange", refresh);
       window.removeEventListener("online", refresh);
     };

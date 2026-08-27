@@ -27,6 +27,7 @@ import {
   unregisterApnsDeviceToken,
 } from "@/lib/live-chat-volunteers.functions";
 import { playWaitingChime } from "@/lib/volunteer-notifications";
+import { ensureDeviceRemembered } from "@/lib/volunteer-device";
 
 /** iOS wrapper bridge (injected only inside the native app shell). */
 type IcfPushPayload = { action?: string };
@@ -118,6 +119,11 @@ function VolunteerChatPage() {
       }));
       setActivated(status.active);
       if (!status.active) return;
+
+      // Trust this device for seven days, so a suspended home-screen app that
+      // loses its Supabase session resumes silently instead of asking for a
+      // new QR code.
+      void ensureDeviceRemembered();
       const { data: row } = await supabase
         .from("live_chat_presence")
         .select("display_name, is_online")
