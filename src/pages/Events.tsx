@@ -236,6 +236,18 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
           </>
         }
         lede={t("events.hero.lede")}
+        actions={
+          <SubscribeCalendarDialog
+            filters={{
+              ...(community ? { community } : {}),
+              ...(category ? { category } : {}),
+              ...(region ? { region } : {}),
+              ...(lang ? { lang } : {}),
+            }}
+            triggerVariant="inverse-ghost"
+            triggerSize="pill"
+          />
+        }
       />
       <main id="main">
         <section className="bg-background py-10">
