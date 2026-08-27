@@ -153,11 +153,7 @@ export async function loadEventTicketing(
       .order("sort_order", { ascending: true }),
     loadPublicRegistrationForm(eventId, locale),
     resolveMembership(userId),
-    supabase
-      .from("events_public")
-      .select("guest_passes_allowed")
-      .eq("id", eventId)
-      .maybeSingle(),
+    supabase.from("events_public").select("guest_passes_allowed").eq("id", eventId).maybeSingle(),
   ]);
 
   const tiers = ((tierRows ?? []) as TierRow[]).map((row) => toPublicTier(row, locale));

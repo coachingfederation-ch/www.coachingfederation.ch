@@ -715,7 +715,9 @@ export function EventPublishingSection({
                 checked={event.guest_passes_allowed ?? false}
                 onChange={(e) => patch({ guest_passes_allowed: e.target.checked })}
               />
-              <p className="mt-1 text-xs text-muted-foreground">{t("events.fieldGuestPassesHelp")}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {t("events.fieldGuestPassesHelp")}
+              </p>
             </Field>
           ) : null}
           <Field label={t("events.fieldRegOpens")}>
