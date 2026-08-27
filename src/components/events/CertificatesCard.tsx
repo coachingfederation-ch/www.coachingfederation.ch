@@ -42,10 +42,15 @@ function emailLabel(status: string, t: Props["t"]) {
   return t("events.certificates.emailNotSent");
 }
 
+type IssueResult = { issued: number; skipped: number; sent: number; failed: number };
+
 export function CertificatesCard({ eventId, t }: Props) {
   const [board, setBoard] = useState<CertificateBoard | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // A run where everybody already holds a certificate is a legitimate no-op;
+  // without this line the button looks broken.
+  const [result, setResult] = useState<IssueResult | null>(null);
 
   const reload = useCallback(async () => {
     try {
@@ -75,7 +80,21 @@ export function CertificatesCard({ eventId, t }: Props) {
     [reload, t],
   );
 
-  if (!board) return null;
+  const issue = useCallback(() => {
+    setResult(null);
+    void run(async () => {
+      setResult((await issueCompletionDocuments({ data: { eventId } })) as IssueResult);
+    });
+  }, [eventId, run]);
+
+  if (!board) {
+    return error ? (
+      <section className="rounded-2xl border border-border bg-card p-4">
+        <p className="text-xs text-destructive">{error}</p>
+      </section>
+    ) : null;
+  }
+
 
   return (
     <section className="rounded-2xl border border-border bg-card p-4">
