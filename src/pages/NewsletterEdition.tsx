@@ -158,14 +158,18 @@ export default function NewsletterEditionPage() {
                     {block.image_credit_name ? (
                       <figcaption className="mt-2 text-xs text-muted-foreground">
                         Photo by{" "}
-                        <a
-                          href={block.image_credit_url ?? "#"}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline underline-offset-2"
-                        >
-                          {block.image_credit_name}
-                        </a>{" "}
+                        {block.image_credit_url ? (
+                          <a
+                            href={block.image_credit_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline underline-offset-2"
+                          >
+                            {block.image_credit_name}
+                          </a>
+                        ) : (
+                          block.image_credit_name
+                        )}{" "}
                         on Unsplash
                       </figcaption>
                     ) : null}
