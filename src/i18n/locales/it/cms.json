@@ -1057,20 +1057,12 @@
     "fieldImageUrl": "URL dell'immagine",
     "fieldCapacity": "Capienza (lascia vuoto per illimitata)",
     "fieldRegistrationMode": "Iscrizione",
-    "fieldGuests": "Consenti iscrizione senza un account",
     "fieldRegOpens": "Apertura iscrizioni",
     "fieldRegCloses": "Chiusura iscrizioni",
     "mode": {
       "inPerson": "In presenza",
       "online": "Online",
       "hybrid": "Ibrido"
-    },
-    "regMode": {
-      "rsvp": "Iscrizione (pubblica)",
-      "none": "Nessuna iscrizione",
-      "rsvpMembers": "Iscrizione (soci)",
-      "rsvpTickets": "Iscrizione (biglietto)",
-      "rsvpInvited": "Iscrizione (membri invitati)"
     },
     "attendees": "Partecipanti",
     "confirmedSuffix": "confermati",
@@ -1168,7 +1160,6 @@
       "loadError": "Impossibile caricare i biglietti.",
       "translateError": "Non è stato possibile tradurre automaticamente i nomi delle tariffe."
     },
-    "fieldAllowNonMembers": "Consenti iscrizione senza affiliazione",
     "fieldGuestPasses": "Consenti i pass ospiti invitati dai membri",
     "fieldGuestPassesHelp": "Un membro attivo può invitare un ospite non membro; Adesione e coinvolgimento approva il posto gratuito.",
     "colConfirmation": "E-mail di conferma",
@@ -1581,7 +1572,6 @@
         "noneHint": "Solo informazione — nessuna iscrizione.",
         "rsvpHint": "Tutti possono iscriversi.",
         "membersHint": "I soci si iscrivono dopo l'accesso.",
-        "ticketsHint": "Tariffe a pagamento, con prezzo soci.",
         "invitedHint": "Solo i soci invitati possono iscriversi."
       },
       "extras": {
@@ -1728,7 +1718,18 @@
       "issuedToast": "{count} attestato/i rilasciato/i."
     },
     "fieldCertificates": "Rilascia attestati di partecipazione",
-    "fieldCertificatesHelp": "Se attivo, è possibile rilasciare un attestato a tutte le persone presenti."
+    "fieldCertificatesHelp": "Se attivo, è possibile rilasciare un attestato a tutte le persone presenti.",
+    "registrationOff": "Nessuna iscrizione",
+    "registrationOn": "Con iscrizione",
+    "fieldRegistrationOn": "Iscrizione",
+    "fieldAudience": "Chi può iscriversi",
+    "audience": {
+      "anyone": "Tutti",
+      "members": "Solo soci attivi",
+      "invited": "Solo membri invitati"
+    },
+    "fieldTickets": "Offri biglietti",
+    "fieldTicketsHelp": "Mostra le categorie di biglietti e i codici sconto. Senza una categoria salvata resta una semplice iscrizione gratuita."
   },
   "eventTranslations": {
     "title": "Traduzioni",

@@ -1057,20 +1057,12 @@
     "fieldImageUrl": "URL de l'image",
     "fieldCapacity": "Capacité (laisser vide pour illimité)",
     "fieldRegistrationMode": "Inscription",
-    "fieldGuests": "Autoriser l'inscription sans compte",
     "fieldRegOpens": "Ouverture des inscriptions",
     "fieldRegCloses": "Fermeture des inscriptions",
     "mode": {
       "inPerson": "En présentiel",
       "online": "En ligne",
       "hybrid": "Hybride"
-    },
-    "regMode": {
-      "rsvp": "Inscription (publique)",
-      "none": "Pas d'inscription",
-      "rsvpMembers": "Inscription (membres)",
-      "rsvpTickets": "Inscription (billet)",
-      "rsvpInvited": "Inscription (membres invités)"
     },
     "attendees": "Participants",
     "confirmedSuffix": "confirmé(s)",
@@ -1168,7 +1160,6 @@
       "loadError": "Impossible de charger les billets.",
       "translateError": "Les noms de tarifs n'ont pas pu être traduits automatiquement."
     },
-    "fieldAllowNonMembers": "Autoriser l'inscription sans adhésion",
     "fieldGuestPasses": "Autoriser les pass invités proposés par les membres",
     "fieldGuestPassesHelp": "Un membre actif peut inviter une personne non membre ; Adhésion et engagement approuve la place gratuite.",
     "colConfirmation": "E-mail de confirmation",
@@ -1581,7 +1572,6 @@
         "noneHint": "Information seulement — pas d'inscription.",
         "rsvpHint": "Tout le monde peut s'inscrire.",
         "membersHint": "Les membres s'inscrivent en étant connectés.",
-        "ticketsHint": "Tarifs payants, avec prix membre.",
         "invitedHint": "Seuls les membres invités peuvent s'inscrire."
       },
       "extras": {
@@ -1728,7 +1718,18 @@
       "issuedToast": "{count} attestation(s) délivrée(s)."
     },
     "fieldCertificates": "Délivrer des attestations de participation",
-    "fieldCertificatesHelp": "Une fois activé, une attestation peut être délivrée à toutes les personnes présentes."
+    "fieldCertificatesHelp": "Une fois activé, une attestation peut être délivrée à toutes les personnes présentes.",
+    "registrationOff": "Pas d'inscription",
+    "registrationOn": "Avec inscription",
+    "fieldRegistrationOn": "Inscription",
+    "fieldAudience": "Qui peut s'inscrire",
+    "audience": {
+      "anyone": "Tout le monde",
+      "members": "Membres actifs uniquement",
+      "invited": "Membres invités uniquement"
+    },
+    "fieldTickets": "Proposer des billets",
+    "fieldTicketsHelp": "Affiche les catégories de billets et les codes de réduction. Sans catégorie enregistrée, l'inscription reste simple et gratuite."
   },
   "eventTranslations": {
     "title": "Traductions",
