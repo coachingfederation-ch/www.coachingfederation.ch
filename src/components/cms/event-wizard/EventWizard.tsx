@@ -16,7 +16,13 @@ import {
   Textarea,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { UnsplashPicker, type UnsplashPick } from "@/components/cms/UnsplashPicker";
-import { Field, inputClass, fromLocalInput } from "@/components/cms/EventEditorSections";
+import {
+  Field,
+  inputClass,
+  fromLocalInput,
+  addHoursToLocalInput,
+} from "@/components/cms/EventEditorSections";
+
 import { slugify } from "@/lib/articles";
 import { fetchVocabulary, vocabLabel, type VocabRow } from "@/lib/vocabularies";
 import { createEvent, listCommunityOptions, setEventStatus } from "@/lib/events-admin.functions";
@@ -297,7 +303,14 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
                   type="datetime-local"
                   className={inputClass}
                   value={draft.startsLocal}
-                  onChange={(e) => patch({ startsLocal: e.target.value })}
+                  onChange={(e) =>
+                    // The end follows the start by two hours by default.
+                    patch({
+                      startsLocal: e.target.value,
+                      endsLocal: addHoursToLocalInput(e.target.value, 2),
+                    })
+                  }
+
                 />
               </Field>
               <Field label={t("events.fieldEnds")}>
