@@ -311,7 +311,6 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
                       endsLocal: addHoursToLocalInput(e.target.value, 2),
                     })
                   }
-
                 />
               </Field>
               <Field label={t("events.fieldEnds")}>
