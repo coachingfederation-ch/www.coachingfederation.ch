@@ -290,9 +290,9 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   // (with an optional "allow without a membership" flag) and ticketed RSVP.
   const mode = event.registration_mode ?? "none";
   const rsvpMode = mode !== "none";
-  const ticketMode = mode === "rsvp_tickets";
+  const ticketMode = event.tickets_enabled === true;
   const invitedMode = mode === "rsvp_invited";
-  const membersOnly = mode === "rsvp_members" && event.guest_registration_allowed === false;
+  const membersOnly = mode === "rsvp_members";
 
   // A tier only applies on a ticketed event, even if tiers linger from an
   // earlier configuration.

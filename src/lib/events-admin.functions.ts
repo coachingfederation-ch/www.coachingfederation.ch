@@ -17,7 +17,7 @@ import { expandRecurrence, occurrenceSlug, RECURRENCE_FREQUENCIES } from "./recu
 const LIST_COLUMNS =
   "id, series_id, slug, title, summary, language, status, starts_at, ends_at, timezone, location_mode, venue_name, city, capacity, is_featured, is_internal, category_id, region_id, organizer_id, updated_at";
 
-const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, guest_passes_allowed, practical_notes, published_at, content_updated_at, hero_marks, cce_enabled, attendance_min_percent, certificates_enabled`;
+const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, tickets_enabled, guest_passes_allowed, practical_notes, published_at, content_updated_at, hero_marks, cce_enabled, attendance_min_percent, certificates_enabled`;
 
 /** One row of the staff events list, enriched with filterable labels. */
 export type ListedEvent = {
@@ -99,6 +99,9 @@ const eventInput = z.object({
   registration_opens_at: z.string().min(1).nullable().optional(),
   registration_closes_at: z.string().min(1).nullable().optional(),
   guest_registration_allowed: z.boolean(),
+  // Ticket tiers and discount codes are offered on this event. Independent of
+  // who may register, so a members-only event can also be ticketed.
+  tickets_enabled: z.boolean().optional(),
   // Share of the scheduled length an online attendee must be present for the
   // CSV import to count them (floor of 15 minutes applies at import time).
   attendance_min_percent: z.number().int().min(1).max(100).optional(),
@@ -647,6 +650,7 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
         capacity: source.capacity,
         registration_mode: source.registration_mode,
         guest_registration_allowed: source.guest_registration_allowed,
+        tickets_enabled: source.tickets_enabled,
         guest_passes_allowed: source.guest_passes_allowed,
         category_id: source.category_id,
         region_id: source.region_id,
@@ -846,7 +850,7 @@ export const createStaffRegistration = createServerFn({ method: "POST" })
 
     const { data: event, error } = await context.supabase
       .from("events")
-      .select("id, registration_mode")
+      .select("id, registration_mode, tickets_enabled")
       .eq("id", data.eventId)
       .maybeSingle();
     if (error || !event) throw new Error("Event not found");
@@ -871,7 +875,7 @@ export const createStaffRegistration = createServerFn({ method: "POST" })
       .from("event_registrations")
       .insert({
         event_id: data.eventId,
-        tier_id: event.registration_mode === "rsvp_tickets" ? (data.tierId ?? null) : null,
+        tier_id: event.tickets_enabled ? (data.tierId ?? null) : null,
         full_name: data.fullName,
         email,
         locale: data.locale,
