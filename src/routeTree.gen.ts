@@ -81,6 +81,7 @@ import { Route as LocaleInsightsIndexRouteImport } from './routes/$locale/insigh
 import { Route as LocaleInsightsIdRouteImport } from './routes/$locale/insights.$id'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as MemberMemberCertificatesRouteImport } from './routes/_member/member.certificates'
 import { Route as StaffArticlesIndexRouteImport } from './routes/_staff/articles.index'
 import { Route as StaffArticlesIdRouteImport } from './routes/_staff/articles.$id'
 import { Route as StaffArticlesCategoriesRouteImport } from './routes/_staff/articles.categories'
@@ -105,12 +106,14 @@ import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/mem
 import { Route as ApiPublicNewsletterRefreshRouteImport } from './routes/api/public/newsletter-refresh'
 import { Route as ApiPublicRoleDirectoryRouteImport } from './routes/api/public/role-directory'
 import { Route as ApiPublicRoleGrantsArchiveRouteImport } from './routes/api/public/role-grants-archive'
+import { Route as VerifyCertificateTokenRouteImport } from './routes/verify.certificate.$token'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
 import { Route as StaffManageEventsNewRouteImport } from './routes/_staff/manage.events.new'
 import { Route as StaffManageNewslettersIndexRouteImport } from './routes/_staff/manage.newsletters.index'
 import { Route as StaffManageNewslettersIdRouteImport } from './routes/_staff/manage.newsletters.$id'
 import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/calendar.$file'
+import { Route as ApiPublicCertificateQrTokenRouteImport } from './routes/api/public/certificate-qr.$token'
 import { Route as ApiPublicEventCalendarFileRouteImport } from './routes/api/public/event-calendar.$file'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicTicketQrTokenRouteImport } from './routes/api/public/ticket-qr.$token'
@@ -484,6 +487,12 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MemberMemberCertificatesRoute =
+  MemberMemberCertificatesRouteImport.update({
+    id: '/certificates',
+    path: '/certificates',
+    getParentRoute: () => MemberMemberRoute,
+  } as any)
 const StaffArticlesIndexRoute = StaffArticlesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -608,6 +617,11 @@ const ApiPublicRoleGrantsArchiveRoute =
     path: '/api/public/role-grants-archive',
     getParentRoute: () => rootRouteImport,
   } as any)
+const VerifyCertificateTokenRoute = VerifyCertificateTokenRouteImport.update({
+  id: '/verify/certificate/$token',
+  path: '/verify/certificate/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StaffManageEventsIndexRoute = StaffManageEventsIndexRouteImport.update({
   id: '/manage/events/',
   path: '/manage/events/',
@@ -640,6 +654,12 @@ const ApiPublicCalendarFileRoute = ApiPublicCalendarFileRouteImport.update({
   path: '/api/public/calendar/$file',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCertificateQrTokenRoute =
+  ApiPublicCertificateQrTokenRouteImport.update({
+    id: '/api/public/certificate-qr/$token',
+    path: '/api/public/certificate-qr/$token',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicEventCalendarFileRoute =
   ApiPublicEventCalendarFileRouteImport.update({
     id: '/api/public/event-calendar/$file',
@@ -730,7 +750,7 @@ export interface FileRoutesByFullPath {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/member': typeof MemberMemberRoute
+  '/member': typeof MemberMemberRouteWithChildren
   '/my-profile': typeof MemberMyProfileRoute
   '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/volunteering': typeof MemberVolunteeringRoute
@@ -765,6 +785,7 @@ export interface FileRoutesByFullPath {
   '/$locale/insights/$id': typeof LocaleInsightsIdRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/member/certificates': typeof MemberMemberCertificatesRoute
   '/articles/$id': typeof StaffArticlesIdRoute
   '/articles/categories': typeof StaffArticlesCategoriesRoute
   '/articles/new': typeof StaffArticlesNewRoute
@@ -787,6 +808,7 @@ export interface FileRoutesByFullPath {
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
+  '/verify/certificate/$token': typeof VerifyCertificateTokenRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
   '/$locale/insights/': typeof LocaleInsightsIndexRoute
@@ -796,6 +818,7 @@ export interface FileRoutesByFullPath {
   '/manage/events/new': typeof StaffManageEventsNewRoute
   '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
+  '/api/public/certificate-qr/$token': typeof ApiPublicCertificateQrTokenRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
@@ -839,7 +862,7 @@ export interface FileRoutesByTo {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/member': typeof MemberMemberRoute
+  '/member': typeof MemberMemberRouteWithChildren
   '/my-profile': typeof MemberMyProfileRoute
   '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/volunteering': typeof MemberVolunteeringRoute
@@ -873,6 +896,7 @@ export interface FileRoutesByTo {
   '/$locale/insights/$id': typeof LocaleInsightsIdRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/member/certificates': typeof MemberMemberCertificatesRoute
   '/articles/$id': typeof StaffArticlesIdRoute
   '/articles/categories': typeof StaffArticlesCategoriesRoute
   '/articles/new': typeof StaffArticlesNewRoute
@@ -895,6 +919,7 @@ export interface FileRoutesByTo {
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
+  '/verify/certificate/$token': typeof VerifyCertificateTokenRoute
   '/$locale/communities': typeof LocaleCommunitiesIndexRoute
   '/$locale/events': typeof LocaleEventsIndexRoute
   '/$locale/insights': typeof LocaleInsightsIndexRoute
@@ -904,6 +929,7 @@ export interface FileRoutesByTo {
   '/manage/events/new': typeof StaffManageEventsNewRoute
   '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
+  '/api/public/certificate-qr/$token': typeof ApiPublicCertificateQrTokenRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
@@ -953,7 +979,7 @@ export interface FileRoutesById {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/_member/member': typeof MemberMemberRoute
+  '/_member/member': typeof MemberMemberRouteWithChildren
   '/_member/my-profile': typeof MemberMyProfileRoute
   '/_member/volunteer-chat': typeof MemberVolunteerChatRoute
   '/_member/volunteering': typeof MemberVolunteeringRoute
@@ -988,6 +1014,7 @@ export interface FileRoutesById {
   '/$locale/insights/$id': typeof LocaleInsightsIdRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/_member/member/certificates': typeof MemberMemberCertificatesRoute
   '/_staff/articles/$id': typeof StaffArticlesIdRoute
   '/_staff/articles/categories': typeof StaffArticlesCategoriesRoute
   '/_staff/articles/new': typeof StaffArticlesNewRoute
@@ -1010,6 +1037,7 @@ export interface FileRoutesById {
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
+  '/verify/certificate/$token': typeof VerifyCertificateTokenRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
   '/$locale/insights/': typeof LocaleInsightsIndexRoute
@@ -1019,6 +1047,7 @@ export interface FileRoutesById {
   '/_staff/manage/events/new': typeof StaffManageEventsNewRoute
   '/_staff/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
+  '/api/public/certificate-qr/$token': typeof ApiPublicCertificateQrTokenRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/ticket-qr/$token': typeof ApiPublicTicketQrTokenRoute
@@ -1102,6 +1131,7 @@ export interface FileRouteTypes {
     | '/$locale/insights/$id'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/member/certificates'
     | '/articles/$id'
     | '/articles/categories'
     | '/articles/new'
@@ -1124,6 +1154,7 @@ export interface FileRouteTypes {
     | '/api/public/newsletter-refresh'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
+    | '/verify/certificate/$token'
     | '/$locale/communities/'
     | '/$locale/events/'
     | '/$locale/insights/'
@@ -1133,6 +1164,7 @@ export interface FileRouteTypes {
     | '/manage/events/new'
     | '/manage/newsletters/$id'
     | '/api/public/calendar/$file'
+    | '/api/public/certificate-qr/$token'
     | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
@@ -1210,6 +1242,7 @@ export interface FileRouteTypes {
     | '/$locale/insights/$id'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/member/certificates'
     | '/articles/$id'
     | '/articles/categories'
     | '/articles/new'
@@ -1232,6 +1265,7 @@ export interface FileRouteTypes {
     | '/api/public/newsletter-refresh'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
+    | '/verify/certificate/$token'
     | '/$locale/communities'
     | '/$locale/events'
     | '/$locale/insights'
@@ -1241,6 +1275,7 @@ export interface FileRouteTypes {
     | '/manage/events/new'
     | '/manage/newsletters/$id'
     | '/api/public/calendar/$file'
+    | '/api/public/certificate-qr/$token'
     | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
@@ -1324,6 +1359,7 @@ export interface FileRouteTypes {
     | '/$locale/insights/$id'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/_member/member/certificates'
     | '/_staff/articles/$id'
     | '/_staff/articles/categories'
     | '/_staff/articles/new'
@@ -1346,6 +1382,7 @@ export interface FileRouteTypes {
     | '/api/public/newsletter-refresh'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
+    | '/verify/certificate/$token'
     | '/$locale/communities/'
     | '/$locale/events/'
     | '/$locale/insights/'
@@ -1355,6 +1392,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/events/new'
     | '/_staff/manage/newsletters/$id'
     | '/api/public/calendar/$file'
+    | '/api/public/certificate-qr/$token'
     | '/api/public/event-calendar/$file'
     | '/api/public/payments/webhook'
     | '/api/public/ticket-qr/$token'
@@ -1423,7 +1461,9 @@ export interface RootRouteChildren {
   ApiPublicNewsletterRefreshRoute: typeof ApiPublicNewsletterRefreshRoute
   ApiPublicRoleDirectoryRoute: typeof ApiPublicRoleDirectoryRoute
   ApiPublicRoleGrantsArchiveRoute: typeof ApiPublicRoleGrantsArchiveRoute
+  VerifyCertificateTokenRoute: typeof VerifyCertificateTokenRoute
   ApiPublicCalendarFileRoute: typeof ApiPublicCalendarFileRoute
+  ApiPublicCertificateQrTokenRoute: typeof ApiPublicCertificateQrTokenRoute
   ApiPublicEventCalendarFileRoute: typeof ApiPublicEventCalendarFileRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicTicketQrTokenRoute: typeof ApiPublicTicketQrTokenRoute
@@ -1938,6 +1978,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_member/member/certificates': {
+      id: '/_member/member/certificates'
+      path: '/certificates'
+      fullPath: '/member/certificates'
+      preLoaderRoute: typeof MemberMemberCertificatesRouteImport
+      parentRoute: typeof MemberMemberRoute
+    }
     '/_staff/articles/': {
       id: '/_staff/articles/'
       path: '/'
@@ -2106,6 +2153,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicRoleGrantsArchiveRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/verify/certificate/$token': {
+      id: '/verify/certificate/$token'
+      path: '/verify/certificate/$token'
+      fullPath: '/verify/certificate/$token'
+      preLoaderRoute: typeof VerifyCertificateTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_staff/manage/events/': {
       id: '/_staff/manage/events/'
       path: '/manage/events'
@@ -2146,6 +2200,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/calendar/$file'
       fullPath: '/api/public/calendar/$file'
       preLoaderRoute: typeof ApiPublicCalendarFileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/certificate-qr/$token': {
+      id: '/api/public/certificate-qr/$token'
+      path: '/api/public/certificate-qr/$token'
+      fullPath: '/api/public/certificate-qr/$token'
+      preLoaderRoute: typeof ApiPublicCertificateQrTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/event-calendar/$file': {
@@ -2277,15 +2338,27 @@ const LocaleRouteRouteWithChildren = LocaleRouteRoute._addFileChildren(
   LocaleRouteRouteChildren,
 )
 
+interface MemberMemberRouteChildren {
+  MemberMemberCertificatesRoute: typeof MemberMemberCertificatesRoute
+}
+
+const MemberMemberRouteChildren: MemberMemberRouteChildren = {
+  MemberMemberCertificatesRoute: MemberMemberCertificatesRoute,
+}
+
+const MemberMemberRouteWithChildren = MemberMemberRoute._addFileChildren(
+  MemberMemberRouteChildren,
+)
+
 interface MemberRouteRouteChildren {
-  MemberMemberRoute: typeof MemberMemberRoute
+  MemberMemberRoute: typeof MemberMemberRouteWithChildren
   MemberMyProfileRoute: typeof MemberMyProfileRoute
   MemberVolunteerChatRoute: typeof MemberVolunteerChatRoute
   MemberVolunteeringRoute: typeof MemberVolunteeringRoute
 }
 
 const MemberRouteRouteChildren: MemberRouteRouteChildren = {
-  MemberMemberRoute: MemberMemberRoute,
+  MemberMemberRoute: MemberMemberRouteWithChildren,
   MemberMyProfileRoute: MemberMyProfileRoute,
   MemberVolunteerChatRoute: MemberVolunteerChatRoute,
   MemberVolunteeringRoute: MemberVolunteeringRoute,
@@ -2448,7 +2521,9 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicNewsletterRefreshRoute: ApiPublicNewsletterRefreshRoute,
   ApiPublicRoleDirectoryRoute: ApiPublicRoleDirectoryRoute,
   ApiPublicRoleGrantsArchiveRoute: ApiPublicRoleGrantsArchiveRoute,
+  VerifyCertificateTokenRoute: VerifyCertificateTokenRoute,
   ApiPublicCalendarFileRoute: ApiPublicCalendarFileRoute,
+  ApiPublicCertificateQrTokenRoute: ApiPublicCertificateQrTokenRoute,
   ApiPublicEventCalendarFileRoute: ApiPublicEventCalendarFileRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicTicketQrTokenRoute: ApiPublicTicketQrTokenRoute,

@@ -13,6 +13,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowRight,
+  Award,
   ExternalLink,
   Mail,
   MapPin,
@@ -147,6 +148,18 @@ export function MemberHome() {
           <p className="mt-1 text-sm text-muted-foreground">{t("member.home.volunteer.body")}</p>
           <Link to="/volunteering" className={CTA}>
             {t("member.home.volunteer.cta")}
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </Link>
+        </section>
+
+        {/* Reprinting a certificate is a self-service task: members reach it
+            without writing to the office. */}
+        <section className={CARD}>
+          <Award className="h-5 w-5 text-primary" aria-hidden />
+          <h2 className="mt-3 text-lg font-bold">{t("member.certificates.title")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t("member.certificates.help")}</p>
+          <Link to="/member/certificates" className={CTA}>
+            {t("member.certificates.open")}
             <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
         </section>

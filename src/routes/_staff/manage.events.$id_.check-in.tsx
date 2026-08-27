@@ -14,6 +14,7 @@ import { useCms } from "@/i18n/cms";
 import { parseScannedTicket, type CheckInOutcome } from "@/lib/check-in";
 import { TicketScanner } from "@/components/events/TicketScanner";
 import { AttendanceImportCard } from "@/components/events/AttendanceImportCard";
+import { CertificatesCard } from "@/components/events/CertificatesCard";
 import {
   checkInAttendee,
   checkInByToken,
@@ -174,6 +175,8 @@ function CheckInPage() {
           t={t}
           onChanged={reload}
         />
+
+        <CertificatesCard eventId={id} t={t} />
 
         <section className="rounded-2xl border border-border bg-card p-4">
           {scanning ? (

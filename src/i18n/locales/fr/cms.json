@@ -811,6 +811,14 @@
         "fallback": "Le Volunteering Director",
         "cta": "Envoyer un e-mail"
       }
+    },
+    "certificates": {
+      "title": "Attestations",
+      "help": "Toutes les attestations obtenues lors de nos événements. Ouvrez-en une pour l'imprimer à nouveau.",
+      "empty": "Vous n'avez encore aucune attestation.",
+      "completedOn": "Terminé le",
+      "serial": "Numéro",
+      "open": "Ouvrir"
     }
   },
   "noAccess": {
@@ -1689,7 +1697,38 @@
         "saveDraft": "Enregistrer le brouillon",
         "publish": "Publier"
       }
-    }
+    },
+    "certificates": {
+      "title": "Attestations de participation",
+      "help": "Délivrez une attestation à toutes les personnes présentes. Elles la reçoivent par e-mail et peuvent l'imprimer depuis une page de vérification.",
+      "disabled": "Les attestations sont désactivées pour cet événement. Activez-les dans les réglages.",
+      "issue": "Délivrer les attestations",
+      "issuing": "Délivrance…",
+      "checkedIn": "Présents",
+      "issued": "Délivrées",
+      "revoked": "Retirées",
+      "pendingEmails": "E-mails en attente",
+      "hoursNote": "Les heures CCE approuvées figurent sur chaque attestation.",
+      "attendanceOnly": "Participation seule",
+      "colHolder": "Participant",
+      "colSerial": "Numéro",
+      "colHours": "Heures",
+      "colEmail": "E-mail",
+      "emailSent": "Envoyé",
+      "emailNotSent": "Non envoyé",
+      "emailSending": "Envoi…",
+      "emailFailed": "Échec",
+      "view": "Voir",
+      "resend": "Renvoyer",
+      "reissue": "Redélivrer",
+      "revoke": "Retirer",
+      "revokeConfirm": "Retirer cette attestation ? La personne est informée qu'elle n'est plus valable.",
+      "empty": "Aucune attestation pour le moment.",
+      "failed": "Cela n'a pas fonctionné. Réessayez.",
+      "issuedToast": "{count} attestation(s) délivrée(s)."
+    },
+    "fieldCertificates": "Délivrer des attestations de participation",
+    "fieldCertificatesHelp": "Une fois activé, une attestation peut être délivrée à toutes les personnes présentes."
   },
   "eventTranslations": {
     "title": "Traductions",

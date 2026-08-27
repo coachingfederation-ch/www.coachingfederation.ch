@@ -780,6 +780,20 @@ export function EventPublishingSection({
               </p>
             </Field>
           ) : null}
+          {/* Certificates depend on attendance, so they are only offered where
+              a seat — and therefore a check-in — can exist. */}
+          {event.registration_mode !== "none" ? (
+            <Field label={t("events.fieldCertificates")}>
+              <input
+                type="checkbox"
+                checked={event.certificates_enabled ?? false}
+                onChange={(e) => patch({ certificates_enabled: e.target.checked })}
+              />
+              <p className="mt-1 text-xs text-muted-foreground">
+                {t("events.fieldCertificatesHelp")}
+              </p>
+            </Field>
+          ) : null}
         </div>
       </Section>
 

@@ -17,7 +17,7 @@ import { expandRecurrence, occurrenceSlug, RECURRENCE_FREQUENCIES } from "./recu
 const LIST_COLUMNS =
   "id, series_id, slug, title, summary, language, status, starts_at, ends_at, timezone, location_mode, venue_name, city, capacity, is_featured, is_internal, category_id, region_id, organizer_id, updated_at";
 
-const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, guest_passes_allowed, practical_notes, published_at, content_updated_at, hero_marks, cce_enabled, attendance_min_percent`;
+const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, guest_passes_allowed, practical_notes, published_at, content_updated_at, hero_marks, cce_enabled, attendance_min_percent, certificates_enabled`;
 
 /** One row of the staff events list, enriched with filterable labels. */
 export type ListedEvent = {
@@ -102,6 +102,7 @@ const eventInput = z.object({
   // Share of the scheduled length an online attendee must be present for the
   // CSV import to count them (floor of 15 minutes applies at import time).
   attendance_min_percent: z.number().int().min(1).max(100).optional(),
+  certificates_enabled: z.boolean().optional(),
   // Members may invite one non-member guest to this event (needs approval).
   guest_passes_allowed: z.boolean().optional(),
   // Door and joining information, repeated in the reminder emails.
@@ -137,6 +138,7 @@ function normalize(input: z.infer<typeof eventInput>) {
     practical_notes: blankToNull(input.practical_notes),
     is_internal: input.is_internal ?? false,
     attendance_min_percent: input.attendance_min_percent ?? 80,
+    certificates_enabled: input.certificates_enabled ?? false,
     guest_passes_allowed: input.guest_passes_allowed ?? false,
     category_id: input.category_id ?? null,
     region_id: input.region_id ?? null,

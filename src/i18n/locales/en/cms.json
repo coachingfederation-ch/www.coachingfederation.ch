@@ -811,6 +811,14 @@
         "fallback": "The Volunteering Director",
         "cta": "Send email"
       }
+    },
+    "certificates": {
+      "title": "Certificates",
+      "help": "Every certificate you have earned at our events. Open one to print it again.",
+      "empty": "You have no certificates yet.",
+      "completedOn": "Completed on",
+      "serial": "Number",
+      "open": "Open"
     }
   },
   "noAccess": {
@@ -1689,7 +1697,38 @@
         "saveDraft": "Save draft",
         "publish": "Publish post"
       }
-    }
+    },
+    "certificates": {
+      "title": "Certificates of completion",
+      "help": "Issue a certificate for everyone who was checked in. Attendees receive it by email and can print it from a verification page.",
+      "disabled": "Certificates are switched off for this event. Turn them on in the event settings.",
+      "issue": "Issue completion documents",
+      "issuing": "Issuing…",
+      "checkedIn": "Checked in",
+      "issued": "Issued",
+      "revoked": "Withdrawn",
+      "pendingEmails": "Emails pending",
+      "hoursNote": "Approved CCE hours are recorded on each certificate.",
+      "attendanceOnly": "Attendance only",
+      "colHolder": "Attendee",
+      "colSerial": "Number",
+      "colHours": "Hours",
+      "colEmail": "Email",
+      "emailSent": "Sent",
+      "emailNotSent": "Not sent",
+      "emailSending": "Sending…",
+      "emailFailed": "Failed",
+      "view": "View",
+      "resend": "Resend",
+      "reissue": "Reissue",
+      "revoke": "Withdraw",
+      "revokeConfirm": "Withdraw this certificate? The holder is told it is no longer valid.",
+      "empty": "No certificates yet.",
+      "failed": "That did not work. Try again.",
+      "issuedToast": "{count} certificate(s) issued."
+    },
+    "fieldCertificates": "Issue certificates of completion",
+    "fieldCertificatesHelp": "When on, staff can issue a certificate for everyone who was checked in."
   },
   "eventTranslations": {
     "title": "Translations",

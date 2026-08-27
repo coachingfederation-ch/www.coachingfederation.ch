@@ -811,6 +811,14 @@
         "fallback": "Die Volunteering Director",
         "cta": "E-Mail senden"
       }
+    },
+    "certificates": {
+      "title": "Bestätigungen",
+      "help": "Alle Bestätigungen, die Sie an unseren Veranstaltungen erhalten haben. Öffnen Sie eine, um sie erneut zu drucken.",
+      "empty": "Sie haben noch keine Bestätigungen.",
+      "completedOn": "Abgeschlossen am",
+      "serial": "Nummer",
+      "open": "Öffnen"
     }
   },
   "noAccess": {
@@ -1689,7 +1697,38 @@
         "saveDraft": "Entwurf speichern",
         "publish": "Beitrag publizieren"
       }
-    }
+    },
+    "certificates": {
+      "title": "Teilnahmebestätigungen",
+      "help": "Stellen Sie für alle anwesenden Personen eine Bestätigung aus. Die Teilnehmenden erhalten sie per E-Mail und können sie über eine Prüfseite ausdrucken.",
+      "disabled": "Bestätigungen sind für diese Veranstaltung ausgeschaltet. Aktivieren Sie sie in den Einstellungen.",
+      "issue": "Bestätigungen ausstellen",
+      "issuing": "Wird ausgestellt…",
+      "checkedIn": "Anwesend",
+      "issued": "Ausgestellt",
+      "revoked": "Zurückgezogen",
+      "pendingEmails": "Offene E-Mails",
+      "hoursNote": "Bewilligte CCE-Stunden werden auf jeder Bestätigung erfasst.",
+      "attendanceOnly": "Nur Teilnahme",
+      "colHolder": "Teilnehmende Person",
+      "colSerial": "Nummer",
+      "colHours": "Stunden",
+      "colEmail": "E-Mail",
+      "emailSent": "Gesendet",
+      "emailNotSent": "Nicht gesendet",
+      "emailSending": "Wird gesendet…",
+      "emailFailed": "Fehlgeschlagen",
+      "view": "Ansehen",
+      "resend": "Erneut senden",
+      "reissue": "Neu ausstellen",
+      "revoke": "Zurückziehen",
+      "revokeConfirm": "Diese Bestätigung zurückziehen? Die Person wird informiert, dass sie nicht mehr gültig ist.",
+      "empty": "Noch keine Bestätigungen.",
+      "failed": "Das hat nicht geklappt. Bitte erneut versuchen.",
+      "issuedToast": "{count} Bestätigung(en) ausgestellt."
+    },
+    "fieldCertificates": "Teilnahmebestätigungen ausstellen",
+    "fieldCertificatesHelp": "Wenn aktiv, können Bestätigungen für alle anwesenden Personen ausgestellt werden."
   },
   "eventTranslations": {
     "title": "Übersetzungen",
