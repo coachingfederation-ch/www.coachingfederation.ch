@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { useCms } from "@/i18n/cms";
 import { getVolunteeringInfo } from "@/lib/volunteering-info.functions";
+import { LiveChatVolunteerControls } from "./LiveChatVolunteerControls";
 
 const CARD = "rounded-2xl border border-border bg-card p-6";
 const CTA =
