@@ -673,11 +673,9 @@ export const setGuestPassFollowUp = createServerFn({ method: "POST" })
   });
 
 /** Every pass in the pilot, with attendance and conversion resolved. */
-export const listAllGuestPasses = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<StaffGuestPass[]> => {
-    const { assertMembership } = await import("./authz");
-    await assertMembership(context);
+/** Shared M&E projection: the list and the detail screen read the same rows. */
+async function buildStaffGuestPasses(): Promise<StaffGuestPass[]> {
+  {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { listAllGuestPasses: readAll } = await import("./guest-passes.server");
 
@@ -768,6 +766,15 @@ export const listAllGuestPasses = createServerFn({ method: "POST" })
       matchedMemberId: memberByEmail.get(r.guestEmail.toLowerCase()) ?? null,
       createdAt: r.createdAt,
     }));
+  }
+}
+
+export const listAllGuestPasses = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<StaffGuestPass[]> => {
+    const { assertMembership } = await import("./authz");
+    await assertMembership(context);
+    return buildStaffGuestPasses();
   });
 
 /**
@@ -780,7 +787,7 @@ export const getGuestPass = createServerFn({ method: "POST" })
   .handler(async ({ data, context }): Promise<StaffGuestPass | null> => {
     const { assertMembership } = await import("./authz");
     await assertMembership(context);
-    const rows = await listAllGuestPasses();
+    const rows = await buildStaffGuestPasses();
     return rows.find((row) => row.id === data.passId) ?? null;
   });
 
