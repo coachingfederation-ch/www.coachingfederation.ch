@@ -26,5 +26,15 @@ export const Route = createFileRoute("/_staff")({
     }
     return { user: data.user, roles };
   },
-  component: () => <Outlet />,
+  component: StaffShell,
 });
+
+function StaffShell() {
+  return (
+    <>
+      <Outlet />
+      {/* Read-only support agent; only exists behind the staff gate. */}
+      <StaffAssistant />
+    </>
+  );
+}
