@@ -719,6 +719,9 @@ export function EventPublishingSection({
                 <option value="rsvp_members">{t("events.audience.members")}</option>
                 <option value="rsvp_invited">{t("events.audience.invited")}</option>
               </select>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {t("events.fieldAudienceHelp")}
+              </p>
             </Field>
           ) : null}
           {event.registration_mode !== "none" ? (
