@@ -11,7 +11,7 @@
  * alt and the partner name carries the meaning. The AI disclosure badge is
  * mandatory on every generated photograph, so it ships inside the image frame.
  */
-import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df/components/photography/AiPhoto";
+import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
 
 export type SponsorItem = {
   name: string;
