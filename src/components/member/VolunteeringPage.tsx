@@ -91,6 +91,21 @@ export function VolunteeringPage() {
                     &mdash; {attribution}
                   </footer>
                 </blockquote>
+                {/* The two cards that carry a real action: writing for the chapter
+                    is an email away, and an activated live-chat volunteer gets
+                    their console controls right where the role is described. */}
+                {key === "contentContributor" ? (
+                  <div className="mt-5 border-t border-border pt-4">
+                    <p className="text-sm text-muted-foreground">
+                      {t("member.home.writeForUs.body")}
+                    </p>
+                    <a href="mailto:office@coachingfederation.ch" target="_top" className={CTA}>
+                      {t("member.home.writeForUs.cta")}
+                      <Mail className="h-4 w-4" aria-hidden />
+                    </a>
+                  </div>
+                ) : null}
+                {key === "liveChat" ? <LiveChatVolunteerControls /> : null}
               </section>
             );
           })}
