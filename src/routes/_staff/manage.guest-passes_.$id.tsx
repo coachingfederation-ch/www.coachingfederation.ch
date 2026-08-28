@@ -20,7 +20,7 @@ import { getGuestPass, type StaffGuestPass } from "@/lib/guest-passes.functions"
 /** Matches the purge job: the record lives 365 days past the event's end. */
 const RETENTION_DAYS = 365;
 
-export const Route = createFileRoute("/_staff/manage/guest-passes/$id")({
+export const Route = createFileRoute("/_staff/manage/guest-passes_/$id")({
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, MEMBERSHIP_ROLES),
   head: () => ({
     meta: [

@@ -113,7 +113,7 @@ import { Route as VerifyCertificateTokenRouteImport } from './routes/verify.cert
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
 import { Route as StaffManageEventsNewRouteImport } from './routes/_staff/manage.events.new'
-import { Route as StaffManageGuestPassesIdRouteImport } from './routes/_staff/manage.guest-passes.$id'
+import { Route as StaffManageGuestPassesIdRouteImport } from './routes/_staff/manage.guest-passes_.$id'
 import { Route as StaffManageNewslettersIndexRouteImport } from './routes/_staff/manage.newsletters.index'
 import { Route as StaffManageNewslettersIdRouteImport } from './routes/_staff/manage.newsletters.$id'
 import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/calendar.$file'
@@ -658,9 +658,9 @@ const StaffManageEventsNewRoute = StaffManageEventsNewRouteImport.update({
 } as any)
 const StaffManageGuestPassesIdRoute =
   StaffManageGuestPassesIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
-    getParentRoute: () => StaffManageGuestPassesRoute,
+    id: '/manage/guest-passes_/$id',
+    path: '/manage/guest-passes/$id',
+    getParentRoute: () => StaffRouteRoute,
   } as any)
 const StaffManageNewslettersIndexRoute =
   StaffManageNewslettersIndexRouteImport.update({
@@ -818,7 +818,7 @@ export interface FileRoutesByFullPath {
   '/manage/chat-insights': typeof StaffManageChatInsightsRoute
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/manage/governance': typeof StaffManageGovernanceRoute
-  '/manage/guest-passes': typeof StaffManageGuestPassesRouteWithChildren
+  '/manage/guest-passes': typeof StaffManageGuestPassesRoute
   '/manage/knowledge': typeof StaffManageKnowledgeRoute
   '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/members/$id': typeof StaffMembersIdRoute
@@ -933,7 +933,7 @@ export interface FileRoutesByTo {
   '/manage/chat-insights': typeof StaffManageChatInsightsRoute
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/manage/governance': typeof StaffManageGovernanceRoute
-  '/manage/guest-passes': typeof StaffManageGuestPassesRouteWithChildren
+  '/manage/guest-passes': typeof StaffManageGuestPassesRoute
   '/manage/knowledge': typeof StaffManageKnowledgeRoute
   '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/members/$id': typeof StaffMembersIdRoute
@@ -1055,7 +1055,7 @@ export interface FileRoutesById {
   '/_staff/manage/chat-insights': typeof StaffManageChatInsightsRoute
   '/_staff/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/_staff/manage/governance': typeof StaffManageGovernanceRoute
-  '/_staff/manage/guest-passes': typeof StaffManageGuestPassesRouteWithChildren
+  '/_staff/manage/guest-passes': typeof StaffManageGuestPassesRoute
   '/_staff/manage/knowledge': typeof StaffManageKnowledgeRoute
   '/_staff/manage/live-chat': typeof StaffManageLiveChatRoute
   '/_staff/members/$id': typeof StaffMembersIdRoute
@@ -1081,7 +1081,7 @@ export interface FileRoutesById {
   '/_staff/members/': typeof StaffMembersIndexRoute
   '/_staff/manage/events/$id': typeof StaffManageEventsIdRoute
   '/_staff/manage/events/new': typeof StaffManageEventsNewRoute
-  '/_staff/manage/guest-passes/$id': typeof StaffManageGuestPassesIdRoute
+  '/_staff/manage/guest-passes_/$id': typeof StaffManageGuestPassesIdRoute
   '/_staff/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/certificate-qr/$token': typeof ApiPublicCertificateQrTokenRoute
@@ -1438,7 +1438,7 @@ export interface FileRouteTypes {
     | '/_staff/members/'
     | '/_staff/manage/events/$id'
     | '/_staff/manage/events/new'
-    | '/_staff/manage/guest-passes/$id'
+    | '/_staff/manage/guest-passes_/$id'
     | '/_staff/manage/newsletters/$id'
     | '/api/public/calendar/$file'
     | '/api/public/certificate-qr/$token'
@@ -2253,12 +2253,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageEventsNewRouteImport
       parentRoute: typeof StaffRouteRoute
     }
-    '/_staff/manage/guest-passes/$id': {
-      id: '/_staff/manage/guest-passes/$id'
-      path: '/$id'
+    '/_staff/manage/guest-passes_/$id': {
+      id: '/_staff/manage/guest-passes_/$id'
+      path: '/manage/guest-passes/$id'
       fullPath: '/manage/guest-passes/$id'
       preLoaderRoute: typeof StaffManageGuestPassesIdRouteImport
-      parentRoute: typeof StaffManageGuestPassesRoute
+      parentRoute: typeof StaffRouteRoute
     }
     '/_staff/manage/newsletters/': {
       id: '/_staff/manage/newsletters/'
@@ -2465,20 +2465,6 @@ const StaffArticlesRouteWithChildren = StaffArticlesRoute._addFileChildren(
   StaffArticlesRouteChildren,
 )
 
-interface StaffManageGuestPassesRouteChildren {
-  StaffManageGuestPassesIdRoute: typeof StaffManageGuestPassesIdRoute
-}
-
-const StaffManageGuestPassesRouteChildren: StaffManageGuestPassesRouteChildren =
-  {
-    StaffManageGuestPassesIdRoute: StaffManageGuestPassesIdRoute,
-  }
-
-const StaffManageGuestPassesRouteWithChildren =
-  StaffManageGuestPassesRoute._addFileChildren(
-    StaffManageGuestPassesRouteChildren,
-  )
-
 interface StaffRouteRouteChildren {
   StaffArticlesRoute: typeof StaffArticlesRouteWithChildren
   StaffCoachFinderRoute: typeof StaffCoachFinderRoute
@@ -2489,7 +2475,7 @@ interface StaffRouteRouteChildren {
   StaffManageChatInsightsRoute: typeof StaffManageChatInsightsRoute
   StaffManageEuropePulseRoute: typeof StaffManageEuropePulseRoute
   StaffManageGovernanceRoute: typeof StaffManageGovernanceRoute
-  StaffManageGuestPassesRoute: typeof StaffManageGuestPassesRouteWithChildren
+  StaffManageGuestPassesRoute: typeof StaffManageGuestPassesRoute
   StaffManageKnowledgeRoute: typeof StaffManageKnowledgeRoute
   StaffManageLiveChatRoute: typeof StaffManageLiveChatRoute
   StaffMembersIdRoute: typeof StaffMembersIdRoute
@@ -2497,6 +2483,7 @@ interface StaffRouteRouteChildren {
   StaffMembersIndexRoute: typeof StaffMembersIndexRoute
   StaffManageEventsIdRoute: typeof StaffManageEventsIdRoute
   StaffManageEventsNewRoute: typeof StaffManageEventsNewRoute
+  StaffManageGuestPassesIdRoute: typeof StaffManageGuestPassesIdRoute
   StaffManageNewslettersIdRoute: typeof StaffManageNewslettersIdRoute
   StaffManageEventsIndexRoute: typeof StaffManageEventsIndexRoute
   StaffManageNewslettersIndexRoute: typeof StaffManageNewslettersIndexRoute
@@ -2516,7 +2503,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffManageChatInsightsRoute: StaffManageChatInsightsRoute,
   StaffManageEuropePulseRoute: StaffManageEuropePulseRoute,
   StaffManageGovernanceRoute: StaffManageGovernanceRoute,
-  StaffManageGuestPassesRoute: StaffManageGuestPassesRouteWithChildren,
+  StaffManageGuestPassesRoute: StaffManageGuestPassesRoute,
   StaffManageKnowledgeRoute: StaffManageKnowledgeRoute,
   StaffManageLiveChatRoute: StaffManageLiveChatRoute,
   StaffMembersIdRoute: StaffMembersIdRoute,
@@ -2524,6 +2511,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffMembersIndexRoute: StaffMembersIndexRoute,
   StaffManageEventsIdRoute: StaffManageEventsIdRoute,
   StaffManageEventsNewRoute: StaffManageEventsNewRoute,
+  StaffManageGuestPassesIdRoute: StaffManageGuestPassesIdRoute,
   StaffManageNewslettersIdRoute: StaffManageNewslettersIdRoute,
   StaffManageEventsIndexRoute: StaffManageEventsIndexRoute,
   StaffManageNewslettersIndexRoute: StaffManageNewslettersIndexRoute,
