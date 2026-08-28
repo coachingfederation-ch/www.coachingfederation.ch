@@ -115,7 +115,7 @@ export function buildStaffAssistantTools(options: { accessToken: string }) {
         if (error || !data) return { error: "Could not read that article." };
         const { data: translations } = await supabase
           .from("article_translations")
-          .select("language, title")
+          .select("locale, manually_edited")
           .eq("article_id", id);
         return {
           kind,
@@ -125,7 +125,7 @@ export function buildStaffAssistantTools(options: { accessToken: string }) {
             has_excerpt: Boolean(data.excerpt?.trim()),
             featured_image_url: undefined,
             excerpt: undefined,
-            translated_languages: (translations ?? []).map((t) => t.language),
+            translated_languages: (translations ?? []).map((t) => t.locale),
           },
         };
       }

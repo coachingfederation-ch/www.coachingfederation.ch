@@ -72,6 +72,7 @@ export function StaffAssistant() {
       prepareSendMessagesRequest: async ({ messages: outgoing }) => {
         const { data } = await supabase.auth.getSession();
         const token = data.session?.access_token;
+        const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
         const { pathname: path, locale: lang } = contextRef.current;
         const record = openRecord(path);
         return {
@@ -82,7 +83,7 @@ export function StaffAssistant() {
             recordKind: record?.kind,
             recordId: record?.id,
           },
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          headers,
         };
       },
     }),
