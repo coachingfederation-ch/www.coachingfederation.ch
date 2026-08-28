@@ -327,9 +327,13 @@ async function loadMembers(
   range: OverviewRange,
   bucket: "day" | "month",
 ): Promise<{ panel: MembersPanelData; detail: Row[] }> {
+  // "Joined" means the membership start date, not the row's import timestamp —
+  // the roster arrives in bulk from the sync, so created_at would report the
+  // whole chapter as new members on import day.
+  const joinIso = (m: Row) => str(m.membership_join_date) ?? str(m.created_at);
   const joined = all.filter((m) => {
-    const iso = str(m.created_at);
-    return iso !== null && iso >= range.from && iso <= range.to;
+    const iso = joinIso(m);
+    return iso !== null && iso >= range.from.slice(0, 10) && iso <= range.to;
   });
 
   const state = (m: Row) => str(m.activity_state) ?? "unknown";
@@ -355,7 +359,7 @@ async function loadMembers(
       range,
       bucket,
       ["members"],
-      joined.map((m) => ({ iso: str(m.created_at), key: "members" })),
+      joined.map((m) => ({ iso: joinIso(m), key: "members" })),
     ),
     credentials: tally(all.map((m) => str(m.credential_slug))),
     lastSync: run
@@ -546,7 +550,7 @@ async function kpiCounts(supabase: SupabaseClient, range: OverviewRange) {
         q.neq("status", "cancelled"),
       ),
       countIn(supabase, "event_registrations", "checked_in_at", range),
-      countIn(supabase, "members", "created_at", range),
+      countIn(supabase, "members", "membership_join_date", range),
       countIn(supabase, "guest_passes", "created_at", range),
       countIn(supabase, "live_chat_conversations", "created_at", range),
     ]);
