@@ -737,7 +737,8 @@
           "declined": "Rifiutato",
           "registered": "Iscritto",
           "cancelled": "Annullato",
-          "attended": "Partecipato"
+          "attended": "Partecipato",
+          "invited": "In attesa dell'ospite"
         }
       }
     },
@@ -791,7 +792,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
+          "items": [
+            "Guidare progetti",
+            "Essere riconosciuti da ICFS per aver guidato iniziative"
+          ]
         },
         "status": {
           "title": "Status",
@@ -2200,7 +2204,8 @@
       "approved": "Approvati / iscritti",
       "attended": "Presenti",
       "declined": "Rifiutati / annullati",
-      "converted": "Diventati soci"
+      "converted": "Diventati soci",
+      "waiting": "In attesa dell'ospite"
     },
     "filters": {
       "label": "Stato",
@@ -2221,7 +2226,8 @@
       "registered": "Iscritto",
       "attended": "Presente",
       "declined": "Rifiutato",
-      "cancelled": "Annullato"
+      "cancelled": "Annullato",
+      "invited": "In attesa dell'ospite"
     },
     "followUpStatus": {
       "none": "Nessun follow-up",
@@ -2236,7 +2242,8 @@
       "followUp": "Follow-up",
       "save": "Salva",
       "close": "Chiudi",
-      "export": "Scarica il CSV"
+      "export": "Scarica il CSV",
+      "view": "Apri"
     },
     "dialog": {
       "approveTitle": "Approvare questo pass ospite?",
@@ -2255,7 +2262,8 @@
       "statusLabel": "Stato",
       "noteLabel": "Nota",
       "linkMember": "Collega la scheda socio corrispondente",
-      "matchFound": "Per questo indirizzo esiste ora un'iscrizione attiva."
+      "matchFound": "Per questo indirizzo esiste ora un'iscrizione attiva.",
+      "noConsent": "Questo ospite non ha acconsentito al ricontatto. Puoi comunque annotare qui; non inviare comunicazioni di marketing."
     },
     "empty": "Nessun pass ospite finora.",
     "emptyFiltered": "Nessun pass ospite con questo stato.",
@@ -2295,6 +2303,38 @@
       "followUpNote": "Nota follow-up",
       "converted": "Diventato socio",
       "createdAt": "Richiesto il"
+    },
+    "waitingHint": "Stiamo aspettando che l'ospite completi i propri dati. Per ora non c'è nulla da decidere.",
+    "consentYes": "Ha acconsentito al ricontatto",
+    "consentNo": "Nessun consenso al ricontatto",
+    "detail": {
+      "back": "Torna ai pass ospite",
+      "title": "Pass ospite",
+      "notFound": "Questo pass ospite non esiste più.",
+      "guestSection": "Ospite",
+      "profileSection": "Dati forniti dall'ospite",
+      "memberSection": "Membro che invita",
+      "consentSection": "Consenso e conservazione",
+      "decisionSection": "Decisione",
+      "followUpSection": "Follow-up",
+      "completedAt": "Dati completati",
+      "requestedAt": "Richiesto",
+      "notCompleted": "Non ancora completato",
+      "consentGiven": "L'ospite ha acconsentito al ricontatto il",
+      "consentNone": "L'ospite non ha acconsentito al ricontatto.",
+      "consentHelp": "La revoca interrompe ulteriori contatti; non cancella questo record in anticipo.",
+      "retention": "Questo record è conservato fino al",
+      "retentionUnknown": "La data di cancellazione si definisce quando l'evento ha una data di fine.",
+      "decisionAt": "Deciso il",
+      "noDecision": "Nessuna decisione registrata.",
+      "coachingLevel": "Livello o percorso di coaching",
+      "focus": "Principale ambito di attività",
+      "associations": "Altre associazioni di coaching",
+      "notes": "Note dell'ospite",
+      "language": "Lingua preferita",
+      "phone": "Telefono",
+      "location": "Opera a",
+      "email": "E-mail"
     }
   },
   "overview": {

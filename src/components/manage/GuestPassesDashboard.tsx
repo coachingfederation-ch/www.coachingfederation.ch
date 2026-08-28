@@ -9,6 +9,7 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Download, Loader2 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,6 +46,7 @@ type Action = "approve" | "decline" | "cancel";
 const FOLLOW_UP_OPTIONS = ["none", "contacted", "converted", "closed"] as const;
 
 const STATUS_TONE: Record<string, string> = {
+  invited: "bg-secondary text-secondary-foreground",
   pending: "bg-warn-soft text-warn-foreground",
   approved: "bg-teal-soft text-teal-foreground",
   registered: "bg-teal-soft text-teal-foreground",
@@ -55,6 +57,7 @@ const STATUS_TONE: Record<string, string> = {
 
 const STATUS_FILTERS = [
   "all",
+  "invited",
   "pending",
   "approved",
   "registered",
@@ -63,11 +66,7 @@ const STATUS_FILTERS = [
   "cancelled",
 ] as const;
 
-export function GuestPassesDashboard({
-  initialRows,
-}: {
-  initialRows: StaffGuestPass[];
-}) {
+export function GuestPassesDashboard({ initialRows }: { initialRows: StaffGuestPass[] }) {
   const { t, locale } = useCms();
   const [rows, setRows] = useState<StaffGuestPass[]>(initialRows);
   const [filter, setFilter] = useState<(typeof STATUS_FILTERS)[number]>("all");
@@ -76,14 +75,14 @@ export function GuestPassesDashboard({
   const [busy, setBusy] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [followUp, setFollowUp] = useState<StaffGuestPass | null>(null);
-  const [followUpStatus, setFollowUpStatus] =
-    useState<(typeof FOLLOW_UP_OPTIONS)[number]>("none");
+  const [followUpStatus, setFollowUpStatus] = useState<(typeof FOLLOW_UP_OPTIONS)[number]>("none");
   const [followUpNote, setFollowUpNote] = useState("");
   const [linkMember, setLinkMember] = useState(false);
 
   const counts = useMemo(() => {
     const has = (s: string[]) => rows.filter((r) => s.includes(r.status)).length;
     return {
+      waiting: has(["invited"]),
       requests: has(["pending"]),
       approved: has(["approved", "registered"]),
       attended: rows.filter((r) => r.checkedInAt || r.status === "attended").length,
@@ -147,9 +146,24 @@ export function GuestPassesDashboard({
     setExporting(true);
     try {
       const headers = [
-        "event","eventDate","memberName","memberEmail","memberNumber","guestName","guestEmail",
-        "guestPhone","guestLocation","guestLanguage","status","decisionAt","decisionNote",
-        "attended","followUpStatus","followUpNote","converted","createdAt",
+        "event",
+        "eventDate",
+        "memberName",
+        "memberEmail",
+        "memberNumber",
+        "guestName",
+        "guestEmail",
+        "guestPhone",
+        "guestLocation",
+        "guestLanguage",
+        "status",
+        "decisionAt",
+        "decisionNote",
+        "attended",
+        "followUpStatus",
+        "followUpNote",
+        "converted",
+        "createdAt",
       ].map((k) => t(`guestPasses.csv.${k}`));
       const file = await exportGuestPasses({ data: { headers } });
       const blob = new Blob([`\uFEFF${file.csv}`], { type: "text/csv;charset=utf-8" });
@@ -184,9 +198,10 @@ export function GuestPassesDashboard({
         </Button>
       </header>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {(
           [
+            ["waiting", counts.waiting],
             ["requests", counts.requests],
             ["approved", counts.approved],
             ["attended", counts.attended],
@@ -237,15 +252,16 @@ export function GuestPassesDashboard({
                         {t("guestPasses.status.attended")}
                       </Badge>
                     ) : null}
+                    <Badge variant="outline">
+                      {pass.followUpConsent
+                        ? t("guestPasses.consentYes")
+                        : t("guestPasses.consentNo")}
+                    </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {pass.guestEmail}
-                    {pass.guestPhone ? ` · ${pass.guestPhone}` : ""}
-                    {pass.guestLocation ? ` · ${pass.guestLocation}` : ""}
-                    {pass.guestPreferredLanguage
-                      ? ` · ${pass.guestPreferredLanguage.toUpperCase()}`
-                      : ""}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{pass.guestEmail}</p>
+                  {pass.status === "invited" ? (
+                    <p className="text-sm text-muted-foreground">{t("guestPasses.waitingHint")}</p>
+                  ) : null}
                   <p className="text-sm text-foreground">
                     {pass.eventTitle} · {formatDate(pass.eventStartsAt)}
                   </p>
@@ -325,6 +341,11 @@ export function GuestPassesDashboard({
                   >
                     {t("guestPasses.actions.followUp")}
                   </Button>
+                  <Button size="sm" variant="ghost" asChild>
+                    <Link to="/manage/guest-passes/$id" params={{ id: pass.id }}>
+                      {t("guestPasses.actions.view")}
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </article>
@@ -399,6 +420,11 @@ export function GuestPassesDashboard({
                 rows={3}
               />
             </div>
+            {followUp && !followUp.followUpConsent ? (
+              <p className="text-sm text-muted-foreground">
+                {t("guestPasses.followUpDialog.noConsent")}
+              </p>
+            ) : null}
             {followUp?.matchedMemberId ? (
               <div className="flex items-center gap-2">
                 <Checkbox

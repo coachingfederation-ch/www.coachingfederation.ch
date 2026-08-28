@@ -26,6 +26,7 @@ export function PurposesSection() {
             ],
             ["Publishing coach directory profiles", "Coach directory profile data"],
             ["Organising events and managing registrations", "Event registration data"],
+            ["Administering Guest Passes for member-invited guests", "Guest Pass data"],
             ["Sending newsletters and association communications", "Newsletter subscription data"],
             [
               "Administering content, member management, and ICF integration",
@@ -79,6 +80,12 @@ export function PurposesSection() {
               <strong>Event registration data</strong> is processed to organise events and manage
               participation.
             </li>
+            <li>
+              <strong>Guest Pass data</strong> is processed to review the pass, prepare the
+              guest&apos;s complimentary place, and contact them about that event. Contact beyond
+              the event is based on the guest&apos;s separate opt-in, which they may withdraw at any
+              time.
+            </li>
           </ul>
         </div>
 
@@ -107,6 +114,11 @@ export function PurposesSection() {
           <li>
             <strong>From ICF Global</strong> — through the automated nightly member data
             synchronisation (see Section 3h).
+          </li>
+          <li>
+            <strong>From an inviting member</strong> — a member who requests a Guest Pass gives us
+            the guest&apos;s name and email address so that we can invite the guest to complete
+            their own details.
           </li>
           <li>
             <strong>From technical systems</strong> — technical data collected automatically when

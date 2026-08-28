@@ -408,7 +408,16 @@ export type StaffGuestPass = {
   guestPhone: string | null;
   guestLocation: string | null;
   guestPreferredLanguage: string | null;
+  guestCoachingLevel: string | null;
+  guestProfessionalFocus: string | null;
+  guestOtherAssociations: string | null;
   guestNotes: string | null;
+  /** Set when the guest submitted their own details; null while `invited`. */
+  guestCompletedAt: string | null;
+  /** The guest's own opt-in to community follow-up, and when they gave it. */
+  followUpConsent: boolean;
+  followUpConsentAt: string | null;
+  eventEndsAt: string | null;
   status: string;
   decisionAt: string | null;
   decisionNote: string | null;
@@ -663,12 +672,9 @@ export const setGuestPassFollowUp = createServerFn({ method: "POST" })
     return { ok: true as const };
   });
 
-/** Every pass in the pilot, with attendance and conversion resolved. */
-export const listAllGuestPasses = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<StaffGuestPass[]> => {
-    const { assertMembership } = await import("./authz");
-    await assertMembership(context);
+/** Shared M&E projection: the list and the detail screen read the same rows. */
+async function buildStaffGuestPasses(): Promise<StaffGuestPass[]> {
+  {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { listAllGuestPasses: readAll } = await import("./guest-passes.server");
 
@@ -703,7 +709,9 @@ export const listAllGuestPasses = createServerFn({ method: "POST" })
 
     const raw = await supabaseAdmin
       .from("guest_passes")
-      .select("id, inviting_member_cst_recno, inviting_member_status, converted_member_id");
+      .select(
+        "id, inviting_member_cst_recno, inviting_member_status, converted_member_id, follow_up_consent, follow_up_consent_at, guest_completed_at, events ( ends_at )",
+      );
     const extra = new Map(
       (
         (raw.data ?? []) as {
@@ -711,9 +719,18 @@ export const listAllGuestPasses = createServerFn({ method: "POST" })
           inviting_member_cst_recno: string | null;
           inviting_member_status: string | null;
           converted_member_id: string | null;
+          follow_up_consent: boolean | null;
+          follow_up_consent_at: string | null;
+          guest_completed_at: string | null;
+          events: { ends_at: string | null } | { ends_at: string | null }[] | null;
         }[]
       ).map((r) => [r.id, r]),
     );
+    const endsAt = (id: string) => {
+      const events = extra.get(id)?.events;
+      const event = Array.isArray(events) ? events[0] : events;
+      return event?.ends_at ?? null;
+    };
 
     return rows.map((r) => ({
       id: r.id,
@@ -729,7 +746,14 @@ export const listAllGuestPasses = createServerFn({ method: "POST" })
       guestPhone: r.guestPhone,
       guestLocation: r.guestLocation,
       guestPreferredLanguage: r.guestPreferredLanguage,
+      guestCoachingLevel: r.guestCoachingLevel,
+      guestProfessionalFocus: r.guestProfessionalFocus,
+      guestOtherAssociations: r.guestOtherAssociations,
       guestNotes: r.guestNotes,
+      guestCompletedAt: extra.get(r.id)?.guest_completed_at ?? null,
+      followUpConsent: Boolean(extra.get(r.id)?.follow_up_consent),
+      followUpConsentAt: extra.get(r.id)?.follow_up_consent_at ?? null,
+      eventEndsAt: endsAt(r.id),
       status: r.status,
       decisionAt: r.decisionAt,
       decisionNote: r.decisionNote,
@@ -741,6 +765,29 @@ export const listAllGuestPasses = createServerFn({ method: "POST" })
       matchedMemberId: memberByEmail.get(r.guestEmail.toLowerCase()) ?? null,
       createdAt: r.createdAt,
     }));
+  }
+}
+
+export const listAllGuestPasses = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<StaffGuestPass[]> => {
+    const { assertMembership } = await import("./authz");
+    await assertMembership(context);
+    return buildStaffGuestPasses();
+  });
+
+/**
+ * One pass in full, for the M&E detail screen. Same gate and same projection
+ * as the list; the extra profile fields never leave this role.
+ */
+export const getGuestPass = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ passId: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }): Promise<StaffGuestPass | null> => {
+    const { assertMembership } = await import("./authz");
+    await assertMembership(context);
+    const rows = await buildStaffGuestPasses();
+    return rows.find((row) => row.id === data.passId) ?? null;
   });
 
 /** CSV of the whole pilot. Headers come localised from the caller. */
