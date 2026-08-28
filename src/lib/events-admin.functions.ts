@@ -139,7 +139,10 @@ function normalize(input: z.infer<typeof eventInput>) {
     image_credit_url: blankToNull(input.image_credit_url),
     capacity: input.capacity ?? null,
     practical_notes: blankToNull(input.practical_notes),
-    is_internal: input.is_internal ?? false,
+    // Members-only is no longer a separate marker: it follows the audience the
+    // organiser picked, so the badge can never contradict the seat policy.
+    is_internal:
+      input.registration_mode === "rsvp_members" || input.registration_mode === "rsvp_invited",
     attendance_min_percent: input.attendance_min_percent ?? 80,
     certificates_enabled: input.certificates_enabled ?? false,
     guest_passes_allowed: input.guest_passes_allowed ?? false,
