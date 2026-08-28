@@ -10,6 +10,7 @@
  * an admin by the server function before any of this runs.
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { MANAGED_ROLES } from "./role-model";
 
 export type ClaimedMemberRole = {
   memberId: string;
