@@ -22,7 +22,8 @@
     "knowledge": "Connaissances de l'assistant",
     "liveChat": "Chat en direct",
     "newsletters": "Newsletters",
-    "guestPasses": "Pass invités"
+    "guestPasses": "Pass invités",
+    "overview": "Vue d’ensemble"
   },
   "auth": {
     "signInSub": "Connectez-vous pour continuer",
@@ -2289,6 +2290,109 @@
       "followUpNote": "Note de suivi",
       "converted": "Devenu membre",
       "createdAt": "Demandé le"
+    }
+  },
+  "overview": {
+    "title": "Vue d’ensemble du chapitre",
+    "subtitle": "Contenus, événements, adhésions, annuaire des coachs et les deux canaux de chat au même endroit.",
+    "loading": "Chargement…",
+    "noData": "Aucune donnée sur cette période.",
+    "loadError": "Le tableau de bord n’a pas pu être chargé.",
+    "exportError": "L’export a échoué.",
+    "export": "Exporter en CSV",
+    "previousPeriod": "Période précédente",
+    "currentState": "État actuel, hors période",
+    "generatedAt": "Généré le",
+    "range": {
+      "30d": "30 jours",
+      "90d": "90 jours",
+      "12m": "12 mois",
+      "ytd": "Depuis janvier",
+      "custom": "Personnalisé",
+      "from": "Du",
+      "to": "Au"
+    },
+    "kpi": {
+      "articles": "Articles publiés",
+      "newsletters": "Newsletters envoyées",
+      "events": "Événements tenus",
+      "registrations": "Inscriptions",
+      "checkIns": "Enregistrements",
+      "newMembers": "Nouveaux membres",
+      "guestPasses": "Pass invités",
+      "chatConversations": "Conversations de chat en direct"
+    },
+    "content": {
+      "title": "Contenus",
+      "description": "Articles publiés et newsletters envoyées sur la période choisie.",
+      "articles": "Articles publiés",
+      "newsletters": "Newsletters envoyées",
+      "trend": "Publications dans le temps",
+      "languages": "Langues des articles",
+      "statusMix": "Nouveaux articles par statut",
+      "sentList": "Newsletters envoyées",
+      "blocks": "blocs"
+    },
+    "events": {
+      "title": "Événements",
+      "description": "Événements de la période, avec inscriptions, présence, crédits CCE et pass invités.",
+      "events": "Événements",
+      "registrations": "Inscriptions",
+      "checkIns": "Enregistrements",
+      "net": "Revenu net",
+      "trend": "Événements et inscriptions",
+      "statusMix": "Événements par statut",
+      "cceEvents": "Événements CCE",
+      "cceAwards": "Attributions CCE",
+      "cceHours": "Heures CC / RD",
+      "cceHoursHint": "Attribuées sur cette période",
+      "certificates": "Certificats émis",
+      "certificateEvents": "Événements avec certificats",
+      "guestPasses": "Pass invités",
+      "approved": "Approuvés",
+      "pending": "En attente",
+      "declined": "Refusés"
+    },
+    "members": {
+      "title": "Membres",
+      "description": "Taille et état de l’adhésion aujourd’hui, et membres arrivés sur la période.",
+      "total": "Membres",
+      "active": "Actifs",
+      "grace": "Délai de grâce",
+      "inactive": "Inactifs",
+      "claimed": "Comptes reliés",
+      "unclaimed": "Non reliés",
+      "joined": "Nouveaux sur la période",
+      "trend": "Nouveaux membres",
+      "credentials": "Credentials",
+      "lastSync": "Dernière synchronisation",
+      "noSync": "Aucune synchronisation n’a encore été exécutée."
+    },
+    "finder": {
+      "title": "Trouver un coach",
+      "description": "Offre de l’annuaire aujourd’hui. Les recherches ne sont pas journalisées : ce panneau montre les profils disponibles, pas la demande.",
+      "published": "Profils publiés",
+      "hidden": "Profils masqués",
+      "visibility": "Profils par visibilité",
+      "credentials": "Credentials",
+      "languages": "Langues",
+      "regions": "Régions",
+      "specialisations": "Spécialisations"
+    },
+    "chat": {
+      "title": "Conversations",
+      "description": "Assistant du chapitre et chat en direct avec les bénévoles sur la période choisie.",
+      "agentConversations": "Conversations avec l’assistant",
+      "interactions": "Questions",
+      "escalationRate": "Taux d’escalade",
+      "helpfulRate": "Jugées utiles",
+      "liveConversations": "Chats en direct",
+      "messages": "Messages",
+      "answerRate": "Pris en charge",
+      "answered": "Pris en charge",
+      "trend": "Conversations dans le temps",
+      "outcomes": "Résultats de l’assistant",
+      "categories": "Principales catégories de questions"
     }
   }
 }

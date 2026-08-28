@@ -22,7 +22,8 @@
     "knowledge": "Conoscenze dell'assistente",
     "liveChat": "Chat dal vivo",
     "newsletters": "Newsletter",
-    "guestPasses": "Pass ospiti"
+    "guestPasses": "Pass ospiti",
+    "overview": "Panoramica"
   },
   "auth": {
     "signInSub": "Accedi per continuare",
@@ -2289,6 +2290,109 @@
       "followUpNote": "Nota follow-up",
       "converted": "Diventato socio",
       "createdAt": "Richiesto il"
+    }
+  },
+  "overview": {
+    "title": "Panoramica del chapter",
+    "subtitle": "Contenuti, eventi, soci, elenco dei coach e i due canali di chat in un unico posto.",
+    "loading": "Caricamento…",
+    "noData": "Nessun dato in questo periodo.",
+    "loadError": "Non è stato possibile caricare la dashboard.",
+    "exportError": "Esportazione non riuscita.",
+    "export": "Esporta CSV",
+    "previousPeriod": "Periodo precedente",
+    "currentState": "Stato attuale, non limitato al periodo",
+    "generatedAt": "Generato il",
+    "range": {
+      "30d": "30 giorni",
+      "90d": "90 giorni",
+      "12m": "12 mesi",
+      "ytd": "Da inizio anno",
+      "custom": "Personalizzato",
+      "from": "Dal",
+      "to": "Al"
+    },
+    "kpi": {
+      "articles": "Articoli pubblicati",
+      "newsletters": "Newsletter inviate",
+      "events": "Eventi svolti",
+      "registrations": "Iscrizioni",
+      "checkIns": "Check-in",
+      "newMembers": "Nuovi soci",
+      "guestPasses": "Pass ospiti",
+      "chatConversations": "Conversazioni in chat dal vivo"
+    },
+    "content": {
+      "title": "Contenuti",
+      "description": "Articoli pubblicati e newsletter inviate nel periodo scelto.",
+      "articles": "Articoli pubblicati",
+      "newsletters": "Newsletter inviate",
+      "trend": "Pubblicazioni nel tempo",
+      "languages": "Lingue degli articoli",
+      "statusMix": "Nuovi articoli per stato",
+      "sentList": "Newsletter inviate",
+      "blocks": "blocchi"
+    },
+    "events": {
+      "title": "Eventi",
+      "description": "Eventi del periodo, con iscrizioni, presenze, crediti CCE e pass ospiti.",
+      "events": "Eventi",
+      "registrations": "Iscrizioni",
+      "checkIns": "Check-in",
+      "net": "Ricavo netto",
+      "trend": "Eventi e iscrizioni",
+      "statusMix": "Eventi per stato",
+      "cceEvents": "Eventi CCE",
+      "cceAwards": "Assegnazioni CCE",
+      "cceHours": "Ore CC / RD",
+      "cceHoursHint": "Assegnate in questo periodo",
+      "certificates": "Certificati emessi",
+      "certificateEvents": "Eventi con certificati",
+      "guestPasses": "Pass ospiti",
+      "approved": "Approvati",
+      "pending": "In attesa",
+      "declined": "Rifiutati"
+    },
+    "members": {
+      "title": "Soci",
+      "description": "Dimensione e stato dei soci oggi, più i soci aggiunti nel periodo.",
+      "total": "Soci",
+      "active": "Attivi",
+      "grace": "Periodo di tolleranza",
+      "inactive": "Inattivi",
+      "claimed": "Account collegati",
+      "unclaimed": "Non collegati",
+      "joined": "Nuovi nel periodo",
+      "trend": "Nuovi soci",
+      "credentials": "Credentials",
+      "lastSync": "Ultima sincronizzazione",
+      "noSync": "Nessuna sincronizzazione è ancora stata eseguita."
+    },
+    "finder": {
+      "title": "Trova un coach",
+      "description": "Offerta dell’elenco oggi. Le ricerche non vengono registrate: qui vedi i profili disponibili, non la domanda.",
+      "published": "Profili pubblicati",
+      "hidden": "Profili nascosti",
+      "visibility": "Profili per visibilità",
+      "credentials": "Credentials",
+      "languages": "Lingue",
+      "regions": "Regioni",
+      "specialisations": "Specializzazioni"
+    },
+    "chat": {
+      "title": "Conversazioni",
+      "description": "Assistente del chapter e chat dal vivo con i volontari nel periodo scelto.",
+      "agentConversations": "Conversazioni con l’assistente",
+      "interactions": "Domande",
+      "escalationRate": "Tasso di escalation",
+      "helpfulRate": "Valutate utili",
+      "liveConversations": "Chat dal vivo",
+      "messages": "Messaggi",
+      "answerRate": "Prese in carico",
+      "answered": "Prese in carico",
+      "trend": "Conversazioni nel tempo",
+      "outcomes": "Esiti dell’assistente",
+      "categories": "Categorie di domande principali"
     }
   }
 }

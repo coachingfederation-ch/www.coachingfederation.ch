@@ -5,6 +5,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import {
+  LayoutDashboard,
   FileText,
   CalendarDays,
   LogOut,
@@ -39,6 +40,8 @@ import type { AppRole } from "@/lib/role-model";
 const PLATFORM_ADMIN: readonly AppRole[] = ["administrator"];
 
 const nav = [
+  // Cross-chapter dashboard: the administrator landing screen.
+  { to: "/manage", key: "nav.overview", icon: LayoutDashboard, allowedRoles: PLATFORM_ADMIN },
   { to: "/articles", key: "nav.articles", icon: FileText, allowedRoles: ["editor"] },
   { to: "/manage/newsletters", key: "nav.newsletters", icon: BookOpen, allowedRoles: ["editor"] },
   { to: "/articles/categories", key: "nav.categories", icon: Tags, allowedRoles: ["editor"] },
@@ -145,7 +148,7 @@ export function Shell({ children }: { children: ReactNode }) {
           <nav className="mt-2 flex flex-col gap-1 px-3">
             {items.map(({ to, key, icon: Icon }) => {
               const active =
-                to === "/articles" ? pathname === "/articles" : pathname.startsWith(to);
+                to === "/articles" || to === "/manage" ? pathname === to : pathname.startsWith(to);
               return (
                 <Link
                   key={to}

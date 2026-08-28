@@ -30,13 +30,13 @@ function fallbackFor(
   | "/articles"
   | "/manage/events"
   | "/manage/guest-passes"
-  | "/vocabularies"
+  | "/manage"
   | "/member"
   | "/no-access" {
   if (hasExactRole(roles.roles, "editor")) return "/articles";
   if (hasExactRole(roles.roles, "publisher")) return "/articles";
   if (hasExactRole(roles.roles, "organizer")) return "/manage/events";
-  if (hasExactRole(roles.roles, "administrator")) return "/vocabularies";
+  if (hasExactRole(roles.roles, "administrator")) return "/manage";
   if (hasExactRole(roles.roles, "membership")) return "/manage/guest-passes";
   if (roles.isMember) return "/member";
   return "/no-access";

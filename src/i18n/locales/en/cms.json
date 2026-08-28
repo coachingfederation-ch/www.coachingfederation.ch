@@ -22,7 +22,8 @@
     "knowledge": "Assistant knowledge",
     "liveChat": "Live chat",
     "newsletters": "Newsletters",
-    "guestPasses": "Guest passes"
+    "guestPasses": "Guest passes",
+    "overview": "Overview"
   },
   "auth": {
     "signInSub": "Sign in to continue",
@@ -2289,6 +2290,109 @@
       "followUpNote": "Follow-up note",
       "converted": "Converted to member",
       "createdAt": "Requested at"
+    }
+  },
+  "overview": {
+    "title": "Chapter overview",
+    "subtitle": "Content, events, membership, the coach directory and both chat channels in one place.",
+    "loading": "Loading…",
+    "noData": "No data in this range.",
+    "loadError": "The dashboard could not be loaded.",
+    "exportError": "The export failed.",
+    "export": "Export CSV",
+    "previousPeriod": "Previous period",
+    "currentState": "Current state, not range-limited",
+    "generatedAt": "Generated at",
+    "range": {
+      "30d": "30 days",
+      "90d": "90 days",
+      "12m": "12 months",
+      "ytd": "Year to date",
+      "custom": "Custom",
+      "from": "From",
+      "to": "To"
+    },
+    "kpi": {
+      "articles": "Articles published",
+      "newsletters": "Newsletters sent",
+      "events": "Events held",
+      "registrations": "Registrations",
+      "checkIns": "Check-ins",
+      "newMembers": "New members",
+      "guestPasses": "Guest passes",
+      "chatConversations": "Live chat conversations"
+    },
+    "content": {
+      "title": "Content",
+      "description": "Articles published and newsletters sent in the selected range.",
+      "articles": "Articles published",
+      "newsletters": "Newsletters sent",
+      "trend": "Publishing over time",
+      "languages": "Article languages",
+      "statusMix": "New articles by status",
+      "sentList": "Newsletters sent",
+      "blocks": "blocks"
+    },
+    "events": {
+      "title": "Events",
+      "description": "Events taking place in the range, with registrations, attendance, CCE credits and guest passes.",
+      "events": "Events",
+      "registrations": "Registrations",
+      "checkIns": "Check-ins",
+      "net": "Net revenue",
+      "trend": "Events and registrations",
+      "statusMix": "Events by status",
+      "cceEvents": "CCE events",
+      "cceAwards": "CCE awards",
+      "cceHours": "CC / RD hours",
+      "cceHoursHint": "Awarded in this range",
+      "certificates": "Certificates issued",
+      "certificateEvents": "Events with certificates",
+      "guestPasses": "Guest passes",
+      "approved": "Approved",
+      "pending": "Pending",
+      "declined": "Declined"
+    },
+    "members": {
+      "title": "Members",
+      "description": "Membership size and state today, plus members added in the selected range.",
+      "total": "Members",
+      "active": "Active",
+      "grace": "Grace",
+      "inactive": "Inactive",
+      "claimed": "Claimed accounts",
+      "unclaimed": "Unclaimed",
+      "joined": "New in range",
+      "trend": "New members",
+      "credentials": "Credentials",
+      "lastSync": "Last sync",
+      "noSync": "No sync has run yet."
+    },
+    "finder": {
+      "title": "Coach finder",
+      "description": "Directory supply today. Searches are not logged, so this reports profiles available, not demand.",
+      "published": "Published profiles",
+      "hidden": "Hidden profiles",
+      "visibility": "Profiles by visibility",
+      "credentials": "Credentials",
+      "languages": "Languages",
+      "regions": "Regions",
+      "specialisations": "Specialisations"
+    },
+    "chat": {
+      "title": "Conversations",
+      "description": "Chapter assistant and live volunteer chat in the selected range.",
+      "agentConversations": "Assistant conversations",
+      "interactions": "Questions",
+      "escalationRate": "Escalation rate",
+      "helpfulRate": "Rated helpful",
+      "liveConversations": "Live chats",
+      "messages": "Messages",
+      "answerRate": "Answered",
+      "answered": "Answered",
+      "trend": "Conversations over time",
+      "outcomes": "Assistant outcomes",
+      "categories": "Top question categories"
     }
   }
 }
