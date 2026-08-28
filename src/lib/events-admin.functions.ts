@@ -113,8 +113,6 @@ const eventInput = z.object({
   // Door and joining information, repeated in the reminder emails.
   practical_notes: z.string().trim().max(2000).nullable().optional(),
   is_featured: z.boolean(),
-  // Audience marker: the event is aimed at members (onboarding, engagement).
-  is_internal: z.boolean().optional(),
   category_id: z.string().uuid().nullable().optional(),
   region_id: z.string().uuid().nullable().optional(),
   // Community events name the local community that runs them; other
