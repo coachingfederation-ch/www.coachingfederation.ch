@@ -21,13 +21,11 @@ import {
   CalendarDays,
   HeartHandshake,
   UserRound,
-  PenLine,
 } from "lucide-react";
 import { useCms } from "@/i18n/cms";
 import { getMemberHome } from "@/lib/member-home.functions";
 import { listPublicEvents } from "@/lib/events.functions";
 import { eventPlace, formatEventDate } from "@/lib/events";
-import { LiveChatVolunteerTile } from "./LiveChatVolunteerTile";
 import { GuestPassesCard } from "./GuestPassesCard";
 
 const ENGAGE_URL =
