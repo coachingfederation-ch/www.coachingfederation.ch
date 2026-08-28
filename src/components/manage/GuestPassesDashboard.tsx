@@ -9,6 +9,7 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Download, Loader2 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,6 +46,7 @@ type Action = "approve" | "decline" | "cancel";
 const FOLLOW_UP_OPTIONS = ["none", "contacted", "converted", "closed"] as const;
 
 const STATUS_TONE: Record<string, string> = {
+  invited: "bg-secondary text-secondary-foreground",
   pending: "bg-warn-soft text-warn-foreground",
   approved: "bg-teal-soft text-teal-foreground",
   registered: "bg-teal-soft text-teal-foreground",
@@ -55,6 +57,7 @@ const STATUS_TONE: Record<string, string> = {
 
 const STATUS_FILTERS = [
   "all",
+  "invited",
   "pending",
   "approved",
   "registered",
@@ -84,6 +87,7 @@ export function GuestPassesDashboard({
   const counts = useMemo(() => {
     const has = (s: string[]) => rows.filter((r) => s.includes(r.status)).length;
     return {
+      waiting: has(["invited"]),
       requests: has(["pending"]),
       approved: has(["approved", "registered"]),
       attended: rows.filter((r) => r.checkedInAt || r.status === "attended").length,
@@ -237,15 +241,18 @@ export function GuestPassesDashboard({
                         {t("guestPasses.status.attended")}
                       </Badge>
                     ) : null}
+                    <Badge variant="outline">
+                      {pass.followUpConsent
+                        ? t("guestPasses.consentYes")
+                        : t("guestPasses.consentNo")}
+                    </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {pass.guestEmail}
-                    {pass.guestPhone ? ` · ${pass.guestPhone}` : ""}
-                    {pass.guestLocation ? ` · ${pass.guestLocation}` : ""}
-                    {pass.guestPreferredLanguage
-                      ? ` · ${pass.guestPreferredLanguage.toUpperCase()}`
-                      : ""}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{pass.guestEmail}</p>
+                  {pass.status === "invited" ? (
+                    <p className="text-sm text-muted-foreground">
+                      {t("guestPasses.waitingHint")}
+                    </p>
+                  ) : null}
                   <p className="text-sm text-foreground">
                     {pass.eventTitle} · {formatDate(pass.eventStartsAt)}
                   </p>
@@ -325,6 +332,11 @@ export function GuestPassesDashboard({
                   >
                     {t("guestPasses.actions.followUp")}
                   </Button>
+                  <Button size="sm" variant="ghost" asChild>
+                    <Link to="/manage/guest-passes/$id" params={{ id: pass.id }}>
+                      {t("guestPasses.actions.view")}
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </article>
@@ -399,6 +411,11 @@ export function GuestPassesDashboard({
                 rows={3}
               />
             </div>
+            {followUp && !followUp.followUpConsent ? (
+              <p className="text-sm text-muted-foreground">
+                {t("guestPasses.followUpDialog.noConsent")}
+              </p>
+            ) : null}
             {followUp?.matchedMemberId ? (
               <div className="flex items-center gap-2">
                 <Checkbox
