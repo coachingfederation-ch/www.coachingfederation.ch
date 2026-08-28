@@ -138,10 +138,10 @@ function FilterPill({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`rounded-full border px-4 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${
+      className={`inline-flex h-9 items-center rounded-full border px-4 text-[13px] font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${
         active
-          ? "border-primary bg-primary text-primary-foreground"
-          : "border-border bg-background text-foreground hover:border-primary/40"
+          ? "border-chip-active-border bg-primary text-primary-foreground"
+          : "border-border/70 bg-chip text-chip-foreground hover:border-chip-active-border"
       }`}
     >
       {label}
