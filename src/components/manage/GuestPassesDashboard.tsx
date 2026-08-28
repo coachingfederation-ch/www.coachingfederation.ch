@@ -191,6 +191,7 @@ export function GuestPassesDashboard({
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {(
           [
+            ["waiting", counts.waiting],
             ["requests", counts.requests],
             ["approved", counts.approved],
             ["attended", counts.attended],
