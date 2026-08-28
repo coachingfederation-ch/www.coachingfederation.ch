@@ -77,7 +77,10 @@ async function countIn(
     .lte(column, range.to);
   if (build) q = build(q);
   const { count, error } = await q;
-  if (error) throw new Error(`${table}: ${error.message}`);
+  if (error) {
+    console.error("[overview-count]", table, column, range.from, range.to, JSON.stringify(error));
+    throw new Error(`${table}: ${error.message}`);
+  }
   return count ?? 0;
 }
 
