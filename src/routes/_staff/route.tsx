@@ -10,6 +10,7 @@
  * shell does not re-request what the components are about to read.
  */
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { StaffAssistant } from "@/components/assistant/StaffAssistant";
 import { supabase } from "@/integrations/supabase/client";
 import { myRolesQueryOptions } from "@/lib/roles";
 
