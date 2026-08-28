@@ -109,10 +109,7 @@ function GuestPassDetailPage() {
                 label={t("guestPasses.detail.language")}
                 value={pass.guestPreferredLanguage?.toUpperCase() ?? null}
               />
-              <Row
-                label={t("guestPasses.detail.requestedAt")}
-                value={formatDate(pass.createdAt)}
-              />
+              <Row label={t("guestPasses.detail.requestedAt")} value={formatDate(pass.createdAt)} />
               <Row
                 label={t("guestPasses.detail.completedAt")}
                 value={
@@ -124,10 +121,7 @@ function GuestPassDetailPage() {
             </Section>
 
             <Section title={t("guestPasses.detail.profileSection")}>
-              <Row
-                label={t("guestPasses.detail.coachingLevel")}
-                value={pass.guestCoachingLevel}
-              />
+              <Row label={t("guestPasses.detail.coachingLevel")} value={pass.guestCoachingLevel} />
               <Row label={t("guestPasses.detail.focus")} value={pass.guestProfessionalFocus} />
               <Row
                 label={t("guestPasses.detail.associations")}
@@ -149,9 +143,7 @@ function GuestPassDetailPage() {
                   ? `${t("guestPasses.detail.consentGiven")} ${formatDate(pass.followUpConsentAt)}`
                   : t("guestPasses.detail.consentNone")}
               </p>
-              <p className="text-sm text-muted-foreground">
-                {t("guestPasses.detail.consentHelp")}
-              </p>
+              <p className="text-sm text-muted-foreground">{t("guestPasses.detail.consentHelp")}</p>
               <p className="text-sm">
                 {retentionUntil
                   ? `${t("guestPasses.detail.retention")} ${retentionUntil}`

@@ -66,11 +66,7 @@ const STATUS_FILTERS = [
   "cancelled",
 ] as const;
 
-export function GuestPassesDashboard({
-  initialRows,
-}: {
-  initialRows: StaffGuestPass[];
-}) {
+export function GuestPassesDashboard({ initialRows }: { initialRows: StaffGuestPass[] }) {
   const { t, locale } = useCms();
   const [rows, setRows] = useState<StaffGuestPass[]>(initialRows);
   const [filter, setFilter] = useState<(typeof STATUS_FILTERS)[number]>("all");
@@ -79,8 +75,7 @@ export function GuestPassesDashboard({
   const [busy, setBusy] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [followUp, setFollowUp] = useState<StaffGuestPass | null>(null);
-  const [followUpStatus, setFollowUpStatus] =
-    useState<(typeof FOLLOW_UP_OPTIONS)[number]>("none");
+  const [followUpStatus, setFollowUpStatus] = useState<(typeof FOLLOW_UP_OPTIONS)[number]>("none");
   const [followUpNote, setFollowUpNote] = useState("");
   const [linkMember, setLinkMember] = useState(false);
 
@@ -151,9 +146,24 @@ export function GuestPassesDashboard({
     setExporting(true);
     try {
       const headers = [
-        "event","eventDate","memberName","memberEmail","memberNumber","guestName","guestEmail",
-        "guestPhone","guestLocation","guestLanguage","status","decisionAt","decisionNote",
-        "attended","followUpStatus","followUpNote","converted","createdAt",
+        "event",
+        "eventDate",
+        "memberName",
+        "memberEmail",
+        "memberNumber",
+        "guestName",
+        "guestEmail",
+        "guestPhone",
+        "guestLocation",
+        "guestLanguage",
+        "status",
+        "decisionAt",
+        "decisionNote",
+        "attended",
+        "followUpStatus",
+        "followUpNote",
+        "converted",
+        "createdAt",
       ].map((k) => t(`guestPasses.csv.${k}`));
       const file = await exportGuestPasses({ data: { headers } });
       const blob = new Blob([`\uFEFF${file.csv}`], { type: "text/csv;charset=utf-8" });
@@ -250,9 +260,7 @@ export function GuestPassesDashboard({
                   </div>
                   <p className="text-sm text-muted-foreground">{pass.guestEmail}</p>
                   {pass.status === "invited" ? (
-                    <p className="text-sm text-muted-foreground">
-                      {t("guestPasses.waitingHint")}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{t("guestPasses.waitingHint")}</p>
                   ) : null}
                   <p className="text-sm text-foreground">
                     {pass.eventTitle} · {formatDate(pass.eventStartsAt)}

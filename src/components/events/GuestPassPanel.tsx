@@ -13,12 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { getEventTicketing } from "@/lib/tickets.functions";
-import {
-  Button,
-  Checkbox,
-  Input,
-  Label,
-} from "@/design-system/icf-welcome-design-system-a835df";
+import { Button, Checkbox, Input, Label } from "@/design-system/icf-welcome-design-system-a835df";
 import { CARD_SHADOW } from "@/components/site-chrome";
 import {
   getMyGuestPassContext,
@@ -180,7 +175,12 @@ export function GuestPassPanel({ event }: { event: PublicEvent }) {
           <p className="text-xs text-warn">{t(`events.guestPass.error.${state.reason}`)}</p>
         ) : null}
 
-        <Button type="submit" size="pill" disabled={state.kind === "saving" || !attested} className="w-full">
+        <Button
+          type="submit"
+          size="pill"
+          disabled={state.kind === "saving" || !attested}
+          className="w-full"
+        >
           {state.kind === "saving" ? t("events.guestPass.saving") : t("events.guestPass.submit")}
         </Button>
 

@@ -167,6 +167,40 @@ export function DataProcessingSection() {
             This data is processed to maintain accurate member records and directory profiles.
           </p>
         </div>
+
+        <div className="space-y-4">
+          <h4 className="text-base font-semibold tracking-tight">i) Guest Pass data</h4>
+          <p className="text-foreground/80">
+            Members may invite one non-member guest to an event with a Guest Pass. The inviting
+            member provides only the guest&apos;s name and email address, and confirms that they
+            have told the guest they are doing so. We then email the guest a personal link, and the
+            guest decides for themselves what else to share:
+          </p>
+          <ul className="list-disc space-y-1 pl-5 text-foreground/80">
+            <li>Name and email address (provided by the inviting member)</li>
+            <li>Preferred language</li>
+            <li>
+              Optionally: phone number, where the guest is based, coaching level or background, main
+              area of activity, other coaching associations, and any note they wish to add
+            </li>
+            <li>Whether the guest opts in to being contacted about the chapter afterwards</li>
+          </ul>
+          <p className="text-foreground/80">
+            We use this data to review the Guest Pass, register the guest for the event if it is
+            approved, and contact them about that event. The request only reaches our Membership
+            &amp; Engagement team once the guest has completed it themselves; that team, which
+            decides on the pass, is the only group that sees the guest&apos;s contact details and
+            the optional details above. Community and project leaders of the event see the
+            guest&apos;s name and who invited them, so they can welcome them. Follow-up contact
+            beyond the event happens only where the guest opted in, and that opt-in can be withdrawn
+            at any time.
+          </p>
+          <p className="text-foreground/80">
+            A Guest Pass is not an ordinary event registration: the seat is complimentary, no
+            payment data arises, and the record carries the invitation relationship as well as the
+            registration. Guest Pass records are deleted automatically 12 months after the event.
+          </p>
+        </div>
       </div>
     </>
   );
