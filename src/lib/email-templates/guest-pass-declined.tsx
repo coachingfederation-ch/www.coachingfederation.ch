@@ -42,8 +42,8 @@ const Email = ({
         <Section style={content}>
           <Heading style={headingStyle}>Your guest pass request was declined</Heading>
           <Text style={paragraph}>
-            Dear {invitingMemberName || "member"}, we could not approve the guest pass you
-            requested for {guestName || "your guest"} at {eventTitle || "the event"}.
+            Dear {invitingMemberName || "member"}, we could not approve the guest pass you requested
+            for {guestName || "your guest"} at {eventTitle || "the event"}.
           </Text>
           {decisionNote ? (
             <Text style={row}>

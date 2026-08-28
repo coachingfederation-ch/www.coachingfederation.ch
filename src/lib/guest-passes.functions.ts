@@ -243,9 +243,7 @@ export type GuestPassClaimView = {
 };
 
 export const getGuestPassClaim = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) =>
-    z.object({ token: z.string().min(10).max(200) }).parse(input),
-  )
+  .inputValidator((input: unknown) => z.object({ token: z.string().min(10).max(200) }).parse(input))
   .handler(async ({ data }): Promise<GuestPassClaimView | null> => {
     const { resolveGuestPassToken } = await import("./guest-passes.server");
     const claim = await resolveGuestPassToken(data.token);
@@ -359,7 +357,6 @@ async function notifyGuestPassCompleted(passId: string) {
     }
   }
 }
-
 
 /** The signed-in member's own guest pass requests, newest first. */
 export const listMyGuestPasses = createServerFn({ method: "POST" })
@@ -527,7 +524,10 @@ export const approveGuestPass = createServerFn({ method: "POST" })
     const result = await createGuestRegistration(data.passId, userId);
     if (result.outcome === "created") await notifyApproval(data.passId);
 
-    return { ok: true as const, status: result.outcome === "ineligible" ? "approved" : "registered" };
+    return {
+      ok: true as const,
+      status: result.outcome === "ineligible" ? "approved" : "registered",
+    };
   });
 
 /** Decline the request and tell the inviting member. */
@@ -705,12 +705,14 @@ export const listAllGuestPasses = createServerFn({ method: "POST" })
       .from("guest_passes")
       .select("id, inviting_member_cst_recno, inviting_member_status, converted_member_id");
     const extra = new Map(
-      ((raw.data ?? []) as {
-        id: string;
-        inviting_member_cst_recno: string | null;
-        inviting_member_status: string | null;
-        converted_member_id: string | null;
-      }[]).map((r) => [r.id, r]),
+      (
+        (raw.data ?? []) as {
+          id: string;
+          inviting_member_cst_recno: string | null;
+          inviting_member_status: string | null;
+          converted_member_id: string | null;
+        }[]
+      ).map((r) => [r.id, r]),
     );
 
     return rows.map((r) => ({

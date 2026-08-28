@@ -57,9 +57,7 @@ const Email = ({
           </Section>
           <Section style={content}>
             <Heading style={headingStyle}>
-              {completed
-                ? "Your guest completed their details"
-                : "We have invited your guest"}
+              {completed ? "Your guest completed their details" : "We have invited your guest"}
             </Heading>
             <Text style={paragraph}>
               {completed

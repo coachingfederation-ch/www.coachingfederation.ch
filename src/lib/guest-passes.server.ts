@@ -147,7 +147,6 @@ export async function resolveGuestEligibility(guestEmail: string): Promise<Guest
   return { eligible: true, reason: "ok", existingPassId: null };
 }
 
-
 /** Every pass one member has invited, newest first. */
 export async function listGuestPassesForMember(memberId: string): Promise<GuestPassRow[]> {
   const { data, error } = await supabaseAdmin
