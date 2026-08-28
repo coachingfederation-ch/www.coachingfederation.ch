@@ -194,7 +194,6 @@ function EventEditor() {
           attendance_min_percent: event.attendance_min_percent ?? 80,
           certificates_enabled: event.certificates_enabled ?? false,
           is_featured: event.is_featured,
-          is_internal: event.is_internal ?? false,
           category_id: event.category_id,
           region_id: event.region_id,
           community_id: event.community_id,
