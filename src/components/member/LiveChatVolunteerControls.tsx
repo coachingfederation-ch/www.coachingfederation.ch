@@ -1,16 +1,18 @@
 /**
- * Member Area tile for activated live-chat volunteers.
+ * Live-chat volunteer controls, rendered inside the Live chat volunteer
+ * opportunity card on /volunteering.
  *
- * Rendered only when the signed-in member holds an activation row. The QR code
- * is minted on demand and carries a single-use, ten-minute sign-in code, so the
- * phone that scans it lands in the console without typing a password — and a
- * screenshot of the code is worthless minutes later. The plain link covers
- * desktop, and opting out is self-service.
+ * Returns null unless the signed-in member holds an activation row, so a
+ * member who has not been activated only sees the descriptive card. The QR
+ * code is minted on demand and carries a single-use, ten-minute sign-in code,
+ * so the phone that scans it lands in the console without typing a password —
+ * and a screenshot of the code is worthless minutes later. The plain link
+ * covers desktop, and opting out is self-service.
  */
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import QRCode from "qrcode";
-import { MessagesSquare, ExternalLink, QrCode, Loader2 } from "lucide-react";
+import { ExternalLink, QrCode, Loader2 } from "lucide-react";
 import { useCms } from "@/i18n/cms";
 import {
   getMyVolunteerStatus,
@@ -19,11 +21,10 @@ import {
 import { createVolunteerLoginCode } from "@/lib/volunteer-qr.functions";
 import { forgetDevice } from "@/lib/volunteer-device";
 
-const CARD = "rounded-2xl border border-border bg-card p-6";
 const CTA =
   "mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90";
 
-export function LiveChatVolunteerTile() {
+export function LiveChatVolunteerControls() {
   const { t } = useCms();
   const queryClient = useQueryClient();
   const [qr, setQr] = useState<string | null>(null);
@@ -83,12 +84,9 @@ export function LiveChatVolunteerTile() {
   };
 
   return (
-    <section className={CARD}>
-      <MessagesSquare className="h-5 w-5 text-primary" aria-hidden />
-      <h2 className="mt-3 text-lg font-bold">{t("member.home.liveChat.title")}</h2>
-      <p className="mt-1 text-sm text-muted-foreground">{t("member.home.liveChat.body")}</p>
+    <div className="mt-5 border-t border-border pt-4">
       {qr ? (
-        <div className="mt-4 flex items-center gap-4">
+        <div className="flex items-center gap-4">
           <img src={qr} alt={t("member.home.liveChat.qrAlt")} className="size-36 shrink-0" />
           <div>
             <p className="text-xs text-muted-foreground">{t("member.home.liveChat.qrHint")}</p>
@@ -99,7 +97,7 @@ export function LiveChatVolunteerTile() {
           </div>
         </div>
       ) : (
-        <p className="mt-4 text-xs text-muted-foreground">{t("member.home.liveChat.qrIntro")}</p>
+        <p className="text-xs text-muted-foreground">{t("member.home.liveChat.qrIntro")}</p>
       )}
       <div className="flex flex-wrap items-center gap-2">
         <button type="button" onClick={() => void showQr()} disabled={minting} className={CTA}>
@@ -132,6 +130,6 @@ export function LiveChatVolunteerTile() {
       >
         {t("member.home.liveChat.leave")}
       </button>
-    </section>
+    </div>
   );
 }

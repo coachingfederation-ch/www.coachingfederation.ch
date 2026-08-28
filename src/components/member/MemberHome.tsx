@@ -21,13 +21,11 @@ import {
   CalendarDays,
   HeartHandshake,
   UserRound,
-  PenLine,
 } from "lucide-react";
 import { useCms } from "@/i18n/cms";
 import { getMemberHome } from "@/lib/member-home.functions";
 import { listPublicEvents } from "@/lib/events.functions";
 import { eventPlace, formatEventDate } from "@/lib/events";
-import { LiveChatVolunteerTile } from "./LiveChatVolunteerTile";
 import { GuestPassesCard } from "./GuestPassesCard";
 
 const ENGAGE_URL =
@@ -164,8 +162,6 @@ export function MemberHome() {
           </Link>
         </section>
 
-        <LiveChatVolunteerTile />
-
         <section className={CARD}>
           <Megaphone className="h-5 w-5 text-primary" aria-hidden />
           <h2 className="mt-3 text-lg font-bold">{t("member.home.ads.title")}</h2>
@@ -173,16 +169,6 @@ export function MemberHome() {
           <button type="button" disabled className={CTA_MUTED}>
             {t("member.home.soon")}
           </button>
-        </section>
-
-        <section className={CARD}>
-          <PenLine className="h-5 w-5 text-primary" aria-hidden />
-          <h2 className="mt-3 text-lg font-bold">{t("member.home.writeForUs.title")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("member.home.writeForUs.body")}</p>
-          <a href="mailto:office@coachingfederation.ch" target="_top" className={CTA}>
-            {t("member.home.writeForUs.cta")}
-            <Mail className="h-4 w-4" aria-hidden />
-          </a>
         </section>
       </div>
 
