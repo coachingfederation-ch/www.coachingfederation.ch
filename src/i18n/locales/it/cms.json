@@ -1543,7 +1543,6 @@
         "error": "Non è stato possibile invitare questo membro."
       }
     },
-    "fieldInternal": "Solo per membri",
     "tag": {
       "membersOnly": "Solo per membri",
       "cce": "CCE"
@@ -1736,6 +1735,7 @@
     "registrationOn": "Con iscrizione",
     "fieldRegistrationOn": "Iscrizione",
     "fieldAudience": "Chi può iscriversi",
+    "fieldAudienceHelp": "Gli eventi riservati ai membri o su invito non compaiono nel feed calendario pubblico, ma vengono mostrati ai membri.",
     "audience": {
       "anyone": "Tutti",
       "members": "Solo soci attivi",
