@@ -57,8 +57,7 @@ async function rows(
   if (build) q = build(q);
   const { data, error } = await q;
   if (error) {
-    console.error("[overview]", table, select, JSON.stringify(error));
-    throw new Error(`${table}: ${JSON.stringify(error)}`);
+    throw new Error(`${table}: ${error.message}`);
   }
   return (data ?? []) as unknown as Row[];
 }
@@ -78,8 +77,7 @@ async function countIn(
   if (build) q = build(q);
   const { count, error } = await q;
   if (error) {
-    console.error("[overview-count]", table, column, range.from, range.to, JSON.stringify(error));
-    throw new Error(`${table}: ${JSON.stringify(error)}`);
+    throw new Error(`${table}: ${error.message}`);
   }
   return count ?? 0;
 }
