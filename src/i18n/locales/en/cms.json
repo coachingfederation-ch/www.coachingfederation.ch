@@ -2170,7 +2170,11 @@
     "updated": "Updated",
     "delete": "Delete entry",
     "confirmDelete": "Delete this entry? The assistant will stop using it.",
-    "empty": "No entries match these filters."
+    "empty": "No entries match these filters.",
+    "fieldAudience": "Audience",
+    "audiencePublic": "Public site",
+    "audienceInternal": "Internal (CMS)",
+    "audienceHint": "Public entries are used by the website assistant, internal entries by the support agent inside these screens."
   },
   "liveChat": {
     "title": "Volunteer live chat",
@@ -2439,5 +2443,17 @@
       "outcomes": "Assistant outcomes",
       "categories": "Top question categories"
     }
+  },
+  "staffAgent": {
+    "title": "Support agent",
+    "subtitle": "Internal help",
+    "open": "Open the support agent",
+    "close": "Close the support agent",
+    "reset": "Start over",
+    "greeting": "Hi — ask me how anything here works, or what an option will change. I can look at the record you have open.",
+    "placeholder": "Ask about this screen…",
+    "thinking": "Thinking…",
+    "error": "Something went wrong. Please try again.",
+    "disclaimer": "Explains only — it cannot change anything. This conversation stays in your browser."
   }
 }

@@ -230,6 +230,7 @@ export type Database = {
       }
       assistant_knowledge: {
         Row: {
+          audience: Database["public"]["Enums"]["assistant_knowledge_audience"]
           body: string
           created_at: string
           created_by: string | null
@@ -243,6 +244,7 @@ export type Database = {
           updated_by: string | null
         }
         Insert: {
+          audience?: Database["public"]["Enums"]["assistant_knowledge_audience"]
           body: string
           created_at?: string
           created_by?: string | null
@@ -256,6 +258,7 @@ export type Database = {
           updated_by?: string | null
         }
         Update: {
+          audience?: Database["public"]["Enums"]["assistant_knowledge_audience"]
           body?: string
           created_at?: string
           created_by?: string | null
@@ -5751,6 +5754,7 @@ export type Database = {
         | "published"
         | "unpublished"
         | "review"
+      assistant_knowledge_audience: "public" | "internal"
       assistant_knowledge_kind: "faq" | "note"
       chat_answer_outcome:
         | "successful"
@@ -5954,6 +5958,7 @@ export const Constants = {
         "unpublished",
         "review",
       ],
+      assistant_knowledge_audience: ["public", "internal"],
       assistant_knowledge_kind: ["faq", "note"],
       chat_answer_outcome: [
         "successful",

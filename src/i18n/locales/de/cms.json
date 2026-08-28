@@ -2170,7 +2170,11 @@
     "updated": "Aktualisiert",
     "delete": "Eintrag löschen",
     "confirmDelete": "Diesen Eintrag löschen? Der Assistent nutzt ihn dann nicht mehr.",
-    "empty": "Keine Einträge entsprechen diesen Filtern."
+    "empty": "Keine Einträge entsprechen diesen Filtern.",
+    "fieldAudience": "Zielgruppe",
+    "audiencePublic": "Öffentliche Website",
+    "audienceInternal": "Intern (CMS)",
+    "audienceHint": "Öffentliche Einträge nutzt der Website-Assistent, interne Einträge der Support-Agent in diesen Screens."
   },
   "liveChat": {
     "title": "Freiwilligen-Live-Chat",
@@ -2439,5 +2443,17 @@
       "outcomes": "Ergebnisse des Assistenten",
       "categories": "Häufigste Fragekategorien"
     }
+  },
+  "staffAgent": {
+    "title": "Support-Agent",
+    "subtitle": "Interne Hilfe",
+    "open": "Support-Agent öffnen",
+    "close": "Support-Agent schliessen",
+    "reset": "Neu beginnen",
+    "greeting": "Hallo — frag mich, wie hier etwas funktioniert oder was eine Option verändert. Ich kann den geöffneten Eintrag ansehen.",
+    "placeholder": "Frage zu diesem Bereich…",
+    "thinking": "Denkt nach…",
+    "error": "Etwas ist schiefgelaufen. Bitte nochmals versuchen.",
+    "disclaimer": "Erklärt nur — ändert nichts. Dieses Gespräch bleibt in deinem Browser."
   }
 }

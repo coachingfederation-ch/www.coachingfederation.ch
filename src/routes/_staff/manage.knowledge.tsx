@@ -28,10 +28,12 @@ export const Route = createFileRoute("/_staff/manage/knowledge")({
 });
 
 type Kind = "faq" | "note";
+type Audience = "public" | "internal";
 
 type Row = {
   id: string;
   kind: Kind;
+  audience: Audience;
   title: string;
   body: string;
   keywords: string[];
@@ -40,7 +42,7 @@ type Row = {
   updated_at: string;
 };
 
-const COLUMNS = "id, kind, title, body, keywords, link_path, is_published, updated_at";
+const COLUMNS = "id, kind, audience, title, body, keywords, link_path, is_published, updated_at";
 
 /** "membership, renewal" -> ["membership", "renewal"], lowercased and deduped. */
 function parseKeywords(value: string): string[] {
@@ -62,8 +64,10 @@ function KnowledgePage() {
   const [search, setSearch] = useState("");
   const [kindFilter, setKindFilter] = useState<"all" | Kind>("all");
   const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all");
+  const [audienceFilter, setAudienceFilter] = useState<"all" | Audience>("all");
 
   const [kind, setKind] = useState<Kind>("faq");
+  const [audience, setAudience] = useState<Audience>("public");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [keywords, setKeywords] = useState("");
@@ -97,6 +101,7 @@ function KnowledgePage() {
     const { data: auth } = await supabase.auth.getUser();
     const { error: err } = await supabase.from("assistant_knowledge").insert({
       kind,
+      audience,
       title: cleanTitle,
       body: cleanBody,
       keywords: parseKeywords(keywords),
@@ -140,6 +145,7 @@ function KnowledgePage() {
     const term = search.trim().toLowerCase();
     return rows.filter((row) => {
       if (kindFilter !== "all" && row.kind !== kindFilter) return false;
+      if (audienceFilter !== "all" && row.audience !== audienceFilter) return false;
       if (statusFilter === "published" && !row.is_published) return false;
       if (statusFilter === "draft" && row.is_published) return false;
       if (!term) return true;
@@ -149,7 +155,7 @@ function KnowledgePage() {
         row.keywords.some((k) => k.includes(term))
       );
     });
-  }, [rows, search, kindFilter, statusFilter]);
+  }, [rows, search, kindFilter, statusFilter, audienceFilter]);
 
   const inputClass =
     "rounded-xl border border-border bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/20";
@@ -174,6 +180,15 @@ function KnowledgePage() {
             >
               <option value="faq">{t("knowledge.kindFaq")}</option>
               <option value="note">{t("knowledge.kindNote")}</option>
+            </select>
+            <select
+              value={audience}
+              onChange={(e) => setAudience(e.target.value as Audience)}
+              aria-label={t("knowledge.fieldAudience")}
+              className={inputClass}
+            >
+              <option value="public">{t("knowledge.audiencePublic")}</option>
+              <option value="internal">{t("knowledge.audienceInternal")}</option>
             </select>
             <input
               value={linkPath}
@@ -238,6 +253,16 @@ function KnowledgePage() {
             <option value="note">{t("knowledge.kindNote")}</option>
           </select>
           <select
+            value={audienceFilter}
+            onChange={(e) => setAudienceFilter(e.target.value as "all" | Audience)}
+            aria-label={t("knowledge.fieldAudience")}
+            className={inputClass}
+          >
+            <option value="all">{t("knowledge.filterAll")}</option>
+            <option value="public">{t("knowledge.audiencePublic")}</option>
+            <option value="internal">{t("knowledge.audienceInternal")}</option>
+          </select>
+          <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as "all" | "published" | "draft")}
             aria-label={t("knowledge.filterStatus")}
@@ -262,6 +287,15 @@ function KnowledgePage() {
                 <span className="rounded-full bg-secondary px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide">
                   {row.kind === "faq" ? t("knowledge.kindFaq") : t("knowledge.kindNote")}
                 </span>
+                <select
+                  value={row.audience}
+                  onChange={(e) => void patch(row.id, { audience: e.target.value as Audience })}
+                  aria-label={t("knowledge.fieldAudience")}
+                  className="rounded-full border border-border bg-background px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide outline-none"
+                >
+                  <option value="public">{t("knowledge.audiencePublic")}</option>
+                  <option value="internal">{t("knowledge.audienceInternal")}</option>
+                </select>
                 <input
                   value={row.title}
                   onChange={(e) =>

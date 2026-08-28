@@ -2170,7 +2170,11 @@
     "updated": "Aggiornata",
     "delete": "Elimina voce",
     "confirmDelete": "Eliminare questa voce? L'assistente smetterà di usarla.",
-    "empty": "Nessuna voce corrisponde a questi filtri."
+    "empty": "Nessuna voce corrisponde a questi filtri.",
+    "fieldAudience": "Destinatari",
+    "audiencePublic": "Sito pubblico",
+    "audienceInternal": "Interno (CMS)",
+    "audienceHint": "Le voci pubbliche servono all'assistente del sito, quelle interne all'agente di supporto in queste schermate."
   },
   "liveChat": {
     "title": "Chat dal vivo volontari",
@@ -2439,5 +2443,17 @@
       "outcomes": "Esiti dell’assistente",
       "categories": "Categorie di domande principali"
     }
+  },
+  "staffAgent": {
+    "title": "Agente di supporto",
+    "subtitle": "Aiuto interno",
+    "open": "Apri l'agente di supporto",
+    "close": "Chiudi l'agente di supporto",
+    "reset": "Ricomincia",
+    "greeting": "Ciao — chiedimi come funziona qualcosa o che cosa cambia un’opzione. Posso leggere la scheda aperta.",
+    "placeholder": "Una domanda su questa schermata…",
+    "thinking": "Sto pensando…",
+    "error": "Qualcosa è andato storto. Riprova.",
+    "disclaimer": "Spiega soltanto — non modifica nulla. Questa conversazione resta nel tuo browser."
   }
 }

@@ -55,6 +55,7 @@ import { Route as StaffOperationalStructureRouteImport } from './routes/_staff/o
 import { Route as StaffRolesRouteImport } from './routes/_staff/roles'
 import { Route as StaffVocabulariesRouteImport } from './routes/_staff/vocabularies'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as ApiStaffAssistantRouteImport } from './routes/api/staff-assistant'
 import { Route as AttendTokenRouteImport } from './routes/attend.$token'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as ClaimIndexRouteImport } from './routes/claim.index'
@@ -358,6 +359,11 @@ const StaffVocabulariesRoute = StaffVocabulariesRouteImport.update({
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStaffAssistantRoute = ApiStaffAssistantRouteImport.update({
+  id: '/api/staff-assistant',
+  path: '/api/staff-assistant',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AttendTokenRoute = AttendTokenRouteImport.update({
@@ -786,6 +792,7 @@ export interface FileRoutesByFullPath {
   '/roles': typeof StaffRolesRoute
   '/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/claim/$token': typeof ClaimTokenRoute
@@ -901,6 +908,7 @@ export interface FileRoutesByTo {
   '/roles': typeof StaffRolesRoute
   '/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/claim/$token': typeof ClaimTokenRoute
@@ -1023,6 +1031,7 @@ export interface FileRoutesById {
   '/_staff/roles': typeof StaffRolesRoute
   '/_staff/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/claim/$token': typeof ClaimTokenRoute
@@ -1144,6 +1153,7 @@ export interface FileRouteTypes {
     | '/roles'
     | '/vocabularies'
     | '/api/chat'
+    | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
     | '/claim/$token'
@@ -1259,6 +1269,7 @@ export interface FileRouteTypes {
     | '/roles'
     | '/vocabularies'
     | '/api/chat'
+    | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
     | '/claim/$token'
@@ -1380,6 +1391,7 @@ export interface FileRouteTypes {
     | '/_staff/roles'
     | '/_staff/vocabularies'
     | '/api/chat'
+    | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
     | '/claim/$token'
@@ -1482,6 +1494,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiStaffAssistantRoute: typeof ApiStaffAssistantRoute
   AttendTokenRoute: typeof AttendTokenRoute
   ClaimTokenRoute: typeof ClaimTokenRoute
   CoachProfileIdRoute: typeof CoachProfileIdRoute
@@ -1845,6 +1858,13 @@ declare module '@tanstack/react-router' {
       path: '/api/chat'
       fullPath: '/api/chat'
       preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/staff-assistant': {
+      id: '/api/staff-assistant'
+      path: '/api/staff-assistant'
+      fullPath: '/api/staff-assistant'
+      preLoaderRoute: typeof ApiStaffAssistantRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/attend/$token': {
@@ -2576,6 +2596,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiStaffAssistantRoute: ApiStaffAssistantRoute,
   AttendTokenRoute: AttendTokenRoute,
   ClaimTokenRoute: ClaimTokenRoute,
   CoachProfileIdRoute: CoachProfileIdRoute,

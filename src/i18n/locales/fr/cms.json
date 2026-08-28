@@ -2170,7 +2170,11 @@
     "updated": "Mise à jour",
     "delete": "Supprimer l'entrée",
     "confirmDelete": "Supprimer cette entrée ? L'assistant cessera de l'utiliser.",
-    "empty": "Aucune entrée ne correspond à ces filtres."
+    "empty": "Aucune entrée ne correspond à ces filtres.",
+    "fieldAudience": "Public visé",
+    "audiencePublic": "Site public",
+    "audienceInternal": "Interne (CMS)",
+    "audienceHint": "Les entrées publiques servent à l'assistant du site, les entrées internes à l'agent d'aide dans ces écrans."
   },
   "liveChat": {
     "title": "Chat en direct bénévole",
@@ -2439,5 +2443,17 @@
       "outcomes": "Résultats de l’assistant",
       "categories": "Principales catégories de questions"
     }
+  },
+  "staffAgent": {
+    "title": "Agent d'aide",
+    "subtitle": "Aide interne",
+    "open": "Ouvrir l'agent d'aide",
+    "close": "Fermer l'agent d'aide",
+    "reset": "Recommencer",
+    "greeting": "Bonjour — demandez-moi comment fonctionne un élément ou ce qu'une option change. Je peux consulter la fiche ouverte.",
+    "placeholder": "Une question sur cet écran…",
+    "thinking": "Réflexion…",
+    "error": "Une erreur s'est produite. Merci de réessayer.",
+    "disclaimer": "Explique seulement — ne modifie rien. Cette conversation reste dans votre navigateur."
   }
 }
