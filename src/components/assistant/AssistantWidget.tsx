@@ -33,6 +33,7 @@ import {
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { useCanonicalPath, useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
+import { ASSISTANT_ASK_EVENT, type AssistantAskDetail } from "@/lib/assistant-open";
 import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "icf-assistant-conversation";
@@ -292,6 +293,30 @@ export function AssistantWidget() {
     if (typeof window !== "undefined") window.localStorage.removeItem(STORAGE_KEY);
     textareaRef.current?.focus();
   }, [setMessages, stop]);
+
+  // A page CTA can open the panel with a question already asked (see
+  // src/lib/assistant-open.ts). The question is queued rather than sent
+  // directly so a turn that is still streaming is never interrupted.
+  const [queuedAsk, setQueuedAsk] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const text = (event as CustomEvent<AssistantAskDetail>).detail?.text?.trim();
+      if (!text) return;
+      setLiveChat(false);
+      setOpen(true);
+      setQueuedAsk(text);
+    };
+    window.addEventListener(ASSISTANT_ASK_EVENT, handler);
+    return () => window.removeEventListener(ASSISTANT_ASK_EVENT, handler);
+  }, []);
+
+  useEffect(() => {
+    if (!queuedAsk || status !== "ready") return;
+    setQueuedAsk(null);
+    void sendMessage({ text: queuedAsk });
+  }, [queuedAsk, sendMessage, status]);
+
 
   const suggestions = [
     t("assistant.suggestions.coach"),

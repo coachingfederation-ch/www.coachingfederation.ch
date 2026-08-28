@@ -16,6 +16,7 @@ import {
   ProofBar,
 } from "@/components/organisations/sections";
 import { useI18n } from "@/i18n";
+import { askAssistant } from "@/lib/assistant-open";
 
 const programmeVisuals: { bg: string; fg: string; mark: MarkName }[] = [
   { bg: "bg-mark-cream", fg: "text-mark-indigo", mark: "circular1" },
@@ -73,7 +74,9 @@ export default function ForOrganisationsPage() {
         }
         lede={t("organisations.hero.lede")}
         ctaLabel={t("organisations.hero.cta")}
-        ctaHref="#organisation-contact"
+        // Opens the chapter assistant with an organisation-specific opening
+        // question instead of dropping the visitor on an empty contact form.
+        onCtaClick={() => askAssistant(t("assistant.prompts.organisations"))}
       />
       <main id="main">
         <ProofBar />
