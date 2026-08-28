@@ -693,7 +693,12 @@
         "setRegions": "Set your service area",
         "empty": "No local community covers your service area yet.",
         "view": "View community",
-        "contact": "Contact the community"
+        "contact": "Contact the community",
+        "join": {
+          "cta": "Join community",
+          "sent": "Request sent — the community leads will be in touch.",
+          "error": "We could not send your request. Please try again."
+        }
       },
       "liveChat": {
         "title": "Live chat volunteer",

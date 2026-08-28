@@ -693,7 +693,12 @@
         "setRegions": "Imposta la tua area di servizio",
         "empty": "Nessuna community locale copre ancora la tua area di servizio.",
         "view": "Vedi community",
-        "contact": "Contatta la community"
+        "contact": "Contatta la community",
+        "join": {
+          "cta": "Unisciti alla community",
+          "sent": "Richiesta inviata — i responsabili della community vi contatteranno.",
+          "error": "Non è stato possibile inviare la richiesta. Riprovate."
+        }
       },
       "liveChat": {
         "title": "Volontario della chat dal vivo",
