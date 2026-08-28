@@ -737,7 +737,8 @@
           "declined": "Refusé",
           "registered": "Inscrit",
           "cancelled": "Annulé",
-          "attended": "Participé"
+          "attended": "Participé",
+          "invited": "En attente de l'invité"
         }
       }
     },
@@ -791,7 +792,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
+          "items": [
+            "Piloter des projets",
+            "Être reconnu par ICFS pour avoir mené des initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -2200,7 +2204,8 @@
       "approved": "Approuvés / inscrits",
       "attended": "Présents",
       "declined": "Refusés / annulés",
-      "converted": "Devenus membres"
+      "converted": "Devenus membres",
+      "waiting": "En attente de l'invité"
     },
     "filters": {
       "label": "Statut",
@@ -2221,7 +2226,8 @@
       "registered": "Inscrit",
       "attended": "Présent",
       "declined": "Refusé",
-      "cancelled": "Annulé"
+      "cancelled": "Annulé",
+      "invited": "En attente de l'invité"
     },
     "followUpStatus": {
       "none": "Pas de suivi",
@@ -2236,7 +2242,8 @@
       "followUp": "Suivi",
       "save": "Enregistrer",
       "close": "Fermer",
-      "export": "Télécharger le CSV"
+      "export": "Télécharger le CSV",
+      "view": "Voir"
     },
     "dialog": {
       "approveTitle": "Approuver ce pass invité ?",
@@ -2255,7 +2262,8 @@
       "statusLabel": "Statut",
       "noteLabel": "Note",
       "linkMember": "Lier la fiche membre correspondante",
-      "matchFound": "Une adhésion active existe désormais pour cette adresse."
+      "matchFound": "Une adhésion active existe désormais pour cette adresse.",
+      "noConsent": "Cet invité n'a pas accepté d'être recontacté. Vous pouvez noter des remarques ici ; n'envoyez pas de communications marketing."
     },
     "empty": "Aucun pass invité pour le moment.",
     "emptyFiltered": "Aucun pass invité avec ce statut.",
@@ -2295,6 +2303,38 @@
       "followUpNote": "Note de suivi",
       "converted": "Devenu membre",
       "createdAt": "Demandé le"
+    },
+    "waitingHint": "Nous attendons que l'invité complète ses informations. Rien à décider pour l'instant.",
+    "consentYes": "Accepte d'être recontacté",
+    "consentNo": "Pas de consentement au suivi",
+    "detail": {
+      "back": "Retour aux pass invité",
+      "title": "Pass invité",
+      "notFound": "Ce pass invité n'existe plus.",
+      "guestSection": "Invité",
+      "profileSection": "Informations fournies par l'invité",
+      "memberSection": "Membre invitant",
+      "consentSection": "Consentement et conservation",
+      "decisionSection": "Décision",
+      "followUpSection": "Suivi",
+      "completedAt": "Informations complétées",
+      "requestedAt": "Demandé",
+      "notCompleted": "Pas encore complété",
+      "consentGiven": "L'invité a accepté le suivi le",
+      "consentNone": "L'invité n'a pas accepté d'être recontacté.",
+      "consentHelp": "Le retrait du consentement met fin aux sollicitations ; il ne supprime pas cet enregistrement plus tôt.",
+      "retention": "Cet enregistrement est conservé jusqu'au",
+      "retentionUnknown": "La date de suppression est fixée dès que l'événement a une date de fin.",
+      "decisionAt": "Décidé le",
+      "noDecision": "Aucune décision enregistrée.",
+      "coachingLevel": "Niveau ou parcours de coaching",
+      "focus": "Domaine d'activité principal",
+      "associations": "Autres associations de coaching",
+      "notes": "Remarques de l'invité",
+      "language": "Langue préférée",
+      "phone": "Téléphone",
+      "location": "Basé à",
+      "email": "E-mail"
     }
   },
   "overview": {

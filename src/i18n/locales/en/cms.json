@@ -737,7 +737,8 @@
           "declined": "Declined",
           "registered": "Registered",
           "cancelled": "Cancelled",
-          "attended": "Attended"
+          "attended": "Attended",
+          "invited": "Waiting for guest"
         }
       }
     },
@@ -791,7 +792,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
+          "items": [
+            "Lead projects",
+            "Be recognized by ICFS for leading initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -2200,7 +2204,8 @@
       "approved": "Approved / registered",
       "attended": "Attended",
       "declined": "Declined / cancelled",
-      "converted": "Converted to member"
+      "converted": "Converted to member",
+      "waiting": "Waiting for guest"
     },
     "filters": {
       "label": "Status",
@@ -2221,7 +2226,8 @@
       "registered": "Registered",
       "attended": "Attended",
       "declined": "Declined",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "invited": "Waiting for guest"
     },
     "followUpStatus": {
       "none": "No follow-up",
@@ -2236,7 +2242,8 @@
       "followUp": "Follow-up",
       "save": "Save",
       "close": "Close",
-      "export": "Download CSV"
+      "export": "Download CSV",
+      "view": "View"
     },
     "dialog": {
       "approveTitle": "Approve this guest pass?",
@@ -2255,7 +2262,8 @@
       "statusLabel": "Status",
       "noteLabel": "Note",
       "linkMember": "Link the matching member record",
-      "matchFound": "An active member now exists for this address."
+      "matchFound": "An active member now exists for this address.",
+      "noConsent": "This guest did not opt in to community follow-up. You can still record notes here; do not send marketing."
     },
     "empty": "No guest passes yet.",
     "emptyFiltered": "No guest passes with this status.",
@@ -2295,6 +2303,38 @@
       "followUpNote": "Follow-up note",
       "converted": "Converted to member",
       "createdAt": "Requested at"
+    },
+    "waitingHint": "Waiting for the guest to complete their details. Nothing to decide yet.",
+    "consentYes": "Opted in to follow-up",
+    "consentNo": "No follow-up consent",
+    "detail": {
+      "back": "Back to guest passes",
+      "title": "Guest pass",
+      "notFound": "This guest pass no longer exists.",
+      "guestSection": "Guest",
+      "profileSection": "Details the guest provided",
+      "memberSection": "Inviting member",
+      "consentSection": "Consent and retention",
+      "decisionSection": "Decision",
+      "followUpSection": "Follow-up",
+      "completedAt": "Details completed",
+      "requestedAt": "Requested",
+      "notCompleted": "Not completed yet",
+      "consentGiven": "The guest opted in to follow-up on",
+      "consentNone": "The guest did not opt in to follow-up.",
+      "consentHelp": "Withdrawing follow-up consent stops further outreach; it does not delete this record early.",
+      "retention": "This record is kept until",
+      "retentionUnknown": "Retention date is set once the event has an end date.",
+      "decisionAt": "Decided",
+      "noDecision": "No decision recorded yet.",
+      "coachingLevel": "Coaching level or background",
+      "focus": "Main area of activity",
+      "associations": "Other coaching associations",
+      "notes": "Notes from the guest",
+      "language": "Preferred language",
+      "phone": "Phone",
+      "location": "Based in",
+      "email": "Email"
     }
   },
   "overview": {

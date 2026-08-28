@@ -737,7 +737,8 @@
           "declined": "Abgelehnt",
           "registered": "Angemeldet",
           "cancelled": "Storniert",
-          "attended": "Teilgenommen"
+          "attended": "Teilgenommen",
+          "invited": "Wartet auf Gast"
         }
       }
     },
@@ -791,7 +792,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
+          "items": [
+            "Projekte leiten",
+            "Von ICFS für die Leitung von Initiativen anerkannt werden"
+          ]
         },
         "status": {
           "title": "Status",
@@ -2200,7 +2204,8 @@
       "approved": "Bewilligt / registriert",
       "attended": "Teilgenommen",
       "declined": "Abgelehnt / storniert",
-      "converted": "Mitglied geworden"
+      "converted": "Mitglied geworden",
+      "waiting": "Wartet auf Gast"
     },
     "filters": {
       "label": "Status",
@@ -2221,7 +2226,8 @@
       "registered": "Registriert",
       "attended": "Teilgenommen",
       "declined": "Abgelehnt",
-      "cancelled": "Storniert"
+      "cancelled": "Storniert",
+      "invited": "Wartet auf Gast"
     },
     "followUpStatus": {
       "none": "Kein Nachfassen",
@@ -2236,7 +2242,8 @@
       "followUp": "Nachfassen",
       "save": "Speichern",
       "close": "Schliessen",
-      "export": "CSV herunterladen"
+      "export": "CSV herunterladen",
+      "view": "Ansehen"
     },
     "dialog": {
       "approveTitle": "Diesen Gastpass bewilligen?",
@@ -2255,7 +2262,8 @@
       "statusLabel": "Status",
       "noteLabel": "Notiz",
       "linkMember": "Passenden Mitgliederdatensatz verknüpfen",
-      "matchFound": "Für diese Adresse besteht jetzt eine aktive Mitgliedschaft."
+      "matchFound": "Für diese Adresse besteht jetzt eine aktive Mitgliedschaft.",
+      "noConsent": "Dieser Gast hat einer Nachkontaktierung nicht zugestimmt. Notizen sind weiterhin möglich; kein Marketing versenden."
     },
     "empty": "Noch keine Gastpässe.",
     "emptyFiltered": "Keine Gastpässe mit diesem Status.",
@@ -2295,6 +2303,38 @@
       "followUpNote": "Notiz Nachfassen",
       "converted": "Mitglied geworden",
       "createdAt": "Angefragt am"
+    },
+    "waitingHint": "Wir warten darauf, dass der Gast seine Angaben ergänzt. Noch nichts zu entscheiden.",
+    "consentYes": "Nachkontaktierung zugestimmt",
+    "consentNo": "Keine Zustimmung zur Nachkontaktierung",
+    "detail": {
+      "back": "Zurück zu den Gastkarten",
+      "title": "Gastkarte",
+      "notFound": "Diese Gastkarte existiert nicht mehr.",
+      "guestSection": "Gast",
+      "profileSection": "Angaben des Gasts",
+      "memberSection": "Einladendes Mitglied",
+      "consentSection": "Einwilligung und Aufbewahrung",
+      "decisionSection": "Entscheidung",
+      "followUpSection": "Nachfassen",
+      "completedAt": "Angaben ergänzt",
+      "requestedAt": "Angefragt",
+      "notCompleted": "Noch nicht ergänzt",
+      "consentGiven": "Der Gast hat der Nachkontaktierung zugestimmt am",
+      "consentNone": "Der Gast hat einer Nachkontaktierung nicht zugestimmt.",
+      "consentHelp": "Ein Widerruf stoppt weitere Kontaktaufnahmen; der Eintrag wird dadurch nicht vorzeitig gelöscht.",
+      "retention": "Dieser Eintrag wird aufbewahrt bis",
+      "retentionUnknown": "Das Löschdatum steht fest, sobald die Veranstaltung ein Enddatum hat.",
+      "decisionAt": "Entschieden",
+      "noDecision": "Noch keine Entscheidung erfasst.",
+      "coachingLevel": "Coaching-Level oder Hintergrund",
+      "focus": "Haupttätigkeitsbereich",
+      "associations": "Weitere Coaching-Verbände",
+      "notes": "Hinweise des Gasts",
+      "language": "Bevorzugte Sprache",
+      "phone": "Telefon",
+      "location": "Tätig in",
+      "email": "E-Mail"
     }
   },
   "overview": {
