@@ -22,6 +22,7 @@ import { HowIWorkFlow } from "@/components/coaches/profile/HowIWorkFlow";
 import { CoachProfileHero } from "@/components/coaches/profile/CoachProfileHero";
 import { CoachProfileSidebar } from "@/components/coaches/profile/CoachProfileSidebar";
 import { Mark } from "@/components/marks";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { useTrackView } from "@/lib/plausible";
 
 export function CoachProfileShell({ children }: { children: React.ReactNode }) {
