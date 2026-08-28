@@ -80,18 +80,14 @@ export function GuestPassPanel({ event }: { event: PublicEvent }) {
     e.preventDefault();
     setState({ kind: "saving" });
     try {
+      // Only the guest's name and email travel with the member's request now;
+      // the guest fills in everything else on their own claim page.
       const result = await submitGuestPassRequest({
         data: {
           eventId,
           guestFullName,
           guestEmail,
-          guestPhone,
-          guestLocation,
-          guestPreferredLanguage,
-          guestCoachingLevel,
-          guestProfessionalFocus,
-          guestOtherAssociations: guestOtherAssociations || undefined,
-          guestNotes: guestNotes || undefined,
+          attested: true,
         },
       });
       if (result.outcome === "ok") setState({ kind: "done" });
