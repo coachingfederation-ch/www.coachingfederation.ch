@@ -131,6 +131,7 @@ export function CompactHero({
   lede,
   ctaLabel,
   ctaHref,
+  onCtaClick,
   actions,
 }: {
   eyebrow: string;
@@ -138,6 +139,12 @@ export function CompactHero({
   lede: string;
   ctaLabel?: string;
   ctaHref?: string;
+  /**
+   * In-page action for the CTA (e.g. opening the assistant). Takes precedence
+   * over `ctaHref`, and renders a real button so keyboard users get the right
+   * semantics.
+   */
+  onCtaClick?: () => void;
   /** Optional controls rendered under the lede (e.g. a secondary action). */
   actions?: React.ReactNode;
 }) {
@@ -153,11 +160,17 @@ export function CompactHero({
           </p>
           {/* A CTA without a destination is never rendered — a labelled button that
               goes nowhere is worse than no button at all. */}
-          {ctaLabel && ctaHref && (
+          {ctaLabel && (onCtaClick || ctaHref) && (
             <div className="mt-9">
-              <Button asChild variant="pill" size="pill">
-                <a href={ctaHref}>{ctaLabel} →</a>
-              </Button>
+              {onCtaClick ? (
+                <Button type="button" variant="pill" size="pill" onClick={onCtaClick}>
+                  {ctaLabel} →
+                </Button>
+              ) : (
+                <Button asChild variant="pill" size="pill">
+                  <a href={ctaHref}>{ctaLabel} →</a>
+                </Button>
+              )}
             </div>
           )}
           {actions ? <div className="mt-9 flex flex-wrap gap-3">{actions}</div> : null}
