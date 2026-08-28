@@ -16,6 +16,7 @@ import {
   ProofBar,
 } from "@/components/organisations/sections";
 import { useI18n } from "@/i18n";
+import { askAssistant } from "@/lib/assistant-open";
 
 const programmeVisuals: { bg: string; fg: string; mark: MarkName }[] = [
   { bg: "bg-mark-cream", fg: "text-mark-indigo", mark: "circular1" },
