@@ -15,7 +15,7 @@ import { Shell } from "@/components/cms/Shell";
 import { useCms } from "@/i18n/cms";
 import { useMyRoles } from "@/lib/roles";
 import { RoleTableRow } from "@/components/cms/RoleTableRow";
-import { RoleDetailPanel, SuperAdminSwitch } from "@/components/cms/RoleDetailPanel";
+import { RoleDetailPanel, type RoleSubject } from "@/components/cms/RoleDetailPanel";
 import { QaTestAccountPanel } from "@/components/cms/QaTestAccountPanel";
 import { RoleAuditList } from "@/components/cms/RoleAuditList";
 import {
@@ -61,6 +61,7 @@ function RolesPage() {
   const [pending, setPending] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
   const [inviteOpen, setInviteOpen] = useState(false);
   const [inviteName, setInviteName] = useState("");
   const [inviteEmail, setInviteEmail] = useState("");
@@ -90,7 +91,11 @@ function RolesPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const toggle = async (row: MemberRow, role: GrantableRole) => {
+  /**
+   * Grants or revokes one right. Imported members are addressed by member id,
+   * internal staff accounts by auth user id — the panel is the same for both.
+   */
+  const toggle = async (row: RoleSubject, role: GrantableRole) => {
     // Must cover every managed role explicitly: a fall-through default made
     // "administrator" read the publisher flag and revoke a grant that was
     // never held, which the server correctly rejects.
@@ -108,10 +113,16 @@ function RolesPage() {
                 : row.isMembership;
     // Full access is never granted or removed on a single stray click.
     if (role === "admin" && !confirmSuperAdmin(held, row.name)) return;
-    setPending(`${row.memberId}:${role}`);
+    setPending(`${row.pendingKey}:${role}`);
     try {
-      if (held) await revokeMemberRole({ data: { memberId: row.memberId, role } });
-      else await grantMemberRole({ data: { memberId: row.memberId, role } });
+      if (row.memberId) {
+        if (held) await revokeMemberRole({ data: { memberId: row.memberId, role } });
+        else await grantMemberRole({ data: { memberId: row.memberId, role } });
+      } else if (held) {
+        await revokeAccountRole({ data: { authUserId: row.authUserId, role } });
+      } else {
+        await grantAccountRole({ data: { authUserId: row.authUserId, role } });
+      }
       await load();
     } catch {
       setError(t("roles.saveError"));
@@ -127,24 +138,6 @@ function RolesPage() {
         name,
       ),
     );
-
-  /**
-   * Super Admin for an internal account — keyed by auth user id, because those
-   * accounts have no imported member record to address.
-   */
-  const toggleAccountSuperAdmin = async (authUserId: string, name: string, held: boolean) => {
-    if (!confirmSuperAdmin(held, name)) return;
-    setPending(`account:${authUserId}:admin`);
-    try {
-      if (held) await revokeAccountRole({ data: { authUserId, role: "admin" } });
-      else await grantAccountRole({ data: { authUserId, role: "admin" } });
-      await load();
-    } catch {
-      setError(t("roles.saveError"));
-    } finally {
-      setPending(null);
-    }
-  };
 
   /**
    * Clears editor + organizer in one action. Internal rows drop out of their
@@ -240,10 +233,44 @@ function RolesPage() {
     );
   }, [members, query]);
 
-  const selected = useMemo(
-    () => members.find((m) => m.memberId === selectedId) ?? null,
-    [members, selectedId],
-  );
+  const selected = useMemo<RoleSubject | null>(() => {
+    const m = members.find((row) => row.memberId === selectedId);
+    if (!m) return null;
+    return {
+      pendingKey: m.memberId,
+      memberId: m.memberId,
+      authUserId: m.authUserId,
+      name: m.name,
+      email: m.email,
+      meta: `ICF ${m.cstRecno} · ${m.authUserId.slice(0, 8)}… · ${m.activityState}`,
+      isAdmin: m.isAdmin,
+      isAdministrator: m.isAdministrator,
+      isEditor: m.isEditor,
+      isOrganizer: m.isOrganizer,
+      isPublisher: m.isPublisher,
+      isMembership: m.isMembership,
+    };
+  }, [members, selectedId]);
+
+  /** The internal (non-member) staff account currently open in the panel. */
+  const selectedAccount = useMemo<RoleSubject | null>(() => {
+    const a = internal.find((row) => row.authUserId === selectedAccountId);
+    if (!a) return null;
+    const has = (role: string) => a.roles.includes(role);
+    return {
+      pendingKey: `account:${a.authUserId}`,
+      authUserId: a.authUserId,
+      name: a.name ?? a.email ?? a.authUserId,
+      email: a.email ?? null,
+      meta: `${a.authUserId.slice(0, 8)}…`,
+      isAdmin: has("admin"),
+      isAdministrator: has("administrator"),
+      isEditor: has("editor"),
+      isOrganizer: has("organizer"),
+      isPublisher: has("publisher"),
+      isMembership: has("membership"),
+    };
+  }, [internal, selectedAccountId]);
 
   if (!rolesLoading && !roles.isAdmin) {
     return (
@@ -462,31 +489,17 @@ function RolesPage() {
                         </span>
                       ))}
                     </td>
-                    {/* Super Admin is now assignable here; the scoped grants
-                        still require a claim-linked member record. */}
+                    {/* Every right — including Super Admin — is edited in the
+                        detail panel, so the row keeps only account actions. */}
                     <td className="px-4 py-3">
                       <div className="flex flex-col items-end gap-2">
-                        <div className="w-full max-w-xs">
-                          <SuperAdminSwitch
-                            on={a.roles.includes("admin")}
-                            busy={pending === `account:${a.authUserId}:admin`}
-                            disabledReason={
-                              a.authUserId === currentUserId
-                                ? t("roles.superAdminSelfHint")
-                                : a.roles.includes("admin") && superAdminCount <= 1
-                                  ? t("roles.superAdminLastHint")
-                                  : null
-                            }
-                            onToggle={() =>
-                              void toggleAccountSuperAdmin(
-                                a.authUserId,
-                                a.name ?? a.email ?? a.authUserId,
-                                a.roles.includes("admin"),
-                              )
-                            }
-                            t={t}
-                          />
-                        </div>
+                        <button
+                          onClick={() => setSelectedAccountId(a.authUserId)}
+                          className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
+                        >
+                          {t("roles.manage")}
+                        </button>
+
                         {a.pending ? (
                           <div className="flex gap-2">
                             <button
@@ -548,6 +561,19 @@ function RolesPage() {
             </tbody>
           </table>
         </div>
+
+        {selectedAccount ? (
+          <RoleDetailPanel
+            member={selectedAccount}
+            pending={pending}
+            isSelf={selectedAccount.authUserId === currentUserId}
+            isLastSuperAdmin={superAdminCount <= 1}
+            onToggle={toggle}
+            onRemoveAccess={removeAccess}
+            onClose={() => setSelectedAccountId(null)}
+            t={t}
+          />
+        ) : null}
 
         <QaTestAccountPanel onProvisioned={() => void load()} />
 

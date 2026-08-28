@@ -21,8 +21,30 @@ import {
 import { listAccountRoleAudit, type listRoleAdminData } from "@/lib/roles.functions";
 import type { GrantableRole, ManagedRole } from "@/lib/role-model";
 
-type MemberRow = Awaited<ReturnType<typeof listRoleAdminData>>["members"][number];
 type AuditRow = Awaited<ReturnType<typeof listRoleAdminData>>["audit"][number];
+
+/**
+ * The panel works on any account that can hold grants — an imported member or
+ * an internal (non-member) staff account. Callers map their own row shape into
+ * this, so the rights checklist and the audit list stay in one component.
+ */
+export type RoleSubject = {
+  /** Prefix for the `pending` key: the member id, or `account:<authUserId>`. */
+  pendingKey: string;
+  /** Present for imported members; absent for internal staff accounts. */
+  memberId?: string;
+  authUserId: string;
+  name: string;
+  email: string | null;
+  /** Small mono line under the email (ICF number, account id, state). */
+  meta?: string | null;
+  isAdmin: boolean;
+  isAdministrator: boolean;
+  isEditor: boolean;
+  isOrganizer: boolean;
+  isPublisher: boolean;
+  isMembership: boolean;
+};
 
 const RIGHTS: { role: ManagedRole; labelKey: string; descKey: string; icon: typeof ShieldCheck }[] =
   [
@@ -58,7 +80,7 @@ const RIGHTS: { role: ManagedRole; labelKey: string; descKey: string; icon: type
     },
   ];
 
-function holds(member: MemberRow, role: ManagedRole): boolean {
+function holds(member: RoleSubject, role: ManagedRole): boolean {
   if (role === "administrator") return member.isAdministrator;
   if (role === "editor") return member.isEditor;
   if (role === "organizer") return member.isOrganizer;
@@ -76,11 +98,11 @@ export function RoleDetailPanel({
   onClose,
   t,
 }: {
-  member: MemberRow;
+  member: RoleSubject;
   pending: string | null;
   isSelf: boolean;
   isLastSuperAdmin: boolean;
-  onToggle: (row: MemberRow, role: GrantableRole) => void | Promise<void>;
+  onToggle: (row: RoleSubject, role: GrantableRole) => void | Promise<void>;
   onRemoveAccess: (authUserId: string, name: string) => void | Promise<void>;
   onClose: () => void;
   t: (k: string) => string;
@@ -129,9 +151,9 @@ export function RoleDetailPanel({
 
         <h2 className="pr-8 text-lg font-semibold tracking-tight">{member.name}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{member.email ?? "—"}</p>
-        <p className="mt-1 font-mono text-xs text-muted-foreground">
-          ICF {member.cstRecno} · {member.authUserId.slice(0, 8)}… · {member.activityState}
-        </p>
+        {member.meta ? (
+          <p className="mt-1 font-mono text-xs text-muted-foreground">{member.meta}</p>
+        ) : null}
 
         <h3 className="mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {t("roles.rightsTitle")}
@@ -145,7 +167,7 @@ export function RoleDetailPanel({
           <ul className="mt-3 space-y-2">
             {RIGHTS.map(({ role, labelKey, descKey, icon: Icon }) => {
               const on = holds(member, role);
-              const busy = pending === `${member.memberId}:${role}`;
+              const busy = pending === `${member.pendingKey}:${role}`;
               return (
                 <li key={role}>
                   <button
@@ -180,7 +202,7 @@ export function RoleDetailPanel({
             above and never silently bundled into "Remove access". */}
         <SuperAdminSwitch
           on={member.isAdmin}
-          busy={pending === `${member.memberId}:admin`}
+          busy={pending === `${member.pendingKey}:admin`}
           disabledReason={
             isSelf
               ? t("roles.superAdminSelfHint")
