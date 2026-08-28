@@ -65,6 +65,7 @@ import { Route as CommunitiesSlugRouteImport } from './routes/communities.$slug'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as FormTokenRouteImport } from './routes/form.$token'
+import { Route as GuestPassTokenRouteImport } from './routes/guest-pass.$token'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as InsightsIdRouteImport } from './routes/insights.$id'
 import { Route as NewslettersIndexRouteImport } from './routes/newsletters.index'
@@ -101,6 +102,7 @@ import { Route as ApiPublicEuropePulseScanRouteImport } from './routes/api/publi
 import { Route as ApiPublicEventFollowUpsRouteImport } from './routes/api/public/event-follow-ups'
 import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public/event-reminders'
 import { Route as ApiPublicEventsFeedDoticsRouteImport } from './routes/api/public/events-feed[.]ics'
+import { Route as ApiPublicGuestPassPurgeRouteImport } from './routes/api/public/guest-pass-purge'
 import { Route as ApiPublicLiveChatRouteImport } from './routes/api/public/live-chat'
 import { Route as ApiPublicLiveChatPurgeRouteImport } from './routes/api/public/live-chat-purge'
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
@@ -407,6 +409,11 @@ const FormTokenRoute = FormTokenRouteImport.update({
   path: '/form/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuestPassTokenRoute = GuestPassTokenRouteImport.update({
+  id: '/guest-pass/$token',
+  path: '/guest-pass/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InsightsIndexRoute = InsightsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -591,6 +598,11 @@ const ApiPublicEventsFeedDoticsRoute =
     path: '/api/public/events-feed.ics',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicGuestPassPurgeRoute = ApiPublicGuestPassPurgeRouteImport.update({
+  id: '/api/public/guest-pass-purge',
+  path: '/api/public/guest-pass-purge',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicLiveChatRoute = ApiPublicLiveChatRouteImport.update({
   id: '/api/public/live-chat',
   path: '/api/public/live-chat',
@@ -774,6 +786,7 @@ export interface FileRoutesByFullPath {
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/form/$token': typeof FormTokenRoute
+  '/guest-pass/$token': typeof GuestPassTokenRoute
   '/insights/$id': typeof InsightsIdRoute
   '/newsletters/$slug': typeof NewslettersSlugRoute
   '/ticket/$token': typeof TicketTokenRoute
@@ -808,6 +821,7 @@ export interface FileRoutesByFullPath {
   '/api/public/event-follow-ups': typeof ApiPublicEventFollowUpsRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/events-feed.ics': typeof ApiPublicEventsFeedDoticsRoute
+  '/api/public/guest-pass-purge': typeof ApiPublicGuestPassPurgeRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
@@ -886,6 +900,7 @@ export interface FileRoutesByTo {
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/form/$token': typeof FormTokenRoute
+  '/guest-pass/$token': typeof GuestPassTokenRoute
   '/insights/$id': typeof InsightsIdRoute
   '/newsletters/$slug': typeof NewslettersSlugRoute
   '/ticket/$token': typeof TicketTokenRoute
@@ -920,6 +935,7 @@ export interface FileRoutesByTo {
   '/api/public/event-follow-ups': typeof ApiPublicEventFollowUpsRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/events-feed.ics': typeof ApiPublicEventsFeedDoticsRoute
+  '/api/public/guest-pass-purge': typeof ApiPublicGuestPassPurgeRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
@@ -1005,6 +1021,7 @@ export interface FileRoutesById {
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/form/$token': typeof FormTokenRoute
+  '/guest-pass/$token': typeof GuestPassTokenRoute
   '/insights/$id': typeof InsightsIdRoute
   '/newsletters/$slug': typeof NewslettersSlugRoute
   '/ticket/$token': typeof TicketTokenRoute
@@ -1039,6 +1056,7 @@ export interface FileRoutesById {
   '/api/public/event-follow-ups': typeof ApiPublicEventFollowUpsRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
   '/api/public/events-feed.ics': typeof ApiPublicEventsFeedDoticsRoute
+  '/api/public/guest-pass-purge': typeof ApiPublicGuestPassPurgeRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
@@ -1123,6 +1141,7 @@ export interface FileRouteTypes {
     | '/communities/$slug'
     | '/events/$slug'
     | '/form/$token'
+    | '/guest-pass/$token'
     | '/insights/$id'
     | '/newsletters/$slug'
     | '/ticket/$token'
@@ -1157,6 +1176,7 @@ export interface FileRouteTypes {
     | '/api/public/event-follow-ups'
     | '/api/public/event-reminders'
     | '/api/public/events-feed.ics'
+    | '/api/public/guest-pass-purge'
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
@@ -1235,6 +1255,7 @@ export interface FileRouteTypes {
     | '/communities/$slug'
     | '/events/$slug'
     | '/form/$token'
+    | '/guest-pass/$token'
     | '/insights/$id'
     | '/newsletters/$slug'
     | '/ticket/$token'
@@ -1269,6 +1290,7 @@ export interface FileRouteTypes {
     | '/api/public/event-follow-ups'
     | '/api/public/event-reminders'
     | '/api/public/events-feed.ics'
+    | '/api/public/guest-pass-purge'
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
@@ -1353,6 +1375,7 @@ export interface FileRouteTypes {
     | '/communities/$slug'
     | '/events/$slug'
     | '/form/$token'
+    | '/guest-pass/$token'
     | '/insights/$id'
     | '/newsletters/$slug'
     | '/ticket/$token'
@@ -1387,6 +1410,7 @@ export interface FileRouteTypes {
     | '/api/public/event-follow-ups'
     | '/api/public/event-reminders'
     | '/api/public/events-feed.ics'
+    | '/api/public/guest-pass-purge'
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
@@ -1451,6 +1475,7 @@ export interface RootRouteChildren {
   CommunitiesSlugRoute: typeof CommunitiesSlugRoute
   EventsSlugRoute: typeof EventsSlugRoute
   FormTokenRoute: typeof FormTokenRoute
+  GuestPassTokenRoute: typeof GuestPassTokenRoute
   NewslettersSlugRoute: typeof NewslettersSlugRoute
   TicketTokenRoute: typeof TicketTokenRoute
   VolunteerLoginTokenRoute: typeof VolunteerLoginTokenRoute
@@ -1467,6 +1492,7 @@ export interface RootRouteChildren {
   ApiPublicEventFollowUpsRoute: typeof ApiPublicEventFollowUpsRoute
   ApiPublicEventRemindersRoute: typeof ApiPublicEventRemindersRoute
   ApiPublicEventsFeedDoticsRoute: typeof ApiPublicEventsFeedDoticsRoute
+  ApiPublicGuestPassPurgeRoute: typeof ApiPublicGuestPassPurgeRoute
   ApiPublicLiveChatRoute: typeof ApiPublicLiveChatRoute
   ApiPublicLiveChatPurgeRoute: typeof ApiPublicLiveChatPurgeRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
@@ -1878,6 +1904,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FormTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guest-pass/$token': {
+      id: '/guest-pass/$token'
+      path: '/guest-pass/$token'
+      fullPath: '/guest-pass/$token'
+      preLoaderRoute: typeof GuestPassTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/insights/': {
       id: '/insights/'
       path: '/'
@@ -2128,6 +2161,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/events-feed.ics'
       fullPath: '/api/public/events-feed.ics'
       preLoaderRoute: typeof ApiPublicEventsFeedDoticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/guest-pass-purge': {
+      id: '/api/public/guest-pass-purge'
+      path: '/api/public/guest-pass-purge'
+      fullPath: '/api/public/guest-pass-purge'
+      preLoaderRoute: typeof ApiPublicGuestPassPurgeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/live-chat': {
@@ -2520,6 +2560,7 @@ const rootRouteChildren: RootRouteChildren = {
   CommunitiesSlugRoute: CommunitiesSlugRoute,
   EventsSlugRoute: EventsSlugRoute,
   FormTokenRoute: FormTokenRoute,
+  GuestPassTokenRoute: GuestPassTokenRoute,
   NewslettersSlugRoute: NewslettersSlugRoute,
   TicketTokenRoute: TicketTokenRoute,
   VolunteerLoginTokenRoute: VolunteerLoginTokenRoute,
@@ -2536,6 +2577,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicEventFollowUpsRoute: ApiPublicEventFollowUpsRoute,
   ApiPublicEventRemindersRoute: ApiPublicEventRemindersRoute,
   ApiPublicEventsFeedDoticsRoute: ApiPublicEventsFeedDoticsRoute,
+  ApiPublicGuestPassPurgeRoute: ApiPublicGuestPassPurgeRoute,
   ApiPublicLiveChatRoute: ApiPublicLiveChatRoute,
   ApiPublicLiveChatPurgeRoute: ApiPublicLiveChatPurgeRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,

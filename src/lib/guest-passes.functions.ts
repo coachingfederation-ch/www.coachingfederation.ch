@@ -40,17 +40,17 @@ export type MyGuestPass = {
   createdAt: string;
 };
 
+/**
+ * The member names a guest — nothing more. Everything personal about the guest
+ * is collected from the guest, on their own claim page, after they have read
+ * the privacy notice. `attested` is the member confirming they told the guest
+ * their name and email would be shared so we can invite them.
+ */
 const requestSchema = z.object({
   eventId: z.string().uuid(),
   guestFullName: z.string().trim().min(1).max(120),
   guestEmail: z.string().trim().email().max(255),
-  guestPhone: z.string().trim().min(1).max(60),
-  guestLocation: z.string().trim().min(1).max(120),
-  guestPreferredLanguage: z.enum(["en", "de", "fr", "it"]),
-  guestCoachingLevel: z.string().trim().min(1).max(160),
-  guestProfessionalFocus: z.string().trim().min(1).max(200),
-  guestOtherAssociations: z.string().trim().max(200).optional(),
-  guestNotes: z.string().trim().max(1000).optional(),
+  attested: z.literal(true),
 });
 
 /** Whose details prefill the request form, and may this member use it at all. */
@@ -102,7 +102,7 @@ export const submitGuestPassRequest = createServerFn({ method: "POST" })
 
     const { data: event } = await supabaseAdmin
       .from("events")
-      .select("id, title, starts_at, guest_passes_allowed, registration_mode, status")
+      .select("id, title, starts_at, language, guest_passes_allowed, registration_mode, status")
       .eq("id", data.eventId)
       .maybeSingle();
     if (!event || !event.guest_passes_allowed) return { outcome: "not_allowed" };
@@ -146,14 +146,15 @@ export const submitGuestPassRequest = createServerFn({ method: "POST" })
         inviting_member_status: member.activity_state,
         guest_full_name: data.guestFullName,
         guest_email: email,
-        guest_phone: data.guestPhone,
-        guest_location: data.guestLocation,
-        guest_preferred_language: data.guestPreferredLanguage,
-        guest_coaching_level: data.guestCoachingLevel,
-        guest_professional_focus: data.guestProfessionalFocus,
-        guest_other_associations: data.guestOtherAssociations ?? null,
-        guest_notes: data.guestNotes ?? null,
-        status: "pending",
+        // The guest fills these in themselves, behind their own link.
+        guest_phone: null,
+        guest_location: null,
+        guest_preferred_language: null,
+        guest_coaching_level: null,
+        guest_professional_focus: null,
+        guest_other_associations: null,
+        guest_notes: null,
+        status: "invited",
       })
       .select("id")
       .single();
@@ -169,26 +170,193 @@ export const submitGuestPassRequest = createServerFn({ method: "POST" })
       return { outcome: "error" };
     }
 
+    // Membership & Engagement is told once the guest has completed the form,
+    // not now: there is nothing to decide on yet.
     // A delivery failure must never lose the request — the row is the record.
     try {
+      const { mintGuestPassInviteToken } = await import("./guest-passes.server");
+      const { SITE_URL, localizePath } = await import("@/i18n/config");
       const { sendTemplateEmail } = await import("./email-templates/send-email");
-      await sendTemplateEmail("guest-pass-request", "", {
-        idempotencyKey: `guest-pass-request-${inserted.id}`,
-        templateData: {
-          invitingMemberName: inviterName,
-          invitingMemberEmail: member.email ?? "",
-          guestName: data.guestFullName,
-          guestEmail: email,
-          eventTitle: event.title ?? "",
-          eventStartsAt: event.starts_at ?? null,
-        },
-      });
+
+      const rawToken = await mintGuestPassInviteToken(inserted.id);
+      const locale = (["en", "de", "fr", "it"] as const).includes(
+        (event.language ?? "en") as "en" | "de" | "fr" | "it",
+      )
+        ? ((event.language ?? "en") as "en" | "de" | "fr" | "it")
+        : "en";
+
+      if (rawToken) {
+        await sendTemplateEmail("guest-pass-invite", email, {
+          idempotencyKey: `guest-pass-invite-${inserted.id}`,
+          replyTo: "office@coachingfederation.ch",
+          templateData: {
+            locale,
+            guestName: data.guestFullName,
+            invitingMemberName: inviterName,
+            eventTitle: event.title ?? "",
+            eventStartsAt: event.starts_at ?? null,
+            claimUrl: `${SITE_URL}${localizePath(`/guest-pass/${rawToken}`, locale)}`,
+          },
+        });
+      }
     } catch (err) {
-      console.error("[guest-pass] notification email failed", err);
+      console.error("[guest-pass] guest invitation email failed", err);
+    }
+
+    // The inviter gets a confirmation — never with the guest's token in it: a
+    // forwarded member mail must not let somebody else complete the profile.
+    try {
+      const { sendTemplateEmail } = await import("./email-templates/send-email");
+      if (member.email) {
+        await sendTemplateEmail("guest-pass-member-invited", member.email, {
+          idempotencyKey: `guest-pass-member-invited-${inserted.id}`,
+          templateData: {
+            stage: "invited",
+            invitingMemberName: inviterName,
+            guestName: data.guestFullName,
+            guestEmail: email,
+            eventTitle: event.title ?? "",
+            eventStartsAt: event.starts_at ?? null,
+          },
+        });
+      }
+    } catch (err) {
+      console.error("[guest-pass] inviter confirmation email failed", err);
     }
 
     return { outcome: "ok", passId: inserted.id };
   });
+
+/* ---------------------------------------------------------------------------
+ * The guest's own claim page (/guest-pass/$token)
+ *
+ * No session: the token is the credential, so both functions are deliberately
+ * unauthenticated and rate-limited per caller. They never accept a pass id.
+ * ------------------------------------------------------------------------- */
+
+export type GuestPassClaimView = {
+  eventTitle: string | null;
+  eventStartsAt: string | null;
+  invitingMemberName: string | null;
+  guestFullName: string;
+  guestEmail: string;
+};
+
+export const getGuestPassClaim = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => z.object({ token: z.string().min(10).max(200) }).parse(input))
+  .handler(async ({ data }): Promise<GuestPassClaimView | null> => {
+    const { resolveGuestPassToken } = await import("./guest-passes.server");
+    const claim = await resolveGuestPassToken(data.token);
+    if (!claim) return null;
+    return {
+      eventTitle: claim.eventTitle,
+      eventStartsAt: claim.eventStartsAt,
+      invitingMemberName: claim.invitingMemberName,
+      guestFullName: claim.guestFullName,
+      guestEmail: claim.guestEmail,
+    };
+  });
+
+const completeSchema = z.object({
+  token: z.string().min(10).max(200),
+  guestPreferredLanguage: z.enum(["en", "de", "fr", "it"]),
+  guestPhone: z.string().trim().max(60).optional(),
+  guestLocation: z.string().trim().max(120).optional(),
+  guestCoachingLevel: z.string().trim().max(160).optional(),
+  guestProfessionalFocus: z.string().trim().max(200).optional(),
+  guestOtherAssociations: z.string().trim().max(200).optional(),
+  guestNotes: z.string().trim().max(1000).optional(),
+  followUpConsent: z.boolean(),
+});
+
+export const completeGuestPassClaim = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => completeSchema.parse(input))
+  .handler(
+    async ({
+      data,
+    }): Promise<{
+      ok: boolean;
+      reason?: "invalid" | "already_completed" | "rate_limited" | "error";
+    }> => {
+      const { clientIp, checkRateLimit } = await import("./rate-limit.server");
+      const { getRequest } = await import("@tanstack/react-start/server");
+      const verdict = await checkRateLimit("guest-pass-claim", `ip:${clientIp(getRequest())}`, [
+        { windowSeconds: 600, max: 8 },
+        { windowSeconds: 86_400, max: 40 },
+      ]);
+      if (!verdict.allowed) return { ok: false, reason: "rate_limited" };
+
+      const { completeGuestPassProfile } = await import("./guest-passes.server");
+      const result = await completeGuestPassProfile(data.token, {
+        guestPreferredLanguage: data.guestPreferredLanguage,
+        guestPhone: data.guestPhone ?? null,
+        guestLocation: data.guestLocation ?? null,
+        guestCoachingLevel: data.guestCoachingLevel ?? null,
+        guestProfessionalFocus: data.guestProfessionalFocus ?? null,
+        guestOtherAssociations: data.guestOtherAssociations ?? null,
+        guestNotes: data.guestNotes ?? null,
+        followUpConsent: data.followUpConsent,
+      });
+      if (!result.ok) return { ok: false, reason: result.reason };
+
+      // Only now is there something to decide on: tell the office, and tell
+      // the member their guest is through the door of the form.
+      try {
+        await notifyGuestPassCompleted(result.passId);
+      } catch (err) {
+        console.error("[guest-pass] completion notifications failed", err);
+      }
+      return { ok: true };
+    },
+  );
+
+/** Office review request + inviter update, once the guest has completed. */
+async function notifyGuestPassCompleted(passId: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { sendTemplateEmail } = await import("./email-templates/send-email");
+
+  const { data: pass } = await supabaseAdmin
+    .from("guest_passes")
+    .select(
+      "id, guest_full_name, guest_email, inviting_member_name, inviting_member_email, events ( title, starts_at )",
+    )
+    .eq("id", passId)
+    .maybeSingle();
+  if (!pass) return;
+  const event = (Array.isArray(pass.events) ? pass.events[0] : pass.events) as
+    | { title?: string | null; starts_at?: string | null }
+    | null
+    | undefined;
+
+  const shared = {
+    invitingMemberName: pass.inviting_member_name ?? "",
+    invitingMemberEmail: pass.inviting_member_email ?? "",
+    guestName: pass.guest_full_name,
+    guestEmail: pass.guest_email,
+    eventTitle: event?.title ?? "",
+    eventStartsAt: event?.starts_at ?? null,
+  };
+
+  try {
+    await sendTemplateEmail("guest-pass-request", "", {
+      idempotencyKey: `guest-pass-request-${passId}`,
+      templateData: shared,
+    });
+  } catch (err) {
+    console.error("[guest-pass] office review email failed", err);
+  }
+
+  if (pass.inviting_member_email) {
+    try {
+      await sendTemplateEmail("guest-pass-member-invited", pass.inviting_member_email, {
+        idempotencyKey: `guest-pass-member-completed-${passId}`,
+        templateData: { ...shared, stage: "completed" },
+      });
+    } catch (err) {
+      console.error("[guest-pass] inviter completion email failed", err);
+    }
+  }
+}
 
 /** The signed-in member's own guest pass requests, newest first. */
 export const listMyGuestPasses = createServerFn({ method: "POST" })
@@ -356,7 +524,10 @@ export const approveGuestPass = createServerFn({ method: "POST" })
     const result = await createGuestRegistration(data.passId, userId);
     if (result.outcome === "created") await notifyApproval(data.passId);
 
-    return { ok: true as const, status: result.outcome === "ineligible" ? "approved" : "registered" };
+    return {
+      ok: true as const,
+      status: result.outcome === "ineligible" ? "approved" : "registered",
+    };
   });
 
 /** Decline the request and tell the inviting member. */
@@ -534,12 +705,14 @@ export const listAllGuestPasses = createServerFn({ method: "POST" })
       .from("guest_passes")
       .select("id, inviting_member_cst_recno, inviting_member_status, converted_member_id");
     const extra = new Map(
-      ((raw.data ?? []) as {
-        id: string;
-        inviting_member_cst_recno: string | null;
-        inviting_member_status: string | null;
-        converted_member_id: string | null;
-      }[]).map((r) => [r.id, r]),
+      (
+        (raw.data ?? []) as {
+          id: string;
+          inviting_member_cst_recno: string | null;
+          inviting_member_status: string | null;
+          converted_member_id: string | null;
+        }[]
+      ).map((r) => [r.id, r]),
     );
 
     return rows.map((r) => ({

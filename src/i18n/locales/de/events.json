@@ -238,6 +238,37 @@
       "event_closed": "Die Anmeldung für dieses Event ist geschlossen.",
       "not_allowed": "Dieses Event bietet keine Gastkarten an.",
       "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    },
+    "claim": {
+      "eyebrow": "Gastkarte",
+      "title": "Gastkarte vervollständigen",
+      "invitedBy": "Eingeladen von",
+      "guest": "Gast",
+      "event": "Veranstaltung",
+      "when": "Wann",
+      "intro": "Bitte ergänzen Sie einige Angaben, damit wir Ihre Gastkarte prüfen und Ihren Platz vorbereiten können. Ausser der bevorzugten Sprache ist alles freiwillig.",
+      "fieldLanguage": "Bevorzugte Sprache",
+      "fieldPhone": "Telefon (optional)",
+      "fieldLocation": "Wo Sie ansässig sind (optional)",
+      "fieldCoachingLevel": "Coaching-Niveau oder Hintergrund (optional)",
+      "fieldFocus": "Haupttätigkeitsbereich (optional)",
+      "fieldAssociations": "Andere Coaching-Verbände (optional)",
+      "fieldNotes": "Sollten wir etwas wissen? (optional)",
+      "privacyTitle": "Wie wir Ihre Angaben verwenden",
+      "privacyNotice": "ICF Switzerland verwendet Ihre Angaben, um diese Gastkarte zu prüfen, Sie bei einer Genehmigung für die Veranstaltung anzumelden und Sie zu dieser Veranstaltung zu kontaktieren (Bestätigung, praktische Informationen, Teilnahme). Community- und Projektleitende dieser Veranstaltung sehen Ihren Namen und wer Sie eingeladen hat, damit sie Sie willkommen heissen können. Wir bewahren diese Gastkarten-Informationen 12 Monate nach der Veranstaltung auf und löschen sie danach. Wenn Sie einer Nachkontaktierung zustimmen, können Sie diese jederzeit widerrufen; ein Widerruf stoppt weitere Kontaktaufnahmen, löscht den Veranstaltungseintrag aber nicht vor Ablauf dieser 12 Monate. Verantwortlich: ICF Switzerland. Sie können Auskunft, Berichtigung oder Löschung verlangen oder Widerspruch einlegen unter office@coachingfederation.ch. Details:",
+      "privacyLink": "Datenschutzerklärung",
+      "followUpConsent": "Ich bin zudem einverstanden, dass ICF Switzerland mich nach der Veranstaltung zu relevanten Community-Aktivitäten und zur Mitgliedschaft kontaktiert. Ich kann dies jederzeit unter office@coachingfederation.ch widerrufen. Dies ist freiwillig und hat keinen Einfluss auf die Genehmigung meiner Gastkarte.",
+      "submit": "Angaben senden",
+      "saving": "Wird gesendet…",
+      "successTitle": "Danke — mehr brauchen wir nicht",
+      "successBody": "Membership & Engagement prüft dies und bestätigt per E-Mail.",
+      "browseEvents": "Veranstaltungen ansehen",
+      "error": {
+        "invalid": "Diese Einladung ist nicht mehr gültig. Schreiben Sie an office@coachingfederation.ch, wir helfen gerne.",
+        "rate_limited": "Zu viele Versuche. Bitte versuchen Sie es etwas später erneut.",
+        "already_completed": "Ihre Angaben liegen uns bereits vor — vielen Dank.",
+        "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+      }
     }
   },
   "subscribe": {

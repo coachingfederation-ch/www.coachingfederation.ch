@@ -16,6 +16,7 @@
  *
  * `.server.ts` so it can never be reached from the browser bundle.
  */
+import { createHash, randomBytes } from "crypto";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 /** Statuses that consume the guest's one pilot pass. */
@@ -27,7 +28,8 @@ export type GuestPassStatus =
   | "declined"
   | "registered"
   | "cancelled"
-  | "attended";
+  | "attended"
+  | "invited";
 
 export type GuestPassRow = {
   id: string;
@@ -103,9 +105,12 @@ export type GuestEligibility = {
 };
 
 /**
- * Whether a guest email may still receive a pass. The pilot rule is one pass
- * per guest in total, so a spent pass on ANY event closes the door — and an
- * address that already belongs to an imported member is not a guest at all.
+ * Whether a guest email may still receive a pass. One pass per guest per 12
+ * months: a spent pass closes the door until the retention job deletes the row
+ * (12 months after that event), and an address that already belongs to an
+ * imported member is not a guest at all. A pass that is only `invited` or
+ * `pending` has not been granted, so it does not spend the allowance — but the
+ * same address cannot be invited twice at once either.
  */
 export async function resolveGuestEligibility(guestEmail: string): Promise<GuestEligibility> {
   const email = guestEmail.trim().toLowerCase();
@@ -114,7 +119,7 @@ export async function resolveGuestEligibility(guestEmail: string): Promise<Guest
   const [{ data: passes }, { data: member }] = await Promise.all([
     supabaseAdmin
       .from("guest_passes")
-      .select("id, status")
+      .select("id, status, events ( starts_at, ends_at )")
       .ilike("guest_email", email)
       .order("created_at", { ascending: false }),
     supabaseAdmin.from("members").select("id").ilike("email", email).maybeSingle(),
@@ -122,12 +127,22 @@ export async function resolveGuestEligibility(guestEmail: string): Promise<Guest
 
   if (member) return { eligible: false, reason: "member", existingPassId: null };
 
-  const rows = (passes ?? []) as { id: string; status: GuestPassStatus }[];
-  const used = rows.find((r) => (USED_STATUSES as readonly string[]).includes(r.status));
+  const cutoff = new Date(Date.now() - GUEST_PASS_RETENTION_DAYS * 86_400_000).toISOString();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rows = (passes ?? []) as any[];
+
+  const used = rows.find((r) => {
+    if (!(USED_STATUSES as readonly string[]).includes(r.status)) return false;
+    const event = (Array.isArray(r.events) ? r.events[0] : r.events) ?? null;
+    const when: string | null = event?.ends_at ?? event?.starts_at ?? null;
+    // A pass whose event is older than the retention window is on borrowed
+    // time; the daily purge will remove it, so it no longer blocks.
+    return !when || when >= cutoff;
+  });
   if (used) return { eligible: false, reason: "used", existingPassId: used.id };
 
-  const pending = rows.find((r) => r.status === "pending");
-  if (pending) return { eligible: false, reason: "pending", existingPassId: pending.id };
+  const open = rows.find((r) => r.status === "pending" || r.status === "invited");
+  if (open) return { eligible: false, reason: "pending", existingPassId: open.id };
 
   return { eligible: true, reason: "ok", existingPassId: null };
 }
@@ -274,4 +289,209 @@ export async function createGuestRegistration(
   }
 
   return { outcome: "created", registrationId };
+}
+
+/* ---------------------------------------------------------------------------
+ * The guest's own claim link
+ *
+ * The member only names a guest; the guest completes their own profile behind
+ * a single-use token. Only the SHA-256 hash of that token is ever stored, so a
+ * database read cannot reconstruct a working link — the same rule the event
+ * invitations follow.
+ * ------------------------------------------------------------------------- */
+
+/** Version stamped on a completed profile, so we know which notice was shown. */
+export const GUEST_PASS_PRIVACY_NOTICE_VERSION = "guest-pass-2026-08";
+
+function hashToken(token: string) {
+  return createHash("sha256").update(token).digest("hex");
+}
+
+/** Writes a fresh invitation token and returns the RAW token, for the email only. */
+export async function mintGuestPassInviteToken(passId: string): Promise<string | null> {
+  const token = randomBytes(32).toString("base64url");
+  const { error } = await supabaseAdmin
+    .from("guest_passes")
+    .update({ invite_token_hash: hashToken(token), invited_at: new Date().toISOString() })
+    .eq("id", passId);
+  if (error) {
+    console.error("[guest-pass] token mint failed", error.message);
+    return null;
+  }
+  return token;
+}
+
+export type GuestPassClaim = {
+  passId: string;
+  eventId: string;
+  eventTitle: string | null;
+  eventStartsAt: string | null;
+  eventSlug: string | null;
+  invitingMemberName: string | null;
+  guestFullName: string;
+  guestEmail: string;
+};
+
+/**
+ * The claim page's read-only facts. Deliberately narrow: no phone, no coaching
+ * fields, no member number, no member email — a leaked link must not expose
+ * more than the guest already knows.
+ */
+export async function resolveGuestPassToken(token: string): Promise<GuestPassClaim | null> {
+  const clean = token.trim();
+  if (!clean) return null;
+  const { data } = await supabaseAdmin
+    .from("guest_passes")
+    .select(
+      "id, event_id, status, inviting_member_name, guest_full_name, guest_email, events ( title, slug, starts_at )",
+    )
+    .eq("invite_token_hash", hashToken(clean))
+    .maybeSingle();
+  if (!data || data.status !== "invited") return null;
+  const event = (Array.isArray(data.events) ? data.events[0] : data.events) as
+    | { title?: string | null; slug?: string | null; starts_at?: string | null }
+    | null
+    | undefined;
+  return {
+    passId: data.id as string,
+    eventId: data.event_id as string,
+    eventTitle: event?.title ?? null,
+    eventStartsAt: event?.starts_at ?? null,
+    eventSlug: event?.slug ?? null,
+    invitingMemberName: (data.inviting_member_name as string | null) ?? null,
+    guestFullName: data.guest_full_name as string,
+    guestEmail: data.guest_email as string,
+  };
+}
+
+export type GuestProfileFields = {
+  guestPreferredLanguage: "en" | "de" | "fr" | "it";
+  guestPhone?: string | null;
+  guestLocation?: string | null;
+  guestCoachingLevel?: string | null;
+  guestProfessionalFocus?: string | null;
+  guestOtherAssociations?: string | null;
+  guestNotes?: string | null;
+  followUpConsent: boolean;
+};
+
+export type CompleteProfileResult =
+  | { ok: true; passId: string }
+  | { ok: false; reason: "invalid" | "already_completed" | "error" };
+
+/**
+ * The guest's one write. Trusted client on purpose: the guest holds a token,
+ * not a session, and the guard trigger only lets the server path move a row
+ * out of `invited`. The token is nulled out in the same update, so the link is
+ * single use and a re-open lands on the stable "already completed" state.
+ */
+export async function completeGuestPassProfile(
+  token: string,
+  fields: GuestProfileFields,
+): Promise<CompleteProfileResult> {
+  const clean = token.trim();
+  if (!clean) return { ok: false, reason: "invalid" };
+  const tokenHash = hashToken(clean);
+
+  const { data: row } = await supabaseAdmin
+    .from("guest_passes")
+    .select("id, status")
+    .eq("invite_token_hash", tokenHash)
+    .maybeSingle();
+
+  if (!row) return { ok: false, reason: "already_completed" };
+  if (row.status !== "invited") return { ok: false, reason: "already_completed" };
+
+  const now = new Date().toISOString();
+  const { data: updated, error } = await supabaseAdmin
+    .from("guest_passes")
+    .update({
+      status: "pending",
+      guest_preferred_language: fields.guestPreferredLanguage,
+      guest_phone: fields.guestPhone || null,
+      guest_location: fields.guestLocation || null,
+      guest_coaching_level: fields.guestCoachingLevel || null,
+      guest_professional_focus: fields.guestProfessionalFocus || null,
+      guest_other_associations: fields.guestOtherAssociations || null,
+      guest_notes: fields.guestNotes || null,
+      follow_up_consent: fields.followUpConsent,
+      follow_up_consent_at: fields.followUpConsent ? now : null,
+      privacy_notice_version: GUEST_PASS_PRIVACY_NOTICE_VERSION,
+      guest_completed_at: now,
+      invite_token_hash: null,
+    })
+    .eq("id", row.id)
+    .eq("status", "invited")
+    .select("id");
+
+  if (error) {
+    console.error("[guest-pass] profile completion failed", error.message);
+    return { ok: false, reason: "error" };
+  }
+  if (!updated || updated.length === 0) return { ok: false, reason: "already_completed" };
+  return { ok: true, passId: row.id as string };
+}
+
+/* ---------------------------------------------------------------------------
+ * Retention
+ *
+ * Guest Pass records live for the same 12 months the privacy policy promises
+ * for event registration — but here the promise is kept by a daily job, not by
+ * hand. After the delete the address is invitable again: the row itself is the
+ * one-pass-per-guest record, so there is no hashed email list to keep.
+ * ------------------------------------------------------------------------- */
+
+export const GUEST_PASS_RETENTION_DAYS = 365;
+
+export async function purgeExpiredGuestPasses(): Promise<{ deleted: number }> {
+  const cutoff = new Date(Date.now() - GUEST_PASS_RETENTION_DAYS * 86_400_000).toISOString();
+
+  const { data, error } = await supabaseAdmin
+    .from("guest_passes")
+    .select("id, registration_id, events!inner ( starts_at, ends_at )");
+  if (error) throw new Error(error.message);
+
+  const expired = (data ?? []).filter((row) => {
+    const event = (Array.isArray(row.events) ? row.events[0] : row.events) as
+      | { starts_at?: string | null; ends_at?: string | null }
+      | null
+      | undefined;
+    const when = event?.ends_at ?? event?.starts_at ?? null;
+    return Boolean(when) && (when as string) < cutoff;
+  });
+  if (expired.length === 0) return { deleted: 0 };
+
+  // The comped seat carries the guest's name and address too. Anonymise it
+  // rather than delete it: the attendance history stays, the person does not.
+  // `notes = 'Guest Pass'` is the provenance `createGuestRegistration` writes,
+  // so no ordinary attendee can be caught by this.
+  const registrationIds = expired
+    .map((row) => row.registration_id as string | null)
+    .filter((id): id is string => Boolean(id));
+
+  for (const registrationId of registrationIds) {
+    const { error: anonError } = await supabaseAdmin
+      .from("event_registrations")
+      .update({
+        full_name: "Guest",
+        email: `deleted+${registrationId}@invalid.local`,
+        notes: null,
+        answers: {},
+      })
+      .eq("id", registrationId)
+      .eq("notes", "Guest Pass");
+    if (anonError) console.error("[guest-pass-purge] anonymise failed", anonError.message);
+  }
+
+  const { data: deleted, error: deleteError } = await supabaseAdmin
+    .from("guest_passes")
+    .delete()
+    .in(
+      "id",
+      expired.map((row) => row.id as string),
+    )
+    .select("id");
+  if (deleteError) throw new Error(deleteError.message);
+
+  return { deleted: (deleted ?? []).length };
 }

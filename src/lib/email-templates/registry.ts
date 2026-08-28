@@ -35,6 +35,8 @@ import { template as internalInvitation } from "./internal-invitation";
 import { template as newsletterRefresh } from "./newsletter-refresh";
 import { template as newsletterEdition } from "./newsletter-edition";
 import { template as guestPassRequest } from "./guest-pass-request";
+import { template as guestPassInvite } from "./guest-pass-invite";
+import { template as guestPassMemberInvited } from "./guest-pass-member-invited";
 import { template as guestPassApproved } from "./guest-pass-approved";
 import { template as guestPassDeclined } from "./guest-pass-declined";
 import { template as eventCertificate } from "./event-certificate";
@@ -61,6 +63,8 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "newsletter-refresh": newsletterRefresh,
   "newsletter-edition": newsletterEdition,
   "guest-pass-request": guestPassRequest,
+  "guest-pass-invite": guestPassInvite,
+  "guest-pass-member-invited": guestPassMemberInvited,
   "guest-pass-approved": guestPassApproved,
   "guest-pass-declined": guestPassDeclined,
   "event-certificate": eventCertificate,

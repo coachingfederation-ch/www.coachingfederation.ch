@@ -3158,23 +3158,29 @@ export type Database = {
           decision_by: string | null
           decision_note: string | null
           event_id: string
+          follow_up_consent: boolean
+          follow_up_consent_at: string | null
           follow_up_note: string | null
           follow_up_status: string
           guest_coaching_level: string | null
+          guest_completed_at: string | null
           guest_email: string
           guest_full_name: string
-          guest_location: string
+          guest_location: string | null
           guest_notes: string | null
           guest_other_associations: string | null
-          guest_phone: string
+          guest_phone: string | null
           guest_preferred_language: string | null
           guest_professional_focus: string | null
           id: string
+          invite_token_hash: string | null
+          invited_at: string | null
           inviting_member_cst_recno: string | null
           inviting_member_email: string | null
           inviting_member_id: string | null
           inviting_member_name: string | null
           inviting_member_status: string | null
+          privacy_notice_version: string | null
           registration_id: string | null
           status: string
           updated_at: string
@@ -3186,23 +3192,29 @@ export type Database = {
           decision_by?: string | null
           decision_note?: string | null
           event_id: string
+          follow_up_consent?: boolean
+          follow_up_consent_at?: string | null
           follow_up_note?: string | null
           follow_up_status?: string
           guest_coaching_level?: string | null
+          guest_completed_at?: string | null
           guest_email: string
           guest_full_name: string
-          guest_location: string
+          guest_location?: string | null
           guest_notes?: string | null
           guest_other_associations?: string | null
-          guest_phone: string
+          guest_phone?: string | null
           guest_preferred_language?: string | null
           guest_professional_focus?: string | null
           id?: string
+          invite_token_hash?: string | null
+          invited_at?: string | null
           inviting_member_cst_recno?: string | null
           inviting_member_email?: string | null
           inviting_member_id?: string | null
           inviting_member_name?: string | null
           inviting_member_status?: string | null
+          privacy_notice_version?: string | null
           registration_id?: string | null
           status?: string
           updated_at?: string
@@ -3214,23 +3226,29 @@ export type Database = {
           decision_by?: string | null
           decision_note?: string | null
           event_id?: string
+          follow_up_consent?: boolean
+          follow_up_consent_at?: string | null
           follow_up_note?: string | null
           follow_up_status?: string
           guest_coaching_level?: string | null
+          guest_completed_at?: string | null
           guest_email?: string
           guest_full_name?: string
-          guest_location?: string
+          guest_location?: string | null
           guest_notes?: string | null
           guest_other_associations?: string | null
-          guest_phone?: string
+          guest_phone?: string | null
           guest_preferred_language?: string | null
           guest_professional_focus?: string | null
           id?: string
+          invite_token_hash?: string | null
+          invited_at?: string | null
           inviting_member_cst_recno?: string | null
           inviting_member_email?: string | null
           inviting_member_id?: string | null
           inviting_member_name?: string | null
           inviting_member_status?: string | null
+          privacy_notice_version?: string | null
           registration_id?: string | null
           status?: string
           updated_at?: string
