@@ -58,7 +58,7 @@ async function rows(
   const { data, error } = await q;
   if (error) {
     console.error("[overview]", table, select, JSON.stringify(error));
-    throw new Error(`${table}: ${error.message}`);
+    throw new Error(`${table}: ${JSON.stringify(error)}`);
   }
   return (data ?? []) as unknown as Row[];
 }
@@ -79,7 +79,7 @@ async function countIn(
   const { count, error } = await q;
   if (error) {
     console.error("[overview-count]", table, column, range.from, range.to, JSON.stringify(error));
-    throw new Error(`${table}: ${error.message}`);
+    throw new Error(`${table}: ${JSON.stringify(error)}`);
   }
   return count ?? 0;
 }
