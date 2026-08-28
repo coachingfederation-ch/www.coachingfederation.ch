@@ -86,6 +86,7 @@ import { Route as StaffArticlesIndexRouteImport } from './routes/_staff/articles
 import { Route as StaffArticlesIdRouteImport } from './routes/_staff/articles.$id'
 import { Route as StaffArticlesCategoriesRouteImport } from './routes/_staff/articles.categories'
 import { Route as StaffArticlesNewRouteImport } from './routes/_staff/articles.new'
+import { Route as StaffManageIndexRouteImport } from './routes/_staff/manage.index'
 import { Route as StaffManageChatInsightsRouteImport } from './routes/_staff/manage.chat-insights'
 import { Route as StaffManageEuropePulseRouteImport } from './routes/_staff/manage.europe-pulse'
 import { Route as StaffManageGovernanceRouteImport } from './routes/_staff/manage.governance'
@@ -513,6 +514,11 @@ const StaffArticlesNewRoute = StaffArticlesNewRouteImport.update({
   path: '/new',
   getParentRoute: () => StaffArticlesRoute,
 } as any)
+const StaffManageIndexRoute = StaffManageIndexRouteImport.update({
+  id: '/manage/',
+  path: '/manage/',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
 const StaffManageChatInsightsRoute = StaffManageChatInsightsRouteImport.update({
   id: '/manage/chat-insights',
   path: '/manage/chat-insights',
@@ -813,6 +819,7 @@ export interface FileRoutesByFullPath {
   '/$locale/events/': typeof LocaleEventsIndexRoute
   '/$locale/insights/': typeof LocaleInsightsIndexRoute
   '/articles/': typeof StaffArticlesIndexRoute
+  '/manage/': typeof StaffManageIndexRoute
   '/members/': typeof StaffMembersIndexRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/manage/events/new': typeof StaffManageEventsNewRoute
@@ -924,6 +931,7 @@ export interface FileRoutesByTo {
   '/$locale/events': typeof LocaleEventsIndexRoute
   '/$locale/insights': typeof LocaleInsightsIndexRoute
   '/articles': typeof StaffArticlesIndexRoute
+  '/manage': typeof StaffManageIndexRoute
   '/members': typeof StaffMembersIndexRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/manage/events/new': typeof StaffManageEventsNewRoute
@@ -1042,6 +1050,7 @@ export interface FileRoutesById {
   '/$locale/events/': typeof LocaleEventsIndexRoute
   '/$locale/insights/': typeof LocaleInsightsIndexRoute
   '/_staff/articles/': typeof StaffArticlesIndexRoute
+  '/_staff/manage/': typeof StaffManageIndexRoute
   '/_staff/members/': typeof StaffMembersIndexRoute
   '/_staff/manage/events/$id': typeof StaffManageEventsIdRoute
   '/_staff/manage/events/new': typeof StaffManageEventsNewRoute
@@ -1159,6 +1168,7 @@ export interface FileRouteTypes {
     | '/$locale/events/'
     | '/$locale/insights/'
     | '/articles/'
+    | '/manage/'
     | '/members/'
     | '/manage/events/$id'
     | '/manage/events/new'
@@ -1270,6 +1280,7 @@ export interface FileRouteTypes {
     | '/$locale/events'
     | '/$locale/insights'
     | '/articles'
+    | '/manage'
     | '/members'
     | '/manage/events/$id'
     | '/manage/events/new'
@@ -1387,6 +1398,7 @@ export interface FileRouteTypes {
     | '/$locale/events/'
     | '/$locale/insights/'
     | '/_staff/articles/'
+    | '/_staff/manage/'
     | '/_staff/members/'
     | '/_staff/manage/events/$id'
     | '/_staff/manage/events/new'
@@ -2013,6 +2025,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffArticlesNewRouteImport
       parentRoute: typeof StaffArticlesRoute
     }
+    '/_staff/manage/': {
+      id: '/_staff/manage/'
+      path: '/manage'
+      fullPath: '/manage/'
+      preLoaderRoute: typeof StaffManageIndexRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/_staff/manage/chat-insights': {
       id: '/_staff/manage/chat-insights'
       path: '/manage/chat-insights'
@@ -2400,6 +2419,7 @@ interface StaffRouteRouteChildren {
   StaffManageKnowledgeRoute: typeof StaffManageKnowledgeRoute
   StaffManageLiveChatRoute: typeof StaffManageLiveChatRoute
   StaffMembersIdRoute: typeof StaffMembersIdRoute
+  StaffManageIndexRoute: typeof StaffManageIndexRoute
   StaffMembersIndexRoute: typeof StaffMembersIndexRoute
   StaffManageEventsIdRoute: typeof StaffManageEventsIdRoute
   StaffManageEventsNewRoute: typeof StaffManageEventsNewRoute
@@ -2426,6 +2446,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffManageKnowledgeRoute: StaffManageKnowledgeRoute,
   StaffManageLiveChatRoute: StaffManageLiveChatRoute,
   StaffMembersIdRoute: StaffMembersIdRoute,
+  StaffManageIndexRoute: StaffManageIndexRoute,
   StaffMembersIndexRoute: StaffMembersIndexRoute,
   StaffManageEventsIdRoute: StaffManageEventsIdRoute,
   StaffManageEventsNewRoute: StaffManageEventsNewRoute,

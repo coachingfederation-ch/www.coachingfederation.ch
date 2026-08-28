@@ -22,7 +22,8 @@
     "knowledge": "Assistenz-Wissen",
     "liveChat": "Live-Chat",
     "newsletters": "Newsletter",
-    "guestPasses": "Gastpässe"
+    "guestPasses": "Gastpässe",
+    "overview": "Übersicht"
   },
   "auth": {
     "signInSub": "Melden Sie sich an, um fortzufahren",
@@ -2289,6 +2290,109 @@
       "followUpNote": "Notiz Nachfassen",
       "converted": "Mitglied geworden",
       "createdAt": "Angefragt am"
+    }
+  },
+  "overview": {
+    "title": "Chapter-Übersicht",
+    "subtitle": "Inhalte, Events, Mitgliedschaft, Coach-Verzeichnis und beide Chat-Kanäle an einem Ort.",
+    "loading": "Wird geladen…",
+    "noData": "Keine Daten in diesem Zeitraum.",
+    "loadError": "Das Dashboard konnte nicht geladen werden.",
+    "exportError": "Der Export ist fehlgeschlagen.",
+    "export": "CSV exportieren",
+    "previousPeriod": "Vorheriger Zeitraum",
+    "currentState": "Aktueller Stand, nicht zeitraumbezogen",
+    "generatedAt": "Erstellt am",
+    "range": {
+      "30d": "30 Tage",
+      "90d": "90 Tage",
+      "12m": "12 Monate",
+      "ytd": "Seit Jahresbeginn",
+      "custom": "Individuell",
+      "from": "Von",
+      "to": "Bis"
+    },
+    "kpi": {
+      "articles": "Veröffentlichte Artikel",
+      "newsletters": "Versendete Newsletter",
+      "events": "Durchgeführte Events",
+      "registrations": "Anmeldungen",
+      "checkIns": "Check-ins",
+      "newMembers": "Neue Mitglieder",
+      "guestPasses": "Gastpässe",
+      "chatConversations": "Live-Chat-Gespräche"
+    },
+    "content": {
+      "title": "Inhalte",
+      "description": "Im gewählten Zeitraum veröffentlichte Artikel und versendete Newsletter.",
+      "articles": "Veröffentlichte Artikel",
+      "newsletters": "Versendete Newsletter",
+      "trend": "Veröffentlichungen im Zeitverlauf",
+      "languages": "Artikelsprachen",
+      "statusMix": "Neue Artikel nach Status",
+      "sentList": "Versendete Newsletter",
+      "blocks": "Blöcke"
+    },
+    "events": {
+      "title": "Events",
+      "description": "Events im Zeitraum mit Anmeldungen, Teilnahme, CCE-Credits und Gastpässen.",
+      "events": "Events",
+      "registrations": "Anmeldungen",
+      "checkIns": "Check-ins",
+      "net": "Nettoumsatz",
+      "trend": "Events und Anmeldungen",
+      "statusMix": "Events nach Status",
+      "cceEvents": "CCE-Events",
+      "cceAwards": "CCE-Vergaben",
+      "cceHours": "CC-/RD-Stunden",
+      "cceHoursHint": "In diesem Zeitraum vergeben",
+      "certificates": "Ausgestellte Zertifikate",
+      "certificateEvents": "Events mit Zertifikaten",
+      "guestPasses": "Gastpässe",
+      "approved": "Genehmigt",
+      "pending": "Offen",
+      "declined": "Abgelehnt"
+    },
+    "members": {
+      "title": "Mitglieder",
+      "description": "Grösse und Status der Mitgliedschaft heute sowie neue Mitglieder im Zeitraum.",
+      "total": "Mitglieder",
+      "active": "Aktiv",
+      "grace": "Karenz",
+      "inactive": "Inaktiv",
+      "claimed": "Verknüpfte Konten",
+      "unclaimed": "Nicht verknüpft",
+      "joined": "Neu im Zeitraum",
+      "trend": "Neue Mitglieder",
+      "credentials": "Credentials",
+      "lastSync": "Letzte Synchronisation",
+      "noSync": "Es wurde noch keine Synchronisation ausgeführt."
+    },
+    "finder": {
+      "title": "Coach-Finder",
+      "description": "Angebot im Verzeichnis heute. Suchanfragen werden nicht protokolliert, gezeigt werden also verfügbare Profile, nicht die Nachfrage.",
+      "published": "Veröffentlichte Profile",
+      "hidden": "Ausgeblendete Profile",
+      "visibility": "Profile nach Sichtbarkeit",
+      "credentials": "Credentials",
+      "languages": "Sprachen",
+      "regions": "Regionen",
+      "specialisations": "Spezialisierungen"
+    },
+    "chat": {
+      "title": "Gespräche",
+      "description": "Chapter-Assistent und Live-Chat mit Freiwilligen im gewählten Zeitraum.",
+      "agentConversations": "Assistenz-Gespräche",
+      "interactions": "Fragen",
+      "escalationRate": "Eskalationsrate",
+      "helpfulRate": "Als hilfreich bewertet",
+      "liveConversations": "Live-Chats",
+      "messages": "Nachrichten",
+      "answerRate": "Beantwortet",
+      "answered": "Beantwortet",
+      "trend": "Gespräche im Zeitverlauf",
+      "outcomes": "Ergebnisse des Assistenten",
+      "categories": "Häufigste Fragekategorien"
     }
   }
 }
