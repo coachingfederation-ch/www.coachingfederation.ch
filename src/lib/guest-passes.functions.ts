@@ -672,7 +672,6 @@ export const setGuestPassFollowUp = createServerFn({ method: "POST" })
     return { ok: true as const };
   });
 
-/** Every pass in the pilot, with attendance and conversion resolved. */
 /** Shared M&E projection: the list and the detail screen read the same rows. */
 async function buildStaffGuestPasses(): Promise<StaffGuestPass[]> {
   {
