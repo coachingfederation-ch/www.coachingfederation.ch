@@ -26,5 +26,8 @@
     "yes": "Helpful",
     "no": "Not helpful",
     "thanks": "Thanks for the feedback."
+  },
+  "prompts": {
+    "organisations": "We're an organisation interested in coaching for our leaders and teams — how can The Switzerland Chapter of ICF help?"
   }
 }
