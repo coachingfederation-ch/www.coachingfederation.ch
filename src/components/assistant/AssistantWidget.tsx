@@ -293,6 +293,30 @@ export function AssistantWidget() {
     textareaRef.current?.focus();
   }, [setMessages, stop]);
 
+  // A page CTA can open the panel with a question already asked (see
+  // src/lib/assistant-open.ts). The question is queued rather than sent
+  // directly so a turn that is still streaming is never interrupted.
+  const [queuedAsk, setQueuedAsk] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const text = (event as CustomEvent<AssistantAskDetail>).detail?.text?.trim();
+      if (!text) return;
+      setLiveChat(false);
+      setOpen(true);
+      setQueuedAsk(text);
+    };
+    window.addEventListener(ASSISTANT_ASK_EVENT, handler);
+    return () => window.removeEventListener(ASSISTANT_ASK_EVENT, handler);
+  }, []);
+
+  useEffect(() => {
+    if (!queuedAsk || status !== "ready") return;
+    setQueuedAsk(null);
+    void sendMessage({ text: queuedAsk });
+  }, [queuedAsk, sendMessage, status]);
+
+
   const suggestions = [
     t("assistant.suggestions.coach"),
     t("assistant.suggestions.events"),
