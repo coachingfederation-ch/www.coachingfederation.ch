@@ -10,6 +10,7 @@
  * an admin by the server function before any of this runs.
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { MANAGED_ROLES } from "./role-model";
 
 export type ClaimedMemberRole = {
   memberId: string;
@@ -351,7 +352,9 @@ export async function listInternalStaffAccounts(): Promise<InternalStaffAccount[
   const { data: roleRows, error } = await supabaseAdmin
     .from("user_roles")
     .select("user_id, role")
-    .in("role", ["admin", "administrator", "editor", "organizer", "publisher"]);
+    // Keep this list in sync with GRANTABLE_ROLES — a role missing here is
+    // granted successfully but never read back, so the toggle looks dead.
+    .in("role", ["admin", ...MANAGED_ROLES]);
   if (error) throw error;
 
   const byUser = new Map<string, string[]>();
