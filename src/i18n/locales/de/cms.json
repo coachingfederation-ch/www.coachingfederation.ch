@@ -693,7 +693,12 @@
         "setRegions": "Einzugsgebiet festlegen",
         "empty": "Noch keine lokale Community deckt Ihr Einzugsgebiet ab.",
         "view": "Community anzeigen",
-        "contact": "Community kontaktieren"
+        "contact": "Community kontaktieren",
+        "join": {
+          "cta": "Community beitreten",
+          "sent": "Anfrage gesendet — die Community-Leads melden sich bei dir.",
+          "error": "Deine Anfrage konnte nicht gesendet werden. Bitte versuche es erneut."
+        }
       },
       "liveChat": {
         "title": "Live-Chat-Freiwillige",

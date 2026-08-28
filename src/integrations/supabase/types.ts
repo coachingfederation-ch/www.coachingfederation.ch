@@ -801,6 +801,66 @@ export type Database = {
         }
         Relationships: []
       }
+      community_join_requests: {
+        Row: {
+          created_at: string
+          id: string
+          member_id: string
+          notified_emails: string[]
+          project_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          member_id: string
+          notified_emails?: string[]
+          project_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          member_id?: string
+          notified_emails?: string[]
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_join_requests_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "coach_directory_public"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "community_join_requests_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_join_requests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["community_id"]
+          },
+          {
+            foreignKeyName: "community_join_requests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "op_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_join_requests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "team_projects_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       deck_download_leads: {
         Row: {
           consent: boolean

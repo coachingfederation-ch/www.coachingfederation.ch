@@ -10,11 +10,14 @@
  * regions overlap the member's own service area, with someone to contact.
  */
 import { Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowRight,
   Award,
+  Check,
   ExternalLink,
+  Loader2,
   Mail,
   MapPin,
   Megaphone,
@@ -24,6 +27,7 @@ import {
 } from "lucide-react";
 import { useCms } from "@/i18n/cms";
 import { getMemberHome } from "@/lib/member-home.functions";
+import { joinCommunity } from "@/lib/community-join.functions";
 import { listPublicEvents } from "@/lib/events.functions";
 import { eventPlace, formatEventDate } from "@/lib/events";
 import { GuestPassesCard } from "./GuestPassesCard";
@@ -36,6 +40,63 @@ const CTA =
   "mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90";
 const CTA_MUTED =
   "mt-4 inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground";
+
+/**
+ * "Join community" — one press tells the community's leads that this member
+ * would like to take part. Recipients are resolved server-side, so nothing
+ * here needs (or gets) a lead address. The confirmed state is authoritative
+ * from the server (`requested`); the local flag only covers the moment
+ * between the successful call and the refetch.
+ */
+function JoinCommunityButton({ slug, requested }: { slug: string; requested: boolean }) {
+  const { t, locale } = useCms();
+  const queryClient = useQueryClient();
+  const [state, setState] = useState<"idle" | "busy" | "sent" | "error">("idle");
+
+  const done = requested || state === "sent";
+
+  const send = async () => {
+    setState("busy");
+    try {
+      const result = await joinCommunity({ data: { slug, locale } });
+      if (result.status === "sent" || result.status === "already") {
+        setState("sent");
+        await queryClient.invalidateQueries({ queryKey: ["member-home"] });
+        return;
+      }
+      setState("error");
+    } catch {
+      setState("error");
+    }
+  };
+
+  if (done) {
+    return (
+      <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground">
+        <Check className="h-4 w-4 text-primary" aria-hidden />
+        {t("member.home.communities.join.sent")}
+      </p>
+    );
+  }
+
+  return (
+    <div>
+      <button type="button" onClick={() => void send()} disabled={state === "busy"} className={CTA}>
+        {state === "busy" ? (
+          <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+        ) : (
+          <HeartHandshake className="h-4 w-4" aria-hidden />
+        )}
+        {t("member.home.communities.join.cta")}
+      </button>
+      {state === "error" ? (
+        <p className="mt-2 text-xs font-semibold text-destructive">
+          {t("member.home.communities.join.error")}
+        </p>
+      ) : null}
+    </div>
+  );
+}
 
 /**
  * The internal-events block: upcoming events flagged "for members only".
@@ -249,6 +310,8 @@ export function MemberHome() {
                     </a>
                   ) : null}
                 </div>
+
+                <JoinCommunityButton slug={community.slug} requested={community.requested} />
               </li>
             ))}
           </ul>

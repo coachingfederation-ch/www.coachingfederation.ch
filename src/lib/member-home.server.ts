@@ -27,6 +27,8 @@ export type MemberHomeCommunity = {
   cadence: string | null;
   contactEmail: string | null;
   leads: MemberHomeCommunityLead[];
+  /** True when this member already asked to join within the last 30 days. */
+  requested: boolean;
 };
 
 export type MemberHomeData = {
@@ -175,12 +177,18 @@ export async function loadMemberHome(
     byProject.set(raw.project_id, list);
   }
 
+  // Join requests the member already sent, so the button comes back in its
+  // confirmed state after a reload rather than inviting a duplicate mail.
+  const { listJoinedCommunitySlugs } = await import("./community-join.server");
+  const requested = new Set(await listJoinedCommunitySlugs(member.id as string));
+
   base.communities = rows.map((p) => ({
     slug: p.slug,
     name: localizedName(p, locale),
     cadence: localizedNote(p, locale),
     contactEmail: p.contact_email,
     leads: byProject.get(p.id) ?? [],
+    requested: requested.has(p.slug),
   }));
   return base;
 }

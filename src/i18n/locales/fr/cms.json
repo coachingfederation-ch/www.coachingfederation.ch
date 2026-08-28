@@ -693,7 +693,12 @@
         "setRegions": "Définir votre zone de service",
         "empty": "Aucune communauté locale ne couvre votre zone de service pour le moment.",
         "view": "Voir la communauté",
-        "contact": "Contacter la communauté"
+        "contact": "Contacter la communauté",
+        "join": {
+          "cta": "Rejoindre la communauté",
+          "sent": "Demande envoyée — les responsables de la communauté vous contacteront.",
+          "error": "Nous n’avons pas pu envoyer votre demande. Veuillez réessayer."
+        }
       },
       "liveChat": {
         "title": "Bénévole du chat en direct",

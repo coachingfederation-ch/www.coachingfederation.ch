@@ -22,6 +22,7 @@ import { HowIWorkFlow } from "@/components/coaches/profile/HowIWorkFlow";
 import { CoachProfileHero } from "@/components/coaches/profile/CoachProfileHero";
 import { CoachProfileSidebar } from "@/components/coaches/profile/CoachProfileSidebar";
 import { Mark } from "@/components/marks";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { useTrackView } from "@/lib/plausible";
 
 export function CoachProfileShell({ children }: { children: React.ReactNode }) {
@@ -45,12 +46,9 @@ export function CoachFallback({ titleKey, bodyKey }: { titleKey: string; bodyKey
       <div className="mx-auto max-w-3xl px-8 py-28 text-center">
         <h1 className="text-3xl font-bold tracking-tight">{t(titleKey)}</h1>
         <p className="mt-4 text-sm text-muted-foreground">{t(bodyKey)}</p>
-        <LocaleLink
-          to="/find-a-coach"
-          className="mt-8 inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground"
-        >
-          {t("directory.detail.back")}
-        </LocaleLink>
+        <Button asChild variant="pill" size="pill" className="mt-8">
+          <LocaleLink to="/find-a-coach">{t("directory.detail.back")}</LocaleLink>
+        </Button>
       </div>
     </CoachProfileShell>
   );
