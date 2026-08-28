@@ -238,6 +238,37 @@
       "event_closed": "Le iscrizioni per questo evento sono chiuse.",
       "not_allowed": "Questo evento non offre pass ospite.",
       "error": "Qualcosa è andato storto. Riprova."
+    },
+    "claim": {
+      "eyebrow": "Pass ospite",
+      "title": "Completa il tuo pass ospite",
+      "invitedBy": "Invitato da",
+      "guest": "Ospite",
+      "event": "Evento",
+      "when": "Quando",
+      "intro": "Aggiungi qualche informazione così possiamo esaminare il tuo pass ospite e preparare il tuo posto. A parte la lingua preferita, tutto è facoltativo.",
+      "fieldLanguage": "Lingua preferita",
+      "fieldPhone": "Telefono (facoltativo)",
+      "fieldLocation": "Dove vivi o lavori (facoltativo)",
+      "fieldCoachingLevel": "Livello o percorso di coaching (facoltativo)",
+      "fieldFocus": "Principale area di attività (facoltativo)",
+      "fieldAssociations": "Altre associazioni di coaching (facoltativo)",
+      "fieldNotes": "Qualcosa che dovremmo sapere? (facoltativo)",
+      "privacyTitle": "Come utilizziamo i tuoi dati",
+      "privacyNotice": "ICF Switzerland utilizza i dati che invii per esaminare questo pass ospite, iscriverti all'evento se viene approvato e contattarti in merito a questo evento (conferma, informazioni pratiche, partecipazione). I responsabili di comunità e progetto di questo evento vedranno il tuo nome e chi ti ha invitato, così potranno darti il benvenuto. Conserviamo queste informazioni per 12 mesi dopo l'evento, poi le cancelliamo. Se acconsenti a essere ricontattato puoi revocare il consenso in qualsiasi momento; la revoca interrompe ulteriori contatti ma non cancella la registrazione dell'evento prima di quei 12 mesi. Titolare del trattamento: ICF Switzerland. Puoi chiedere di accedere, correggere o cancellare i tuoi dati, oppure opporti, scrivendo a office@coachingfederation.ch. Dettagli:",
+      "privacyLink": "Informativa sulla privacy",
+      "followUpConsent": "Acconsento inoltre a che ICF Switzerland mi contatti dopo l'evento riguardo alle attività della comunità e all'adesione. Posso revocare questo consenso in qualsiasi momento scrivendo a office@coachingfederation.ch. È facoltativo e non influisce sull'approvazione del mio pass ospite.",
+      "submit": "Invia i miei dati",
+      "saving": "Invio…",
+      "successTitle": "Grazie — è tutto ciò che ci serve",
+      "successBody": "Membership & Engagement esaminerà la richiesta e confermerà via e-mail.",
+      "browseEvents": "Scopri gli eventi",
+      "error": {
+        "invalid": "Questo invito non è più valido. Scrivi a office@coachingfederation.ch e ti aiuteremo.",
+        "rate_limited": "Troppi tentativi. Riprova tra poco.",
+        "already_completed": "Abbiamo già i tuoi dati — grazie.",
+        "error": "Qualcosa è andato storto. Riprova."
+      }
     }
   },
   "subscribe": {

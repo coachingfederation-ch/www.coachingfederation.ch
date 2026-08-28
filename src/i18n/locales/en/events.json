@@ -238,6 +238,37 @@
       "event_closed": "Registration is closed for this event.",
       "not_allowed": "This event does not offer Guest Passes.",
       "error": "Something went wrong. Please try again."
+    },
+    "claim": {
+      "eyebrow": "Guest pass",
+      "title": "Complete your guest pass",
+      "invitedBy": "Invited by",
+      "guest": "Guest",
+      "event": "Event",
+      "when": "When",
+      "intro": "Please add a few details so we can review your Guest Pass and prepare your place. Everything except your preferred language is optional.",
+      "fieldLanguage": "Preferred language",
+      "fieldPhone": "Phone (optional)",
+      "fieldLocation": "Where you are based (optional)",
+      "fieldCoachingLevel": "Coaching level or background (optional)",
+      "fieldFocus": "Main area of activity (optional)",
+      "fieldAssociations": "Other coaching associations (optional)",
+      "fieldNotes": "Anything we should know? (optional)",
+      "privacyTitle": "How we use your details",
+      "privacyNotice": "ICF Switzerland will use the details you submit to review this Guest Pass, register you for the event if it is approved, and contact you about this event (confirmation, practical information, attendance). Community and project leaders of this event will see your name and who invited you, so they can welcome you. We keep this Guest Pass information for 12 months after the event, then delete it. If you opt in to follow-up you may withdraw that at any time; withdrawing stops further outreach but does not delete the event record before those 12 months. Controller: ICF Switzerland. You can ask us to access, correct or delete your data, or object, by writing to office@coachingfederation.ch. Details:",
+      "privacyLink": "Privacy policy",
+      "followUpConsent": "I also agree that ICF Switzerland may contact me after the event about relevant community activities and membership. I can withdraw this at any time by writing to office@coachingfederation.ch. This is optional and does not affect whether my Guest Pass is approved.",
+      "submit": "Send my details",
+      "saving": "Sending…",
+      "successTitle": "Thank you — that is everything we need",
+      "successBody": "Membership & Engagement will review this and confirm by email.",
+      "browseEvents": "Browse events",
+      "error": {
+        "invalid": "This invitation is no longer valid. Write to office@coachingfederation.ch and we will help.",
+        "rate_limited": "Too many attempts. Please try again a little later.",
+        "already_completed": "We already have your details — thank you.",
+        "error": "Something went wrong. Please try again."
+      }
     }
   },
   "subscribe": {

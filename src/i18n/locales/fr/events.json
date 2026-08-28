@@ -238,6 +238,37 @@
       "event_closed": "Les inscriptions sont closes pour cet événement.",
       "not_allowed": "Cet événement ne propose pas de pass invité.",
       "error": "Une erreur s'est produite. Veuillez réessayer."
+    },
+    "claim": {
+      "eyebrow": "Pass invité",
+      "title": "Complétez votre pass invité",
+      "invitedBy": "Invité par",
+      "guest": "Invité",
+      "event": "Événement",
+      "when": "Quand",
+      "intro": "Merci d'ajouter quelques informations afin que nous puissions examiner votre pass invité et préparer votre place. Hormis la langue préférée, tout est facultatif.",
+      "fieldLanguage": "Langue préférée",
+      "fieldPhone": "Téléphone (facultatif)",
+      "fieldLocation": "Où vous êtes basé (facultatif)",
+      "fieldCoachingLevel": "Niveau ou parcours de coaching (facultatif)",
+      "fieldFocus": "Principal domaine d'activité (facultatif)",
+      "fieldAssociations": "Autres associations de coaching (facultatif)",
+      "fieldNotes": "Quelque chose à nous signaler ? (facultatif)",
+      "privacyTitle": "Comment nous utilisons vos informations",
+      "privacyNotice": "ICF Switzerland utilise les informations que vous transmettez pour examiner ce pass invité, vous inscrire à l'événement s'il est approuvé, et vous contacter au sujet de cet événement (confirmation, informations pratiques, participation). Les responsables de communauté et de projet de cet événement verront votre nom et qui vous a invité, afin de vous accueillir. Nous conservons ces informations pendant 12 mois après l'événement, puis les supprimons. Si vous acceptez d'être recontacté, vous pouvez le retirer à tout moment ; le retrait met fin aux sollicitations mais ne supprime pas l'enregistrement de l'événement avant ces 12 mois. Responsable du traitement : ICF Switzerland. Vous pouvez demander l'accès, la correction ou la suppression de vos données, ou vous y opposer, en écrivant à office@coachingfederation.ch. Détails :",
+      "privacyLink": "Politique de confidentialité",
+      "followUpConsent": "J'accepte également qu'ICF Switzerland me contacte après l'événement au sujet des activités de la communauté et de l'adhésion. Je peux retirer cet accord à tout moment en écrivant à office@coachingfederation.ch. C'est facultatif et sans effet sur l'approbation de mon pass invité.",
+      "submit": "Envoyer mes informations",
+      "saving": "Envoi…",
+      "successTitle": "Merci — c'est tout ce dont nous avons besoin",
+      "successBody": "Membership & Engagement examinera votre demande et confirmera par e-mail.",
+      "browseEvents": "Voir les événements",
+      "error": {
+        "invalid": "Cette invitation n'est plus valable. Écrivez à office@coachingfederation.ch et nous vous aiderons.",
+        "rate_limited": "Trop de tentatives. Merci de réessayer un peu plus tard.",
+        "already_completed": "Nous avons déjà vos informations — merci.",
+        "error": "Une erreur est survenue. Merci de réessayer."
+      }
     }
   },
   "subscribe": {
