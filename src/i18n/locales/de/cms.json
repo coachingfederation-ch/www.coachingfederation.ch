@@ -1543,7 +1543,6 @@
         "error": "Wir konnten dieses Mitglied nicht einladen."
       }
     },
-    "fieldInternal": "Nur für Mitglieder",
     "tag": {
       "membersOnly": "Nur für Mitglieder",
       "cce": "CCE"
@@ -1736,6 +1735,7 @@
     "registrationOn": "Mit Anmeldung",
     "fieldRegistrationOn": "Anmeldung",
     "fieldAudience": "Wer kann sich anmelden",
+    "fieldAudienceHelp": "Veranstaltungen nur für Mitglieder oder für Eingeladene erscheinen nicht im öffentlichen Kalender-Feed, sondern werden Mitgliedern angezeigt.",
     "audience": {
       "anyone": "Alle",
       "members": "Nur aktive Mitglieder",

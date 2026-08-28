@@ -211,15 +211,6 @@ export function EventDetailsSection({
               onChange={(e) => patch({ is_featured: e.target.checked })}
             />
           </Field>
-          {/* Audience marker only: the seat policy still comes from the
-              registration mode. */}
-          <Field label={t("events.fieldInternal")}>
-            <input
-              type="checkbox"
-              checked={event.is_internal ?? false}
-              onChange={(e) => patch({ is_internal: e.target.checked })}
-            />
-          </Field>
         </div>
       </Section>
 
@@ -728,6 +719,9 @@ export function EventPublishingSection({
                 <option value="rsvp_members">{t("events.audience.members")}</option>
                 <option value="rsvp_invited">{t("events.audience.invited")}</option>
               </select>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {t("events.fieldAudienceHelp")}
+              </p>
             </Field>
           ) : null}
           {event.registration_mode !== "none" ? (

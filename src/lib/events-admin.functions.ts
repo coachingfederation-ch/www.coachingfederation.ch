@@ -113,8 +113,6 @@ const eventInput = z.object({
   // Door and joining information, repeated in the reminder emails.
   practical_notes: z.string().trim().max(2000).nullable().optional(),
   is_featured: z.boolean(),
-  // Audience marker: the event is aimed at members (onboarding, engagement).
-  is_internal: z.boolean().optional(),
   category_id: z.string().uuid().nullable().optional(),
   region_id: z.string().uuid().nullable().optional(),
   // Community events name the local community that runs them; other
@@ -141,7 +139,10 @@ function normalize(input: z.infer<typeof eventInput>) {
     image_credit_url: blankToNull(input.image_credit_url),
     capacity: input.capacity ?? null,
     practical_notes: blankToNull(input.practical_notes),
-    is_internal: input.is_internal ?? false,
+    // Members-only is no longer a separate marker: it follows the audience the
+    // organiser picked, so the badge can never contradict the seat policy.
+    is_internal:
+      input.registration_mode === "rsvp_members" || input.registration_mode === "rsvp_invited",
     attendance_min_percent: input.attendance_min_percent ?? 80,
     certificates_enabled: input.certificates_enabled ?? false,
     guest_passes_allowed: input.guest_passes_allowed ?? false,
@@ -659,7 +660,10 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
         community_id: source.community_id,
         // Occurrences never inherit "featured" or a published state.
         is_featured: false,
-        is_internal: source.is_internal,
+        // Derived from the audience, exactly as on create/update.
+        is_internal:
+          source.registration_mode === "rsvp_members" ||
+          source.registration_mode === "rsvp_invited",
         status: "draft" as const,
         organizer_id: context.userId,
       }));

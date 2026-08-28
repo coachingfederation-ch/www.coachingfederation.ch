@@ -51,7 +51,6 @@ type Draft = {
   capacity: string;
   /** Ticket tiers and discount codes are offered, whoever may register. */
   ticketsEnabled: boolean;
-  isInternal: boolean;
   isFeatured: boolean;
   repeats: boolean;
   cce: boolean;
@@ -148,7 +147,6 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
     registrationMode: "rsvp",
     capacity: "",
     ticketsEnabled: false,
-    isInternal: false,
     isFeatured: false,
     repeats: false,
     cce: false,
@@ -196,7 +194,7 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
         ? "an online event"
         : `an event in ${draft.city || "Switzerland"}${draft.venue ? ` at ${draft.venue}` : ""}`;
     const facts = `Event title: ${draft.title}. It is ${where}, on ${when}. Audience: ${
-      draft.isInternal ? "chapter members" : "coaches, clients and organisations"
+      draft.registrationMode === "rsvp" ? "coaches, clients and organisations" : "chapter members"
     }.`;
     try {
       const [summary, body] = await Promise.all([
@@ -508,13 +506,6 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
           <div className="mt-6 grid gap-3">
             <label className="flex items-center gap-2 text-sm">
               <Checkbox
-                checked={draft.isInternal}
-                onCheckedChange={(v) => patch({ isInternal: v === true })}
-              />
-              <span>{t("events.fieldInternal")}</span>
-            </label>
-            <label className="flex items-center gap-2 text-sm">
-              <Checkbox
                 checked={draft.isFeatured}
                 onCheckedChange={(v) => patch({ isFeatured: v === true })}
               />
@@ -759,7 +750,6 @@ function payload(draft: Draft, slug: string) {
     guest_registration_allowed: draft.registrationMode !== "rsvp_members",
     tickets_enabled: draft.ticketsEnabled,
     is_featured: draft.isFeatured,
-    is_internal: draft.isInternal,
     category_id: draft.categoryId,
     region_id: draft.regionId,
     community_id: draft.communityId,

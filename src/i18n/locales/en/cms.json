@@ -1543,7 +1543,6 @@
         "error": "We could not invite that member."
       }
     },
-    "fieldInternal": "For members only",
     "tag": {
       "membersOnly": "Members only",
       "cce": "CCE"
@@ -1736,6 +1735,7 @@
     "registrationOn": "People register",
     "fieldRegistrationOn": "Registration",
     "fieldAudience": "Who can register",
+    "fieldAudienceHelp": "Members-only and invited events are hidden from the public calendar feed and shown to members instead.",
     "audience": {
       "anyone": "Anyone",
       "members": "Active members only",
