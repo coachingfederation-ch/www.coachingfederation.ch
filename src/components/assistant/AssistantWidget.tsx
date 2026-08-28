@@ -33,6 +33,7 @@ import {
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { useCanonicalPath, useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
+import { ASSISTANT_ASK_EVENT, type AssistantAskDetail } from "@/lib/assistant-open";
 import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "icf-assistant-conversation";
