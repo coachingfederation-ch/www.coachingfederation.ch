@@ -660,7 +660,10 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
         community_id: source.community_id,
         // Occurrences never inherit "featured" or a published state.
         is_featured: false,
-        is_internal: source.is_internal,
+        // Derived from the audience, exactly as on create/update.
+        is_internal:
+          source.registration_mode === "rsvp_members" ||
+          source.registration_mode === "rsvp_invited",
         status: "draft" as const,
         organizer_id: context.userId,
       }));
