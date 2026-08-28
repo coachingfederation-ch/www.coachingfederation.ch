@@ -73,7 +73,9 @@ export default function ForOrganisationsPage() {
         }
         lede={t("organisations.hero.lede")}
         ctaLabel={t("organisations.hero.cta")}
-        ctaHref="#organisation-contact"
+        // Opens the chapter assistant with an organisation-specific opening
+        // question instead of dropping the visitor on an empty contact form.
+        onCtaClick={() => askAssistant(t("assistant.prompts.organisations"))}
       />
       <main id="main">
         <ProofBar />
