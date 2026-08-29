@@ -151,11 +151,6 @@ function WhyCredentialed() {
           <div className="lg:col-span-7">
             <p className="eyebrow text-primary">{t("home.pillars.eyebrow")}</p>
             <h2 className="display-xl mt-5 text-foreground">{t("home.pillars.title")}</h2>
-            <Mark
-              name="Line02"
-              aria-hidden="true"
-              className="pointer-events-none mt-3 h-6 w-64 text-mark-blue"
-            />
           </div>
           <p className="border-l-2 border-mark-blue pl-6 text-lg leading-relaxed text-muted-foreground lg:col-span-5">
             {t("home.pillars.subtitle")}
