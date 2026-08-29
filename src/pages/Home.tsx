@@ -147,29 +147,46 @@ function WhyCredentialed() {
         className="pointer-events-none absolute -right-20 top-10 h-64 w-64 text-mark-blue opacity-10"
       />
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
-        <p className="eyebrow">{t("home.pillars.eyebrow")}</p>
-        <div className="mt-5 grid gap-10 md:grid-cols-2 md:items-end">
-          <h2 className="display-lg text-foreground">{t("home.pillars.title")}</h2>
-          <p className="text-lg leading-relaxed text-muted-foreground">
+        <div className="grid items-end gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <p className="eyebrow text-primary">{t("home.pillars.eyebrow")}</p>
+            <h2 className="display-xl mt-5 text-foreground">{t("home.pillars.title")}</h2>
+          </div>
+          <p className="border-l-2 border-mark-blue pl-6 text-lg leading-relaxed text-muted-foreground lg:col-span-5">
             {t("home.pillars.subtitle")}
           </p>
         </div>
-        <div className="mt-16 grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-16 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {pillars.map((p, i) => (
-            <div key={p.title} className="relative border-t border-border pt-6">
-              <span
-                aria-hidden="true"
-                className="block font-display text-5xl font-bold leading-none tracking-tight text-primary/15"
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="mt-5 text-lg font-semibold text-foreground">{p.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{p.desc}</p>
+            <div
+              key={p.title}
+              className={`flex flex-col justify-between rounded-3xl bg-hero p-8 transition-colors duration-300 hover:bg-primary ${
+                i % 2 === 1 ? "lg:translate-y-6" : ""
+              }`}
+            >
+              <div className="relative mb-12 inline-flex self-start">
+                <Mark
+                  name="CircularMark02"
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -left-3 -top-3 h-16 w-16 text-mark-blue opacity-40"
+                />
+                <span
+                  aria-hidden="true"
+                  className="relative font-display text-4xl leading-none text-accent"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              </div>
+              <div>
+                <h3 className="font-display text-2xl text-hero-foreground">{p.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-hero-foreground/75">{p.desc}</p>
+              </div>
             </div>
           ))}
         </div>
       </div>
     </section>
+
   );
 }
 
