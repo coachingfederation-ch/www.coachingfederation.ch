@@ -55,6 +55,7 @@ import { Route as StaffOperationalStructureRouteImport } from './routes/_staff/o
 import { Route as StaffRolesRouteImport } from './routes/_staff/roles'
 import { Route as StaffVocabulariesRouteImport } from './routes/_staff/vocabularies'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as ApiContactAgentRouteImport } from './routes/api/contact-agent'
 import { Route as ApiStaffAssistantRouteImport } from './routes/api/staff-assistant'
 import { Route as AttendTokenRouteImport } from './routes/attend.$token'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
@@ -359,6 +360,11 @@ const StaffVocabulariesRoute = StaffVocabulariesRouteImport.update({
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiContactAgentRoute = ApiContactAgentRouteImport.update({
+  id: '/api/contact-agent',
+  path: '/api/contact-agent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiStaffAssistantRoute = ApiStaffAssistantRouteImport.update({
@@ -792,6 +798,7 @@ export interface FileRoutesByFullPath {
   '/roles': typeof StaffRolesRoute
   '/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/contact-agent': typeof ApiContactAgentRoute
   '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -908,6 +915,7 @@ export interface FileRoutesByTo {
   '/roles': typeof StaffRolesRoute
   '/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/contact-agent': typeof ApiContactAgentRoute
   '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -1031,6 +1039,7 @@ export interface FileRoutesById {
   '/_staff/roles': typeof StaffRolesRoute
   '/_staff/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/contact-agent': typeof ApiContactAgentRoute
   '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -1153,6 +1162,7 @@ export interface FileRouteTypes {
     | '/roles'
     | '/vocabularies'
     | '/api/chat'
+    | '/api/contact-agent'
     | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
@@ -1269,6 +1279,7 @@ export interface FileRouteTypes {
     | '/roles'
     | '/vocabularies'
     | '/api/chat'
+    | '/api/contact-agent'
     | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
@@ -1391,6 +1402,7 @@ export interface FileRouteTypes {
     | '/_staff/roles'
     | '/_staff/vocabularies'
     | '/api/chat'
+    | '/api/contact-agent'
     | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
@@ -1494,6 +1506,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiContactAgentRoute: typeof ApiContactAgentRoute
   ApiStaffAssistantRoute: typeof ApiStaffAssistantRoute
   AttendTokenRoute: typeof AttendTokenRoute
   ClaimTokenRoute: typeof ClaimTokenRoute
@@ -1858,6 +1871,13 @@ declare module '@tanstack/react-router' {
       path: '/api/chat'
       fullPath: '/api/chat'
       preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/contact-agent': {
+      id: '/api/contact-agent'
+      path: '/api/contact-agent'
+      fullPath: '/api/contact-agent'
+      preLoaderRoute: typeof ApiContactAgentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/staff-assistant': {
@@ -2596,6 +2616,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiContactAgentRoute: ApiContactAgentRoute,
   ApiStaffAssistantRoute: ApiStaffAssistantRoute,
   AttendTokenRoute: AttendTokenRoute,
   ClaimTokenRoute: ClaimTokenRoute,
