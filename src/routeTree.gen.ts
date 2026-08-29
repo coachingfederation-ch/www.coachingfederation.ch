@@ -112,6 +112,7 @@ import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/mem
 import { Route as ApiPublicNewsletterRefreshRouteImport } from './routes/api/public/newsletter-refresh'
 import { Route as ApiPublicRoleDirectoryRouteImport } from './routes/api/public/role-directory'
 import { Route as ApiPublicRoleGrantsArchiveRouteImport } from './routes/api/public/role-grants-archive'
+import { Route as ContactConfirmTokenRouteImport } from './routes/contact.confirm.$token'
 import { Route as VerifyCertificateTokenRouteImport } from './routes/verify.certificate.$token'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
@@ -655,6 +656,11 @@ const ApiPublicRoleGrantsArchiveRoute =
     path: '/api/public/role-grants-archive',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ContactConfirmTokenRoute = ContactConfirmTokenRouteImport.update({
+  id: '/contact/confirm/$token',
+  path: '/contact/confirm/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerifyCertificateTokenRoute = VerifyCertificateTokenRouteImport.update({
   id: '/verify/certificate/$token',
   path: '/verify/certificate/$token',
@@ -857,6 +863,7 @@ export interface FileRoutesByFullPath {
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
+  '/contact/confirm/$token': typeof ContactConfirmTokenRoute
   '/verify/certificate/$token': typeof VerifyCertificateTokenRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
@@ -975,6 +982,7 @@ export interface FileRoutesByTo {
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
+  '/contact/confirm/$token': typeof ContactConfirmTokenRoute
   '/verify/certificate/$token': typeof VerifyCertificateTokenRoute
   '/$locale/communities': typeof LocaleCommunitiesIndexRoute
   '/$locale/events': typeof LocaleEventsIndexRoute
@@ -1100,6 +1108,7 @@ export interface FileRoutesById {
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
+  '/contact/confirm/$token': typeof ContactConfirmTokenRoute
   '/verify/certificate/$token': typeof VerifyCertificateTokenRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
@@ -1224,6 +1233,7 @@ export interface FileRouteTypes {
     | '/api/public/newsletter-refresh'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
+    | '/contact/confirm/$token'
     | '/verify/certificate/$token'
     | '/$locale/communities/'
     | '/$locale/events/'
@@ -1342,6 +1352,7 @@ export interface FileRouteTypes {
     | '/api/public/newsletter-refresh'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
+    | '/contact/confirm/$token'
     | '/verify/certificate/$token'
     | '/$locale/communities'
     | '/$locale/events'
@@ -1466,6 +1477,7 @@ export interface FileRouteTypes {
     | '/api/public/newsletter-refresh'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
+    | '/contact/confirm/$token'
     | '/verify/certificate/$token'
     | '/$locale/communities/'
     | '/$locale/events/'
@@ -1552,6 +1564,7 @@ export interface RootRouteChildren {
   ApiPublicNewsletterRefreshRoute: typeof ApiPublicNewsletterRefreshRoute
   ApiPublicRoleDirectoryRoute: typeof ApiPublicRoleDirectoryRoute
   ApiPublicRoleGrantsArchiveRoute: typeof ApiPublicRoleGrantsArchiveRoute
+  ContactConfirmTokenRoute: typeof ContactConfirmTokenRoute
   VerifyCertificateTokenRoute: typeof VerifyCertificateTokenRoute
   ApiPublicCalendarFileRoute: typeof ApiPublicCalendarFileRoute
   ApiPublicCertificateQrTokenRoute: typeof ApiPublicCertificateQrTokenRoute
@@ -2286,6 +2299,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicRoleGrantsArchiveRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact/confirm/$token': {
+      id: '/contact/confirm/$token'
+      path: '/contact/confirm/$token'
+      fullPath: '/contact/confirm/$token'
+      preLoaderRoute: typeof ContactConfirmTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verify/certificate/$token': {
       id: '/verify/certificate/$token'
       path: '/verify/certificate/$token'
@@ -2670,6 +2690,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicNewsletterRefreshRoute: ApiPublicNewsletterRefreshRoute,
   ApiPublicRoleDirectoryRoute: ApiPublicRoleDirectoryRoute,
   ApiPublicRoleGrantsArchiveRoute: ApiPublicRoleGrantsArchiveRoute,
+  ContactConfirmTokenRoute: ContactConfirmTokenRoute,
   VerifyCertificateTokenRoute: VerifyCertificateTokenRoute,
   ApiPublicCalendarFileRoute: ApiPublicCalendarFileRoute,
   ApiPublicCertificateQrTokenRoute: ApiPublicCertificateQrTokenRoute,
