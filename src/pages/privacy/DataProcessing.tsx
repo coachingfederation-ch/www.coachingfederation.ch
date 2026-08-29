@@ -52,7 +52,19 @@ export function DataProcessingSection() {
             <li>Email address</li>
             <li>Any other information you choose to provide in your message</li>
           </ul>
+          <p className="text-foreground/80">
+            On our About page, you can prepare your enquiry in a conversation with an AI assistant
+            instead of filling in a form. The conversation runs through our AI provider, is not
+            stored by us, and is never used to train a model. When you press &ldquo;Review and
+            send&rdquo;, the assistant drafts a summary that you can edit — the version you approve
+            is the one we receive. We then store your name, email address, subject, and message
+            temporarily and send a confirmation link to your email address; your message only
+            reaches our office when you click that link. This protects you against someone writing
+            to us in your name. Unconfirmed and confirmed enquiries alike are deleted automatically
+            seven days after they were created.
+          </p>
         </div>
+
 
         <div className="space-y-4">
           <h4 className="text-base font-semibold tracking-tight">
