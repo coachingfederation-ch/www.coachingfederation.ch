@@ -37,28 +37,42 @@
         "city": "Zürich",
         "region": "German-speaking Switzerland",
         "cadence": "Monthly",
-        "langs": ["DE", "EN"],
+        "langs": [
+          "DE",
+          "EN"
+        ],
         "lead": "Chapter lead: Zürich team"
       },
       {
         "city": "Lausanne & Genève",
         "region": "Romandie",
         "cadence": "Monthly",
-        "langs": ["FR", "EN"],
+        "langs": [
+          "FR",
+          "EN"
+        ],
         "lead": "Chapter lead: Romandie team"
       },
       {
         "city": "Lugano",
         "region": "Ticino",
         "cadence": "Quarterly",
-        "langs": ["IT", "EN"],
+        "langs": [
+          "IT",
+          "EN"
+        ],
         "lead": "Chapter lead: Ticino team"
       },
       {
         "city": "Online",
         "region": "Events, mentoring & volunteering",
         "cadence": "Ongoing",
-        "langs": ["DE", "FR", "IT", "EN"],
+        "langs": [
+          "DE",
+          "FR",
+          "IT",
+          "EN"
+        ],
         "lead": "Open to all members"
       }
     ]
@@ -66,7 +80,13 @@
   "research": {
     "eyebrow": "Research & partnerships",
     "title": "Connecting research, practice and leadership.",
-    "partners": ["ETH Zürich", "HEC Lausanne", "USI Lugano", "SwissRe", "Nestlé"],
+    "partners": [
+      "ETH Zürich",
+      "HEC Lausanne",
+      "USI Lugano",
+      "SwissRe",
+      "Nestlé"
+    ],
     "items": [
       {
         "title": "The state of coaching in Switzerland 2026",
@@ -127,16 +147,44 @@
   },
   "contact": {
     "eyebrow": "Get in touch",
-    "title": "Send us a message",
-    "lede": "Questions about membership, events, or partnerships? We'd love to hear from you.",
+    "title": "Tell us what you need",
+    "lede": "Talk it through with our assistant. It helps you put your request into words, then you review the message before anything is sent.",
+    "empty": "Hello. Tell us what brings you here — finding a coach, coaching for your organisation, membership, or something else entirely.",
+    "placeholder": "Type your message…",
+    "thinking": "Thinking…",
+    "review": "Review and send",
+    "preparing": "Preparing…",
+    "disclaimer": "An AI assistant helps you prepare the message. Nothing is sent until you review and confirm it.",
+    "reviewTitle": "Review your message",
+    "reviewLede": "This is what our office will receive. Edit anything you like — your version is what we send.",
     "nameLabel": "Name",
     "namePlaceholder": "Your name",
     "emailLabel": "Email",
     "emailPlaceholder": "your@email.com",
+    "subjectLabel": "Subject",
     "messageLabel": "Message",
     "messagePlaceholder": "How can we help?",
-    "send": "Send email",
-    "privacy": "By sending, you agree that your message is processed via email. Read our"
+    "send": "Send message",
+    "sending": "Sending…",
+    "back": "Back to the conversation",
+    "doneTitle": "Check your inbox",
+    "doneBody": "We sent a confirmation link to {email}. Open it and your message goes straight to our office.",
+    "doneHint": "We do this so nobody can write to us in your name. Unconfirmed messages are deleted after seven days.",
+    "privacy": "We process your message to reply to you. Read our",
+    "suggestions": {
+      "coach": "I am looking for a coach",
+      "organisation": "Coaching for our organisation",
+      "membership": "A question about membership"
+    },
+    "errors": {
+      "chat": "Something went wrong. Please try again.",
+      "draft": "We could not prepare the message. Please try again.",
+      "empty": "Tell us a little about your request first.",
+      "required": "Please fill in your name, a subject and a message.",
+      "email": "Please enter a valid email address.",
+      "send": "We could not send the message. Please try again, or write to office@coachingfederation.ch.",
+      "rateLimited": "That is a lot of messages from this connection. Please try again later."
+    }
   },
   "cta": {
     "eyebrow": "Get involved",

@@ -37,28 +37,42 @@
         "city": "Zürich",
         "region": "Suisse alémanique",
         "cadence": "Mensuel",
-        "langs": ["DE", "EN"],
+        "langs": [
+          "DE",
+          "EN"
+        ],
         "lead": "Responsable régional : équipe de Zürich"
       },
       {
         "city": "Lausanne & Genève",
         "region": "Romandie",
         "cadence": "Mensuel",
-        "langs": ["FR", "EN"],
+        "langs": [
+          "FR",
+          "EN"
+        ],
         "lead": "Responsable régional : équipe de Romandie"
       },
       {
         "city": "Lugano",
         "region": "Ticino",
         "cadence": "Trimestriel",
-        "langs": ["IT", "EN"],
+        "langs": [
+          "IT",
+          "EN"
+        ],
         "lead": "Responsable régional : équipe du Ticino"
       },
       {
         "city": "En ligne",
         "region": "Événements, mentorat & bénévolat",
         "cadence": "En continu",
-        "langs": ["DE", "FR", "IT", "EN"],
+        "langs": [
+          "DE",
+          "FR",
+          "IT",
+          "EN"
+        ],
         "lead": "Ouvert à tous les membres"
       }
     ]
@@ -66,7 +80,13 @@
   "research": {
     "eyebrow": "Recherche & partenariats",
     "title": "Relier la recherche, la pratique et le leadership.",
-    "partners": ["ETH Zürich", "HEC Lausanne", "USI Lugano", "SwissRe", "Nestlé"],
+    "partners": [
+      "ETH Zürich",
+      "HEC Lausanne",
+      "USI Lugano",
+      "SwissRe",
+      "Nestlé"
+    ],
     "items": [
       {
         "title": "L'état du coaching en Suisse 2026",
@@ -127,16 +147,44 @@
   },
   "contact": {
     "eyebrow": "Contact",
-    "title": "Écrivez-nous",
-    "lede": "Des questions sur l'adhésion, les événements ou les partenariats ? Nous serions ravis de vous lire.",
+    "title": "Dites-nous ce dont vous avez besoin",
+    "lede": "Échangez avec notre assistant. Il vous aide à formuler votre demande, puis vous relisez le message avant tout envoi.",
+    "empty": "Bonjour. Dites-nous ce qui vous amène — trouver un coach, du coaching pour votre organisation, l'adhésion ou tout autre sujet.",
+    "placeholder": "Écrivez votre message…",
+    "thinking": "Réflexion…",
+    "review": "Relire et envoyer",
+    "preparing": "Préparation…",
+    "disclaimer": "Un assistant IA vous aide à préparer le message. Rien n'est envoyé avant votre relecture et votre confirmation.",
+    "reviewTitle": "Relisez votre message",
+    "reviewLede": "Voici ce que notre bureau recevra. Modifiez ce que vous voulez — c'est votre version qui part.",
     "nameLabel": "Nom",
     "namePlaceholder": "Votre nom",
     "emailLabel": "E-mail",
     "emailPlaceholder": "votre@email.com",
+    "subjectLabel": "Objet",
     "messageLabel": "Message",
-    "messagePlaceholder": "Comment pouvons-nous vous aider ?",
-    "send": "Envoyer un e-mail",
-    "privacy": "En envoyant, vous acceptez que votre message soit traité par e-mail. Consultez notre"
+    "messagePlaceholder": "Comment pouvons-nous aider ?",
+    "send": "Envoyer le message",
+    "sending": "Envoi…",
+    "back": "Retour à la conversation",
+    "doneTitle": "Consultez votre boîte de réception",
+    "doneBody": "Nous avons envoyé un lien de confirmation à {email}. Ouvrez-le et votre message part directement à notre bureau.",
+    "doneHint": "Ainsi, personne ne peut nous écrire en votre nom. Les messages non confirmés sont supprimés après sept jours.",
+    "privacy": "Nous traitons votre message pour vous répondre. Lisez notre",
+    "suggestions": {
+      "coach": "Je cherche un coach",
+      "organisation": "Du coaching pour notre organisation",
+      "membership": "Une question sur l'adhésion"
+    },
+    "errors": {
+      "chat": "Une erreur est survenue. Veuillez réessayer.",
+      "draft": "Nous n'avons pas pu préparer le message. Veuillez réessayer.",
+      "empty": "Parlez-nous d'abord brièvement de votre demande.",
+      "required": "Veuillez remplir le nom, l'objet et le message.",
+      "email": "Veuillez saisir une adresse e-mail valide.",
+      "send": "Nous n'avons pas pu envoyer le message. Réessayez ou écrivez à office@coachingfederation.ch.",
+      "rateLimited": "Cela fait beaucoup de messages depuis cette connexion. Réessayez plus tard."
+    }
   },
   "cta": {
     "eyebrow": "S'engager",

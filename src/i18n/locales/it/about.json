@@ -37,28 +37,42 @@
         "city": "Zürich",
         "region": "Svizzera tedesca",
         "cadence": "Mensile",
-        "langs": ["DE", "EN"],
+        "langs": [
+          "DE",
+          "EN"
+        ],
         "lead": "Responsabile Chapter: team Zürich"
       },
       {
         "city": "Lausanne & Genève",
         "region": "Romandie",
         "cadence": "Mensile",
-        "langs": ["FR", "EN"],
+        "langs": [
+          "FR",
+          "EN"
+        ],
         "lead": "Responsabile Chapter: team Romandie"
       },
       {
         "city": "Lugano",
         "region": "Ticino",
         "cadence": "Trimestrale",
-        "langs": ["IT", "EN"],
+        "langs": [
+          "IT",
+          "EN"
+        ],
         "lead": "Responsabile Chapter: team Ticino"
       },
       {
         "city": "Online",
         "region": "Eventi, mentoring e volontariato",
         "cadence": "In corso",
-        "langs": ["DE", "FR", "IT", "EN"],
+        "langs": [
+          "DE",
+          "FR",
+          "IT",
+          "EN"
+        ],
         "lead": "Aperto a tutti i membri"
       }
     ]
@@ -66,7 +80,13 @@
   "research": {
     "eyebrow": "Ricerca e partnership",
     "title": "Connettere ricerca, pratica e leadership.",
-    "partners": ["ETH Zürich", "HEC Lausanne", "USI Lugano", "SwissRe", "Nestlé"],
+    "partners": [
+      "ETH Zürich",
+      "HEC Lausanne",
+      "USI Lugano",
+      "SwissRe",
+      "Nestlé"
+    ],
     "items": [
       {
         "title": "Lo stato del coaching in Svizzera 2026",
@@ -127,16 +147,44 @@
   },
   "contact": {
     "eyebrow": "Contatto",
-    "title": "Scrivici",
-    "lede": "Domande su membership, eventi o partnership? Saremo lieti di sentirti.",
+    "title": "Dicci di cosa hai bisogno",
+    "lede": "Parlane con il nostro assistente. Ti aiuta a mettere in parole la tua richiesta, poi rileggi il messaggio prima che venga inviato.",
+    "empty": "Ciao. Raccontaci cosa ti porta qui — trovare un coach, coaching per la tua organizzazione, l'iscrizione o altro.",
+    "placeholder": "Scrivi il tuo messaggio…",
+    "thinking": "Sto pensando…",
+    "review": "Rileggi e invia",
+    "preparing": "Preparazione…",
+    "disclaimer": "Un assistente IA ti aiuta a preparare il messaggio. Nulla viene inviato prima della tua rilettura e conferma.",
+    "reviewTitle": "Rileggi il messaggio",
+    "reviewLede": "Questo è ciò che riceverà il nostro ufficio. Modifica quello che vuoi — inviamo la tua versione.",
     "nameLabel": "Nome",
     "namePlaceholder": "Il tuo nome",
-    "emailLabel": "Email",
+    "emailLabel": "E-mail",
     "emailPlaceholder": "tua@email.com",
+    "subjectLabel": "Oggetto",
     "messageLabel": "Messaggio",
     "messagePlaceholder": "Come possiamo aiutarti?",
-    "send": "Invia email",
-    "privacy": "Inviando, accetti che il tuo messaggio venga elaborato via email. Leggi la nostra"
+    "send": "Invia il messaggio",
+    "sending": "Invio…",
+    "back": "Torna alla conversazione",
+    "doneTitle": "Controlla la tua posta",
+    "doneBody": "Abbiamo inviato un link di conferma a {email}. Aprilo e il messaggio arriva subito al nostro ufficio.",
+    "doneHint": "Così nessuno può scriverci a tuo nome. I messaggi non confermati vengono eliminati dopo sette giorni.",
+    "privacy": "Trattiamo il tuo messaggio per risponderti. Leggi la nostra",
+    "suggestions": {
+      "coach": "Sto cercando un coach",
+      "organisation": "Coaching per la nostra organizzazione",
+      "membership": "Una domanda sull'iscrizione"
+    },
+    "errors": {
+      "chat": "Qualcosa è andato storto. Riprova.",
+      "draft": "Non siamo riusciti a preparare il messaggio. Riprova.",
+      "empty": "Raccontaci prima brevemente la tua richiesta.",
+      "required": "Compila nome, oggetto e messaggio.",
+      "email": "Inserisci un indirizzo e-mail valido.",
+      "send": "Non siamo riusciti a inviare il messaggio. Riprova o scrivi a office@coachingfederation.ch.",
+      "rateLimited": "Sono molti messaggi da questa connessione. Riprova più tardi."
+    }
   },
   "cta": {
     "eyebrow": "Partecipa",

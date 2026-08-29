@@ -37,28 +37,42 @@
         "city": "Zürich",
         "region": "Deutschschweiz",
         "cadence": "Monatlich",
-        "langs": ["DE", "EN"],
+        "langs": [
+          "DE",
+          "EN"
+        ],
         "lead": "Chapter-Leitung: Team Zürich"
       },
       {
         "city": "Lausanne & Genève",
         "region": "Romandie",
         "cadence": "Monatlich",
-        "langs": ["FR", "EN"],
+        "langs": [
+          "FR",
+          "EN"
+        ],
         "lead": "Chapter-Leitung: Team Romandie"
       },
       {
         "city": "Lugano",
         "region": "Ticino",
         "cadence": "Quartalsweise",
-        "langs": ["IT", "EN"],
+        "langs": [
+          "IT",
+          "EN"
+        ],
         "lead": "Chapter-Leitung: Team Ticino"
       },
       {
         "city": "Online",
         "region": "Events, Mentoring & Engagement",
         "cadence": "Fortlaufend",
-        "langs": ["DE", "FR", "IT", "EN"],
+        "langs": [
+          "DE",
+          "FR",
+          "IT",
+          "EN"
+        ],
         "lead": "Offen für alle Mitglieder"
       }
     ]
@@ -66,7 +80,13 @@
   "research": {
     "eyebrow": "Forschung & Partnerschaften",
     "title": "Forschung, Praxis und Führung verbinden.",
-    "partners": ["ETH Zürich", "HEC Lausanne", "USI Lugano", "SwissRe", "Nestlé"],
+    "partners": [
+      "ETH Zürich",
+      "HEC Lausanne",
+      "USI Lugano",
+      "SwissRe",
+      "Nestlé"
+    ],
     "items": [
       {
         "title": "State of Coaching in der Schweiz 2026",
@@ -127,16 +147,44 @@
   },
   "contact": {
     "eyebrow": "Kontakt",
-    "title": "Schreiben Sie uns",
-    "lede": "Fragen zu Mitgliedschaft, Events oder Partnerschaften? Wir freuen uns auf Ihre Nachricht.",
+    "title": "Sag uns, was du brauchst",
+    "lede": "Bespreche dein Anliegen mit unserem Assistenten. Er hilft dir, es in Worte zu fassen — du prüfst die Nachricht, bevor etwas gesendet wird.",
+    "empty": "Hallo. Erzähl uns, was dich herführt — Coachsuche, Coaching für deine Organisation, Mitgliedschaft oder etwas ganz anderes.",
+    "placeholder": "Nachricht schreiben …",
+    "thinking": "Denkt nach …",
+    "review": "Prüfen und senden",
+    "preparing": "Wird vorbereitet …",
+    "disclaimer": "Ein KI-Assistent hilft dir, die Nachricht vorzubereiten. Es wird nichts gesendet, bevor du sie geprüft und bestätigt hast.",
+    "reviewTitle": "Nachricht prüfen",
+    "reviewLede": "Das erhält unser Büro. Passe alles an, was du möchtest — gesendet wird deine Version.",
     "nameLabel": "Name",
-    "namePlaceholder": "Ihr Name",
+    "namePlaceholder": "Dein Name",
     "emailLabel": "E-Mail",
-    "emailPlaceholder": "ihre@email.com",
+    "emailPlaceholder": "deine@email.ch",
+    "subjectLabel": "Betreff",
     "messageLabel": "Nachricht",
     "messagePlaceholder": "Wie können wir helfen?",
-    "send": "E-Mail senden",
-    "privacy": "Mit dem Senden stimmen Sie zu, dass Ihre Nachricht per E-Mail verarbeitet wird. Lesen Sie unsere"
+    "send": "Nachricht senden",
+    "sending": "Wird gesendet …",
+    "back": "Zurück zum Gespräch",
+    "doneTitle": "Schau in dein Postfach",
+    "doneBody": "Wir haben einen Bestätigungslink an {email} gesendet. Öffne ihn, und deine Nachricht geht direkt an unser Büro.",
+    "doneHint": "So kann niemand in deinem Namen an uns schreiben. Unbestätigte Nachrichten löschen wir nach sieben Tagen.",
+    "privacy": "Wir verarbeiten deine Nachricht, um dir zu antworten. Lies unsere",
+    "suggestions": {
+      "coach": "Ich suche einen Coach",
+      "organisation": "Coaching für unsere Organisation",
+      "membership": "Eine Frage zur Mitgliedschaft"
+    },
+    "errors": {
+      "chat": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+      "draft": "Wir konnten die Nachricht nicht vorbereiten. Bitte versuche es erneut.",
+      "empty": "Erzähl uns zuerst kurz von deinem Anliegen.",
+      "required": "Bitte fülle Name, Betreff und Nachricht aus.",
+      "email": "Bitte gib eine gültige E-Mail-Adresse ein.",
+      "send": "Wir konnten die Nachricht nicht senden. Bitte versuche es erneut oder schreibe an office@coachingfederation.ch.",
+      "rateLimited": "Das sind viele Nachrichten von dieser Verbindung. Bitte versuche es später erneut."
+    }
   },
   "cta": {
     "eyebrow": "Mitmachen",
