@@ -146,7 +146,7 @@ function WhyCredentialed() {
         <p className="eyebrow text-primary">{t("home.pillars.eyebrow")}</p>
         <div className="mt-6 grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-end">
           <h2 className="display-xl text-foreground">{t("home.pillars.title")}</h2>
-          <p className="border-l-4 border-highlight pl-6 text-lg leading-relaxed text-muted-foreground">
+          <p className="border-l-4 border-accent pl-6 text-lg leading-relaxed text-muted-foreground">
             {t("home.pillars.subtitle")}
           </p>
         </div>
@@ -164,7 +164,7 @@ function WhyCredentialed() {
                   name="CircularMark02"
                   className="absolute inset-0 h-full w-full text-mark-blue"
                 />
-                <span className="relative font-display text-2xl font-bold leading-none text-highlight">
+                <span className="relative font-display text-2xl font-bold leading-none text-accent">
                   {String(i + 1).padStart(2, "0")}
                 </span>
               </span>
