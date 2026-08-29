@@ -21,6 +21,8 @@ import type { MarkName } from "@/design-system/icf-welcome-design-system-a835df"
 import { SiteHeaderBar, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SponsorMarquee, type SponsorItem } from "@/components/home/SponsorMarquee";
 import { useI18n, LocaleLink } from "@/i18n";
+import { cn } from "@/lib/utils";
+
 
 /** Demo sponsor imagery (AI generated), ordered to match `home.ads.items`. */
 const AD_IMAGES = [adSupervision, adPress, adAssessment, adPractice, adRetreats, adMentoring];
