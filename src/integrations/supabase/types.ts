@@ -864,6 +864,48 @@ export type Database = {
           },
         ]
       }
+      contact_enquiries: {
+        Row: {
+          body: string
+          confirmed_at: string | null
+          created_at: string
+          email: string
+          id: string
+          locale: string
+          name: string
+          sent_at: string | null
+          status: string
+          subject: string
+          token_hash: string
+        }
+        Insert: {
+          body: string
+          confirmed_at?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          locale?: string
+          name: string
+          sent_at?: string | null
+          status?: string
+          subject: string
+          token_hash: string
+        }
+        Update: {
+          body?: string
+          confirmed_at?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          locale?: string
+          name?: string
+          sent_at?: string | null
+          status?: string
+          subject?: string
+          token_hash?: string
+        }
+        Relationships: []
+      }
       deck_download_leads: {
         Row: {
           consent: boolean
