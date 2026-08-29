@@ -49,12 +49,6 @@ function HeroHeader() {
               <Button asChild variant="pill" size="pill">
                 <LocaleLink to="/find-a-coach">{t("common.nav.findACoach")} →</LocaleLink>
               </Button>
-              <LocaleLink
-                to="/for-organisations"
-                className="inline-flex h-12 items-center text-sm font-semibold text-hero-foreground/85 underline-offset-4 transition hover:text-hero-foreground hover:underline"
-              >
-                {t("common.nav.forOrganisations")}
-              </LocaleLink>
             </div>
           </div>
           <div className="relative">
