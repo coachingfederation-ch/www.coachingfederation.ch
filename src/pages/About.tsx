@@ -6,7 +6,7 @@
 import { BrushMark as Mark, Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { DeibCommitment } from "@/components/about/DeibCommitment";
-import { ContactForm } from "@/components/about/ContactForm";
+import { ContactAgent } from "@/components/about/ContactAgent";
 import { Governance } from "@/components/about/Governance";
 import { TeamPreview } from "@/components/team/TeamPreview";
 import { CommunitiesPreview } from "@/components/communities/CommunitiesPreview";
@@ -93,7 +93,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <ContactForm />
+        <ContactAgent />
 
         <section className="bg-hero text-hero-foreground">
           <div className="mx-auto max-w-7xl px-8 py-20 text-center">
