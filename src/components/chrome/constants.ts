@@ -10,7 +10,7 @@ export const navItems = [
   { key: "home", to: "/" },
   { key: "about", to: "/about" },
   { key: "forCoaches", to: "/for-coaches" },
-  
+  { key: "forOrganisations", to: "/for-organisations" },
   { key: "insights", to: "/insights" },
   { key: "events", to: "/events" },
 ] as const;
