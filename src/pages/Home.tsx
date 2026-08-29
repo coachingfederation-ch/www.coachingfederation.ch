@@ -85,12 +85,12 @@ function Audiences() {
     "home.audiences",
   );
   const targets = [
-    "/find-a-coach",
-    "/for-organisations",
-    "/for-coaches",
     "https://coachingfederation.org/become-a-coach/why-become-a-coach/",
+    "/for-coaches",
+    "/for-organisations",
+    "/find-a-coach",
   ];
-  const isExternal = [false, false, false, true];
+  const isExternal = [true, false, false, false];
   const cardClassName = "group flex flex-col bg-card p-7 transition-colors hover:bg-secondary/50";
   return (
     <section id="find-a-coach" className="mx-auto -mt-10 max-w-7xl px-5 sm:px-8">
