@@ -55,6 +55,7 @@ import { Route as StaffOperationalStructureRouteImport } from './routes/_staff/o
 import { Route as StaffRolesRouteImport } from './routes/_staff/roles'
 import { Route as StaffVocabulariesRouteImport } from './routes/_staff/vocabularies'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as ApiContactAgentRouteImport } from './routes/api/contact-agent'
 import { Route as ApiStaffAssistantRouteImport } from './routes/api/staff-assistant'
 import { Route as AttendTokenRouteImport } from './routes/attend.$token'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
@@ -99,6 +100,7 @@ import { Route as StaffMembersIndexRouteImport } from './routes/_staff/members.i
 import { Route as StaffMembersIdRouteImport } from './routes/_staff/members.$id'
 import { Route as ApiPublicChatSignalRouteImport } from './routes/api/public/chat-signal'
 import { Route as ApiPublicClaimWavesRouteImport } from './routes/api/public/claim-waves'
+import { Route as ApiPublicContactEnquiryPurgeRouteImport } from './routes/api/public/contact-enquiry-purge'
 import { Route as ApiPublicEuropePulseScanRouteImport } from './routes/api/public/europe-pulse-scan'
 import { Route as ApiPublicEventFollowUpsRouteImport } from './routes/api/public/event-follow-ups'
 import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public/event-reminders'
@@ -110,6 +112,7 @@ import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/mem
 import { Route as ApiPublicNewsletterRefreshRouteImport } from './routes/api/public/newsletter-refresh'
 import { Route as ApiPublicRoleDirectoryRouteImport } from './routes/api/public/role-directory'
 import { Route as ApiPublicRoleGrantsArchiveRouteImport } from './routes/api/public/role-grants-archive'
+import { Route as ContactConfirmTokenRouteImport } from './routes/contact.confirm.$token'
 import { Route as VerifyCertificateTokenRouteImport } from './routes/verify.certificate.$token'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
@@ -361,6 +364,11 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiContactAgentRoute = ApiContactAgentRouteImport.update({
+  id: '/api/contact-agent',
+  path: '/api/contact-agent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiStaffAssistantRoute = ApiStaffAssistantRouteImport.update({
   id: '/api/staff-assistant',
   path: '/api/staff-assistant',
@@ -583,6 +591,12 @@ const ApiPublicClaimWavesRoute = ApiPublicClaimWavesRouteImport.update({
   path: '/api/public/claim-waves',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicContactEnquiryPurgeRoute =
+  ApiPublicContactEnquiryPurgeRouteImport.update({
+    id: '/api/public/contact-enquiry-purge',
+    path: '/api/public/contact-enquiry-purge',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicEuropePulseScanRoute =
   ApiPublicEuropePulseScanRouteImport.update({
     id: '/api/public/europe-pulse-scan',
@@ -642,6 +656,11 @@ const ApiPublicRoleGrantsArchiveRoute =
     path: '/api/public/role-grants-archive',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ContactConfirmTokenRoute = ContactConfirmTokenRouteImport.update({
+  id: '/contact/confirm/$token',
+  path: '/contact/confirm/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerifyCertificateTokenRoute = VerifyCertificateTokenRouteImport.update({
   id: '/verify/certificate/$token',
   path: '/verify/certificate/$token',
@@ -792,6 +811,7 @@ export interface FileRoutesByFullPath {
   '/roles': typeof StaffRolesRoute
   '/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/contact-agent': typeof ApiContactAgentRoute
   '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -831,6 +851,7 @@ export interface FileRoutesByFullPath {
   '/members/$id': typeof StaffMembersIdRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
+  '/api/public/contact-enquiry-purge': typeof ApiPublicContactEnquiryPurgeRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-follow-ups': typeof ApiPublicEventFollowUpsRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
@@ -842,6 +863,7 @@ export interface FileRoutesByFullPath {
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
+  '/contact/confirm/$token': typeof ContactConfirmTokenRoute
   '/verify/certificate/$token': typeof VerifyCertificateTokenRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
@@ -908,6 +930,7 @@ export interface FileRoutesByTo {
   '/roles': typeof StaffRolesRoute
   '/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/contact-agent': typeof ApiContactAgentRoute
   '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -947,6 +970,7 @@ export interface FileRoutesByTo {
   '/members/$id': typeof StaffMembersIdRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
+  '/api/public/contact-enquiry-purge': typeof ApiPublicContactEnquiryPurgeRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-follow-ups': typeof ApiPublicEventFollowUpsRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
@@ -958,6 +982,7 @@ export interface FileRoutesByTo {
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
+  '/contact/confirm/$token': typeof ContactConfirmTokenRoute
   '/verify/certificate/$token': typeof VerifyCertificateTokenRoute
   '/$locale/communities': typeof LocaleCommunitiesIndexRoute
   '/$locale/events': typeof LocaleEventsIndexRoute
@@ -1031,6 +1056,7 @@ export interface FileRoutesById {
   '/_staff/roles': typeof StaffRolesRoute
   '/_staff/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/contact-agent': typeof ApiContactAgentRoute
   '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -1070,6 +1096,7 @@ export interface FileRoutesById {
   '/_staff/members/$id': typeof StaffMembersIdRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
+  '/api/public/contact-enquiry-purge': typeof ApiPublicContactEnquiryPurgeRoute
   '/api/public/europe-pulse-scan': typeof ApiPublicEuropePulseScanRoute
   '/api/public/event-follow-ups': typeof ApiPublicEventFollowUpsRoute
   '/api/public/event-reminders': typeof ApiPublicEventRemindersRoute
@@ -1081,6 +1108,7 @@ export interface FileRoutesById {
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
+  '/contact/confirm/$token': typeof ContactConfirmTokenRoute
   '/verify/certificate/$token': typeof VerifyCertificateTokenRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
@@ -1153,6 +1181,7 @@ export interface FileRouteTypes {
     | '/roles'
     | '/vocabularies'
     | '/api/chat'
+    | '/api/contact-agent'
     | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
@@ -1192,6 +1221,7 @@ export interface FileRouteTypes {
     | '/members/$id'
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
+    | '/api/public/contact-enquiry-purge'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-follow-ups'
     | '/api/public/event-reminders'
@@ -1203,6 +1233,7 @@ export interface FileRouteTypes {
     | '/api/public/newsletter-refresh'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
+    | '/contact/confirm/$token'
     | '/verify/certificate/$token'
     | '/$locale/communities/'
     | '/$locale/events/'
@@ -1269,6 +1300,7 @@ export interface FileRouteTypes {
     | '/roles'
     | '/vocabularies'
     | '/api/chat'
+    | '/api/contact-agent'
     | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
@@ -1308,6 +1340,7 @@ export interface FileRouteTypes {
     | '/members/$id'
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
+    | '/api/public/contact-enquiry-purge'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-follow-ups'
     | '/api/public/event-reminders'
@@ -1319,6 +1352,7 @@ export interface FileRouteTypes {
     | '/api/public/newsletter-refresh'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
+    | '/contact/confirm/$token'
     | '/verify/certificate/$token'
     | '/$locale/communities'
     | '/$locale/events'
@@ -1391,6 +1425,7 @@ export interface FileRouteTypes {
     | '/_staff/roles'
     | '/_staff/vocabularies'
     | '/api/chat'
+    | '/api/contact-agent'
     | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
@@ -1430,6 +1465,7 @@ export interface FileRouteTypes {
     | '/_staff/members/$id'
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
+    | '/api/public/contact-enquiry-purge'
     | '/api/public/europe-pulse-scan'
     | '/api/public/event-follow-ups'
     | '/api/public/event-reminders'
@@ -1441,6 +1477,7 @@ export interface FileRouteTypes {
     | '/api/public/newsletter-refresh'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
+    | '/contact/confirm/$token'
     | '/verify/certificate/$token'
     | '/$locale/communities/'
     | '/$locale/events/'
@@ -1494,6 +1531,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiContactAgentRoute: typeof ApiContactAgentRoute
   ApiStaffAssistantRoute: typeof ApiStaffAssistantRoute
   AttendTokenRoute: typeof AttendTokenRoute
   ClaimTokenRoute: typeof ClaimTokenRoute
@@ -1514,6 +1552,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicChatSignalRoute: typeof ApiPublicChatSignalRoute
   ApiPublicClaimWavesRoute: typeof ApiPublicClaimWavesRoute
+  ApiPublicContactEnquiryPurgeRoute: typeof ApiPublicContactEnquiryPurgeRoute
   ApiPublicEuropePulseScanRoute: typeof ApiPublicEuropePulseScanRoute
   ApiPublicEventFollowUpsRoute: typeof ApiPublicEventFollowUpsRoute
   ApiPublicEventRemindersRoute: typeof ApiPublicEventRemindersRoute
@@ -1525,6 +1564,7 @@ export interface RootRouteChildren {
   ApiPublicNewsletterRefreshRoute: typeof ApiPublicNewsletterRefreshRoute
   ApiPublicRoleDirectoryRoute: typeof ApiPublicRoleDirectoryRoute
   ApiPublicRoleGrantsArchiveRoute: typeof ApiPublicRoleGrantsArchiveRoute
+  ContactConfirmTokenRoute: typeof ContactConfirmTokenRoute
   VerifyCertificateTokenRoute: typeof VerifyCertificateTokenRoute
   ApiPublicCalendarFileRoute: typeof ApiPublicCalendarFileRoute
   ApiPublicCertificateQrTokenRoute: typeof ApiPublicCertificateQrTokenRoute
@@ -1860,6 +1900,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/contact-agent': {
+      id: '/api/contact-agent'
+      path: '/api/contact-agent'
+      fullPath: '/api/contact-agent'
+      preLoaderRoute: typeof ApiContactAgentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/staff-assistant': {
       id: '/api/staff-assistant'
       path: '/api/staff-assistant'
@@ -2168,6 +2215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicClaimWavesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/contact-enquiry-purge': {
+      id: '/api/public/contact-enquiry-purge'
+      path: '/api/public/contact-enquiry-purge'
+      fullPath: '/api/public/contact-enquiry-purge'
+      preLoaderRoute: typeof ApiPublicContactEnquiryPurgeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/europe-pulse-scan': {
       id: '/api/public/europe-pulse-scan'
       path: '/api/public/europe-pulse-scan'
@@ -2243,6 +2297,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/role-grants-archive'
       fullPath: '/api/public/role-grants-archive'
       preLoaderRoute: typeof ApiPublicRoleGrantsArchiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact/confirm/$token': {
+      id: '/contact/confirm/$token'
+      path: '/contact/confirm/$token'
+      fullPath: '/contact/confirm/$token'
+      preLoaderRoute: typeof ContactConfirmTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verify/certificate/$token': {
@@ -2596,6 +2657,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiContactAgentRoute: ApiContactAgentRoute,
   ApiStaffAssistantRoute: ApiStaffAssistantRoute,
   AttendTokenRoute: AttendTokenRoute,
   ClaimTokenRoute: ClaimTokenRoute,
@@ -2616,6 +2678,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicChatSignalRoute: ApiPublicChatSignalRoute,
   ApiPublicClaimWavesRoute: ApiPublicClaimWavesRoute,
+  ApiPublicContactEnquiryPurgeRoute: ApiPublicContactEnquiryPurgeRoute,
   ApiPublicEuropePulseScanRoute: ApiPublicEuropePulseScanRoute,
   ApiPublicEventFollowUpsRoute: ApiPublicEventFollowUpsRoute,
   ApiPublicEventRemindersRoute: ApiPublicEventRemindersRoute,
@@ -2627,6 +2690,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicNewsletterRefreshRoute: ApiPublicNewsletterRefreshRoute,
   ApiPublicRoleDirectoryRoute: ApiPublicRoleDirectoryRoute,
   ApiPublicRoleGrantsArchiveRoute: ApiPublicRoleGrantsArchiveRoute,
+  ContactConfirmTokenRoute: ContactConfirmTokenRoute,
   VerifyCertificateTokenRoute: VerifyCertificateTokenRoute,
   ApiPublicCalendarFileRoute: ApiPublicCalendarFileRoute,
   ApiPublicCertificateQrTokenRoute: ApiPublicCertificateQrTokenRoute,

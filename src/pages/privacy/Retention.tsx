@@ -22,8 +22,9 @@ export function RetentionSection() {
             ],
             [
               "Contact enquiries",
-              "For the duration of the enquiry and 3 months thereafter for follow-up",
+              "For the duration of the enquiry and 3 months thereafter for follow-up. The temporary record created while a website enquiry awaits your email confirmation is deleted by an automatic daily job seven days after it was created, whether or not it was confirmed",
             ],
+
             [
               "Newsletter subscriptions",
               "Until you unsubscribe; suppression list retained to prevent re-subscription without consent",

@@ -41,6 +41,9 @@ import { template as guestPassApproved } from "./guest-pass-approved";
 import { template as guestPassDeclined } from "./guest-pass-declined";
 import { template as eventCertificate } from "./event-certificate";
 import { template as communityJoinInterest } from "./community-join-interest";
+import { template as contactEnquiry } from "./contact-enquiry";
+import { template as contactEnquiryVerify } from "./contact-enquiry-verify";
+import { template as contactEnquiryCopy } from "./contact-enquiry-copy-mail";
 
 /**
  * Template registry — maps template names to their React Email components.
@@ -69,4 +72,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "guest-pass-declined": guestPassDeclined,
   "event-certificate": eventCertificate,
   "community-join-interest": communityJoinInterest,
+  "contact-enquiry": contactEnquiry,
+  "contact-enquiry-verify": contactEnquiryVerify,
+  "contact-enquiry-copy": contactEnquiryCopy,
 };
