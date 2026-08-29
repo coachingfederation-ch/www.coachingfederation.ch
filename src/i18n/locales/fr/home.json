@@ -15,16 +15,10 @@
   },
   "audiences": [
     {
-      "eyebrow": "Je recherche",
-      "title": "Un coach",
-      "desc": "Trouvez un coach certifié ICF de confiance.",
-      "cta": "Trouver un coach"
-    },
-    {
-      "eyebrow": "Je représente",
-      "title": "Une organisation",
-      "desc": "Découvrez comment le coaching développe les leaders et les organisations.",
-      "cta": "Pour les organisations"
+      "eyebrow": "Je souhaite en savoir plus",
+      "title": "Sur le coaching",
+      "desc": "Découvrez ce qu'est le coaching et toute sa valeur.",
+      "cta": "Découvrir le coaching"
     },
     {
       "eyebrow": "Je suis",
@@ -33,10 +27,16 @@
       "cta": "Pour les coachs"
     },
     {
-      "eyebrow": "Je souhaite en savoir plus",
-      "title": "Sur le coaching",
-      "desc": "Découvrez ce qu'est le coaching et toute sa valeur.",
-      "cta": "Découvrir le coaching"
+      "eyebrow": "Je représente",
+      "title": "Une organisation",
+      "desc": "Découvrez comment le coaching développe les leaders et les organisations.",
+      "cta": "Pour les organisations"
+    },
+    {
+      "eyebrow": "Je recherche",
+      "title": "Un coach",
+      "desc": "Trouvez un coach certifié ICF de confiance.",
+      "cta": "Trouver un coach"
     }
   ],
   "pillars": {
@@ -141,19 +141,28 @@
         "date": "Jeu 17 sep 2026",
         "city": "Zürich",
         "title": "Coaching Perspectives Conference 2026",
-        "tags": ["EN · DE", "Leadership"]
+        "tags": [
+          "EN · DE",
+          "Leadership"
+        ]
       },
       {
         "date": "Mar 6 oct 2026",
         "city": "Online",
         "title": "AI & Coaching: What Stays Human?",
-        "tags": ["EN", "Webinaire"]
+        "tags": [
+          "EN",
+          "Webinaire"
+        ]
       },
       {
         "date": "Jeu 12 nov 2026",
         "city": "Lausanne",
         "title": "Soirée Coaching: Bâtir une culture de coaching",
-        "tags": ["FR", "Réseautage"]
+        "tags": [
+          "FR",
+          "Réseautage"
+        ]
       }
     ]
   },

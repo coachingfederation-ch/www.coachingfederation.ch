@@ -15,16 +15,10 @@
   },
   "audiences": [
     {
-      "eyebrow": "Ich suche",
-      "title": "Einen Coach",
-      "desc": "Finden Sie einen vertrauenswürdigen, ICF-zertifizierten Coach.",
-      "cta": "Coach finden"
-    },
-    {
-      "eyebrow": "Ich vertrete",
-      "title": "Eine Organisation",
-      "desc": "Erfahren Sie, wie Coaching Führungskräfte und Organisationen weiterentwickelt.",
-      "cta": "Für Organisationen"
+      "eyebrow": "Ich möchte mehr erfahren",
+      "title": "Über Coaching",
+      "desc": "Erfahren Sie, was Coaching ist und warum es wichtig ist.",
+      "cta": "Coaching entdecken"
     },
     {
       "eyebrow": "Ich bin",
@@ -33,10 +27,16 @@
       "cta": "Für Coaches"
     },
     {
-      "eyebrow": "Ich möchte mehr erfahren",
-      "title": "Über Coaching",
-      "desc": "Erfahren Sie, was Coaching ist und warum es wichtig ist.",
-      "cta": "Coaching entdecken"
+      "eyebrow": "Ich vertrete",
+      "title": "Eine Organisation",
+      "desc": "Erfahren Sie, wie Coaching Führungskräfte und Organisationen weiterentwickelt.",
+      "cta": "Für Organisationen"
+    },
+    {
+      "eyebrow": "Ich suche",
+      "title": "Einen Coach",
+      "desc": "Finden Sie einen vertrauenswürdigen, ICF-zertifizierten Coach.",
+      "cta": "Coach finden"
     }
   ],
   "pillars": {
@@ -141,19 +141,28 @@
         "date": "Do, 17. Sep. 2026",
         "city": "Zürich",
         "title": "Coaching Perspectives Conference 2026",
-        "tags": ["EN · DE", "Führung"]
+        "tags": [
+          "EN · DE",
+          "Führung"
+        ]
       },
       {
         "date": "Di, 6. Okt. 2026",
         "city": "Online",
         "title": "AI & Coaching: What Stays Human?",
-        "tags": ["EN", "Webinar"]
+        "tags": [
+          "EN",
+          "Webinar"
+        ]
       },
       {
         "date": "Do, 12. Nov. 2026",
         "city": "Lausanne",
         "title": "Soirée Coaching: Bâtir une culture de coaching",
-        "tags": ["FR", "Networking"]
+        "tags": [
+          "FR",
+          "Networking"
+        ]
       }
     ]
   },

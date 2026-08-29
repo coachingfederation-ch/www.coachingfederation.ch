@@ -15,16 +15,10 @@
   },
   "audiences": [
     {
-      "eyebrow": "Cerco",
-      "title": "Un coach",
-      "desc": "Trova un coach di fiducia con credenziale ICF.",
-      "cta": "Trova un coach"
-    },
-    {
-      "eyebrow": "Rappresento",
-      "title": "Un'organizzazione",
-      "desc": "Scopri come il coaching sviluppa leader e organizzazioni.",
-      "cta": "Per le organizzazioni"
+      "eyebrow": "Desidero approfondire",
+      "title": "Il coaching",
+      "desc": "Scopri cos'è il coaching e perché è importante.",
+      "cta": "Scopri il coaching"
     },
     {
       "eyebrow": "Sono",
@@ -33,10 +27,16 @@
       "cta": "Per i coach"
     },
     {
-      "eyebrow": "Desidero approfondire",
-      "title": "Il coaching",
-      "desc": "Scopri cos'è il coaching e perché è importante.",
-      "cta": "Scopri il coaching"
+      "eyebrow": "Rappresento",
+      "title": "Un'organizzazione",
+      "desc": "Scopri come il coaching sviluppa leader e organizzazioni.",
+      "cta": "Per le organizzazioni"
+    },
+    {
+      "eyebrow": "Cerco",
+      "title": "Un coach",
+      "desc": "Trova un coach di fiducia con credenziale ICF.",
+      "cta": "Trova un coach"
     }
   ],
   "pillars": {
@@ -141,19 +141,28 @@
         "date": "Gio 17 Set 2026",
         "city": "Zürich",
         "title": "Coaching Perspectives Conference 2026",
-        "tags": ["EN · DE", "Leadership"]
+        "tags": [
+          "EN · DE",
+          "Leadership"
+        ]
       },
       {
         "date": "Mar 6 Ott 2026",
         "city": "Online",
         "title": "AI & Coaching: What Stays Human?",
-        "tags": ["EN", "Webinar"]
+        "tags": [
+          "EN",
+          "Webinar"
+        ]
       },
       {
         "date": "Gio 12 Nov 2026",
         "city": "Lausanne",
         "title": "Soirée Coaching: Bâtir une culture de coaching",
-        "tags": ["FR", "Networking"]
+        "tags": [
+          "FR",
+          "Networking"
+        ]
       }
     ]
   },
