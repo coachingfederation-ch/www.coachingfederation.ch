@@ -141,28 +141,38 @@ function WhyCredentialed() {
         className="pointer-events-none absolute -right-20 top-10 h-64 w-64 text-mark-blue opacity-10"
       />
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
-        <p className="eyebrow">{t("home.pillars.eyebrow")}</p>
-        <div className="mt-5 grid gap-10 md:grid-cols-2 md:items-end">
-          <h2 className="display-lg text-foreground">{t("home.pillars.title")}</h2>
-          <p className="text-lg leading-relaxed text-muted-foreground">
+        <p className="eyebrow text-primary">{t("home.pillars.eyebrow")}</p>
+        <div className="mt-6 grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-end">
+          <h2 className="display-xl text-foreground">{t("home.pillars.title")}</h2>
+          <p className="border-l-4 border-highlight pl-6 text-lg leading-relaxed text-muted-foreground">
             {t("home.pillars.subtitle")}
           </p>
         </div>
-        <div className="mt-16 grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {pillars.map((p, i) => (
-            <div key={p.title} className="relative border-t border-border pt-6">
-              <span
-                aria-hidden="true"
-                className="block font-display text-5xl font-bold leading-none tracking-tight text-primary/15"
-              >
-                {String(i + 1).padStart(2, "0")}
+            <div
+              key={p.title}
+              className={cn(
+                "relative overflow-hidden rounded-3xl bg-primary p-8 text-primary-foreground",
+                i % 2 === 1 ? "lg:translate-y-10" : undefined,
+              )}
+            >
+              <span aria-hidden="true" className="relative inline-grid h-16 w-16 place-items-center">
+                <Mark
+                  name="CircularMark02"
+                  className="absolute inset-0 h-full w-full text-mark-blue"
+                />
+                <span className="relative font-display text-2xl font-bold leading-none text-highlight">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
               </span>
-              <h3 className="mt-5 text-lg font-semibold text-foreground">{p.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{p.desc}</p>
+              <h3 className="mt-6 text-lg font-semibold">{p.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-primary-foreground/80">{p.desc}</p>
             </div>
           ))}
         </div>
       </div>
+
     </section>
   );
 }
