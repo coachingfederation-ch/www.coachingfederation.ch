@@ -20,7 +20,15 @@ export const VOCAB_TABLES = [
   "cf_client_types",
   "cf_experience_bands",
   "cf_event_categories",
+  "cf_cadences",
 ] as const;
+
+/**
+ * Lists the public Coach Finder filters actually use. `cf_cadences` is a CMS
+ * vocabulary only (community meeting rhythm), so the finder must not spend a
+ * round trip on it.
+ */
+const COACH_FINDER_TABLES = VOCAB_TABLES.filter((t) => t !== "cf_cadences");
 
 export type VocabTable = (typeof VOCAB_TABLES)[number];
 
