@@ -6,11 +6,12 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { ArrowUpRight } from "lucide-react";
 import { CompactHero, SiteFooter } from "@/components/site-chrome";
 import { TeamFilters, TeamHoneycomb } from "@/components/team/TeamGrid";
 import { StructureMap } from "@/components/team/StructureMap";
 import { Button } from "@/design-system/icf-welcome-design-system-a835df";
-import { useI18n } from "@/i18n";
+import { LocaleLink, useI18n } from "@/i18n";
 import { listTeamDirectory } from "@/lib/team.functions";
 
 type View = "grid" | "map";
@@ -56,6 +57,13 @@ export default function TeamPage() {
     () => (data?.projects ?? []).map((p) => ({ slug: p.slug, label: p.label, isCommunity: p.isCommunity })),
     [data],
   );
+
+  /** The active filter, when it points at a community that has a public page. */
+  const activeCommunity = useMemo(
+    () => (data?.projects ?? []).find((p) => p.slug === project && p.isCommunity) ?? null,
+    [data, project],
+  );
+
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -107,6 +115,16 @@ export default function TeamPage() {
         </section>
         <section className="bg-card py-16">
           <div className="mx-auto max-w-6xl px-6 sm:px-8">
+            {!isPending && view === "grid" && activeCommunity ? (
+              <div className="mb-10 flex justify-center">
+                <Button asChild variant="outline" size="pill">
+                  <LocaleLink to={`/communities/${activeCommunity.slug}`}>
+                    {t("team.filters.openCommunity")}
+                    <ArrowUpRight aria-hidden="true" />
+                  </LocaleLink>
+                </Button>
+              </div>
+            ) : null}
             {isPending ? (
               <p className="text-center text-sm text-muted-foreground">{t("team.loading")}</p>
             ) : view === "map" ? (

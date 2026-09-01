@@ -8,9 +8,8 @@
  * list and the comb reflows.
  */
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
 
-import { LocaleLink, useI18n } from "@/i18n";
+import { useI18n } from "@/i18n";
 import { MemberModal } from "@/components/team/MemberModal";
 import { combRows, HexMemberTile } from "@/components/hex-tile";
 import type { TeamMember, TeamProject } from "@/lib/team";
@@ -112,28 +111,15 @@ export function TeamFilters({
         {t("team.filters.all")}
       </button>
       {projects.map((p) => (
-        <span key={p.slug} className="inline-flex items-center gap-1">
-          <button
-            type="button"
-            aria-pressed={active === p.slug}
-            onClick={() => onChange(p.slug)}
-            className={pill(active === p.slug)}
-          >
-            {p.label}
-          </button>
-          {p.isCommunity ? (
-            <LocaleLink
-              to={`/communities/${p.slug}`}
-              aria-label={`${t("team.filters.openCommunity")}: ${p.label}`}
-              className="inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-xs font-semibold text-primary underline-offset-4 transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <ArrowUpRight className="size-3.5" aria-hidden="true" />
-              <span className="sr-only sm:not-sr-only">
-                {t("team.filters.openCommunity")}
-              </span>
-            </LocaleLink>
-          ) : null}
-        </span>
+        <button
+          key={p.slug}
+          type="button"
+          aria-pressed={active === p.slug}
+          onClick={() => onChange(p.slug)}
+          className={pill(active === p.slug)}
+        >
+          {p.label}
+        </button>
       ))}
     </div>
   );
