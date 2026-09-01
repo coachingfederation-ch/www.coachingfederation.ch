@@ -337,18 +337,11 @@ function OperationalStructurePage() {
         </div>
 
         <div className="mt-4">
-          <Button
-            type="button"
-            variant="outline"
-            size="pill"
-            onClick={() => setShowMap((v) => !v)}
-          >
+          <Button type="button" variant="outline" size="pill" onClick={() => setShowMap((v) => !v)}>
             {showMap ? t("ops.map.hide") : t("ops.map.show")}
           </Button>
         </div>
         {showMap ? <StructureMapPanel t={t} projects={projects} /> : null}
-
-
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[260px_1fr]">
           <ProjectGroupList

@@ -132,7 +132,6 @@ export function CommunityPanel({
     return () => dirtyCb.current?.(false);
   }, [dirty]);
 
-
   useEffect(() => {
     void (async () => {
       const { data } = await supabase
@@ -243,7 +242,6 @@ export function CommunityPanel({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [saveAll]);
-
 
   const uploadImage = async (file: File) => {
     setError(null);
@@ -628,7 +626,9 @@ export function CommunityPanel({
       <div className="sticky bottom-0 -mx-5 -mb-5 mt-6 flex flex-wrap items-center justify-end gap-3 rounded-b-2xl border-t border-border bg-card/95 px-5 py-3 backdrop-blur">
         <span
           aria-live="polite"
-          className={"mr-auto text-xs " + (dirty ? "font-semibold text-foreground" : "text-muted-foreground")}
+          className={
+            "mr-auto text-xs " + (dirty ? "font-semibold text-foreground" : "text-muted-foreground")
+          }
         >
           {dirty ? t("ops.community.unsaved") : t("ops.community.saved")}
         </span>

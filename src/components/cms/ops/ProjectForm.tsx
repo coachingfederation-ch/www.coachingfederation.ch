@@ -124,7 +124,9 @@ export function ProjectForm({
                   key={option.key}
                   className={
                     "flex cursor-pointer gap-2 rounded-xl border p-3 text-left " +
-                    (active ? "border-primary bg-secondary/60" : "border-border hover:bg-secondary/30")
+                    (active
+                      ? "border-primary bg-secondary/60"
+                      : "border-border hover:bg-secondary/30")
                   }
                 >
                   <input
@@ -153,7 +155,6 @@ export function ProjectForm({
             })}
           </div>
         </fieldset>
-
       </section>
 
       {/* Keyed by id: switching community must reset the panel's edit buffer
