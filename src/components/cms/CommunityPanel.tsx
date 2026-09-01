@@ -110,7 +110,10 @@ export function CommunityPanel({
   const [languages, setLanguages] = useState<{ slug: string; name: string }[]>([]);
   const [regions, setRegions] = useState<{ id: string; name: string }[]>([]);
   const [regionIds, setRegionIds] = useState<string[]>([]);
-  const [busy, setBusy] = useState<Target | null>(null);
+  const [busy, setBusy] = useState<Target | "__all__" | null>(null);
+  /** Which target language the single description editor below is editing. */
+  const [activeLocale, setActiveLocale] = useState<Target>(TARGETS[0]);
+
   // Per-language feedback sits next to the button that triggered it; the
   // panel-level error banner is too far away to be noticed.
   const [localeNote, setLocaleNote] = useState<
