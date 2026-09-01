@@ -12,7 +12,7 @@
  * editorial work — so the admin is asked.
  */
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { Button } from "@/design-system/icf-welcome-design-system-a835df";
