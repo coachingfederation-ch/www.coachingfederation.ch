@@ -12,7 +12,7 @@
  * editorial work — so the admin is asked.
  */
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { Button } from "@/design-system/icf-welcome-design-system-a835df";
@@ -59,6 +59,8 @@ function OperationalStructurePage() {
   const [roles, setRoles] = useState<Localized[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
+  // The community panel buffers its text edits; warn before switching away.
+  const communityDirty = useRef(false);
   const [members, setMembers] = useState<MemberOption[]>([]);
   const [search, setSearch] = useState("");
   const [newProject, setNewProject] = useState("");
@@ -302,6 +304,15 @@ function OperationalStructurePage() {
 
   const project = projects.find((p) => p.id === selected) ?? null;
 
+  const selectProject = (id: string) => {
+    if (id !== selected && communityDirty.current) {
+      const leave = window.confirm(t("ops.community.leaveDirty"));
+      if (!leave) return;
+      communityDirty.current = false;
+    }
+    setSelected(id);
+  };
+
   return (
     <Shell>
       <div className="mx-auto max-w-5xl px-10 py-10">
@@ -326,25 +337,18 @@ function OperationalStructurePage() {
         </div>
 
         <div className="mt-4">
-          <Button
-            type="button"
-            variant="outline"
-            size="pill"
-            onClick={() => setShowMap((v) => !v)}
-          >
+          <Button type="button" variant="outline" size="pill" onClick={() => setShowMap((v) => !v)}>
             {showMap ? t("ops.map.hide") : t("ops.map.show")}
           </Button>
         </div>
         {showMap ? <StructureMapPanel t={t} projects={projects} /> : null}
-
-
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[260px_1fr]">
           <ProjectGroupList
             t={t}
             projects={projects}
             selected={selected}
-            setSelected={setSelected}
+            setSelected={selectProject}
             reordering={reordering}
             setReordering={setReordering}
             move={move}
@@ -361,6 +365,9 @@ function OperationalStructurePage() {
                 loadProjects={loadProjects}
                 translateLabels={translateLabels}
                 translating={translating}
+                onCommunityDirtyChange={(dirty) => {
+                  communityDirty.current = dirty;
+                }}
               />
 
               <RoleAssignmentEditor

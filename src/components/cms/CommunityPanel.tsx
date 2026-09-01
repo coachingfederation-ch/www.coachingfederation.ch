@@ -10,7 +10,7 @@
  * Writes go through the caller's RLS-scoped client; the "admins manage
  * op_projects" policy remains the real boundary.
  */
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Image as ImageIcon, Languages, Loader2, Sparkles, Upload, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
@@ -48,29 +48,89 @@ export type CommunityFields = {
   image_credit_url: string | null;
 };
 
+/**
+ * Text-ish columns edited in the local buffer and written by the Save CTA.
+ * Everything not listed here (image binaries, language and region links) is
+ * applied immediately, because those actions already create a server artefact.
+ */
+const BUFFERED_FIELDS = [
+  "is_featured_community",
+  "cadence_note",
+  "cadence_note_de",
+  "cadence_note_fr",
+  "cadence_note_it",
+  "contact_email",
+  "signup_url",
+  "description",
+  "description_de",
+  "description_fr",
+  "description_it",
+  "cover_image_alt",
+  "cover_image_url",
+  "image_source",
+  "image_credit_name",
+  "image_credit_url",
+] as const satisfies readonly (keyof CommunityFields)[];
+
+const SELECT_COLUMNS =
+  "id, is_community, is_featured_community, description, description_de, description_fr, description_it, cadence_note, cadence_note_de, cadence_note_fr, cadence_note_it, contact_email, signup_url, language_slugs, cover_image_url, cover_image_alt, image_source, image_credit_name, image_credit_url";
+
+function changedFields(row: CommunityFields, base: CommunityFields): Partial<CommunityFields> {
+  const out: Record<string, unknown> = {};
+  for (const key of BUFFERED_FIELDS) {
+    const next = row[key] ?? null;
+    const prev = base[key] ?? null;
+    if (next !== prev) out[key] = next;
+  }
+  return out as Partial<CommunityFields>;
+}
+
 export function CommunityPanel({
   project,
   onSaved,
+  onDirtyChange,
 }: {
   project: CommunityFields;
   onSaved: () => void | Promise<void>;
+  /** Lets the page warn before switching away with unsaved changes. */
+  onDirtyChange?: (dirty: boolean) => void;
 }) {
   const { t } = useCms();
+  // `row` is the edit buffer; `saved` is the last state known to be on the
+  // server. A refetch triggered by an unrelated part of the page must never
+  // reset the buffer, so the prop is only read when the project id changes.
   const [row, setRow] = useState<CommunityFields>(project);
+  const [saved, setSaved] = useState<CommunityFields>(project);
   const [languages, setLanguages] = useState<{ slug: string; name: string }[]>([]);
   const [regions, setRegions] = useState<{ id: string; name: string }[]>([]);
   const [regionIds, setRegionIds] = useState<string[]>([]);
   const [busy, setBusy] = useState<Target | null>(null);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [unsplashOpen, setUnsplashOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [brief, setBrief] = useState("");
-  // Markdown fields save on blur; the ref keeps the latest keystroke available
-  // to the blur handler without re-creating it on every character.
-  const draft = useRef<Record<string, string>>({});
 
-  useEffect(() => setRow(project), [project]);
+  const pending = changedFields(row, saved);
+  const dirty = Object.keys(pending).length > 0;
+
+  useEffect(() => {
+    setRow(project);
+    setSaved(project);
+    // Only a different community replaces the buffer; refetches of the same
+    // row must not discard what the editor is typing.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project.id]);
+
+  // Keep the callback in a ref so an inline parent arrow does not re-fire the
+  // notification on every render.
+  const dirtyCb = useRef(onDirtyChange);
+  dirtyCb.current = onDirtyChange;
+  useEffect(() => {
+    dirtyCb.current?.(dirty);
+    return () => dirtyCb.current?.(false);
+  }, [dirty]);
 
   useEffect(() => {
     void (async () => {
@@ -120,8 +180,14 @@ export function CommunityPanel({
     if (err) setError(err.message);
   };
 
-  const save = async (values: Partial<CommunityFields>) => {
+  /**
+   * Immediate write for actions that already produced a server artefact
+   * (uploads, AI images, language links). Both the buffer and the baseline
+   * move, so the Save CTA does not then report a phantom change.
+   */
+  const savePatch = async (values: Partial<CommunityFields>) => {
     setRow((prev) => ({ ...prev, ...values }));
+    setSaved((prev) => ({ ...prev, ...values }));
     const { error: err } = await supabase
       .from("op_projects")
       .update(values as never)
@@ -130,6 +196,52 @@ export function CommunityPanel({
     setError(null);
     await onSaved();
   };
+
+  /** Pull the row back from the server and reset both buffer and baseline. */
+  const refetch = async () => {
+    const { data } = await supabase
+      .from("op_projects")
+      .select(SELECT_COLUMNS)
+      .eq("id", project.id)
+      .maybeSingle();
+    if (!data) return;
+    const fresh = data as unknown as CommunityFields;
+    setRow(fresh);
+    setSaved(fresh);
+  };
+
+  /** The Save CTA: writes only the buffered columns that actually changed. */
+  const saveAll = useCallback(async () => {
+    const values = changedFields(row, saved);
+    if (!Object.keys(values).length || saving) return;
+    setSaving(true);
+    const { error: err } = await supabase
+      .from("op_projects")
+      .update(values as never)
+      .eq("id", project.id);
+    setSaving(false);
+    if (err) return setError(err.message);
+    setError(null);
+    setSaved(row);
+    await onSaved();
+  }, [row, saved, saving, project.id, onSaved]);
+
+  const discard = () => {
+    setRow(saved);
+    setError(null);
+  };
+
+  // Cmd/Ctrl+S saves, matching the rest of the CMS editors.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        void saveAll();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [saveAll]);
 
   const uploadImage = async (file: File) => {
     setError(null);
@@ -150,7 +262,7 @@ export function CommunityPanel({
       .createSignedUrl(path, ARTICLE_IMAGE_TTL_SECONDS);
     setUploading(false);
     if (signErr || !signed) return setError(signErr?.message ?? "Upload failed");
-    await save({
+    await savePatch({
       cover_image_url: signed.signedUrl,
       image_source: "upload",
       image_credit_name: null,
@@ -165,14 +277,15 @@ export function CommunityPanel({
       const result = await generateCommunityImageFn({
         data: { projectId: project.id, brief: brief.trim() || undefined },
       });
-      setRow((p) => ({
-        ...p,
+      const applied = {
         cover_image_url: result.url,
         cover_image_alt: result.alt,
         image_source: "ai",
         image_credit_name: null,
         image_credit_url: null,
-      }));
+      };
+      setRow((p) => ({ ...p, ...applied }));
+      setSaved((p) => ({ ...p, ...applied }));
       await onSaved();
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -184,7 +297,7 @@ export function CommunityPanel({
   const toggleLanguage = (slug: string) => {
     const current = row.language_slugs ?? [];
     const next = current.includes(slug) ? current.filter((s) => s !== slug) : [...current, slug];
-    void save({ language_slugs: next });
+    void savePatch({ language_slugs: next });
   };
 
   const translate = async (locale: Target) => {
@@ -192,6 +305,7 @@ export function CommunityPanel({
     setError(null);
     try {
       await translateCommunity({ data: { projectId: project.id, locale } });
+      await refetch();
       await onSaved();
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -218,7 +332,7 @@ export function CommunityPanel({
           <input
             type="checkbox"
             checked={row.is_featured_community}
-            onChange={(e) => void save({ is_featured_community: e.target.checked })}
+            onChange={(e) => setRow((p) => ({ ...p, is_featured_community: e.target.checked }))}
             className="h-4 w-4 accent-[var(--color-primary)]"
           />
           {t("ops.community.featured")}
@@ -233,7 +347,6 @@ export function CommunityPanel({
               <input
                 value={row.cadence_note ?? ""}
                 onChange={(e) => setRow((p) => ({ ...p, cadence_note: e.target.value }))}
-                onBlur={(e) => void save({ cadence_note: e.target.value || null })}
                 className={INPUT + " mt-1 font-normal"}
               />
             </label>
@@ -243,7 +356,6 @@ export function CommunityPanel({
                 type="email"
                 value={row.contact_email ?? ""}
                 onChange={(e) => setRow((p) => ({ ...p, contact_email: e.target.value }))}
-                onBlur={(e) => void save({ contact_email: e.target.value || null })}
                 className={INPUT + " mt-1 font-normal"}
               />
             </label>
@@ -253,7 +365,6 @@ export function CommunityPanel({
                 type="url"
                 value={row.signup_url ?? ""}
                 onChange={(e) => setRow((p) => ({ ...p, signup_url: e.target.value }))}
-                onBlur={(e) => void save({ signup_url: e.target.value || null })}
                 className={INPUT + " mt-1 font-normal"}
               />
             </label>
@@ -278,7 +389,7 @@ export function CommunityPanel({
                   <button
                     type="button"
                     onClick={() =>
-                      void save({
+                      void savePatch({
                         cover_image_url: null,
                         cover_image_alt: null,
                         image_source: null,
@@ -332,7 +443,6 @@ export function CommunityPanel({
                 placeholder={t("ops.community.imageAlt")}
                 value={row.cover_image_alt ?? ""}
                 onChange={(e) => setRow((p) => ({ ...p, cover_image_alt: e.target.value }))}
-                onBlur={(e) => void save({ cover_image_alt: e.target.value || null })}
                 className={INPUT}
               />
 
@@ -341,14 +451,14 @@ export function CommunityPanel({
                 <input
                   aria-label={t("ops.community.imageUrl")}
                   value={row.cover_image_url ?? ""}
-                  onChange={(e) => setRow((p) => ({ ...p, cover_image_url: e.target.value }))}
-                  onBlur={(e) =>
-                    void save({
-                      cover_image_url: e.target.value || null,
+                  onChange={(e) =>
+                    setRow((p) => ({
+                      ...p,
+                      cover_image_url: e.target.value,
                       image_source: e.target.value ? "url" : null,
                       image_credit_name: null,
                       image_credit_url: null,
-                    })
+                    }))
                   }
                   placeholder={t("ops.community.imageUrl")}
                   className={INPUT + " min-w-40 flex-1"}
@@ -392,23 +502,13 @@ export function CommunityPanel({
             <p className="text-xs font-semibold text-muted-foreground">
               {t("ops.community.description")}
             </p>
-            <div
-              className="mt-1"
-              onBlur={() => {
-                const next = draft.current.description;
-                if (next !== undefined && next !== (row.description ?? ""))
-                  void save({ description: next || null });
-              }}
-            >
+            <div className="mt-1">
               <MarkdownEditor
                 value={row.description ?? ""}
                 rows={12}
                 language="en"
                 modes={["write", "preview"]}
-                onChange={(next) => {
-                  draft.current.description = next;
-                  setRow((p) => ({ ...p, description: next }));
-                }}
+                onChange={(next) => setRow((p) => ({ ...p, description: next }))}
               />
             </div>
           </div>
@@ -471,7 +571,8 @@ export function CommunityPanel({
                   <button
                     type="button"
                     onClick={() => void translate(locale)}
-                    disabled={busy !== null || !row.description}
+                    disabled={busy !== null || dirty || !row.description}
+                    title={dirty ? t("ops.community.saveFirst") : undefined}
                     className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-[11px] font-semibold hover:bg-secondary disabled:opacity-50"
                   >
                     {busy === locale ? (
@@ -489,33 +590,17 @@ export function CommunityPanel({
                   onChange={(e) =>
                     setRow((p) => ({ ...p, [localeField("cadence_note", locale)]: e.target.value }))
                   }
-                  onBlur={(e) =>
-                    void save({ [localeField("cadence_note", locale)]: e.target.value || null })
-                  }
                   className={INPUT + " mt-2"}
                 />
-                <div
-                  className="mt-2"
-                  onBlur={() => {
-                    const key = localeField("description", locale) as string;
-                    const next = draft.current[key];
-                    if (
-                      next !== undefined &&
-                      next !== ((row[key as keyof CommunityFields] as string | null) ?? "")
-                    )
-                      void save({ [key]: next || null });
-                  }}
-                >
+                <div className="mt-2">
                   <MarkdownEditor
                     value={(row[localeField("description", locale)] as string | null) ?? ""}
                     rows={8}
                     language={locale}
                     modes={["write", "preview"]}
-                    onChange={(next) => {
-                      const key = localeField("description", locale) as string;
-                      draft.current[key] = next;
-                      setRow((p) => ({ ...p, [key]: next }));
-                    }}
+                    onChange={(next) =>
+                      setRow((p) => ({ ...p, [localeField("description", locale)]: next }))
+                    }
                   />
                 </div>
               </div>
@@ -527,7 +612,7 @@ export function CommunityPanel({
         open={unsplashOpen}
         onOpenChange={setUnsplashOpen}
         onPick={(pick) =>
-          void save({
+          void savePatch({
             cover_image_url: pick.url,
             image_source: "unsplash",
             image_credit_name: pick.creditName,
@@ -535,6 +620,38 @@ export function CommunityPanel({
           })
         }
       />
+
+      {/* Save state: the panel buffers text edits, so the editor needs to see
+          whether their work has reached the server. */}
+      <div className="sticky bottom-0 -mx-5 -mb-5 mt-6 flex flex-wrap items-center justify-end gap-3 rounded-b-2xl border-t border-border bg-card/95 px-5 py-3 backdrop-blur">
+        <span
+          aria-live="polite"
+          className={
+            "mr-auto text-xs " + (dirty ? "font-semibold text-foreground" : "text-muted-foreground")
+          }
+        >
+          {dirty ? t("ops.community.unsaved") : t("ops.community.saved")}
+        </span>
+        {dirty ? (
+          <button
+            type="button"
+            onClick={discard}
+            disabled={saving}
+            className="rounded-full border border-border px-4 py-1.5 text-xs font-semibold hover:bg-secondary disabled:opacity-50"
+          >
+            {t("ops.community.discard")}
+          </button>
+        ) : null}
+        <button
+          type="button"
+          onClick={() => void saveAll()}
+          disabled={!dirty || saving}
+          className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+        >
+          {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : null}
+          {t("ops.community.save")}
+        </button>
+      </div>
     </section>
   );
 }

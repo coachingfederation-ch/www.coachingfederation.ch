@@ -1833,7 +1833,13 @@
       "imageUrl": "Or paste an image URL",
       "imageBrief": "Optional art direction for AI, e.g. coaches talking in a Basel café",
       "imageGenerate": "Generate with AI",
-      "imageAiNote": "AI generated images are always labelled as such on the public site."
+      "imageAiNote": "AI generated images are always labelled as such on the public site.",
+      "saved": "All changes saved",
+      "unsaved": "Unsaved changes",
+      "save": "Save community content",
+      "discard": "Discard changes",
+      "saveFirst": "Save your changes before translating.",
+      "leaveDirty": "This community has unsaved changes. Leave without saving?"
     },
     "reorder": "Reorder",
     "reorderHint": "Order controls how projects and communities appear on the public team and communities pages.",

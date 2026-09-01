@@ -1833,7 +1833,13 @@
       "imageUrl": "Ou collez l’URL d’une image",
       "imageBrief": "Direction artistique facultative pour l’IA, p. ex. des coachs qui échangent dans un café à Lausanne",
       "imageGenerate": "Générer avec l’IA",
-      "imageAiNote": "Les images générées par IA sont toujours signalées comme telles sur le site public."
+      "imageAiNote": "Les images générées par IA sont toujours signalées comme telles sur le site public.",
+      "saved": "Toutes les modifications sont enregistrées",
+      "unsaved": "Modifications non enregistrées",
+      "save": "Enregistrer le contenu de la communauté",
+      "discard": "Annuler les modifications",
+      "saveFirst": "Enregistrez vos modifications avant de traduire.",
+      "leaveDirty": "Cette communauté a des modifications non enregistrées. Quitter sans enregistrer ?"
     },
     "reorder": "Réordonner",
     "reorderHint": "L'ordre détermine la façon dont les projets et communautés apparaissent sur les pages publiques de l'équipe et des communautés.",

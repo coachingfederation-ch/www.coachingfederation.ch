@@ -1833,7 +1833,13 @@
       "imageUrl": "Oppure incolla l’URL di un’immagine",
       "imageBrief": "Indicazione artistica facoltativa per l’IA, ad es. coach che dialogano in un caffè a Lugano",
       "imageGenerate": "Genera con l’IA",
-      "imageAiNote": "Le immagini generate dall’IA sono sempre segnalate come tali sul sito pubblico."
+      "imageAiNote": "Le immagini generate dall’IA sono sempre segnalate come tali sul sito pubblico.",
+      "saved": "Tutte le modifiche sono salvate",
+      "unsaved": "Modifiche non salvate",
+      "save": "Salva il contenuto della community",
+      "discard": "Annulla le modifiche",
+      "saveFirst": "Salva le modifiche prima di tradurre.",
+      "leaveDirty": "Questa community ha modifiche non salvate. Uscire senza salvare?"
     },
     "reorder": "Riorordina",
     "reorderHint": "L'ordine determina come i progetti e le community appaiono sulle pagine pubbliche del team e delle community.",
