@@ -10,7 +10,7 @@
  * Writes go through the caller's RLS-scoped client; the "admins manage
  * op_projects" policy remains the real boundary.
  */
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Image as ImageIcon, Languages, Loader2, Sparkles, Upload, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
