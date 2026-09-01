@@ -87,15 +87,15 @@ export async function fetchVocabulary(
   return (data ?? []) as VocabRow[];
 }
 
-export type CoachFinderVocabularies = Record<VocabTable, VocabRow[]>;
+export type CoachFinderVocabularies = Record<Exclude<VocabTable, "cf_cadences">, VocabRow[]>;
 
 /** All lists in one round trip, active rows only — for the public filters. */
 export async function fetchActiveVocabularies(): Promise<CoachFinderVocabularies> {
   const results = await Promise.all(
-    VOCAB_TABLES.map((t) => fetchVocabulary(t, { activeOnly: true })),
+    COACH_FINDER_TABLES.map((t) => fetchVocabulary(t, { activeOnly: true })),
   );
   return Object.fromEntries(
-    VOCAB_TABLES.map((table, i) => [table, results[i]!]),
+    COACH_FINDER_TABLES.map((table, i) => [table, results[i]!]),
   ) as CoachFinderVocabularies;
 }
 
