@@ -57,10 +57,6 @@ export type CommunityFields = {
  */
 const BUFFERED_FIELDS = [
   "is_featured_community",
-  "cadence_note",
-  "cadence_note_de",
-  "cadence_note_fr",
-  "cadence_note_it",
   "contact_email",
   "signup_url",
   "description",
