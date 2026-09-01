@@ -304,15 +304,25 @@ export const regenerateNewsletterBlockFn = createServerFn({ method: "POST" })
     return { generated: true as const, content: generated.content };
   });
 
+const localeIdSchema = z.object({
+  id: z.string().uuid(),
+  locale: z.enum(["en", "de", "fr", "it"]).optional(),
+});
+
 /** Staff-only email preview of an edition, returned as a standalone HTML doc. */
 export const previewNewsletterFn = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => idSchema.parse(data))
+  .inputValidator((data) => localeIdSchema.parse(data))
   .handler(async ({ data, context }) => {
     const client = await assertStaff(context as AuthedContext);
     const { renderNewsletterEmail } = await import("./newsletters.server");
     // "#" keeps MailerLite's {$unsubscribe} placeholder out of the preview.
-    return { html: await renderNewsletterEmail(client, data.id, { unsubscribeUrl: "#" }) };
+    return {
+      html: await renderNewsletterEmail(client, data.id, {
+        unsubscribeUrl: "#",
+        locale: data.locale ?? "en",
+      }),
+    };
   });
 
 /**
@@ -349,11 +359,11 @@ async function assertPublisher(context: AuthedContext, newsletterId: string) {
 /** Current MailerLite send state for one edition. */
 export const getNewsletterSendStateFn = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => idSchema.parse(data))
+  .inputValidator((data) => localeIdSchema.parse(data))
   .handler(async ({ data, context }) => {
     await assertStaff(context as AuthedContext);
     const { getSendState } = await import("./newsletter-send.server");
-    return getSendState(data.id);
+    return getSendState(data.id, data.locale ?? "en");
   });
 
 /** MailerLite audience groups, for the group picker. */
@@ -380,6 +390,7 @@ const pushSchema = z.object({
   subject: z.string().min(3).max(200),
   fromName: z.string().min(2).max(120),
   fromEmail: z.string().email().max(200),
+  locale: z.enum(["en", "de", "fr", "it"]).optional(),
 });
 
 /** Creates or refreshes the MailerLite draft campaign for this edition. */
@@ -389,20 +400,23 @@ export const pushNewsletterToMailerLiteFn = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const client = await assertPublisher(context as AuthedContext, data.id);
     const { pushCampaign, getSendState } = await import("./newsletter-send.server");
+    const locale = data.locale ?? "en";
     await pushCampaign(client, {
       newsletterId: data.id,
+      locale,
       groupId: data.groupId,
       groupName: data.groupName,
       subject: data.subject,
       fromName: data.fromName,
       fromEmail: data.fromEmail,
     });
-    return getSendState(data.id);
+    return getSendState(data.id, locale);
   });
 
 const sendSchema = z.object({
   id: z.string().uuid(),
   scheduledFor: z.string().datetime().nullable().optional(),
+  locale: z.enum(["en", "de", "fr", "it"]).optional(),
 });
 
 /** Sends (or schedules) the pushed campaign. Irreversible. */
@@ -412,5 +426,5 @@ export const sendNewsletterFn = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertPublisher(context as AuthedContext, data.id);
     const { sendCampaign } = await import("./newsletter-send.server");
-    return sendCampaign(data.id, data.scheduledFor ?? null);
+    return sendCampaign(data.id, data.scheduledFor ?? null, data.locale ?? "en");
   });
