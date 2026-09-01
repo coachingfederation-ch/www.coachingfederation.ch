@@ -213,38 +213,33 @@ export function LocaleTabsEditor<
       <div className="overflow-hidden rounded-2xl border border-border bg-card text-sm">
         <div className="space-y-4 p-5">
           <div className="border-b border-border pb-3">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-              {adapter.labels.hint}
-            </span>
-            <div className="mt-1 flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">{adapter.labels.hint}</p>
+            <div className="mt-2 flex items-center justify-between">
               <span className="font-semibold text-foreground">
                 {adapter.sourceLanguage.toUpperCase()}
               </span>
-              <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                {adapter.labels.open}
+              <span className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                {adapter.labels.title}
               </span>
             </div>
           </div>
 
           <div className="space-y-3">
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                {translateAllLabel}
-              </span>
-              <button
-                type="button"
-                onClick={() => void runTranslate(targets, "__all__")}
-                disabled={busy !== null || saving}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline disabled:opacity-60"
-              >
-                {busy === "__all__" ? (
-                  <Loader2 className="h-3 w-3 animate-spin" />
-                ) : (
-                  <Languages className="h-3 w-3" />
-                )}
-                {busy === "__all__" ? adapter.labels.working : adapter.labels.translate}
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => void runTranslate(targets, "__all__")}
+              disabled={busy !== null || saving}
+              className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-border py-2 text-xs font-semibold text-primary transition-colors hover:bg-secondary disabled:opacity-60"
+            >
+              {busy === "__all__" ? (
+                <Loader2 className="h-3 w-3 animate-spin" />
+              ) : (
+                <Languages className="h-3 w-3" />
+              )}
+              {busy === "__all__" ? adapter.labels.working : translateAllLabel}
+            </button>
+
+
 
             {targets.map((locale) => {
               const badge = badgeFor(locale);
