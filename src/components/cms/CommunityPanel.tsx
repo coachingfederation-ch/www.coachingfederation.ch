@@ -34,6 +34,8 @@ export type CommunityFields = {
   description_de: string | null;
   description_fr: string | null;
   description_it: string | null;
+  /** Chosen from the `cf_cadences` vocabulary; the notes below are derived. */
+  cadence_slug: string | null;
   cadence_note: string | null;
   cadence_note_de: string | null;
   cadence_note_fr: string | null;
