@@ -8,6 +8,7 @@
  */
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/design-system/icf-welcome-design-system-a835df";
 import { StructureMap } from "@/components/team/StructureMap";
 import { useI18n } from "@/i18n";
 import { listTeamDirectory } from "@/lib/team.functions";
@@ -40,10 +41,12 @@ export function StructureMapPanel({
   }, [data, projects]);
 
   return (
-    <section className="mt-8 rounded-2xl border border-border bg-card p-6">
-      <h2 className="text-sm font-semibold">{t("ops.map.title")}</h2>
-      <p className="mt-1 text-xs text-muted-foreground">{t("ops.map.note")}</p>
-      <div className="mt-4">
+    <Card className="mt-8">
+      <CardHeader>
+        <CardTitle>{t("ops.map.title")}</CardTitle>
+        <CardDescription>{t("ops.map.note")}</CardDescription>
+      </CardHeader>
+      <CardContent>
         {isPending ? (
           <p className="text-sm text-muted-foreground">{t("ops.map.loading")}</p>
         ) : (
@@ -58,7 +61,7 @@ export function StructureMapPanel({
             }}
           />
         )}
-      </div>
-    </section>
+      </CardContent>
+    </Card>
   );
 }
