@@ -135,14 +135,15 @@ export function LocaleTabsEditor<
     const row = rowFor(locale);
     const s = stateFor(locale);
     if (s === "missing")
-      return { label: adapter.labels.notTranslated, cls: "bg-secondary text-muted-foreground" };
+      return { label: adapter.labels.notTranslated, cls: "text-muted-foreground" };
     if (s === "stale")
-      return { label: adapter.labels.needsRefresh, cls: "bg-warn-soft text-[color:var(--warn)]" };
+      return { label: adapter.labels.needsRefresh, cls: "text-[color:var(--warn)]" };
     return {
       label: row?.manually_edited ? adapter.labels.manual : adapter.labels.upToDate,
-      cls: "bg-teal-soft text-teal-foreground",
+      cls: row?.manually_edited ? "text-primary" : "text-teal-foreground",
     };
   };
+
 
   const dirtyLocales = useMemo(
     () =>
