@@ -137,7 +137,7 @@ export function LocaleTabsEditor<
     if (s === "missing")
       return { label: adapter.labels.notTranslated, cls: "text-muted-foreground" };
     if (s === "stale")
-      return { label: adapter.labels.needsRefresh, cls: "text-[color:var(--warn)]" };
+      return { label: adapter.labels.needsRefresh, cls: "text-warn" };
     return {
       label: row?.manually_edited ? adapter.labels.manual : adapter.labels.upToDate,
       cls: row?.manually_edited ? "text-primary" : "text-teal-foreground",
@@ -218,7 +218,7 @@ export function LocaleTabsEditor<
               <span className="font-semibold text-foreground">
                 {adapter.sourceLanguage.toUpperCase()}
               </span>
-              <span className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+              <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-muted-foreground">
                 {adapter.labels.title}
               </span>
             </div>
@@ -268,7 +268,7 @@ export function LocaleTabsEditor<
                     >
                       {locale.toUpperCase()}
                     </span>
-                    <span className={`text-[10px] font-semibold ${badge.cls}`}>{badge.label}</span>
+                    <span className={`text-xs font-semibold ${badge.cls}`}>{badge.label}</span>
                   </button>
                   <button
                     type="button"
@@ -340,7 +340,7 @@ export function LocaleTabsEditor<
             {adapter.labels.discard ?? adapter.labels.close}
           </button>
           {isDirty ? (
-            <span className="text-center text-xs text-[color:var(--warn)]">
+            <span className="text-center text-xs text-warn">
               {adapter.labels.unsaved ?? ""}
             </span>
           ) : savedNote ? (
