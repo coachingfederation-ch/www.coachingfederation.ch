@@ -4066,6 +4066,107 @@ export type Database = {
           },
         ]
       }
+      member_engagement_campaigns: {
+        Row: {
+          copy: Json
+          created_at: string
+          daily_cap: number
+          key: string
+          mode: string
+          updated_at: string
+        }
+        Insert: {
+          copy?: Json
+          created_at?: string
+          daily_cap?: number
+          key: string
+          mode?: string
+          updated_at?: string
+        }
+        Update: {
+          copy?: Json
+          created_at?: string
+          daily_cap?: number
+          key?: string
+          mode?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      member_engagement_sends: {
+        Row: {
+          campaign_key: string
+          created_at: string
+          dedupe_key: string
+          error_message: string | null
+          id: string
+          member_id: string
+          released_at: string | null
+          sent_at: string | null
+          status: string
+          sync_run_id: string | null
+          trigger_details: Json
+          updated_at: string
+        }
+        Insert: {
+          campaign_key: string
+          created_at?: string
+          dedupe_key: string
+          error_message?: string | null
+          id?: string
+          member_id: string
+          released_at?: string | null
+          sent_at?: string | null
+          status?: string
+          sync_run_id?: string | null
+          trigger_details?: Json
+          updated_at?: string
+        }
+        Update: {
+          campaign_key?: string
+          created_at?: string
+          dedupe_key?: string
+          error_message?: string | null
+          id?: string
+          member_id?: string
+          released_at?: string | null
+          sent_at?: string | null
+          status?: string
+          sync_run_id?: string | null
+          trigger_details?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_engagement_sends_campaign_key_fkey"
+            columns: ["campaign_key"]
+            isOneToOne: false
+            referencedRelation: "member_engagement_campaigns"
+            referencedColumns: ["key"]
+          },
+          {
+            foreignKeyName: "member_engagement_sends_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "coach_directory_public"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "member_engagement_sends_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "member_engagement_sends_sync_run_id_fkey"
+            columns: ["sync_run_id"]
+            isOneToOne: false
+            referencedRelation: "member_sync_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       member_import_snapshots: {
         Row: {
           change_kind: string

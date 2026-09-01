@@ -22,6 +22,7 @@ import {
   BookOpen,
   Headset,
   Ticket,
+  Mail,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
@@ -52,6 +53,13 @@ const nav = [
     to: "/manage/guest-passes",
     key: "nav.guestPasses",
     icon: Ticket,
+    allowedRoles: ["membership", "administrator"],
+  },
+  // Lifecycle emails triggered by member sync — also Membership & Engagement.
+  {
+    to: "/manage/member-engagement",
+    key: "nav.memberEngagement",
+    icon: Mail,
     allowedRoles: ["membership", "administrator"],
   },
   { to: "/vocabularies", key: "nav.vocabularies", icon: ListTree, allowedRoles: PLATFORM_ADMIN },

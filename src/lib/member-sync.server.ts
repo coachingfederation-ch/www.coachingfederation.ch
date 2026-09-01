@@ -236,6 +236,29 @@ export async function runMemberSync(options: {
 
     await reconcileDirectoryVisibility(runId);
 
+    // Engagement emails are a consequence of the sync, never a precondition:
+    // a failure here is logged and the run still counts as succeeded.
+    try {
+      const { detectEngagementForRun } = await import("./member-engagement/detect.server");
+      const { queued } = await detectEngagementForRun(runId);
+      if (queued) {
+        await logEvent(runId, "engagement_queued", `Queued ${queued} engagement emails.`);
+      }
+      const { dispatchEngagementSends } = await import("./member-engagement/dispatch.server");
+      const dispatched = await dispatchEngagementSends();
+      const sent = Object.values(dispatched).reduce((total, row) => total + row.sent, 0);
+      if (sent) {
+        await logEvent(runId, "engagement_sent", `Sent ${sent} engagement emails.`);
+      }
+    } catch (engagementError) {
+      await logEvent(
+        runId,
+        "engagement_failed",
+        engagementError instanceof Error ? engagementError.message : String(engagementError),
+        { severity: "warning" },
+      );
+    }
+
     return await finish({
       status: "succeeded",
       feedCount: feed.length,
