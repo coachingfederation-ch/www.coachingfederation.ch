@@ -68,7 +68,7 @@ export function CommunityRing({
       <div className="hidden sm:block">
         <div className="flex flex-col items-center">
           {rows.map((row, i) => (
-            <div key={i} className={"flex justify-center gap-1.5 " + (i > 0 ? "-mt-[3.5%]" : "")}>
+            <div key={i} className={"flex justify-center gap-1 " + (i > 0 ? "-mt-[4%]" : "")}>
               {row.map((cell) =>
                 cell.kind === "name" ? (
                   <HexLabelTile key="name" className={TILE}>
