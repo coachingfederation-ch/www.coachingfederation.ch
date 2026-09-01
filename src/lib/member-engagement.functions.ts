@@ -32,7 +32,7 @@ export type EngagementSendRow = {
   memberId: string;
   memberName: string | null;
   status: EngagementSendStatus;
-  triggerDetails: Record<string, unknown>;
+  triggerDetails: Record<string, string | null>;
   errorMessage: string | null;
   releasedAt: string | null;
   sentAt: string | null;
@@ -151,7 +151,7 @@ export const listEngagementSends = createServerFn({ method: "POST" })
             memberId: row.member_id as string,
             memberName: member?.full_name ?? null,
             status: row.status as EngagementSendStatus,
-            triggerDetails: (row.trigger_details ?? {}) as Record<string, unknown>,
+            triggerDetails: (row.trigger_details ?? {}) as Record<string, string | null>,
             errorMessage: row.error_message as string | null,
             releasedAt: row.released_at as string | null,
             sentAt: row.sent_at as string | null,

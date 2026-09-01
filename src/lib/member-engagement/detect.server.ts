@@ -19,7 +19,7 @@ type PendingSend = {
   member_id: string;
   dedupe_key: string;
   sync_run_id: string;
-  trigger_details: Record<string, unknown>;
+  trigger_details: Record<string, string | null>;
 };
 
 /**
@@ -62,7 +62,9 @@ export async function detectEngagementForRun(runId: string): Promise<{ queued: n
         member_id: memberId,
         dedupe_key: `welcome_new_member:${memberId}`,
         sync_run_id: runId,
-        trigger_details: { cst_recno: payload["cst_recno"] ?? null },
+        trigger_details: {
+          cst_recno: typeof payload["cst_recno"] === "string" ? (payload["cst_recno"] as string) : null,
+        },
       });
       // A first import is not a credential upgrade, even when a credential is present.
       continue;
@@ -116,7 +118,7 @@ export async function detectEngagementForRun(runId: string): Promise<{ queued: n
 
   const { data: inserted, error: insertError } = await supabaseAdmin
     .from("member_engagement_sends")
-    .upsert(eligible, { onConflict: "dedupe_key", ignoreDuplicates: true })
+    .upsert(eligible as never, { onConflict: "dedupe_key", ignoreDuplicates: true })
     .select("id");
   if (insertError) throw insertError;
 

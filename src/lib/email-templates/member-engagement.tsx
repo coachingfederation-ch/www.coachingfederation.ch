@@ -54,7 +54,7 @@ const Email = ({ subject, heading, body, baseUrl }: MemberEngagementProps) => {
         <Container style={container}>
           <Section style={banner}>
             <Img
-              src={assetUrl(logoNegativeAsset.src, baseUrl)}
+              src={assetUrl(logoNegativeAsset.url, baseUrl)}
               alt="The Switzerland Chapter of ICF"
               width={150}
               height={56}
@@ -82,7 +82,7 @@ const Email = ({ subject, heading, body, baseUrl }: MemberEngagementProps) => {
 
           <Section style={footer}>
             <Img
-              src={assetUrl(logoWhiteAsset.src, baseUrl)}
+              src={assetUrl(logoWhiteAsset.url, baseUrl)}
               alt="The Switzerland Chapter of ICF"
               width={150}
               height={56}
