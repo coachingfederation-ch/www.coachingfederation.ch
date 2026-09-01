@@ -287,7 +287,19 @@ export function MemberEngagementPanel() {
                 </p>
               </div>
 
-              <div className="flex justify-end">
+              <div className="flex flex-wrap items-center justify-end gap-3">
+                <p className="mr-auto text-xs text-muted-foreground">
+                  Translations fill the DE, FR and IT tabs from the English copy. Review them,
+                  then save.
+                </p>
+                <Button variant="outline" onClick={translate} disabled={translating || !canTranslate}>
+                  {translating ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Languages className="mr-2 h-4 w-4" />
+                  )}
+                  Translate to DE, FR, IT
+                </Button>
                 <Button onClick={save} disabled={saving}>
                   {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                   Save campaign
