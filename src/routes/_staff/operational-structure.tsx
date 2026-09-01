@@ -59,6 +59,8 @@ function OperationalStructurePage() {
   const [roles, setRoles] = useState<Localized[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
+  // The community panel buffers its text edits; warn before switching away.
+  const communityDirty = useRef(false);
   const [members, setMembers] = useState<MemberOption[]>([]);
   const [search, setSearch] = useState("");
   const [newProject, setNewProject] = useState("");
@@ -302,6 +304,15 @@ function OperationalStructurePage() {
 
   const project = projects.find((p) => p.id === selected) ?? null;
 
+  const selectProject = (id: string) => {
+    if (id !== selected && communityDirty.current) {
+      const leave = window.confirm(t("ops.community.leaveDirty"));
+      if (!leave) return;
+      communityDirty.current = false;
+    }
+    setSelected(id);
+  };
+
   return (
     <Shell>
       <div className="mx-auto max-w-5xl px-10 py-10">
@@ -344,7 +355,7 @@ function OperationalStructurePage() {
             t={t}
             projects={projects}
             selected={selected}
-            setSelected={setSelected}
+            setSelected={selectProject}
             reordering={reordering}
             setReordering={setReordering}
             move={move}
@@ -361,6 +372,9 @@ function OperationalStructurePage() {
                 loadProjects={loadProjects}
                 translateLabels={translateLabels}
                 translating={translating}
+                onCommunityDirtyChange={(dirty) => {
+                  communityDirty.current = dirty;
+                }}
               />
 
               <RoleAssignmentEditor
