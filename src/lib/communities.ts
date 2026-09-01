@@ -22,6 +22,13 @@ export type CommunitySummary = {
   /** Localized language labels, e.g. ["Deutsch", "English"]. */
   languages: string[];
   isFeatured: boolean;
+  /** Optional feature image (signed URL or external link). */
+  coverImageUrl: string | null;
+  coverImageAlt: string | null;
+  /** "upload" | "url" | "unsplash" | "ai" — drives the AI disclosure badge. */
+  imageSource: string | null;
+  imageCreditName: string | null;
+  imageCreditUrl: string | null;
   memberCount: number;
   /** A few photos for the overview card preview. */
   preview: TeamMember[];
