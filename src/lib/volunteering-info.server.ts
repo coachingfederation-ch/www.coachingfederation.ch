@@ -70,7 +70,10 @@ export async function loadVolunteeringInfo(
       members: {
         full_name: string | null;
         email: string | null;
-        member_directory_profiles?: { contact_email_public: boolean }[] | null;
+        member_directory_profiles?:
+          | { contact_email_public: boolean }[]
+          | { contact_email_public: boolean }
+          | null;
       } | null;
       op_project_roles: {
         slug: string;
@@ -86,9 +89,10 @@ export async function loadVolunteeringInfo(
       if (!LEAD_SLUGS.includes(slug)) continue;
       const name = raw.members?.full_name?.trim();
       if (!name) continue;
-      const optedIn = (raw.members?.member_directory_profiles ?? []).some(
-        (p) => p.contact_email_public,
-      );
+      // PostgREST returns an object for a to-one embed and an array for to-many.
+      const embedded = raw.members?.member_directory_profiles;
+      const profiles = Array.isArray(embedded) ? embedded : embedded ? [embedded] : [];
+      const optedIn = profiles.some((p) => p.contact_email_public);
       if (!optedIn || !raw.members?.email) continue;
       director = {
         name,
