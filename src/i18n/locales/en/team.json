@@ -12,7 +12,8 @@
   "intro": "Our work is organised in projects: the board, the regional communities and a set of thematic teams. Filter by project to see who contributes where, and open a tile to read more.",
   "filters": {
     "all": "All",
-    "label": "Filter the team by project"
+    "label": "Filter the team by project",
+    "openCommunity": "Open community details"
   },
   "loading": "Loading the team…",
   "empty": "No team members in this project yet.",

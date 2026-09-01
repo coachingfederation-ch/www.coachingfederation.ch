@@ -12,7 +12,8 @@
   "intro": "Unsere Arbeit ist in Projekten organisiert: der Vorstand, die regionalen Communitys und verschiedene thematische Teams. Filtern Sie nach Projekt, um zu sehen, wer wo mitwirkt, und öffnen Sie eine Kachel, um mehr zu erfahren.",
   "filters": {
     "all": "Alle",
-    "label": "Team nach Projekt filtern"
+    "label": "Team nach Projekt filtern",
+    "openCommunity": "Community-Details öffnen"
   },
   "loading": "Team wird geladen…",
   "empty": "Noch keine Teammitglieder in diesem Projekt.",
