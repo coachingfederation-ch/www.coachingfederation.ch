@@ -1837,6 +1837,13 @@
       "projectTeamNote": "Time-boxed working group. Appears on the public team page only.",
       "community": "Local community",
       "communityNote": "Regional community. Also published on /communities."
+    },
+    "map": {
+      "title": "Structure map (read-only)",
+      "note": "Preview of the nested circle map on the public team page. It shows publicly visible volunteers only.",
+      "loading": "Loading the map…",
+      "show": "Structure map",
+      "hide": "Hide map"
     }
   },
   "governance": {

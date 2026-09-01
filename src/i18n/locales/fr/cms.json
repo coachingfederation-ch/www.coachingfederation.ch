@@ -1837,6 +1837,13 @@
       "projectTeamNote": "Groupe de travail à durée limitée. Apparaît uniquement sur la page publique de l'équipe.",
       "community": "Communauté locale",
       "communityNote": "Communauté régionale. Également publiée sur /communities."
+    },
+    "map": {
+      "title": "Carte de la structure (lecture seule)",
+      "note": "Aperçu de la carte à cercles imbriqués de la page équipe publique. Elle n’affiche que les bénévoles visibles publiquement.",
+      "loading": "Chargement de la carte…",
+      "show": "Carte de la structure",
+      "hide": "Masquer la carte"
     }
   },
   "governance": {

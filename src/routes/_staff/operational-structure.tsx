@@ -28,6 +28,7 @@ import {
 import { grantMemberRole, revokeMemberRole } from "@/lib/roles.functions";
 import { translateOpsLabels } from "@/lib/ops-label-translations.functions";
 import { ProjectGroupList } from "@/components/cms/ops/ProjectGroupList";
+import { StructureMapPanel } from "@/components/cms/ops/StructureMapPanel";
 import { ProjectForm } from "@/components/cms/ops/ProjectForm";
 import { RoleAssignmentEditor } from "@/components/cms/ops/RoleAssignmentEditor";
 import {
@@ -70,6 +71,8 @@ function OperationalStructurePage() {
   // and the /communities order. It is a rare action, so the arrows stay hidden
   // behind this toggle instead of dominating the list.
   const [reordering, setReordering] = useState(false);
+  // Read-only preview of the public nested-circle map.
+  const [showMap, setShowMap] = useState(false);
 
   const loadProjects = async () => {
     // `contact_email` is not granted to the browser roles (it is the private
@@ -320,6 +323,19 @@ function OperationalStructurePage() {
             {t("ops.addProject")}
           </button>
         </div>
+
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={() => setShowMap((v) => !v)}
+            className="rounded-full border border-border px-4 py-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground"
+          >
+            {showMap ? t("ops.map.hide") : t("ops.map.show")}
+          </button>
+        </div>
+        {showMap ? <StructureMapPanel t={t} projects={projects} /> : null}
+
+
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[260px_1fr]">
           <ProjectGroupList

@@ -1837,6 +1837,13 @@
       "projectTeamNote": "Zeitlich begrenzte Arbeitsgruppe. Erscheint nur auf der öffentlichen Team-Seite.",
       "community": "Lokale Community",
       "communityNote": "Regionale Community. Wird auch auf /communities veröffentlicht."
+    },
+    "map": {
+      "title": "Strukturkarte (schreibgeschützt)",
+      "note": "Vorschau der verschachtelten Kreiskarte auf der öffentlichen Teamseite. Sie zeigt nur öffentlich sichtbare Freiwillige.",
+      "loading": "Karte wird geladen…",
+      "show": "Strukturkarte",
+      "hide": "Karte ausblenden"
     }
   },
   "governance": {

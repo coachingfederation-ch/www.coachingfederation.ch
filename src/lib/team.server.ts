@@ -136,5 +136,5 @@ export function usedProjects(
   const used = new Set(members.flatMap((m) => m.assignments.map((a) => a.projectSlug)));
   return projects
     .filter((p) => used.has(p.slug))
-    .map((p) => ({ slug: p.slug, label: localizedName(p, locale) }));
+    .map((p) => ({ slug: p.slug, label: localizedName(p, locale), isCommunity: p.is_community }));
 }

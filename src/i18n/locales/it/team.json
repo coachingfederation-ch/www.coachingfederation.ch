@@ -27,5 +27,22 @@
     "title": "I volontari che fanno crescere il chapter",
     "body": "Membri del comitato, responsabili di comunità e team di progetto in tutto il Paese — tutti coach professionisti che dedicano il loro tempo alla professione.",
     "cta": "Incontra il team"
+  },
+  "view": {
+    "label": "Scegli come visualizzare il team",
+    "grid": "Persone",
+    "map": "Mappa della struttura"
+  },
+  "map": {
+    "title": "Mappa annidata della struttura operativa",
+    "root": "Il Capitolo Svizzero di ICF",
+    "breadcrumb": "Livello della mappa",
+    "hint": "Seleziona un cerchio per ingrandire, una persona per aprire la sua scheda e usa il percorso qui sopra per tornare indietro.",
+    "listView": "Mostra la stessa struttura come elenco",
+    "group": {
+      "organizational": "Team organizzativi",
+      "projectTeams": "Team di progetto",
+      "communities": "Comunità locali"
+    }
   }
 }

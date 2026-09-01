@@ -1837,6 +1837,13 @@
       "projectTeamNote": "Gruppo di lavoro a tempo determinato. Appare solo sulla pagina pubblica del team.",
       "community": "Community locale",
       "communityNote": "Community regionale. Pubblicata anche su /communities."
+    },
+    "map": {
+      "title": "Mappa della struttura (sola lettura)",
+      "note": "Anteprima della mappa a cerchi annidati della pagina pubblica del team. Mostra solo i volontari visibili pubblicamente.",
+      "loading": "Caricamento della mappa…",
+      "show": "Mappa della struttura",
+      "hide": "Nascondi mappa"
     }
   },
   "governance": {
