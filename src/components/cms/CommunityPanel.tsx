@@ -202,17 +202,24 @@ export function CommunityPanel({
     await onSaved();
   };
 
-  /** Pull the row back from the server and reset both buffer and baseline. */
-  const refetch = async () => {
-    const { data } = await supabase
+  /**
+   * Pull the readable columns back from the server and move both buffer and
+   * baseline. Merged rather than replaced, because `contact_email` is not in
+   * the readable set. Failures are surfaced — a silent return is what made an
+   * AI translation look like it had done nothing.
+   */
+  const refetch = async (): Promise<string | null> => {
+    const { data, error: err } = await supabase
       .from("op_projects")
-      .select(SELECT_COLUMNS)
+      .select(REFETCH_COLUMNS)
       .eq("id", project.id)
       .maybeSingle();
-    if (!data) return;
-    const fresh = data as unknown as CommunityFields;
-    setRow(fresh);
-    setSaved(fresh);
+    if (err) return err.message;
+    if (!data) return "Community not found";
+    const fresh = data as unknown as Partial<CommunityFields>;
+    setRow((prev) => ({ ...prev, ...fresh }));
+    setSaved((prev) => ({ ...prev, ...fresh }));
+    return null;
   };
 
   /** The Save CTA: writes only the buffered columns that actually changed. */
