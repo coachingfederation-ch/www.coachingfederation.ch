@@ -178,6 +178,29 @@ function EditorPage() {
     });
   };
 
+  // Paid AI call. The helper only uploads and signs the file; the patch below
+  // goes through the same autosave path as every other editor change.
+  const generateImage = async () => {
+    if (!article) return;
+    setUploadError(null);
+    setGeneratingImage(true);
+    try {
+      const result = await generateArticleImageFn({
+        data: { articleId: article.id, brief: imageBrief.trim() || undefined },
+      });
+      update({
+        featured_image_url: result.url,
+        image_source: "ai",
+        image_credit_name: null,
+        image_credit_url: null,
+      });
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setGeneratingImage(false);
+    }
+  };
+
   const toggleFeatured = async () => {
     if (!article) return;
     const next = !article.is_featured;
