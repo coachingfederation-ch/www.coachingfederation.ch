@@ -871,6 +871,7 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          kind: string
           locale: string
           name: string
           sent_at: string | null
@@ -884,6 +885,7 @@ export type Database = {
           created_at?: string
           email: string
           id?: string
+          kind?: string
           locale?: string
           name: string
           sent_at?: string | null
@@ -897,6 +899,7 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+          kind?: string
           locale?: string
           name?: string
           sent_at?: string | null
