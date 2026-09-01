@@ -123,8 +123,7 @@ export function TeamFilters({
           </button>
           {p.isCommunity ? (
             <LocaleLink
-              to="/communities/$slug"
-              params={{ slug: p.slug }}
+              to={`/communities/${p.slug}`}
               aria-label={`${t("team.filters.openCommunity")}: ${p.label}`}
               className="inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-xs font-semibold text-primary underline-offset-4 transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
