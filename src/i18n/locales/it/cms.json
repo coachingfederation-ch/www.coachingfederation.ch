@@ -2500,5 +2500,12 @@
     "thinking": "Sto pensando…",
     "error": "Qualcosa è andato storto. Riprova.",
     "disclaimer": "Spiega soltanto — non modifica nulla. Questa conversazione resta nel tuo browser."
+  },
+  "newsletterTranslations": {
+    "title": "Traduzioni",
+    "hint": "L'inglese è la fonte. Traduci il titolo, l'oggetto dell'e-mail e tutti i blocchi attivi, poi modificali a mano.",
+    "titleField": "Titolo dell'edizione",
+    "subjectField": "Oggetto dell'e-mail",
+    "contentField": "Contenuto"
   }
 }

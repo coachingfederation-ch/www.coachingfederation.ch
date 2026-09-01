@@ -2500,5 +2500,12 @@
     "thinking": "Réflexion…",
     "error": "Une erreur s'est produite. Merci de réessayer.",
     "disclaimer": "Explique seulement — ne modifie rien. Cette conversation reste dans votre navigateur."
+  },
+  "newsletterTranslations": {
+    "title": "Traductions",
+    "hint": "L'anglais est la source. Traduisez le titre, l'objet de l'e-mail et tous les blocs actifs, puis modifiez-les à la main.",
+    "titleField": "Titre de l'édition",
+    "subjectField": "Objet de l'e-mail",
+    "contentField": "Contenu"
   }
 }

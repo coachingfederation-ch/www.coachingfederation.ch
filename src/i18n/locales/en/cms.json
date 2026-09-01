@@ -2500,5 +2500,12 @@
     "thinking": "Thinking…",
     "error": "Something went wrong. Please try again.",
     "disclaimer": "Explains only — it cannot change anything. This conversation stays in your browser."
+  },
+  "newsletterTranslations": {
+    "title": "Translations",
+    "hint": "English is the source. Translate the edition title, the mail subject and every enabled block, then edit by hand.",
+    "titleField": "Edition title",
+    "subjectField": "Email subject",
+    "contentField": "Content"
   }
 }
