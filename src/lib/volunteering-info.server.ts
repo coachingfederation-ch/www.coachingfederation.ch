@@ -70,7 +70,10 @@ export async function loadVolunteeringInfo(
       members: {
         full_name: string | null;
         email: string | null;
-        member_directory_profiles?: { contact_email_public: boolean }[] | null;
+        member_directory_profiles?:
+          | { contact_email_public: boolean }[]
+          | { contact_email_public: boolean }
+          | null;
       } | null;
       op_project_roles: {
         slug: string;
