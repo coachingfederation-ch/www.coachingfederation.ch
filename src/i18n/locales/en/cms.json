@@ -250,7 +250,8 @@
       "availability": "Availability",
       "clientTypes": "Client Types",
       "experienceBands": "Experience bands",
-      "eventCategories": "Event categories"
+      "eventCategories": "Event categories",
+      "cadences": "Meeting cadences"
     }
   },
   "finder": {

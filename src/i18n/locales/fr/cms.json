@@ -250,7 +250,8 @@
       "availability": "Disponibilité",
       "clientTypes": "Types de clients",
       "experienceBands": "Niveaux d'expérience",
-      "eventCategories": "Catégories d'événements"
+      "eventCategories": "Catégories d'événements",
+      "cadences": "Rythmes de rencontre"
     }
   },
   "finder": {
