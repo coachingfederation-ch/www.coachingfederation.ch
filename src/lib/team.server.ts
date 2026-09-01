@@ -48,10 +48,15 @@ export type PublicProjectRow = {
   contact_email: string | null;
   signup_url: string | null;
   language_slugs: string[] | null;
+  cover_image_url: string | null;
+  cover_image_alt: string | null;
+  image_source: string | null;
+  image_credit_name: string | null;
+  image_credit_url: string | null;
 };
 
 export const PUBLIC_PROJECT_COLUMNS =
-  "id, slug, name, name_de, name_fr, name_it, sort_order, is_community, is_featured_community, description, description_de, description_fr, description_it, cadence_note, cadence_note_de, cadence_note_fr, cadence_note_it, contact_email, signup_url, language_slugs";
+  "id, slug, name, name_de, name_fr, name_it, sort_order, is_community, is_featured_community, description, description_de, description_fr, description_it, cadence_note, cadence_note_de, cadence_note_fr, cadence_note_it, contact_email, signup_url, language_slugs, cover_image_url, cover_image_alt, image_source, image_credit_name, image_credit_url";
 
 /** Every active project, in admin sort order. */
 export async function loadPublicProjects(): Promise<PublicProjectRow[]> {
