@@ -8,11 +8,7 @@
  * safely: every send carries a dedupe key and is inserted with `ignoreDuplicates`.
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import {
-  credentialRank,
-  isDormant,
-  type EngagementCampaignKey,
-} from "../member-engagement";
+import { credentialRank, isDormant, type EngagementCampaignKey } from "../member-engagement";
 
 type PendingSend = {
   campaign_key: EngagementCampaignKey;
@@ -63,7 +59,8 @@ export async function detectEngagementForRun(runId: string): Promise<{ queued: n
         dedupe_key: `welcome_new_member:${memberId}`,
         sync_run_id: runId,
         trigger_details: {
-          cst_recno: typeof payload["cst_recno"] === "string" ? (payload["cst_recno"] as string) : null,
+          cst_recno:
+            typeof payload["cst_recno"] === "string" ? (payload["cst_recno"] as string) : null,
         },
       });
       // A first import is not a credential upgrade, even when a credential is present.
@@ -71,9 +68,10 @@ export async function detectEngagementForRun(runId: string): Promise<{ queued: n
     }
 
     if (!changed.includes("credential_slug")) continue;
-    const to = typeof payload["credential_slug"] === "string"
-      ? (payload["credential_slug"] as string).toUpperCase()
-      : null;
+    const to =
+      typeof payload["credential_slug"] === "string"
+        ? (payload["credential_slug"] as string).toUpperCase()
+        : null;
     const from = await previousCredential(memberId, runId);
     // Only a forward move on the ACC → PCC → MCC ladder is congratulated.
     if (!to || credentialRank(to) < 0 || credentialRank(from) < 0) continue;
@@ -99,9 +97,10 @@ export async function detectEngagementForRun(runId: string): Promise<{ queued: n
     const memberId = event.member_id as string | null;
     if (!memberId) continue;
     const details = (event.details ?? {}) as Record<string, unknown>;
-    const deletionAt = typeof details["scheduled_deletion_at"] === "string"
-      ? (details["scheduled_deletion_at"] as string)
-      : null;
+    const deletionAt =
+      typeof details["scheduled_deletion_at"] === "string"
+        ? (details["scheduled_deletion_at"] as string)
+        : null;
     sends.push({
       campaign_key: "grace_reengagement",
       member_id: memberId,

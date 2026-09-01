@@ -99,10 +99,7 @@ export const listEngagementSends = createServerFn({ method: "POST" })
       .parse(input ?? {}),
   )
   .handler(
-    async ({
-      data,
-      context,
-    }): Promise<{ rows: EngagementSendRow[]; stats: EngagementStats }> => {
+    async ({ data, context }): Promise<{ rows: EngagementSendRow[]; stats: EngagementStats }> => {
       const { assertMembership } = await import("./authz");
       await assertMembership(context);
 

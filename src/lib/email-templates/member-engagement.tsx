@@ -100,7 +100,8 @@ const Email = ({ subject, heading, body, baseUrl }: MemberEngagementProps) => {
 
 export const template = {
   component: Email,
-  subject: (data: EmailTemplateData) => (data["subject"] as string) || "The Switzerland Chapter of ICF",
+  subject: (data: EmailTemplateData) =>
+    (data["subject"] as string) || "The Switzerland Chapter of ICF",
   displayName: "Member engagement",
   previewData: {
     subject: "Welcome to The Switzerland Chapter of ICF",

@@ -155,10 +155,7 @@ export function MemberEngagementPanel() {
     }
   };
 
-  const act = async (
-    action: "release" | "cancel" | "dispatch",
-    ids: string[] = pendingIds,
-  ) => {
+  const act = async (action: "release" | "cancel" | "dispatch", ids: string[] = pendingIds) => {
     try {
       if (action === "release") {
         const { released } = await releaseEngagementSends({ data: { ids } });
@@ -229,9 +226,7 @@ export function MemberEngagementPanel() {
                   <Label>Sending mode</Label>
                   <Select
                     value={draft.mode}
-                    onValueChange={(value) =>
-                      setDraft({ ...draft, mode: value as EngagementMode })
-                    }
+                    onValueChange={(value) => setDraft({ ...draft, mode: value as EngagementMode })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -346,8 +341,7 @@ export function MemberEngagementPanel() {
                   <TableRow key={row.id}>
                     <TableCell>{row.memberName ?? "—"}</TableCell>
                     <TableCell>
-                      {CAMPAIGN_LABELS[row.campaignKey as EngagementCampaignKey] ??
-                        row.campaignKey}
+                      {CAMPAIGN_LABELS[row.campaignKey as EngagementCampaignKey] ?? row.campaignKey}
                     </TableCell>
                     <TableCell>
                       <Badge variant={row.status === "failed" ? "destructive" : "secondary"}>

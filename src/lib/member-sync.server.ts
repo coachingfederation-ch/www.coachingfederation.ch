@@ -259,8 +259,6 @@ export async function runMemberSync(options: {
       );
     }
 
-
-
     return await finish({
       status: "succeeded",
       feedCount: feed.length,
