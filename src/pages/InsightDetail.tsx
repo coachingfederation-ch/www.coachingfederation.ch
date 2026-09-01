@@ -15,6 +15,7 @@ import {
   tileFor,
   type PublicArticle,
 } from "@/lib/articles";
+import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
 import { LocaleLink, useI18n } from "@/i18n";
 import { localizePath, SITE_URL } from "@/i18n/config";
 import { ShareInline, ShareBlock } from "@/components/share-buttons";
@@ -114,6 +115,10 @@ export default function InsightDetailPage({ article }: { article: DetailArticle 
           )}
           {placedMarks ? (
             <HeroMarks marks={placedMarks} placement={HERO_ARTICLE_PLACEMENT} />
+          ) : null}
+          {article.featured_image_url &&
+          (article as { image_source?: string | null }).image_source === "ai" ? (
+            <AiBadge className="absolute bottom-3 left-3" />
           ) : null}
         </div>
         {article.featured_image_url && article.image_credit_name ? (

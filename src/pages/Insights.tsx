@@ -4,7 +4,7 @@
  * the locale-prefixed equivalent in src/routes/$locale/insights.index.tsx.
  */
 import { Link } from "@tanstack/react-router";
-import { Button } from "@/design-system/icf-welcome-design-system-a835df";
+import { AiBadge, Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Mark } from "@/components/marks";
@@ -46,12 +46,17 @@ async function fetchCategories(): Promise<CategoryRow[]> {
 function CardVisual({ article, className }: { article: PublicArticle; className: string }) {
   if (article.featured_image_url) {
     return (
-      <img
-        src={article.featured_image_url}
-        alt=""
-        loading="lazy"
-        className={"w-full object-cover " + className}
-      />
+      <div className="relative">
+        <img
+          src={article.featured_image_url}
+          alt=""
+          loading="lazy"
+          className={"w-full object-cover " + className}
+        />
+        {article.image_source === "ai" ? (
+          <AiBadge className="absolute bottom-2 left-2" />
+        ) : null}
+      </div>
     );
   }
   const tile = tileFor(article.id);

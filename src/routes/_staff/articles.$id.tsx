@@ -11,6 +11,7 @@ import { ChevronLeft } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
 import { ArticleEditorPane } from "@/components/cms/ArticleEditorPane";
+import { generateArticleImageFn } from "@/lib/article-images.functions";
 import { ArticleMetaSidebar, StatusPill } from "@/components/cms/ArticleMetaSidebar";
 import {
   type ArticleLang,
@@ -73,6 +74,8 @@ function EditorPage() {
   const skipNextAutosave = useRef(true);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [imageBrief, setImageBrief] = useState("");
+  const [generatingImage, setGeneratingImage] = useState(false);
   const [featuredNote, setFeaturedNote] = useState<string | null>(null);
   const [unsplashOpen, setUnsplashOpen] = useState(false);
 
@@ -174,6 +177,29 @@ function EditorPage() {
       image_credit_name: null,
       image_credit_url: null,
     });
+  };
+
+  // Paid AI call. The helper only uploads and signs the file; the patch below
+  // goes through the same autosave path as every other editor change.
+  const generateImage = async () => {
+    if (!article) return;
+    setUploadError(null);
+    setGeneratingImage(true);
+    try {
+      const result = await generateArticleImageFn({
+        data: { articleId: article.id, brief: imageBrief.trim() || undefined },
+      });
+      update({
+        featured_image_url: result.url,
+        image_source: "ai",
+        image_credit_name: null,
+        image_credit_url: null,
+      });
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setGeneratingImage(false);
+    }
   };
 
   const toggleFeatured = async () => {
@@ -380,6 +406,10 @@ function EditorPage() {
           uploadImage={uploadImage}
           unsplashOpen={unsplashOpen}
           setUnsplashOpen={setUnsplashOpen}
+          imageBrief={imageBrief}
+          setImageBrief={setImageBrief}
+          generating={generatingImage}
+          generateImage={generateImage}
         />
 
         <ArticleMetaSidebar

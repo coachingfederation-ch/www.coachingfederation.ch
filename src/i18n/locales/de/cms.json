@@ -141,7 +141,10 @@
     "reviewNeedsPublisher": "Ein Konto mit Veröffentlichungsrechten muss diesen Artikel veröffentlichen.",
     "reviewSelfBlocked": "Du hast diesen Artikel erstellt — eine andere Person mit Publisher-Rolle muss ihn prüfen und veröffentlichen.",
     "publishFailed": "Diese Aktion wurde abgelehnt. Bitte lade die Seite neu und versuche es erneut.",
-    "statusUnchanged": "Der Artikelstatus wurde nicht geändert."
+    "statusUnchanged": "Der Artikelstatus wurde nicht geändert.",
+    "imageBrief": "Optionale Bildidee für die KI, z. B. Coaches im Gespräch in einem Café in Basel",
+    "imageGenerate": "Mit KI erzeugen",
+    "imageAiNote": "KI-generierte Bilder werden auf der Website immer entsprechend gekennzeichnet."
   },
   "translations": {
     "title": "Übersetzungen",
@@ -792,7 +795,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
+          "items": [
+            "Projekte leiten",
+            "Von ICFS für die Leitung von Initiativen anerkannt werden"
+          ]
         },
         "status": {
           "title": "Status",
