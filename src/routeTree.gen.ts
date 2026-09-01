@@ -56,6 +56,7 @@ import { Route as StaffRolesRouteImport } from './routes/_staff/roles'
 import { Route as StaffVocabulariesRouteImport } from './routes/_staff/vocabularies'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiContactAgentRouteImport } from './routes/api/contact-agent'
+import { Route as ApiEventProposalAgentRouteImport } from './routes/api/event-proposal-agent'
 import { Route as ApiStaffAssistantRouteImport } from './routes/api/staff-assistant'
 import { Route as AttendTokenRouteImport } from './routes/attend.$token'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
@@ -367,6 +368,11 @@ const ApiChatRoute = ApiChatRouteImport.update({
 const ApiContactAgentRoute = ApiContactAgentRouteImport.update({
   id: '/api/contact-agent',
   path: '/api/contact-agent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiEventProposalAgentRoute = ApiEventProposalAgentRouteImport.update({
+  id: '/api/event-proposal-agent',
+  path: '/api/event-proposal-agent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiStaffAssistantRoute = ApiStaffAssistantRouteImport.update({
@@ -812,6 +818,7 @@ export interface FileRoutesByFullPath {
   '/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
   '/api/contact-agent': typeof ApiContactAgentRoute
+  '/api/event-proposal-agent': typeof ApiEventProposalAgentRoute
   '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -931,6 +938,7 @@ export interface FileRoutesByTo {
   '/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
   '/api/contact-agent': typeof ApiContactAgentRoute
+  '/api/event-proposal-agent': typeof ApiEventProposalAgentRoute
   '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -1057,6 +1065,7 @@ export interface FileRoutesById {
   '/_staff/vocabularies': typeof StaffVocabulariesRoute
   '/api/chat': typeof ApiChatRoute
   '/api/contact-agent': typeof ApiContactAgentRoute
+  '/api/event-proposal-agent': typeof ApiEventProposalAgentRoute
   '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -1182,6 +1191,7 @@ export interface FileRouteTypes {
     | '/vocabularies'
     | '/api/chat'
     | '/api/contact-agent'
+    | '/api/event-proposal-agent'
     | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
@@ -1301,6 +1311,7 @@ export interface FileRouteTypes {
     | '/vocabularies'
     | '/api/chat'
     | '/api/contact-agent'
+    | '/api/event-proposal-agent'
     | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
@@ -1426,6 +1437,7 @@ export interface FileRouteTypes {
     | '/_staff/vocabularies'
     | '/api/chat'
     | '/api/contact-agent'
+    | '/api/event-proposal-agent'
     | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
@@ -1532,6 +1544,7 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiContactAgentRoute: typeof ApiContactAgentRoute
+  ApiEventProposalAgentRoute: typeof ApiEventProposalAgentRoute
   ApiStaffAssistantRoute: typeof ApiStaffAssistantRoute
   AttendTokenRoute: typeof AttendTokenRoute
   ClaimTokenRoute: typeof ClaimTokenRoute
@@ -1905,6 +1918,13 @@ declare module '@tanstack/react-router' {
       path: '/api/contact-agent'
       fullPath: '/api/contact-agent'
       preLoaderRoute: typeof ApiContactAgentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/event-proposal-agent': {
+      id: '/api/event-proposal-agent'
+      path: '/api/event-proposal-agent'
+      fullPath: '/api/event-proposal-agent'
+      preLoaderRoute: typeof ApiEventProposalAgentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/staff-assistant': {
@@ -2658,6 +2678,7 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiChatRoute: ApiChatRoute,
   ApiContactAgentRoute: ApiContactAgentRoute,
+  ApiEventProposalAgentRoute: ApiEventProposalAgentRoute,
   ApiStaffAssistantRoute: ApiStaffAssistantRoute,
   AttendTokenRoute: AttendTokenRoute,
   ClaimTokenRoute: ClaimTokenRoute,

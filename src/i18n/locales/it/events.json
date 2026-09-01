@@ -29,6 +29,43 @@
     "title": "Hai un evento da proporre?",
     "propose": "Proponi un evento"
   },
+  "propose": {
+    "empty": "Racconta la tua idea in una o due frasi — la mettiamo a fuoco insieme per una proposta che il nostro team programma possa valutare.",
+    "placeholder": "Descrivi la tua idea di evento…",
+    "thinking": "Sto pensando…",
+    "review": "Rivedi e invia",
+    "preparing": "Preparazione…",
+    "disclaimer": "Un assistente IA ti aiuta a formulare la proposta. Non viene inviato nulla finché non la rivedi e la confermi.",
+    "reviewTitle": "Rivedi la tua proposta",
+    "reviewLede": "Questo è ciò che riceverà il nostro team. Modifica quello che vuoi — inviamo la tua versione.",
+    "nameLabel": "Nome",
+    "namePlaceholder": "Il tuo nome",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "tua@email.ch",
+    "subjectLabel": "Oggetto",
+    "messageLabel": "Proposta",
+    "send": "Invia la proposta",
+    "sending": "Invio…",
+    "back": "Torna alla conversazione",
+    "doneTitle": "Controlla la tua casella di posta",
+    "doneBody": "Abbiamo inviato un link di conferma a {email}. Aprilo e la tua proposta arriva direttamente al nostro team.",
+    "doneHint": "Così nessuno può scriverci a tuo nome. Le proposte non confermate vengono cancellate dopo sette giorni.",
+    "privacy": "Trattiamo la tua proposta per risponderti. Leggi la nostra",
+    "suggestions": {
+      "workshop": "Un workshop per coach",
+      "community": "Un evento con la mia community locale",
+      "unsure": "Ho un'idea, ma è ancora abbozzata"
+    },
+    "errors": {
+      "chat": "Qualcosa è andato storto. Riprova.",
+      "draft": "Non siamo riusciti a preparare la proposta. Riprova.",
+      "empty": "Raccontaci prima qualcosa della tua idea.",
+      "required": "Inserisci nome, oggetto e proposta.",
+      "email": "Inserisci un indirizzo e-mail valido.",
+      "send": "Non siamo riusciti a inviare la proposta. Riprova oppure scrivi a office@coachingfederation.ch.",
+      "rateLimited": "Sono molti messaggi da questa connessione. Riprova più tardi."
+    }
+  },
   "tag": {
     "inPerson": "In presenza",
     "online": "Online",

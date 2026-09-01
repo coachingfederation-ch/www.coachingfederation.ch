@@ -28,6 +28,8 @@ function hashToken(token: string): string {
 }
 
 export type ContactSubmission = {
+  /** Which conversation produced this message — stored for the office's context. */
+  kind?: "contact" | "event_proposal";
   name: string;
   email: string;
   subject: string;
@@ -65,6 +67,7 @@ export async function createPendingEnquiry(
       subject: submission.subject.slice(0, 200),
       body: submission.body.slice(0, 8000),
       locale: submission.locale,
+      kind: submission.kind ?? "contact",
       status: "pending",
     })
     .select("id")

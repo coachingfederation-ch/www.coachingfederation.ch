@@ -7,6 +7,7 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Mark, type MarkName } from "@/components/marks";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SubscribeCalendarDialog } from "@/components/events/SubscribeCalendarDialog";
+import { EventProposalAgent } from "@/components/events/EventProposalAgent";
 import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { LocaleLink, useI18n } from "@/i18n";
 import {
@@ -512,9 +513,10 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
           <div className="mx-auto max-w-7xl px-8 py-20 text-center">
             <p className="eyebrow-accent">{t("events.cta.eyebrow")}</p>
             <h2 className="mx-auto mt-3 max-w-2xl display-lg">{t("events.cta.title")}</h2>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Button asChild variant="inverse" size="pill">
-                {/* Event proposals come in by email — the office triages them. */}
+            {/* The proposal is shaped in conversation; email stays as the fallback. */}
+            <EventProposalAgent />
+            <div className="mt-6 flex justify-center">
+              <Button asChild variant="inverse-ghost" size="pill">
                 <a href="mailto:office@coachingfederation.ch" target="_top">
                   {t("events.cta.propose")}
                 </a>

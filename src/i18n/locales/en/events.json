@@ -29,6 +29,43 @@
     "title": "Have an event to propose?",
     "propose": "Propose an event"
   },
+  "propose": {
+    "empty": "Tell us your idea in a sentence or two — we will shape it together into a proposal our programme team can review.",
+    "placeholder": "Describe your event idea…",
+    "thinking": "Thinking…",
+    "review": "Review and send",
+    "preparing": "Preparing…",
+    "disclaimer": "An AI assistant helps you shape the proposal. Nothing is sent until you review and confirm it.",
+    "reviewTitle": "Review your proposal",
+    "reviewLede": "This is what our team will receive. Edit anything you like — your version is what we send.",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "subjectLabel": "Subject",
+    "messageLabel": "Proposal",
+    "send": "Send proposal",
+    "sending": "Sending…",
+    "back": "Back to the conversation",
+    "doneTitle": "Check your inbox",
+    "doneBody": "We sent a confirmation link to {email}. Open it and your proposal goes straight to our team.",
+    "doneHint": "We do this so nobody can write to us in your name. Unconfirmed proposals are deleted after seven days.",
+    "privacy": "We process your proposal to reply to you. Read our",
+    "suggestions": {
+      "workshop": "A workshop for coaches",
+      "community": "An event with my local community",
+      "unsure": "I have an idea but it is still rough"
+    },
+    "errors": {
+      "chat": "Something went wrong. Please try again.",
+      "draft": "We could not prepare the proposal. Please try again.",
+      "empty": "Tell us a little about your idea first.",
+      "required": "Please fill in your name, a subject and the proposal.",
+      "email": "Please enter a valid email address.",
+      "send": "We could not send the proposal. Please try again, or write to office@coachingfederation.ch.",
+      "rateLimited": "That is a lot of messages from this connection. Please try again later."
+    }
+  },
   "tag": {
     "inPerson": "In-person",
     "online": "Online",
