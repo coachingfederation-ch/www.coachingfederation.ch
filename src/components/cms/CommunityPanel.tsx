@@ -385,11 +385,30 @@ export function CommunityPanel({
           <div className="grid gap-2 sm:grid-cols-2">
             <label className="text-xs font-semibold text-muted-foreground">
               {t("ops.community.cadence")}
-              <input
-                value={row.cadence_note ?? ""}
-                onChange={(e) => setRow((p) => ({ ...p, cadence_note: e.target.value }))}
+              <select
+                value={row.cadence_slug ?? ""}
+                onChange={(e) => {
+                  const next = e.target.value || null;
+                  // Saved straight away: the four localised notes are written
+                  // by the database from this choice, so the buffer would go
+                  // stale if we waited for the Save CTA.
+                  void (async () => {
+                    await savePatch({ cadence_slug: next });
+                    await refetch();
+                  })();
+                }}
                 className={INPUT + " mt-1 font-normal"}
-              />
+              >
+                <option value="">{t("ops.community.cadenceNone")}</option>
+                {cadences.map((c) => (
+                  <option key={c.slug} value={c.slug}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+              <span className="mt-1 block font-normal text-[11px] text-muted-foreground">
+                {t("ops.community.cadenceHint")}
+              </span>
             </label>
             <label className="text-xs font-semibold text-muted-foreground">
               {t("ops.community.contactEmail")}
