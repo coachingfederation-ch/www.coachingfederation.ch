@@ -8,7 +8,7 @@
  */
 import type { TeamMember } from "./team";
 
-/** Members shown in the ring around the community hexagon. */
+/** Members shown in the community honeycomb. */
 export const RING_MAX_MEMBERS = 12;
 
 export type CommunitySummary = {
@@ -39,21 +39,15 @@ export type CommunityDetail = Omit<CommunitySummary, "preview"> & {
 };
 
 /**
- * Ring members plus the overflow.
+ * Comb members plus the overflow.
  *
- * Every member up to `RING_MAX_MEMBERS` goes on the circle — including a lone
- * volunteer, who would otherwise disappear from the detail page and the About
- * preview. Only members beyond the cap fall into the overflow note.
+ * Every member up to `RING_MAX_MEMBERS` goes into the honeycomb — including a
+ * lone volunteer, who would otherwise disappear from the detail page and the
+ * About preview. Only members beyond the cap fall into the overflow note.
  */
 export function splitRing(members: TeamMember[]): { ring: TeamMember[]; overflow: TeamMember[] } {
   return {
     ring: members.slice(0, RING_MAX_MEMBERS),
     overflow: members.slice(RING_MAX_MEMBERS),
   };
-}
-
-/** Even placement on a circle, starting at the top and going clockwise. */
-export function ringPosition(index: number, total: number): { x: number; y: number } {
-  const angle = (index / Math.max(total, 1)) * Math.PI * 2 - Math.PI / 2;
-  return { x: Math.cos(angle), y: Math.sin(angle) };
 }

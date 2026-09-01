@@ -6,25 +6,24 @@
  */
 import { ArrowRight, MapPin, Users } from "lucide-react";
 import { CARD_SHADOW } from "@/components/site-chrome";
+import { HEX_CLIP, HexPhoto } from "@/components/hex-tile";
 import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
 import { LocaleLink, useI18n } from "@/i18n";
 import type { CommunitySummary } from "@/lib/communities";
 import type { TeamMember } from "@/lib/team";
 
+/** Small hexagon row — the card-scale echo of the community honeycomb. */
 function AvatarStack({ members }: { members: TeamMember[] }) {
   if (!members.length) return null;
   return (
-    <div className="flex -space-x-2" aria-hidden="true">
+    <div className="flex -space-x-1" aria-hidden="true">
       {members.map((m) => (
         <span
           key={m.memberId}
-          className="grid h-8 w-8 place-items-center overflow-hidden rounded-full bg-primary/10 text-[10px] font-bold text-primary ring-2 ring-card"
+          className="block h-9 w-9 overflow-hidden bg-primary/10 text-[10px]"
+          style={{ clipPath: HEX_CLIP }}
         >
-          {m.imageUrl ? (
-            <img src={m.imageUrl} alt="" loading="lazy" className="h-full w-full object-cover" />
-          ) : (
-            m.initials
-          )}
+          <HexPhoto member={m} textClass="text-[10px]" />
         </span>
       ))}
     </div>
