@@ -111,25 +111,27 @@ export function CoachProfileHero({
             {hasCta && (
               <div className="mt-6 flex flex-wrap gap-3">
                 {bookingUrl && (
-                  <a
-                    href={bookingUrl}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    onClick={() => trackGoal("Coach Contact", { channel: "booking" })}
-                    className="inline-flex h-11 items-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground"
-                  >
-                    {t("directory.detail.book")}
-                  </a>
+                  <Button asChild variant="pill" size="pill">
+                    <a
+                      href={bookingUrl}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      onClick={() => trackGoal("Coach Contact", { channel: "booking" })}
+                    >
+                      {t("directory.detail.book")}
+                    </a>
+                  </Button>
                 )}
                 {contactEmail && (
-                  <a
-                    href={`mailto:${contactEmail}`}
-                    target="_top"
-                    onClick={() => trackGoal("Coach Contact", { channel: "email" })}
-                    className="inline-flex h-11 items-center rounded-full border border-hero-foreground/40 px-5 text-sm font-semibold text-hero-foreground hover:bg-hero-foreground/10"
-                  >
-                    {t("directory.detail.message")}
-                  </a>
+                  <Button asChild variant="inverse-ghost" size="pill">
+                    <a
+                      href={`mailto:${contactEmail}`}
+                      target="_top"
+                      onClick={() => trackGoal("Coach Contact", { channel: "email" })}
+                    >
+                      {t("directory.detail.message")}
+                    </a>
+                  </Button>
                 )}
               </div>
             )}
