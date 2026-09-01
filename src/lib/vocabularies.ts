@@ -56,6 +56,7 @@ export const VOCAB_DESCRIPTORS: { table: VocabTable; key: string }[] = [
   { table: "cf_client_types", key: "clientTypes" },
   { table: "cf_experience_bands", key: "experienceBands" },
   { table: "cf_event_categories", key: "eventCategories" },
+  { table: "cf_cadences", key: "cadences" },
 ];
 
 /** Locale-aware label with a graceful fallback to the English name. */
