@@ -40,32 +40,38 @@
 
 ## Technical notes
 
-- `src/components/cms/CommunityPanel.tsx` — remove the locale cadence input and the
-  `cadence_note` branch of the `localeField` helper; add per-locale status/error.
-- `src/lib/community-translations.functions.ts` — remove `cadence_note` from the
-  select, prompt, parsed shape, update payload and the returned type.
-- `src/lib/communities.server.ts` — read `cadence_note` directly instead of via
-  `localizedText`.
-- One data statement (not a migration):
-  `update op_projects set cadence_note_de = null, cadence_note_fr = null,
-  cadence_note_it = null;`
-- The buffered-field list in the panel keeps working; the locale cadence keys just
-  stop being edited.
+- New `cf_cadences` table following the existing `cf_*` vocabulary shape (slug,
+  name, name_de/fr/it, sort_order, is_active) with the same grants, RLS policies
+  and admin-translation hook; registered in `src/lib/vocabularies.ts` and the
+  Vocabularies screen.
+- `op_projects` gains a `cadence_slug` column referencing the vocabulary; the
+  existing `cadence_note*` columns stay until the follow-up cleanup.
+- `src/components/cms/CommunityPanel.tsx` — cadence dropdown, locale cadence inputs
+  removed, per-locale status/error, and a buffer refresh after a translate run.
+- `src/lib/community-translations.functions.ts` — drop `cadence_note` from select,
+  prompt, parsed shape, update payload and returned type.
+- `src/lib/communities.server.ts`, `communities.ts`, `member-home.server.ts`,
+  `team.server.ts` — resolve the cadence label from the vocabulary per locale.
+- Two data statements: seed the five cadence entries, and backfill `cadence_slug`
+  from the current free-text values where they match.
 
 ## PR note
 
-- **Summary** — The per-language "Meeting cadence" field is removed from the
-  community translation blocks and from the AI translation payload; the AI
-  translate action gets a diagnosed fix and visible per-language feedback.
-- **Changes** — CMS community panel (UI + state), community translation server
-  function, public community read helper, per-locale error/success display.
-- **Backend / schema changes** — No schema change. One data update clearing the
-  three translated cadence columns.
-- **Testing & verification** — Switch between two communities, translate into DE,
-  FR and IT, confirm the description arrives and no cadence input is present;
-  confirm the public community page still shows the cadence line in all four
-  languages.
-- **Risks & rollback** — Clearing the translated cadence values is not reversible
-  from the app; the values are short and re-enterable. Code changes revert cleanly.
-- **Follow-ups** — Dropping the unused `cadence_note_de/_fr/_it` columns once the
-  new behaviour has run for a while.
+- **Summary** — Meeting cadence moves from free text (repeated per language) to a
+  managed, auto-translated vocabulary, and the community translate action now
+  updates the editor immediately instead of only after a view change.
+- **Changes** — New cadence vocabulary (table, admin screen entry), community CMS
+  panel (dropdown, removed locale inputs, buffer refresh, per-locale feedback),
+  community translation server function, public community/member reads.
+- **Backend / schema changes** — New `cf_cadences` table with grants and RLS
+  matching the other vocabularies; new `op_projects.cadence_slug` column. Data:
+  seed five entries and backfill matching communities.
+- **Testing & verification** — Add/rename a cadence in Vocabularies and confirm
+  auto-translation; set a cadence on two communities and check the public pages in
+  DE / FR / IT / EN; translate a description and confirm the text appears without
+  leaving the screen.
+- **Risks & rollback** — Additive schema, so a code revert leaves the old text
+  fields intact. Unmatched cadence values need one manual pick per community.
+- **Follow-ups** — Dropping the `cadence_note*` columns once the new field is in
+  use everywhere.
+
