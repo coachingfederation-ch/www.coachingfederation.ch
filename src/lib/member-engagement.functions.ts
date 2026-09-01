@@ -239,7 +239,10 @@ export const translateEngagementCopy = createServerFn({ method: "POST" })
       .object({
         subject: z.string().min(1).max(200),
         body: z.string().min(1).max(8000),
-        locales: z.array(z.enum(["de", "fr", "it"])).min(1).max(3),
+        locales: z
+          .array(z.enum(["de", "fr", "it"]))
+          .min(1)
+          .max(3),
       })
       .parse(input),
   )
@@ -282,7 +285,8 @@ export const translateEngagementCopy = createServerFn({ method: "POST" })
         }),
       });
 
-      if (response.status === 429) throw new Error("Rate limit reached — please try again shortly.");
+      if (response.status === 429)
+        throw new Error("Rate limit reached — please try again shortly.");
       if (response.status === 402)
         throw new Error("AI credits exhausted — please top up the workspace.");
       if (!response.ok) throw new Error(`Translation service error (${response.status})`);

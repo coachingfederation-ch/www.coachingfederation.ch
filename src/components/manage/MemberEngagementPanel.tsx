@@ -6,7 +6,7 @@
  * written on Save, so switching campaigns can never clobber unsaved text.
  */
 import { useEffect, useMemo, useState } from "react";
-import { Loader2, Mail, Send, Check, X } from "lucide-react";
+import { Loader2, Mail, Send, Check, X, Languages } from "lucide-react";
 import { toast } from "sonner";
 import {
   Badge,
@@ -49,6 +49,7 @@ import {
   releaseEngagementSends,
   runEngagementDispatch,
   saveEngagementCampaign,
+  translateEngagementCopy,
   type EngagementSendRow,
   type EngagementStats,
 } from "@/lib/member-engagement.functions";
@@ -80,6 +81,7 @@ export function MemberEngagementPanel() {
   const [locale, setLocale] = useState<EngagementLocale>("en");
   const [draft, setDraft] = useState<EngagementCampaign | null>(null);
   const [saving, setSaving] = useState(false);
+  const [translating, setTranslating] = useState(false);
 
   const [sends, setSends] = useState<EngagementSendRow[]>([]);
   const [stats, setStats] = useState<EngagementStats | null>(null);
@@ -130,6 +132,32 @@ export function MemberEngagementPanel() {
           }
         : current,
     );
+  };
+
+  const englishCopy = draft?.copy.en;
+  const canTranslate = Boolean(englishCopy?.subject?.trim() && englishCopy?.body?.trim());
+
+  /** Translates the English copy into the other chapter languages, into the draft only. */
+  const translate = async () => {
+    if (!draft || !englishCopy) return;
+    setTranslating(true);
+    try {
+      const result = await translateEngagementCopy({
+        data: {
+          subject: englishCopy.subject,
+          body: englishCopy.body,
+          locales: ["de", "fr", "it"],
+        },
+      });
+      setDraft((current) =>
+        current ? { ...current, copy: { ...current.copy, ...result } } : current,
+      );
+      toast.success("Translated — review the DE, FR and IT tabs, then save");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not translate the copy");
+    } finally {
+      setTranslating(false);
+    }
   };
 
   const save = async () => {
@@ -289,10 +317,14 @@ export function MemberEngagementPanel() {
 
               <div className="flex flex-wrap items-center justify-end gap-3">
                 <p className="mr-auto text-xs text-muted-foreground">
-                  Translations fill the DE, FR and IT tabs from the English copy. Review them,
-                  then save.
+                  Translations fill the DE, FR and IT tabs from the English copy. Review them, then
+                  save.
                 </p>
-                <Button variant="outline" onClick={translate} disabled={translating || !canTranslate}>
+                <Button
+                  variant="outline"
+                  onClick={translate}
+                  disabled={translating || !canTranslate}
+                >
                   {translating ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   ) : (
