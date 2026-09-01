@@ -48,9 +48,8 @@ export const Route = createFileRoute("/api/event-proposal-agent")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const { checkRateLimit, clientIp, rateLimitResponse } = await import(
-          "@/lib/rate-limit.server"
-        );
+        const { checkRateLimit, clientIp, rateLimitResponse } =
+          await import("@/lib/rate-limit.server");
 
         // Anonymous and gateway-billed, so the cap is per host — its own key, so
         // it can never exhaust the contact conversation's budget.

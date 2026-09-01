@@ -169,9 +169,7 @@ export function EnquiryAgentPanel({
         setStage("done");
         return;
       }
-      setProblem(
-        result.status === "rate_limited" ? tp("errors.rateLimited") : tp("errors.send"),
-      );
+      setProblem(result.status === "rate_limited" ? tp("errors.rateLimited") : tp("errors.send"));
     } catch {
       setProblem(tp("errors.send"));
     } finally {
@@ -180,7 +178,9 @@ export function EnquiryAgentPanel({
   };
 
   return (
-    <div className={cn("rounded-3xl border border-border bg-background text-foreground", className)}>
+    <div
+      className={cn("rounded-3xl border border-border bg-background text-foreground", className)}
+    >
       {stage === "chat" && (
         <div className="flex h-[32rem] flex-col">
           <Conversation className="flex-1">

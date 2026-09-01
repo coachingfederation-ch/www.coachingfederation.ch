@@ -523,7 +523,6 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                 {t("events.cta.propose")}
               </a>
             </p>
-
           </div>
         </section>
       </main>

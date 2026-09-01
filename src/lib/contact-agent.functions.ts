@@ -49,7 +49,10 @@ const SUMMARY_RULES = `- Summarise only what the visitor actually said. Never in
 - Return the visitor's name and email address exactly as they gave them. If one was never given, return an empty string for it.
 - Always write "The Switzerland Chapter of ICF", "ICF Credential" and "credentialed coach".`;
 
-function summarySystemPrompt(kind: z.infer<typeof kindSchema>, locale: z.infer<typeof localeSchema>) {
+function summarySystemPrompt(
+  kind: z.infer<typeof kindSchema>,
+  locale: z.infer<typeof localeSchema>,
+) {
   const language = LANGUAGE_NAMES[locale];
 
   if (kind === "event_proposal") {
@@ -81,10 +84,14 @@ export const draftContactSummary = createServerFn({ method: "POST" })
 
     const { checkRateLimit, clientIp } = await import("./rate-limit.server");
     const { getRequest } = await import("@tanstack/react-start/server");
-    const verdict = await checkRateLimit(data.kind === "event_proposal" ? "proposal-draft" : "contact-draft", `ip:${clientIp(getRequest())}`, [
-      { windowSeconds: 3_600, max: 12 },
-      { windowSeconds: 86_400, max: 40 },
-    ]);
+    const verdict = await checkRateLimit(
+      data.kind === "event_proposal" ? "proposal-draft" : "contact-draft",
+      `ip:${clientIp(getRequest())}`,
+      [
+        { windowSeconds: 3_600, max: 12 },
+        { windowSeconds: 86_400, max: 40 },
+      ],
+    );
     if (!verdict.allowed) return empty;
 
     const apiKey = process.env["LOVABLE_API_KEY"];
@@ -148,10 +155,14 @@ export const submitContactEnquiry = createServerFn({ method: "POST" })
     const { checkRateLimit, clientIp } = await import("./rate-limit.server");
     const { getRequest } = await import("@tanstack/react-start/server");
     // Each submission sends outbound mail, so the cap is tighter than the chat.
-    const verdict = await checkRateLimit(data.kind === "event_proposal" ? "proposal-submit" : "contact-submit", `ip:${clientIp(getRequest())}`, [
-      { windowSeconds: 3_600, max: 3 },
-      { windowSeconds: 86_400, max: 10 },
-    ]);
+    const verdict = await checkRateLimit(
+      data.kind === "event_proposal" ? "proposal-submit" : "contact-submit",
+      `ip:${clientIp(getRequest())}`,
+      [
+        { windowSeconds: 3_600, max: 3 },
+        { windowSeconds: 86_400, max: 10 },
+      ],
+    );
     if (!verdict.allowed) return { status: "rate_limited" };
 
     const { createPendingEnquiry, isPlausibleEmail } = await import("./contact-agent.server");
@@ -165,7 +176,9 @@ export const submitContactEnquiry = createServerFn({ method: "POST" })
       locale: data.locale,
       kind: data.kind,
     });
-    return { status: result.outcome === "verification_sent" ? "verification_sent" : result.outcome };
+    return {
+      status: result.outcome === "verification_sent" ? "verification_sent" : result.outcome,
+    };
   });
 
 /** Consumes the one-time link from the visitor's inbox and delivers the message. */
