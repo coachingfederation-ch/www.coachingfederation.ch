@@ -22,6 +22,7 @@ import {
   BookOpen,
   Headset,
   Ticket,
+  Mail,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
