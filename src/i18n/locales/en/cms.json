@@ -1825,13 +1825,16 @@
     "reorder": "Reorder",
     "reorderHint": "Order controls how projects and communities appear on the public team and communities pages.",
     "group": {
-      "general": "General projects",
+      "general": "Organizational teams",
+      "projectTeams": "Project teams",
       "communities": "Local communities"
     },
     "type": {
-      "legend": "Project type",
-      "general": "General project",
-      "generalNote": "Committee or working group. Appears on the public team page only.",
+      "legend": "Structure type",
+      "general": "Organizational Team",
+      "generalNote": "Standing committee or board function. Appears on the public team page only.",
+      "projectTeam": "Project Team",
+      "projectTeamNote": "Time-boxed working group. Appears on the public team page only.",
       "community": "Local community",
       "communityNote": "Regional community. Also published on /communities."
     }
