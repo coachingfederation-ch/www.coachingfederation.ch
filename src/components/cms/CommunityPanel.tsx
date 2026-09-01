@@ -10,7 +10,7 @@
  * Writes go through the caller's RLS-scoped client; the "admins manage
  * op_projects" policy remains the real boundary.
  */
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Image as ImageIcon, Languages, Loader2, Sparkles, Upload, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
@@ -123,10 +123,14 @@ export function CommunityPanel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project.id]);
 
+  // Keep the callback in a ref so an inline parent arrow does not re-fire the
+  // notification on every render.
+  const dirtyCb = useRef(onDirtyChange);
+  dirtyCb.current = onDirtyChange;
   useEffect(() => {
-    onDirtyChange?.(dirty);
-    return () => onDirtyChange?.(false);
-  }, [dirty, onDirtyChange]);
+    dirtyCb.current?.(dirty);
+    return () => dirtyCb.current?.(false);
+  }, [dirty]);
 
 
   useEffect(() => {
