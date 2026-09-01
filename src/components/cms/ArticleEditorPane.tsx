@@ -3,7 +3,8 @@
  * fields, featured image controls, and the markdown body editor.
  * Extracted from articles.$id.tsx to keep the route file focused on wiring.
  */
-import { Image as ImageIcon, Upload, X } from "lucide-react";
+import { Image as ImageIcon, Loader2, Sparkles, Upload, X } from "lucide-react";
+import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import { UnsplashPicker } from "@/components/cms/UnsplashPicker";
 import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
@@ -63,6 +64,10 @@ export function ArticleEditorPane({
   uploadImage,
   unsplashOpen,
   setUnsplashOpen,
+  imageBrief,
+  setImageBrief,
+  generating,
+  generateImage,
 }: {
   article: Article;
   languageLocked: boolean;
@@ -74,6 +79,10 @@ export function ArticleEditorPane({
   uploadImage: (file: File) => Promise<void>;
   unsplashOpen: boolean;
   setUnsplashOpen: (open: boolean) => void;
+  imageBrief: string;
+  setImageBrief: (value: string) => void;
+  generating: boolean;
+  generateImage: () => Promise<void>;
 }) {
   return (
     <article>
@@ -128,8 +137,11 @@ export function ArticleEditorPane({
                 alt="Featured"
                 className="h-64 w-full object-cover"
               />
+              {article.image_source === "ai" ? (
+                <AiBadge className="absolute bottom-3 left-3" />
+              ) : null}
               <button
-                onClick={() => update({ featured_image_url: null })}
+                onClick={() => update({ featured_image_url: null, image_source: null })}
                 aria-label={t("editor.removeImage")}
                 className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-card/90 text-foreground shadow-[var(--shadow-soft)] hover:bg-card"
               >
@@ -193,6 +205,30 @@ export function ArticleEditorPane({
               {t("unsplash.button")}
             </button>
           </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Sparkles className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <input
+              aria-label={t("editor.imageBrief")}
+              value={imageBrief}
+              onChange={(e) => setImageBrief(e.target.value)}
+              placeholder={t("editor.imageBrief")}
+              className="min-w-40 flex-1 rounded-xl border border-border bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/20"
+            />
+            <button
+              type="button"
+              onClick={() => void generateImage()}
+              disabled={generating}
+              className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-secondary disabled:opacity-50"
+            >
+              {generating ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Sparkles className="h-4 w-4" />
+              )}
+              {t("editor.imageGenerate")}
+            </button>
+          </div>
+          <p className="text-xs text-muted-foreground">{t("editor.imageAiNote")}</p>
           {uploadError ? <p className="text-xs text-destructive">{uploadError}</p> : null}
         </div>
       </HeroDesignSection>

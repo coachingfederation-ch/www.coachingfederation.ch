@@ -73,6 +73,8 @@ function EditorPage() {
   const skipNextAutosave = useRef(true);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [imageBrief, setImageBrief] = useState("");
+  const [generatingImage, setGeneratingImage] = useState(false);
   const [featuredNote, setFeaturedNote] = useState<string | null>(null);
   const [unsplashOpen, setUnsplashOpen] = useState(false);
 
