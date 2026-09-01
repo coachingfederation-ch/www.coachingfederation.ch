@@ -20,6 +20,7 @@ import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
 import { ARTICLE_IMAGE_BUCKET, ARTICLE_IMAGE_TTL_SECONDS } from "@/lib/storage";
 import { translateCommunity } from "@/lib/community-translations.functions";
 import { generateCommunityImageFn } from "@/lib/community-images.functions";
+import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
 
 const INPUT =
   "w-full rounded-lg border border-border bg-card px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-ring/20";
