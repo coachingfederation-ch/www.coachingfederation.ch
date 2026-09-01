@@ -156,7 +156,7 @@
     "manual": "Modificato a mano",
     "translate": "Traduci",
     "refresh": "Aggiorna",
-    "translateAll": "Traduci tutto",
+    "translateAll": "Traduci tutte le lingue",
     "working": "Traduzione in corso…",
     "open": "Modifica",
     "close": "Chiudi",
@@ -166,7 +166,10 @@
     "excerptField": "Paragrafo introduttivo",
     "bodyField": "Testo principale",
     "saveTranslation": "Salva traduzione",
-    "savedTranslation": "Salvato"
+    "savedTranslation": "Salvato",
+    "discard": "Annulla",
+    "unsaved": "Modifiche non salvate",
+    "emptyState": "Traduci prima questa lingua."
   },
   "categories": {
     "title": "Categorie",
@@ -926,7 +929,11 @@
       "testimonial_quote": "Testimonianza",
       "testimonial_attribution": "Attribuzione testimonianza",
       "team_bio": "Descrizione del ruolo nel team"
-    }
+    },
+    "translateAll": "Traduci tutte le lingue",
+    "discard": "Annulla",
+    "unsaved": "Modifiche non salvate",
+    "emptyState": "Traduci prima questa lingua."
   },
   "roles": {
     "title": "Ruoli",
@@ -1771,7 +1778,11 @@
     "summaryField": "Sommario",
     "descriptionField": "Descrizione",
     "saveTranslation": "Salva traduzione",
-    "savedTranslation": "Salvato"
+    "savedTranslation": "Salvato",
+    "translateAll": "Traduci tutte le lingue",
+    "discard": "Annulla",
+    "unsaved": "Modifiche non salvate",
+    "emptyState": "Traduci prima questa lingua."
   },
   "ops": {
     "title": "Struttura operativa",
