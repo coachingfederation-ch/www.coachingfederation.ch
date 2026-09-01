@@ -12,7 +12,8 @@
   "intro": "Il nostro lavoro è organizzato in progetti: il comitato, le comunità regionali e un insieme di team tematici. Filtra per progetto per vedere chi contribuisce e dove, e apri una scheda per saperne di più.",
   "filters": {
     "all": "Tutti",
-    "label": "Filtra il team per progetto"
+    "label": "Filtra il team per progetto",
+    "openCommunity": "Apri i dettagli della comunità"
   },
   "loading": "Caricamento del team…",
   "empty": "Nessun membro del team ancora presente in questo progetto.",

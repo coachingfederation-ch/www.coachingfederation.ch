@@ -12,7 +12,8 @@
   "intro": "Notre travail est organisé par projets : le comité, les communautés régionales et des équipes thématiques. Filtrez par projet pour voir qui contribue où, et ouvrez une fiche pour en savoir plus.",
   "filters": {
     "all": "Tous",
-    "label": "Filtrer l'équipe par projet"
+    "label": "Filtrer l'équipe par projet",
+    "openCommunity": "Ouvrir les détails de la communauté"
   },
   "loading": "Chargement de l'équipe…",
   "empty": "Aucun membre de l'équipe dans ce projet pour le moment.",
