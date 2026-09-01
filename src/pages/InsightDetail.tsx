@@ -115,6 +115,10 @@ export default function InsightDetailPage({ article }: { article: DetailArticle 
           {placedMarks ? (
             <HeroMarks marks={placedMarks} placement={HERO_ARTICLE_PLACEMENT} />
           ) : null}
+          {article.featured_image_url &&
+          (article as { image_source?: string | null }).image_source === "ai" ? (
+            <AiBadge className="absolute bottom-3 left-3" />
+          ) : null}
         </div>
         {article.featured_image_url && article.image_credit_name ? (
           <p className="mt-2 text-xs text-muted-foreground">
