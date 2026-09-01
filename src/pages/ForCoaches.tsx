@@ -17,7 +17,6 @@ import { useI18n, LocaleLink } from "@/i18n";
 const ICF_MEMBERSHIP_URL =
   "https://coachingfederation.org/about/icf-membership/individual-membership/";
 
-
 export default function ForCoachesPage() {
   const { t, tList } = useI18n();
   const credentials = tList<{ level: string; hours: string; desc: string }>(
