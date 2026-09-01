@@ -54,6 +54,13 @@ const nav = [
     icon: Ticket,
     allowedRoles: ["membership", "administrator"],
   },
+  // Lifecycle emails triggered by member sync — also Membership & Engagement.
+  {
+    to: "/manage/member-engagement",
+    key: "nav.memberEngagement",
+    icon: Mail,
+    allowedRoles: ["membership", "administrator"],
+  },
   { to: "/vocabularies", key: "nav.vocabularies", icon: ListTree, allowedRoles: PLATFORM_ADMIN },
   {
     to: "/coach-finder",
