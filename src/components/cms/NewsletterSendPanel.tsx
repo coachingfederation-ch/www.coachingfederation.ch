@@ -39,6 +39,7 @@ import {
   sendNewsletterFn,
 } from "@/lib/newsletters.functions";
 import { isNewsletterSendable } from "@/lib/newsletters";
+import { LOCALE_ORDER, type Locale } from "@/i18n/config";
 
 function errorMessage(error: unknown): string | null {
   if (!error) return null;
@@ -63,10 +64,12 @@ export function NewsletterSendPanel({
   const push = useServerFn(pushNewsletterToMailerLiteFn);
   const send = useServerFn(sendNewsletterFn);
 
-  const stateKey = ["newsletter-send", id];
+  // One campaign per language: the whole panel is scoped to the active locale.
+  const [locale, setLocale] = useState<Locale>("en");
+  const stateKey = ["newsletter-send", id, locale];
   const { data: state } = useQuery({
     queryKey: stateKey,
-    queryFn: () => getState({ data: { id } }),
+    queryFn: () => getState({ data: { id, locale } }),
   });
   const { data: groupData } = useQuery({
     queryKey: ["mailerlite-groups"],
@@ -90,11 +93,11 @@ export function NewsletterSendPanel({
       subject: string;
       fromName: string;
       fromEmail: string;
-    }) => push({ data: { id, ...input } }),
+    }) => push({ data: { id, locale, ...input } }),
     onSuccess: invalidate,
   });
   const sendMutation = useMutation({
-    mutationFn: (scheduledFor: string | null) => send({ data: { id, scheduledFor } }),
+    mutationFn: (scheduledFor: string | null) => send({ data: { id, locale, scheduledFor } }),
     onSuccess: invalidate,
   });
 
@@ -129,6 +132,26 @@ export function NewsletterSendPanel({
         <CardTitle>Send with MailerLite</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Language edition">
+          {LOCALE_ORDER.map((code) => (
+            <Button
+              key={code}
+              variant={locale === code ? "default" : "outline"}
+              size="sm"
+              onClick={() => {
+                setLocale(code);
+                setGroupId(null);
+                setSubject(null);
+                setFromName(null);
+                setFromEmail(null);
+                setScheduleAt("");
+              }}
+            >
+              {code.toUpperCase()}
+            </Button>
+          ))}
+        </div>
+
         {!state.connected ? (
           <p className="text-sm text-muted-foreground">
             MailerLite is not connected yet. Add the API key to enable sending.

@@ -65,21 +65,22 @@ async function admin() {
 }
 
 /** Reads the send row, creating the empty one on first use. */
-async function ensureConfig(newsletterId: string): Promise<ConfigRow> {
+async function ensureConfig(newsletterId: string, locale: string): Promise<ConfigRow> {
   const db = await admin();
   const { data } = await db
     .from("newsletter_send_config")
     .select(SELECT)
     .eq("newsletter_id", newsletterId)
+    .eq("locale", locale)
     .maybeSingle();
   if (data) return data as ConfigRow;
 
   // Concurrent editors can both reach this point; ignore the duplicate and
   // re-read rather than failing the panel with a unique-violation.
   await db.from("newsletter_send_config").upsert(
-    { newsletter_id: newsletterId, provider: "mailerlite", is_stub: false },
+    { newsletter_id: newsletterId, locale, provider: "mailerlite", is_stub: false },
     {
-      onConflict: "newsletter_id",
+      onConflict: "newsletter_id,locale",
       ignoreDuplicates: true,
     },
   );
@@ -87,6 +88,7 @@ async function ensureConfig(newsletterId: string): Promise<ConfigRow> {
     .from("newsletter_send_config")
     .select(SELECT)
     .eq("newsletter_id", newsletterId)
+    .eq("locale", locale)
     .maybeSingle();
   return (created ?? {}) as ConfigRow;
 }
@@ -111,13 +113,17 @@ function toState(row: ConfigRow): SendState {
   };
 }
 
-export async function getSendState(newsletterId: string): Promise<SendState> {
-  return toState(await ensureConfig(newsletterId));
+export async function getSendState(newsletterId: string, locale = "en"): Promise<SendState> {
+  return toState(await ensureConfig(newsletterId, locale));
 }
 
-async function patch(newsletterId: string, values: Record<string, unknown>) {
+async function patch(newsletterId: string, locale: string, values: Record<string, unknown>) {
   const db = await admin();
-  await db.from("newsletter_send_config").update(values).eq("newsletter_id", newsletterId);
+  await db
+    .from("newsletter_send_config")
+    .update(values)
+    .eq("newsletter_id", newsletterId)
+    .eq("locale", locale);
 }
 
 /**
@@ -136,6 +142,8 @@ function assertAbsoluteImages(html: string) {
 
 export interface PushInput {
   newsletterId: string;
+  /** Language edition being pushed; each locale is its own campaign. */
+  locale: string;
   groupId: string;
   groupName: string;
   subject: string;
@@ -151,16 +159,16 @@ export async function pushCampaign(
   client: Client,
   input: PushInput,
 ): Promise<{ campaignId: string }> {
-  const current = await ensureConfig(input.newsletterId);
+  const current = await ensureConfig(input.newsletterId, input.locale);
   if (current.sent_at)
     throw new Error("This edition was already sent — it cannot be pushed again.");
 
-  const html = await renderNewsletterEmail(client, input.newsletterId);
+  const html = await renderNewsletterEmail(client, input.newsletterId, { locale: input.locale });
   assertAbsoluteImages(html);
 
   const ml = await import("./mailerlite.server");
   const campaign = {
-    name: `${input.subject} (${SITE_URL.replace(/^https?:\/\//, "")})`,
+    name: `${input.subject} [${input.locale.toUpperCase()}] (${SITE_URL.replace(/^https?:\/\//, "")})`,
     subject: input.subject,
     fromName: input.fromName,
     fromEmail: input.fromEmail,
@@ -177,11 +185,11 @@ export async function pushCampaign(
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : "MailerLite push failed";
-    await patch(input.newsletterId, { last_error: message });
+    await patch(input.newsletterId, input.locale, { last_error: message });
     throw new Error(message);
   }
 
-  await patch(input.newsletterId, {
+  await patch(input.newsletterId, input.locale, {
     campaign_id: campaignId,
     group_id: input.groupId,
     group_name: input.groupName,
@@ -198,8 +206,9 @@ export async function pushCampaign(
 export async function sendCampaign(
   newsletterId: string,
   scheduledFor: string | null,
+  locale = "en",
 ): Promise<SendState> {
-  const current = await ensureConfig(newsletterId);
+  const current = await ensureConfig(newsletterId, locale);
   if (!current.campaign_id) throw new Error("Push the edition to MailerLite first, then send it.");
   if (current.sent_at) throw new Error("This edition was already sent.");
 
@@ -212,14 +221,14 @@ export async function sendCampaign(
     await ml.sendCampaign(current.campaign_id, when);
   } catch (err) {
     const message = err instanceof Error ? err.message : "MailerLite send failed";
-    await patch(newsletterId, { last_error: message });
+    await patch(newsletterId, locale, { last_error: message });
     throw new Error(message);
   }
 
-  await patch(newsletterId, {
+  await patch(newsletterId, locale, {
     scheduled_for: when ? when.toISOString() : null,
     sent_at: new Date().toISOString(),
     last_error: null,
   });
-  return getSendState(newsletterId);
+  return getSendState(newsletterId, locale);
 }

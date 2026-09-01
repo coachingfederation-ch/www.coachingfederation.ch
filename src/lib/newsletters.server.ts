@@ -315,10 +315,50 @@ export async function deleteNewsletter(client: Client, id: string) {
 export async function renderNewsletterEmail(
   client: Client,
   id: string,
-  options: { unsubscribeUrl?: string } = {},
+  options: { unsubscribeUrl?: string; locale?: string } = {},
 ): Promise<string> {
   const { newsletter, blocks } = await loadNewsletterEditorData(client, id);
   if (!newsletter) throw new Error("newsletter not found");
+
+  const source = newsletter.language || "en";
+  const locale = options.locale || source;
+
+  // Translated editions overlay the source copy field by field: a missing
+  // translation must fall back to the source rather than render an empty
+  // block in a recipient's inbox.
+  let editionTitle = newsletter.title;
+  const overlay = new Map<string, { title: string; content: string; imageAlt: string | null }>();
+  if (locale !== source) {
+    const [editionRes, blockRes] = await Promise.all([
+      client
+        .from("newsletter_translations")
+        .select("title")
+        .eq("newsletter_id", id)
+        .eq("locale", locale)
+        .maybeSingle(),
+      client
+        .from("newsletter_block_translations")
+        .select("block_id, title, content, image_alt")
+        .eq("locale", locale)
+        .in(
+          "block_id",
+          blocks.map((b) => b.id),
+        ),
+    ]);
+    const editionRow = editionRes.data as { title: string | null } | null;
+    if (editionRow?.title) editionTitle = editionRow.title;
+    for (const row of (blockRes.data ?? []) as {
+      block_id: string;
+      title: string | null;
+      content: string | null;
+      image_alt: string | null;
+    }[])
+      overlay.set(row.block_id, {
+        title: row.title ?? "",
+        content: row.content ?? "",
+        imageAlt: row.image_alt,
+      });
+  }
 
   const [{ render }, { NewsletterEditionEmail }, { formatIssueDate }] = await Promise.all([
     import("@react-email/render"),
@@ -328,25 +368,28 @@ export async function renderNewsletterEmail(
 
   return render(
     NewsletterEditionEmail({
-      title: newsletter.title,
-      issueLabel: formatIssueDate(newsletter.issue_date, newsletter.language || "en"),
+      title: editionTitle,
+      issueLabel: formatIssueDate(newsletter.issue_date, locale),
       ...(options.unsubscribeUrl ? { unsubscribeUrl: options.unsubscribeUrl } : {}),
 
       blocks: blocks
         .filter((b) => b.enabled)
-        .map((b) => ({
-          id: b.id,
-          title: b.title,
-          content: b.content ?? "",
-          featuredImageUrl: b.featured_image_url,
-          imageAlt: b.image_alt,
-          imageSource: b.image_source,
-          imageCreditName: b.image_credit_name,
-          imageCreditUrl: b.image_credit_url,
-          imageAspect: b.image_aspect,
+        .map((b) => {
+          const translated = overlay.get(b.id);
+          return {
+            id: b.id,
+            title: translated?.title || b.title,
+            content: translated?.content || b.content || "",
+            featuredImageUrl: b.featured_image_url,
+            imageAlt: translated?.imageAlt ?? b.image_alt,
+            imageSource: b.image_source,
+            imageCreditName: b.image_credit_name,
+            imageCreditUrl: b.image_credit_url,
+            imageAspect: b.image_aspect,
 
-          sources: b.source_refs ?? [],
-        })),
+            sources: b.source_refs ?? [],
+          };
+        }),
     }),
   );
 }

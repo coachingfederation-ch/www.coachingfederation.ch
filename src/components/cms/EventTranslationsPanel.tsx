@@ -1,6 +1,6 @@
 /**
  * Event translations sidebar. Exports: EventTranslationsPanel.
- * Thin adapter around GenericTranslationsPanel, mirroring the article panel
+ * Thin adapter around LocaleTabsEditor, mirroring the article panel
  * but with title/summary/description fields (only markdown-free textareas).
  */
 import { useServerFn } from "@tanstack/react-start";
@@ -8,9 +8,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { translateEvent } from "@/lib/event-translations.functions";
 import { useCms } from "@/i18n/cms";
 import {
-  GenericTranslationsPanel,
+  LocaleTabsEditor,
   type TranslationRowBase,
-} from "@/components/cms/translations/GenericTranslationsPanel";
+} from "@/components/cms/translations/LocaleTabsEditor";
 
 interface EventTranslationRow extends TranslationRowBase {
   title: string;
@@ -32,7 +32,7 @@ export function EventTranslationsPanel({
   const runTranslate = useServerFn(translateEvent);
 
   return (
-    <GenericTranslationsPanel<EventTranslationRow, EventTranslationValues>
+    <LocaleTabsEditor<EventTranslationRow, EventTranslationValues>
       deps={[eventId]}
       adapter={{
         sourceLanguage,
@@ -96,6 +96,10 @@ export function EventTranslationsPanel({
           close: t("eventTranslations.close"),
           saveTranslation: t("eventTranslations.saveTranslation"),
           savedTranslation: t("eventTranslations.savedTranslation"),
+          translateAll: t("eventTranslations.translateAll"),
+          discard: t("eventTranslations.discard"),
+          unsaved: t("eventTranslations.unsaved"),
+          emptyState: t("eventTranslations.emptyState"),
         },
       }}
     />

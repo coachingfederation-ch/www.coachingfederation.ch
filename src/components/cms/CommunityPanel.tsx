@@ -110,7 +110,10 @@ export function CommunityPanel({
   const [languages, setLanguages] = useState<{ slug: string; name: string }[]>([]);
   const [regions, setRegions] = useState<{ id: string; name: string }[]>([]);
   const [regionIds, setRegionIds] = useState<string[]>([]);
-  const [busy, setBusy] = useState<Target | null>(null);
+  const [busy, setBusy] = useState<Target | "__all__" | null>(null);
+  /** Which target language the single description editor below is editing. */
+  const [activeLocale, setActiveLocale] = useState<Target>(TARGETS[0]);
+
   // Per-language feedback sits next to the button that triggered it; the
   // panel-level error banner is too far away to be noticed.
   const [localeNote, setLocaleNote] = useState<
@@ -355,6 +358,35 @@ export function CommunityPanel({
       setBusy(null);
     }
   };
+
+  /** Bulk action: translate the saved English description into every target. */
+  const translateAll = async () => {
+    setBusy("__all__");
+    setError(null);
+    setLocaleNote({});
+    try {
+      for (const locale of TARGETS) {
+        await translateCommunity({ data: { projectId: project.id, locale } });
+      }
+      const failure = await refetch();
+      if (failure) {
+        setError(failure);
+      } else {
+        setLocaleNote(
+          Object.fromEntries(
+            TARGETS.map((locale) => [locale, { ok: true, text: t("ops.community.translated") }]),
+          ),
+        );
+      }
+      await onSaved();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+
 
   const localeField = (field: "description", locale: Target) =>
     `${field}_${locale}` as keyof CommunityFields;
@@ -623,51 +655,80 @@ export function CommunityPanel({
 
           <div className="space-y-3 border-t border-border pt-4">
             <h3 className="text-xs font-bold">{t("ops.community.translations")}</h3>
-            {TARGETS.map((locale) => (
-              <div key={locale} className="rounded-xl border border-border p-3">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    {t(`ops.name_${locale}`)}
-                  </span>
+            {/* Language toggle: one chip per target language, the editor below
+                always edits the selected language of the same buffered row. */}
+            <div className="flex flex-wrap items-center gap-2">
+              {TARGETS.map((locale) => {
+                const selected = activeLocale === locale;
+                return (
                   <button
+                    key={locale}
                     type="button"
-                    onClick={() => void translate(locale)}
-                    disabled={busy !== null || dirty || !row.description}
-                    title={dirty ? t("ops.community.saveFirst") : undefined}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-[11px] font-semibold hover:bg-secondary disabled:opacity-50"
+                    aria-pressed={selected}
+                    onClick={() => setActiveLocale(locale)}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                      selected
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-card hover:bg-secondary"
+                    }`}
                   >
-                    {busy === locale ? (
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                    ) : (
-                      <Languages className="h-3 w-3" />
-                    )}
-                    {t("ops.community.translate")}
+                    {locale.toUpperCase()}
                   </button>
-                </div>
-                {localeNote[locale] ? (
-                  <p
-                    className={
-                      "mt-2 text-[11px] " +
-                      (localeNote[locale]!.ok ? "text-muted-foreground" : "text-destructive")
-                    }
-                  >
-                    {localeNote[locale]!.text}
-                  </p>
-                ) : null}
-                <div className="mt-2">
-                  <MarkdownEditor
-                    value={(row[localeField("description", locale)] as string | null) ?? ""}
-                    rows={8}
-                    language={locale}
-                    modes={["write", "preview"]}
-                    onChange={(next) =>
-                      setRow((p) => ({ ...p, [localeField("description", locale)]: next }))
-                    }
-                  />
-                </div>
+                );
+              })}
+              <div className="ml-auto flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => void translate(activeLocale)}
+                  disabled={busy !== null || dirty || !row.description}
+                  title={dirty ? t("ops.community.saveFirst") : undefined}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-[11px] font-semibold hover:bg-secondary disabled:opacity-50"
+                >
+                  {busy === activeLocale ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <Languages className="h-3 w-3" />
+                  )}
+                  {t("ops.community.translate")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void translateAll()}
+                  disabled={busy !== null || dirty || !row.description}
+                  title={dirty ? t("ops.community.saveFirst") : undefined}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold text-primary-foreground disabled:opacity-50"
+                >
+                  {busy === "__all__" ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <Languages className="h-3 w-3" />
+                  )}
+                  {t("translations.translateAll")}
+                </button>
               </div>
-            ))}
+            </div>
+            {localeNote[activeLocale] ? (
+              <p
+                className={
+                  "text-[11px] " +
+                  (localeNote[activeLocale]!.ok ? "text-muted-foreground" : "text-destructive")
+                }
+              >
+                {localeNote[activeLocale]!.text}
+              </p>
+            ) : null}
+            <MarkdownEditor
+              key={activeLocale}
+              value={(row[localeField("description", activeLocale)] as string | null) ?? ""}
+              rows={8}
+              language={activeLocale}
+              modes={["write", "preview"]}
+              onChange={(next) =>
+                setRow((p) => ({ ...p, [localeField("description", activeLocale)]: next }))
+              }
+            />
           </div>
+
         </div>
       }
       <UnsplashPicker

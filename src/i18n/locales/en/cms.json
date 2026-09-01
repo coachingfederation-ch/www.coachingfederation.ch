@@ -156,7 +156,7 @@
     "manual": "Hand-edited",
     "translate": "Translate",
     "refresh": "Refresh",
-    "translateAll": "Translate all",
+    "translateAll": "Translate all languages",
     "working": "Translating…",
     "open": "Edit",
     "close": "Close",
@@ -166,7 +166,10 @@
     "excerptField": "Lead paragraph",
     "bodyField": "Body",
     "saveTranslation": "Save translation",
-    "savedTranslation": "Saved"
+    "savedTranslation": "Saved",
+    "discard": "Discard",
+    "unsaved": "Unsaved changes",
+    "emptyState": "Translate this language first."
   },
   "categories": {
     "title": "Categories",
@@ -926,7 +929,11 @@
       "testimonial_quote": "Testimonial",
       "testimonial_attribution": "Testimonial attribution",
       "team_bio": "Team role description"
-    }
+    },
+    "translateAll": "Translate all languages",
+    "discard": "Discard",
+    "unsaved": "Unsaved changes",
+    "emptyState": "Translate this language first."
   },
   "roles": {
     "title": "Roles",
@@ -1771,7 +1778,11 @@
     "summaryField": "Summary",
     "descriptionField": "Description",
     "saveTranslation": "Save translation",
-    "savedTranslation": "Saved"
+    "savedTranslation": "Saved",
+    "translateAll": "Translate all languages",
+    "discard": "Discard",
+    "unsaved": "Unsaved changes",
+    "emptyState": "Translate this language first."
   },
   "ops": {
     "title": "Operational structure",
@@ -2489,5 +2500,12 @@
     "thinking": "Thinking…",
     "error": "Something went wrong. Please try again.",
     "disclaimer": "Explains only — it cannot change anything. This conversation stays in your browser."
+  },
+  "newsletterTranslations": {
+    "title": "Translations",
+    "hint": "English is the source. Translate the edition title, the mail subject and every enabled block, then edit by hand.",
+    "titleField": "Edition title",
+    "subjectField": "Email subject",
+    "contentField": "Content"
   }
 }

@@ -156,7 +156,7 @@
     "manual": "Manuell bearbeitet",
     "translate": "Übersetzen",
     "refresh": "Aktualisieren",
-    "translateAll": "Alle übersetzen",
+    "translateAll": "Alle Sprachen übersetzen",
     "working": "Wird übersetzt…",
     "open": "Bearbeiten",
     "close": "Schliessen",
@@ -166,7 +166,10 @@
     "excerptField": "Einleitungssatz",
     "bodyField": "Haupttext",
     "saveTranslation": "Übersetzung speichern",
-    "savedTranslation": "Gespeichert"
+    "savedTranslation": "Gespeichert",
+    "discard": "Verwerfen",
+    "unsaved": "Nicht gespeicherte Änderungen",
+    "emptyState": "Diese Sprache zuerst übersetzen."
   },
   "categories": {
     "title": "Kategorien",
@@ -926,7 +929,11 @@
       "testimonial_quote": "Kundenstimme",
       "testimonial_attribution": "Herkunftsangabe Kundenstimme",
       "team_bio": "Beschreibung der Team-Rolle"
-    }
+    },
+    "translateAll": "Alle Sprachen übersetzen",
+    "discard": "Verwerfen",
+    "unsaved": "Nicht gespeicherte Änderungen",
+    "emptyState": "Diese Sprache zuerst übersetzen."
   },
   "roles": {
     "title": "Rollen",
@@ -1771,7 +1778,11 @@
     "summaryField": "Zusammenfassung",
     "descriptionField": "Beschreibung",
     "saveTranslation": "Übersetzung speichern",
-    "savedTranslation": "Gespeichert"
+    "savedTranslation": "Gespeichert",
+    "translateAll": "Alle Sprachen übersetzen",
+    "discard": "Verwerfen",
+    "unsaved": "Nicht gespeicherte Änderungen",
+    "emptyState": "Diese Sprache zuerst übersetzen."
   },
   "ops": {
     "title": "Operationelle Struktur",
@@ -2489,5 +2500,12 @@
     "thinking": "Denkt nach…",
     "error": "Etwas ist schiefgelaufen. Bitte nochmals versuchen.",
     "disclaimer": "Erklärt nur — ändert nichts. Dieses Gespräch bleibt in deinem Browser."
+  },
+  "newsletterTranslations": {
+    "title": "Übersetzungen",
+    "hint": "Englisch ist die Quelle. Übersetze Titel, Betreff und alle aktiven Blöcke und bearbeite sie danach von Hand.",
+    "titleField": "Titel der Ausgabe",
+    "subjectField": "E-Mail-Betreff",
+    "contentField": "Inhalt"
   }
 }

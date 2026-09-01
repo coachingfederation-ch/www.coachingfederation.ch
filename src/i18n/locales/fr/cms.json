@@ -156,7 +156,7 @@
     "manual": "Édité à la main",
     "translate": "Traduire",
     "refresh": "Actualiser",
-    "translateAll": "Tout traduire",
+    "translateAll": "Traduire toutes les langues",
     "working": "Traduction en cours…",
     "open": "Éditer",
     "close": "Fermer",
@@ -166,7 +166,10 @@
     "excerptField": "Chapeau",
     "bodyField": "Corps",
     "saveTranslation": "Enregistrer la traduction",
-    "savedTranslation": "Enregistré"
+    "savedTranslation": "Enregistré",
+    "discard": "Annuler",
+    "unsaved": "Modifications non enregistrées",
+    "emptyState": "Traduisez d'abord cette langue."
   },
   "categories": {
     "title": "Catégories",
@@ -926,7 +929,11 @@
       "testimonial_quote": "Témoignage",
       "testimonial_attribution": "Attribution du témoignage",
       "team_bio": "Description du rôle dans l'équipe"
-    }
+    },
+    "translateAll": "Traduire toutes les langues",
+    "discard": "Annuler",
+    "unsaved": "Modifications non enregistrées",
+    "emptyState": "Traduisez d'abord cette langue."
   },
   "roles": {
     "title": "Rôles",
@@ -1771,7 +1778,11 @@
     "summaryField": "Résumé",
     "descriptionField": "Description",
     "saveTranslation": "Enregistrer la traduction",
-    "savedTranslation": "Enregistré"
+    "savedTranslation": "Enregistré",
+    "translateAll": "Traduire toutes les langues",
+    "discard": "Annuler",
+    "unsaved": "Modifications non enregistrées",
+    "emptyState": "Traduisez d'abord cette langue."
   },
   "ops": {
     "title": "Structure opérationnelle",
@@ -2489,5 +2500,12 @@
     "thinking": "Réflexion…",
     "error": "Une erreur s'est produite. Merci de réessayer.",
     "disclaimer": "Explique seulement — ne modifie rien. Cette conversation reste dans votre navigateur."
+  },
+  "newsletterTranslations": {
+    "title": "Traductions",
+    "hint": "L'anglais est la source. Traduisez le titre, l'objet de l'e-mail et tous les blocs actifs, puis modifiez-les à la main.",
+    "titleField": "Titre de l'édition",
+    "subjectField": "Objet de l'e-mail",
+    "contentField": "Contenu"
   }
 }
