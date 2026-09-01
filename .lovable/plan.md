@@ -1,69 +1,77 @@
-# Community translations: drop the cadence field, fix the AI translate action
+# Community cadence as a vocabulary, and a translate button that shows its result
 
 ## What's wrong
 
-1. **Meeting cadence appears inside each translation block.** Every language card
-   (DE / FR / IT) under a community currently shows a small "Meeting cadence" input
-   above the translated description, and the AI translation writes a translated
-   cadence note as well. The cadence is a short factual line ("Once a month") that
-   should be maintained once, in the main community fields — not per language.
-2. **"Translate with AI" appears to do nothing.** Confirmed so far: the buttons are
-   enabled on the live screen, and translated descriptions do exist for some
-   communities, so the wiring is not dead. The failure has not been reproduced yet,
-   and the error message the panel renders sits at the very top of the card — far
-   above the translation block — so a failing call looks like silence.
+1. **Meeting cadence is free text, repeated per language.** Every language card
+   (DE / FR / IT) under a community shows its own "Meeting cadence" input, and the
+   AI translation writes a translated cadence note too. Cadence is a fixed, small
+   set of values ("Monthly", "Quarterly"), so it should be picked from a managed
+   list — not typed once per language per community.
+2. **Translating does not update the screen.** The translated text is written
+   correctly, but the editor only sees it after leaving the community and coming
+   back. The panel keeps its own edit buffer, and the values it pulls back after a
+   translation run do not reach the visible fields, so the run looks like it failed.
 
 ## What will change
 
-### 1. Remove cadence from the translation flow
+### 1. Cadence becomes a managed vocabulary
 
-- Community panel: delete the per-language cadence input from each DE / FR / IT
-  block. The single "Meeting cadence" field in the main community fields stays.
-- Translation server function: drop the cadence note from the prompt, from the
-  expected JSON shape, and from the write-back, so a re-run no longer refills it.
-- Public rendering: the community pages fall back to the one language-neutral
-  cadence value instead of looking for a translated one.
-- Existing data: clear the stored `cadence_note_de / _fr / _it` values for all
-  communities so nothing stale is shown. The columns themselves stay in place for
-  now (removing them is a separate, riskier cleanup).
+- New "Cadences" list under Vocabularies, working exactly like the existing lists:
+  admins add, rename, reorder and deactivate entries, and each entry is
+  auto-translated into DE / FR / IT on creation (editable afterwards).
+- Seeded with Weekly, Bi-weekly, Monthly, Bi-monthly, Quarterly.
+- Community editor: the free-text cadence field becomes a dropdown of the active
+  cadence entries; the per-language cadence inputs disappear from the translation
+  blocks.
+- Public pages (community list, detail, member area) show the cadence in the
+  visitor's language straight from the vocabulary entry.
+- Translation server function: cadence is dropped from the prompt, the expected
+  shape and the write-back, so re-running a translation no longer refills it.
+- Existing free-text cadence values are mapped onto the matching new entries where
+  possible; anything unmatched is left blank for an admin to set.
 
-### 2. Make the translate action honest
+### 2. Translate updates the view immediately
 
-- Reproduce a translate click and read the server-function log to identify the real
-  cause (missing AI key, credits, model response, permissions). Fix whatever that
-  turns out to be.
-- Regardless of cause: move the error message next to the translate button of the
-  language it belongs to, and show a short success confirmation, so an editor can
-  see whether a run succeeded.
+- After a translation run, the panel refreshes its edit buffer from the freshly
+  written row so the translated description appears at once — no menu round trip.
+- Any error is shown next to the language it belongs to, with a short success
+  confirmation, instead of only at the top of the card.
+
 
 ## Technical notes
 
-- `src/components/cms/CommunityPanel.tsx` — remove the locale cadence input and the
-  `cadence_note` branch of the `localeField` helper; add per-locale status/error.
-- `src/lib/community-translations.functions.ts` — remove `cadence_note` from the
-  select, prompt, parsed shape, update payload and the returned type.
-- `src/lib/communities.server.ts` — read `cadence_note` directly instead of via
-  `localizedText`.
-- One data statement (not a migration):
-  `update op_projects set cadence_note_de = null, cadence_note_fr = null,
-  cadence_note_it = null;`
-- The buffered-field list in the panel keeps working; the locale cadence keys just
-  stop being edited.
+- New `cf_cadences` table following the existing `cf_*` vocabulary shape (slug,
+  name, name_de/fr/it, sort_order, is_active) with the same grants, RLS policies
+  and admin-translation hook; registered in `src/lib/vocabularies.ts` and the
+  Vocabularies screen.
+- `op_projects` gains a `cadence_slug` column referencing the vocabulary; the
+  existing `cadence_note*` columns stay until the follow-up cleanup.
+- `src/components/cms/CommunityPanel.tsx` — cadence dropdown, locale cadence inputs
+  removed, per-locale status/error, and a buffer refresh after a translate run.
+- `src/lib/community-translations.functions.ts` — drop `cadence_note` from select,
+  prompt, parsed shape, update payload and returned type.
+- `src/lib/communities.server.ts`, `communities.ts`, `member-home.server.ts`,
+  `team.server.ts` — resolve the cadence label from the vocabulary per locale.
+- Two data statements: seed the five cadence entries, and backfill `cadence_slug`
+  from the current free-text values where they match.
 
 ## PR note
 
-- **Summary** — The per-language "Meeting cadence" field is removed from the
-  community translation blocks and from the AI translation payload; the AI
-  translate action gets a diagnosed fix and visible per-language feedback.
-- **Changes** — CMS community panel (UI + state), community translation server
-  function, public community read helper, per-locale error/success display.
-- **Backend / schema changes** — No schema change. One data update clearing the
-  three translated cadence columns.
-- **Testing & verification** — Switch between two communities, translate into DE,
-  FR and IT, confirm the description arrives and no cadence input is present;
-  confirm the public community page still shows the cadence line in all four
-  languages.
-- **Risks & rollback** — Clearing the translated cadence values is not reversible
-  from the app; the values are short and re-enterable. Code changes revert cleanly.
-- **Follow-ups** — Dropping the unused `cadence_note_de/_fr/_it` columns once the
-  new behaviour has run for a while.
+- **Summary** — Meeting cadence moves from free text (repeated per language) to a
+  managed, auto-translated vocabulary, and the community translate action now
+  updates the editor immediately instead of only after a view change.
+- **Changes** — New cadence vocabulary (table, admin screen entry), community CMS
+  panel (dropdown, removed locale inputs, buffer refresh, per-locale feedback),
+  community translation server function, public community/member reads.
+- **Backend / schema changes** — New `cf_cadences` table with grants and RLS
+  matching the other vocabularies; new `op_projects.cadence_slug` column. Data:
+  seed five entries and backfill matching communities.
+- **Testing & verification** — Add/rename a cadence in Vocabularies and confirm
+  auto-translation; set a cadence on two communities and check the public pages in
+  DE / FR / IT / EN; translate a description and confirm the text appears without
+  leaving the screen.
+- **Risks & rollback** — Additive schema, so a code revert leaves the old text
+  fields intact. Unmatched cadence values need one manual pick per community.
+- **Follow-ups** — Dropping the `cadence_note*` columns once the new field is in
+  use everywhere.
+
