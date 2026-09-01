@@ -111,6 +111,7 @@ import { Route as ApiPublicLiveChatRouteImport } from './routes/api/public/live-
 import { Route as ApiPublicLiveChatPurgeRouteImport } from './routes/api/public/live-chat-purge'
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
 import { Route as ApiPublicNewsletterRefreshRouteImport } from './routes/api/public/newsletter-refresh'
+import { Route as ApiPublicOpStructureRouteImport } from './routes/api/public/op-structure'
 import { Route as ApiPublicRoleDirectoryRouteImport } from './routes/api/public/role-directory'
 import { Route as ApiPublicRoleGrantsArchiveRouteImport } from './routes/api/public/role-grants-archive'
 import { Route as ContactConfirmTokenRouteImport } from './routes/contact.confirm.$token'
@@ -651,6 +652,11 @@ const ApiPublicNewsletterRefreshRoute =
     path: '/api/public/newsletter-refresh',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicOpStructureRoute = ApiPublicOpStructureRouteImport.update({
+  id: '/api/public/op-structure',
+  path: '/api/public/op-structure',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicRoleDirectoryRoute = ApiPublicRoleDirectoryRouteImport.update({
   id: '/api/public/role-directory',
   path: '/api/public/role-directory',
@@ -868,6 +874,7 @@ export interface FileRoutesByFullPath {
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
+  '/api/public/op-structure': typeof ApiPublicOpStructureRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
   '/contact/confirm/$token': typeof ContactConfirmTokenRoute
@@ -988,6 +995,7 @@ export interface FileRoutesByTo {
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
+  '/api/public/op-structure': typeof ApiPublicOpStructureRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
   '/contact/confirm/$token': typeof ContactConfirmTokenRoute
@@ -1115,6 +1123,7 @@ export interface FileRoutesById {
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
+  '/api/public/op-structure': typeof ApiPublicOpStructureRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
   '/api/public/role-grants-archive': typeof ApiPublicRoleGrantsArchiveRoute
   '/contact/confirm/$token': typeof ContactConfirmTokenRoute
@@ -1241,6 +1250,7 @@ export interface FileRouteTypes {
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
     | '/api/public/newsletter-refresh'
+    | '/api/public/op-structure'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
     | '/contact/confirm/$token'
@@ -1361,6 +1371,7 @@ export interface FileRouteTypes {
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
     | '/api/public/newsletter-refresh'
+    | '/api/public/op-structure'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
     | '/contact/confirm/$token'
@@ -1487,6 +1498,7 @@ export interface FileRouteTypes {
     | '/api/public/live-chat-purge'
     | '/api/public/member-sync'
     | '/api/public/newsletter-refresh'
+    | '/api/public/op-structure'
     | '/api/public/role-directory'
     | '/api/public/role-grants-archive'
     | '/contact/confirm/$token'
@@ -1575,6 +1587,7 @@ export interface RootRouteChildren {
   ApiPublicLiveChatPurgeRoute: typeof ApiPublicLiveChatPurgeRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
   ApiPublicNewsletterRefreshRoute: typeof ApiPublicNewsletterRefreshRoute
+  ApiPublicOpStructureRoute: typeof ApiPublicOpStructureRoute
   ApiPublicRoleDirectoryRoute: typeof ApiPublicRoleDirectoryRoute
   ApiPublicRoleGrantsArchiveRoute: typeof ApiPublicRoleGrantsArchiveRoute
   ContactConfirmTokenRoute: typeof ContactConfirmTokenRoute
@@ -2305,6 +2318,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicNewsletterRefreshRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/op-structure': {
+      id: '/api/public/op-structure'
+      path: '/api/public/op-structure'
+      fullPath: '/api/public/op-structure'
+      preLoaderRoute: typeof ApiPublicOpStructureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/role-directory': {
       id: '/api/public/role-directory'
       path: '/api/public/role-directory'
@@ -2709,6 +2729,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicLiveChatPurgeRoute: ApiPublicLiveChatPurgeRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,
   ApiPublicNewsletterRefreshRoute: ApiPublicNewsletterRefreshRoute,
+  ApiPublicOpStructureRoute: ApiPublicOpStructureRoute,
   ApiPublicRoleDirectoryRoute: ApiPublicRoleDirectoryRoute,
   ApiPublicRoleGrantsArchiveRoute: ApiPublicRoleGrantsArchiveRoute,
   ContactConfirmTokenRoute: ContactConfirmTokenRoute,
