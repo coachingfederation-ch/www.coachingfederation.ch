@@ -16,7 +16,7 @@ import type { ProjectRow } from "@/components/cms/ops/types";
 /** Columns the operational-structure editor needs, including the private ones. */
 const PROJECT_COLUMNS =
   "id, slug, name, name_de, name_fr, name_it, sort_order, is_active," +
-  " is_community, is_featured_community, description, description_de, description_fr," +
+  " is_community, is_project_team, is_featured_community, description, description_de, description_fr," +
   " description_it, cadence_note, cadence_note_de, cadence_note_fr, cadence_note_it," +
   " contact_email, signup_url, language_slugs";
 

@@ -17,7 +17,7 @@ export type Localized = {
 import type { CommunityFields } from "@/components/cms/CommunityPanel";
 
 /** Projects carry the community fields too; roles never do. */
-export type ProjectRow = Localized & CommunityFields;
+export type ProjectRow = Localized & CommunityFields & { is_project_team: boolean };
 
 export type Assignment = {
   id: string;
