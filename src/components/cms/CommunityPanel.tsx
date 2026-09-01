@@ -618,6 +618,36 @@ export function CommunityPanel({
           })
         }
       />
+
+      {/* Save state: the panel buffers text edits, so the editor needs to see
+          whether their work has reached the server. */}
+      <div className="sticky bottom-0 -mx-5 -mb-5 mt-6 flex flex-wrap items-center justify-end gap-3 rounded-b-2xl border-t border-border bg-card/95 px-5 py-3 backdrop-blur">
+        <span
+          aria-live="polite"
+          className={"mr-auto text-xs " + (dirty ? "font-semibold text-foreground" : "text-muted-foreground")}
+        >
+          {dirty ? t("ops.community.unsaved") : t("ops.community.saved")}
+        </span>
+        {dirty ? (
+          <button
+            type="button"
+            onClick={discard}
+            disabled={saving}
+            className="rounded-full border border-border px-4 py-1.5 text-xs font-semibold hover:bg-secondary disabled:opacity-50"
+          >
+            {t("ops.community.discard")}
+          </button>
+        ) : null}
+        <button
+          type="button"
+          onClick={() => void saveAll()}
+          disabled={!dirty || saving}
+          className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+        >
+          {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : null}
+          {t("ops.community.save")}
+        </button>
+      </div>
     </section>
   );
 }
