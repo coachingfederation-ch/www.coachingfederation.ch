@@ -70,8 +70,15 @@ const BUFFERED_FIELDS = [
   "image_credit_url",
 ] as const satisfies readonly (keyof CommunityFields)[];
 
-const SELECT_COLUMNS =
-  "id, is_community, is_featured_community, description, description_de, description_fr, description_it, cadence_note, cadence_note_de, cadence_note_fr, cadence_note_it, contact_email, signup_url, language_slugs, cover_image_url, cover_image_alt, image_source, image_credit_name, image_credit_url";
+/**
+ * Columns the browser client may re-read after a server-side write.
+ * `contact_email` is deliberately absent: `authenticated` has no column-level
+ * SELECT grant on it (only `public_contact_email` is exposed), and a single
+ * ungranted column makes PostgREST reject the whole row — which is why a
+ * refetch after "Translate with AI" used to return nothing at all.
+ */
+const REFETCH_COLUMNS =
+  "id, is_community, is_featured_community, description, description_de, description_fr, description_it, cadence_slug, cadence_note, cadence_note_de, cadence_note_fr, cadence_note_it, signup_url, language_slugs, cover_image_url, cover_image_alt, image_source, image_credit_name, image_credit_url";
 
 function changedFields(row: CommunityFields, base: CommunityFields): Partial<CommunityFields> {
   const out: Record<string, unknown> = {};
