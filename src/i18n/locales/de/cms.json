@@ -1833,7 +1833,13 @@
       "imageUrl": "Oder Bild-URL einfügen",
       "imageBrief": "Optionale Bildidee für die KI, z. B. Coaches im Gespräch in einem Café in Basel",
       "imageGenerate": "Mit KI erzeugen",
-      "imageAiNote": "KI-generierte Bilder werden auf der Website immer entsprechend gekennzeichnet."
+      "imageAiNote": "KI-generierte Bilder werden auf der Website immer entsprechend gekennzeichnet.",
+      "saved": "Alle Änderungen gespeichert",
+      "unsaved": "Nicht gespeicherte Änderungen",
+      "save": "Community-Inhalt speichern",
+      "discard": "Änderungen verwerfen",
+      "saveFirst": "Speichern Sie Ihre Änderungen, bevor Sie übersetzen.",
+      "leaveDirty": "Diese Community hat nicht gespeicherte Änderungen. Ohne Speichern verlassen?"
     },
     "reorder": "Neu ordnen",
     "reorderHint": "Die Reihenfolge bestimmt, wie Projekte und Communities auf den öffentlichen Team- und Community-Seiten erscheinen.",

@@ -20,6 +20,8 @@ type Props = {
   ) => void | Promise<void>;
   removeRow: (table: "op_projects" | "op_project_roles", id: string) => void | Promise<void>;
   loadProjects: () => void | Promise<void>;
+  /** Bubbles the community panel's unsaved state up to the page. */
+  onCommunityDirtyChange?: (dirty: boolean) => void;
   translateLabels: (
     table: "op_projects" | "op_project_roles",
     id: string,
@@ -37,6 +39,7 @@ export function ProjectForm({
   loadProjects,
   translateLabels,
   translating,
+  onCommunityDirtyChange,
 }: Props) {
   const busy = translating.includes(project.id);
   return (
@@ -153,7 +156,14 @@ export function ProjectForm({
 
       </section>
 
-      <CommunityPanel project={project} onSaved={loadProjects} />
+      {/* Keyed by id: switching community must reset the panel's edit buffer
+          instead of carrying the previous community's text over. */}
+      <CommunityPanel
+        key={project.id}
+        project={project}
+        onSaved={loadProjects}
+        onDirtyChange={onCommunityDirtyChange}
+      />
     </>
   );
 }
