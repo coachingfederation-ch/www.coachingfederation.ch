@@ -643,15 +643,16 @@ export function CommunityPanel({
                     {t("ops.community.translate")}
                   </button>
                 </div>
-                <input
-                  aria-label={t("ops.community.cadence")}
-                  placeholder={t("ops.community.cadence")}
-                  value={(row[localeField("cadence_note", locale)] as string | null) ?? ""}
-                  onChange={(e) =>
-                    setRow((p) => ({ ...p, [localeField("cadence_note", locale)]: e.target.value }))
-                  }
-                  className={INPUT + " mt-2"}
-                />
+                {localeNote[locale] ? (
+                  <p
+                    className={
+                      "mt-2 text-[11px] " +
+                      (localeNote[locale]!.ok ? "text-muted-foreground" : "text-destructive")
+                    }
+                  >
+                    {localeNote[locale]!.text}
+                  </p>
+                ) : null}
                 <div className="mt-2">
                   <MarkdownEditor
                     value={(row[localeField("description", locale)] as string | null) ?? ""}
