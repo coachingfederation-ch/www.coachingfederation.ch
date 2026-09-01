@@ -15,6 +15,7 @@ import {
   tileFor,
   type PublicArticle,
 } from "@/lib/articles";
+import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
 import { LocaleLink, useI18n } from "@/i18n";
 import { localizePath, SITE_URL } from "@/i18n/config";
 import { ShareInline, ShareBlock } from "@/components/share-buttons";

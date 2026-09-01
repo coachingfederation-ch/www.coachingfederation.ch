@@ -141,7 +141,10 @@
     "reviewNeedsPublisher": "An account with publishing rights has to publish this article.",
     "reviewSelfBlocked": "You created this article — another publisher has to review and publish it.",
     "publishFailed": "That action was refused. Please reload and try again.",
-    "statusUnchanged": "The article status did not change."
+    "statusUnchanged": "The article status did not change.",
+    "imageBrief": "Optional art direction for AI, e.g. coaches talking in a Basel café",
+    "imageGenerate": "Generate with AI",
+    "imageAiNote": "AI generated images are always labelled as such on the public site."
   },
   "translations": {
     "title": "Translations",
@@ -792,7 +795,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
+          "items": [
+            "Lead projects",
+            "Be recognized by ICFS for leading initiatives"
+          ]
         },
         "status": {
           "title": "Status",

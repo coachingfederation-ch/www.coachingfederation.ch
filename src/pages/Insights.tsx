@@ -4,7 +4,7 @@
  * the locale-prefixed equivalent in src/routes/$locale/insights.index.tsx.
  */
 import { Link } from "@tanstack/react-router";
-import { Button } from "@/design-system/icf-welcome-design-system-a835df";
+import { AiBadge, Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Mark } from "@/components/marks";

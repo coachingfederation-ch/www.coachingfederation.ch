@@ -141,7 +141,10 @@
     "reviewNeedsPublisher": "Un account con diritti di pubblicazione deve pubblicare questo articolo.",
     "reviewSelfBlocked": "Hai creato tu questo articolo — deve rivederlo e pubblicarlo un altro publisher.",
     "publishFailed": "Azione rifiutata. Ricarica la pagina e riprova.",
-    "statusUnchanged": "Lo stato dell'articolo non è cambiato."
+    "statusUnchanged": "Lo stato dell'articolo non è cambiato.",
+    "imageBrief": "Indicazione artistica facoltativa per l’IA, ad es. coach che dialogano in un caffè a Lugano",
+    "imageGenerate": "Genera con l’IA",
+    "imageAiNote": "Le immagini generate dall’IA sono sempre segnalate come tali sul sito pubblico."
   },
   "translations": {
     "title": "Traduzioni",
@@ -792,7 +795,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
+          "items": [
+            "Guidare progetti",
+            "Essere riconosciuti da ICFS per aver guidato iniziative"
+          ]
         },
         "status": {
           "title": "Status",
