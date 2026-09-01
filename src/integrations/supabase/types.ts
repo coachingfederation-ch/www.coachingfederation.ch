@@ -348,6 +348,45 @@ export type Database = {
         }
         Relationships: []
       }
+      cf_cadences: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          name_de: string | null
+          name_fr: string | null
+          name_it: string | null
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          name_de?: string | null
+          name_fr?: string | null
+          name_it?: string | null
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          name_de?: string | null
+          name_fr?: string | null
+          name_it?: string | null
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       cf_client_types: {
         Row: {
           created_at: string
@@ -5154,6 +5193,7 @@ export type Database = {
           cadence_note_de: string | null
           cadence_note_fr: string | null
           cadence_note_it: string | null
+          cadence_slug: string | null
           contact_email: string | null
           content_updated_at: string
           cover_image_alt: string | null
@@ -5187,6 +5227,7 @@ export type Database = {
           cadence_note_de?: string | null
           cadence_note_fr?: string | null
           cadence_note_it?: string | null
+          cadence_slug?: string | null
           contact_email?: string | null
           content_updated_at?: string
           cover_image_alt?: string | null
@@ -5220,6 +5261,7 @@ export type Database = {
           cadence_note_de?: string | null
           cadence_note_fr?: string | null
           cadence_note_it?: string | null
+          cadence_slug?: string | null
           contact_email?: string | null
           content_updated_at?: string
           cover_image_alt?: string | null
@@ -5248,7 +5290,15 @@ export type Database = {
           sort_order?: number
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "op_projects_cadence_slug_fkey"
+            columns: ["cadence_slug"]
+            isOneToOne: false
+            referencedRelation: "cf_cadences"
+            referencedColumns: ["slug"]
+          },
+        ]
       }
       organisation_survey_responses: {
         Row: {
