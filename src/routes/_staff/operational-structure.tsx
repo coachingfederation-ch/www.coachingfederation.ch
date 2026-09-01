@@ -15,6 +15,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
 import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
@@ -325,13 +326,14 @@ function OperationalStructurePage() {
         </div>
 
         <div className="mt-4">
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="pill"
             onClick={() => setShowMap((v) => !v)}
-            className="rounded-full border border-border px-4 py-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground"
           >
             {showMap ? t("ops.map.hide") : t("ops.map.show")}
-          </button>
+          </Button>
         </div>
         {showMap ? <StructureMapPanel t={t} projects={projects} /> : null}
 

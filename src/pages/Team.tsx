@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CompactHero, SiteFooter } from "@/components/site-chrome";
 import { TeamFilters, TeamHoneycomb } from "@/components/team/TeamGrid";
 import { StructureMap } from "@/components/team/StructureMap";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { useI18n } from "@/i18n";
 import { listTeamDirectory } from "@/lib/team.functions";
 
@@ -80,21 +81,17 @@ export default function TeamPage() {
               className="mt-8 flex justify-center gap-2"
             >
               {(["grid", "map"] as const).map((key) => (
-                <button
+                <Button
                   key={key}
                   type="button"
                   role="tab"
                   aria-selected={view === key}
                   onClick={() => setView(key)}
-                  className={
-                    "rounded-full px-4 py-2 text-sm font-semibold " +
-                    (view === key
-                      ? "bg-primary text-primary-foreground"
-                      : "border border-border text-muted-foreground hover:text-foreground")
-                  }
+                  variant={view === key ? "default" : "outline"}
+                  size="pill"
                 >
                   {t(`team.view.${key}`)}
-                </button>
+                </Button>
               ))}
             </div>
             {view === "grid" ? (
