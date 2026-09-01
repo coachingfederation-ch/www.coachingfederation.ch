@@ -23,6 +23,7 @@ import {
   ToggleGroupItem,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { previewNewsletterFn } from "@/lib/newsletters.functions";
+import { LOCALE_ORDER, type Locale } from "@/i18n/config";
 
 export function NewsletterPreviewDialog({
   id,
@@ -34,11 +35,12 @@ export function NewsletterPreviewDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   const [width, setWidth] = useState<"desktop" | "mobile">("desktop");
+  const [locale, setLocale] = useState<Locale>("en");
   const preview = useServerFn(previewNewsletterFn);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["newsletter-preview", id],
-    queryFn: () => preview({ data: { id } }),
+    queryKey: ["newsletter-preview", id, locale],
+    queryFn: () => preview({ data: { id, locale } }),
     enabled: open,
     staleTime: 0,
   });
@@ -52,6 +54,19 @@ export function NewsletterPreviewDialog({
             Enabled blocks only, in order — this is how the edition arrives in an inbox.
           </DialogDescription>
         </DialogHeader>
+
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Preview language">
+          {LOCALE_ORDER.map((code) => (
+            <Button
+              key={code}
+              variant={locale === code ? "default" : "outline"}
+              size="sm"
+              onClick={() => setLocale(code)}
+            >
+              {code.toUpperCase()}
+            </Button>
+          ))}
+        </div>
 
         <ToggleGroup
           type="single"

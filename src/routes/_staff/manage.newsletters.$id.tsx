@@ -17,6 +17,7 @@ import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import { BlockImageField } from "@/components/cms/BlockImageField";
 import { NewsletterPreviewDialog } from "@/components/cms/NewsletterPreviewDialog";
 import { NewsletterSendPanel } from "@/components/cms/NewsletterSendPanel";
+import { NewsletterTranslationsPanel } from "@/components/cms/NewsletterTranslationsPanel";
 
 import { ARTICLE_ROLES, requireStaffAccess } from "@/lib/staff-guard";
 import { Button, Input, Label, Switch } from "@/design-system/icf-welcome-design-system-a835df";
@@ -466,6 +467,18 @@ function NewsletterEditor() {
           <Button variant="outline" size="sm" onClick={() => addMutation.mutate("advertisement")}>
             Add advertisement slot
           </Button>
+        </div>
+
+        <div className="mt-8">
+          <NewsletterTranslationsPanel
+            newsletterId={id}
+            blocks={blocks.map((block) => ({
+              id: block.id,
+              title: block.title,
+              enabled: block.enabled,
+            }))}
+            contentUpdatedAt={edition.updated_at}
+          />
         </div>
 
         <NewsletterSendPanel
