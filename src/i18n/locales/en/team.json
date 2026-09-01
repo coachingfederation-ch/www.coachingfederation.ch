@@ -10,7 +10,10 @@
     "lede": "Everything The Switzerland Chapter of ICF does is carried by volunteers — coaches who give their time to the profession and to the community."
   },
   "intro": "Our work is organised in projects: the board, the regional communities and a set of thematic teams. Filter by project to see who contributes where, and open a tile to read more.",
-  "filters": { "all": "All", "label": "Filter the team by project" },
+  "filters": {
+    "all": "All",
+    "label": "Filter the team by project"
+  },
   "loading": "Loading the team…",
   "empty": "No team members in this project yet.",
   "modal": {
@@ -24,5 +27,22 @@
     "title": "Volunteers who keep the chapter moving",
     "body": "Board members, community leads and project teams across the country — all of them practising coaches giving their time to the profession.",
     "cta": "Meet the team"
+  },
+  "view": {
+    "label": "Choose how to view the team",
+    "grid": "People",
+    "map": "Structure map"
+  },
+  "map": {
+    "title": "Nested map of the operational structure",
+    "root": "The Switzerland Chapter of ICF",
+    "breadcrumb": "Map level",
+    "hint": "Select a circle to zoom in, a person to open their card, and use the trail above to zoom back out.",
+    "listView": "Show the same structure as a list",
+    "group": {
+      "organizational": "Organizational teams",
+      "projectTeams": "Project teams",
+      "communities": "Local communities"
+    }
   }
 }

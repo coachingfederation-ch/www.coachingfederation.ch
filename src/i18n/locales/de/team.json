@@ -27,5 +27,22 @@
     "title": "Freiwillige, die das Chapter bewegen",
     "body": "Vorstandsmitglieder, Community-Leitungen und Projektteams in der ganzen Schweiz — alles praktizierende Coaches, die ihre Zeit dem Berufsstand widmen.",
     "cta": "Team kennenlernen"
+  },
+  "view": {
+    "label": "Ansicht des Teams wählen",
+    "grid": "Personen",
+    "map": "Strukturkarte"
+  },
+  "map": {
+    "title": "Verschachtelte Karte der operativen Struktur",
+    "root": "Das Schweizer Chapter der ICF",
+    "breadcrumb": "Kartenebene",
+    "hint": "Wählen Sie einen Kreis, um hineinzuzoomen, eine Person, um ihre Karte zu öffnen, und nutzen Sie den Pfad oben, um wieder herauszuzoomen.",
+    "listView": "Dieselbe Struktur als Liste anzeigen",
+    "group": {
+      "organizational": "Organisationsteams",
+      "projectTeams": "Projektteams",
+      "communities": "Lokale Communitys"
+    }
   }
 }

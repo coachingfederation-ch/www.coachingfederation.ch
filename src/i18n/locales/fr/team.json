@@ -27,5 +27,22 @@
     "title": "Des bénévoles qui font vivre le chapitre",
     "body": "Membres du comité, responsables de communautés et équipes de projet dans toute la Suisse — tous des coachs actifs offrant de leur temps à la profession.",
     "cta": "Rencontrer l'équipe"
+  },
+  "view": {
+    "label": "Choisir l’affichage de l’équipe",
+    "grid": "Personnes",
+    "map": "Carte de la structure"
+  },
+  "map": {
+    "title": "Carte imbriquée de la structure opérationnelle",
+    "root": "Le Chapitre Suisse de l’ICF",
+    "breadcrumb": "Niveau de la carte",
+    "hint": "Sélectionnez un cercle pour zoomer, une personne pour ouvrir sa fiche, et utilisez le fil d’Ariane ci-dessus pour revenir en arrière.",
+    "listView": "Afficher la même structure sous forme de liste",
+    "group": {
+      "organizational": "Équipes organisationnelles",
+      "projectTeams": "Équipes de projet",
+      "communities": "Communautés locales"
+    }
   }
 }

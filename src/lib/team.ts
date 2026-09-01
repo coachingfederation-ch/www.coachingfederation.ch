@@ -23,7 +23,7 @@ export function localizedName(row: LocalizedNameRow, locale: Locale): string {
   return row.name;
 }
 
-export type TeamProject = { slug: string; label: string };
+export type TeamProject = { slug: string; label: string; isCommunity: boolean };
 
 export type TeamAssignment = { projectSlug: string; project: string; role: string };
 

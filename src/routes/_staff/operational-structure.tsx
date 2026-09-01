@@ -15,6 +15,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
 import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
@@ -28,6 +29,7 @@ import {
 import { grantMemberRole, revokeMemberRole } from "@/lib/roles.functions";
 import { translateOpsLabels } from "@/lib/ops-label-translations.functions";
 import { ProjectGroupList } from "@/components/cms/ops/ProjectGroupList";
+import { StructureMapPanel } from "@/components/cms/ops/StructureMapPanel";
 import { ProjectForm } from "@/components/cms/ops/ProjectForm";
 import { RoleAssignmentEditor } from "@/components/cms/ops/RoleAssignmentEditor";
 import {
@@ -70,6 +72,8 @@ function OperationalStructurePage() {
   // and the /communities order. It is a rare action, so the arrows stay hidden
   // behind this toggle instead of dominating the list.
   const [reordering, setReordering] = useState(false);
+  // Read-only preview of the public nested-circle map.
+  const [showMap, setShowMap] = useState(false);
 
   const loadProjects = async () => {
     // `contact_email` is not granted to the browser roles (it is the private
@@ -320,6 +324,20 @@ function OperationalStructurePage() {
             {t("ops.addProject")}
           </button>
         </div>
+
+        <div className="mt-4">
+          <Button
+            type="button"
+            variant="outline"
+            size="pill"
+            onClick={() => setShowMap((v) => !v)}
+          >
+            {showMap ? t("ops.map.hide") : t("ops.map.show")}
+          </Button>
+        </div>
+        {showMap ? <StructureMapPanel t={t} projects={projects} /> : null}
+
+
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[260px_1fr]">
           <ProjectGroupList
