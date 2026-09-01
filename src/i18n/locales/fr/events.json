@@ -29,6 +29,43 @@
     "title": "Vous avez un événement à proposer ?",
     "propose": "Proposer un événement"
   },
+  "propose": {
+    "empty": "Décrivez votre idée en une ou deux phrases — nous la mettrons en forme ensemble pour que notre équipe programme puisse l'examiner.",
+    "placeholder": "Décrivez votre idée d'événement…",
+    "thinking": "Réflexion…",
+    "review": "Vérifier et envoyer",
+    "preparing": "Préparation…",
+    "disclaimer": "Un assistant IA vous aide à formuler la proposition. Rien n'est envoyé avant que vous l'ayez vérifiée et confirmée.",
+    "reviewTitle": "Vérifiez votre proposition",
+    "reviewLede": "Voici ce que notre équipe recevra. Modifiez ce que vous voulez — c'est votre version qui part.",
+    "nameLabel": "Nom",
+    "namePlaceholder": "Votre nom",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "votre@email.ch",
+    "subjectLabel": "Objet",
+    "messageLabel": "Proposition",
+    "send": "Envoyer la proposition",
+    "sending": "Envoi…",
+    "back": "Revenir à la conversation",
+    "doneTitle": "Consultez votre boîte de réception",
+    "doneBody": "Nous avons envoyé un lien de confirmation à {email}. Ouvrez-le et votre proposition part directement à notre équipe.",
+    "doneHint": "Ainsi, personne ne peut nous écrire en votre nom. Les propositions non confirmées sont supprimées après sept jours.",
+    "privacy": "Nous traitons votre proposition pour vous répondre. Consultez notre",
+    "suggestions": {
+      "workshop": "Un atelier pour les coachs",
+      "community": "Un événement avec ma communauté locale",
+      "unsure": "J'ai une idée, encore un peu vague"
+    },
+    "errors": {
+      "chat": "Un problème est survenu. Veuillez réessayer.",
+      "draft": "Nous n'avons pas pu préparer la proposition. Veuillez réessayer.",
+      "empty": "Parlez-nous d'abord un peu de votre idée.",
+      "required": "Veuillez remplir votre nom, un objet et la proposition.",
+      "email": "Veuillez saisir une adresse e-mail valide.",
+      "send": "Nous n'avons pas pu envoyer la proposition. Réessayez ou écrivez à office@coachingfederation.ch.",
+      "rateLimited": "Cela fait beaucoup de messages depuis cette connexion. Réessayez plus tard."
+    }
+  },
   "tag": {
     "inPerson": "En présentiel",
     "online": "En ligne",

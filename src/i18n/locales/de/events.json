@@ -29,6 +29,43 @@
     "title": "Möchten Sie ein Event vorschlagen?",
     "propose": "Event vorschlagen"
   },
+  "propose": {
+    "empty": "Beschreiben Sie Ihre Idee in ein, zwei Sätzen — gemeinsam machen wir daraus einen Vorschlag, den unser Programmteam prüfen kann.",
+    "placeholder": "Beschreiben Sie Ihre Event-Idee …",
+    "thinking": "Denkt nach …",
+    "review": "Prüfen und senden",
+    "preparing": "Wird vorbereitet …",
+    "disclaimer": "Ein KI-Assistent hilft Ihnen, den Vorschlag zu formulieren. Es wird nichts gesendet, bevor Sie ihn geprüft und bestätigt haben.",
+    "reviewTitle": "Ihren Vorschlag prüfen",
+    "reviewLede": "Das erhält unser Team. Sie können alles anpassen — gesendet wird Ihre Fassung.",
+    "nameLabel": "Name",
+    "namePlaceholder": "Ihr Name",
+    "emailLabel": "E-Mail",
+    "emailPlaceholder": "ihre@email.ch",
+    "subjectLabel": "Betreff",
+    "messageLabel": "Vorschlag",
+    "send": "Vorschlag senden",
+    "sending": "Wird gesendet …",
+    "back": "Zurück zum Gespräch",
+    "doneTitle": "Schauen Sie in Ihr Postfach",
+    "doneBody": "Wir haben einen Bestätigungslink an {email} gesendet. Öffnen Sie ihn, und Ihr Vorschlag geht direkt an unser Team.",
+    "doneHint": "So kann niemand in Ihrem Namen an uns schreiben. Unbestätigte Vorschläge löschen wir nach sieben Tagen.",
+    "privacy": "Wir verarbeiten Ihren Vorschlag, um Ihnen zu antworten. Lesen Sie unsere",
+    "suggestions": {
+      "workshop": "Ein Workshop für Coaches",
+      "community": "Ein Event mit meiner lokalen Community",
+      "unsure": "Ich habe eine Idee, aber sie ist noch grob"
+    },
+    "errors": {
+      "chat": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "draft": "Wir konnten den Vorschlag nicht vorbereiten. Bitte versuchen Sie es erneut.",
+      "empty": "Erzählen Sie uns zuerst kurz von Ihrer Idee.",
+      "required": "Bitte füllen Sie Name, Betreff und Vorschlag aus.",
+      "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+      "send": "Wir konnten den Vorschlag nicht senden. Bitte versuchen Sie es erneut oder schreiben Sie an office@coachingfederation.ch.",
+      "rateLimited": "Das sind viele Nachrichten von dieser Verbindung. Bitte versuchen Sie es später erneut."
+    }
+  },
   "tag": {
     "inPerson": "Vor Ort",
     "online": "Online",
