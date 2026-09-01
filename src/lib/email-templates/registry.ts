@@ -43,6 +43,7 @@ import { template as eventCertificate } from "./event-certificate";
 import { template as communityJoinInterest } from "./community-join-interest";
 import { template as contactEnquiry } from "./contact-enquiry";
 import { template as contactEnquiryVerify } from "./contact-enquiry-verify";
+import { template as memberEngagement } from "./member-engagement";
 import { template as contactEnquiryCopy } from "./contact-enquiry-copy-mail";
 
 /**
@@ -55,6 +56,7 @@ import { template as contactEnquiryCopy } from "./contact-enquiry-copy-mail";
  */
 export const TEMPLATES: Record<string, TemplateEntry> = {
   "member-claim-invitation": memberClaimInvitation,
+  "member-engagement": memberEngagement,
   "event-registration-confirmation": eventRegistrationConfirmation,
   "event-cancellation": eventCancellation,
   "event-waitlist-invitation": eventWaitlistInvitation,
