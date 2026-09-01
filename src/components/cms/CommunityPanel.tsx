@@ -48,29 +48,86 @@ export type CommunityFields = {
   image_credit_url: string | null;
 };
 
+/**
+ * Text-ish columns edited in the local buffer and written by the Save CTA.
+ * Everything not listed here (image binaries, language and region links) is
+ * applied immediately, because those actions already create a server artefact.
+ */
+const BUFFERED_FIELDS = [
+  "is_featured_community",
+  "cadence_note",
+  "cadence_note_de",
+  "cadence_note_fr",
+  "cadence_note_it",
+  "contact_email",
+  "signup_url",
+  "description",
+  "description_de",
+  "description_fr",
+  "description_it",
+  "cover_image_alt",
+  "cover_image_url",
+  "image_source",
+  "image_credit_name",
+  "image_credit_url",
+] as const satisfies readonly (keyof CommunityFields)[];
+
+const SELECT_COLUMNS =
+  "id, is_community, is_featured_community, description, description_de, description_fr, description_it, cadence_note, cadence_note_de, cadence_note_fr, cadence_note_it, contact_email, signup_url, language_slugs, cover_image_url, cover_image_alt, image_source, image_credit_name, image_credit_url";
+
+function changedFields(row: CommunityFields, base: CommunityFields): Partial<CommunityFields> {
+  const out: Record<string, unknown> = {};
+  for (const key of BUFFERED_FIELDS) {
+    const next = row[key] ?? null;
+    const prev = base[key] ?? null;
+    if (next !== prev) out[key] = next;
+  }
+  return out as Partial<CommunityFields>;
+}
+
 export function CommunityPanel({
   project,
   onSaved,
+  onDirtyChange,
 }: {
   project: CommunityFields;
   onSaved: () => void | Promise<void>;
+  /** Lets the page warn before switching away with unsaved changes. */
+  onDirtyChange?: (dirty: boolean) => void;
 }) {
   const { t } = useCms();
+  // `row` is the edit buffer; `saved` is the last state known to be on the
+  // server. A refetch triggered by an unrelated part of the page must never
+  // reset the buffer, so the prop is only read when the project id changes.
   const [row, setRow] = useState<CommunityFields>(project);
+  const [saved, setSaved] = useState<CommunityFields>(project);
   const [languages, setLanguages] = useState<{ slug: string; name: string }[]>([]);
   const [regions, setRegions] = useState<{ id: string; name: string }[]>([]);
   const [regionIds, setRegionIds] = useState<string[]>([]);
   const [busy, setBusy] = useState<Target | null>(null);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [unsplashOpen, setUnsplashOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [brief, setBrief] = useState("");
-  // Markdown fields save on blur; the ref keeps the latest keystroke available
-  // to the blur handler without re-creating it on every character.
-  const draft = useRef<Record<string, string>>({});
 
-  useEffect(() => setRow(project), [project]);
+  const pending = changedFields(row, saved);
+  const dirty = Object.keys(pending).length > 0;
+
+  useEffect(() => {
+    setRow(project);
+    setSaved(project);
+    // Only a different community replaces the buffer; refetches of the same
+    // row must not discard what the editor is typing.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project.id]);
+
+  useEffect(() => {
+    onDirtyChange?.(dirty);
+    return () => onDirtyChange?.(false);
+  }, [dirty, onDirtyChange]);
+
 
   useEffect(() => {
     void (async () => {
