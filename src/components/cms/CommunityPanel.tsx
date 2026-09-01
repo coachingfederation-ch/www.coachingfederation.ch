@@ -165,6 +165,18 @@ export function CommunityPanel({
     })();
   }, []);
 
+  // Cadence is a managed vocabulary, so the four localised cadence notes are
+  // derived from the chosen entry instead of being typed per language.
+  useEffect(() => {
+    void (async () => {
+      try {
+        setCadences(await fetchVocabulary("cf_cadences", { activeOnly: true }));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : String(err));
+      }
+    })();
+  }, []);
+
   // Region links drive the "communities in your service area" block in the
   // Member Area, so they live with the rest of the community content.
   useEffect(() => {
