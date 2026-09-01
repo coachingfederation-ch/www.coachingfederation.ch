@@ -3,6 +3,7 @@
  * (booking link / email). Extracted verbatim from src/pages/CoachProfile.tsx.
  */
 import { CoachAvatar } from "@/components/coaches/directory";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { LocaleLink, useI18n } from "@/i18n";
 import type { PublicCoachProfile } from "@/lib/directory.functions";
 import { trackGoal } from "@/lib/plausible";
