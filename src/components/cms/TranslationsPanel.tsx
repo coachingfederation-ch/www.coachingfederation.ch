@@ -1,15 +1,15 @@
 /**
  * CMS sidebar panel for managing automated and manual translations of articles.
- * Exports: TranslationsPanel. Thin adapter around GenericTranslationsPanel.
+ * Exports: TranslationsPanel. Thin adapter around LocaleTabsEditor.
  */
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { translateArticle } from "@/lib/translations.functions";
 import { useCms } from "@/i18n/cms";
 import {
-  GenericTranslationsPanel,
+  LocaleTabsEditor,
   type TranslationRowBase,
-} from "@/components/cms/translations/GenericTranslationsPanel";
+} from "@/components/cms/translations/LocaleTabsEditor";
 
 interface ArticleTranslationRow extends TranslationRowBase {
   title: string;
@@ -31,7 +31,7 @@ export function TranslationsPanel({
   const runTranslate = useServerFn(translateArticle);
 
   return (
-    <GenericTranslationsPanel<ArticleTranslationRow, ArticleTranslationValues>
+    <LocaleTabsEditor<ArticleTranslationRow, ArticleTranslationValues>
       deps={[articleId]}
       adapter={{
         sourceLanguage,
@@ -83,6 +83,10 @@ export function TranslationsPanel({
           close: t("translations.close"),
           saveTranslation: t("translations.saveTranslation"),
           savedTranslation: t("translations.savedTranslation"),
+          translateAll: t("translations.translateAll"),
+          discard: t("translations.discard"),
+          unsaved: t("translations.unsaved"),
+          emptyState: t("translations.emptyState"),
           previewWrite: t("toolbar.write"),
           previewShow: t("toolbar.preview"),
         },
