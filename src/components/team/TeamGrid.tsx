@@ -8,9 +8,8 @@
  * list and the comb reflows.
  */
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
 
-import { LocaleLink, useI18n } from "@/i18n";
+import { useI18n } from "@/i18n";
 import { MemberModal } from "@/components/team/MemberModal";
 import { combRows, HexMemberTile } from "@/components/hex-tile";
 import type { TeamMember, TeamProject } from "@/lib/team";
