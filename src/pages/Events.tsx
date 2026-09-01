@@ -514,12 +514,8 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
             <h2 className="mx-auto mt-3 max-w-2xl display-lg">{t("events.cta.title")}</h2>
             {/* The proposal is shaped in conversation; email stays as the fallback. */}
             <EventProposalAgent />
-            <p className="mt-6 text-sm text-hero-foreground/80">
-              <a
-                href="mailto:office@coachingfederation.ch"
-                target="_top"
-                className="underline underline-offset-4"
-              >
+            <p className="mt-6 text-sm text-hero-foreground">
+              <a href="mailto:office@coachingfederation.ch" target="_top" className="menu-item">
                 {t("events.cta.propose")}
               </a>
             </p>
