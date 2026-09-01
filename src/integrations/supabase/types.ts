@@ -5156,12 +5156,17 @@ export type Database = {
           cadence_note_it: string | null
           contact_email: string | null
           content_updated_at: string
+          cover_image_alt: string | null
+          cover_image_url: string | null
           created_at: string
           description: string | null
           description_de: string | null
           description_fr: string | null
           description_it: string | null
           id: string
+          image_credit_name: string | null
+          image_credit_url: string | null
+          image_source: string | null
           is_active: boolean
           is_community: boolean
           is_featured_community: boolean
@@ -5184,12 +5189,17 @@ export type Database = {
           cadence_note_it?: string | null
           contact_email?: string | null
           content_updated_at?: string
+          cover_image_alt?: string | null
+          cover_image_url?: string | null
           created_at?: string
           description?: string | null
           description_de?: string | null
           description_fr?: string | null
           description_it?: string | null
           id?: string
+          image_credit_name?: string | null
+          image_credit_url?: string | null
+          image_source?: string | null
           is_active?: boolean
           is_community?: boolean
           is_featured_community?: boolean
@@ -5212,12 +5222,17 @@ export type Database = {
           cadence_note_it?: string | null
           contact_email?: string | null
           content_updated_at?: string
+          cover_image_alt?: string | null
+          cover_image_url?: string | null
           created_at?: string
           description?: string | null
           description_de?: string | null
           description_fr?: string | null
           description_it?: string | null
           id?: string
+          image_credit_name?: string | null
+          image_credit_url?: string | null
+          image_source?: string | null
           is_active?: boolean
           is_community?: boolean
           is_featured_community?: boolean
@@ -5658,11 +5673,16 @@ export type Database = {
           cadence_note_fr: string | null
           cadence_note_it: string | null
           contact_email: string | null
+          cover_image_alt: string | null
+          cover_image_url: string | null
           description: string | null
           description_de: string | null
           description_fr: string | null
           description_it: string | null
           id: string | null
+          image_credit_name: string | null
+          image_credit_url: string | null
+          image_source: string | null
           is_community: boolean | null
           is_featured_community: boolean | null
           language_slugs: string[] | null
@@ -5680,11 +5700,16 @@ export type Database = {
           cadence_note_fr?: string | null
           cadence_note_it?: string | null
           contact_email?: string | null
+          cover_image_alt?: string | null
+          cover_image_url?: string | null
           description?: string | null
           description_de?: string | null
           description_fr?: string | null
           description_it?: string | null
           id?: string | null
+          image_credit_name?: string | null
+          image_credit_url?: string | null
+          image_source?: string | null
           is_community?: boolean | null
           is_featured_community?: boolean | null
           language_slugs?: string[] | null
@@ -5702,11 +5727,16 @@ export type Database = {
           cadence_note_fr?: string | null
           cadence_note_it?: string | null
           contact_email?: string | null
+          cover_image_alt?: string | null
+          cover_image_url?: string | null
           description?: string | null
           description_de?: string | null
           description_fr?: string | null
           description_it?: string | null
           id?: string | null
+          image_credit_name?: string | null
+          image_credit_url?: string | null
+          image_source?: string | null
           is_community?: boolean | null
           is_featured_community?: boolean | null
           language_slugs?: string[] | null
