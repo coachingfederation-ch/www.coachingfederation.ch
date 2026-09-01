@@ -569,7 +569,8 @@ export function CommunityPanel({
                   <button
                     type="button"
                     onClick={() => void translate(locale)}
-                    disabled={busy !== null || !row.description}
+                    disabled={busy !== null || dirty || !row.description}
+                    title={dirty ? t("ops.community.saveFirst") : undefined}
                     className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-[11px] font-semibold hover:bg-secondary disabled:opacity-50"
                   >
                     {busy === locale ? (
