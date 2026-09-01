@@ -105,44 +105,52 @@ export function ProjectForm({
         <fieldset className="mt-5 border-t border-border pt-4">
           <legend className="sr-only">{t("ops.type.legend")}</legend>
           <p className="text-xs font-bold">{t("ops.type.legend")}</p>
-          <div className="mt-2 grid gap-2 sm:grid-cols-2">
+          <div className="mt-2 grid gap-2 sm:grid-cols-3">
             {(
               [
-                { value: false, key: "general" },
-                { value: true, key: "community" },
+                { key: "general", is_community: false, is_project_team: false },
+                { key: "projectTeam", is_community: false, is_project_team: true },
+                { key: "community", is_community: true, is_project_team: false },
               ] as const
-            ).map((option) => (
-              <label
-                key={option.key}
-                className={
-                  "flex cursor-pointer gap-2 rounded-xl border p-3 text-left " +
-                  (project.is_community === option.value
-                    ? "border-primary bg-secondary/60"
-                    : "border-border hover:bg-secondary/30")
-                }
-              >
-                <input
-                  type="radio"
-                  name="project-type"
-                  className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
-                  checked={project.is_community === option.value}
-                  onChange={() =>
-                    void patch("op_projects", project.id, {
-                      is_community: option.value,
-                      ...(option.value ? {} : { is_featured_community: false }),
-                    })
+            ).map((option) => {
+              const active =
+                project.is_community === option.is_community &&
+                (project.is_community || project.is_project_team === option.is_project_team);
+              return (
+                <label
+                  key={option.key}
+                  className={
+                    "flex cursor-pointer gap-2 rounded-xl border p-3 text-left " +
+                    (active ? "border-primary bg-secondary/60" : "border-border hover:bg-secondary/30")
                   }
-                />
-                <span>
-                  <span className="block text-xs font-semibold">{t(`ops.type.${option.key}`)}</span>
-                  <span className="mt-0.5 block text-[11px] leading-snug text-muted-foreground">
-                    {t(`ops.type.${option.key}Note`)}
+                >
+                  <input
+                    type="radio"
+                    name="project-type"
+                    className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
+                    checked={active}
+                    onChange={() =>
+                      void patch("op_projects", project.id, {
+                        is_community: option.is_community,
+                        is_project_team: option.is_project_team,
+                        ...(option.is_community ? {} : { is_featured_community: false }),
+                      })
+                    }
+                  />
+                  <span>
+                    <span className="block text-xs font-semibold">
+                      {t(`ops.type.${option.key}`)}
+                    </span>
+                    <span className="mt-0.5 block text-[11px] leading-snug text-muted-foreground">
+                      {t(`ops.type.${option.key}Note`)}
+                    </span>
                   </span>
-                </span>
-              </label>
-            ))}
+                </label>
+              );
+            })}
           </div>
         </fieldset>
+
       </section>
 
       <CommunityPanel project={project} onSaved={loadProjects} />
