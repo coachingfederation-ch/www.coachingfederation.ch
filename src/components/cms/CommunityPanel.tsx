@@ -315,18 +315,29 @@ export function CommunityPanel({
   const translate = async (locale: Target) => {
     setBusy(locale);
     setError(null);
+    setLocaleNote((prev) => ({ ...prev, [locale]: null }));
     try {
       await translateCommunity({ data: { projectId: project.id, locale } });
-      await refetch();
+      const failure = await refetch();
+      if (failure) {
+        setLocaleNote((prev) => ({ ...prev, [locale]: { ok: false, text: failure } }));
+      } else {
+        setLocaleNote((prev) => ({
+          ...prev,
+          [locale]: { ok: true, text: t("ops.community.translated") },
+        }));
+      }
       await onSaved();
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+      const text = err instanceof Error ? err.message : String(err);
+      setError(text);
+      setLocaleNote((prev) => ({ ...prev, [locale]: { ok: false, text } }));
     } finally {
       setBusy(null);
     }
   };
 
-  const localeField = (field: "description" | "cadence_note", locale: Target) =>
+  const localeField = (field: "description", locale: Target) =>
     `${field}_${locale}` as keyof CommunityFields;
 
   // The project-type choice lives in the parent "Project details" card; this
