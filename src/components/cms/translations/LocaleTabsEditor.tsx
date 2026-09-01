@@ -135,14 +135,15 @@ export function LocaleTabsEditor<
     const row = rowFor(locale);
     const s = stateFor(locale);
     if (s === "missing")
-      return { label: adapter.labels.notTranslated, cls: "bg-secondary text-muted-foreground" };
+      return { label: adapter.labels.notTranslated, cls: "text-muted-foreground" };
     if (s === "stale")
-      return { label: adapter.labels.needsRefresh, cls: "bg-warn-soft text-[color:var(--warn)]" };
+      return { label: adapter.labels.needsRefresh, cls: "text-warn" };
     return {
       label: row?.manually_edited ? adapter.labels.manual : adapter.labels.upToDate,
-      cls: "bg-teal-soft text-teal-foreground",
+      cls: row?.manually_edited ? "text-primary" : "text-teal-foreground",
     };
   };
+
 
   const dirtyLocales = useMemo(
     () =>
@@ -209,59 +210,26 @@ export function LocaleTabsEditor<
         <Languages className="h-3.5 w-3.5" />
         {adapter.labels.title}
       </div>
-      <div className="space-y-3 rounded-2xl border border-border bg-card p-4 text-sm">
-        <p className="text-xs text-muted-foreground">{adapter.labels.hint}</p>
+      <div className="overflow-hidden rounded-2xl border border-border bg-card text-sm">
+        <div className="space-y-4 p-5">
+          <div className="border-b border-border pb-3">
+            <p className="text-xs text-muted-foreground">{adapter.labels.hint}</p>
+            <div className="mt-2 flex items-center justify-between">
+              <span className="font-semibold text-foreground">
+                {adapter.sourceLanguage.toUpperCase()}
+              </span>
+              <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                {adapter.labels.title}
+              </span>
+            </div>
+          </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          {targets.map((locale) => {
-            const badge = badgeFor(locale);
-            const selected = active === locale;
-            return (
-              <button
-                key={locale}
-                type="button"
-                onClick={() => {
-                  setActive(locale);
-                  setPreview(false);
-                }}
-                aria-pressed={selected}
-                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                  selected
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border bg-card hover:bg-secondary"
-                }`}
-              >
-                {locale.toUpperCase()}
-                <span
-                  className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
-                    selected ? "bg-primary-foreground/15 text-primary-foreground" : badge.cls
-                  }`}
-                >
-                  {badge.label}
-                </span>
-              </button>
-            );
-          })}
-          <div className="ml-auto flex items-center gap-2">
-            {active ? (
-              <button
-                type="button"
-                onClick={() => void runTranslate([active], active)}
-                disabled={busy !== null || saving}
-                className="rounded-full border border-border px-3 py-1.5 text-xs font-medium hover:bg-secondary disabled:opacity-60"
-              >
-                {busy === active
-                  ? adapter.labels.working
-                  : rowFor(active)
-                    ? adapter.labels.refresh
-                    : adapter.labels.translate}
-              </button>
-            ) : null}
+          <div className="space-y-3">
             <button
               type="button"
               onClick={() => void runTranslate(targets, "__all__")}
               disabled={busy !== null || saving}
-              className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-60"
+              className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-border py-2 text-xs font-semibold text-primary transition-colors hover:bg-secondary disabled:opacity-60"
             >
               {busy === "__all__" ? (
                 <Loader2 className="h-3 w-3 animate-spin" />
@@ -270,43 +238,96 @@ export function LocaleTabsEditor<
               )}
               {busy === "__all__" ? adapter.labels.working : translateAllLabel}
             </button>
+
+
+
+            {targets.map((locale) => {
+              const badge = badgeFor(locale);
+              const selected = active === locale;
+              const exists = Boolean(rowFor(locale));
+              return (
+                <div
+                  key={locale}
+                  className={`-mx-2 flex items-center justify-between rounded-lg px-2 py-1.5 transition ${
+                    selected ? "bg-secondary" : ""
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActive(locale);
+                      setPreview(false);
+                    }}
+                    aria-pressed={selected}
+                    className="flex flex-col items-start text-left"
+                  >
+                    <span
+                      className={`text-sm font-medium ${
+                        exists ? "text-foreground" : "text-muted-foreground"
+                      }`}
+                    >
+                      {locale.toUpperCase()}
+                    </span>
+                    <span className={`text-xs font-semibold ${badge.cls}`}>{badge.label}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void runTranslate([locale], locale)}
+                    disabled={busy !== null || saving}
+                    className={
+                      exists
+                        ? "text-xs font-semibold text-primary hover:underline disabled:opacity-60"
+                        : "rounded-md bg-primary px-3 py-1 text-xs font-medium text-primary-foreground transition-colors hover:bg-hero disabled:opacity-60"
+                    }
+                  >
+                    {busy === locale
+                      ? adapter.labels.working
+                      : exists
+                        ? adapter.labels.refresh
+                        : adapter.labels.translate}
+                  </button>
+                </div>
+              );
+            })}
           </div>
+
+          {active && activeRow && activeDraft ? (
+            <div className="space-y-3 border-t border-border pt-4">
+              {adapter.fields.map((field) => (
+                <FieldBlock
+                  key={field.key}
+                  field={field}
+                  value={activeDraft[field.key] ?? ""}
+                  onChange={(value) =>
+                    setDrafts((current) => ({
+                      ...current,
+                      [active]: { ...(current[active] as Values), [field.key]: value } as Values,
+                    }))
+                  }
+                  isPreview={adapter.previewField === field.key && preview}
+                  onTogglePreview={
+                    adapter.previewField === field.key ? () => setPreview((p) => !p) : undefined
+                  }
+                  previewWrite={adapter.labels.previewWrite}
+                  previewShow={adapter.labels.previewShow}
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="border-t border-border pt-4 text-xs text-muted-foreground">
+              {adapter.labels.emptyState ?? adapter.labels.notTranslated}
+            </p>
+          )}
+
+          {error ? <p className="text-xs text-destructive">{error}</p> : null}
         </div>
 
-        {active && activeRow && activeDraft ? (
-          <div className="space-y-3 border-t border-border pt-3">
-            {adapter.fields.map((field) => (
-              <FieldBlock
-                key={field.key}
-                field={field}
-                value={activeDraft[field.key] ?? ""}
-                onChange={(value) =>
-                  setDrafts((current) => ({
-                    ...current,
-                    [active]: { ...(current[active] as Values), [field.key]: value } as Values,
-                  }))
-                }
-                isPreview={adapter.previewField === field.key && preview}
-                onTogglePreview={
-                  adapter.previewField === field.key ? () => setPreview((p) => !p) : undefined
-                }
-                previewWrite={adapter.labels.previewWrite}
-                previewShow={adapter.labels.previewShow}
-              />
-            ))}
-          </div>
-        ) : (
-          <p className="border-t border-border pt-3 text-xs text-muted-foreground">
-            {adapter.labels.emptyState ?? adapter.labels.notTranslated}
-          </p>
-        )}
-
-        <div className="flex items-center gap-2 border-t border-border pt-3">
+        <div className="flex flex-col gap-2 border-t border-border bg-background p-4">
           <button
             type="button"
             onClick={() => void saveAll()}
             disabled={!isDirty || saving || busy !== null}
-            className="rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-60"
+            className="w-full rounded-lg bg-primary py-2.5 text-sm font-bold text-primary-foreground transition-all hover:bg-hero disabled:opacity-60"
           >
             {adapter.labels.saveTranslation}
           </button>
@@ -314,24 +335,25 @@ export function LocaleTabsEditor<
             type="button"
             onClick={() => void discard()}
             disabled={!isDirty || saving || busy !== null}
-            className="rounded-full border border-border px-3 py-1.5 text-xs font-medium hover:bg-secondary disabled:opacity-40"
+            className="w-full rounded-lg py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground disabled:opacity-40"
           >
             {adapter.labels.discard ?? adapter.labels.close}
           </button>
           {isDirty ? (
-            <span className="text-xs text-[color:var(--warn)]">
+            <span className="text-center text-xs text-warn">
               {adapter.labels.unsaved ?? ""}
             </span>
           ) : savedNote ? (
-            <span className="text-xs text-muted-foreground">{adapter.labels.savedTranslation}</span>
+            <span className="text-center text-xs text-muted-foreground">
+              {adapter.labels.savedTranslation}
+            </span>
           ) : null}
         </div>
-
-        {error ? <p className="text-xs text-destructive">{error}</p> : null}
       </div>
     </div>
   );
 }
+
 
 function FieldBlock({
   field,
