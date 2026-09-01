@@ -359,6 +359,35 @@ export function CommunityPanel({
     }
   };
 
+  /** Bulk action: translate the saved English description into every target. */
+  const translateAll = async () => {
+    setBusy("__all__");
+    setError(null);
+    setLocaleNote({});
+    try {
+      for (const locale of TARGETS) {
+        await translateCommunity({ data: { projectId: project.id, locale } });
+      }
+      const failure = await refetch();
+      if (failure) {
+        setError(failure);
+      } else {
+        setLocaleNote(
+          Object.fromEntries(
+            TARGETS.map((locale) => [locale, { ok: true, text: t("ops.community.translated") }]),
+          ),
+        );
+      }
+      await onSaved();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+
+
   const localeField = (field: "description", locale: Target) =>
     `${field}_${locale}` as keyof CommunityFields;
 
