@@ -114,6 +114,16 @@ export default function TeamPage() {
         </section>
         <section className="bg-card py-16">
           <div className="mx-auto max-w-6xl px-6 sm:px-8">
+            {!isPending && view === "grid" && activeCommunity ? (
+              <div className="mb-10 flex justify-center">
+                <Button asChild variant="outline" size="pill">
+                  <LocaleLink to={`/communities/${activeCommunity.slug}`}>
+                    {t("team.filters.openCommunity")}
+                    <ArrowUpRight aria-hidden="true" />
+                  </LocaleLink>
+                </Button>
+              </div>
+            ) : null}
             {isPending ? (
               <p className="text-center text-sm text-muted-foreground">{t("team.loading")}</p>
             ) : view === "map" ? (
