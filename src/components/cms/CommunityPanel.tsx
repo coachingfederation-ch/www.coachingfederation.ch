@@ -177,8 +177,14 @@ export function CommunityPanel({
     if (err) setError(err.message);
   };
 
-  const save = async (values: Partial<CommunityFields>) => {
+  /**
+   * Immediate write for actions that already produced a server artefact
+   * (uploads, AI images, language links). Both the buffer and the baseline
+   * move, so the Save CTA does not then report a phantom change.
+   */
+  const savePatch = async (values: Partial<CommunityFields>) => {
     setRow((prev) => ({ ...prev, ...values }));
+    setSaved((prev) => ({ ...prev, ...values }));
     const { error: err } = await supabase
       .from("op_projects")
       .update(values as never)
@@ -187,6 +193,53 @@ export function CommunityPanel({
     setError(null);
     await onSaved();
   };
+
+  /** Pull the row back from the server and reset both buffer and baseline. */
+  const refetch = async () => {
+    const { data } = await supabase
+      .from("op_projects")
+      .select(SELECT_COLUMNS)
+      .eq("id", project.id)
+      .maybeSingle();
+    if (!data) return;
+    const fresh = data as unknown as CommunityFields;
+    setRow(fresh);
+    setSaved(fresh);
+  };
+
+  /** The Save CTA: writes only the buffered columns that actually changed. */
+  const saveAll = useCallback(async () => {
+    const values = changedFields(row, saved);
+    if (!Object.keys(values).length || saving) return;
+    setSaving(true);
+    const { error: err } = await supabase
+      .from("op_projects")
+      .update(values as never)
+      .eq("id", project.id);
+    setSaving(false);
+    if (err) return setError(err.message);
+    setError(null);
+    setSaved(row);
+    await onSaved();
+  }, [row, saved, saving, project.id, onSaved]);
+
+  const discard = () => {
+    setRow(saved);
+    setError(null);
+  };
+
+  // Cmd/Ctrl+S saves, matching the rest of the CMS editors.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        void saveAll();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [saveAll]);
+
 
   const uploadImage = async (file: File) => {
     setError(null);
