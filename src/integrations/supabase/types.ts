@@ -4866,6 +4866,53 @@ export type Database = {
           },
         ]
       }
+      newsletter_block_translations: {
+        Row: {
+          block_id: string
+          content: string
+          created_at: string
+          id: string
+          image_alt: string | null
+          locale: string
+          manually_edited: boolean
+          source_updated_at: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          block_id: string
+          content?: string
+          created_at?: string
+          id?: string
+          image_alt?: string | null
+          locale: string
+          manually_edited?: boolean
+          source_updated_at?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          block_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          image_alt?: string | null
+          locale?: string
+          manually_edited?: boolean
+          source_updated_at?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_block_translations_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: false
+            referencedRelation: "newsletter_blocks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       newsletter_blocks: {
         Row: {
           block_type: string
@@ -4997,6 +5044,7 @@ export type Database = {
           is_stub: boolean
           last_error: string | null
           last_pushed_at: string | null
+          locale: string
           newsletter_id: string
           note: string | null
           provider: string
@@ -5017,6 +5065,7 @@ export type Database = {
           is_stub?: boolean
           last_error?: string | null
           last_pushed_at?: string | null
+          locale?: string
           newsletter_id: string
           note?: string | null
           provider?: string
@@ -5037,6 +5086,7 @@ export type Database = {
           is_stub?: boolean
           last_error?: string | null
           last_pushed_at?: string | null
+          locale?: string
           newsletter_id?: string
           note?: string | null
           provider?: string
@@ -5050,7 +5100,51 @@ export type Database = {
           {
             foreignKeyName: "newsletter_send_config_newsletter_id_fkey"
             columns: ["newsletter_id"]
-            isOneToOne: true
+            isOneToOne: false
+            referencedRelation: "newsletters"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      newsletter_translations: {
+        Row: {
+          created_at: string
+          id: string
+          locale: string
+          manually_edited: boolean
+          newsletter_id: string
+          source_updated_at: string
+          subject: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          locale: string
+          manually_edited?: boolean
+          newsletter_id: string
+          source_updated_at?: string
+          subject?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          locale?: string
+          manually_edited?: boolean
+          newsletter_id?: string
+          source_updated_at?: string
+          subject?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_translations_newsletter_id_fkey"
+            columns: ["newsletter_id"]
+            isOneToOne: false
             referencedRelation: "newsletters"
             referencedColumns: ["id"]
           },
