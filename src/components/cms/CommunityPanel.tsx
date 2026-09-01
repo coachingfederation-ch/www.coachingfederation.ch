@@ -110,6 +110,12 @@ export function CommunityPanel({
   const [regions, setRegions] = useState<{ id: string; name: string }[]>([]);
   const [regionIds, setRegionIds] = useState<string[]>([]);
   const [busy, setBusy] = useState<Target | null>(null);
+  // Per-language feedback sits next to the button that triggered it; the
+  // panel-level error banner is too far away to be noticed.
+  const [localeNote, setLocaleNote] = useState<
+    Partial<Record<Target, { ok: boolean; text: string } | null>>
+  >({});
+  const [cadences, setCadences] = useState<VocabRow[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [unsplashOpen, setUnsplashOpen] = useState(false);
