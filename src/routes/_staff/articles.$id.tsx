@@ -11,6 +11,7 @@ import { ChevronLeft } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
 import { ArticleEditorPane } from "@/components/cms/ArticleEditorPane";
+import { generateArticleImageFn } from "@/lib/article-images.functions";
 import { ArticleMetaSidebar, StatusPill } from "@/components/cms/ArticleMetaSidebar";
 import {
   type ArticleLang,
@@ -405,6 +406,10 @@ function EditorPage() {
           uploadImage={uploadImage}
           unsplashOpen={unsplashOpen}
           setUnsplashOpen={setUnsplashOpen}
+          imageBrief={imageBrief}
+          setImageBrief={setImageBrief}
+          generating={generatingImage}
+          generateImage={generateImage}
         />
 
         <ArticleMetaSidebar
