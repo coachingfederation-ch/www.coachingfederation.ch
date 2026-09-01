@@ -15,14 +15,19 @@ content (links, quotes, tables) displays correctly.
 
 ## 2. Feature image for a community
 
-A new "Feature image" block in the community panel, working exactly like the
-article cover image:
+A new "Feature image" block in the community panel, working like the newsletter
+block image — the article cover image plus AI generation:
 
-- Upload from the computer, pick from Unsplash, or paste an image URL.
+- Upload from the computer, pick from Unsplash, paste an image URL, or generate
+  one with AI from a short prompt (the community name and description are offered
+  as a starting prompt).
+- AI images are always disclosed: they store `image_source = "ai"` and carry the
+  non-removable `AiBadge` in the CMS and everywhere they are published.
 - Preview with a Remove button.
 - Unsplash picks store the photographer credit and link, shown on the public page
   as the site does elsewhere.
 - Optional alt text field for accessibility.
+
 
 Where it appears publicly:
 
