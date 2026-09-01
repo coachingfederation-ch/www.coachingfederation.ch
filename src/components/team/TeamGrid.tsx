@@ -110,15 +110,29 @@ export function TeamFilters({
         {t("team.filters.all")}
       </button>
       {projects.map((p) => (
-        <button
-          key={p.slug}
-          type="button"
-          aria-pressed={active === p.slug}
-          onClick={() => onChange(p.slug)}
-          className={pill(active === p.slug)}
-        >
-          {p.label}
-        </button>
+        <span key={p.slug} className="inline-flex items-center gap-1">
+          <button
+            type="button"
+            aria-pressed={active === p.slug}
+            onClick={() => onChange(p.slug)}
+            className={pill(active === p.slug)}
+          >
+            {p.label}
+          </button>
+          {p.isCommunity ? (
+            <LocaleLink
+              to="/communities/$slug"
+              params={{ slug: p.slug }}
+              aria-label={`${t("team.filters.openCommunity")}: ${p.label}`}
+              className="inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-xs font-semibold text-primary underline-offset-4 transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <ArrowUpRight className="size-3.5" aria-hidden="true" />
+              <span className="sr-only sm:not-sr-only">
+                {t("team.filters.openCommunity")}
+              </span>
+            </LocaleLink>
+          ) : null}
+        </span>
       ))}
     </div>
   );
