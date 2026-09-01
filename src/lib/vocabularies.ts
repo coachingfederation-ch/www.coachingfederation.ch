@@ -20,7 +20,15 @@ export const VOCAB_TABLES = [
   "cf_client_types",
   "cf_experience_bands",
   "cf_event_categories",
+  "cf_cadences",
 ] as const;
+
+/**
+ * Lists the public Coach Finder filters actually use. `cf_cadences` is a CMS
+ * vocabulary only (community meeting rhythm), so the finder must not spend a
+ * round trip on it.
+ */
+const COACH_FINDER_TABLES = VOCAB_TABLES.filter((t) => t !== "cf_cadences");
 
 export type VocabTable = (typeof VOCAB_TABLES)[number];
 
@@ -48,6 +56,7 @@ export const VOCAB_DESCRIPTORS: { table: VocabTable; key: string }[] = [
   { table: "cf_client_types", key: "clientTypes" },
   { table: "cf_experience_bands", key: "experienceBands" },
   { table: "cf_event_categories", key: "eventCategories" },
+  { table: "cf_cadences", key: "cadences" },
 ];
 
 /** Locale-aware label with a graceful fallback to the English name. */
@@ -79,15 +88,15 @@ export async function fetchVocabulary(
   return (data ?? []) as VocabRow[];
 }
 
-export type CoachFinderVocabularies = Record<VocabTable, VocabRow[]>;
+export type CoachFinderVocabularies = Record<Exclude<VocabTable, "cf_cadences">, VocabRow[]>;
 
 /** All lists in one round trip, active rows only — for the public filters. */
 export async function fetchActiveVocabularies(): Promise<CoachFinderVocabularies> {
   const results = await Promise.all(
-    VOCAB_TABLES.map((t) => fetchVocabulary(t, { activeOnly: true })),
+    COACH_FINDER_TABLES.map((t) => fetchVocabulary(t, { activeOnly: true })),
   );
   return Object.fromEntries(
-    VOCAB_TABLES.map((table, i) => [table, results[i]!]),
+    COACH_FINDER_TABLES.map((table, i) => [table, results[i]!]),
   ) as CoachFinderVocabularies;
 }
 

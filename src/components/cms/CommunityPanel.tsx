@@ -20,6 +20,7 @@ import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
 import { ARTICLE_IMAGE_BUCKET, ARTICLE_IMAGE_TTL_SECONDS } from "@/lib/storage";
 import { translateCommunity } from "@/lib/community-translations.functions";
 import { generateCommunityImageFn } from "@/lib/community-images.functions";
+import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
 
 const INPUT =
   "w-full rounded-lg border border-border bg-card px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-ring/20";
@@ -34,6 +35,8 @@ export type CommunityFields = {
   description_de: string | null;
   description_fr: string | null;
   description_it: string | null;
+  /** Chosen from the `cf_cadences` vocabulary; the notes below are derived. */
+  cadence_slug: string | null;
   cadence_note: string | null;
   cadence_note_de: string | null;
   cadence_note_fr: string | null;
@@ -55,10 +58,6 @@ export type CommunityFields = {
  */
 const BUFFERED_FIELDS = [
   "is_featured_community",
-  "cadence_note",
-  "cadence_note_de",
-  "cadence_note_fr",
-  "cadence_note_it",
   "contact_email",
   "signup_url",
   "description",
@@ -72,8 +71,15 @@ const BUFFERED_FIELDS = [
   "image_credit_url",
 ] as const satisfies readonly (keyof CommunityFields)[];
 
-const SELECT_COLUMNS =
-  "id, is_community, is_featured_community, description, description_de, description_fr, description_it, cadence_note, cadence_note_de, cadence_note_fr, cadence_note_it, contact_email, signup_url, language_slugs, cover_image_url, cover_image_alt, image_source, image_credit_name, image_credit_url";
+/**
+ * Columns the browser client may re-read after a server-side write.
+ * `contact_email` is deliberately absent: `authenticated` has no column-level
+ * SELECT grant on it (only `public_contact_email` is exposed), and a single
+ * ungranted column makes PostgREST reject the whole row — which is why a
+ * refetch after "Translate with AI" used to return nothing at all.
+ */
+const REFETCH_COLUMNS =
+  "id, is_community, is_featured_community, description, description_de, description_fr, description_it, cadence_slug, cadence_note, cadence_note_de, cadence_note_fr, cadence_note_it, signup_url, language_slugs, cover_image_url, cover_image_alt, image_source, image_credit_name, image_credit_url";
 
 function changedFields(row: CommunityFields, base: CommunityFields): Partial<CommunityFields> {
   const out: Record<string, unknown> = {};
@@ -105,6 +111,12 @@ export function CommunityPanel({
   const [regions, setRegions] = useState<{ id: string; name: string }[]>([]);
   const [regionIds, setRegionIds] = useState<string[]>([]);
   const [busy, setBusy] = useState<Target | null>(null);
+  // Per-language feedback sits next to the button that triggered it; the
+  // panel-level error banner is too far away to be noticed.
+  const [localeNote, setLocaleNote] = useState<
+    Partial<Record<Target, { ok: boolean; text: string } | null>>
+  >({});
+  const [cadences, setCadences] = useState<VocabRow[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [unsplashOpen, setUnsplashOpen] = useState(false);
@@ -154,6 +166,18 @@ export function CommunityPanel({
     })();
   }, []);
 
+  // Cadence is a managed vocabulary, so the four localised cadence notes are
+  // derived from the chosen entry instead of being typed per language.
+  useEffect(() => {
+    void (async () => {
+      try {
+        setCadences(await fetchVocabulary("cf_cadences", { activeOnly: true }));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : String(err));
+      }
+    })();
+  }, []);
+
   // Region links drive the "communities in your service area" block in the
   // Member Area, so they live with the rest of the community content.
   useEffect(() => {
@@ -197,17 +221,24 @@ export function CommunityPanel({
     await onSaved();
   };
 
-  /** Pull the row back from the server and reset both buffer and baseline. */
-  const refetch = async () => {
-    const { data } = await supabase
+  /**
+   * Pull the readable columns back from the server and move both buffer and
+   * baseline. Merged rather than replaced, because `contact_email` is not in
+   * the readable set. Failures are surfaced — a silent return is what made an
+   * AI translation look like it had done nothing.
+   */
+  const refetch = async (): Promise<string | null> => {
+    const { data, error: err } = await supabase
       .from("op_projects")
-      .select(SELECT_COLUMNS)
+      .select(REFETCH_COLUMNS)
       .eq("id", project.id)
       .maybeSingle();
-    if (!data) return;
-    const fresh = data as unknown as CommunityFields;
-    setRow(fresh);
-    setSaved(fresh);
+    if (err) return err.message;
+    if (!data) return "Community not found";
+    const fresh = data as unknown as Partial<CommunityFields>;
+    setRow((prev) => ({ ...prev, ...fresh }));
+    setSaved((prev) => ({ ...prev, ...fresh }));
+    return null;
   };
 
   /** The Save CTA: writes only the buffered columns that actually changed. */
@@ -303,18 +334,29 @@ export function CommunityPanel({
   const translate = async (locale: Target) => {
     setBusy(locale);
     setError(null);
+    setLocaleNote((prev) => ({ ...prev, [locale]: null }));
     try {
       await translateCommunity({ data: { projectId: project.id, locale } });
-      await refetch();
+      const failure = await refetch();
+      if (failure) {
+        setLocaleNote((prev) => ({ ...prev, [locale]: { ok: false, text: failure } }));
+      } else {
+        setLocaleNote((prev) => ({
+          ...prev,
+          [locale]: { ok: true, text: t("ops.community.translated") },
+        }));
+      }
       await onSaved();
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+      const text = err instanceof Error ? err.message : String(err);
+      setError(text);
+      setLocaleNote((prev) => ({ ...prev, [locale]: { ok: false, text } }));
     } finally {
       setBusy(null);
     }
   };
 
-  const localeField = (field: "description" | "cadence_note", locale: Target) =>
+  const localeField = (field: "description", locale: Target) =>
     `${field}_${locale}` as keyof CommunityFields;
 
   // The project-type choice lives in the parent "Project details" card; this
@@ -344,11 +386,30 @@ export function CommunityPanel({
           <div className="grid gap-2 sm:grid-cols-2">
             <label className="text-xs font-semibold text-muted-foreground">
               {t("ops.community.cadence")}
-              <input
-                value={row.cadence_note ?? ""}
-                onChange={(e) => setRow((p) => ({ ...p, cadence_note: e.target.value }))}
+              <select
+                value={row.cadence_slug ?? ""}
+                onChange={(e) => {
+                  const next = e.target.value || null;
+                  // Saved straight away: the four localised notes are written
+                  // by the database from this choice, so the buffer would go
+                  // stale if we waited for the Save CTA.
+                  void (async () => {
+                    await savePatch({ cadence_slug: next });
+                    await refetch();
+                  })();
+                }}
                 className={INPUT + " mt-1 font-normal"}
-              />
+              >
+                <option value="">{t("ops.community.cadenceNone")}</option>
+                {cadences.map((c) => (
+                  <option key={c.slug} value={c.slug}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+              <span className="mt-1 block font-normal text-[11px] text-muted-foreground">
+                {t("ops.community.cadenceHint")}
+              </span>
             </label>
             <label className="text-xs font-semibold text-muted-foreground">
               {t("ops.community.contactEmail")}
@@ -583,15 +644,16 @@ export function CommunityPanel({
                     {t("ops.community.translate")}
                   </button>
                 </div>
-                <input
-                  aria-label={t("ops.community.cadence")}
-                  placeholder={t("ops.community.cadence")}
-                  value={(row[localeField("cadence_note", locale)] as string | null) ?? ""}
-                  onChange={(e) =>
-                    setRow((p) => ({ ...p, [localeField("cadence_note", locale)]: e.target.value }))
-                  }
-                  className={INPUT + " mt-2"}
-                />
+                {localeNote[locale] ? (
+                  <p
+                    className={
+                      "mt-2 text-[11px] " +
+                      (localeNote[locale]!.ok ? "text-muted-foreground" : "text-destructive")
+                    }
+                  >
+                    {localeNote[locale]!.text}
+                  </p>
+                ) : null}
                 <div className="mt-2">
                   <MarkdownEditor
                     value={(row[localeField("description", locale)] as string | null) ?? ""}

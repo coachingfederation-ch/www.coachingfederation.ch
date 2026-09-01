@@ -250,7 +250,8 @@
       "availability": "Availability",
       "clientTypes": "Client Types",
       "experienceBands": "Experience bands",
-      "eventCategories": "Event categories"
+      "eventCategories": "Event categories",
+      "cadences": "Meeting cadences"
     }
   },
   "finder": {
@@ -1816,6 +1817,9 @@
       "isCommunity": "This project is a local community",
       "featured": "Feature on the About page",
       "cadence": "Meeting cadence",
+      "cadenceNone": "Not set",
+      "cadenceHint": "Chosen from the managed cadence list; translations follow automatically.",
+      "translated": "Translation updated.",
       "contactEmail": "Contact email",
       "signupUrl": "Sign-up or meetup link",
       "description": "Description (Markdown)",

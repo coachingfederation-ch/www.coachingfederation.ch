@@ -2,7 +2,7 @@
  * AI translation for operational-structure community content.
  *
  * Mirrors the article/event workflow: the English source (name, markdown
- * description, cadence note) is machine-translated into one target locale and
+ * description) is machine-translated into one target locale and
  * written back into the `*_de` / `*_fr` / `*_it` columns of `op_projects`.
  *
  * Paid AI call — gated on `admin`, the same role that may edit the operational
@@ -29,7 +29,6 @@ export type CommunityTranslationResult = {
   locale: "de" | "fr" | "it";
   name: string;
   description: string | null;
-  cadence_note: string | null;
 };
 
 export const translateCommunity = createServerFn({ method: "POST" })
@@ -41,7 +40,7 @@ export const translateCommunity = createServerFn({ method: "POST" })
 
     const { data: project, error } = await supabase
       .from("op_projects")
-      .select("id, name, description, cadence_note")
+      .select("id, name, description")
       .eq("id", data.projectId)
       .maybeSingle();
     if (error) throw new Error(error.message);
@@ -55,11 +54,10 @@ export const translateCommunity = createServerFn({ method: "POST" })
       "Keep Markdown formatting, links and structure exactly as they are.",
       "Use a warm, professional tone suitable for The Switzerland Chapter of ICF.",
       "Do not translate proper nouns such as ICF, ACC, PCC, MCC, Zürich, Basel, Bern, Lausanne, Genève, Lugano.",
-      'Respond with JSON only, in the shape {"name": "...", "description": "...", "cadence_note": "..."}.',
+      'Respond with JSON only, in the shape {"name": "...", "description": "..."}.',
       "Use an empty string for any field that is empty in the source.",
       "",
       `NAME: ${project.name ?? ""}`,
-      `CADENCE_NOTE: ${project.cadence_note ?? ""}`,
       "DESCRIPTION:",
       project.description ?? "",
     ].join("\n");
@@ -87,7 +85,7 @@ export const translateCommunity = createServerFn({ method: "POST" })
 
     const payload = (await response.json()) as { choices?: { message?: { content?: string } }[] };
     const raw = payload.choices?.[0]?.message?.content ?? "";
-    let parsed: { name?: string; description?: string; cadence_note?: string };
+    let parsed: { name?: string; description?: string };
     try {
       parsed = JSON.parse(
         raw
@@ -104,7 +102,6 @@ export const translateCommunity = createServerFn({ method: "POST" })
     const update = {
       [`name_${suffix}`]: clean(parsed.name) ?? project.name,
       [`description_${suffix}`]: clean(parsed.description),
-      [`cadence_note_${suffix}`]: clean(parsed.cadence_note),
     };
 
     const { error: updateError } = await supabase
@@ -117,6 +114,5 @@ export const translateCommunity = createServerFn({ method: "POST" })
       locale: data.locale,
       name: update[`name_${suffix}`] as string,
       description: update[`description_${suffix}`] as string | null,
-      cadence_note: update[`cadence_note_${suffix}`] as string | null,
     };
   });

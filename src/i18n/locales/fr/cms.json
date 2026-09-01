@@ -250,7 +250,8 @@
       "availability": "Disponibilité",
       "clientTypes": "Types de clients",
       "experienceBands": "Niveaux d'expérience",
-      "eventCategories": "Catégories d'événements"
+      "eventCategories": "Catégories d'événements",
+      "cadences": "Rythmes de rencontre"
     }
   },
   "finder": {
@@ -1816,6 +1817,9 @@
       "isCommunity": "Ce projet est une communauté locale",
       "featured": "Mettre en avant sur la page À propos",
       "cadence": "Fréquence des rencontres",
+      "cadenceNone": "Non défini",
+      "cadenceHint": "Choisi dans la liste gérée des rythmes ; les traductions suivent automatiquement.",
+      "translated": "Traduction mise à jour.",
       "contactEmail": "E-mail de contact",
       "signupUrl": "Lien d'inscription ou de rencontre",
       "description": "Description (Markdown)",
