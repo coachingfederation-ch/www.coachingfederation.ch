@@ -1825,13 +1825,16 @@
     "reorder": "Réordonner",
     "reorderHint": "L'ordre détermine la façon dont les projets et communautés apparaissent sur les pages publiques de l'équipe et des communautés.",
     "group": {
-      "general": "Projets généraux",
+      "general": "Équipes organisationnelles",
+      "projectTeams": "Équipes de projet",
       "communities": "Communautés locales"
     },
     "type": {
-      "legend": "Type de projet",
-      "general": "Projet général",
-      "generalNote": "Comité ou groupe de travail. Apparaît uniquement sur la page publique de l'équipe.",
+      "legend": "Type de structure",
+      "general": "Équipe organisationnelle",
+      "generalNote": "Comité permanent ou fonction du comité directeur. Apparaît uniquement sur la page publique de l'équipe.",
+      "projectTeam": "Équipe de projet",
+      "projectTeamNote": "Groupe de travail à durée limitée. Apparaît uniquement sur la page publique de l'équipe.",
       "community": "Communauté locale",
       "communityNote": "Communauté régionale. Également publiée sur /communities."
     }

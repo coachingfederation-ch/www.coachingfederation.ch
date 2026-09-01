@@ -1825,13 +1825,16 @@
     "reorder": "Neu ordnen",
     "reorderHint": "Die Reihenfolge bestimmt, wie Projekte und Communities auf den öffentlichen Team- und Community-Seiten erscheinen.",
     "group": {
-      "general": "Allgemeine Projekte",
+      "general": "Organisationsteams",
+      "projectTeams": "Projektteams",
       "communities": "Lokale Communities"
     },
     "type": {
-      "legend": "Projekttyp",
-      "general": "Allgemeines Projekt",
-      "generalNote": "Komitee oder Arbeitsgruppe. Erscheint nur auf der öffentlichen Team-Seite.",
+      "legend": "Strukturtyp",
+      "general": "Organisationsteam",
+      "generalNote": "Ständiges Komitee oder Vorstandsfunktion. Erscheint nur auf der öffentlichen Team-Seite.",
+      "projectTeam": "Projektteam",
+      "projectTeamNote": "Zeitlich begrenzte Arbeitsgruppe. Erscheint nur auf der öffentlichen Team-Seite.",
       "community": "Lokale Community",
       "communityNote": "Regionale Community. Wird auch auf /communities veröffentlicht."
     }

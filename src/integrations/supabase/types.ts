@@ -5165,6 +5165,7 @@ export type Database = {
           is_active: boolean
           is_community: boolean
           is_featured_community: boolean
+          is_project_team: boolean
           language_slugs: string[]
           name: string
           name_de: string | null
@@ -5192,6 +5193,7 @@ export type Database = {
           is_active?: boolean
           is_community?: boolean
           is_featured_community?: boolean
+          is_project_team?: boolean
           language_slugs?: string[]
           name: string
           name_de?: string | null
@@ -5219,6 +5221,7 @@ export type Database = {
           is_active?: boolean
           is_community?: boolean
           is_featured_community?: boolean
+          is_project_team?: boolean
           language_slugs?: string[]
           name?: string
           name_de?: string | null
