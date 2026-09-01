@@ -275,14 +275,15 @@ export function CommunityPanel({
       const result = await generateCommunityImageFn({
         data: { projectId: project.id, brief: brief.trim() || undefined },
       });
-      setRow((p) => ({
-        ...p,
+      const applied = {
         cover_image_url: result.url,
         cover_image_alt: result.alt,
         image_source: "ai",
         image_credit_name: null,
         image_credit_url: null,
-      }));
+      };
+      setRow((p) => ({ ...p, ...applied }));
+      setSaved((p) => ({ ...p, ...applied }));
       await onSaved();
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -302,6 +303,7 @@ export function CommunityPanel({
     setError(null);
     try {
       await translateCommunity({ data: { projectId: project.id, locale } });
+      await refetch();
       await onSaved();
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -328,7 +330,7 @@ export function CommunityPanel({
           <input
             type="checkbox"
             checked={row.is_featured_community}
-            onChange={(e) => void save({ is_featured_community: e.target.checked })}
+            onChange={(e) => setRow((p) => ({ ...p, is_featured_community: e.target.checked }))}
             className="h-4 w-4 accent-[var(--color-primary)]"
           />
           {t("ops.community.featured")}
@@ -343,7 +345,6 @@ export function CommunityPanel({
               <input
                 value={row.cadence_note ?? ""}
                 onChange={(e) => setRow((p) => ({ ...p, cadence_note: e.target.value }))}
-                onBlur={(e) => void save({ cadence_note: e.target.value || null })}
                 className={INPUT + " mt-1 font-normal"}
               />
             </label>
@@ -353,7 +354,6 @@ export function CommunityPanel({
                 type="email"
                 value={row.contact_email ?? ""}
                 onChange={(e) => setRow((p) => ({ ...p, contact_email: e.target.value }))}
-                onBlur={(e) => void save({ contact_email: e.target.value || null })}
                 className={INPUT + " mt-1 font-normal"}
               />
             </label>
@@ -363,7 +363,6 @@ export function CommunityPanel({
                 type="url"
                 value={row.signup_url ?? ""}
                 onChange={(e) => setRow((p) => ({ ...p, signup_url: e.target.value }))}
-                onBlur={(e) => void save({ signup_url: e.target.value || null })}
                 className={INPUT + " mt-1 font-normal"}
               />
             </label>
@@ -442,7 +441,6 @@ export function CommunityPanel({
                 placeholder={t("ops.community.imageAlt")}
                 value={row.cover_image_alt ?? ""}
                 onChange={(e) => setRow((p) => ({ ...p, cover_image_alt: e.target.value }))}
-                onBlur={(e) => void save({ cover_image_alt: e.target.value || null })}
                 className={INPUT}
               />
 
@@ -451,14 +449,14 @@ export function CommunityPanel({
                 <input
                   aria-label={t("ops.community.imageUrl")}
                   value={row.cover_image_url ?? ""}
-                  onChange={(e) => setRow((p) => ({ ...p, cover_image_url: e.target.value }))}
-                  onBlur={(e) =>
-                    void save({
-                      cover_image_url: e.target.value || null,
+                  onChange={(e) =>
+                    setRow((p) => ({
+                      ...p,
+                      cover_image_url: e.target.value,
                       image_source: e.target.value ? "url" : null,
                       image_credit_name: null,
                       image_credit_url: null,
-                    })
+                    }))
                   }
                   placeholder={t("ops.community.imageUrl")}
                   className={INPUT + " min-w-40 flex-1"}
@@ -502,23 +500,13 @@ export function CommunityPanel({
             <p className="text-xs font-semibold text-muted-foreground">
               {t("ops.community.description")}
             </p>
-            <div
-              className="mt-1"
-              onBlur={() => {
-                const next = draft.current.description;
-                if (next !== undefined && next !== (row.description ?? ""))
-                  void save({ description: next || null });
-              }}
-            >
+            <div className="mt-1">
               <MarkdownEditor
                 value={row.description ?? ""}
                 rows={12}
                 language="en"
                 modes={["write", "preview"]}
-                onChange={(next) => {
-                  draft.current.description = next;
-                  setRow((p) => ({ ...p, description: next }));
-                }}
+                onChange={(next) => setRow((p) => ({ ...p, description: next }))}
               />
             </div>
           </div>
@@ -599,33 +587,17 @@ export function CommunityPanel({
                   onChange={(e) =>
                     setRow((p) => ({ ...p, [localeField("cadence_note", locale)]: e.target.value }))
                   }
-                  onBlur={(e) =>
-                    void save({ [localeField("cadence_note", locale)]: e.target.value || null })
-                  }
                   className={INPUT + " mt-2"}
                 />
-                <div
-                  className="mt-2"
-                  onBlur={() => {
-                    const key = localeField("description", locale) as string;
-                    const next = draft.current[key];
-                    if (
-                      next !== undefined &&
-                      next !== ((row[key as keyof CommunityFields] as string | null) ?? "")
-                    )
-                      void save({ [key]: next || null });
-                  }}
-                >
+                <div className="mt-2">
                   <MarkdownEditor
                     value={(row[localeField("description", locale)] as string | null) ?? ""}
                     rows={8}
                     language={locale}
                     modes={["write", "preview"]}
-                    onChange={(next) => {
-                      const key = localeField("description", locale) as string;
-                      draft.current[key] = next;
-                      setRow((p) => ({ ...p, [key]: next }));
-                    }}
+                    onChange={(next) =>
+                      setRow((p) => ({ ...p, [localeField("description", locale)]: next }))
+                    }
                   />
                 </div>
               </div>
@@ -637,7 +609,7 @@ export function CommunityPanel({
         open={unsplashOpen}
         onOpenChange={setUnsplashOpen}
         onPick={(pick) =>
-          void save({
+          void savePatch({
             cover_image_url: pick.url,
             image_source: "unsplash",
             image_credit_name: pick.creditName,
