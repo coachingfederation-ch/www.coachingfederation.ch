@@ -263,9 +263,7 @@ export function CommunityPanel({
             <legend className="text-xs font-semibold text-muted-foreground">
               {t("ops.community.image")}
             </legend>
-            <p className="mt-1 text-[11px] text-muted-foreground">
-              {t("ops.community.imageNote")}
-            </p>
+            <p className="mt-1 text-[11px] text-muted-foreground">{t("ops.community.imageNote")}</p>
             <div className="mt-2 space-y-3">
               {row.cover_image_url ? (
                 <div className="relative overflow-hidden rounded-2xl border border-border">
@@ -386,9 +384,7 @@ export function CommunityPanel({
                   {t("ops.community.imageGenerate")}
                 </button>
               </div>
-              <p className="text-[11px] text-muted-foreground">
-                {t("ops.community.imageAiNote")}
-              </p>
+              <p className="text-[11px] text-muted-foreground">{t("ops.community.imageAiNote")}</p>
             </div>
           </fieldset>
 
@@ -503,7 +499,10 @@ export function CommunityPanel({
                   onBlur={() => {
                     const key = localeField("description", locale) as string;
                     const next = draft.current[key];
-                    if (next !== undefined && next !== ((row[key as keyof CommunityFields] as string | null) ?? ""))
+                    if (
+                      next !== undefined &&
+                      next !== ((row[key as keyof CommunityFields] as string | null) ?? "")
+                    )
                       void save({ [key]: next || null });
                   }}
                 >
