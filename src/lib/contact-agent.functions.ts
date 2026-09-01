@@ -81,7 +81,7 @@ export const draftContactSummary = createServerFn({ method: "POST" })
 
     const { checkRateLimit, clientIp } = await import("./rate-limit.server");
     const { getRequest } = await import("@tanstack/react-start/server");
-    const verdict = await checkRateLimit("contact-draft", `ip:${clientIp(getRequest())}`, [
+    const verdict = await checkRateLimit(data.kind === "event_proposal" ? "proposal-draft" : "contact-draft", `ip:${clientIp(getRequest())}`, [
       { windowSeconds: 3_600, max: 12 },
       { windowSeconds: 86_400, max: 40 },
     ]);
@@ -148,7 +148,7 @@ export const submitContactEnquiry = createServerFn({ method: "POST" })
     const { checkRateLimit, clientIp } = await import("./rate-limit.server");
     const { getRequest } = await import("@tanstack/react-start/server");
     // Each submission sends outbound mail, so the cap is tighter than the chat.
-    const verdict = await checkRateLimit("contact-submit", `ip:${clientIp(getRequest())}`, [
+    const verdict = await checkRateLimit(data.kind === "event_proposal" ? "proposal-submit" : "contact-submit", `ip:${clientIp(getRequest())}`, [
       { windowSeconds: 3_600, max: 3 },
       { windowSeconds: 86_400, max: 10 },
     ]);
