@@ -57,6 +57,13 @@ export default function TeamPage() {
     [data],
   );
 
+  /** The active filter, when it points at a community that has a public page. */
+  const activeCommunity = useMemo(
+    () => (data?.projects ?? []).find((p) => p.slug === project && p.isCommunity) ?? null,
+    [data, project],
+  );
+
+
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <CompactHero
