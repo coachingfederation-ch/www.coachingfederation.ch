@@ -10,9 +10,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useI18n } from "@/i18n";
 import { MemberModal } from "@/components/team/MemberModal";
+import { combRows, HexMemberTile } from "@/components/hex-tile";
 import type { TeamMember, TeamProject } from "@/lib/team";
-
-const HEX_CLIP = "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)";
 
 function useColumns(): number {
   const [cols, setCols] = useState(4);
@@ -32,48 +31,16 @@ function useColumns(): number {
   return cols;
 }
 
-/** Alternating full / short rows — the shape that makes a comb read as a comb. */
-function combRows<T>(items: T[], columns: number): T[][] {
-  const rows: T[][] = [];
-  let index = 0;
-  let long = true;
-  while (index < items.length) {
-    const size = long || columns < 3 ? columns : columns - 1;
-    rows.push(items.slice(index, index + size));
-    index += size;
-    long = !long;
-  }
-  return rows;
-}
-
 function HexTile({ member, onOpen }: { member: TeamMember; onOpen: () => void }) {
-  const [failed, setFailed] = useState(false);
   const role = member.assignments[0];
-  const showImage = !!member.imageUrl && !failed;
   return (
-    <button
-      type="button"
-      onClick={onOpen}
-      className="group relative block w-[clamp(7rem,22vw,10.5rem)] shrink-0 focus:outline-none"
-    >
-      <span
-        className="relative block aspect-square w-full overflow-hidden bg-primary/10 transition group-hover:brightness-95 group-focus-visible:ring-4 group-focus-visible:ring-ring/40"
-        style={{ clipPath: HEX_CLIP }}
-      >
-        {showImage ? (
-          <img
-            src={member.imageUrl!}
-            alt=""
-            loading="lazy"
-            onError={() => setFailed(true)}
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <span className="grid h-full w-full place-items-center text-2xl font-bold text-primary">
-            {member.initials}
-          </span>
-        )}
-        <span className="absolute inset-0 flex flex-col justify-center bg-primary/85 px-3 py-4 text-center opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
+    <HexMemberTile
+      member={member}
+      label={member.name}
+      onOpen={onOpen}
+      className="w-[clamp(7rem,22vw,10.5rem)]"
+      caption={
+        <>
           <span className="text-[13px] font-bold leading-tight text-primary-foreground">
             {member.name}
           </span>
@@ -82,10 +49,9 @@ function HexTile({ member, onOpen }: { member: TeamMember; onOpen: () => void })
               {role.role} · {role.project}
             </span>
           ) : null}
-        </span>
-      </span>
-      <span className="sr-only">{member.name}</span>
-    </button>
+        </>
+      }
+    />
   );
 }
 
