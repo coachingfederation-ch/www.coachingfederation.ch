@@ -6,11 +6,12 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { ArrowUpRight } from "lucide-react";
 import { CompactHero, SiteFooter } from "@/components/site-chrome";
 import { TeamFilters, TeamHoneycomb } from "@/components/team/TeamGrid";
 import { StructureMap } from "@/components/team/StructureMap";
 import { Button } from "@/design-system/icf-welcome-design-system-a835df";
-import { useI18n } from "@/i18n";
+import { LocaleLink, useI18n } from "@/i18n";
 import { listTeamDirectory } from "@/lib/team.functions";
 
 type View = "grid" | "map";
