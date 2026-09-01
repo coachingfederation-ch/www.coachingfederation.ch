@@ -182,7 +182,7 @@ export function EnquiryAgentPanel({
       className={cn("rounded-3xl border border-border bg-background text-foreground", className)}
     >
       {stage === "chat" && (
-        <div className="flex h-[32rem] flex-col">
+        <div className="flex h-128 flex-col">
           <Conversation className="flex-1">
             <ConversationContent className="gap-4 px-5 py-5">
               {messages.length === 0 && (
@@ -257,7 +257,7 @@ export function EnquiryAgentPanel({
             </PromptInput>
 
             <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-              <p className="text-[11px] leading-snug text-muted-foreground">{tp("disclaimer")}</p>
+              <p className="text-xs leading-snug text-muted-foreground">{tp("disclaimer")}</p>
               <Button
                 type="button"
                 size="pill"
