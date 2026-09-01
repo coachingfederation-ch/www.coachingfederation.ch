@@ -792,10 +792,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Projekte leiten",
-            "Von ICFS für die Leitung von Initiativen anerkannt werden"
-          ]
+          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
         },
         "status": {
           "title": "Status",
@@ -1820,7 +1817,17 @@
       "translations": "Übersetzungen",
       "translate": "Mit KI übersetzen",
       "regions": "Abgedeckte Regionen",
-      "regionsNote": "Mitglieder, deren Einzugsgebiet diese Regionen umfasst, sehen diese Community in ihrem Mitgliederbereich."
+      "regionsNote": "Mitglieder, deren Einzugsgebiet diese Regionen umfasst, sehen diese Community in ihrem Mitgliederbereich.",
+      "image": "Titelbild",
+      "imageNote": "Erscheint auf der Community-Karte und oben auf der Community-Seite.",
+      "imageUpload": "Bild hochladen",
+      "imageUploading": "Wird hochgeladen…",
+      "imageRemove": "Bild entfernen",
+      "imageAlt": "Alternativtext (Bild beschreiben)",
+      "imageUrl": "Oder Bild-URL einfügen",
+      "imageBrief": "Optionale Bildidee für die KI, z. B. Coaches im Gespräch in einem Café in Basel",
+      "imageGenerate": "Mit KI erzeugen",
+      "imageAiNote": "KI-generierte Bilder werden auf der Website immer entsprechend gekennzeichnet."
     },
     "reorder": "Neu ordnen",
     "reorderHint": "Die Reihenfolge bestimmt, wie Projekte und Communities auf den öffentlichen Team- und Community-Seiten erscheinen.",

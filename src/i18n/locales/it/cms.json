@@ -792,10 +792,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Guidare progetti",
-            "Essere riconosciuti da ICFS per aver guidato iniziative"
-          ]
+          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
         },
         "status": {
           "title": "Status",
@@ -1820,7 +1817,17 @@
       "translations": "Traduzioni",
       "translate": "Traduci con l'IA",
       "regions": "Regioni coperte",
-      "regionsNote": "I membri la cui area di servizio include queste regioni vedranno questa community nella loro Area membri."
+      "regionsNote": "I membri la cui area di servizio include queste regioni vedranno questa community nella loro Area membri.",
+      "image": "Immagine principale",
+      "imageNote": "Mostrata sulla scheda della community e in cima alla sua pagina.",
+      "imageUpload": "Carica un’immagine",
+      "imageUploading": "Caricamento…",
+      "imageRemove": "Rimuovi immagine",
+      "imageAlt": "Testo alternativo (descrivi l’immagine)",
+      "imageUrl": "Oppure incolla l’URL di un’immagine",
+      "imageBrief": "Indicazione artistica facoltativa per l’IA, ad es. coach che dialogano in un caffè a Lugano",
+      "imageGenerate": "Genera con l’IA",
+      "imageAiNote": "Le immagini generate dall’IA sono sempre segnalate come tali sul sito pubblico."
     },
     "reorder": "Riorordina",
     "reorderHint": "L'ordine determina come i progetti e le community appaiono sulle pagine pubbliche del team e delle community.",

@@ -792,10 +792,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Piloter des projets",
-            "Être reconnu par ICFS pour avoir mené des initiatives"
-          ]
+          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
         },
         "status": {
           "title": "Status",
@@ -1820,7 +1817,17 @@
       "translations": "Traductions",
       "translate": "Traduire avec l'IA",
       "regions": "Régions couvertes",
-      "regionsNote": "Les membres dont la zone de service inclut ces régions voient cette communauté dans leur espace membres."
+      "regionsNote": "Les membres dont la zone de service inclut ces régions voient cette communauté dans leur espace membres.",
+      "image": "Image principale",
+      "imageNote": "Affichée sur la carte de la communauté et en haut de sa page.",
+      "imageUpload": "Téléverser une image",
+      "imageUploading": "Téléversement…",
+      "imageRemove": "Retirer l’image",
+      "imageAlt": "Texte alternatif (décrivez l’image)",
+      "imageUrl": "Ou collez l’URL d’une image",
+      "imageBrief": "Direction artistique facultative pour l’IA, p. ex. des coachs qui échangent dans un café à Lausanne",
+      "imageGenerate": "Générer avec l’IA",
+      "imageAiNote": "Les images générées par IA sont toujours signalées comme telles sur le site public."
     },
     "reorder": "Réordonner",
     "reorderHint": "L'ordre détermine la façon dont les projets et communautés apparaissent sur les pages publiques de l'équipe et des communautés.",

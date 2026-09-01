@@ -38,7 +38,8 @@
       "venueLabel": "Venue",
       "timeLabel": "Time",
       "all": "See all events"
-    }
+    },
+    "photoBy": "Photo by"
   },
   "preview": {
     "eyebrow": "Local communities",

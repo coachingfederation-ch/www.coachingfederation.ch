@@ -8,6 +8,7 @@ import { ArrowLeft, CalendarClock, Mail, ArrowUpRight } from "lucide-react";
 import { CompactHero, SiteFooter } from "@/components/site-chrome";
 import { Markdown } from "@/components/markdown";
 import { CommunityRing } from "@/components/communities/CommunityRing";
+import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
 import { CommunityEvents } from "@/components/communities/CommunityEvents";
 import { LocaleLink, useI18n } from "@/i18n";
 import { getCommunity } from "@/lib/communities.functions";
@@ -50,6 +51,33 @@ export default function CommunityDetailPage({ slug }: { slug: string }) {
             ) : (
               <div className="mt-10 grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:items-start">
                 <div>
+                  {data.coverImageUrl ? (
+                    <figure className="mb-8">
+                      <div className="relative overflow-hidden rounded-3xl border border-border/70">
+                        <img
+                          src={data.coverImageUrl}
+                          alt={data.coverImageAlt ?? ""}
+                          className="h-64 w-full object-cover"
+                        />
+                        {data.imageSource === "ai" ? (
+                          <AiBadge className="absolute bottom-3 left-3" />
+                        ) : null}
+                      </div>
+                      {data.imageCreditName ? (
+                        <figcaption className="mt-2 text-xs text-muted-foreground">
+                          {t("communities.detail.photoBy")}{" "}
+                          <a
+                            href={data.imageCreditUrl ?? "#"}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline underline-offset-2"
+                          >
+                            {data.imageCreditName}
+                          </a>
+                        </figcaption>
+                      ) : null}
+                    </figure>
+                  ) : null}
                   {data.description ? (
                     <Markdown>{data.description}</Markdown>
                   ) : (
