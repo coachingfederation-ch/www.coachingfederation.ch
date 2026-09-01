@@ -260,7 +260,7 @@ export function CommunityPanel({
       .createSignedUrl(path, ARTICLE_IMAGE_TTL_SECONDS);
     setUploading(false);
     if (signErr || !signed) return setError(signErr?.message ?? "Upload failed");
-    await save({
+    await savePatch({
       cover_image_url: signed.signedUrl,
       image_source: "upload",
       image_credit_name: null,
@@ -294,7 +294,7 @@ export function CommunityPanel({
   const toggleLanguage = (slug: string) => {
     const current = row.language_slugs ?? [];
     const next = current.includes(slug) ? current.filter((s) => s !== slug) : [...current, slug];
-    void save({ language_slugs: next });
+    void savePatch({ language_slugs: next });
   };
 
   const translate = async (locale: Target) => {
@@ -388,7 +388,7 @@ export function CommunityPanel({
                   <button
                     type="button"
                     onClick={() =>
-                      void save({
+                      void savePatch({
                         cover_image_url: null,
                         cover_image_alt: null,
                         image_source: null,
