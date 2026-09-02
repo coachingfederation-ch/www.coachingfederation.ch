@@ -251,7 +251,7 @@ export function EnquiryAgentPanel({
             <ConversationScrollButton />
           </Conversation>
 
-          <div className="border-t border-border p-4">
+          <div className={cn("border-t border-border", overlay ? "px-8 py-5" : "p-4")}>
             <PromptInput className="relative" onSubmit={(_message, event) => submitTurn(event)}>
               <PromptInputTextarea
                 ref={textareaRef}
