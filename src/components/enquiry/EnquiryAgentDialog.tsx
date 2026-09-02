@@ -62,7 +62,7 @@ export function EnquiryAgentDialog({ trigger, tp, ...panelProps }: EnquiryAgentD
 
   if (isMobile) {
     return (
-      <Drawer open={open} onOpenChange={setOpen}>
+      <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerTrigger asChild>{trigger}</DrawerTrigger>
         <DrawerContent className="h-[92dvh] text-left">
           <DrawerHeader className="text-left">
@@ -76,7 +76,7 @@ export function EnquiryAgentDialog({ trigger, tp, ...panelProps }: EnquiryAgentD
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="flex h-[80dvh] max-w-2xl flex-col gap-0 rounded-3xl p-0 text-left">
         <DialogHeader className="space-y-2 border-b border-border px-8 pb-6 pt-8 text-left">
