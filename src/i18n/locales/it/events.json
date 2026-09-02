@@ -64,7 +64,10 @@
       "email": "Inserisci un indirizzo e-mail valido.",
       "send": "Non siamo riusciti a inviare la proposta. Riprova oppure scrivi a office@coachingfederation.ch.",
       "rateLimited": "Sono molti messaggi da questa connessione. Riprova più tardi."
-    }
+    },
+    "openCta": "Proponi un evento",
+    "overlayTitle": "Proponi un evento",
+    "overlayLede": "Diamo forma insieme alla tua idea, poi rivedi la proposta prima che arrivi al nostro team programmi."
   },
   "tag": {
     "inPerson": "In presenza",

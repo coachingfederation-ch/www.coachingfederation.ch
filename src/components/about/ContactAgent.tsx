@@ -3,13 +3,15 @@
 /**
  * Contact section of /about: a conversation instead of a form.
  *
- * The panel itself is shared with the event proposal on /events — see
- * `src/components/enquiry/EnquiryAgentPanel.tsx`. This file only supplies the
- * section chrome, the endpoint and the copy for the contact flow.
+ * The section shows the invitation; the conversation itself opens in an
+ * overlay (sheet on phones, dialog on desktop) shared with the event proposal
+ * on /events — see `src/components/enquiry/EnquiryAgentDialog.tsx`.
  *
  * Exports: ContactAgent. Rendered by src/pages/About.tsx.
  */
-import { EnquiryAgentPanel } from "@/components/enquiry/EnquiryAgentPanel";
+import { MessageCircle } from "lucide-react";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
+import { EnquiryAgentDialog } from "@/components/enquiry/EnquiryAgentDialog";
 import { useI18n } from "@/i18n";
 
 export function ContactAgent() {
@@ -17,21 +19,29 @@ export function ContactAgent() {
 
   return (
     <section id="contact" className="bg-card py-24" aria-label={t("about.contact.eyebrow")}>
-      <div className="mx-auto max-w-7xl px-8">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="eyebrow text-primary">{t("about.contact.eyebrow")}</p>
-          <h2 className="mt-3 display-lg">{t("about.contact.title")}</h2>
-          <p className="mt-4 text-muted-foreground">{t("about.contact.lede")}</p>
-        </div>
+      <div className="mx-auto max-w-2xl px-8 text-center">
+        <p className="eyebrow text-primary">{t("about.contact.eyebrow")}</p>
+        <h2 className="mt-3 display-lg">{t("about.contact.title")}</h2>
+        <p className="mt-4 text-muted-foreground">{t("about.contact.lede")}</p>
 
-        <EnquiryAgentPanel
-          className="mx-auto mt-10 max-w-2xl"
-          api="/api/contact-agent"
-          kind="contact"
-          idPrefix="contact"
-          tp={(key) => t(`about.contact.${key}`)}
-          suggestionKeys={["coach", "organisation", "membership"]}
-        />
+        <div className="mt-8 flex flex-col items-center gap-3">
+          <EnquiryAgentDialog
+            api="/api/contact-agent"
+            kind="contact"
+            idPrefix="contact"
+            tp={(key) => t(`about.contact.${key}`)}
+            suggestionKeys={["coach", "organisation", "membership"]}
+            trigger={
+              <Button type="button" size="pill">
+                <MessageCircle aria-hidden="true" />
+                {t("about.contact.openCta")}
+              </Button>
+            }
+          />
+          <p className="text-xs leading-snug text-muted-foreground">
+            {t("about.contact.disclaimer")}
+          </p>
+        </div>
       </div>
     </section>
   );

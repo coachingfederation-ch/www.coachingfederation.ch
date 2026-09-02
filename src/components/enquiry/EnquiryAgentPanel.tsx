@@ -60,6 +60,10 @@ export type EnquiryAgentPanelProps = {
   tp: (key: string) => string;
   /** Copy keys of the starter chips shown on the empty conversation. */
   suggestionKeys: string[];
+  /** "overlay" fills the height of a dialog or sheet and drops the outer frame. */
+  variant?: "inline" | "overlay";
+  /** Fires once the verification email is on its way. */
+  onComplete?: () => void;
   className?: string;
 };
 
@@ -69,6 +73,8 @@ export function EnquiryAgentPanel({
   idPrefix,
   tp,
   suggestionKeys,
+  variant = "inline",
+  onComplete,
   className,
 }: EnquiryAgentPanelProps) {
   const { t, locale } = useI18n();
@@ -167,6 +173,7 @@ export function EnquiryAgentPanel({
       });
       if (result.status === "verification_sent") {
         setStage("done");
+        onComplete?.();
         return;
       }
       setProblem(result.status === "rate_limited" ? tp("errors.rateLimited") : tp("errors.send"));
@@ -177,18 +184,24 @@ export function EnquiryAgentPanel({
     }
   };
 
+  const overlay = variant === "overlay";
+
   return (
     <div
-      className={cn("rounded-3xl border border-border bg-background text-foreground", className)}
+      className={cn(
+        "flex flex-col bg-background text-foreground",
+        overlay ? "overflow-hidden" : "rounded-3xl border border-border",
+        className,
+      )}
     >
       {stage === "chat" && (
-        <div className="flex h-128 flex-col">
+        <div className={cn("flex min-h-0 flex-col", overlay ? "flex-1" : "h-128")}>
           <Conversation className="flex-1">
-            <ConversationContent className="gap-4 px-5 py-5">
+            <ConversationContent className={cn("gap-6", overlay ? "px-8 py-6" : "px-6 py-6")}>
               {messages.length === 0 && (
-                <div className="space-y-3">
-                  <p className="text-sm text-muted-foreground">{tp("empty")}</p>
-                  <div className="flex flex-wrap gap-2">
+                <div className="space-y-4">
+                  <p className="text-base leading-relaxed text-muted-foreground">{tp("empty")}</p>
+                  <div className="flex flex-col items-start gap-2">
                     {suggestionKeys.map((key) => {
                       const suggestion = tp(`suggestions.${key}`);
                       return (
@@ -196,7 +209,7 @@ export function EnquiryAgentPanel({
                           key={key}
                           type="button"
                           onClick={() => void sendMessage({ text: suggestion })}
-                          className="rounded-full border border-border px-3 py-1.5 text-xs text-foreground transition-colors hover:bg-secondary"
+                          className="rounded-full border border-border px-4 py-2 text-left text-sm text-foreground transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         >
                           {suggestion}
                         </button>
@@ -238,7 +251,7 @@ export function EnquiryAgentPanel({
             <ConversationScrollButton />
           </Conversation>
 
-          <div className="border-t border-border p-4">
+          <div className={cn("border-t border-border", overlay ? "px-8 py-5" : "p-4")}>
             <PromptInput className="relative" onSubmit={(_message, event) => submitTurn(event)}>
               <PromptInputTextarea
                 ref={textareaRef}
@@ -278,10 +291,16 @@ export function EnquiryAgentPanel({
       )}
 
       {stage === "review" && (
-        <form onSubmit={send} className="space-y-5 p-6 text-left sm:p-8">
+        <form
+          onSubmit={send}
+          className={cn(
+            "space-y-6 text-left",
+            overlay ? "min-h-0 flex-1 overflow-y-auto px-8 py-7" : "p-6 sm:p-8",
+          )}
+        >
           <div>
-            <h3 className="font-display text-xl font-bold tracking-tight">{tp("reviewTitle")}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">{tp("reviewLede")}</p>
+            <h3 className="font-heading text-xl tracking-tight">{tp("reviewTitle")}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{tp("reviewLede")}</p>
           </div>
 
           <div className="grid gap-2">
@@ -383,12 +402,18 @@ export function EnquiryAgentPanel({
       )}
 
       {stage === "done" && (
-        <div className="space-y-4 p-8 text-center" role="status">
-          <h3 className="font-display text-xl font-bold tracking-tight">{tp("doneTitle")}</h3>
-          <p className="text-sm text-muted-foreground">
+        <div
+          className={cn(
+            "space-y-4 text-center",
+            overlay ? "min-h-0 flex-1 overflow-y-auto px-8 py-12" : "p-8",
+          )}
+          role="status"
+        >
+          <h3 className="font-heading text-xl tracking-tight">{tp("doneTitle")}</h3>
+          <p className="mx-auto max-w-md text-sm leading-relaxed text-muted-foreground">
             {tp("doneBody").replace("{email}", email)}
           </p>
-          <p className="text-xs text-muted-foreground">{tp("doneHint")}</p>
+          <p className="mx-auto max-w-md text-xs text-muted-foreground">{tp("doneHint")}</p>
         </div>
       )}
     </div>
