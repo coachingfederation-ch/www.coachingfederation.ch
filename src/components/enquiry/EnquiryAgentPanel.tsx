@@ -209,7 +209,7 @@ export function EnquiryAgentPanel({
                           key={key}
                           type="button"
                           onClick={() => void sendMessage({ text: suggestion })}
-                          className="rounded-full border border-border px-3 py-1.5 text-xs text-foreground transition-colors hover:bg-secondary"
+                          className="rounded-full border border-border px-4 py-2 text-left text-sm text-foreground transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         >
                           {suggestion}
                         </button>
