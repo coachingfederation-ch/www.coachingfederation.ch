@@ -58,5 +58,58 @@
     "errorBody": "Veuillez réessayer dans quelques instants.",
     "notFoundMetaTitle": "Article introuvable — The Switzerland Chapter of ICF",
     "fallbackDescription": "Un article de la collection de perspectives de The Switzerland Chapter of ICF."
+  },
+  "minRead": "min de lecture",
+  "feedback": {
+    "eyebrow": "Orienter la rédaction",
+    "title": "Dites-nous où aller ensuite",
+    "lede": "Deux curseurs et, si vous le souhaitez, une phrase. Nous lisons chaque réponse et elle oriente nos prochains articles.",
+    "depth": "Profondeur",
+    "depthMin": "Trop léger",
+    "depthMax": "Trop pointu",
+    "depthScale": {
+      "1": "Trop léger",
+      "2": "Un peu léger",
+      "3": "Juste ce qu'il faut",
+      "4": "Un peu pointu",
+      "5": "Trop pointu"
+    },
+    "usefulness": "Utilité",
+    "usefulnessMin": "Intéressant",
+    "usefulnessMax": "Je vais m'en servir",
+    "usefulnessScale": {
+      "1": "Pas pour moi",
+      "2": "Un peu intéressant",
+      "3": "Intéressant",
+      "4": "Utile",
+      "5": "Je vais m'en servir"
+    },
+    "topicsTitle": "Quels sujets aborder ensuite ?",
+    "topicsHint": "Choisissez jusqu'à cinq sujets ou ajoutez le vôtre.",
+    "topicOptions": [
+      "Accréditation",
+      "Coaching et IA",
+      "Coaching d'équipe",
+      "Éthique",
+      "Coaching en entreprise",
+      "Recherche et données",
+      "Développer sa pratique",
+      "Diversité et inclusion"
+    ],
+    "ownTopicLabel": "Ajouter votre sujet",
+    "ownTopicPlaceholder": "Votre sujet",
+    "addTopic": "Ajouter le sujet",
+    "commentLabel": "Une phrase pour la rédaction (facultatif)",
+    "commentPlaceholder": "Qu'est-ce qui vous a parlé, qu'est-ce qui manquait ?",
+    "emailLabel": "E-mail (facultatif)",
+    "emailPlaceholder": "vous@example.com",
+    "emailHint": "Uniquement si nous pouvons vous recontacter. Nous ne le publions jamais.",
+    "submit": "Envoyer",
+    "sending": "Envoi…",
+    "failed": "Nous n'avons pas pu enregistrer votre retour. Merci de réessayer.",
+    "tooMany": "Merci — cela suffit pour le moment.",
+    "thanksTitle": "Merci, cela nous aide",
+    "thanksBody": "Votre réponse arrive directement à la rédaction et guide nos prochains sujets.",
+    "editAnswer": "Modifier ma réponse"
   }
 }

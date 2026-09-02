@@ -58,5 +58,58 @@
     "errorBody": "Bitte versuchen Sie es in Kürze erneut.",
     "notFoundMetaTitle": "Artikel nicht gefunden — The Switzerland Chapter of ICF",
     "fallbackDescription": "Ein Artikel aus der Insights-Sammlung von The Switzerland Chapter of ICF."
+  },
+  "minRead": "Min. Lesezeit",
+  "feedback": {
+    "eyebrow": "Redaktion mitgestalten",
+    "title": "Sagen Sie uns, wohin es weitergehen soll",
+    "lede": "Zwei Regler und, wenn Sie mögen, ein Satz. Wir lesen jede Antwort, und sie prägt, was wir als Nächstes veröffentlichen.",
+    "depth": "Tiefe",
+    "depthMin": "Zu oberflächlich",
+    "depthMax": "Zu tief",
+    "depthScale": {
+      "1": "Zu oberflächlich",
+      "2": "Etwas oberflächlich",
+      "3": "Genau richtig",
+      "4": "Etwas tief",
+      "5": "Zu tief"
+    },
+    "usefulness": "Nutzen",
+    "usefulnessMin": "Interessant",
+    "usefulnessMax": "Werde ich anwenden",
+    "usefulnessScale": {
+      "1": "Nichts für mich",
+      "2": "Etwas interessant",
+      "3": "Interessant",
+      "4": "Nützlich",
+      "5": "Werde ich anwenden"
+    },
+    "topicsTitle": "Worüber sollen wir als Nächstes schreiben?",
+    "topicsHint": "Wählen Sie bis zu fünf Themen oder ergänzen Sie eigene.",
+    "topicOptions": [
+      "Zertifizierung",
+      "Coaching mit KI",
+      "Teamcoaching",
+      "Ethik",
+      "Coaching in Organisationen",
+      "Forschung und Evidenz",
+      "Praxis aufbauen",
+      "Vielfalt und Inklusion"
+    ],
+    "ownTopicLabel": "Eigenes Thema ergänzen",
+    "ownTopicPlaceholder": "Ihr Thema",
+    "addTopic": "Thema hinzufügen",
+    "commentLabel": "Ein Satz an die Redaktion (optional)",
+    "commentPlaceholder": "Was hat Sie angesprochen, was hat gefehlt?",
+    "emailLabel": "E-Mail (optional)",
+    "emailPlaceholder": "sie@example.com",
+    "emailHint": "Nur, falls wir nachfragen dürfen. Wir veröffentlichen sie nie.",
+    "submit": "Feedback senden",
+    "sending": "Wird gesendet…",
+    "failed": "Ihr Feedback konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+    "tooMany": "Danke – das ist genug Feedback für den Moment.",
+    "thanksTitle": "Danke, das hilft",
+    "thanksBody": "Ihre Antwort geht direkt an die Redaktion und lenkt, was wir als Nächstes veröffentlichen.",
+    "editAnswer": "Antwort ändern"
   }
 }

@@ -19,6 +19,8 @@ import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
 import { LocaleLink, useI18n } from "@/i18n";
 import { localizePath, SITE_URL } from "@/i18n/config";
 import { ShareInline, ShareBlock } from "@/components/share-buttons";
+import { ArticleFeedbackPanel } from "@/components/insights/ArticleFeedbackPanel";
+import { readingMinutes } from "@/lib/articles";
 import { useTrackView } from "@/lib/plausible";
 
 export function DetailShell({ children }: { children: React.ReactNode }) {
@@ -59,7 +61,7 @@ type DetailArticle = Omit<PublicArticle, "is_featured"> & {
 };
 
 export default function InsightDetailPage({ article }: { article: DetailArticle }) {
-  const { t, locale } = useI18n();
+  const { t, tList, locale } = useI18n();
   useTrackView("Insight View", article.id, { article_id: article.id });
   const tile = tileFor(article.id);
   // A hand-placed cover arrangement replaces the automatic fallback mark.
@@ -71,6 +73,12 @@ export default function InsightDetailPage({ article }: { article: DetailArticle 
   const byline = authorName(article.author) ?? t("insights.byline");
   // Canonical, locale-aware URL so readers share their own language edition.
   const shareUrl = `${SITE_URL}${localizePath(`/insights/${article.id}`, locale)}`;
+  const minutes = readingMinutes(article.content);
+  // Category first: the topic the reader just finished is the likeliest wish.
+  const feedbackTopics = [
+    ...(category ? [category] : []),
+    ...tList<string>("insights.feedback.topicOptions"),
+  ];
 
   return (
     <DetailShell>
@@ -91,6 +99,7 @@ export default function InsightDetailPage({ article }: { article: DetailArticle 
             <p className="btn-mono mt-1 !text-muted-foreground">
               {formatArticleDate(article.published_at)}
               {category ? ` · ${category}` : ""}
+              {` · ${minutes} ${t("insights.minRead")}`}
             </p>
           </div>
           <ShareInline url={shareUrl} title={article.title} />
@@ -153,6 +162,8 @@ export default function InsightDetailPage({ article }: { article: DetailArticle 
         </div>
 
         <ShareBlock url={shareUrl} title={article.title} />
+
+        <ArticleFeedbackPanel articleId={article.id} suggestedTopics={feedbackTopics} />
       </article>
     </DetailShell>
   );
