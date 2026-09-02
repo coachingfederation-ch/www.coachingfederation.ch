@@ -92,6 +92,7 @@ import { Route as StaffArticlesCategoriesRouteImport } from './routes/_staff/art
 import { Route as StaffArticlesNewRouteImport } from './routes/_staff/articles.new'
 import { Route as StaffManageIndexRouteImport } from './routes/_staff/manage.index'
 import { Route as StaffManageChatInsightsRouteImport } from './routes/_staff/manage.chat-insights'
+import { Route as StaffManageEditorialSignalsRouteImport } from './routes/_staff/manage.editorial-signals'
 import { Route as StaffManageEuropePulseRouteImport } from './routes/_staff/manage.europe-pulse'
 import { Route as StaffManageGovernanceRouteImport } from './routes/_staff/manage.governance'
 import { Route as StaffManageGuestPassesRouteImport } from './routes/_staff/manage.guest-passes'
@@ -100,6 +101,7 @@ import { Route as StaffManageLiveChatRouteImport } from './routes/_staff/manage.
 import { Route as StaffManageMemberEngagementRouteImport } from './routes/_staff/manage.member-engagement'
 import { Route as StaffMembersIndexRouteImport } from './routes/_staff/members.index'
 import { Route as StaffMembersIdRouteImport } from './routes/_staff/members.$id'
+import { Route as ApiPublicArticleFeedbackRouteImport } from './routes/api/public/article-feedback'
 import { Route as ApiPublicChatSignalRouteImport } from './routes/api/public/chat-signal'
 import { Route as ApiPublicClaimWavesRouteImport } from './routes/api/public/claim-waves'
 import { Route as ApiPublicContactEnquiryPurgeRouteImport } from './routes/api/public/contact-enquiry-purge'
@@ -554,6 +556,12 @@ const StaffManageChatInsightsRoute = StaffManageChatInsightsRouteImport.update({
   path: '/manage/chat-insights',
   getParentRoute: () => StaffRouteRoute,
 } as any)
+const StaffManageEditorialSignalsRoute =
+  StaffManageEditorialSignalsRouteImport.update({
+    id: '/manage/editorial-signals',
+    path: '/manage/editorial-signals',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
 const StaffManageEuropePulseRoute = StaffManageEuropePulseRouteImport.update({
   id: '/manage/europe-pulse',
   path: '/manage/europe-pulse',
@@ -595,6 +603,12 @@ const StaffMembersIdRoute = StaffMembersIdRouteImport.update({
   path: '/members/$id',
   getParentRoute: () => StaffRouteRoute,
 } as any)
+const ApiPublicArticleFeedbackRoute =
+  ApiPublicArticleFeedbackRouteImport.update({
+    id: '/api/public/article-feedback',
+    path: '/api/public/article-feedback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicChatSignalRoute = ApiPublicChatSignalRouteImport.update({
   id: '/api/public/chat-signal',
   path: '/api/public/chat-signal',
@@ -863,6 +877,7 @@ export interface FileRoutesByFullPath {
   '/articles/categories': typeof StaffArticlesCategoriesRoute
   '/articles/new': typeof StaffArticlesNewRoute
   '/manage/chat-insights': typeof StaffManageChatInsightsRoute
+  '/manage/editorial-signals': typeof StaffManageEditorialSignalsRoute
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/manage/governance': typeof StaffManageGovernanceRoute
   '/manage/guest-passes': typeof StaffManageGuestPassesRoute
@@ -870,6 +885,7 @@ export interface FileRoutesByFullPath {
   '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/manage/member-engagement': typeof StaffManageMemberEngagementRoute
   '/members/$id': typeof StaffMembersIdRoute
+  '/api/public/article-feedback': typeof ApiPublicArticleFeedbackRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
   '/api/public/contact-enquiry-purge': typeof ApiPublicContactEnquiryPurgeRoute
@@ -985,6 +1001,7 @@ export interface FileRoutesByTo {
   '/articles/categories': typeof StaffArticlesCategoriesRoute
   '/articles/new': typeof StaffArticlesNewRoute
   '/manage/chat-insights': typeof StaffManageChatInsightsRoute
+  '/manage/editorial-signals': typeof StaffManageEditorialSignalsRoute
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/manage/governance': typeof StaffManageGovernanceRoute
   '/manage/guest-passes': typeof StaffManageGuestPassesRoute
@@ -992,6 +1009,7 @@ export interface FileRoutesByTo {
   '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/manage/member-engagement': typeof StaffManageMemberEngagementRoute
   '/members/$id': typeof StaffMembersIdRoute
+  '/api/public/article-feedback': typeof ApiPublicArticleFeedbackRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
   '/api/public/contact-enquiry-purge': typeof ApiPublicContactEnquiryPurgeRoute
@@ -1114,6 +1132,7 @@ export interface FileRoutesById {
   '/_staff/articles/categories': typeof StaffArticlesCategoriesRoute
   '/_staff/articles/new': typeof StaffArticlesNewRoute
   '/_staff/manage/chat-insights': typeof StaffManageChatInsightsRoute
+  '/_staff/manage/editorial-signals': typeof StaffManageEditorialSignalsRoute
   '/_staff/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/_staff/manage/governance': typeof StaffManageGovernanceRoute
   '/_staff/manage/guest-passes': typeof StaffManageGuestPassesRoute
@@ -1121,6 +1140,7 @@ export interface FileRoutesById {
   '/_staff/manage/live-chat': typeof StaffManageLiveChatRoute
   '/_staff/manage/member-engagement': typeof StaffManageMemberEngagementRoute
   '/_staff/members/$id': typeof StaffMembersIdRoute
+  '/api/public/article-feedback': typeof ApiPublicArticleFeedbackRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
   '/api/public/contact-enquiry-purge': typeof ApiPublicContactEnquiryPurgeRoute
@@ -1242,6 +1262,7 @@ export interface FileRouteTypes {
     | '/articles/categories'
     | '/articles/new'
     | '/manage/chat-insights'
+    | '/manage/editorial-signals'
     | '/manage/europe-pulse'
     | '/manage/governance'
     | '/manage/guest-passes'
@@ -1249,6 +1270,7 @@ export interface FileRouteTypes {
     | '/manage/live-chat'
     | '/manage/member-engagement'
     | '/members/$id'
+    | '/api/public/article-feedback'
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
     | '/api/public/contact-enquiry-purge'
@@ -1364,6 +1386,7 @@ export interface FileRouteTypes {
     | '/articles/categories'
     | '/articles/new'
     | '/manage/chat-insights'
+    | '/manage/editorial-signals'
     | '/manage/europe-pulse'
     | '/manage/governance'
     | '/manage/guest-passes'
@@ -1371,6 +1394,7 @@ export interface FileRouteTypes {
     | '/manage/live-chat'
     | '/manage/member-engagement'
     | '/members/$id'
+    | '/api/public/article-feedback'
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
     | '/api/public/contact-enquiry-purge'
@@ -1492,6 +1516,7 @@ export interface FileRouteTypes {
     | '/_staff/articles/categories'
     | '/_staff/articles/new'
     | '/_staff/manage/chat-insights'
+    | '/_staff/manage/editorial-signals'
     | '/_staff/manage/europe-pulse'
     | '/_staff/manage/governance'
     | '/_staff/manage/guest-passes'
@@ -1499,6 +1524,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/live-chat'
     | '/_staff/manage/member-engagement'
     | '/_staff/members/$id'
+    | '/api/public/article-feedback'
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
     | '/api/public/contact-enquiry-purge'
@@ -1588,6 +1614,7 @@ export interface RootRouteChildren {
   VolunteerLoginIndexRoute: typeof VolunteerLoginIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  ApiPublicArticleFeedbackRoute: typeof ApiPublicArticleFeedbackRoute
   ApiPublicChatSignalRoute: typeof ApiPublicChatSignalRoute
   ApiPublicClaimWavesRoute: typeof ApiPublicClaimWavesRoute
   ApiPublicContactEnquiryPurgeRoute: typeof ApiPublicContactEnquiryPurgeRoute
@@ -2198,6 +2225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageChatInsightsRouteImport
       parentRoute: typeof StaffRouteRoute
     }
+    '/_staff/manage/editorial-signals': {
+      id: '/_staff/manage/editorial-signals'
+      path: '/manage/editorial-signals'
+      fullPath: '/manage/editorial-signals'
+      preLoaderRoute: typeof StaffManageEditorialSignalsRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/_staff/manage/europe-pulse': {
       id: '/_staff/manage/europe-pulse'
       path: '/manage/europe-pulse'
@@ -2253,6 +2287,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/members/$id'
       preLoaderRoute: typeof StaffMembersIdRouteImport
       parentRoute: typeof StaffRouteRoute
+    }
+    '/api/public/article-feedback': {
+      id: '/api/public/article-feedback'
+      path: '/api/public/article-feedback'
+      fullPath: '/api/public/article-feedback'
+      preLoaderRoute: typeof ApiPublicArticleFeedbackRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/chat-signal': {
       id: '/api/public/chat-signal'
@@ -2614,6 +2655,7 @@ interface StaffRouteRouteChildren {
   StaffRolesRoute: typeof StaffRolesRoute
   StaffVocabulariesRoute: typeof StaffVocabulariesRoute
   StaffManageChatInsightsRoute: typeof StaffManageChatInsightsRoute
+  StaffManageEditorialSignalsRoute: typeof StaffManageEditorialSignalsRoute
   StaffManageEuropePulseRoute: typeof StaffManageEuropePulseRoute
   StaffManageGovernanceRoute: typeof StaffManageGovernanceRoute
   StaffManageGuestPassesRoute: typeof StaffManageGuestPassesRoute
@@ -2643,6 +2685,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffRolesRoute: StaffRolesRoute,
   StaffVocabulariesRoute: StaffVocabulariesRoute,
   StaffManageChatInsightsRoute: StaffManageChatInsightsRoute,
+  StaffManageEditorialSignalsRoute: StaffManageEditorialSignalsRoute,
   StaffManageEuropePulseRoute: StaffManageEuropePulseRoute,
   StaffManageGovernanceRoute: StaffManageGovernanceRoute,
   StaffManageGuestPassesRoute: StaffManageGuestPassesRoute,
@@ -2739,6 +2782,7 @@ const rootRouteChildren: RootRouteChildren = {
   VolunteerLoginIndexRoute: VolunteerLoginIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  ApiPublicArticleFeedbackRoute: ApiPublicArticleFeedbackRoute,
   ApiPublicChatSignalRoute: ApiPublicChatSignalRoute,
   ApiPublicClaimWavesRoute: ApiPublicClaimWavesRoute,
   ApiPublicContactEnquiryPurgeRoute: ApiPublicContactEnquiryPurgeRoute,

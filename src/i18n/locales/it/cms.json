@@ -24,7 +24,8 @@
     "newsletters": "Newsletter",
     "guestPasses": "Pass ospiti",
     "memberEngagement": "Coinvolgimento dei membri",
-    "overview": "Panoramica"
+    "overview": "Panoramica",
+    "editorialSignals": "Segnali editoriali"
   },
   "auth": {
     "signInSub": "Accedi per continuare",
@@ -2507,5 +2508,55 @@
     "titleField": "Titolo dell'edizione",
     "subjectField": "Oggetto dell'e-mail",
     "contentField": "Contenuto"
+  },
+  "editorialSignals": {
+    "title": "Segnali editoriali",
+    "articleTitle": "Riscontri dei lettori",
+    "subtitle": "Che cosa dicono i lettori su profondità e utilità, quali temi desiderano e quali motivi emergono dai commenti. Le risposte sono anonime.",
+    "loading": "Caricamento…",
+    "loadError": "Non è stato possibile caricare i segnali.",
+    "noData": "Ancora nessun riscontro.",
+    "from": "Dal",
+    "to": "Al",
+    "locale": "Lingua",
+    "allLocales": "Tutte le lingue",
+    "reset": "Reimposta",
+    "exportCsv": "Esporta CSV",
+    "exportFailed": "L'esportazione non è riuscita.",
+    "kpi": {
+      "responses": "Risposte",
+      "depth": "Profondità media",
+      "usefulness": "Utilità media",
+      "comments": "Commenti",
+      "withEmail": "con e-mail"
+    },
+    "depthTitle": "Profondità (1 troppo leggero — 5 troppo tecnico)",
+    "usefulnessTitle": "Utilità (1 non fa per me — 5 lo userò)",
+    "depthScale": [
+      "Troppo leggero",
+      "Un po' leggero",
+      "Equilibrato",
+      "Un po' tecnico",
+      "Troppo tecnico"
+    ],
+    "usefulnessScale": [
+      "Non fa per me",
+      "Poco interessante",
+      "Interessante",
+      "Utile",
+      "Lo userò"
+    ],
+    "topicsTitle": "Temi richiesti",
+    "noTopics": "Nessun tema richiesto finora.",
+    "themesTitle": "Temi IA",
+    "noThemes": "Nessuna analisi. Avviala per raggruppare i commenti.",
+    "themesStale": "nuove risposte da questa analisi",
+    "analyse": "Analizza i commenti",
+    "analysing": "Analisi in corso…",
+    "analyseFailed": "L'analisi non è riuscita.",
+    "commentsTitle": "Commenti dei lettori",
+    "noComments": "Ancora nessun commento.",
+    "perArticle": "Per articolo",
+    "article": "Articolo"
   }
 }

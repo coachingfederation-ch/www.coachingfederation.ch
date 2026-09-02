@@ -308,7 +308,6 @@ export function EventRecapEditor({
       {/* Status and the publish/withdraw action live with "Save recap" in the
           action bar below the fields, so the panel reads top-down: edit, then act. */}
 
-
       <label className="mt-5 block text-sm font-medium">
         {t("recap.fieldHeadline")}
         <input
@@ -392,7 +391,6 @@ export function EventRecapEditor({
           {busy === "save" ? t("recap.saving") : t("recap.save")}
         </Button>
       </div>
-
 
       {/* Gallery */}
       <div className="mt-8 border-t border-border pt-6">
@@ -620,7 +618,6 @@ export function EventRecapEditor({
           t={t}
         />
       </div>
-
 
       {/* Thank-you email to the attendees */}
       <div className="mt-8 border-t border-border pt-6">

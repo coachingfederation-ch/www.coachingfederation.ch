@@ -386,8 +386,6 @@ export function CommunityPanel({
     }
   };
 
-
-
   const localeField = (field: "description", locale: Target) =>
     `${field}_${locale}` as keyof CommunityFields;
 
@@ -728,7 +726,6 @@ export function CommunityPanel({
               }
             />
           </div>
-
         </div>
       }
       <UnsplashPicker

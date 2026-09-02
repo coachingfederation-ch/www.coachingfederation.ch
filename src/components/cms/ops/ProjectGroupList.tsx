@@ -62,7 +62,6 @@ export function ProjectGroupList({
           { key: "communities", rows: projects.filter((p) => p.is_community) },
         ] as const
       ).map((group) =>
-
         group.rows.length === 0 ? null : (
           <div key={group.key}>
             <h2 className="px-3 pb-1 text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">

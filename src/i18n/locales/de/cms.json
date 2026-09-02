@@ -24,7 +24,8 @@
     "newsletters": "Newsletter",
     "guestPasses": "Gastpässe",
     "memberEngagement": "Mitglieder-Kommunikation",
-    "overview": "Übersicht"
+    "overview": "Übersicht",
+    "editorialSignals": "Redaktionssignale"
   },
   "auth": {
     "signInSub": "Melden Sie sich an, um fortzufahren",
@@ -2507,5 +2508,55 @@
     "titleField": "Titel der Ausgabe",
     "subjectField": "E-Mail-Betreff",
     "contentField": "Inhalt"
+  },
+  "editorialSignals": {
+    "title": "Redaktionssignale",
+    "articleTitle": "Leserfeedback",
+    "subtitle": "Was Leserinnen und Leser zu Tiefe und Nutzen sagen, welche Themen sie sich wünschen und welche Muster in den Kommentaren stecken. Antworten sind anonym.",
+    "loading": "Wird geladen…",
+    "loadError": "Die Signale konnten nicht geladen werden.",
+    "noData": "Noch kein Feedback.",
+    "from": "Von",
+    "to": "Bis",
+    "locale": "Sprache",
+    "allLocales": "Alle Sprachen",
+    "reset": "Zurücksetzen",
+    "exportCsv": "CSV exportieren",
+    "exportFailed": "Der Export ist fehlgeschlagen.",
+    "kpi": {
+      "responses": "Antworten",
+      "depth": "Ø Tiefe",
+      "usefulness": "Ø Nutzen",
+      "comments": "Kommentare",
+      "withEmail": "mit E-Mail"
+    },
+    "depthTitle": "Tiefe (1 zu oberflächlich — 5 zu tief)",
+    "usefulnessTitle": "Nutzen (1 nichts für mich — 5 werde ich anwenden)",
+    "depthScale": [
+      "Zu oberflächlich",
+      "Etwas oberflächlich",
+      "Genau richtig",
+      "Etwas tief",
+      "Zu tief"
+    ],
+    "usefulnessScale": [
+      "Nichts für mich",
+      "Etwas interessant",
+      "Interessant",
+      "Nützlich",
+      "Werde ich anwenden"
+    ],
+    "topicsTitle": "Gewünschte Themen",
+    "noTopics": "Noch keine Themenwünsche.",
+    "themesTitle": "KI-Themen",
+    "noThemes": "Noch keine Analyse. Starten Sie sie, um die Kommentare zu clustern.",
+    "themesStale": "neue Antworten seit dieser Analyse",
+    "analyse": "Kommentare analysieren",
+    "analysing": "Analyse läuft…",
+    "analyseFailed": "Die Analyse ist fehlgeschlagen.",
+    "commentsTitle": "Leserkommentare",
+    "noComments": "Noch keine Kommentare.",
+    "perArticle": "Nach Artikel",
+    "article": "Artikel"
   }
 }

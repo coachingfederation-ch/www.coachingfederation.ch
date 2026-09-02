@@ -8,7 +8,13 @@
  */
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/design-system/icf-welcome-design-system-a835df";
 import { StructureMap } from "@/components/team/StructureMap";
 import { useI18n } from "@/i18n";
 import { listTeamDirectory } from "@/lib/team.functions";

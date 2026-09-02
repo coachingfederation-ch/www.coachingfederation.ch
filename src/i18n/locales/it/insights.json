@@ -58,5 +58,58 @@
     "errorBody": "Riprova tra qualche istante.",
     "notFoundMetaTitle": "Articolo non trovato — The Switzerland Chapter of ICF",
     "fallbackDescription": "Un articolo della raccolta di approfondimenti di The Switzerland Chapter of ICF."
+  },
+  "minRead": "min di lettura",
+  "feedback": {
+    "eyebrow": "Orienta la redazione",
+    "title": "Dicci dove andare adesso",
+    "lede": "Due cursori e, se vuole, una frase. Leggiamo ogni risposta e guida ciò che pubblichiamo dopo.",
+    "depth": "Profondità",
+    "depthMin": "Troppo leggero",
+    "depthMax": "Troppo tecnico",
+    "depthScale": {
+      "1": "Troppo leggero",
+      "2": "Un po' leggero",
+      "3": "Equilibrato",
+      "4": "Un po' tecnico",
+      "5": "Troppo tecnico"
+    },
+    "usefulness": "Utilità",
+    "usefulnessMin": "Interessante",
+    "usefulnessMax": "Lo userò",
+    "usefulnessScale": {
+      "1": "Non fa per me",
+      "2": "Poco interessante",
+      "3": "Interessante",
+      "4": "Utile",
+      "5": "Lo userò"
+    },
+    "topicsTitle": "Di cosa dovremmo parlare?",
+    "topicsHint": "Scelga fino a cinque temi o ne aggiunga uno.",
+    "topicOptions": [
+      "Credenziali",
+      "Coaching e IA",
+      "Coaching di team",
+      "Etica",
+      "Coaching nelle organizzazioni",
+      "Ricerca ed evidenze",
+      "Costruire la pratica",
+      "Diversità e inclusione"
+    ],
+    "ownTopicLabel": "Aggiunga un tema",
+    "ownTopicPlaceholder": "Il suo tema",
+    "addTopic": "Aggiungi tema",
+    "commentLabel": "Una frase per la redazione (facoltativo)",
+    "commentPlaceholder": "Che cosa l'ha colpita, che cosa mancava?",
+    "emailLabel": "E-mail (facoltativa)",
+    "emailPlaceholder": "lei@example.com",
+    "emailHint": "Solo se possiamo farle una domanda. Non la pubblichiamo mai.",
+    "submit": "Invia",
+    "sending": "Invio…",
+    "failed": "Non è stato possibile salvare il suo riscontro. Riprovi.",
+    "tooMany": "Grazie — per ora è sufficiente.",
+    "thanksTitle": "Grazie, ci aiuta",
+    "thanksBody": "La sua risposta arriva alla redazione e guida i prossimi articoli.",
+    "editAnswer": "Modifica la risposta"
   }
 }

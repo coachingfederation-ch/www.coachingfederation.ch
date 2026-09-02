@@ -35,6 +35,88 @@ export type Database = {
         }
         Relationships: []
       }
+      article_feedback: {
+        Row: {
+          article_id: string
+          comment: string | null
+          created_at: string
+          depth: number
+          email: string | null
+          id: string
+          ip_hash: string | null
+          locale: string
+          topics: string[]
+          usefulness: number
+        }
+        Insert: {
+          article_id: string
+          comment?: string | null
+          created_at?: string
+          depth: number
+          email?: string | null
+          id?: string
+          ip_hash?: string | null
+          locale?: string
+          topics?: string[]
+          usefulness: number
+        }
+        Update: {
+          article_id?: string
+          comment?: string | null
+          created_at?: string
+          depth?: number
+          email?: string | null
+          id?: string
+          ip_hash?: string | null
+          locale?: string
+          topics?: string[]
+          usefulness?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_feedback_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      article_feedback_themes: {
+        Row: {
+          article_id: string | null
+          generated_at: string
+          id: string
+          payload: Json
+          response_count: number
+          scope: string
+        }
+        Insert: {
+          article_id?: string | null
+          generated_at?: string
+          id?: string
+          payload?: Json
+          response_count?: number
+          scope: string
+        }
+        Update: {
+          article_id?: string | null
+          generated_at?: string
+          id?: string
+          payload?: Json
+          response_count?: number
+          scope?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_feedback_themes_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       article_linkedin_posts: {
         Row: {
           article_id: string

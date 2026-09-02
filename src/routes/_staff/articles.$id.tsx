@@ -28,6 +28,7 @@ import {
   saveArticle,
   setArticleFeaturedFlag,
 } from "@/lib/articles.functions";
+import { ArticleFeedbackTab } from "@/components/cms/feedback/ArticleFeedbackTab";
 import { useCms } from "@/i18n/cms";
 import { toast } from "sonner";
 
@@ -425,6 +426,16 @@ function EditorPage() {
           canShareLinkedIn={!!permissions?.isPublisher || !!permissions?.isAdmin}
         />
       </div>
+
+      {/* Reader feedback only exists once the piece has been published. */}
+      {article.first_published_at ? (
+        <section className="px-8 pb-12">
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            {t("editorialSignals.articleTitle")}
+          </h2>
+          <ArticleFeedbackTab articleId={article.id} />
+        </section>
+      ) : null}
     </Shell>
   );
 }

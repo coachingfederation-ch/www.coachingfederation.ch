@@ -136,14 +136,12 @@ export function LocaleTabsEditor<
     const s = stateFor(locale);
     if (s === "missing")
       return { label: adapter.labels.notTranslated, cls: "text-muted-foreground" };
-    if (s === "stale")
-      return { label: adapter.labels.needsRefresh, cls: "text-warn" };
+    if (s === "stale") return { label: adapter.labels.needsRefresh, cls: "text-warn" };
     return {
       label: row?.manually_edited ? adapter.labels.manual : adapter.labels.upToDate,
       cls: row?.manually_edited ? "text-primary" : "text-teal-foreground",
     };
   };
-
 
   const dirtyLocales = useMemo(
     () =>
@@ -238,8 +236,6 @@ export function LocaleTabsEditor<
               )}
               {busy === "__all__" ? adapter.labels.working : translateAllLabel}
             </button>
-
-
 
             {targets.map((locale) => {
               const badge = badgeFor(locale);
@@ -340,9 +336,7 @@ export function LocaleTabsEditor<
             {adapter.labels.discard ?? adapter.labels.close}
           </button>
           {isDirty ? (
-            <span className="text-center text-xs text-warn">
-              {adapter.labels.unsaved ?? ""}
-            </span>
+            <span className="text-center text-xs text-warn">{adapter.labels.unsaved ?? ""}</span>
           ) : savedNote ? (
             <span className="text-center text-xs text-muted-foreground">
               {adapter.labels.savedTranslation}
@@ -353,7 +347,6 @@ export function LocaleTabsEditor<
     </div>
   );
 }
-
 
 function FieldBlock({
   field,

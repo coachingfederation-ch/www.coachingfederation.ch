@@ -58,5 +58,58 @@
     "errorBody": "Please try again in a moment.",
     "notFoundMetaTitle": "Article not found — The Switzerland Chapter of ICF",
     "fallbackDescription": "An article from the The Switzerland Chapter of ICF insights collection."
+  },
+  "minRead": "min read",
+  "feedback": {
+    "eyebrow": "Steer the editorial",
+    "title": "Tell us where to take this next",
+    "lede": "Two quick dials and, if you like, one sentence. We read every answer and it shapes what we publish next.",
+    "depth": "Depth",
+    "depthMin": "Too light",
+    "depthMax": "Too deep",
+    "depthScale": {
+      "1": "Too light",
+      "2": "A bit light",
+      "3": "About right",
+      "4": "A bit deep",
+      "5": "Too deep"
+    },
+    "usefulness": "Usefulness",
+    "usefulnessMin": "Interesting",
+    "usefulnessMax": "I will use this",
+    "usefulnessScale": {
+      "1": "Not for me",
+      "2": "Mildly interesting",
+      "3": "Interesting",
+      "4": "Useful",
+      "5": "I will use this"
+    },
+    "topicsTitle": "What should we cover next?",
+    "topicsHint": "Pick up to five, or add your own.",
+    "topicOptions": [
+      "Credentialing",
+      "Coaching with AI",
+      "Team coaching",
+      "Ethics",
+      "Coaching in organizations",
+      "Research and evidence",
+      "Building a practice",
+      "Diversity and inclusion"
+    ],
+    "ownTopicLabel": "Add your own topic",
+    "ownTopicPlaceholder": "Your topic",
+    "addTopic": "Add topic",
+    "commentLabel": "One sentence for the editors (optional)",
+    "commentPlaceholder": "What resonated, or what was missing?",
+    "emailLabel": "Email (optional)",
+    "emailPlaceholder": "you@example.com",
+    "emailHint": "Only if you are open to a follow-up question. We never publish it.",
+    "submit": "Send feedback",
+    "sending": "Sending…",
+    "failed": "We could not save your feedback. Please try again.",
+    "tooMany": "Thanks — that is enough feedback for now.",
+    "thanksTitle": "Thank you, this helps",
+    "thanksBody": "Your answer goes straight to the editorial team and guides what we publish next.",
+    "editAnswer": "Change my answer"
   }
 }

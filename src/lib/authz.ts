@@ -97,3 +97,10 @@ export async function assertMembership(context: AuthedContext): Promise<string> 
   if (!roles.some((r) => allowed.includes(r))) throw new Error("Forbidden");
   return context.userId;
 }
+
+/** Throws unless the caller holds at least one of `roles`. */
+export async function assertAnyRole(context: AuthedContext, roles: AppRole[]): Promise<string> {
+  const held = await rolesOf(context);
+  if (!held.some((r) => roles.includes(r))) throw new Error("Forbidden");
+  return context.userId;
+}

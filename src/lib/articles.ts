@@ -179,3 +179,23 @@ export function formatArticleDate(value: string | null) {
     year: "numeric",
   });
 }
+
+/**
+ * Approximate reading time in whole minutes.
+ *
+ * Markdown syntax (fences, links, images, emphasis, headings) is stripped
+ * first so a code- or image-heavy piece is not counted as prose. 200 wpm is
+ * the usual reading speed for non-fiction; the result is never below one
+ * minute so a very short piece still reads as "1 min read".
+ */
+export function readingMinutes(content: string | null | undefined): number {
+  const text = String(content ?? "")
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]*`/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/[#>*_~|-]+/g, " ");
+  const words = text.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}

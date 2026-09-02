@@ -24,7 +24,8 @@
     "newsletters": "Newsletters",
     "guestPasses": "Guest passes",
     "memberEngagement": "Member engagement",
-    "overview": "Overview"
+    "overview": "Overview",
+    "editorialSignals": "Editorial signals"
   },
   "auth": {
     "signInSub": "Sign in to continue",
@@ -2507,5 +2508,55 @@
     "titleField": "Edition title",
     "subjectField": "Email subject",
     "contentField": "Content"
+  },
+  "editorialSignals": {
+    "title": "Editorial signals",
+    "articleTitle": "Reader feedback",
+    "subtitle": "What readers tell us about depth and usefulness, which topics they want next, and the themes behind their comments. Responses are anonymous.",
+    "loading": "Loading…",
+    "loadError": "The signals could not be loaded.",
+    "noData": "No feedback yet.",
+    "from": "From",
+    "to": "To",
+    "locale": "Language",
+    "allLocales": "All languages",
+    "reset": "Reset",
+    "exportCsv": "Export CSV",
+    "exportFailed": "The export failed.",
+    "kpi": {
+      "responses": "Responses",
+      "depth": "Avg. depth",
+      "usefulness": "Avg. usefulness",
+      "comments": "Comments",
+      "withEmail": "left an email"
+    },
+    "depthTitle": "Depth (1 too light — 5 too deep)",
+    "usefulnessTitle": "Usefulness (1 not for me — 5 I will use this)",
+    "depthScale": [
+      "Too light",
+      "A bit light",
+      "About right",
+      "A bit deep",
+      "Too deep"
+    ],
+    "usefulnessScale": [
+      "Not for me",
+      "Mildly interesting",
+      "Interesting",
+      "Useful",
+      "I will use this"
+    ],
+    "topicsTitle": "Requested topics",
+    "noTopics": "No topics requested yet.",
+    "themesTitle": "AI themes",
+    "noThemes": "No analysis yet. Run it to cluster the comments.",
+    "themesStale": "new responses since this run",
+    "analyse": "Analyse comments",
+    "analysing": "Analysing…",
+    "analyseFailed": "The analysis failed.",
+    "commentsTitle": "Reader comments",
+    "noComments": "No comments yet.",
+    "perArticle": "By article",
+    "article": "Article"
   }
 }
