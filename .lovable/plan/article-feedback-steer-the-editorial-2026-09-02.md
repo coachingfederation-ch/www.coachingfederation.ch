@@ -110,3 +110,21 @@ in all four languages. Purely presentational, no new data.
   best-effort; no email reply workflow in the CMS (addresses are visible to staff
   and answered from the office inbox); theme clustering is refreshed manually
   rather than on a schedule.
+
+## PR note
+
+**Summary** — Readers can steer the editorial from the bottom of every published article: two 1-5 dials (depth, usefulness), topic wishes, an optional sentence and an optional email. Staff see the aggregate per article and chapter-wide, with AI theme clustering. Articles now show an approximate reading time.
+
+**Changes**
+- Public: reading time in the byline; `ArticleFeedbackPanel` under the share block; EN/DE/FR/IT copy.
+- Backend: `article_feedback` + `article_feedback_themes` tables; public insert-only route `/api/public/article-feedback` (Zod, honeypot, hashed IP, 10/hour and 30/day); aggregation, CSV export and Gemini clustering in `article-feedback.server.ts`; role-gated server functions.
+- Staff: `Reader feedback` section in the article editor; new `/manage/editorial-signals` dashboard with filters, KPIs, dial distributions, topics, comments, AI themes, per-article table and CSV export; CMS nav entry.
+- Legal: 24-month retention row for article feedback in the privacy policy.
+
+**Backend / schema** — Two new tables with GRANTs and RLS. `article_feedback` grants anon/authenticated INSERT only; `article_feedback_themes` is service-role only (RLS on, no policy — intentional, staff reach it through role-checked server functions).
+
+**Testing** — Typecheck, build and Prettier clean. Playwright: article page renders the reading time and the panel, a submission returns 204 and the thank-you state; the test row was deleted afterwards. Staff surfaces verified by build/typecheck only.
+
+**Risks & rollback** — Additive; removing the UI leaves the tables harmless. No change to existing article behaviour.
+
+**Follow-ups** — No automated 24-month deletion job yet; the retention promise is currently manual.
