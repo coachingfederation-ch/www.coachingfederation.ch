@@ -173,6 +173,7 @@ export function EnquiryAgentPanel({
       });
       if (result.status === "verification_sent") {
         setStage("done");
+        onComplete?.();
         return;
       }
       setProblem(result.status === "rate_limited" ? tp("errors.rateLimited") : tp("errors.send"));
@@ -183,18 +184,24 @@ export function EnquiryAgentPanel({
     }
   };
 
+  const overlay = variant === "overlay";
+
   return (
     <div
-      className={cn("rounded-3xl border border-border bg-background text-foreground", className)}
+      className={cn(
+        "flex flex-col bg-background text-foreground",
+        overlay ? "overflow-hidden" : "rounded-3xl border border-border",
+        className,
+      )}
     >
       {stage === "chat" && (
-        <div className="flex h-128 flex-col">
+        <div className={cn("flex min-h-0 flex-col", overlay ? "flex-1" : "h-128")}>
           <Conversation className="flex-1">
-            <ConversationContent className="gap-4 px-5 py-5">
+            <ConversationContent className={cn("gap-6", overlay ? "px-8 py-6" : "px-6 py-6")}>
               {messages.length === 0 && (
-                <div className="space-y-3">
-                  <p className="text-sm text-muted-foreground">{tp("empty")}</p>
-                  <div className="flex flex-wrap gap-2">
+                <div className="space-y-4">
+                  <p className="text-base leading-relaxed text-muted-foreground">{tp("empty")}</p>
+                  <div className="flex flex-col items-start gap-2">
                     {suggestionKeys.map((key) => {
                       const suggestion = tp(`suggestions.${key}`);
                       return (
