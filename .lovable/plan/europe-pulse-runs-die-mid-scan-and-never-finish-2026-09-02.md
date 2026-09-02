@@ -63,3 +63,12 @@ Once the fix is in, I start one run for the current week so the page shows the 3
 **Risks & rollback** — Additive columns; reverting the code leaves them unused. Worst case a run stalls again, and the reaper now makes that visible instead of silent.
 
 **Follow-ups** — Per-chapter timing metrics to spot slow sites; an alert when a weekly edition ends up empty.
+
+## Implementation note (as built)
+
+- Runs are resumable: `europe_pulse_runs` gained `phase`, `scan_cursor`, `chapter_ids`, `heartbeat_at`, `locked_until`. Each invocation scans a slice of six chapters, persists counters, and releases its lease.
+- Hand-over is event-driven: a slice wakes the next one via the cron-token endpoint (`{"advance": true}`). Deviation from the plan: instead of a 5-minute polling cron there is only an hourly backstop, so no permanent sub-hourly sweeper runs.
+- Stale runs (no heartbeat for 15 min) are reaped to `failed`; the two stuck runs were closed by the migration.
+- CMS shows live phase/progress and a "Resume unfinished run" action; the browser no longer needs to stay open.
+- Verified end to end: a fresh run self-chained through 29/29 chapters (0 failed) and published 15 curated items for the week of 2026-08-31. Typecheck, build, Prettier clean.
+- Known debt: the second-chance retry appends failed chapters to the same work list, so `chapter_ids` can exceed `chapters_total`; progress percentage is computed from the list, not the original total.
