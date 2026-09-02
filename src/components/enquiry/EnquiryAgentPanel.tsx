@@ -303,7 +303,6 @@ export function EnquiryAgentPanel({
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{tp("reviewLede")}</p>
           </div>
 
-
           <div className="grid gap-2">
             <Label htmlFor={`${idPrefix}-name`}>{tp("nameLabel")}</Label>
             <Input
