@@ -39,6 +39,7 @@ export function EnquiryAgentDialog({ trigger, tp, ...panelProps }: EnquiryAgentD
   const [completed, setCompleted] = useState(false);
 
   const onOpenChange = (next: boolean) => {
+    console.log("[enquiry] openChange", next);
     setOpen(next);
     if (!next && completed) {
       setCompleted(false);
