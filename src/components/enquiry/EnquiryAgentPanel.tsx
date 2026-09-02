@@ -60,6 +60,10 @@ export type EnquiryAgentPanelProps = {
   tp: (key: string) => string;
   /** Copy keys of the starter chips shown on the empty conversation. */
   suggestionKeys: string[];
+  /** "overlay" fills the height of a dialog or sheet and drops the outer frame. */
+  variant?: "inline" | "overlay";
+  /** Fires once the verification email is on its way. */
+  onComplete?: () => void;
   className?: string;
 };
 
@@ -69,6 +73,8 @@ export function EnquiryAgentPanel({
   idPrefix,
   tp,
   suggestionKeys,
+  variant = "inline",
+  onComplete,
   className,
 }: EnquiryAgentPanelProps) {
   const { t, locale } = useI18n();
