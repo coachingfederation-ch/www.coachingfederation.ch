@@ -291,11 +291,18 @@ export function EnquiryAgentPanel({
       )}
 
       {stage === "review" && (
-        <form onSubmit={send} className="space-y-5 p-6 text-left sm:p-8">
+        <form
+          onSubmit={send}
+          className={cn(
+            "space-y-6 text-left",
+            overlay ? "min-h-0 flex-1 overflow-y-auto px-8 py-7" : "p-6 sm:p-8",
+          )}
+        >
           <div>
-            <h3 className="font-display text-xl font-bold tracking-tight">{tp("reviewTitle")}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">{tp("reviewLede")}</p>
+            <h3 className="font-heading text-xl tracking-tight">{tp("reviewTitle")}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{tp("reviewLede")}</p>
           </div>
+
 
           <div className="grid gap-2">
             <Label htmlFor={`${idPrefix}-name`}>{tp("nameLabel")}</Label>
