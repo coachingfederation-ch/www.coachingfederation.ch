@@ -36,6 +36,15 @@ export function EnquiryAgentDialog({ trigger, tp, ...panelProps }: EnquiryAgentD
   const [open, setOpen] = useState(false);
   /** Remounts the panel after a completed conversation, so reopening starts fresh. */
   const [session, setSession] = useState(0);
+  const [completed, setCompleted] = useState(false);
+
+  const onOpenChange = (next: boolean) => {
+    setOpen(next);
+    if (!next && completed) {
+      setCompleted(false);
+      setSession((n) => n + 1);
+    }
+  };
 
   const panel = (
     <EnquiryAgentPanel
@@ -44,7 +53,7 @@ export function EnquiryAgentDialog({ trigger, tp, ...panelProps }: EnquiryAgentD
       tp={tp}
       variant="overlay"
       className="min-h-0 flex-1"
-      onComplete={() => setSession((n) => n + 1)}
+      onComplete={() => setCompleted(true)}
     />
   );
 
