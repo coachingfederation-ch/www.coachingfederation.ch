@@ -514,8 +514,8 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
             <p className="eyebrow-accent">{t("events.cta.eyebrow")}</p>
             <h2 className="mx-auto mt-3 max-w-2xl display-lg">{t("events.cta.title")}</h2>
             {/* The proposal is shaped in conversation; email stays as the fallback. */}
-            <EventProposalAgent />
-            <div className="mt-6 flex justify-center">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <EventProposalAgent />
               <Button asChild variant="inverse-ghost" size="pill">
                 <a href="mailto:office@coachingfederation.ch" target="_top">
                   {t("events.cta.propose")}

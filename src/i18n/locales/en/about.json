@@ -184,7 +184,10 @@
       "email": "Please enter a valid email address.",
       "send": "We could not send the message. Please try again, or write to office@coachingfederation.ch.",
       "rateLimited": "That is a lot of messages from this connection. Please try again later."
-    }
+    },
+    "openCta": "Start a conversation",
+    "overlayTitle": "How can we help?",
+    "overlayLede": "Tell us what you need. We answer what we can, and pass the rest to the right person."
   },
   "cta": {
     "eyebrow": "Get involved",
