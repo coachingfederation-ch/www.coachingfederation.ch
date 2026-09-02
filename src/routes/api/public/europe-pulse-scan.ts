@@ -36,9 +36,8 @@ export const Route = createFileRoute("/api/public/europe-pulse-scan")({
 
         const body = (await request.json().catch(() => ({}))) as { advance?: boolean };
         const startedAt = Date.now();
-        const { startEuropePulseRun, advanceEuropePulseRun, kickNextSlice } = await import(
-          "@/lib/europe-pulse.server"
-        );
+        const { startEuropePulseRun, advanceEuropePulseRun, kickNextSlice } =
+          await import("@/lib/europe-pulse.server");
 
         try {
           let runId: string | undefined;
@@ -72,4 +71,3 @@ export const Route = createFileRoute("/api/public/europe-pulse-scan")({
     },
   },
 });
-

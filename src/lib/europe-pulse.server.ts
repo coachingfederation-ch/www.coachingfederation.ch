@@ -137,10 +137,7 @@ export async function startEuropePulseRun(options: {
   if (existing) return existing;
 
   const week = weekStart();
-  let chapterQuery = supabaseAdmin
-    .from("europe_pulse_chapters")
-    .select("id")
-    .eq("is_active", true);
+  let chapterQuery = supabaseAdmin.from("europe_pulse_chapters").select("id").eq("is_active", true);
   if (options.chapterIds?.length) chapterQuery = chapterQuery.in("id", options.chapterIds);
   const { data: chapterRows } = await chapterQuery.order("sort_order", { ascending: true });
   const ids = (chapterRows ?? []).map((row) => row.id as string);
@@ -230,7 +227,8 @@ async function tallyRun(runId: string): Promise<{ ok: number; failed: number }> 
   }
   let ok = 0;
   let failed = 0;
-  for (const status of seen.values()) if (status === "ok") ok += 1;
+  for (const status of seen.values())
+    if (status === "ok") ok += 1;
     else failed += 1;
   return { ok, failed };
 }
@@ -359,9 +357,7 @@ export async function advanceEuropePulseRun(runId?: string): Promise<PulseProgre
         .select("id, chapter, country, country_code, base_url")
         .in("id", sliceIds);
       const byId = new Map((chapterRows ?? []).map((c) => [c.id as string, c as ChapterRow]));
-      const slice = sliceIds
-        .map((id) => byId.get(id))
-        .filter((c): c is ChapterRow => Boolean(c));
+      const slice = sliceIds.map((id) => byId.get(id)).filter((c): c is ChapterRow => Boolean(c));
 
       for (let i = 0; i < slice.length; i += BATCH_SIZE) {
         const batch = slice.slice(i, i + BATCH_SIZE);

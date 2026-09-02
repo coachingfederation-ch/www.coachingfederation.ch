@@ -260,7 +260,6 @@ function EuropePulseAdmin() {
           onResume={resumeRun}
         />
 
-
         {notice ? <p className="mt-4 rounded-lg bg-secondary px-4 py-3 text-sm">{notice}</p> : null}
         {error ? (
           <p className="mt-4 rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
