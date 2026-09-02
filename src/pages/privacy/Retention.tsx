@@ -46,6 +46,11 @@ export function RetentionSection() {
               "12 months after the event ends; deleted by an automatic daily job, and the complimentary registration is anonymised at the same time. Withdrawing consent to follow-up stops further contact but does not delete the record earlier",
             ],
             [
+              "Article feedback",
+              "Anonymous ratings, topic wishes and comments are kept for 24 months to guide our editorial planning. An email address is only stored if you add one yourself, and is used solely for a follow-up question about your feedback",
+            ],
+
+            [
               "CMS/staff user data",
               "For the duration of the user&apos;s role; deleted 90 days after access is revoked",
             ],
