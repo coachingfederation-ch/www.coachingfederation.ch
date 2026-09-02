@@ -13,6 +13,7 @@ import {
   type ArticleFeedbackInput,
   type ArticleFeedbackRow,
   type ArticleFeedbackSummary,
+  type ChapterFeedbackReport,
   type EditorialTheme,
   type EditorialThemes,
 } from "./article-feedback";
@@ -120,19 +121,6 @@ export async function buildArticleFeedback(articleId: string): Promise<{
   return { summary: summarise(rows), themes: await readThemes(articleId) };
 }
 
-export type ChapterFeedbackReport = {
-  summary: ArticleFeedbackSummary;
-  perArticle: {
-    id: string;
-    title: string;
-    category: string | null;
-    responses: number;
-    depth: number | null;
-    usefulness: number | null;
-  }[];
-  byMonth: { month: string; responses: number; depth: number | null; usefulness: number | null }[];
-  themes: EditorialThemes | null;
-};
 
 /** Chapter-wide report for `/manage/editorial-signals`. */
 export async function buildChapterFeedback(

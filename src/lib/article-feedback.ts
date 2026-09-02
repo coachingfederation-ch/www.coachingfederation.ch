@@ -135,3 +135,18 @@ export function summarise(rows: ArticleFeedbackRow[]): ArticleFeedbackSummary {
     withEmail,
   };
 }
+
+/** Chapter-wide aggregate, as the Editorial signals dashboard reads it. */
+export interface ChapterFeedbackReport {
+  summary: ArticleFeedbackSummary;
+  perArticle: {
+    id: string;
+    title: string;
+    category: string | null;
+    responses: number;
+    depth: number | null;
+    usefulness: number | null;
+  }[];
+  byMonth: { month: string; responses: number; depth: number | null; usefulness: number | null }[];
+  themes: EditorialThemes | null;
+}

@@ -26,7 +26,7 @@ import {
   getChapterFeedback,
   refreshFeedbackThemes,
 } from "@/lib/article-feedback.functions";
-import type { ChapterFeedbackReport } from "@/lib/article-feedback.server";
+import type { ChapterFeedbackReport } from "@/lib/article-feedback";
 
 export const Route = createFileRoute("/_staff/manage/editorial-signals")({
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, ARTICLE_ROLES),
