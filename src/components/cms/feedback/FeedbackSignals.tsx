@@ -7,7 +7,11 @@
  * Exports: FeedbackSignals, DialBars.
  */
 import { Button } from "@/design-system/icf-welcome-design-system-a835df";
-import { DIAL_MIN, type ArticleFeedbackSummary, type EditorialThemes } from "@/lib/article-feedback";
+import {
+  DIAL_MIN,
+  type ArticleFeedbackSummary,
+  type EditorialThemes,
+} from "@/lib/article-feedback";
 
 function Kpi({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (

@@ -20,7 +20,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/design-system/icf-welcome-design-system-a835df";
-import { CALLOUT_SHADES, SHADE_SWATCH, type CalloutShade } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  CALLOUT_SHADES,
+  SHADE_SWATCH,
+  type CalloutShade,
+} from "@/design-system/icf-welcome-design-system-a835df";
 
 const EMOJIS = ["💡", "⭐", "⚠️", "✅", "📌", "🎯", "❤️", "🔍"];
 

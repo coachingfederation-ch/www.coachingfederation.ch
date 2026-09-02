@@ -21,7 +21,11 @@ import {
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { LinkedInPostPreview, type PreviewSlide } from "./LinkedInPostPreview";
 import { RECAP_COVER_SIZE, RecapCoverSlide } from "./RecapCoverSlide";
-import { draftRecapPost, publishRecapToLinkedIn, saveRecapPostDraft } from "@/lib/event-recaps-admin.functions";
+import {
+  draftRecapPost,
+  publishRecapToLinkedIn,
+  saveRecapPostDraft,
+} from "@/lib/event-recaps-admin.functions";
 
 /** LinkedIn refuses a multi-image post above nine images, cover included. */
 const MAX_SLIDES = 9;
@@ -29,7 +33,12 @@ const MAX_SLIDES = 9;
 const TONES = ["warm", "professional", "celebratory"] as const;
 type Tone = (typeof TONES)[number];
 
-export type RecapPhoto = { id?: string; preview: string | null; alt: string | null; caption: string | null };
+export type RecapPhoto = {
+  id?: string;
+  preview: string | null;
+  alt: string | null;
+  caption: string | null;
+};
 
 export type RecapPostDraft = { commentary: string; withCover: boolean; slideIds: string[] };
 
@@ -289,7 +298,11 @@ export function RecapPostEditor({
                     aria-label={t("recap.post.addSlide")}
                   >
                     {photo.preview ? (
-                      <img src={photo.preview} alt="" className="h-12 w-16 rounded-md object-cover" />
+                      <img
+                        src={photo.preview}
+                        alt=""
+                        className="h-12 w-16 rounded-md object-cover"
+                      />
                     ) : (
                       <span className="block h-12 w-16 rounded-md bg-secondary" aria-hidden />
                     )}

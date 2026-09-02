@@ -51,7 +51,11 @@ export function NewsletterTranslationsPanel({
     { key: "title", label: t("newsletterTranslations.titleField"), type: "input" },
     { key: "subject", label: t("newsletterTranslations.subjectField"), type: "input" },
     ...enabled.flatMap((block) => [
-      { key: titleKey(block.id), label: `${block.title} — ${t("translations.titleField")}`, type: "input" as const },
+      {
+        key: titleKey(block.id),
+        label: `${block.title} — ${t("translations.titleField")}`,
+        type: "input" as const,
+      },
       {
         key: contentKey(block.id),
         label: `${block.title} — ${t("newsletterTranslations.contentField")}`,

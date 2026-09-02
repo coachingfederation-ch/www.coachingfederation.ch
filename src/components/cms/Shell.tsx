@@ -23,6 +23,7 @@ import {
   Headset,
   Ticket,
   Mail,
+  Gauge,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
@@ -46,6 +47,12 @@ const nav = [
   { to: "/articles", key: "nav.articles", icon: FileText, allowedRoles: ["editor"] },
   { to: "/manage/newsletters", key: "nav.newsletters", icon: BookOpen, allowedRoles: ["editor"] },
   { to: "/articles/categories", key: "nav.categories", icon: Tags, allowedRoles: ["editor"] },
+  {
+    to: "/manage/editorial-signals",
+    key: "nav.editorialSignals",
+    icon: Gauge,
+    allowedRoles: ["editor", "publisher"],
+  },
   // Organizers see only this item; the shell itself is open to all staff roles.
   { to: "/manage/events", key: "nav.events", icon: CalendarDays, allowedRoles: ["organizer"] },
   // Membership & Engagement decides guest passes chapter-wide.

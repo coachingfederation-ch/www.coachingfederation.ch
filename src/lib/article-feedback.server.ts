@@ -121,7 +121,6 @@ export async function buildArticleFeedback(articleId: string): Promise<{
   return { summary: summarise(rows), themes: await readThemes(articleId) };
 }
 
-
 /** Chapter-wide report for `/manage/editorial-signals`. */
 export async function buildChapterFeedback(
   filters: FeedbackFilters,
