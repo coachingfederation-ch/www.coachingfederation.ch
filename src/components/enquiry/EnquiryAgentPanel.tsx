@@ -403,12 +403,18 @@ export function EnquiryAgentPanel({
       )}
 
       {stage === "done" && (
-        <div className="space-y-4 p-8 text-center" role="status">
-          <h3 className="font-display text-xl font-bold tracking-tight">{tp("doneTitle")}</h3>
-          <p className="text-sm text-muted-foreground">
+        <div
+          className={cn(
+            "space-y-4 text-center",
+            overlay ? "min-h-0 flex-1 overflow-y-auto px-8 py-12" : "p-8",
+          )}
+          role="status"
+        >
+          <h3 className="font-heading text-xl tracking-tight">{tp("doneTitle")}</h3>
+          <p className="mx-auto max-w-md text-sm leading-relaxed text-muted-foreground">
             {tp("doneBody").replace("{email}", email)}
           </p>
-          <p className="text-xs text-muted-foreground">{tp("doneHint")}</p>
+          <p className="mx-auto max-w-md text-xs text-muted-foreground">{tp("doneHint")}</p>
         </div>
       )}
     </div>
