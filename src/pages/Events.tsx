@@ -8,7 +8,7 @@ import { Mark, type MarkName } from "@/components/marks";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SubscribeCalendarDialog } from "@/components/events/SubscribeCalendarDialog";
 import { EventProposalAgent } from "@/components/events/EventProposalAgent";
-import { Button } from "@/design-system/icf-welcome-design-system-a835df";
+
 import { LocaleLink, useI18n } from "@/i18n";
 import {
   eventPlace,
@@ -513,15 +513,11 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
           <div className="mx-auto max-w-7xl px-8 py-20 text-center">
             <p className="eyebrow-accent">{t("events.cta.eyebrow")}</p>
             <h2 className="mx-auto mt-3 max-w-2xl display-lg">{t("events.cta.title")}</h2>
-            {/* The proposal is shaped in conversation; email stays as the fallback. */}
+            {/* The proposal is shaped in conversation. */}
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <EventProposalAgent />
-              <Button asChild variant="inverse-ghost" size="pill">
-                <a href="mailto:office@coachingfederation.ch" target="_top">
-                  {t("events.cta.propose")}
-                </a>
-              </Button>
             </div>
+
           </div>
         </section>
       </main>
