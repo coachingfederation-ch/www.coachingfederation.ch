@@ -1268,6 +1268,7 @@ export type Database = {
       }
       europe_pulse_runs: {
         Row: {
+          chapter_ids: Json
           chapters_failed: number
           chapters_ok: number
           chapters_total: number
@@ -1275,8 +1276,12 @@ export type Database = {
           curated_items: number
           error_message: string | null
           finished_at: string | null
+          heartbeat_at: string
           id: string
+          locked_until: string | null
+          phase: string
           raw_items: number
+          scan_cursor: number
           started_at: string
           status: Database["public"]["Enums"]["pulse_run_status"]
           trigger_source: string
@@ -1284,6 +1289,7 @@ export type Database = {
           week_of: string
         }
         Insert: {
+          chapter_ids?: Json
           chapters_failed?: number
           chapters_ok?: number
           chapters_total?: number
@@ -1291,8 +1297,12 @@ export type Database = {
           curated_items?: number
           error_message?: string | null
           finished_at?: string | null
+          heartbeat_at?: string
           id?: string
+          locked_until?: string | null
+          phase?: string
           raw_items?: number
+          scan_cursor?: number
           started_at?: string
           status?: Database["public"]["Enums"]["pulse_run_status"]
           trigger_source?: string
@@ -1300,6 +1310,7 @@ export type Database = {
           week_of: string
         }
         Update: {
+          chapter_ids?: Json
           chapters_failed?: number
           chapters_ok?: number
           chapters_total?: number
@@ -1307,8 +1318,12 @@ export type Database = {
           curated_items?: number
           error_message?: string | null
           finished_at?: string | null
+          heartbeat_at?: string
           id?: string
+          locked_until?: string | null
+          phase?: string
           raw_items?: number
+          scan_cursor?: number
           started_at?: string
           status?: Database["public"]["Enums"]["pulse_run_status"]
           trigger_source?: string

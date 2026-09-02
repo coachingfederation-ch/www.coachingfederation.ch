@@ -109,3 +109,21 @@ export function formatPulseDate(iso: string | null, locale: Locale): string | nu
     timeZone: "UTC",
   }).format(date);
 }
+
+/** Stage a run is in. Progress is stored on the run row so an interrupted
+ * scan can be resumed and shown in the CMS instead of hanging as "running". */
+export type PulsePhase = "scanning" | "second_chance" | "curating" | "done" | "failed";
+
+export type PulseProgress = {
+  runId: string;
+  weekOf: string;
+  status: "running" | "succeeded" | "failed";
+  phase: PulsePhase;
+  /** Chapters already scanned, out of `total`. */
+  done: number;
+  total: number;
+  chaptersOk: number;
+  chaptersFailed: number;
+  curatedItems: number;
+  error?: string | null;
+};

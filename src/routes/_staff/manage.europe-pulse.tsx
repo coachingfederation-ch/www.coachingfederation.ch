@@ -16,7 +16,12 @@ import { PulseItemCard } from "@/components/cms/PulseItemCard";
 import { PulseRunControls } from "@/components/cms/PulseRunControls";
 import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
 import { supabase } from "@/integrations/supabase/client";
-import { runEuropePulseNow, retryFailedChapters } from "@/lib/europe-pulse.functions";
+import {
+  runEuropePulseNow,
+  retryFailedChapters,
+  advancePulseRun,
+} from "@/lib/europe-pulse.functions";
+import type { PulseProgress } from "@/lib/europe-pulse";
 import { flagFor, PULSE_COLUMNS, type PulsePublishMode, type PulseRow } from "@/lib/europe-pulse";
 
 export const Route = createFileRoute("/_staff/manage/europe-pulse")({
@@ -72,12 +77,14 @@ const FAILURE_HINTS: Record<string, string> = {
 function EuropePulseAdmin() {
   const runScan = useServerFn(runEuropePulseNow);
   const retryFailed = useServerFn(retryFailedChapters);
+  const advance = useServerFn(advancePulseRun);
   const [mode, setMode] = useState<PulsePublishMode>("automatic");
   const [items, setItems] = useState<PulseRow[]>([]);
   const [chapters, setChapters] = useState<ChapterRow[]>([]);
   const [runs, setRuns] = useState<RunRow[]>([]);
   const [failures, setFailures] = useState<FailureRow[]>([]);
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState<PulseProgress | null>(null);
   const [retrying, setRetrying] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -153,18 +160,54 @@ function EuropePulseAdmin() {
     );
   };
 
+  /**
+   * Drive an unfinished run to completion. Each call advances one short slice;
+   * the server refuses overlapping slices, so a `null` answer just means the
+   * cron backstop (or another tab) is working it — we wait and re-read state.
+   */
+  const drive = async (initial: PulseProgress | null) => {
+    let current = initial;
+    setProgress(current);
+    while (current && current.status === "running") {
+      const next = await advance({ data: { runId: current.runId } });
+      if (next) {
+        current = next;
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 8000));
+        const { data: row } = await supabase
+          .from("europe_pulse_runs")
+          .select("id, week_of, status, phase, scan_cursor, chapters_ok, chapters_failed")
+          .eq("id", current.runId)
+          .maybeSingle();
+        if (!row) break;
+        current = {
+          ...current,
+          status: row.status as PulseProgress["status"],
+          phase: row.phase as PulseProgress["phase"],
+          done: row.scan_cursor ?? current.done,
+          chaptersOk: row.chapters_ok ?? current.chaptersOk,
+          chaptersFailed: row.chapters_failed ?? current.chaptersFailed,
+        };
+      }
+      setProgress(current);
+    }
+    setProgress(null);
+    if (current) {
+      setNotice(
+        current.status === "succeeded"
+          ? `Scanned ${current.chaptersOk} chapters (${current.chaptersFailed} failed) — ${current.curatedItems} items curated for the week of ${current.weekOf}.`
+          : `Run failed: ${current.error ?? "unknown error"}`,
+      );
+    }
+    await load();
+  };
+
   const scanNow = async () => {
     setBusy(true);
     setError(null);
     setNotice(null);
     try {
-      const result = await runScan({});
-      setNotice(
-        result.status === "succeeded"
-          ? `Scanned ${result.chaptersOk} chapters (${result.chaptersFailed} failed) — ${result.curatedItems} items curated for the week of ${result.weekOf}.`
-          : `Run failed: ${result.error ?? "unknown error"}`,
-      );
-      await load();
+      await drive(await runScan({}));
     } catch (err) {
       setError(err instanceof Error ? err.message : "The scan could not be started.");
     } finally {
@@ -179,13 +222,9 @@ function EuropePulseAdmin() {
     setError(null);
     setNotice(null);
     try {
-      const result = await retryFailed({ data: { runId: latest.id } });
-      setNotice(
-        result
-          ? `Retry finished: ${result.chaptersOk} recovered, ${result.chaptersFailed} still failing — ${result.curatedItems} items curated.`
-          : "Nothing to retry — the last run had no failed chapters.",
-      );
-      await load();
+      const started = await retryFailed({ data: { runId: latest.id } });
+      if (!started) setNotice("Nothing to retry — the last run had no failed chapters.");
+      else await drive(started);
     } catch (err) {
       setError(err instanceof Error ? err.message : "The retry could not be started.");
     } finally {
@@ -193,7 +232,21 @@ function EuropePulseAdmin() {
     }
   };
 
+  const resumeRun = async (runId: string) => {
+    setBusy(true);
+    setError(null);
+    setNotice(null);
+    try {
+      await drive(await advance({ data: { runId } }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "The run could not be resumed.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const pending = items.filter((i) => i.status === "pending").length;
+  const unfinished = runs.find((r) => r.status === "running");
 
   return (
     <Shell>
@@ -202,6 +255,9 @@ function EuropePulseAdmin() {
           activeChapterCount={chapters.filter((c) => c.is_active).length}
           busy={busy}
           onScanNow={scanNow}
+          progress={progress}
+          resumableRunId={!busy && !progress && unfinished ? unfinished.id : null}
+          onResume={resumeRun}
         />
 
         {notice ? <p className="mt-4 rounded-lg bg-secondary px-4 py-3 text-sm">{notice}</p> : null}

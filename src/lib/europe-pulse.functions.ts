@@ -78,13 +78,30 @@ export const listEuropePulse = createServerFn({ method: "GET" })
     };
   });
 
-/** Admin-triggered scan + curation run. */
+/**
+ * Admin-triggered scan. Only creates the run and works the first slice: a full
+ * scan outlives a single request, so the CMS polls `advancePulseRun` (and an
+ * hourly cron backs it up) until the run reports it is finished.
+ */
 export const runEuropePulseNow = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const userId = await assertPlatformAdmin(context);
-    const { runEuropePulse } = await import("./europe-pulse.server");
-    return runEuropePulse({ triggerSource: "manual", triggeredBy: userId });
+    const { startEuropePulseRun, advanceEuropePulseRun } = await import("./europe-pulse.server");
+    const started = await startEuropePulseRun({ triggerSource: "manual", triggeredBy: userId });
+    return (await advanceEuropePulseRun(started.runId)) ?? started;
+  });
+
+/** Work one more slice of the unfinished run. Safe to call repeatedly. */
+export const advancePulseRun = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ runId: z.string().uuid().optional() }).parse(input ?? {}),
+  )
+  .handler(async ({ data, context }) => {
+    await assertPlatformAdmin(context);
+    const { advanceEuropePulseRun } = await import("./europe-pulse.server");
+    return advanceEuropePulseRun(data.runId);
   });
 
 /**
@@ -108,6 +125,11 @@ export const retryFailedChapters = createServerFn({ method: "POST" })
       ),
     ];
     if (!chapterIds.length) return null;
-    const { runEuropePulse } = await import("./europe-pulse.server");
-    return runEuropePulse({ triggerSource: "manual", triggeredBy: userId, chapterIds });
+    const { startEuropePulseRun, advanceEuropePulseRun } = await import("./europe-pulse.server");
+    const started = await startEuropePulseRun({
+      triggerSource: "manual",
+      triggeredBy: userId,
+      chapterIds,
+    });
+    return (await advanceEuropePulseRun(started.runId)) ?? started;
   });
