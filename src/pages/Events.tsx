@@ -270,7 +270,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                       aria-pressed={when === v}
                       onClick={() => setFilter("when", v === "upcoming" ? "" : v)}
                       className={
-                        "h-8 rounded-full px-4 text-sm font-semibold transition " +
+                        "h-10 rounded-full px-4 text-sm font-semibold transition sm:h-8 " +
                         (when === v
                           ? "bg-primary text-primary-foreground"
                           : "text-muted-foreground hover:text-foreground")
@@ -281,61 +281,55 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                   ))}
                 </div>
               </div>
-              <div className="grid flex-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                <FilterSelect
-                  label={t("events.filters.category")}
-                  anyLabel={t("events.filters.allCategories")}
-                  value={category}
-                  options={categories.map((c) => ({ value: c.slug, label: c.label }))}
-                  onChange={(v) => setFilter("category", v)}
-                />
-                <WhereSelect
-                  label={t("events.filters.where")}
-                  anyLabel={t("events.filters.allWhere")}
-                  value={whereValue}
-                  regionGroupLabel={t("events.filters.groupRegions")}
-                  communityGroupLabel={t("events.filters.groupCommunities")}
-                  regions={regions.map((r) => ({ value: `region:${r.slug}`, label: r.label }))}
-                  communities={communityOptions}
-                  onChange={setWhere}
-                />
-                <FilterSelect
-                  label={t("events.filters.language")}
-                  anyLabel={t("events.filters.allLanguages")}
-                  value={lang}
-                  options={LANGUAGES.map((l) => ({ value: l, label: l.toUpperCase() }))}
-                  onChange={(v) => setFilter("lang", v)}
-                />
-                <FilterSelect
-                  label={t("events.filters.audience")}
-                  anyLabel={t("events.filters.allAudiences")}
-                  value={audience}
-                  options={[
-                    { value: "open", label: t("events.filters.audienceOpen") },
-                    { value: "members", label: t("events.filters.audienceMembers") },
-                  ]}
-                  onChange={(v) => setFilter("audience", v)}
-                />
-                <FilterSelect
-                  label={t("events.filters.format")}
-                  anyLabel={t("events.filters.allFormats")}
-                  value={format}
-                  options={FORMATS.map((f) => ({ value: f, label: t(LOCATION_TAG[f]) }))}
-                  onChange={(v) => setFilter("format", v)}
-                />
+
+              {/* Mobile: the five facets live in a bottom sheet so the list stays
+                  visible; desktop keeps the inline grid. */}
+              <div className="lg:hidden">
+                <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
+                  <SheetTrigger asChild>
+                    <Button variant="outline" size="pill" className="min-h-11">
+                      <SlidersHorizontal aria-hidden />
+                      {t("events.filters.mobileTrigger")}
+                      {activeFilterCount > 0 ? (
+                        <span className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-primary-foreground">
+                          {activeFilterCount}
+                        </span>
+                      ) : null}
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto">
+                    <SheetHeader>
+                      <SheetTitle>{t("events.filters.mobileTitle")}</SheetTitle>
+                    </SheetHeader>
+                    <div className="grid gap-4 py-4 sm:grid-cols-2">{facetFields}</div>
+                    <SheetFooter className="flex-row gap-3">
+                      {hasFacetFilters ? (
+                        <Button variant="outline" size="pill" onClick={resetFilters}>
+                          {t("events.filters.reset")}
+                        </Button>
+                      ) : null}
+                      <Button size="pill" onClick={() => setFiltersOpen(false)}>
+                        {t("events.filters.apply")}
+                      </Button>
+                    </SheetFooter>
+                  </SheetContent>
+                </Sheet>
               </div>
+
+              <div className="hidden flex-1 gap-3 lg:grid lg:grid-cols-5">{facetFields}</div>
             </div>
             {hasFacetFilters ? (
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 <button
                   type="button"
                   onClick={resetFilters}
-                  className="text-sm font-semibold text-primary hover:underline"
+                  className="min-h-11 text-sm font-semibold text-primary hover:underline"
                 >
                   {t("events.filters.reset")}
                 </button>
               </div>
             ) : null}
+
           </div>
         </section>
 
