@@ -174,7 +174,7 @@ export default function InsightsPage() {
       aria-pressed={id === topic}
       onClick={() => setTopic(id)}
       className={
-        "inline-flex min-h-11 items-center rounded-full border px-4 text-[11px] font-semibold uppercase tracking-wider transition lg:min-h-8 " +
+        "btn-mono inline-flex min-h-11 items-center rounded-full border px-4 transition lg:min-h-8 " +
         (id === topic
           ? "border-chip-active-border bg-primary text-primary-foreground"
           : "border-border/70 bg-chip text-chip-foreground hover:border-chip-active-border")
