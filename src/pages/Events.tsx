@@ -360,7 +360,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                       ) : null}
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto">
+                  <SheetContent side="bottom" className="max-h-dvh overflow-y-auto">
                     <SheetHeader>
                       <SheetTitle>{t("events.filters.mobileTitle")}</SheetTitle>
                     </SheetHeader>
