@@ -108,7 +108,7 @@
     "titlePlaceholder": "Titre de l'article",
     "excerptPlaceholder": "Chapeau — un court résumé qui apparaît sous le titre et dans les cartes d'articles.",
     "excerptGenerate": "Générer le chapeau à partir du corps",
-    "excerptGenerateEmpty": "Rédigez d"abord le corps du texte.",
+    "excerptGenerateEmpty": "Rédigez d'abord le corps du texte.",
     "excerptGenerating": "Rédaction…",
     "bodyPlaceholder": "Corps du texte — rédigez votre article ici en Markdown.",
     "uploadImage": "Téléverser une image à la une",
