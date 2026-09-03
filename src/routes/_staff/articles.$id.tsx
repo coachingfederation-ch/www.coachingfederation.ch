@@ -80,6 +80,7 @@ function EditorPage() {
   const [generatingImage, setGeneratingImage] = useState(false);
   const [featuredNote, setFeaturedNote] = useState<string | null>(null);
   const [unsplashOpen, setUnsplashOpen] = useState(false);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
 
   useEffect(() => {
     void (async () => {
