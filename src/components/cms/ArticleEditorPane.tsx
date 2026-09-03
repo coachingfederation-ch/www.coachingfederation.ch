@@ -3,8 +3,11 @@
  * fields, featured image controls, and the markdown body editor.
  * Extracted from articles.$id.tsx to keep the route file focused on wiring.
  */
+import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Image as ImageIcon, Loader2, Sparkles, Upload, X } from "lucide-react";
-import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
+import { assistWriting } from "@/lib/writing-assist.functions";
+import { AiBadge, Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import { UnsplashPicker } from "@/components/cms/UnsplashPicker";
 import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
@@ -84,6 +87,39 @@ export function ArticleEditorPane({
   generating: boolean;
   generateImage: () => Promise<void>;
 }) {
+  // Lead paragraph drafted from the body text. Kept local: it only writes the
+  // excerpt field back through the same `update` the manual field uses.
+  const runAssist = useServerFn(assistWriting);
+  const [leadBusy, setLeadBusy] = useState(false);
+  const [leadError, setLeadError] = useState<string | null>(null);
+
+  async function generateLead() {
+    const body = (article.content ?? "").trim();
+    if (!body) {
+      setLeadError(t("editor.excerptGenerateEmpty"));
+      return;
+    }
+    setLeadBusy(true);
+    setLeadError(null);
+    try {
+      const result = await runAssist({
+        data: {
+          action: "prompt",
+          text: body.slice(0, 20000),
+          language: article.language,
+          prompt:
+            "Write a lead paragraph for this article: one or two plain sentences, at most 280 characters, summarising what the reader gains. No Markdown, no heading, no quotation marks. Use only facts from the text.",
+        },
+      });
+      const lead = (result.text ?? "").replace(/\s+/g, " ").trim();
+      if (lead) update({ excerpt: lead });
+    } catch (error) {
+      setLeadError(error instanceof Error ? error.message : String(error));
+    } finally {
+      setLeadBusy(false);
+    }
+  }
+
   return (
     <article>
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -119,6 +155,19 @@ export function ArticleEditorPane({
         rows={2}
         className="mt-4 w-full max-w-2xl resize-none border-none bg-transparent text-lg text-muted-foreground outline-none placeholder:text-muted-foreground/60"
       />
+      <div className="mt-2 flex flex-wrap items-center gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => void generateLead()}
+          disabled={leadBusy}
+        >
+          {leadBusy ? <Loader2 className="animate-spin" /> : <Sparkles />}
+          {leadBusy ? t("editor.excerptGenerating") : t("editor.excerptGenerate")}
+        </Button>
+        {leadError ? <span className="text-xs text-destructive">{leadError}</span> : null}
+      </div>
 
       <HeroDesignSection
         kind="article"
