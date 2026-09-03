@@ -153,6 +153,18 @@ export function ArticleMetaSidebar({
               <p className="mt-2 text-xs text-muted-foreground">{featuredNote}</p>
             ) : null}
           </div>
+          <div className="border-t border-border pt-3">
+            <label className="flex items-center justify-between gap-3">
+              <span className="text-muted-foreground">{t("editor.aiCoedited")}</span>
+              <input
+                type="checkbox"
+                checked={article.ai_coedited}
+                onChange={(e) => update({ ai_coedited: e.target.checked })}
+                className="h-4 w-4 accent-[color:var(--primary)]"
+              />
+            </label>
+            <p className="mt-2 text-xs text-muted-foreground">{t("editor.aiCoeditedNote")}</p>
+          </div>
         </div>
       </div>
 

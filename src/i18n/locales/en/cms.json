@@ -146,7 +146,9 @@
     "statusUnchanged": "The article status did not change.",
     "imageBrief": "Optional art direction for AI, e.g. coaches talking in a Basel café",
     "imageGenerate": "Generate with AI",
-    "imageAiNote": "AI generated images are always labelled as such on the public site."
+    "imageAiNote": "AI generated images are always labelled as such on the public site.",
+    "aiCoedited": "AI co-edited",
+    "aiCoeditedNote": "Shown to readers as a small tag on the article."
   },
   "translations": {
     "title": "Translations",
@@ -801,10 +803,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Lead projects",
-            "Be recognized by ICFS for leading initiatives"
-          ]
+          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
         },
         "status": {
           "title": "Status",
@@ -2532,13 +2531,7 @@
     },
     "depthTitle": "Depth (1 too light — 5 too deep)",
     "usefulnessTitle": "Usefulness (1 not for me — 5 I will use this)",
-    "depthScale": [
-      "Too light",
-      "A bit light",
-      "About right",
-      "A bit deep",
-      "Too deep"
-    ],
+    "depthScale": ["Too light", "A bit light", "About right", "A bit deep", "Too deep"],
     "usefulnessScale": [
       "Not for me",
       "Mildly interesting",

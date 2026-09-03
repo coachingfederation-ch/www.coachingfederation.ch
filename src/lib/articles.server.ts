@@ -109,6 +109,7 @@ export type ArticleContentPatch = {
   image_credit_url: string | null;
   image_source: string | null;
   hero_marks: PlacedMark[] | null;
+  ai_coedited: boolean;
 };
 
 export async function saveArticleContent(client: Client, id: string, patch: ArticleContentPatch) {

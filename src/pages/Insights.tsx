@@ -53,9 +53,7 @@ function CardVisual({ article, className }: { article: PublicArticle; className:
           loading="lazy"
           className={"w-full object-cover " + className}
         />
-        {article.image_source === "ai" ? (
-          <AiBadge className="absolute bottom-2 left-2" />
-        ) : null}
+        {article.image_source === "ai" ? <AiBadge className="absolute bottom-2 left-2" /> : null}
       </div>
     );
   }
@@ -236,6 +234,9 @@ export default function InsightsPage() {
                     {formatArticleDate(featured.published_at)} ·{" "}
                     {authorName(featured.author) ?? t("insights.byline")}
                   </p>
+                  {featured.ai_coedited ? (
+                    <AiBadge label={t("insights.aiCoedited")} className="mt-4 self-start" />
+                  ) : null}
                 </div>
               </LocaleLink>
             </section>
@@ -270,6 +271,9 @@ export default function InsightsPage() {
                           <p className="btn-mono mt-4 !text-muted-foreground">
                             {formatArticleDate(p.published_at)}
                           </p>
+                          {p.ai_coedited ? (
+                            <AiBadge label={t("insights.aiCoedited")} className="mt-3 self-start" />
+                          ) : null}
                         </div>
                       </LocaleLink>
                     ))}

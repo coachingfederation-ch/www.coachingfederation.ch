@@ -146,7 +146,9 @@
     "statusUnchanged": "Lo stato dell'articolo non è cambiato.",
     "imageBrief": "Indicazione artistica facoltativa per l’IA, ad es. coach che dialogano in un caffè a Lugano",
     "imageGenerate": "Genera con l’IA",
-    "imageAiNote": "Le immagini generate dall’IA sono sempre segnalate come tali sul sito pubblico."
+    "imageAiNote": "Le immagini generate dall’IA sono sempre segnalate come tali sul sito pubblico.",
+    "aiCoedited": "Co-editato con IA",
+    "aiCoeditedNote": "Mostrato ai lettori come una piccola etichetta sull’articolo."
   },
   "translations": {
     "title": "Traduzioni",
@@ -801,10 +803,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Guidare progetti",
-            "Essere riconosciuti da ICFS per aver guidato iniziative"
-          ]
+          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
         },
         "status": {
           "title": "Status",
@@ -2539,13 +2538,7 @@
       "Un po' tecnico",
       "Troppo tecnico"
     ],
-    "usefulnessScale": [
-      "Non fa per me",
-      "Poco interessante",
-      "Interessante",
-      "Utile",
-      "Lo userò"
-    ],
+    "usefulnessScale": ["Non fa per me", "Poco interessante", "Interessante", "Utile", "Lo userò"],
     "topicsTitle": "Temi richiesti",
     "noTopics": "Nessun tema richiesto finora.",
     "themesTitle": "Temi IA",
