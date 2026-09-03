@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { SlidersHorizontal } from "lucide-react";
 import {
+  Badge,
   Button,
   Sheet,
   SheetContent,
