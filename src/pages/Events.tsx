@@ -3,11 +3,23 @@
  * Exports: EventsPage (default), EventsPageData. Rendered by src/routes/events.index.tsx
  * and the locale-prefixed equivalent in src/routes/$locale/events.index.tsx.
  */
+import { useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
+import { SlidersHorizontal } from "lucide-react";
+import {
+  Button,
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df";
 import { Mark, type MarkName } from "@/components/marks";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SubscribeCalendarDialog } from "@/components/events/SubscribeCalendarDialog";
 import { EventProposalAgent } from "@/components/events/EventProposalAgent";
+
 
 import { LocaleLink, useI18n } from "@/i18n";
 import {
