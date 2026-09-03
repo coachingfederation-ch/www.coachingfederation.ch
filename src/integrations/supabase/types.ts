@@ -222,6 +222,7 @@ export type Database = {
       }
       articles: {
         Row: {
+          ai_coedited: boolean
           author_id: string
           category: string | null
           category_id: string | null
@@ -246,6 +247,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_coedited?: boolean
           author_id: string
           category?: string | null
           category_id?: string | null
@@ -270,6 +272,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_coedited?: boolean
           author_id?: string
           category?: string | null
           category_id?: string | null

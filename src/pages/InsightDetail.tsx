@@ -101,6 +101,10 @@ export default function InsightDetailPage({ article }: { article: DetailArticle 
               {category ? ` · ${category}` : ""}
               {` · ${minutes} ${t("insights.minRead")}`}
             </p>
+            {/* Text-level disclosure; the cover badge covers imagery separately. */}
+            {article.ai_coedited ? (
+              <AiBadge label={t("insights.aiCoedited")} className="mt-3" />
+            ) : null}
           </div>
           <ShareInline url={shareUrl} title={article.title} />
         </div>

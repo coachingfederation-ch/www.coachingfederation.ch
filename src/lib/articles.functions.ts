@@ -57,6 +57,7 @@ const contentSchema = idSchema.extend({
   image_credit_url: z.string().max(2000).nullable(),
   image_source: z.string().max(40).nullable(),
   hero_marks: z.array(heroMarkSchema).max(HERO_MARK_LIMIT).nullable(),
+  ai_coedited: z.boolean(),
 });
 
 const transitionSchema = z.union([

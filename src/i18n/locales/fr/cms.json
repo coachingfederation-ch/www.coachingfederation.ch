@@ -146,7 +146,9 @@
     "statusUnchanged": "Le statut de l'article n'a pas changé.",
     "imageBrief": "Direction artistique facultative pour l’IA, p. ex. des coachs qui échangent dans un café à Lausanne",
     "imageGenerate": "Générer avec l’IA",
-    "imageAiNote": "Les images générées par IA sont toujours signalées comme telles sur le site public."
+    "imageAiNote": "Les images générées par IA sont toujours signalées comme telles sur le site public.",
+    "aiCoedited": "Co-édité avec l’IA",
+    "aiCoeditedNote": "Affiché aux lectrices et lecteurs sous forme d’une petite étiquette sur l’article."
   },
   "translations": {
     "title": "Traductions",
@@ -801,10 +803,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Piloter des projets",
-            "Être reconnu par ICFS pour avoir mené des initiatives"
-          ]
+          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
         },
         "status": {
           "title": "Status",

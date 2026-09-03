@@ -1,0 +1,1 @@
+ALTER TABLE public.articles ADD COLUMN IF NOT EXISTS ai_coedited boolean NOT NULL DEFAULT false;

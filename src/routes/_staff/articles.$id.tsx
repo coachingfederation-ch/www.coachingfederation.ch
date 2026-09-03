@@ -120,6 +120,7 @@ function EditorPage() {
             image_credit_url: article.image_credit_url,
             image_source: article.image_source,
             hero_marks: article.hero_marks ?? null,
+            ai_coedited: article.ai_coedited,
           },
         });
         setSaveState("saved");
@@ -143,6 +144,7 @@ function EditorPage() {
     article?.image_credit_url,
     article?.image_source,
     article?.hero_marks,
+    article?.ai_coedited,
   ]);
 
   const update = (patch: Partial<Article>) => setArticle((a) => (a ? { ...a, ...patch } : a));
