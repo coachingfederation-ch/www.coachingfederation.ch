@@ -13,6 +13,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowDown, ArrowUp, Eye, RefreshCw, Sparkles, Trash2 } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
+import { useSaveShortcut } from "@/hooks/use-save-shortcut";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import { BlockImageField } from "@/components/cms/BlockImageField";
 import { NewsletterPreviewDialog } from "@/components/cms/NewsletterPreviewDialog";
@@ -305,6 +306,12 @@ function NewsletterEditor() {
       saveMeta({ data: { id, title, language: data?.newsletter?.language ?? "en" } }),
     onSuccess: invalidate,
   });
+
+  // Cmd/Ctrl+S saves the edition title, matching the other CMS editors.
+  useSaveShortcut(
+    () => metaMutation.mutate(),
+    metaMutation.isPending || !data?.newsletter || title === data.newsletter.title,
+  );
 
   if (isLoading) {
     return (
