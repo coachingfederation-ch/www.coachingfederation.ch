@@ -95,6 +95,44 @@ function EditorPage() {
     })();
   }, [id]);
 
+  // One persist path shared by the debounced autosave and the Cmd/Ctrl+S
+  // shortcut, so the shortcut writes exactly what the timer would have.
+  const articleRef = useRef<Article | null>(null);
+  articleRef.current = article;
+  const flushSave = useCallback(async () => {
+    const current = articleRef.current;
+    if (!current) return;
+    if (saveTimer.current) {
+      clearTimeout(saveTimer.current);
+      saveTimer.current = null;
+    }
+    setSaveState("saving");
+    try {
+      await saveArticle({
+        data: {
+          id: current.id,
+          title: current.title,
+          excerpt: current.excerpt,
+          content: current.content,
+          language: current.language,
+          category_id: current.category_id,
+          author_id: current.author_id,
+          featured_image_url: current.featured_image_url,
+          image_credit_name: current.image_credit_name,
+          image_credit_url: current.image_credit_url,
+          image_source: current.image_source,
+          hero_marks: current.hero_marks ?? null,
+          ai_coedited: current.ai_coedited,
+        },
+      });
+      setSaveState("saved");
+    } catch {
+      setSaveState("idle");
+    }
+  }, []);
+
+  useSaveShortcut(flushSave, !article);
+
   // Autosave title/excerpt/content/language
   useEffect(() => {
     if (!article) return;
@@ -104,30 +142,7 @@ function EditorPage() {
     }
     setSaveState("saving");
     if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(async () => {
-      try {
-        await saveArticle({
-          data: {
-            id: article.id,
-            title: article.title,
-            excerpt: article.excerpt,
-            content: article.content,
-            language: article.language,
-            category_id: article.category_id,
-            author_id: article.author_id,
-            featured_image_url: article.featured_image_url,
-            image_credit_name: article.image_credit_name,
-            image_credit_url: article.image_credit_url,
-            image_source: article.image_source,
-            hero_marks: article.hero_marks ?? null,
-            ai_coedited: article.ai_coedited,
-          },
-        });
-        setSaveState("saved");
-      } catch {
-        setSaveState("idle");
-      }
-    }, 800);
+    saveTimer.current = setTimeout(() => void flushSave(), 800);
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current);
     };
@@ -146,6 +161,7 @@ function EditorPage() {
     article?.hero_marks,
     article?.ai_coedited,
   ]);
+
 
   const update = (patch: Partial<Article>) => setArticle((a) => (a ? { ...a, ...patch } : a));
 
