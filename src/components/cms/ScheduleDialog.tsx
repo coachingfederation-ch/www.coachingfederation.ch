@@ -118,7 +118,9 @@ export function ScheduleDialog({
   t: (key: string) => string;
 }) {
   const initial = useMemo<Parts>(() => {
-    const base = currentScheduledAt ? new Date(currentScheduledAt) : new Date(Date.now() + 3600_000);
+    const base = currentScheduledAt
+      ? new Date(currentScheduledAt)
+      : new Date(Date.now() + 3600_000);
     const valid = isNaN(base.getTime()) ? new Date(Date.now() + 3600_000) : base;
     return roundUpToQuarter(valid);
   }, [currentScheduledAt]);
