@@ -170,25 +170,38 @@ export default function InsightsPage() {
       />
       <main id="main">
         <section className="mx-auto max-w-7xl px-8 pt-16">
-          <div className="flex flex-wrap items-center gap-2">
-            {topics.map(({ id, label }) => (
-              <button
-                key={id}
-                type="button"
-                aria-pressed={id === topic}
-                onClick={() => setTopic(id)}
-                className={
-                  "inline-flex min-h-11 items-center rounded-full border px-4 text-[11px] font-semibold uppercase tracking-wider transition sm:min-h-8 " +
-                  (id === topic
-                    ? "border-chip-active-border bg-primary text-primary-foreground"
-                    : "border-border/70 bg-chip text-chip-foreground hover:border-chip-active-border")
-                }
-              >
-                {label}
-              </button>
-            ))}
+          {/* Mobile: topics move into a bottom sheet so the chip wall does not
+              push articles below the fold; desktop keeps the inline chip row. */}
+          <div className="lg:hidden">
+            <Sheet open={topicsOpen} onOpenChange={setTopicsOpen}>
+              <SheetTrigger asChild>
+                <Button type="button" variant="outline" size="pill">
+                  <SlidersHorizontal aria-hidden />
+                  {t("insights.filters.mobileTrigger")}
+                  {topic !== "all" ? <Badge>1</Badge> : null}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="bottom" className="max-h-dvh overflow-y-auto">
+                <SheetHeader>
+                  <SheetTitle>{t("insights.filters.mobileTitle")}</SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-wrap items-center gap-2 py-4">{topicChips}</div>
+                <SheetFooter className="flex-row gap-3">
+                  {topic !== "all" ? (
+                    <Button variant="outline" size="pill" onClick={() => setTopic("all")}>
+                      {t("insights.filters.reset")}
+                    </Button>
+                  ) : null}
+                  <Button size="pill" onClick={() => setTopicsOpen(false)}>
+                    {t("insights.filters.apply")}
+                  </Button>
+                </SheetFooter>
+              </SheetContent>
+            </Sheet>
           </div>
+          <div className="hidden flex-wrap items-center gap-2 lg:flex">{topicChips}</div>
         </section>
+
 
         {isPending ? (
           <SkeletonGrid recentLabel={t("insights.recent")} />
