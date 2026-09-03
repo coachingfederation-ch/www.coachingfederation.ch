@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ArticleEditorPane } from "@/components/cms/ArticleEditorPane";
 import { generateArticleImageFn } from "@/lib/article-images.functions";
 import { ArticleMetaSidebar, StatusPill } from "@/components/cms/ArticleMetaSidebar";
+import { ScheduleDialog } from "@/components/cms/ScheduleDialog";
 import {
   type ArticleLang,
   type ArticleRow,
@@ -80,6 +81,7 @@ function EditorPage() {
   const [generatingImage, setGeneratingImage] = useState(false);
   const [featuredNote, setFeaturedNote] = useState<string | null>(null);
   const [unsplashOpen, setUnsplashOpen] = useState(false);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
 
   useEffect(() => {
     void (async () => {
@@ -267,19 +269,10 @@ function EditorPage() {
   const returnToDraft = () =>
     article ? void runTransition({ id: article.id, action: "return_to_draft" }) : undefined;
 
-  const schedule = async () => {
+  const confirmSchedule = async (scheduledAt: string) => {
     if (!article) return;
-    const input = window.prompt(
-      t("editor.schedulePrompt"),
-      new Date(Date.now() + 3600_000).toISOString().slice(0, 16).replace("T", " "),
-    );
-    if (!input) return;
-    const dt = new Date(input.replace(" ", "T"));
-    if (isNaN(dt.getTime())) {
-      toast.info(t("editor.invalidDate"));
-      return;
-    }
-    await runTransition({ id: article.id, action: "schedule", scheduledAt: dt.toISOString() });
+    const ok = await runTransition({ id: article.id, action: "schedule", scheduledAt });
+    if (ok) setScheduleOpen(false);
   };
 
   const unpublish = async () => {
@@ -397,11 +390,19 @@ function EditorPage() {
           {article.status === "review" && canPublish ? (
             <>
               <button
-                onClick={schedule}
+                onClick={() => setScheduleOpen(true)}
                 className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium hover:bg-secondary"
               >
                 {t("editor.schedule")}
               </button>
+              <ScheduleDialog
+                open={scheduleOpen}
+                onOpenChange={setScheduleOpen}
+                currentScheduledAt={article.scheduled_at ?? null}
+                onConfirm={confirmSchedule}
+                locale={locale}
+                t={t}
+              />
               <button
                 onClick={publishNow}
                 className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] hover:opacity-95"
