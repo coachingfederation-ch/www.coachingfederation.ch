@@ -11,7 +11,11 @@
     "lede": "Idées, recherches et histoires sur le leadership, l'IA, la diversité et l'avenir du travail — par des coachs exerçant dans toute la Suisse."
   },
   "filters": {
-    "all": "Tous"
+    "all": "Tous",
+    "mobileTrigger": "Thèmes",
+    "mobileTitle": "Filtrer par thème",
+    "apply": "Afficher les résultats",
+    "reset": "Réinitialiser"
   },
   "categories": {
     "Leadership": "Leadership",

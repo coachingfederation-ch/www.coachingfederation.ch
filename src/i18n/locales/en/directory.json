@@ -53,7 +53,8 @@
     "formatLabel": "Format",
     "acceptingLabel": "Accepting new clients",
     "clear": "Clear filters",
-    "toggle": "Filters"
+    "toggle": "Filters",
+    "apply": "Show results"
   },
   "modes": {
     "aria": "Finder mode"

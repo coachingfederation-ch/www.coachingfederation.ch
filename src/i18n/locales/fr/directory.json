@@ -53,7 +53,8 @@
     "formatLabel": "Format",
     "acceptingLabel": "Accepte de nouveaux clients",
     "clear": "Réinitialiser les filtres",
-    "toggle": "Filtres"
+    "toggle": "Filtres",
+    "apply": "Afficher les résultats"
   },
   "modes": {
     "aria": "Mode de recherche"

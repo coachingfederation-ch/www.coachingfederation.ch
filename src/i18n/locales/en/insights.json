@@ -11,7 +11,11 @@
     "lede": "Ideas, research and stories on leadership, AI, diversity and the future of work — from coaches practising across Switzerland."
   },
   "filters": {
-    "all": "All"
+    "all": "All",
+    "mobileTrigger": "Topics",
+    "mobileTitle": "Filter by topic",
+    "apply": "Show results",
+    "reset": "Reset"
   },
   "categories": {
     "Leadership": "Leadership",

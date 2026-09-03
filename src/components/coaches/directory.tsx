@@ -10,7 +10,17 @@
  * public symbols so existing imports keep working unchanged.
  */
 export { CoachAvatar } from "./directory/CoachCard";
-import { Button } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  Badge,
+  Button,
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df";
+import { SlidersHorizontal } from "lucide-react";
 import { ModeTabs, CoachFilters } from "./directory/CoachFilters";
 import { CoachResultsGrid } from "./directory/CoachResultsGrid";
 import { useCoachDirectoryFilters } from "./directory/useCoachDirectoryFilters";
@@ -86,6 +96,16 @@ export function CoachDirectory() {
     />
   );
 
+  // Badge on the mobile trigger: how many facets are currently narrowing the list.
+  const activeFilterCount =
+    (query !== "" ? 1 : 0) +
+    (region !== "all" ? 1 : 0) +
+    (language !== "all" ? 1 : 0) +
+    credentials.length +
+    specializations.length +
+    formats.length +
+    (acceptingOnly ? 1 : 0);
+
   return (
     <section className="bg-card py-16">
       <div className="mx-auto max-w-7xl px-8">
@@ -101,17 +121,36 @@ export function CoachDirectory() {
         )}
         <div className="grid gap-10 lg:grid-cols-[280px_1fr] lg:items-start">
           <div className="lg:sticky lg:top-8">
-            <Button
-              type="button"
-              variant="outline"
-              size="pill"
-              onClick={() => setShowFilters((v) => !v)}
-              aria-expanded={showFilters}
-              className="mb-4 lg:hidden"
-            >
-              {t("directory.filters.toggle")}
-            </Button>
-            <div className={showFilters ? "block" : "hidden lg:block"}>{filterPanel}</div>
+            {/* Mobile: filters live in a bottom sheet so results stay visible;
+                desktop keeps the sticky sidebar panel. */}
+            <div className="lg:hidden">
+              <Sheet open={showFilters} onOpenChange={setShowFilters}>
+                <SheetTrigger asChild>
+                  <Button type="button" variant="outline" size="pill">
+                    <SlidersHorizontal aria-hidden />
+                    {t("directory.filters.toggle")}
+                    {activeFilterCount > 0 ? <Badge>{activeFilterCount}</Badge> : null}
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="bottom" className="max-h-dvh overflow-y-auto">
+                  <SheetHeader>
+                    <SheetTitle>{t("directory.filters.title")}</SheetTitle>
+                  </SheetHeader>
+                  <div className="py-4">{filterPanel}</div>
+                  <SheetFooter className="flex-row gap-3">
+                    {dirty ? (
+                      <Button variant="outline" size="pill" onClick={clearAll}>
+                        {t("directory.filters.clear")}
+                      </Button>
+                    ) : null}
+                    <Button size="pill" onClick={() => setShowFilters(false)}>
+                      {t("directory.filters.apply")}
+                    </Button>
+                  </SheetFooter>
+                </SheetContent>
+              </Sheet>
+            </div>
+            <div className="hidden lg:block">{filterPanel}</div>
           </div>
 
           <div>

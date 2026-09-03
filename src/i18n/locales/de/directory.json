@@ -53,7 +53,8 @@
     "formatLabel": "Format",
     "acceptingLabel": "Nimmt neue Klienten an",
     "clear": "Filter zurücksetzen",
-    "toggle": "Filter"
+    "toggle": "Filter",
+    "apply": "Ergebnisse anzeigen"
   },
   "modes": {
     "aria": "Suchmodus"

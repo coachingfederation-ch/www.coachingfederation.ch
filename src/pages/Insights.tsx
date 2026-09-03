@@ -4,7 +4,18 @@
  * the locale-prefixed equivalent in src/routes/$locale/insights.index.tsx.
  */
 import { Link } from "@tanstack/react-router";
-import { AiBadge, Button } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  AiBadge,
+  Badge,
+  Button,
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df";
+import { SlidersHorizontal } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Mark } from "@/components/marks";
@@ -138,6 +149,7 @@ function EmptyState({
 export default function InsightsPage() {
   const { t, locale } = useI18n();
   const [topic, setTopic] = useState<string>("all");
+  const [topicsOpen, setTopicsOpen] = useState(false);
   const { data, isPending, isError } = useQuery({
     queryKey: ["published-articles", locale],
     queryFn: () => fetchPublishedArticles(locale),
@@ -155,6 +167,23 @@ export default function InsightsPage() {
   ];
   const cardCategory = (a: PublicArticle) => articleCategoryLabel(a, locale);
 
+  const topicChips = topics.map(({ id, label }) => (
+    <button
+      key={id}
+      type="button"
+      aria-pressed={id === topic}
+      onClick={() => setTopic(id)}
+      className={
+        "btn-mono inline-flex min-h-11 items-center rounded-full border px-4 transition lg:min-h-8 " +
+        (id === topic
+          ? "border-chip-active-border bg-primary text-primary-foreground"
+          : "border-border/70 bg-chip text-chip-foreground hover:border-chip-active-border")
+      }
+    >
+      {label}
+    </button>
+  ));
+
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <CompactHero
@@ -170,24 +199,36 @@ export default function InsightsPage() {
       />
       <main id="main">
         <section className="mx-auto max-w-7xl px-8 pt-16">
-          <div className="flex flex-wrap items-center gap-2">
-            {topics.map(({ id, label }) => (
-              <button
-                key={id}
-                type="button"
-                aria-pressed={id === topic}
-                onClick={() => setTopic(id)}
-                className={
-                  "inline-flex min-h-11 items-center rounded-full border px-4 text-[11px] font-semibold uppercase tracking-wider transition sm:min-h-8 " +
-                  (id === topic
-                    ? "border-chip-active-border bg-primary text-primary-foreground"
-                    : "border-border/70 bg-chip text-chip-foreground hover:border-chip-active-border")
-                }
-              >
-                {label}
-              </button>
-            ))}
+          {/* Mobile: topics move into a bottom sheet so the chip wall does not
+              push articles below the fold; desktop keeps the inline chip row. */}
+          <div className="lg:hidden">
+            <Sheet open={topicsOpen} onOpenChange={setTopicsOpen}>
+              <SheetTrigger asChild>
+                <Button type="button" variant="outline" size="pill">
+                  <SlidersHorizontal aria-hidden />
+                  {t("insights.filters.mobileTrigger")}
+                  {topic !== "all" ? <Badge>1</Badge> : null}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="bottom" className="max-h-dvh overflow-y-auto">
+                <SheetHeader>
+                  <SheetTitle>{t("insights.filters.mobileTitle")}</SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-wrap items-center gap-2 py-4">{topicChips}</div>
+                <SheetFooter className="flex-row gap-3">
+                  {topic !== "all" ? (
+                    <Button variant="outline" size="pill" onClick={() => setTopic("all")}>
+                      {t("insights.filters.reset")}
+                    </Button>
+                  ) : null}
+                  <Button size="pill" onClick={() => setTopicsOpen(false)}>
+                    {t("insights.filters.apply")}
+                  </Button>
+                </SheetFooter>
+              </SheetContent>
+            </Sheet>
           </div>
+          <div className="hidden flex-wrap items-center gap-2 lg:flex">{topicChips}</div>
         </section>
 
         {isPending ? (
