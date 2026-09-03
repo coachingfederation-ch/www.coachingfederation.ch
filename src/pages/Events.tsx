@@ -20,7 +20,6 @@ import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SubscribeCalendarDialog } from "@/components/events/SubscribeCalendarDialog";
 import { EventProposalAgent } from "@/components/events/EventProposalAgent";
 
-
 import { LocaleLink, useI18n } from "@/i18n";
 import {
   eventPlace,
@@ -263,7 +262,6 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
     </>
   );
 
-
   const matches = (e: PublicEvent) =>
     (!category || e.category_slug === category) &&
     (!region || e.region_slug === region) &&
@@ -394,7 +392,6 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                 </button>
               </div>
             ) : null}
-
           </div>
         </section>
 
@@ -576,7 +573,6 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <EventProposalAgent />
             </div>
-
           </div>
         </section>
       </main>
