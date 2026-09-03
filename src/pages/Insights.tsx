@@ -155,6 +155,25 @@ export default function InsightsPage() {
   ];
   const cardCategory = (a: PublicArticle) => articleCategoryLabel(a, locale);
 
+  const topicChips = topics.map(({ id, label }) => (
+    <button
+      key={id}
+      type="button"
+      aria-pressed={id === topic}
+      onClick={() => setTopic(id)}
+      className={
+        "inline-flex min-h-11 items-center rounded-full border px-4 text-[11px] font-semibold uppercase tracking-wider transition lg:min-h-8 " +
+        (id === topic
+          ? "border-chip-active-border bg-primary text-primary-foreground"
+          : "border-border/70 bg-chip text-chip-foreground hover:border-chip-active-border")
+      }
+    >
+      {label}
+    </button>
+  ));
+
+
+
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <CompactHero
