@@ -228,7 +228,10 @@
     "audience": "Pubblico",
     "allAudiences": "Tutti",
     "audienceOpen": "Aperto a tutti",
-    "audienceMembers": "Solo per membri"
+    "audienceMembers": "Solo per membri",
+    "mobileTrigger": "Filtri",
+    "mobileTitle": "Filtra gli eventi",
+    "apply": "Mostra i risultati"
   },
   "recap": {
     "eyebrow": "Dopo l'evento",

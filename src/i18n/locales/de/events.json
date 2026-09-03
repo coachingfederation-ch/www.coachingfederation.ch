@@ -228,7 +228,10 @@
     "audience": "Zielgruppe",
     "allAudiences": "Alle",
     "audienceOpen": "Offen für alle",
-    "audienceMembers": "Nur für Mitglieder"
+    "audienceMembers": "Nur für Mitglieder",
+    "mobileTrigger": "Filter",
+    "mobileTitle": "Veranstaltungen filtern",
+    "apply": "Ergebnisse anzeigen"
   },
   "recap": {
     "eyebrow": "Nach dem Anlass",

@@ -3,7 +3,19 @@
  * Exports: EventsPage (default), EventsPageData. Rendered by src/routes/events.index.tsx
  * and the locale-prefixed equivalent in src/routes/$locale/events.index.tsx.
  */
+import { useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
+import { SlidersHorizontal } from "lucide-react";
+import {
+  Badge,
+  Button,
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df";
 import { Mark, type MarkName } from "@/components/marks";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SubscribeCalendarDialog } from "@/components/events/SubscribeCalendarDialog";
@@ -199,6 +211,58 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
       replace: true,
     });
 
+  const activeFilterCount = [category, region, community, lang, format, audience].filter(
+    Boolean,
+  ).length;
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  /** One set of facet controls, rendered inline on desktop and in the sheet on mobile. */
+  const facetFields = (
+    <>
+      <FilterSelect
+        label={t("events.filters.category")}
+        anyLabel={t("events.filters.allCategories")}
+        value={category}
+        options={categories.map((c) => ({ value: c.slug, label: c.label }))}
+        onChange={(v) => setFilter("category", v)}
+      />
+      <WhereSelect
+        label={t("events.filters.where")}
+        anyLabel={t("events.filters.allWhere")}
+        value={whereValue}
+        regionGroupLabel={t("events.filters.groupRegions")}
+        communityGroupLabel={t("events.filters.groupCommunities")}
+        regions={regions.map((r) => ({ value: `region:${r.slug}`, label: r.label }))}
+        communities={communityOptions}
+        onChange={setWhere}
+      />
+      <FilterSelect
+        label={t("events.filters.language")}
+        anyLabel={t("events.filters.allLanguages")}
+        value={lang}
+        options={LANGUAGES.map((l) => ({ value: l, label: l.toUpperCase() }))}
+        onChange={(v) => setFilter("lang", v)}
+      />
+      <FilterSelect
+        label={t("events.filters.audience")}
+        anyLabel={t("events.filters.allAudiences")}
+        value={audience}
+        options={[
+          { value: "open", label: t("events.filters.audienceOpen") },
+          { value: "members", label: t("events.filters.audienceMembers") },
+        ]}
+        onChange={(v) => setFilter("audience", v)}
+      />
+      <FilterSelect
+        label={t("events.filters.format")}
+        anyLabel={t("events.filters.allFormats")}
+        value={format}
+        options={FORMATS.map((f) => ({ value: f, label: t(LOCATION_TAG[f]) }))}
+        onChange={(v) => setFilter("format", v)}
+      />
+    </>
+  );
+
   const matches = (e: PublicEvent) =>
     (!category || e.category_slug === category) &&
     (!region || e.region_slug === region) &&
@@ -270,7 +334,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                       aria-pressed={when === v}
                       onClick={() => setFilter("when", v === "upcoming" ? "" : v)}
                       className={
-                        "h-8 rounded-full px-4 text-sm font-semibold transition " +
+                        "h-10 rounded-full px-4 text-sm font-semibold transition sm:h-8 " +
                         (when === v
                           ? "bg-primary text-primary-foreground"
                           : "text-muted-foreground hover:text-foreground")
@@ -281,56 +345,46 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                   ))}
                 </div>
               </div>
-              <div className="grid flex-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                <FilterSelect
-                  label={t("events.filters.category")}
-                  anyLabel={t("events.filters.allCategories")}
-                  value={category}
-                  options={categories.map((c) => ({ value: c.slug, label: c.label }))}
-                  onChange={(v) => setFilter("category", v)}
-                />
-                <WhereSelect
-                  label={t("events.filters.where")}
-                  anyLabel={t("events.filters.allWhere")}
-                  value={whereValue}
-                  regionGroupLabel={t("events.filters.groupRegions")}
-                  communityGroupLabel={t("events.filters.groupCommunities")}
-                  regions={regions.map((r) => ({ value: `region:${r.slug}`, label: r.label }))}
-                  communities={communityOptions}
-                  onChange={setWhere}
-                />
-                <FilterSelect
-                  label={t("events.filters.language")}
-                  anyLabel={t("events.filters.allLanguages")}
-                  value={lang}
-                  options={LANGUAGES.map((l) => ({ value: l, label: l.toUpperCase() }))}
-                  onChange={(v) => setFilter("lang", v)}
-                />
-                <FilterSelect
-                  label={t("events.filters.audience")}
-                  anyLabel={t("events.filters.allAudiences")}
-                  value={audience}
-                  options={[
-                    { value: "open", label: t("events.filters.audienceOpen") },
-                    { value: "members", label: t("events.filters.audienceMembers") },
-                  ]}
-                  onChange={(v) => setFilter("audience", v)}
-                />
-                <FilterSelect
-                  label={t("events.filters.format")}
-                  anyLabel={t("events.filters.allFormats")}
-                  value={format}
-                  options={FORMATS.map((f) => ({ value: f, label: t(LOCATION_TAG[f]) }))}
-                  onChange={(v) => setFilter("format", v)}
-                />
+
+              {/* Mobile: the five facets live in a bottom sheet so the list stays
+                  visible; desktop keeps the inline grid. */}
+              <div className="lg:hidden">
+                <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
+                  <SheetTrigger asChild>
+                    <Button variant="outline" size="pill">
+                      <SlidersHorizontal aria-hidden />
+                      {t("events.filters.mobileTrigger")}
+                      {activeFilterCount > 0 ? <Badge>{activeFilterCount}</Badge> : null}
+                    </Button>
+                  </SheetTrigger>
+
+                  <SheetContent side="bottom" className="max-h-dvh overflow-y-auto">
+                    <SheetHeader>
+                      <SheetTitle>{t("events.filters.mobileTitle")}</SheetTitle>
+                    </SheetHeader>
+                    <div className="grid gap-4 py-4 sm:grid-cols-2">{facetFields}</div>
+                    <SheetFooter className="flex-row gap-3">
+                      {hasFacetFilters ? (
+                        <Button variant="outline" size="pill" onClick={resetFilters}>
+                          {t("events.filters.reset")}
+                        </Button>
+                      ) : null}
+                      <Button size="pill" onClick={() => setFiltersOpen(false)}>
+                        {t("events.filters.apply")}
+                      </Button>
+                    </SheetFooter>
+                  </SheetContent>
+                </Sheet>
               </div>
+
+              <div className="hidden flex-1 gap-3 lg:grid lg:grid-cols-5">{facetFields}</div>
             </div>
             {hasFacetFilters ? (
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 <button
                   type="button"
                   onClick={resetFilters}
-                  className="text-sm font-semibold text-primary hover:underline"
+                  className="min-h-11 text-sm font-semibold text-primary hover:underline"
                 >
                   {t("events.filters.reset")}
                 </button>
@@ -517,7 +571,6 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <EventProposalAgent />
             </div>
-
           </div>
         </section>
       </main>

@@ -228,7 +228,10 @@
     "audience": "Audience",
     "allAudiences": "Everyone",
     "audienceOpen": "Open to everyone",
-    "audienceMembers": "Members only"
+    "audienceMembers": "Members only",
+    "mobileTrigger": "Filters",
+    "mobileTitle": "Filter events",
+    "apply": "Show results"
   },
   "recap": {
     "eyebrow": "After the event",
