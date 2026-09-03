@@ -25,7 +25,6 @@ import { ModeTabs, CoachFilters } from "./directory/CoachFilters";
 import { CoachResultsGrid } from "./directory/CoachResultsGrid";
 import { useCoachDirectoryFilters } from "./directory/useCoachDirectoryFilters";
 
-
 export function CoachDirectory() {
   const {
     t,
@@ -107,8 +106,6 @@ export function CoachDirectory() {
     formats.length +
     (acceptingOnly ? 1 : 0);
 
-
-
   return (
     <section className="bg-card py-16">
       <div className="mx-auto max-w-7xl px-8">
@@ -155,7 +152,6 @@ export function CoachDirectory() {
             </div>
             <div className="hidden lg:block">{filterPanel}</div>
           </div>
-
 
           <div>
             <div className="mb-6 flex items-center justify-between gap-4">

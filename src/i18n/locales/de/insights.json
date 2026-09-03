@@ -11,7 +11,11 @@
     "lede": "Ideen, Forschung und Geschichten zu Führung, KI, Diversität und der Zukunft der Arbeit — von Coaches aus der ganzen Schweiz."
   },
   "filters": {
-    "all": "Alle"
+    "all": "Alle",
+    "mobileTrigger": "Themen",
+    "mobileTitle": "Nach Thema filtern",
+    "apply": "Ergebnisse anzeigen",
+    "reset": "Zurücksetzen"
   },
   "categories": {
     "Leadership": "Führung",

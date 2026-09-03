@@ -53,7 +53,8 @@
     "formatLabel": "Modalità",
     "acceptingLabel": "Disponibile per nuovi clienti",
     "clear": "Cancella filtri",
-    "toggle": "Filtri"
+    "toggle": "Filtri",
+    "apply": "Mostra risultati"
   },
   "modes": {
     "aria": "Modalità di ricerca"

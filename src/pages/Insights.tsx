@@ -4,7 +4,18 @@
  * the locale-prefixed equivalent in src/routes/$locale/insights.index.tsx.
  */
 import { Link } from "@tanstack/react-router";
-import { AiBadge, Button } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  AiBadge,
+  Badge,
+  Button,
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df";
+import { SlidersHorizontal } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Mark } from "@/components/marks";
@@ -138,6 +149,7 @@ function EmptyState({
 export default function InsightsPage() {
   const { t, locale } = useI18n();
   const [topic, setTopic] = useState<string>("all");
+  const [topicsOpen, setTopicsOpen] = useState(false);
   const { data, isPending, isError } = useQuery({
     queryKey: ["published-articles", locale],
     queryFn: () => fetchPublishedArticles(locale),
@@ -171,8 +183,6 @@ export default function InsightsPage() {
       {label}
     </button>
   ));
-
-
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -220,7 +230,6 @@ export default function InsightsPage() {
           </div>
           <div className="hidden flex-wrap items-center gap-2 lg:flex">{topicChips}</div>
         </section>
-
 
         {isPending ? (
           <SkeletonGrid recentLabel={t("insights.recent")} />
