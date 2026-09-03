@@ -110,6 +110,13 @@
     "tooMany": "Thanks — that is enough feedback for now.",
     "thanksTitle": "Thank you, this helps",
     "thanksBody": "Your answer goes straight to the editorial team and guides what we publish next.",
-    "editAnswer": "Change my answer"
+    "editAnswer": "Change my answer",
+    "bannerLede": "Two quick dials and, if you like, one sentence. It takes under a minute and it shapes what we publish next.",
+    "bannerCta": "Give feedback",
+    "stickyLede": "How is this article landing?",
+    "stickyCta": "Give feedback",
+    "stickyDismiss": "Dismiss",
+    "exitTitle": "Before you go — one quick signal?",
+    "exitLede": "Two dials, under a minute. It tells our editors where to take this next."
   }
 }
