@@ -163,7 +163,6 @@ function EditorPage() {
     article?.ai_coedited,
   ]);
 
-
   const update = (patch: Partial<Article>) => setArticle((a) => (a ? { ...a, ...patch } : a));
 
   const uploadImage = async (file: File) => {
