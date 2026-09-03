@@ -267,19 +267,10 @@ function EditorPage() {
   const returnToDraft = () =>
     article ? void runTransition({ id: article.id, action: "return_to_draft" }) : undefined;
 
-  const schedule = async () => {
+  const confirmSchedule = async (scheduledAt: string) => {
     if (!article) return;
-    const input = window.prompt(
-      t("editor.schedulePrompt"),
-      new Date(Date.now() + 3600_000).toISOString().slice(0, 16).replace("T", " "),
-    );
-    if (!input) return;
-    const dt = new Date(input.replace(" ", "T"));
-    if (isNaN(dt.getTime())) {
-      toast.info(t("editor.invalidDate"));
-      return;
-    }
-    await runTransition({ id: article.id, action: "schedule", scheduledAt: dt.toISOString() });
+    const ok = await runTransition({ id: article.id, action: "schedule", scheduledAt });
+    if (ok) setScheduleOpen(false);
   };
 
   const unpublish = async () => {
