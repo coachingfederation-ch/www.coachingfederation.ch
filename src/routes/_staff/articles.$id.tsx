@@ -6,7 +6,7 @@
 
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { requireStaffAccess, ARTICLE_ROLES } from "@/lib/staff-guard";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,6 +29,7 @@ import {
   setArticleFeaturedFlag,
 } from "@/lib/articles.functions";
 import { ArticleFeedbackTab } from "@/components/cms/feedback/ArticleFeedbackTab";
+import { useSaveShortcut } from "@/hooks/use-save-shortcut";
 import { useCms } from "@/i18n/cms";
 import { toast } from "sonner";
 

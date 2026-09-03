@@ -31,6 +31,7 @@ import { listEventForms } from "@/lib/event-forms.functions";
 import { EventRecapEditor } from "@/components/cms/EventRecapEditor";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { takeWizardExtras } from "@/lib/event-wizard-extras";
+import { useSaveShortcut } from "@/hooks/use-save-shortcut";
 import { useCms } from "@/i18n/cms";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
 import {
@@ -290,6 +291,9 @@ function EventEditor() {
   // Repeat dates copy the stored row, so they only make sense for a published
   // event whose form holds no pending edits.
   const dirty = baseline !== null && baseline !== JSON.stringify(event);
+
+  // Cmd/Ctrl+S saves, matching the other CMS editors.
+  useSaveShortcut(save, saving || !dirty);
   const canCreateOccurrences = event.status === "published" && !dirty;
   const repeatBlockedReason =
     event.status !== "published"
