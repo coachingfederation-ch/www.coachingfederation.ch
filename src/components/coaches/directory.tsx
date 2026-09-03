@@ -10,10 +10,21 @@
  * public symbols so existing imports keep working unchanged.
  */
 export { CoachAvatar } from "./directory/CoachCard";
-import { Button } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  Badge,
+  Button,
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df";
+import { SlidersHorizontal } from "lucide-react";
 import { ModeTabs, CoachFilters } from "./directory/CoachFilters";
 import { CoachResultsGrid } from "./directory/CoachResultsGrid";
 import { useCoachDirectoryFilters } from "./directory/useCoachDirectoryFilters";
+
 
 export function CoachDirectory() {
   const {
