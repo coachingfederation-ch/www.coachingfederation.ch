@@ -389,11 +389,19 @@ function EditorPage() {
           {article.status === "review" && canPublish ? (
             <>
               <button
-                onClick={schedule}
+                onClick={() => setScheduleOpen(true)}
                 className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium hover:bg-secondary"
               >
                 {t("editor.schedule")}
               </button>
+              <ScheduleDialog
+                open={scheduleOpen}
+                onOpenChange={setScheduleOpen}
+                currentScheduledAt={article.scheduled_at ?? null}
+                onConfirm={confirmSchedule}
+                locale={locale}
+                t={t}
+              />
               <button
                 onClick={publishNow}
                 className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] hover:opacity-95"
