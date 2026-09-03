@@ -252,7 +252,11 @@ export function ScheduleDialog({
           <span className="text-xs text-muted-foreground">
             {t("editor.scheduleDialog.quickLabel")}
           </span>
-          <Button variant="outline" size="sm" onClick={() => applyPreset(presetAt(0, 0))}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => applyPreset(new Date(Date.now() + 3600_000))}
+          >
             {t("editor.scheduleDialog.inAnHour")}
           </Button>
           <Button variant="outline" size="sm" onClick={() => applyPreset(presetAt(1, 9))}>
