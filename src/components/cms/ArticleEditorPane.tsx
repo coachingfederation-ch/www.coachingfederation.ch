@@ -3,7 +3,10 @@
  * fields, featured image controls, and the markdown body editor.
  * Extracted from articles.$id.tsx to keep the route file focused on wiring.
  */
+import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Image as ImageIcon, Loader2, Sparkles, Upload, X } from "lucide-react";
+import { assistWriting } from "@/lib/writing-assist.functions";
 import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import { UnsplashPicker } from "@/components/cms/UnsplashPicker";
