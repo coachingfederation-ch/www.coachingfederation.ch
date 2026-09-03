@@ -156,19 +156,16 @@ export function ArticleEditorPane({
         className="mt-4 w-full max-w-2xl resize-none border-none bg-transparent text-lg text-muted-foreground outline-none placeholder:text-muted-foreground/60"
       />
       <div className="mt-2 flex flex-wrap items-center gap-2">
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="sm"
           onClick={() => void generateLead()}
           disabled={leadBusy}
-          className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium hover:bg-secondary disabled:opacity-50"
         >
-          {leadBusy ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : (
-            <Sparkles className="h-3.5 w-3.5" />
-          )}
+          {leadBusy ? <Loader2 className="animate-spin" /> : <Sparkles />}
           {leadBusy ? t("editor.excerptGenerating") : t("editor.excerptGenerate")}
-        </button>
+        </Button>
         {leadError ? <span className="text-xs text-destructive">{leadError}</span> : null}
       </div>
 
