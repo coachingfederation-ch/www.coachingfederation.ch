@@ -350,16 +350,13 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
               <div className="lg:hidden">
                 <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
                   <SheetTrigger asChild>
-                    <Button variant="outline" size="pill" className="min-h-11">
+                    <Button variant="outline" size="pill">
                       <SlidersHorizontal aria-hidden />
                       {t("events.filters.mobileTrigger")}
-                      {activeFilterCount > 0 ? (
-                        <span className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-primary-foreground">
-                          {activeFilterCount}
-                        </span>
-                      ) : null}
+                      {activeFilterCount > 0 ? <Badge>{activeFilterCount}</Badge> : null}
                     </Button>
                   </SheetTrigger>
+
                   <SheetContent side="bottom" className="max-h-dvh overflow-y-auto">
                     <SheetHeader>
                       <SheetTitle>{t("events.filters.mobileTitle")}</SheetTitle>
