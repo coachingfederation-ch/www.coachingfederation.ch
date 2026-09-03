@@ -97,6 +97,18 @@ export function CoachDirectory() {
     />
   );
 
+  // Badge on the mobile trigger: how many facets are currently narrowing the list.
+  const activeFilterCount =
+    (query !== "" ? 1 : 0) +
+    (region !== "all" ? 1 : 0) +
+    (language !== "all" ? 1 : 0) +
+    credentials.length +
+    specializations.length +
+    formats.length +
+    (acceptingOnly ? 1 : 0);
+
+
+
   return (
     <section className="bg-card py-16">
       <div className="mx-auto max-w-7xl px-8">
