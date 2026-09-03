@@ -199,6 +199,59 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
       replace: true,
     });
 
+  const activeFilterCount = [category, region, community, lang, format, audience].filter(
+    Boolean,
+  ).length;
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  /** One set of facet controls, rendered inline on desktop and in the sheet on mobile. */
+  const facetFields = (
+    <>
+      <FilterSelect
+        label={t("events.filters.category")}
+        anyLabel={t("events.filters.allCategories")}
+        value={category}
+        options={categories.map((c) => ({ value: c.slug, label: c.label }))}
+        onChange={(v) => setFilter("category", v)}
+      />
+      <WhereSelect
+        label={t("events.filters.where")}
+        anyLabel={t("events.filters.allWhere")}
+        value={whereValue}
+        regionGroupLabel={t("events.filters.groupRegions")}
+        communityGroupLabel={t("events.filters.groupCommunities")}
+        regions={regions.map((r) => ({ value: `region:${r.slug}`, label: r.label }))}
+        communities={communityOptions}
+        onChange={setWhere}
+      />
+      <FilterSelect
+        label={t("events.filters.language")}
+        anyLabel={t("events.filters.allLanguages")}
+        value={lang}
+        options={LANGUAGES.map((l) => ({ value: l, label: l.toUpperCase() }))}
+        onChange={(v) => setFilter("lang", v)}
+      />
+      <FilterSelect
+        label={t("events.filters.audience")}
+        anyLabel={t("events.filters.allAudiences")}
+        value={audience}
+        options={[
+          { value: "open", label: t("events.filters.audienceOpen") },
+          { value: "members", label: t("events.filters.audienceMembers") },
+        ]}
+        onChange={(v) => setFilter("audience", v)}
+      />
+      <FilterSelect
+        label={t("events.filters.format")}
+        anyLabel={t("events.filters.allFormats")}
+        value={format}
+        options={FORMATS.map((f) => ({ value: f, label: t(LOCATION_TAG[f]) }))}
+        onChange={(v) => setFilter("format", v)}
+      />
+    </>
+  );
+
+
   const matches = (e: PublicEvent) =>
     (!category || e.category_slug === category) &&
     (!region || e.region_slug === region) &&
