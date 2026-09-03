@@ -110,6 +110,13 @@
     "tooMany": "Danke – das ist genug Feedback für den Moment.",
     "thanksTitle": "Danke, das hilft",
     "thanksBody": "Ihre Antwort geht direkt an die Redaktion und lenkt, was wir als Nächstes veröffentlichen.",
-    "editAnswer": "Antwort ändern"
+    "editAnswer": "Antwort ändern",
+    "bannerLede": "Zwei schnelle Regler und, wenn Sie mögen, ein Satz. Das dauert unter einer Minute und prägt, was wir als Nächstes veröffentlichen.",
+    "bannerCta": "Feedback geben",
+    "stickyLede": "Wie wirkt dieser Artikel auf Sie?",
+    "stickyCta": "Feedback geben",
+    "stickyDismiss": "Schliessen",
+    "exitTitle": "Bevor Sie gehen — ein kurzes Signal?",
+    "exitLede": "Zwei Regler, unter einer Minute. Damit sagen Sie unserer Redaktion, wohin es gehen soll."
   }
 }

@@ -110,6 +110,13 @@
     "tooMany": "Merci — cela suffit pour le moment.",
     "thanksTitle": "Merci, cela nous aide",
     "thanksBody": "Votre réponse arrive directement à la rédaction et guide nos prochains sujets.",
-    "editAnswer": "Modifier ma réponse"
+    "editAnswer": "Modifier ma réponse",
+    "bannerLede": "Deux curseurs rapides et, si vous le souhaitez, une phrase. Moins d’une minute, et cela oriente nos prochaines publications.",
+    "bannerCta": "Donner un retour",
+    "stickyLede": "Comment trouvez-vous cet article ?",
+    "stickyCta": "Donner un retour",
+    "stickyDismiss": "Fermer",
+    "exitTitle": "Avant de partir — un signal rapide ?",
+    "exitLede": "Deux curseurs, moins d’une minute. Cela indique à notre rédaction la suite à donner."
   }
 }
