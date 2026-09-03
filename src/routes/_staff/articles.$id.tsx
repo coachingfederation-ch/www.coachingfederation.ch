@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ArticleEditorPane } from "@/components/cms/ArticleEditorPane";
 import { generateArticleImageFn } from "@/lib/article-images.functions";
 import { ArticleMetaSidebar, StatusPill } from "@/components/cms/ArticleMetaSidebar";
+import { ScheduleDialog } from "@/components/cms/ScheduleDialog";
 import {
   type ArticleLang,
   type ArticleRow,
