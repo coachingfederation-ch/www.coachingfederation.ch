@@ -37,10 +37,7 @@ export function CorrespondenceSection({
   return (
     <Section title={t("member.correspondenceTitle")} note={t("member.correspondenceNote")}>
       <div className="mt-3 max-w-xs">
-        <Select
-          value={value || NONE}
-          onValueChange={(next) => onChange(next === NONE ? "" : next)}
-        >
+        <Select value={value || NONE} onValueChange={(next) => onChange(next === NONE ? "" : next)}>
           <SelectTrigger aria-label={t("member.correspondenceTitle")}>
             <SelectValue />
           </SelectTrigger>
