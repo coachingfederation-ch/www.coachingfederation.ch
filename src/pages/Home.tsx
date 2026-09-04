@@ -277,6 +277,9 @@ function ForOrganisations() {
   );
 }
 
+/** Temporarily hidden: the advertisement band still shows demo partners. Flip to re-enable. */
+const SHOW_SPONSORS = false;
+
 function Sponsors() {
   const { t, tList } = useI18n();
   // Demo imagery is bundled positionally: locale item order matches AD_IMAGES.
@@ -475,7 +478,7 @@ export default function HomePage() {
         <CoachingInAction />
         <ForOrganisations />
         <Events />
-        <Sponsors />
+        {SHOW_SPONSORS && <Sponsors />}
         <Research />
         <Join />
       </main>
