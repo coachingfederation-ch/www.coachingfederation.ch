@@ -182,7 +182,6 @@ export default function InsightsPage() {
           ? "border-chip-active-border bg-primary text-primary-foreground"
           : "border-border bg-card text-chip-foreground hover:border-chip-active-border")
       }
-
     >
       {label}
     </button>
