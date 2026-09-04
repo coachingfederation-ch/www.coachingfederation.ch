@@ -101,7 +101,7 @@ export async function dispatchCampaign(campaign: EngagementCampaign): Promise<Di
     result.attempted += 1;
     const { data: member } = await supabaseAdmin
       .from("members")
-      .select("id, first_name, full_name, email, activity_state")
+      .select("id, first_name, full_name, email, activity_state, correspondence_locale")
       .eq("id", send.member_id as string)
       .maybeSingle();
 
@@ -125,7 +125,8 @@ export async function dispatchCampaign(campaign: EngagementCampaign): Promise<Di
       continue;
     }
 
-    const copy = pickCopy(campaign.copy, null);
+    // Write to the member in the language they asked for, when they picked one.
+    const copy = pickCopy(campaign.copy, member?.correspondence_locale ?? null);
     if (!copy) {
       await finish("skipped", "No copy authored for this campaign");
       result.skipped += 1;
