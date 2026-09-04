@@ -215,10 +215,14 @@ export const openAttendanceSession = createServerFn({ method: "POST" })
   )
   .handler(async ({ context, data }): Promise<AttendanceSession> => {
     await assertOrganizer(context);
-    // Run as the caller: the routine authorises on auth.uid().
-    const { data: result, error } = await context.supabase.rpc("open_event_attendance_session", {
+    // The routine is no longer executable by signed-in browser sessions, so it
+    // runs through the server client with the verified caller as actor. The
+    // routine still re-checks that this actor manages the event.
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: result, error } = await supabaseAdmin.rpc("open_event_attendance_session", {
       _event_id: data.eventId,
       _grace_minutes: data.graceMinutes ?? 30,
+      _actor: context.userId,
     });
     if (error) throw new Error(error.message);
     return result as AttendanceSession;
@@ -229,8 +233,10 @@ export const closeAttendanceSession = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
-    const { error } = await context.supabase.rpc("close_event_attendance_session", {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.rpc("close_event_attendance_session", {
       _event_id: data.eventId,
+      _actor: context.userId,
     });
     if (error) throw new Error(error.message);
     return { outcome: "closed" as const };
@@ -241,12 +247,15 @@ export const loadAttendanceSession = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }): Promise<AttendanceSession | null> => {
     await assertOrganizer(context);
-    const { data: result, error } = await context.supabase.rpc("get_event_attendance_session", {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: result, error } = await supabaseAdmin.rpc("get_event_attendance_session", {
       _event_id: data.eventId,
+      _actor: context.userId,
     });
     if (error) throw new Error(error.message);
     return (result as AttendanceSession | null) ?? null;
   });
+
 
 export type AttendanceConfirmation =
   | { outcome: "checked_in"; name: string }
