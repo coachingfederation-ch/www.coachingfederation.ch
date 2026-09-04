@@ -243,6 +243,7 @@ export function RoleAssignmentEditor({
             {t("ops.assign")}
           </button>
         </div>
+        {notice ? <p className="mt-2 text-xs text-muted-foreground">{notice}</p> : null}
       </section>
     </>
   );
