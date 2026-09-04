@@ -67,6 +67,8 @@ function OperationalStructurePage() {
   const [pickedMember, setPickedMember] = useState("");
   const [pickedRole, setPickedRole] = useState("");
   const [error, setError] = useState<string | null>(null);
+  // Non-error feedback under the assignment controls (e.g. the roles hint).
+  const [notice, setNotice] = useState<string | null>(null);
   // Ids currently being machine-translated (a new row, or a manual re-run).
   const [translating, setTranslating] = useState<string[]>([]);
   // Reordering writes `sort_order`, which drives the public /team filter chips
