@@ -290,10 +290,6 @@ function EventEditor() {
 
   // Repeat dates copy the stored row, so they only make sense for a published
   // event whose form holds no pending edits.
-  const dirty = baseline !== null && baseline !== JSON.stringify(event);
-
-  // Cmd/Ctrl+S saves, matching the other CMS editors.
-  useSaveShortcut(save, saving || !dirty);
   const canCreateOccurrences = event.status === "published" && !dirty;
   const repeatBlockedReason =
     event.status !== "published"
