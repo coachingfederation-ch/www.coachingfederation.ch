@@ -39,7 +39,7 @@ function Panel({ title, children }: { title: string; children: React.ReactNode }
 }
 
 const OUTCOME_COLORS: Record<string, string> = {
-  successful: "var(--color-teal)",
+  successful: "var(--color-success)",
   partially_successful: "var(--color-accent)",
   escalated: "var(--color-secondary-foreground)",
   unsuccessful: "var(--color-destructive)",

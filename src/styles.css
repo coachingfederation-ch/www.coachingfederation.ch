@@ -12,3 +12,11 @@
  * stylesheet imported above (single source of truth). Only app-specific base
  * styles and utilities live below.
  */
+
+/*
+ * App-level chart token. The attached design system ships no green; the
+ * chat-insights charts need a positive/green outcome colour (requested).
+ */
+@theme {
+  --color-success: oklch(0.62 0.14 152);
+}
