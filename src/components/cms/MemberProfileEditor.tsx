@@ -11,6 +11,7 @@
 import { ProfileTranslationsPanel } from "@/components/member/ProfileTranslationsPanel";
 import { AboutSection } from "./member-profile/AboutSection";
 import { ContactSection } from "./member-profile/ContactSection";
+import { CorrespondenceSection } from "./member-profile/CorrespondenceSection";
 import { FacetSection } from "./member-profile/FacetSection";
 import { IdentitySection } from "./member-profile/IdentitySection";
 import { LinksSection } from "./member-profile/LinksSection";
@@ -35,6 +36,8 @@ export function MemberProfileEditor() {
     setDescription,
     availability,
     setAvailability,
+    correspondenceLocale,
+    setCorrespondenceLocale,
     services,
     setServices,
     facets,
@@ -131,6 +134,12 @@ export function MemberProfileEditor() {
         selected={facets.language_ids}
         onToggle={toggle("language_ids")}
         locale={locale}
+      />
+
+      <CorrespondenceSection
+        t={t}
+        value={correspondenceLocale}
+        onChange={setCorrespondenceLocale}
       />
 
       <FacetSection

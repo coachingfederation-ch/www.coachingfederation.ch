@@ -631,6 +631,9 @@
     "regionsTitle": "Zone de service (cantons / régions)",
     "regionsNote": "Où vous proposez vos prestations en présentiel. Sélectionnez toutes les régions desservies — il ne s'agit pas de votre adresse postale.",
     "languagesTitle": "Langues de coaching",
+    "correspondenceTitle": "Langue de correspondance",
+    "correspondenceNote": "Choisissez la langue dans laquelle nous vous écrivons. Elle n'apparaît pas sur votre profil public.",
+    "correspondenceNone": "Aucune préférence",
     "formatsTitle": "Formats",
     "specialisationsTitle": "Spécialisations",
     "linksTitle": "Liens",
@@ -820,7 +823,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
+          "items": [
+            "Piloter des projets",
+            "Être reconnu par ICFS pour avoir mené des initiatives"
+          ]
         },
         "status": {
           "title": "Status",

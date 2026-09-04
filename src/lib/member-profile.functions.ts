@@ -14,6 +14,7 @@ const linkSchema = z.object({
 });
 
 const updateSchema = z.object({
+  correspondence_locale: z.enum(["en", "de", "fr", "it"]).nullish(),
   tagline: z.string().max(160).nullish(),
   description: z.string().max(3000).nullish(),
   availability_slug: z.string().max(60).nullish(),

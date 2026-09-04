@@ -73,6 +73,8 @@ export type MyMemberProfile = {
     credential_expires_on: string | null;
     membership_expiration_date: string | null;
     activity_state: string;
+    /** Language the chapter uses when writing to this member; null = no preference. */
+    correspondence_locale: string | null;
   };
   eligibility: { eligible: boolean; reason: string };
   profile: {
@@ -110,7 +112,7 @@ export type MyMemberProfile = {
 };
 
 const MEMBER_COLUMNS =
-  "id, cst_recno, full_name, email, city, country, credential_slug, credential_expires_on, membership_expiration_date, activity_state";
+  "id, cst_recno, full_name, email, city, country, credential_slug, credential_expires_on, membership_expiration_date, activity_state, correspondence_locale";
 
 const PROFILE_COLUMNS =
   "id, visibility, tagline, description, profile_image_path, availability_slug, coaching_available, mentoring_available, supervision_available, mentor_accredited, supervision_accredited, booking_url, contact_email_public, response_time_note, approach, qualifications, experience_band, session_length_note, fees_note, availability_note, testimonial_quote, testimonial_attribution, team_bio";
@@ -195,6 +197,8 @@ export async function loadMyMemberProfile(userId: string): Promise<MyMemberProfi
 }
 
 export type MyProfileUpdate = {
+  /** Lives on the member record, not the directory profile. */
+  correspondence_locale?: string | null;
   tagline?: string | null;
   description?: string | null;
   availability_slug?: string | null;
@@ -249,6 +253,20 @@ export async function updateMyMemberProfile(
 ): Promise<MyMemberProfile> {
   const member = await resolveMember(userId);
   if (!member) throw new Error("No member record is linked to this account.");
+
+  // Correspondence language belongs to the member record, so it is saved
+  // independently of the directory profile.
+  if (input.correspondence_locale !== undefined) {
+    const locale = (input.correspondence_locale ?? "").trim();
+    if (locale && !["en", "de", "fr", "it"].includes(locale)) {
+      throw new Error("Unsupported correspondence language.");
+    }
+    const { error: memberError } = await supabaseAdmin
+      .from("members")
+      .update({ correspondence_locale: locale || null })
+      .eq("id", member.id);
+    if (memberError) throw memberError;
+  }
 
   const { data: profile, error } = await supabaseAdmin
     .from("member_directory_profiles")

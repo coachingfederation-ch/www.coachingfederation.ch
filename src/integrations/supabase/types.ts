@@ -4877,6 +4877,7 @@ export type Database = {
           anonymized_at: string | null
           auth_user_id: string | null
           city: string | null
+          correspondence_locale: string | null
           country: string | null
           created_at: string
           credential_awarded_on: string | null
@@ -4905,6 +4906,7 @@ export type Database = {
           anonymized_at?: string | null
           auth_user_id?: string | null
           city?: string | null
+          correspondence_locale?: string | null
           country?: string | null
           created_at?: string
           credential_awarded_on?: string | null
@@ -4933,6 +4935,7 @@ export type Database = {
           anonymized_at?: string | null
           auth_user_id?: string | null
           city?: string | null
+          correspondence_locale?: string | null
           country?: string | null
           created_at?: string
           credential_awarded_on?: string | null

@@ -631,6 +631,9 @@
     "regionsTitle": "Service area (cantons / regions)",
     "regionsNote": "Where you offer in-person work. Select every region you serve — this is not your postal address.",
     "languagesTitle": "Coaching languages",
+    "correspondenceTitle": "Correspondence language",
+    "correspondenceNote": "Choose the language we use when we write to you. This is not shown on your public profile.",
+    "correspondenceNone": "No preference",
     "formatsTitle": "Formats",
     "specialisationsTitle": "Specialisations",
     "linksTitle": "Links",
@@ -820,7 +823,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
+          "items": [
+            "Lead projects",
+            "Be recognized by ICFS for leading initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -2546,7 +2552,13 @@
     },
     "depthTitle": "Depth (1 too light — 5 too deep)",
     "usefulnessTitle": "Usefulness (1 not for me — 5 I will use this)",
-    "depthScale": ["Too light", "A bit light", "About right", "A bit deep", "Too deep"],
+    "depthScale": [
+      "Too light",
+      "A bit light",
+      "About right",
+      "A bit deep",
+      "Too deep"
+    ],
     "usefulnessScale": [
       "Not for me",
       "Mildly interesting",

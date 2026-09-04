@@ -631,6 +631,9 @@
     "regionsTitle": "Area di servizio (cantoni / regioni)",
     "regionsNote": "Dove offri prestazioni in presenza. Seleziona ogni regione in cui operi — non si tratta del tuo indirizzo postale.",
     "languagesTitle": "Lingue di coaching",
+    "correspondenceTitle": "Lingua di corrispondenza",
+    "correspondenceNote": "Scegli la lingua in cui ti scriviamo. Non compare nel tuo profilo pubblico.",
+    "correspondenceNone": "Nessuna preferenza",
     "formatsTitle": "Formati",
     "specialisationsTitle": "Specializzazioni",
     "linksTitle": "Link",
@@ -820,7 +823,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
+          "items": [
+            "Guidare progetti",
+            "Essere riconosciuti da ICFS per aver guidato iniziative"
+          ]
         },
         "status": {
           "title": "Status",
@@ -2553,7 +2559,13 @@
       "Un po' tecnico",
       "Troppo tecnico"
     ],
-    "usefulnessScale": ["Non fa per me", "Poco interessante", "Interessante", "Utile", "Lo userò"],
+    "usefulnessScale": [
+      "Non fa per me",
+      "Poco interessante",
+      "Interessante",
+      "Utile",
+      "Lo userò"
+    ],
     "topicsTitle": "Temi richiesti",
     "noTopics": "Nessun tema richiesto finora.",
     "themesTitle": "Temi IA",
