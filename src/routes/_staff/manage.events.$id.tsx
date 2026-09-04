@@ -218,9 +218,6 @@ function EventEditor() {
 
   const patch = (next: Partial<Managed>) => setEvent({ ...event, ...next });
 
-
-
-
   const changeStatus = async (status: "draft" | "published" | "cancelled") => {
     try {
       await setEventStatus({ data: { id: event.id, status } });
