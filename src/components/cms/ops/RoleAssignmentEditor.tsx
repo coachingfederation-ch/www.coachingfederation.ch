@@ -44,6 +44,8 @@ type Props = {
   pickedRole: string;
   setPickedRole: (value: string) => void;
   assign: () => void | Promise<void>;
+  /** Non-error feedback shown under the assignment controls. */
+  notice?: string | null;
   translateLabels: (
     table: "op_projects" | "op_project_roles",
     id: string,
