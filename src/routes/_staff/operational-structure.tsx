@@ -20,11 +20,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
 import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
 import { slugifyVocab } from "@/lib/vocabularies";
-import {
-  listOpsAssignments,
-  listOpsProjects,
-  searchOpsMembers,
-} from "@/lib/ops-admin.functions";
+import { listOpsAssignments, listOpsProjects, searchOpsMembers } from "@/lib/ops-admin.functions";
 
 import { translateOpsLabels } from "@/lib/ops-label-translations.functions";
 import { ProjectGroupList } from "@/components/cms/ops/ProjectGroupList";
@@ -278,7 +274,6 @@ function OperationalStructurePage() {
     if (err) return setError(err.message);
     await loadDetail(selected);
   };
-
 
   const moveAssignmentUp = async (row: Assignment, index: number) => {
     const b = assignments[index - 1];
