@@ -107,6 +107,16 @@
     "title": "Profile von ICF Global",
     "body": "Die Coach-Einträge werden von ICF Global verwaltet. Mitglieder können ihr Profil auf diesem Portal mit zusätzlichen Inhalten ergänzen."
   },
+  "inactive": {
+    "title": "Der Coach Finder ist noch nicht offen",
+    "body": "Wir bereiten das Verzeichnis der ICF-zertifizierten Coaches in der Schweiz vor. Es ist derzeit deaktiviert, deshalb sind noch keine Coaches gelistet. Sie können sich aber bereits ansehen, wie ein Coach-Profil aussehen wird. Den Start kündigen wir auf dieser Seite an.",
+    "cta": "Demo-Profil ansehen",
+    "contact": "Fragen? Schreiben Sie an office@coachingfederation.ch"
+  },
+  "demo": {
+    "badge": "Demo-Profil",
+    "notice": "Dies ist ein fiktives Beispielprofil, das gezeigt wird, solange der Coach Finder noch nicht offen ist. Anna Muster ist kein echter Coach und kann nicht kontaktiert werden."
+  },
   "detail": {
     "back": "Zurück zur Suche",
     "about": "Über mich",

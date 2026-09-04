@@ -304,7 +304,8 @@
       "title": "Verzeichnis-Berechtigung",
       "allowNonCredentialed": "Mitglieder ohne Akkreditierung zulassen",
       "allowNonCredentialedHint": "Mitglieder mit aktiver Mitgliedschaft oder in der Nachfrist dürfen ein Profil veröffentlichen, auch ohne gültige ACC-, PCC- oder MCC-Akkreditierung. Mitglieder mit inaktiver Mitgliedschaft nie. Akkreditierte Coaches bleiben in jeder Sortierung zuvorderst."
-    }
+    },
+    "modesOffNote": "Sind alle vier Modi deaktiviert, ist der öffentliche Coach Finder geschlossen: Besucherinnen und Besucher sehen statt Resultaten einen kurzen Hinweis und einen Link zum Demo-Profil unter /coach/demo."
   },
   "members": {
     "title": "Mitglieder",

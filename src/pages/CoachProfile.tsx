@@ -54,7 +54,14 @@ export function CoachFallback({ titleKey, bodyKey }: { titleKey: string; bodyKey
   );
 }
 
-export default function CoachProfilePage({ profile }: { profile: PublicCoachProfile }) {
+export default function CoachProfilePage({
+  profile,
+  demo = false,
+}: {
+  profile: PublicCoachProfile;
+  /** Renders the fictional sample profile shown while the finder is closed. */
+  demo?: boolean;
+}) {
   const { t, locale } = useI18n();
   useTrackView("Coach Profile View", profile.profile_id ?? "", {
     profile_id: profile.profile_id ?? "",
@@ -116,6 +123,15 @@ export default function CoachProfilePage({ profile }: { profile: PublicCoachProf
 
   return (
     <CoachProfileShell>
+      {/* A fictional example must say so before anything else on the page. */}
+      {demo ? (
+        <div className="bg-highlight text-highlight-foreground">
+          <div className="mx-auto max-w-6xl px-5 py-3 text-sm sm:px-8">
+            <span className="font-bold">{t("directory.demo.badge")}</span>{" "}
+            <span>{t("directory.demo.notice")}</span>
+          </div>
+        </div>
+      ) : null}
       {/* Hero: identity, at-a-glance meta and the two contact actions. */}
       <CoachProfileHero
         profile={profile}

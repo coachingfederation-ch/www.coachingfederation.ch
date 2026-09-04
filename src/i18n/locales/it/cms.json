@@ -304,7 +304,8 @@
       "title": "Idoneità alla directory",
       "allowNonCredentialed": "Consenti i membri senza accreditamento",
       "allowNonCredentialedHint": "I membri attivi o nel periodo di tolleranza possono pubblicare un profilo anche senza una credenziale ACC, PCC o MCC valida. I membri con iscrizione inattiva non possono mai. I coach accreditati restano per primi in ogni ordinamento."
-    }
+    },
+    "modesOffNote": "Se tutti e quattro i modi sono disattivati, il Coach Finder pubblico è chiuso: i visitatori vedono una breve nota invece dei risultati, con un link al profilo dimostrativo su /coach/demo."
   },
   "members": {
     "title": "Membri",

@@ -39,6 +39,10 @@ export function useCoachDirectoryFilters() {
   });
 
   const modes = useMemo(() => activeFinderModes(finderConfig), [finderConfig]);
+  // Every mode switched off in the CMS means the finder is closed: we show an
+  // explanation instead of an empty search. `undefined` is "still loading", so
+  // the notice never flashes before the config arrives.
+  const finderDisabled = finderConfig !== undefined && modes.length === 0;
   // An unknown or absent ?mode= resolves to the first active mode, so links to
   // a since-disabled mode still show results instead of an empty list.
   const mode = modes.find((m) => m.slug === search.mode)?.slug ?? modes[0]?.slug ?? null;
@@ -128,11 +132,12 @@ export function useCoachDirectoryFilters() {
     [filters, sampled, shuffleSeed],
   );
 
-
   const { data, isPending, isError } = useQuery({
     queryKey: ["coach-directory", queryInput],
     queryFn: () => queryCoachDirectory({ data: queryInput }),
     placeholderData: keepPreviousData,
+    // No point querying while the finder is closed — nothing is rendered.
+    enabled: !finderDisabled,
   });
 
   // One goal per settled filter set: the effect keys on the serialised filters,
@@ -216,6 +221,7 @@ export function useCoachDirectoryFilters() {
   return {
     t,
     modes,
+    finderDisabled,
     mode,
     modeLabel,
     selectMode,

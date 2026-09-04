@@ -304,7 +304,8 @@
       "title": "Directory eligibility",
       "allowNonCredentialed": "Enable non-eligible members",
       "allowNonCredentialedHint": "Members in the active or grace period may publish a profile even without a valid ACC, PCC or MCC credential. Members with an inactive membership never can. Credentialed coaches stay first in every sort order."
-    }
+    },
+    "modesOffNote": "When all four modes are switched off, the public Coach Finder is closed: visitors see a short notice instead of search results, plus a link to the demo profile at /coach/demo."
   },
   "members": {
     "title": "Members",

@@ -24,11 +24,13 @@ import { SlidersHorizontal } from "lucide-react";
 import { ModeTabs, CoachFilters } from "./directory/CoachFilters";
 import { CoachResultsGrid } from "./directory/CoachResultsGrid";
 import { useCoachDirectoryFilters } from "./directory/useCoachDirectoryFilters";
+import { CoachFinderInactive } from "./CoachFinderInactive";
 
 export function CoachDirectory() {
   const {
     t,
     modes,
+    finderDisabled,
     mode,
     modeLabel,
     selectMode,
@@ -68,6 +70,9 @@ export function CoachDirectory() {
     hasMore,
     isSample,
   } = useCoachDirectoryFilters();
+
+  // Finder closed in the CMS: no filters, no results, just the explanation.
+  if (finderDisabled) return <CoachFinderInactive />;
 
   const filterPanel = (
     <CoachFilters
