@@ -6,10 +6,10 @@
  * go through the caller's own RLS-scoped client; the "admins manage …"
  * policies on `op_*` are the real boundary.
  *
- * Assignment side effect: being part of the operational structure grants the
- * existing `editor` role (no new role was introduced). Removing the last
- * assignment never auto-revokes it — `editor` may also have been granted for
- * editorial work — so the admin is asked.
+ * Assignments are purely structural: they say who volunteers where and drive
+ * the public team page. They never grant or revoke a role — staff access is
+ * managed exclusively in the Roles screen — so the UI only hints at it.
+
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
@@ -20,13 +20,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
 import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
 import { slugifyVocab } from "@/lib/vocabularies";
-import {
-  countOpsAssignments,
-  listOpsAssignments,
-  listOpsProjects,
-  searchOpsMembers,
-} from "@/lib/ops-admin.functions";
-import { grantMemberRole, revokeMemberRole } from "@/lib/roles.functions";
+import { listOpsAssignments, listOpsProjects, searchOpsMembers } from "@/lib/ops-admin.functions";
+
 import { translateOpsLabels } from "@/lib/ops-label-translations.functions";
 import { ProjectGroupList } from "@/components/cms/ops/ProjectGroupList";
 import { StructureMapPanel } from "@/components/cms/ops/StructureMapPanel";
@@ -68,6 +63,8 @@ function OperationalStructurePage() {
   const [pickedMember, setPickedMember] = useState("");
   const [pickedRole, setPickedRole] = useState("");
   const [error, setError] = useState<string | null>(null);
+  // Non-error feedback under the assignment controls (e.g. the roles hint).
+  const [notice, setNotice] = useState<string | null>(null);
   // Ids currently being machine-translated (a new row, or a manual re-run).
   const [translating, setTranslating] = useState<string[]>([]);
   // Reordering writes `sort_order`, which drives the public /team filter chips
@@ -251,6 +248,7 @@ function OperationalStructurePage() {
   const assign = async () => {
     if (!selected || !pickedMember || !pickedRole) return;
     setError(null);
+    setNotice(null);
     const member = members.find((m) => m.id === pickedMember);
     const { error: err } = await supabase.from("op_assignments").insert({
       member_id: pickedMember,
@@ -260,17 +258,10 @@ function OperationalStructurePage() {
     });
     if (err) return setError(err.message);
 
-    // Reuse the existing `editor` grant; a member who has not claimed their
-    // account yet simply gets it the moment they are granted one.
-    if (member?.auth_user_id) {
-      try {
-        await grantMemberRole({ data: { memberId: pickedMember, role: "editor" } });
-      } catch {
-        setError(t("ops.grantFailed"));
-      }
-    } else {
-      setError(t("ops.unclaimed"));
-    }
+    // Structural only — staff access is granted in the Roles screen. An
+    // unclaimed account still matters for the team page and the Member Area.
+    if (member?.auth_user_id) setNotice(t("ops.assignHint"));
+    else setError(t("ops.unclaimed"));
     setPickedMember("");
     setSearch("");
     await loadDetail(selected);
@@ -278,17 +269,9 @@ function OperationalStructurePage() {
 
   const unassign = async (row: Assignment) => {
     if (!selected) return;
+    setNotice(null);
     const { error: err } = await supabase.from("op_assignments").delete().eq("id", row.id);
     if (err) return setError(err.message);
-
-    const count = await countOpsAssignments({ data: { memberId: row.member_id } }).catch(() => 1);
-    if (!count && row.member?.auth_user_id && window.confirm(t("ops.confirmRevoke"))) {
-      try {
-        await revokeMemberRole({ data: { memberId: row.member_id, role: "editor" } });
-      } catch {
-        setError(t("ops.revokeFailed"));
-      }
-    }
     await loadDetail(selected);
   };
 
@@ -393,6 +376,7 @@ function OperationalStructurePage() {
                 pickedRole={pickedRole}
                 setPickedRole={setPickedRole}
                 assign={assign}
+                notice={notice}
               />
             </div>
           ) : (

@@ -44,6 +44,8 @@ type Props = {
   pickedRole: string;
   setPickedRole: (value: string) => void;
   assign: () => void | Promise<void>;
+  /** Non-error feedback shown under the assignment controls. */
+  notice?: string | null;
   translateLabels: (
     table: "op_projects" | "op_project_roles",
     id: string,
@@ -75,6 +77,7 @@ export function RoleAssignmentEditor({
   assign,
   translateLabels,
   translating,
+  notice,
 }: Props) {
   return (
     <>
@@ -240,6 +243,7 @@ export function RoleAssignmentEditor({
             {t("ops.assign")}
           </button>
         </div>
+        {notice ? <p className="mt-2 text-xs text-muted-foreground">{notice}</p> : null}
       </section>
     </>
   );
