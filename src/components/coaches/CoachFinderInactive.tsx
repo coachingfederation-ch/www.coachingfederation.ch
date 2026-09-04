@@ -6,7 +6,6 @@
  */
 import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { LocaleLink, useI18n } from "@/i18n";
-import { Mark } from "@/components/marks";
 import { DEMO_PROFILE_ID } from "@/lib/demo-coach";
 
 export function CoachFinderInactive() {
@@ -14,13 +13,8 @@ export function CoachFinderInactive() {
   return (
     <section className="bg-card py-16">
       <div className="mx-auto max-w-3xl px-8">
-        <div className="relative overflow-hidden rounded-3xl border border-border/70 bg-background px-8 py-12 text-center sm:px-12">
-          <Mark
-            name="highlight3"
-            aria-hidden
-            className="pointer-events-none absolute -top-6 -right-6 h-24 w-24 text-accent/20"
-          />
-          <div className="relative">
+        <div className="rounded-3xl border border-border bg-background px-8 py-12 text-center sm:px-12">
+          <div>
             <h2 className="font-heading text-2xl tracking-tight text-foreground sm:text-3xl">
               {t("directory.inactive.title")}
             </h2>
