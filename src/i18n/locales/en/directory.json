@@ -107,6 +107,16 @@
     "title": "Profiles sourced from ICF Global",
     "body": "Coach records are maintained by ICF Global. Members can extend their profile with additional content on this portal."
   },
+  "inactive": {
+    "title": "The Coach Finder is not open yet",
+    "body": "We are preparing the directory of ICF-credentialed coaches in Switzerland. It is currently switched off, so no coaches are listed. You can already see what a coach profile will look like, and we will announce the launch on this page.",
+    "cta": "View a demo profile",
+    "contact": "Questions? Write to office@coachingfederation.ch"
+  },
+  "demo": {
+    "badge": "Demo profile",
+    "notice": "This is a fictional example profile, shown while the Coach Finder is not yet open. Anna Muster is not a real coach and cannot be contacted."
+  },
   "detail": {
     "back": "Back to search",
     "about": "About",
