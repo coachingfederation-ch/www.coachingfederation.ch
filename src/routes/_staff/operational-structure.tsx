@@ -381,6 +381,7 @@ function OperationalStructurePage() {
                 pickedRole={pickedRole}
                 setPickedRole={setPickedRole}
                 assign={assign}
+                notice={notice}
               />
             </div>
           ) : (
