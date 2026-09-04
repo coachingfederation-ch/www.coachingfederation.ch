@@ -21,12 +21,11 @@ import { useCms } from "@/i18n/cms";
 import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
 import { slugifyVocab } from "@/lib/vocabularies";
 import {
-  countOpsAssignments,
   listOpsAssignments,
   listOpsProjects,
   searchOpsMembers,
 } from "@/lib/ops-admin.functions";
-import { grantMemberRole, revokeMemberRole } from "@/lib/roles.functions";
+
 import { translateOpsLabels } from "@/lib/ops-label-translations.functions";
 import { ProjectGroupList } from "@/components/cms/ops/ProjectGroupList";
 import { StructureMapPanel } from "@/components/cms/ops/StructureMapPanel";
