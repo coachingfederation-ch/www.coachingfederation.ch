@@ -6113,13 +6113,13 @@ export type Database = {
         Returns: Json
       }
       close_event_attendance_session: {
-        Args: { _event_id: string }
+        Args: { _actor?: string; _event_id: string }
         Returns: Json
       }
       directory_allows_non_credentialed: { Args: never; Returns: boolean }
       get_certificate_by_token: { Args: { _token: string }; Returns: Json }
       get_event_attendance_session: {
-        Args: { _event_id: string }
+        Args: { _actor?: string; _event_id: string }
         Returns: Json
       }
       issue_event_completion: {
@@ -6142,7 +6142,7 @@ export type Database = {
         Returns: boolean
       }
       open_event_attendance_session: {
-        Args: { _event_id: string; _grace_minutes?: number }
+        Args: { _actor?: string; _event_id: string; _grace_minutes?: number }
         Returns: Json
       }
       reissue_event_certificate: {
