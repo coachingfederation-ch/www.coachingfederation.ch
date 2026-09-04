@@ -74,6 +74,7 @@ export function useMemberProfileForm() {
     specialisation_ids: [] as string[],
     client_type_ids: [] as string[],
   });
+  const [correspondenceLocale, setCorrespondenceLocale] = useState("");
   const [practice, setPractice] = useState<PracticeDraft>(EMPTY_PRACTICE);
   const [links, setLinks] = useState<LinkDraft[]>([]);
   const [imagePath, setImagePath] = useState<string | null>(null);
@@ -85,6 +86,7 @@ export function useMemberProfileForm() {
   const apply = (next: Profile) => {
     setData(next);
     const p = next.profile;
+    setCorrespondenceLocale(next.member?.correspondence_locale ?? "");
     setTagline(p?.tagline ?? "");
     setDescription(p?.description ?? "");
     setAvailability(p?.availability_slug ?? "");
@@ -183,6 +185,7 @@ export function useMemberProfileForm() {
           tagline: tagline || null,
           description: description || null,
           availability_slug: availability || null,
+          correspondence_locale: (correspondenceLocale || null) as never,
           coaching_available: services.coaching,
           mentoring_available: services.mentoring,
           supervision_available: services.supervision,
@@ -244,6 +247,8 @@ export function useMemberProfileForm() {
     setDescription,
     availability,
     setAvailability,
+    correspondenceLocale,
+    setCorrespondenceLocale,
     services,
     setServices,
     facets,
