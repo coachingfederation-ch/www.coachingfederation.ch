@@ -14,20 +14,16 @@ export function CoachFinderInactive() {
     <section className="bg-card py-16">
       <div className="mx-auto max-w-3xl px-8">
         <div className="rounded-3xl border border-border bg-background px-8 py-12 text-center sm:px-12">
-          <div>
-            <h2 className="font-heading text-2xl tracking-tight text-foreground sm:text-3xl">
-              {t("directory.inactive.title")}
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
-              {t("directory.inactive.body")}
-            </p>
-            <Button asChild variant="pill" size="pill" className="mt-8">
-              <LocaleLink to={`/coach/${DEMO_PROFILE_ID}`}>
-                {t("directory.inactive.cta")}
-              </LocaleLink>
-            </Button>
-            <p className="mt-6 text-xs text-muted-foreground">{t("directory.inactive.contact")}</p>
-          </div>
+          <h2 className="font-heading text-2xl tracking-tight text-foreground sm:text-3xl">
+            {t("directory.inactive.title")}
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
+            {t("directory.inactive.body")}
+          </p>
+          <Button asChild variant="pill" size="pill" className="mt-8">
+            <LocaleLink to={`/coach/${DEMO_PROFILE_ID}`}>{t("directory.inactive.cta")}</LocaleLink>
+          </Button>
+          <p className="mt-6 text-xs text-muted-foreground">{t("directory.inactive.contact")}</p>
         </div>
       </div>
     </section>
