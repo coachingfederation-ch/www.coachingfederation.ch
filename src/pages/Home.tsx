@@ -475,7 +475,7 @@ export default function HomePage() {
         <CoachingInAction />
         <ForOrganisations />
         <Events />
-        <Sponsors />
+        {SHOW_SPONSORS && <Sponsors />}
         <Research />
         <Join />
       </main>
