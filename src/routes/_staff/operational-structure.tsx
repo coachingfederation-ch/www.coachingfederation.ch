@@ -6,10 +6,10 @@
  * go through the caller's own RLS-scoped client; the "admins manage …"
  * policies on `op_*` are the real boundary.
  *
- * Assignment side effect: being part of the operational structure grants the
- * existing `editor` role (no new role was introduced). Removing the last
- * assignment never auto-revokes it — `editor` may also have been granted for
- * editorial work — so the admin is asked.
+ * Assignments are purely structural: they say who volunteers where and drive
+ * the public team page. They never grant or revoke a role — staff access is
+ * managed exclusively in the Roles screen — so the UI only hints at it.
+
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
