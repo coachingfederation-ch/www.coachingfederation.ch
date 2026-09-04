@@ -147,8 +147,8 @@
         ]
       },
       {
-        "date": "Date · Online",
-        "city": "",
+        "date": "Date",
+        "city": "Online",
         "title": "AI & Coaching",
         "tags": [
           "EN",
@@ -156,8 +156,8 @@
         ]
       },
       {
-        "date": "Date · Place",
-        "city": "",
+        "date": "Date",
+        "city": "Place",
         "title": "Soirée Coaching:\nBâtir une culture de coaching",
         "tags": [
           "FR",
