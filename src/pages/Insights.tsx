@@ -174,11 +174,15 @@ export default function InsightsPage() {
       aria-pressed={id === topic}
       onClick={() => setTopic(id)}
       className={
-        "btn-mono inline-flex min-h-11 items-center rounded-full border px-4 transition lg:min-h-8 " +
+        // Chip treatment from the design system's ChipRow pattern (body face,
+        // 13px, semibold). It must NOT use `btn-mono` — that utility is the
+        // mono metadata face and rendered these topic pills in monospace.
+        "inline-flex min-h-11 items-center rounded-full border px-4 text-[13px] font-semibold transition lg:min-h-9 " +
         (id === topic
           ? "border-chip-active-border bg-primary text-primary-foreground"
-          : "border-border/70 bg-chip text-chip-foreground hover:border-chip-active-border")
+          : "border-border bg-card text-chip-foreground hover:border-chip-active-border")
       }
+
     >
       {label}
     </button>
