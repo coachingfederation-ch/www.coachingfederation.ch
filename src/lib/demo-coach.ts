@@ -83,7 +83,8 @@ const COPY: Record<Locale, DemoCopy> = {
       "Iniziamo con una chiamata conoscitiva di 30 minuti.\nDefiniamo tre obiettivi e come capiremo di averli raggiunti.\nCi incontriamo ogni due settimane per sei mesi, di persona o online.\nDopo tre mesi verifichiamo i progressi e adattiamo gli obiettivi.",
     qualifications:
       "Credential ACC, ottenuto nel 2021.\nFormazione: 145 ore di formazione accreditata specifica per il coaching.\nEsperienza precedente nella gestione di team di ingegneria.",
-    fees_note: "$220 USD a sessione. Tariffe ridotte per organizzazioni no profit e settore pubblico.",
+    fees_note:
+      "$220 USD a sessione. Tariffe ridotte per organizzazioni no profit e settore pubblico.",
     session_length_note: "60 minuti",
     availability_note: "Accetta nuovi clienti da gennaio",
     response_time_note: "Risponde entro due giorni lavorativi",

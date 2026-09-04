@@ -48,7 +48,6 @@ export function useCoachDirectoryFilters() {
   const mode = modes.find((m) => m.slug === search.mode)?.slug ?? modes[0]?.slug ?? null;
   const modeLabel = modes.find((m) => m.slug === mode)?.label ?? null;
 
-
   const regions = vocab?.cf_regions ?? [];
   const languages = vocab?.cf_languages ?? [];
   const credentialTerms = vocab?.cf_credentials ?? [];
@@ -132,7 +131,6 @@ export function useCoachDirectoryFilters() {
     () => ({ ...filters, seed: shuffleSeed, ...(sampled ? { sample: 8 } : {}) }),
     [filters, sampled, shuffleSeed],
   );
-
 
   const { data, isPending, isError } = useQuery({
     queryKey: ["coach-directory", queryInput],

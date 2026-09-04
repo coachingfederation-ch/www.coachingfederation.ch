@@ -820,10 +820,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Guidare progetti",
-            "Essere riconosciuti da ICFS per aver guidato iniziative"
-          ]
+          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
         },
         "status": {
           "title": "Status",
@@ -2558,13 +2555,7 @@
       "Un po' tecnico",
       "Troppo tecnico"
     ],
-    "usefulnessScale": [
-      "Non fa per me",
-      "Poco interessante",
-      "Interessante",
-      "Utile",
-      "Lo userò"
-    ],
+    "usefulnessScale": ["Non fa per me", "Poco interessante", "Interessante", "Utile", "Lo userò"],
     "topicsTitle": "Temi richiesti",
     "noTopics": "Nessun tema richiesto finora.",
     "themesTitle": "Temi IA",

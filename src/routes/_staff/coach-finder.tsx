@@ -107,7 +107,6 @@ function CoachFinderSettingsPage() {
               <p className="mt-3 text-xs text-muted-foreground">{t("finder.modesOffNote")}</p>
             </section>
 
-
             <section className="rounded-2xl border border-border bg-card p-5">
               <h2 className="text-sm font-bold">{t("finder.display")}</h2>
               <label className="mt-3 block text-xs text-muted-foreground">
