@@ -138,6 +138,8 @@ export function useCoachDirectoryFilters() {
     queryKey: ["coach-directory", queryInput],
     queryFn: () => queryCoachDirectory({ data: queryInput }),
     placeholderData: keepPreviousData,
+    // No point querying while the finder is closed — nothing is rendered.
+    enabled: !finderDisabled,
   });
 
   // One goal per settled filter set: the effect keys on the serialised filters,
@@ -221,6 +223,7 @@ export function useCoachDirectoryFilters() {
   return {
     t,
     modes,
+    finderDisabled,
     mode,
     modeLabel,
     selectMode,
