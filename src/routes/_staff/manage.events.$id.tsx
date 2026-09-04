@@ -149,19 +149,12 @@ function EventEditor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  if (!event) {
-    return (
-      <Shell>
-        <div className="mx-auto max-w-4xl px-10 py-10 text-sm text-muted-foreground">
-          {error ?? t("events.loading")}
-        </div>
-      </Shell>
-    );
-  }
-
-  const patch = (next: Partial<Managed>) => setEvent({ ...event, ...next });
+  // Unsaved-changes flag and the save handler live above the loading guard so
+  // the keyboard-shortcut hook below runs on every render (Rules of Hooks).
+  const dirty = event !== null && baseline !== null && baseline !== JSON.stringify(event);
 
   const save = async () => {
+    if (!event) return;
     setSaving(true);
     setMessage(null);
     setError(null);
@@ -209,6 +202,21 @@ function EventEditor() {
       setSaving(false);
     }
   };
+
+  // Cmd/Ctrl+S saves, matching the other CMS editors.
+  useSaveShortcut(save, saving || !dirty);
+
+  if (!event) {
+    return (
+      <Shell>
+        <div className="mx-auto max-w-4xl px-10 py-10 text-sm text-muted-foreground">
+          {error ?? t("events.loading")}
+        </div>
+      </Shell>
+    );
+  }
+
+  const patch = (next: Partial<Managed>) => setEvent({ ...event, ...next });
 
   const changeStatus = async (status: "draft" | "published" | "cancelled") => {
     try {
@@ -290,10 +298,6 @@ function EventEditor() {
 
   // Repeat dates copy the stored row, so they only make sense for a published
   // event whose form holds no pending edits.
-  const dirty = baseline !== null && baseline !== JSON.stringify(event);
-
-  // Cmd/Ctrl+S saves, matching the other CMS editors.
-  useSaveShortcut(save, saving || !dirty);
   const canCreateOccurrences = event.status === "published" && !dirty;
   const repeatBlockedReason =
     event.status !== "published"
