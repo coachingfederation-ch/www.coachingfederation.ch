@@ -250,6 +250,7 @@ function OperationalStructurePage() {
   const assign = async () => {
     if (!selected || !pickedMember || !pickedRole) return;
     setError(null);
+    setNotice(null);
     const member = members.find((m) => m.id === pickedMember);
     const { error: err } = await supabase.from("op_assignments").insert({
       member_id: pickedMember,
@@ -259,17 +260,10 @@ function OperationalStructurePage() {
     });
     if (err) return setError(err.message);
 
-    // Reuse the existing `editor` grant; a member who has not claimed their
-    // account yet simply gets it the moment they are granted one.
-    if (member?.auth_user_id) {
-      try {
-        await grantMemberRole({ data: { memberId: pickedMember, role: "editor" } });
-      } catch {
-        setError(t("ops.grantFailed"));
-      }
-    } else {
-      setError(t("ops.unclaimed"));
-    }
+    // Structural only — staff access is granted in the Roles screen. An
+    // unclaimed account still matters for the team page and the Member Area.
+    if (member?.auth_user_id) setNotice(t("ops.assignHint"));
+    else setError(t("ops.unclaimed"));
     setPickedMember("");
     setSearch("");
     await loadDetail(selected);
@@ -277,19 +271,12 @@ function OperationalStructurePage() {
 
   const unassign = async (row: Assignment) => {
     if (!selected) return;
+    setNotice(null);
     const { error: err } = await supabase.from("op_assignments").delete().eq("id", row.id);
     if (err) return setError(err.message);
-
-    const count = await countOpsAssignments({ data: { memberId: row.member_id } }).catch(() => 1);
-    if (!count && row.member?.auth_user_id && window.confirm(t("ops.confirmRevoke"))) {
-      try {
-        await revokeMemberRole({ data: { memberId: row.member_id, role: "editor" } });
-      } catch {
-        setError(t("ops.revokeFailed"));
-      }
-    }
     await loadDetail(selected);
   };
+
 
   const moveAssignmentUp = async (row: Assignment, index: number) => {
     const b = assignments[index - 1];
