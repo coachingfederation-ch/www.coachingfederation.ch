@@ -114,7 +114,8 @@ export const issueCompletionDocuments = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
 
-    const { data: result, error } = await context.supabase.rpc("issue_event_completion", {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: result, error } = await supabaseAdmin.rpc("issue_event_completion", {
       _event_id: data.eventId,
       _actor: context.userId,
     });
@@ -144,7 +145,8 @@ export const revokeCertificate = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
 
-    const { error } = await context.supabase.rpc("revoke_event_certificate", {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.rpc("revoke_event_certificate", {
       _certificate_id: data.certificateId,
       _actor: context.userId,
       _reason: data.reason ?? undefined,
@@ -163,7 +165,8 @@ export const reissueCertificate = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
 
-    const { data: result, error } = await context.supabase.rpc("reissue_event_certificate", {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: result, error } = await supabaseAdmin.rpc("reissue_event_certificate", {
       _certificate_id: data.certificateId,
       _actor: context.userId,
     });
