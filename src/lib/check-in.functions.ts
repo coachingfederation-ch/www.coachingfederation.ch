@@ -256,7 +256,6 @@ export const loadAttendanceSession = createServerFn({ method: "POST" })
     return (result as AttendanceSession | null) ?? null;
   });
 
-
 export type AttendanceConfirmation =
   | { outcome: "checked_in"; name: string }
   | { outcome: "already"; name: string; checkedInAt: string | null }
