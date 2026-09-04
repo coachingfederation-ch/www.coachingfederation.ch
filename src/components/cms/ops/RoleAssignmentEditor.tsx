@@ -77,6 +77,7 @@ export function RoleAssignmentEditor({
   assign,
   translateLabels,
   translating,
+  notice,
 }: Props) {
   return (
     <>
