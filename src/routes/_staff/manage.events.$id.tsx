@@ -149,6 +149,63 @@ function EventEditor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  // Unsaved-changes flag and the save handler live above the loading guard so
+  // the keyboard-shortcut hook below runs on every render (Rules of Hooks).
+  const dirty = event !== null && baseline !== null && baseline !== JSON.stringify(event);
+
+  const save = async () => {
+    if (!event) return;
+    setSaving(true);
+    setMessage(null);
+    setError(null);
+    try {
+      await updateEvent({
+        data: {
+          id: event.id,
+          title: event.title,
+          slug: event.slug,
+          summary: event.summary,
+          description: event.description,
+          language: event.language,
+          starts_at: event.starts_at,
+          ends_at: event.ends_at,
+          timezone: event.timezone ?? "Europe/Zurich",
+          location_mode: event.location_mode,
+          venue_name: event.venue_name,
+          city: event.city,
+          online_url: event.online_url,
+          map_location: event.map_location,
+          image_url: event.image_url,
+          image_credit_name: event.image_credit_name,
+          image_credit_url: event.image_credit_url,
+          capacity: event.capacity,
+          registration_mode: event.registration_mode,
+          registration_opens_at: event.registration_opens_at,
+          registration_closes_at: event.registration_closes_at,
+          guest_registration_allowed: event.guest_registration_allowed,
+          tickets_enabled: event.tickets_enabled ?? false,
+          guest_passes_allowed: event.guest_passes_allowed ?? false,
+          attendance_min_percent: event.attendance_min_percent ?? 80,
+          certificates_enabled: event.certificates_enabled ?? false,
+          is_featured: event.is_featured,
+          category_id: event.category_id,
+          region_id: event.region_id,
+          community_id: event.community_id,
+          hero_marks: sanitizeHeroMarks("event", event.hero_marks),
+        },
+      });
+      setMessage(t("events.saved"));
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t("events.saveError"));
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // Cmd/Ctrl+S saves, matching the other CMS editors.
+  useSaveShortcut(save, saving || !dirty);
+
   if (!event) {
     return (
       <Shell>
@@ -160,6 +217,8 @@ function EventEditor() {
   }
 
   const patch = (next: Partial<Managed>) => setEvent({ ...event, ...next });
+
+
 
 
   const changeStatus = async (status: "draft" | "published" | "cancelled") => {
