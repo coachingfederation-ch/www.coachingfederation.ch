@@ -56,7 +56,9 @@ export function DeckDownload() {
   }
 
   return (
-    <div className="mt-10 rounded-2xl border border-accent/40 bg-card p-6 shadow-lg md:p-8">
+    // Sits inside the Deep Blue deck band, so the light card must reset the
+    // inherited hero foreground colour or its text renders white-on-white.
+    <div className="mt-10 rounded-2xl border border-accent/40 bg-card p-6 text-foreground shadow-lg md:p-8">
       {done ? (
         <div className="flex flex-col gap-2">
           <p className="text-lg font-semibold tracking-tight">
