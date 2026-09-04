@@ -631,6 +631,9 @@
     "regionsTitle": "Einzugsgebiet (Kantone / Regionen)",
     "regionsNote": "Wo Sie Präsenzarbeit anbeiten. Wählen Sie jede Region aus, die Sie bedienen — dies ist nicht Ihre Postadresse.",
     "languagesTitle": "Coaching-Sprachen",
+    "correspondenceTitle": "Korrespondenzsprache",
+    "correspondenceNote": "Wählen Sie die Sprache, in der wir Ihnen schreiben. Sie erscheint nicht in Ihrem öffentlichen Profil.",
+    "correspondenceNone": "Keine Präferenz",
     "formatsTitle": "Formate",
     "specialisationsTitle": "Spezialisierungen",
     "linksTitle": "Links",
@@ -820,7 +823,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
+          "items": [
+            "Projekte leiten",
+            "Von ICFS für die Leitung von Initiativen anerkannt werden"
+          ]
         },
         "status": {
           "title": "Status",
