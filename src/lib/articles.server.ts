@@ -50,8 +50,10 @@ export async function loadArticleEditorData(client: Client, id: string) {
  * Four-eye principle.
  *
  * Publishing is its own access right: the account must hold the `publisher`
- * role, and it must not be the account that created the article. Admins may
- * override the self-publish block only.
+ * role, and it must not be the account that created the article. Only the
+ * Super Admin (`admin`) may override the self-publish block. The Administrator
+ * grant (`administrator`) is a platform role, not an editorial one — it never
+ * grants publishing rights and never overrides the four-eye rule.
  *
  * The database enforces the same two rules in `tg_articles_publish_guard`;
  * this function exists so the UI can disable actions and explain why, and so
@@ -59,7 +61,8 @@ export async function loadArticleEditorData(client: Client, id: string) {
  * Postgres exception.
  */
 export type ArticlePermissions = {
-  isAdmin: boolean;
+  /** Holds the `admin` grant — Super Admin. Never true for `administrator`. */
+  isSuperAdmin: boolean;
   isPublisher: boolean;
   isCreator: boolean;
   /** May move the article into published/scheduled. */
@@ -80,16 +83,19 @@ export async function isArticlePublisher(userId: string): Promise<boolean> {
 
 export async function loadArticlePermissions(
   userId: string,
-  isAdmin: boolean,
+  isSuperAdmin: boolean,
   createdBy: string | null,
 ): Promise<ArticlePermissions> {
   const isPublisher = await isArticlePublisher(userId);
   const isCreator = !!createdBy && createdBy === userId;
   return {
-    isAdmin,
+    isSuperAdmin,
     isPublisher,
     isCreator,
-    canPublish: isAdmin ? true : isPublisher && !isCreator,
+    // Super Admin is the single override. Everyone else — Editors,
+    // Administrators, Publishers alike — needs the publisher grant and a
+    // second pair of eyes.
+    canPublish: isSuperAdmin || (isPublisher && !isCreator),
   };
 }
 
@@ -177,7 +183,7 @@ export async function transitionArticle(
     transition.action === "publish" ||
     transition.action === "schedule" ||
     transition.action === "unpublish";
-  if (needsPublishRights && !permissions.isAdmin && !permissions.isPublisher) {
+  if (needsPublishRights && !permissions.isSuperAdmin && !permissions.isPublisher) {
     throw new Error("Only an account with publishing rights may publish or unpublish articles.");
   }
   if (
