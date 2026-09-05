@@ -15,12 +15,14 @@ import { generateArticleImageFn } from "@/lib/article-images.functions";
 import { ArticleMetaSidebar, StatusPill } from "@/components/cms/ArticleMetaSidebar";
 import { ScheduleDialog } from "@/components/cms/ScheduleDialog";
 import {
+  authorName,
   type ArticleLang,
   type ArticleRow,
   type ArticleStatus,
   type CategoryRow,
   type ProfileRow,
 } from "@/lib/articles";
+
 import { ARTICLE_IMAGE_BUCKET, ARTICLE_IMAGE_TTL_SECONDS } from "@/lib/storage";
 import {
   changeArticleStatus,
