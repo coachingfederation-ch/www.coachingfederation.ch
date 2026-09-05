@@ -320,6 +320,9 @@ function EditorPage() {
   // Publishing rights come from the `publisher` access right plus the
   // four-eye rule (nobody publishes what they created).
   const canPublish = !!permissions?.canPublish;
+  const releasedBy = article.published_by
+    ? authorName(profiles.find((p) => p.id === article.published_by) ?? null)
+    : "";
   const canUnpublish =
     (article.status === "published" || article.status === "scheduled") &&
     (!!permissions?.isPublisher || !!permissions?.isAdmin);
@@ -347,6 +350,11 @@ function EditorPage() {
             {t("editor.back")}
           </Link>
           <StatusPill status={article.status} t={t} />
+          {releasedBy ? (
+            <span className="text-xs text-muted-foreground">
+              {t("list.releasedBy")}: {releasedBy}
+            </span>
+          ) : null}
           <span className="text-xs text-muted-foreground">{saveLabel}</span>
         </div>
         <div className="flex items-center gap-2">

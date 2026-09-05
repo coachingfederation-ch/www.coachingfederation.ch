@@ -50,6 +50,8 @@ export interface ArticleRow {
   author_id: string;
   /** Who created the row — the four-eye rule blocks this account from publishing it. */
   created_by: string | null;
+  /** Who released the article; set by the database at publish/schedule time. */
+  published_by: string | null;
   content_updated_at: string | null;
   featured_image_url: string | null;
   image_credit_name: string | null;
