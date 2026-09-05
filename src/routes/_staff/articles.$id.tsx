@@ -53,7 +53,7 @@ type Article = ArticleRow;
 
 /** What the caller may do with this article under the four-eye rule. */
 type Permissions = {
-  isAdmin: boolean;
+  isSuperAdmin: boolean;
   isPublisher: boolean;
   isCreator: boolean;
   canPublish: boolean;
@@ -327,7 +327,7 @@ function EditorPage() {
     : "";
   const canUnpublish =
     (article.status === "published" || article.status === "scheduled") &&
-    (!!permissions?.isPublisher || !!permissions?.isAdmin);
+    (!!permissions?.isPublisher || !!permissions?.isSuperAdmin);
   const canSubmit =
     article.status === "draft" ||
     article.status === "unpublished" ||
@@ -362,7 +362,7 @@ function EditorPage() {
         <div className="flex items-center gap-2">
           {article.status === "review" && !canPublish ? (
             <span className="max-w-xs text-xs text-muted-foreground">
-              {permissions?.isCreator && permissions.isPublisher
+              {permissions?.isCreator
                 ? t("editor.reviewSelfBlocked")
                 : t("editor.reviewNeedsPublisher")}
             </span>
@@ -377,7 +377,7 @@ function EditorPage() {
             </button>
           ) : null}
 
-          {article.status === "review" && (permissions?.isPublisher || permissions?.isAdmin) ? (
+          {article.status === "review" && (permissions?.isPublisher || permissions?.isSuperAdmin) ? (
             <button
               onClick={returnToDraft}
               className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium hover:bg-secondary"
@@ -452,7 +452,7 @@ function EditorPage() {
           toggleFeatured={toggleFeatured}
           featuredNote={featuredNote}
           remove={remove}
-          canShareLinkedIn={!!permissions?.isPublisher || !!permissions?.isAdmin}
+          canShareLinkedIn={!!permissions?.isPublisher || !!permissions?.isSuperAdmin}
         />
       </div>
 

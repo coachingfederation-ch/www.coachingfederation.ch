@@ -14,8 +14,13 @@ import { HERO_MARK_LIMIT } from "./hero-design";
 import type { ArticleContentPatch } from "./articles.server";
 import type { AuthedContext } from "./authz";
 
-/** True when the caller holds the `admin` grant (read through their own RLS). */
-async function callerIsAdmin(context: AuthedContext): Promise<boolean> {
+/**
+ * True when the caller holds the `admin` grant — Super Admin — read through
+ * their own RLS. Deliberately an exact match: `administrator` is the platform
+ * Administrator grant and must never be mistaken for the Super Admin override
+ * that allows publishing one's own article.
+ */
+async function callerIsSuperAdmin(context: AuthedContext): Promise<boolean> {
   const { data } = await context.supabase
     .from("user_roles")
     .select("role")
@@ -77,7 +82,7 @@ export const getArticleEditorData = createServerFn({ method: "POST" })
     const loaded = await loadArticleEditorData(client, data.id);
     const permissions = await loadArticlePermissions(
       context.userId,
-      await callerIsAdmin(context),
+      await callerIsSuperAdmin(context),
       loaded.article?.created_by ?? null,
     );
     return { ...loaded, permissions };
@@ -107,7 +112,7 @@ export const changeArticleStatus = createServerFn({ method: "POST" })
       .maybeSingle();
     const permissions = await loadArticlePermissions(
       context.userId,
-      await callerIsAdmin(context),
+      await callerIsSuperAdmin(context),
       (row as { created_by: string | null } | null)?.created_by ?? null,
     );
     const patch = await transitionArticle(client, id, transition as never, permissions);
