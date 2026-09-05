@@ -5,7 +5,7 @@
  * components under src/design-system/.
  */
 @import "./design-system/icf-welcome-design-system-a835df/styles.css";
-@source "../src";
+@source ".";
 
 /*
  * Fonts, theme tokens and palette come from the attached design system
