@@ -15,7 +15,7 @@ export const getPublishedArticle = createServerFn({ method: "GET" })
     const { data: row, error } = await supabasePublic
       .from("articles")
       .select(
-        "id, title, excerpt, content, category, category_id, featured_image_url, image_source, image_credit_name, image_credit_url, hero_marks, ai_coedited, published_at, language, category_ref:categories(id, slug, name, name_de, name_fr, name_it), author:profiles(first_name, last_name), translations:article_translations(locale, title, excerpt, content)",
+        "id, title, excerpt, content, category, category_id, featured_image_url, image_source, image_credit_name, image_credit_url, hero_marks, ai_coedited, published_at, language, category_ref:categories(id, slug, name, name_de, name_fr, name_it), author:profiles!articles_author_id_fkey(first_name, last_name), translations:article_translations(locale, title, excerpt, content)",
       )
       .eq("id", data.id)
       .eq("status", "published")
