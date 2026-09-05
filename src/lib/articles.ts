@@ -125,7 +125,7 @@ export interface PublicArticle {
 }
 
 export const PUBLIC_ARTICLE_COLUMNS =
-  "id, title, excerpt, category, category_id, featured_image_url, image_source, is_featured, ai_coedited, published_at, language, category_ref:categories(id, slug, name, name_de, name_fr, name_it), author:profiles(first_name, last_name), translations:article_translations(locale, title, excerpt)";
+  "id, title, excerpt, category, category_id, featured_image_url, image_source, is_featured, ai_coedited, published_at, language, category_ref:categories(id, slug, name, name_de, name_fr, name_it), author:profiles!articles_author_id_fkey(first_name, last_name), translations:article_translations(locale, title, excerpt)";
 
 /** Localized display label for an article's category, falling back to legacy text. */
 export function articleCategoryLabel(article: PublicArticle, locale: Locale): string | null {
