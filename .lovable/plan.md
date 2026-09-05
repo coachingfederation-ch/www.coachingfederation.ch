@@ -11,7 +11,14 @@ Today nothing is sent when someone submits an article for review — the publish
 - One email per publisher per submission — re-submitting the same article later sends a fresh nudge, but a retry of the same action does not duplicate.
 - No email on publish, unpublish or return-to-draft (can be added later if wanted).
 
+## Released by, in the article overview
+
+The articles list gains a **Released by** column showing who put each article live (empty for drafts, articles in review, and older articles published before this change). The same name appears in the editor header next to the status.
+
+This needs one small database addition: an `articles.published_by` column, filled automatically when someone publishes or schedules an article; the list resolves it to a name through the existing profile lookup.
+
 ## What gets built
+
 
 **Recipients** — accounts holding the `publisher` role in `user_roles`, minus the submitter; their addresses come from the auth admin lookup already used elsewhere. If no publisher has an address, nothing is sent.
 
