@@ -45,6 +45,8 @@ import { template as contactEnquiry } from "./contact-enquiry";
 import { template as contactEnquiryVerify } from "./contact-enquiry-verify";
 import { template as memberEngagement } from "./member-engagement";
 import { template as contactEnquiryCopy } from "./contact-enquiry-copy-mail";
+import { template as articleReviewRequest } from "./article-review-request";
+
 
 /**
  * Template registry — maps template names to their React Email components.
@@ -77,4 +79,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "contact-enquiry": contactEnquiry,
   "contact-enquiry-verify": contactEnquiryVerify,
   "contact-enquiry-copy": contactEnquiryCopy,
+  "article-review-request": articleReviewRequest,
+
 };

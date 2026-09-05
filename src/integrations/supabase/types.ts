@@ -241,6 +241,7 @@ export type Database = {
           is_featured: boolean
           language: Database["public"]["Enums"]["article_lang"]
           published_at: string | null
+          published_by: string | null
           scheduled_at: string | null
           status: Database["public"]["Enums"]["article_status"]
           title: string
@@ -266,6 +267,7 @@ export type Database = {
           is_featured?: boolean
           language: Database["public"]["Enums"]["article_lang"]
           published_at?: string | null
+          published_by?: string | null
           scheduled_at?: string | null
           status?: Database["public"]["Enums"]["article_status"]
           title?: string
@@ -291,6 +293,7 @@ export type Database = {
           is_featured?: boolean
           language?: Database["public"]["Enums"]["article_lang"]
           published_at?: string | null
+          published_by?: string | null
           scheduled_at?: string | null
           status?: Database["public"]["Enums"]["article_status"]
           title?: string
@@ -309,6 +312,13 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "articles_published_by_fkey"
+            columns: ["published_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

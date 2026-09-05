@@ -48,6 +48,7 @@ interface Row {
   updated_at: string;
   published_at: string | null;
   author: { first_name: string | null; last_name: string | null } | null;
+  releaser: { first_name: string | null; last_name: string | null } | null;
   translations?: { locale: string }[] | null;
 }
 
@@ -131,7 +132,7 @@ function ArticlesPage() {
     supabase
       .from("articles")
       .select(
-        "id, title, language, status, updated_at, published_at, author:profiles(first_name, last_name), translations:article_translations(locale)",
+        "id, title, language, status, updated_at, published_at, author:profiles!articles_author_id_fkey(first_name, last_name), releaser:profiles!articles_published_by_fkey(first_name, last_name), translations:article_translations(locale)",
       )
       .order("published_at", { ascending: false })
       .then(({ data }) => setRows((data as unknown as Row[]) ?? []));
@@ -211,12 +212,13 @@ function ArticlesPage() {
         </div>
 
         <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-soft)]">
-          <div className="grid grid-cols-[minmax(0,2fr)_1fr_0.8fr_1fr_0.8fr_auto] items-center gap-4 border-b border-border bg-secondary/50 px-6 py-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <div className="grid grid-cols-[minmax(0,2fr)_1fr_0.8fr_1fr_0.8fr_1fr_auto] items-center gap-4 border-b border-border bg-secondary/50 px-6 py-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
             <div>{t("list.title")}</div>
             <div>{t("list.author")}</div>
             <div>{t("editor.sourceLanguage")}</div>
             <div>{t("editor.statusLabel")}</div>
             <div>{t("list.published")}</div>
+            <div>{t("list.releasedBy")}</div>
             <div className="w-4" />
           </div>
           {rows === null ? (
@@ -233,7 +235,7 @@ function ArticlesPage() {
                 to="/articles/$id"
                 params={{ id: r.id }}
                 key={r.id}
-                className="group grid grid-cols-[minmax(0,2fr)_1fr_0.8fr_1fr_0.8fr_auto] items-center gap-4 border-b border-border/70 px-6 py-4 text-sm transition last:border-b-0 hover:bg-secondary/60"
+                className="group grid grid-cols-[minmax(0,2fr)_1fr_0.8fr_1fr_0.8fr_1fr_auto] items-center gap-4 border-b border-border/70 px-6 py-4 text-sm transition last:border-b-0 hover:bg-secondary/60"
               >
                 <div className="font-semibold text-foreground">
                   {r.title || <span className="text-muted-foreground">Untitled</span>}
@@ -258,6 +260,7 @@ function ArticlesPage() {
                 <div className="text-muted-foreground">
                   {r.published_at ? timeAgo(r.published_at) : "—"}
                 </div>
+                <div className="text-muted-foreground">{authorName(r.releaser) || "—"}</div>
                 <ChevronRight className="h-4 w-4 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-foreground" />
               </Link>
             ))

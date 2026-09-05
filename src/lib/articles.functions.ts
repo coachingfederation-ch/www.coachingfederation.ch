@@ -110,8 +110,14 @@ export const changeArticleStatus = createServerFn({ method: "POST" })
       await callerIsAdmin(context),
       (row as { created_by: string | null } | null)?.created_by ?? null,
     );
-    return await transitionArticle(client, id, transition as never, permissions);
+    const patch = await transitionArticle(client, id, transition as never, permissions);
+    if (patch.status === "review") {
+      const { notifyReviewRequested } = await import("./article-notifications.server");
+      await notifyReviewRequested(id, context.userId);
+    }
+    return patch;
   });
+
 
 export const setArticleFeaturedFlag = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
