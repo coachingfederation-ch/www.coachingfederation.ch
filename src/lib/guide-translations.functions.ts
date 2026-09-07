@@ -79,7 +79,9 @@ export const loadGuideTranslations = createServerFn({ method: "GET" })
 
     const { data: guideRows, error } = await context.supabase
       .from("guide_translations")
-      .select("locale, title, summary, eyebrow, intro, footnote, manually_edited, source_updated_at")
+      .select(
+        "locale, title, summary, eyebrow, intro, footnote, manually_edited, source_updated_at",
+      )
       .eq("guide_id", data.guideId);
     if (error) throw new Error(error.message);
 

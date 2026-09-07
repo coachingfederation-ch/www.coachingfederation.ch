@@ -54,7 +54,6 @@ export function MemberShell({ children }: { children: ReactNode }) {
             <Link to="/guides" className="text-sm font-semibold hover:underline">
               {t("nav.guides")}
             </Link>
-
           </div>
           <div className="ml-auto flex items-center gap-3">
             {roles.isStaff ? (

@@ -130,8 +130,16 @@ function GuidesCmsRoute() {
     sections.forEach((section, index) => {
       const prefix = `${t("guides.section")} ${index + 1}`;
       list.push(
-        { key: `s${index}_eyebrow`, label: `${prefix} · ${t("guides.fieldEyebrow")}`, type: "input" },
-        { key: `s${index}_heading`, label: `${prefix} · ${t("guides.fieldHeading")}`, type: "input" },
+        {
+          key: `s${index}_eyebrow`,
+          label: `${prefix} · ${t("guides.fieldEyebrow")}`,
+          type: "input",
+        },
+        {
+          key: `s${index}_heading`,
+          label: `${prefix} · ${t("guides.fieldHeading")}`,
+          type: "input",
+        },
         {
           key: `s${index}_lead`,
           label: `${prefix} · ${t("guides.fieldLead")}`,
@@ -339,7 +347,9 @@ function GuidesCmsRoute() {
                           {t("guides.fieldTone")}
                           <select
                             value={section.tone}
-                            onChange={(e) => void patchSection(section.id, { tone: e.target.value })}
+                            onChange={(e) =>
+                              void patchSection(section.id, { tone: e.target.value })
+                            }
                             className={`ml-2 ${INPUT} inline-block w-auto`}
                           >
                             {GUIDE_TONES.map((tone) => (
@@ -490,13 +500,7 @@ function GuidesCmsRoute() {
  * Rich body editor for one section. Local state keeps the caret stable while
  * typing; the parent only hears about the text once the editor loses focus.
  */
-function SectionBody({
-  initial,
-  onCommit,
-}: {
-  initial: string;
-  onCommit: (next: string) => void;
-}) {
+function SectionBody({ initial, onCommit }: { initial: string; onCommit: (next: string) => void }) {
   const [value, setValue] = useState(initial);
   return <RichTextField value={value} onChange={setValue} onBlur={() => onCommit(value)} />;
 }

@@ -23,7 +23,9 @@ export async function loadPublishedGuides(locale: string): Promise<GuideSummary[
   const { publicSupabaseClient } = await import("./supabase-public.server");
   const { data, error } = await publicSupabaseClient()
     .from("guides")
-    .select("id, slug, title, summary, eyebrow, updated_at, guide_translations(locale, title, summary, eyebrow)")
+    .select(
+      "id, slug, title, summary, eyebrow, updated_at, guide_translations(locale, title, summary, eyebrow)",
+    )
     .eq("is_published", true)
     .order("sort_order", { ascending: true })
     .order("title", { ascending: true });
@@ -60,7 +62,8 @@ export async function loadPublishedGuide(slug: string, locale: string): Promise<
   if (!data) return null;
 
   const row = data as Row;
-  const tr = ((row.guide_translations as Row[] | null) ?? []).find((t) => t.locale === locale) ?? {};
+  const tr =
+    ((row.guide_translations as Row[] | null) ?? []).find((t) => t.locale === locale) ?? {};
 
   const { data: sectionData, error: sectionError } = await client
     .from("guide_sections")
