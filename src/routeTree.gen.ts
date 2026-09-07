@@ -60,6 +60,7 @@ import { Route as ApiEventProposalAgentRouteImport } from './routes/api/event-pr
 import { Route as ApiStaffAssistantRouteImport } from './routes/api/staff-assistant'
 import { Route as AttendTokenRouteImport } from './routes/attend.$token'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
 import { Route as ClaimIndexRouteImport } from './routes/claim.index'
 import { Route as ClaimTokenRouteImport } from './routes/claim.$token'
 import { Route as CoachProfileIdRouteImport } from './routes/coach.$profileId'
@@ -397,6 +398,11 @@ const AttendTokenRoute = AttendTokenRouteImport.update({
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
   id: '/callback',
   path: '/callback',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthConfirmRoute = AuthConfirmRouteImport.update({
+  id: '/confirm',
+  path: '/confirm',
   getParentRoute: () => AuthRoute,
 } as any)
 const ClaimIndexRoute = ClaimIndexRouteImport.update({
@@ -879,6 +885,7 @@ export interface FileRoutesByFullPath {
   '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/auth/confirm': typeof AuthConfirmRoute
   '/claim/$token': typeof ClaimTokenRoute
   '/coach/$profileId': typeof CoachProfileIdRoute
   '/communities/$slug': typeof CommunitiesSlugRoute
@@ -1008,6 +1015,7 @@ export interface FileRoutesByTo {
   '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/auth/confirm': typeof AuthConfirmRoute
   '/claim/$token': typeof ClaimTokenRoute
   '/coach/$profileId': typeof CoachProfileIdRoute
   '/communities/$slug': typeof CommunitiesSlugRoute
@@ -1144,6 +1152,7 @@ export interface FileRoutesById {
   '/api/staff-assistant': typeof ApiStaffAssistantRoute
   '/attend/$token': typeof AttendTokenRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/auth/confirm': typeof AuthConfirmRoute
   '/claim/$token': typeof ClaimTokenRoute
   '/coach/$profileId': typeof CoachProfileIdRoute
   '/communities/$slug': typeof CommunitiesSlugRoute
@@ -1279,6 +1288,7 @@ export interface FileRouteTypes {
     | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
+    | '/auth/confirm'
     | '/claim/$token'
     | '/coach/$profileId'
     | '/communities/$slug'
@@ -1408,6 +1418,7 @@ export interface FileRouteTypes {
     | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
+    | '/auth/confirm'
     | '/claim/$token'
     | '/coach/$profileId'
     | '/communities/$slug'
@@ -1543,6 +1554,7 @@ export interface FileRouteTypes {
     | '/api/staff-assistant'
     | '/attend/$token'
     | '/auth/callback'
+    | '/auth/confirm'
     | '/claim/$token'
     | '/coach/$profileId'
     | '/communities/$slug'
@@ -2061,6 +2073,13 @@ declare module '@tanstack/react-router' {
       path: '/callback'
       fullPath: '/auth/callback'
       preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/confirm': {
+      id: '/auth/confirm'
+      path: '/confirm'
+      fullPath: '/auth/confirm'
+      preLoaderRoute: typeof AuthConfirmRouteImport
       parentRoute: typeof AuthRoute
     }
     '/claim/': {
@@ -2816,10 +2835,12 @@ const StaffRouteRouteWithChildren = StaffRouteRoute._addFileChildren(
 
 interface AuthRouteChildren {
   AuthCallbackRoute: typeof AuthCallbackRoute
+  AuthConfirmRoute: typeof AuthConfirmRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthCallbackRoute: AuthCallbackRoute,
+  AuthConfirmRoute: AuthConfirmRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
