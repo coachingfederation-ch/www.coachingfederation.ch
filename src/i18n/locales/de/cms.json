@@ -2609,12 +2609,34 @@
     "fieldHeading": "Überschrift",
     "fieldLead": "Lead",
     "fieldBody": "Text",
-    "fieldCallout": "Hinweisbox",
     "tone": {
       "neutral": "Neutral",
       "positive": "Empfohlen",
       "caution": "Vorsicht",
       "critical": "Nicht erlaubt"
-    }
+    },
+    "fieldKind": "Layout",
+    "kind": {
+      "article": "Artikel",
+      "faq": "Fragen"
+    },
+    "callouts": "Hinweise",
+    "callout": "Hinweis",
+    "addCallout": "Hinweis hinzufügen",
+    "deleteCallout": "Entfernen",
+    "fieldCalloutKind": "Typ",
+    "fieldLabel": "Titel",
+    "calloutKind": {
+      "info": "Hinweis",
+      "warning": "Vorsicht",
+      "critical": "Nicht erlaubt"
+    },
+    "questions": "Fragen",
+    "question": "Frage",
+    "addQuestion": "Frage hinzufügen",
+    "deleteQuestion": "Entfernen",
+    "fieldQuestion": "Frage",
+    "fieldAnswer": "Antwort",
+    "fieldQuote": "So sagen Sie es"
   }
 }

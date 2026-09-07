@@ -19,5 +19,8 @@
   "contact": {
     "eyebrow": "Questions",
     "body": "If you are unsure how a guideline applies to your situation, write to us before you post."
+  },
+  "faq": {
+    "sayThis": "Say it like this"
   }
 }

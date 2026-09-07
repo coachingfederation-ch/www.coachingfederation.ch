@@ -19,5 +19,8 @@
   "contact": {
     "eyebrow": "Questions",
     "body": "Si vous ne savez pas comment appliquer une règle à votre situation, écrivez-nous avant de publier."
+  },
+  "faq": {
+    "sayThis": "À dire ainsi"
   }
 }

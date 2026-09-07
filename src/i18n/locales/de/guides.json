@@ -19,5 +19,8 @@
   "contact": {
     "eyebrow": "Fragen",
     "body": "Wenn Sie unsicher sind, wie eine Regel auf Ihre Situation zutrifft, schreiben Sie uns, bevor Sie posten."
+  },
+  "faq": {
+    "sayThis": "So sagen Sie es"
   }
 }
