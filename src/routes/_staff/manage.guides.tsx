@@ -580,7 +580,7 @@ function GuidesCmsRoute() {
               </section>
 
               <GenericTranslationsPanel<GuideTranslationRow, Record<string, string | null>>
-                deps={[guide.id, sectionCount, guide.content_updated_at]}
+                deps={[guide.id, shapeKey, guide.content_updated_at]}
                 adapter={{
                   sourceLanguage: "en",
                   contentUpdatedAt: guide.content_updated_at,
@@ -601,7 +601,7 @@ function GuidesCmsRoute() {
                     }),
                   valuesFromRow: (row) =>
                     Object.fromEntries(
-                      guideTranslationFieldKeys(sectionCount).map((key) => [
+                      guideTranslationFieldKeys(shape).map((key) => [
                         key,
                         (row[key] as string | null) ?? "",
                       ]),
