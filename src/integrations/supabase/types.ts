@@ -5276,6 +5276,7 @@ export type Database = {
           cst_recno: string
           diagnostics: Json
           email: string | null
+          email_change_state: string
           first_name: string | null
           full_name: string | null
           id: string
@@ -5287,6 +5288,8 @@ export type Database = {
           membership_expiration_date: string | null
           membership_join_date: string | null
           organisation: string | null
+          pending_email: string | null
+          pending_email_since: string | null
           phone: string | null
           scheduled_deletion_at: string | null
           updated_at: string
@@ -5305,6 +5308,7 @@ export type Database = {
           cst_recno: string
           diagnostics?: Json
           email?: string | null
+          email_change_state?: string
           first_name?: string | null
           full_name?: string | null
           id?: string
@@ -5316,6 +5320,8 @@ export type Database = {
           membership_expiration_date?: string | null
           membership_join_date?: string | null
           organisation?: string | null
+          pending_email?: string | null
+          pending_email_since?: string | null
           phone?: string | null
           scheduled_deletion_at?: string | null
           updated_at?: string
@@ -5334,6 +5340,7 @@ export type Database = {
           cst_recno?: string
           diagnostics?: Json
           email?: string | null
+          email_change_state?: string
           first_name?: string | null
           full_name?: string | null
           id?: string
@@ -5345,6 +5352,8 @@ export type Database = {
           membership_expiration_date?: string | null
           membership_join_date?: string | null
           organisation?: string | null
+          pending_email?: string | null
+          pending_email_since?: string | null
           phone?: string | null
           scheduled_deletion_at?: string | null
           updated_at?: string

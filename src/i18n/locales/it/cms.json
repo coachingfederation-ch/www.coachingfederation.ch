@@ -403,7 +403,32 @@
       "resend": "Reinvia invito",
       "result": "Risultato:"
     },
-    "colPilot": "Pilota"
+    "colPilot": "Pilota",
+    "signIn": {
+      "title": "Stato dell'accesso",
+      "note": "Quello che dice l'account stesso. Il link di reimpostazione va sempre all'indirizzo qui sotto, mai a uno digitato qui.",
+      "loading": "Caricamento…",
+      "notClaimed": "Questo socio non ha ancora rivendicato un account.",
+      "address": "Indirizzo di accesso",
+      "confirmed": "Indirizzo confermato",
+      "yes": "Sì",
+      "no": "No",
+      "lastSignIn": "Ultimo accesso",
+      "created": "Account creato",
+      "pendingTitle": "Un nuovo indirizzo da ICF Global attende conferma",
+      "pendingBody": "Nuovo indirizzo:",
+      "pendingHint": "Solo il socio può confermarlo, dall'avviso nella sua area soci. Fino ad allora l'accesso resta sull'indirizzo attuale.",
+      "pendingBlockedTitle": "Il nuovo indirizzo da ICF Global non può essere usato",
+      "pendingBlockedHint": "Un altro account accede già con quell'indirizzo. Risolvi il doppione prima che la modifica possa procedere.",
+      "sendReset": "Invia link di reimpostazione",
+      "sending": "Invio…",
+      "refresh": "Aggiorna",
+      "resetSent": "Link inviato.",
+      "reset_not_claimed": "Nessun account è collegato a questo socio.",
+      "reset_no_address": "L'account non ha un indirizzo.",
+      "reset_rate_limited": "Troppe email di questo tipo per questo indirizzo oggi. Riprova più tardi.",
+      "reset_failed": "Impossibile inviare il link."
+    }
   },
   "integration": {
     "title": "Stato dell'integrazione",
@@ -859,6 +884,21 @@
       "completedOn": "Completato il",
       "serial": "Numero",
       "open": "Apri"
+    },
+    "emailChange": {
+      "title": "Conferma il tuo nuovo indirizzo e-mail",
+      "body": "ICF Global ci segnala che il tuo indirizzo e-mail è cambiato. Il tuo indirizzo di accesso resta invariato finché non confermi quello nuovo: inviati il link di conferma e aprilo nella nuova casella.",
+      "newAddress": "Nuovo indirizzo",
+      "current": "Attualmente accedi con",
+      "send": "Inviami il link di conferma",
+      "resend": "Invia di nuovo il link",
+      "sending": "Invio…",
+      "hint": "Il link va al nuovo indirizzo.",
+      "sentHint": "Inviato. Controlla la nuova casella: il link ha una validità limitata.",
+      "error": "Non ha funzionato. Riprova o contatta l'ufficio.",
+      "blockedTitle": "Non possiamo spostare il tuo indirizzo di accesso",
+      "blockedBody": "ICF Global segnala un indirizzo già usato qui da un altro account, quindi non possiamo spostarci il tuo accesso.",
+      "blockedHint": "Scrivi a office@coachingfederation.ch e sistemiamo la cosa."
     }
   },
   "noAccess": {
@@ -963,14 +1003,14 @@
   "roles": {
     "title": "Ruoli",
     "intro": "Possono accedere due tipi di account: gli amministratori interni, che non necessitano di una scheda membro ICF, e i membri con account attivato collegati a una scheda importata. L'accesso da redattore viene concesso qui in aggiunta all'iscrizione attivata — non modifica mai l'accesso all'area membri o il profilo della directory. Un account può essere sia membro sia amministratore; questi account sono elencati nella tabella sottostante, non tra gli account interni.",
-    "searchPlaceholder": "Cerca per nome o e-mail",
+    "searchPlaceholder": "Cerca per nome, e-mail o numero socio",
     "colName": "Membro",
     "colEmail": "Email",
     "colAccess": "Accesso",
     "memberBadge": "Membro",
     "editorBadge": "Redattore",
     "loading": "Caricamento membri in corso…",
-    "empty": "Ancora nessun account membro attivato.",
+    "empty": "Nessuno ha ancora un ruolo oltre a quello di socio ordinario. Cerca un socio qui sopra per assegnarne uno.",
     "loadError": "Impossibile caricare i dati dei ruoli.",
     "saveError": "Impossibile salvare le modifiche.",
     "adminOnly": "Solo gli amministratori possono gestire i ruoli.",
@@ -1051,7 +1091,10 @@
     "revokeAccount": "Revoca account",
     "revokeAccountConfirm": "Revocare l’account interno di {name}? Tutti gli accessi vengono rimossi e l’account viene eliminato. Operazione irreversibile.",
     "revokeAccountDone": "L’account interno di {name} è stato revocato.",
-    "revokeAccountAdminHint": "Disattiva Super Admin prima di revocare questo account."
+    "revokeAccountAdminHint": "Disattiva Super Admin prima di revocare questo account.",
+    "searchEmpty": "Nessun socio collegato corrisponde a questa ricerca.",
+    "tableHint": "Sono elencati solo i soci con un ruolo oltre a quello ordinario. Rimuovendo l'ultimo ruolo tornano soci ordinari. Per scollegare un account usa la pagina di dettaglio del socio.",
+    "searchHint": "Vengono mostrati tutti i soci collegati corrispondenti. Apri «Gestisci» per assegnare un ruolo."
   },
   "events": {
     "title": "Eventi",

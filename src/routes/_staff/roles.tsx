@@ -225,13 +225,27 @@ function RolesPage() {
     }
   };
 
+  /**
+   * The table is a list of *granted roles*, not of claimed accounts: a member
+   * holding only the ordinary `member` grant has nothing to manage here and is
+   * hidden. Searching widens the list to every claimed member so a role can be
+   * granted to someone who holds none yet.
+   */
+  const hasExtraRole = (m: MemberRow) =>
+    m.isAdmin || m.isAdministrator || m.isEditor || m.isOrganizer || m.isPublisher || m.isMembership;
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return members;
+    const withRole = members.filter(hasExtraRole);
+    if (!q) return withRole;
     return members.filter(
-      (m) => m.name.toLowerCase().includes(q) || (m.email ?? "").toLowerCase().includes(q),
+      (m) =>
+        m.name.toLowerCase().includes(q) ||
+        (m.email ?? "").toLowerCase().includes(q) ||
+        m.cstRecno.toLowerCase().includes(q),
     );
   }, [members, query]);
+
 
   const selected = useMemo<RoleSubject | null>(() => {
     const m = members.find((row) => row.memberId === selectedId);
@@ -309,6 +323,10 @@ function RolesPage() {
             className="w-full rounded-lg border border-border bg-card py-2 pl-9 pr-3 text-sm"
           />
         </div>
+        <p className="mt-2 max-w-2xl text-xs text-muted-foreground">
+          {query.trim() ? t("roles.searchHint") : t("roles.tableHint")}
+        </p>
+
 
         <div className="mt-4 overflow-hidden rounded-2xl border border-border bg-card">
           <table className="w-full text-left text-sm">
@@ -331,7 +349,7 @@ function RolesPage() {
               ) : filtered.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-4 py-6 text-muted-foreground">
-                    {t("roles.empty")}
+                    {query.trim() ? t("roles.searchEmpty") : t("roles.empty")}
                   </td>
                 </tr>
               ) : (

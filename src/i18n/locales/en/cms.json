@@ -403,7 +403,32 @@
       "resend": "Resend invitation",
       "result": "Result:"
     },
-    "colPilot": "Pilot"
+    "colPilot": "Pilot",
+    "signIn": {
+      "title": "Sign-in health",
+      "note": "What the account itself says. A reset link always goes to the address below — never to one typed in here.",
+      "loading": "Loading…",
+      "notClaimed": "This member has not claimed an account yet.",
+      "address": "Sign-in address",
+      "confirmed": "Address confirmed",
+      "yes": "Yes",
+      "no": "No",
+      "lastSignIn": "Last sign-in",
+      "created": "Account created",
+      "pendingTitle": "A new address from ICF Global is waiting for confirmation",
+      "pendingBody": "New address:",
+      "pendingHint": "Only the member can confirm this, from the notice in their member area. Sign-in stays on the current address until they do.",
+      "pendingBlockedTitle": "The new address from ICF Global cannot be used",
+      "pendingBlockedHint": "Another account already signs in with that address. Sort out the duplicate before the change can go through.",
+      "sendReset": "Send password reset link",
+      "sending": "Sending…",
+      "refresh": "Refresh",
+      "resetSent": "Reset link sent.",
+      "reset_not_claimed": "No account is linked to this member.",
+      "reset_no_address": "The account has no address.",
+      "reset_rate_limited": "Too many reset mails for this address today. Try again later.",
+      "reset_failed": "Could not send the reset link."
+    }
   },
   "integration": {
     "title": "Integration status",
@@ -859,6 +884,21 @@
       "completedOn": "Completed on",
       "serial": "Number",
       "open": "Open"
+    },
+    "emailChange": {
+      "title": "Confirm your new email address",
+      "body": "ICF Global tells us your email address changed. We keep your sign-in address as it is until you confirm the new one — send yourself the confirmation link and click it in the new mailbox.",
+      "newAddress": "New address",
+      "current": "You currently sign in with",
+      "send": "Send me the confirmation link",
+      "resend": "Send the link again",
+      "sending": "Sending…",
+      "hint": "The link goes to the new address.",
+      "sentHint": "Sent. Check the new mailbox — the link is valid for a limited time.",
+      "error": "That did not work. Please try again, or contact the office.",
+      "blockedTitle": "We cannot move your sign-in address",
+      "blockedBody": "ICF Global reports an address that another account here already uses, so we cannot move your sign-in to it.",
+      "blockedHint": "Please contact the office at office@coachingfederation.ch and we will sort it out."
     }
   },
   "noAccess": {
@@ -963,14 +1003,14 @@
   "roles": {
     "title": "Roles",
     "intro": "Two kinds of account can sign in: internal administrators, who need no ICF member record, and claimed members linked to an imported member record. Editor access is granted here on top of a claimed membership — it never changes member area access or the directory profile. An account can be both a member and an administrator; those accounts are listed in the table below, not under internal accounts.",
-    "searchPlaceholder": "Search by name or email",
+    "searchPlaceholder": "Search by name, email or member number",
     "colName": "Member",
     "colEmail": "Email",
     "colAccess": "Access",
     "memberBadge": "Member",
     "editorBadge": "Editor",
     "loading": "Loading members…",
-    "empty": "No claimed member accounts yet.",
+    "empty": "No one holds a role beyond ordinary member yet. Search for a member above to grant one.",
     "loadError": "Could not load role data.",
     "saveError": "Could not save the change.",
     "adminOnly": "Only administrators can manage roles.",
@@ -1051,7 +1091,10 @@
     "revokeAccount": "Revoke account",
     "revokeAccountConfirm": "Revoke the internal account for {name}? All access is removed and the account is deleted. This cannot be undone.",
     "revokeAccountDone": "Internal account for {name} was revoked.",
-    "revokeAccountAdminHint": "Turn off Super Admin before revoking this account."
+    "revokeAccountAdminHint": "Turn off Super Admin before revoking this account.",
+    "searchEmpty": "No claimed member matches this search.",
+    "tableHint": "Only members holding a role beyond ordinary member are listed. Removing the last role returns them to ordinary member. To unlink an account from a member record, use the member detail page.",
+    "searchHint": "Showing every claimed member that matches. Open Manage to grant a role."
   },
   "events": {
     "title": "Events",

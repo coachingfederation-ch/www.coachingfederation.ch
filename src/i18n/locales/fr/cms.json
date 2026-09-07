@@ -403,7 +403,32 @@
       "resend": "Renvoyer l'invitation",
       "result": "Résultat :"
     },
-    "colPilot": "Pilote"
+    "colPilot": "Pilote",
+    "signIn": {
+      "title": "État de la connexion",
+      "note": "Ce que dit le compte lui-même. Le lien de réinitialisation part toujours vers l'adresse ci-dessous, jamais vers une adresse saisie ici.",
+      "loading": "Chargement…",
+      "notClaimed": "Ce membre n'a pas encore revendiqué de compte.",
+      "address": "Adresse de connexion",
+      "confirmed": "Adresse confirmée",
+      "yes": "Oui",
+      "no": "Non",
+      "lastSignIn": "Dernière connexion",
+      "created": "Compte créé",
+      "pendingTitle": "Une nouvelle adresse d'ICF Global attend confirmation",
+      "pendingBody": "Nouvelle adresse :",
+      "pendingHint": "Seul le membre peut confirmer, depuis l'avis dans son espace membre. La connexion reste sur l'adresse actuelle jusque-là.",
+      "pendingBlockedTitle": "La nouvelle adresse d'ICF Global ne peut pas être utilisée",
+      "pendingBlockedHint": "Un autre compte se connecte déjà avec cette adresse. Réglez le doublon avant que le changement puisse aboutir.",
+      "sendReset": "Envoyer un lien de réinitialisation",
+      "sending": "Envoi…",
+      "refresh": "Actualiser",
+      "resetSent": "Lien envoyé.",
+      "reset_not_claimed": "Aucun compte n'est lié à ce membre.",
+      "reset_no_address": "Le compte n'a pas d'adresse.",
+      "reset_rate_limited": "Trop de courriels de ce type pour cette adresse aujourd'hui. Réessayez plus tard.",
+      "reset_failed": "Impossible d'envoyer le lien."
+    }
   },
   "integration": {
     "title": "Statut de l'intégration",
@@ -859,6 +884,21 @@
       "completedOn": "Terminé le",
       "serial": "Numéro",
       "open": "Ouvrir"
+    },
+    "emailChange": {
+      "title": "Confirmez votre nouvelle adresse e-mail",
+      "body": "ICF Global nous signale que votre adresse e-mail a changé. Votre adresse de connexion reste inchangée tant que vous n'avez pas confirmé la nouvelle : envoyez-vous le lien de confirmation et cliquez dessus dans la nouvelle boîte.",
+      "newAddress": "Nouvelle adresse",
+      "current": "Vous vous connectez actuellement avec",
+      "send": "M'envoyer le lien de confirmation",
+      "resend": "Renvoyer le lien",
+      "sending": "Envoi…",
+      "hint": "Le lien part vers la nouvelle adresse.",
+      "sentHint": "Envoyé. Regardez dans la nouvelle boîte : le lien a une durée de validité limitée.",
+      "error": "Cela n'a pas fonctionné. Réessayez ou contactez le bureau.",
+      "blockedTitle": "Nous ne pouvons pas changer votre adresse de connexion",
+      "blockedBody": "ICF Global signale une adresse qu'un autre compte utilise déjà ici, nous ne pouvons donc pas y déplacer votre connexion.",
+      "blockedHint": "Écrivez à office@coachingfederation.ch et nous réglerons cela."
     }
   },
   "noAccess": {
@@ -963,14 +1003,14 @@
   "roles": {
     "title": "Rôles",
     "intro": "Deux types de comptes peuvent se connecter : les administrateurs internes, qui n'ont pas besoin de dossier membre ICF, et les membres activés liés à un dossier membre importé. L'accès éditeur est accordé ici en plus d'une adhésion activée — il ne modifie jamais l'accès à l'espace membres ni le profil d'annuaire. Un compte peut être à la fois membre et administrateur ; ces comptes sont répertoriés dans le tableau ci-dessous, non sous les comptes internes.",
-    "searchPlaceholder": "Rechercher par nom ou e-mail",
+    "searchPlaceholder": "Rechercher par nom, e-mail ou numéro de membre",
     "colName": "Membre",
     "colEmail": "E-mail",
     "colAccess": "Accès",
     "memberBadge": "Membre",
     "editorBadge": "Éditeur",
     "loading": "Chargement des membres…",
-    "empty": "Aucun compte membre activé pour le moment.",
+    "empty": "Personne ne détient encore de rôle au-delà du statut de membre ordinaire. Recherchez un membre ci-dessus pour en attribuer un.",
     "loadError": "Impossible de charger les données de rôle.",
     "saveError": "Impossible d'enregistrer la modification.",
     "adminOnly": "Seuls les administrateurs peuvent gérer les rôles.",
@@ -1051,7 +1091,10 @@
     "revokeAccount": "Révoquer le compte",
     "revokeAccountConfirm": "Révoquer le compte interne de {name} ? Tous les accès sont supprimés et le compte est effacé. Action irréversible.",
     "revokeAccountDone": "Le compte interne de {name} a été révoqué.",
-    "revokeAccountAdminHint": "Désactivez Super Admin avant de révoquer ce compte."
+    "revokeAccountAdminHint": "Désactivez Super Admin avant de révoquer ce compte.",
+    "searchEmpty": "Aucun membre lié ne correspond à cette recherche.",
+    "tableHint": "Seuls les membres détenant un rôle au-delà du statut de membre ordinaire figurent ici. Le retrait du dernier rôle les ramène au statut ordinaire. Pour dissocier un compte, utilisez la fiche du membre.",
+    "searchHint": "Tous les membres liés correspondants sont affichés. Ouvrez « Gérer » pour attribuer un rôle."
   },
   "events": {
     "title": "Événements",

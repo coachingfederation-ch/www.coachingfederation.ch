@@ -12,6 +12,8 @@ import { Shell } from "@/components/cms/Shell";
 import { useCms } from "@/i18n/cms";
 import { MemberSyncStatusPanel } from "@/components/cms/MemberSyncStatusPanel";
 import { MemberClaimStatusPanel } from "@/components/cms/MemberClaimStatusPanel";
+import { MemberSignInHealthPanel } from "@/components/cms/MemberSignInHealthPanel";
+
 import { supabase } from "@/integrations/supabase/client";
 import {
   bindMemberAccount,
@@ -331,7 +333,10 @@ function MemberDetailPage() {
               </>
             )}
 
+            <MemberSignInHealthPanel memberId={id} />
+
             <section className="mt-5 rounded-2xl border border-dashed border-border bg-card p-5">
+
               <h2 className="text-sm font-semibold">{t("members.detail.bindTitle")}</h2>
               <p className="mt-1 text-xs text-muted-foreground">{t("members.detail.bindNote")}</p>
               <p className="mt-3 text-sm">
