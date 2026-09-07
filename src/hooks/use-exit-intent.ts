@@ -2,12 +2,14 @@
 
 /**
  * Fires once when a reader looks like they are leaving the page: the pointer
- * exits through the top edge (desktop), a back navigation is attempted, or the
- * tab is hidden and later returned to. Gated on scroll depth so a bounce in the
- * first seconds never triggers it. Never blocks navigation — the back guard
- * pushes a single sentinel history entry and gives it straight back.
+ * exits through the top edge (desktop), or the tab is hidden and later
+ * returned to. Gated on scroll depth so a bounce in the first seconds never
+ * triggers it. Deliberately does NOT touch history — an earlier version pushed
+ * a sentinel entry and popped it on cleanup, which undid genuine navigations
+ * and bounced readers back to the article they had just left.
  *
  * Exports: useExitIntent.
+
  */
 import { useEffect, useRef } from "react";
 
