@@ -30,6 +30,7 @@ import {
   checkIcfCredentials,
   getOutboundIpDiagnostics,
   getRelayHealth,
+  reapAbandonedSyncRuns,
 } from "@/lib/members.functions";
 
 export const Route = createFileRoute("/_staff/integration")({
