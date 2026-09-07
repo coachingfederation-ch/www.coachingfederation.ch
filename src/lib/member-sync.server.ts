@@ -89,6 +89,9 @@ export async function runMemberSync(options: {
   /** Admin one-off escape hatch: skip the percentage drop guard (never the empty-feed abort). */
   ignoreDropGuard?: boolean;
 }): Promise<SyncResult> {
+  // Close any dead run first, so two runs never appear to overlap.
+  await reapAbandonedRuns();
+
   const config = await loadIntegrationConfigAdmin();
 
   const { data: runRow, error: runError } = await supabaseAdmin
