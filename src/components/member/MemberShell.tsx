@@ -49,6 +49,12 @@ export function MemberShell({ children }: { children: ReactNode }) {
             <Link to="/member" className="text-sm font-semibold hover:underline">
               {t("member.areaTitle")}
             </Link>
+            {/* Guidelines live on the public site, so one link works for
+                members, volunteers and anyone they share it with. */}
+            <Link to="/guides" className="text-sm font-semibold hover:underline">
+              {t("nav.guides")}
+            </Link>
+
           </div>
           <div className="ml-auto flex items-center gap-3">
             {roles.isStaff ? (
