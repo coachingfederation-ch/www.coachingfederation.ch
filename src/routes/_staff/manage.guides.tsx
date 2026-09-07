@@ -466,15 +466,100 @@ function GuidesCmsRoute() {
                           onCommit={(next) => void patchSection(section.id, { body: next })}
                         />
                       </div>
-                      <label className="mt-3 block text-xs text-muted-foreground">
-                        {t("guides.fieldCallout")}
-                        <textarea
-                          rows={2}
-                          defaultValue={section.callout}
-                          onBlur={(e) => void patchSection(section.id, { callout: e.target.value })}
-                          className={`mt-1 ${INPUT}`}
-                        />
-                      </label>
+                      {section.kind === "faq" ? (
+                        <div className="mt-4 space-y-3">
+                          <p className="text-xs font-semibold text-muted-foreground">
+                            {t("guides.questions")}
+                          </p>
+                          {section.faq.map((item, q) => (
+                            <FaqEditor
+                              key={item.id}
+                              item={item}
+                              index={q}
+                              labels={{
+                                question: t("guides.fieldQuestion"),
+                                answer: t("guides.fieldAnswer"),
+                                quote: t("guides.fieldQuote"),
+                                remove: t("guides.deleteQuestion"),
+                                position: `${t("guides.question")} ${q + 1}`,
+                              }}
+                              onPatch={(values) =>
+                                void run(async () => {
+                                  await updateGuideFaqItem({ data: { id: item.id, values } });
+                                  if (selected) await loadOne(selected);
+                                })
+                              }
+                              onDelete={() =>
+                                void run(async () => {
+                                  await deleteGuideFaqItem({ data: { id: item.id } });
+                                  if (selected) await loadOne(selected);
+                                })
+                              }
+                            />
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() =>
+                              void run(async () => {
+                                await createGuideFaqItem({
+                                  data: { sectionId: section.id, position: section.faq.length },
+                                });
+                                if (selected) await loadOne(selected);
+                              })
+                            }
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary"
+                          >
+                            <Plus className="h-3.5 w-3.5" /> {t("guides.addQuestion")}
+                          </button>
+                        </div>
+                      ) : null}
+
+                      <div className="mt-4 space-y-3">
+                        <p className="text-xs font-semibold text-muted-foreground">
+                          {t("guides.callouts")}
+                        </p>
+                        {section.callouts.map((callout, c) => (
+                          <CalloutEditor
+                            key={callout.id}
+                            callout={callout}
+                            labels={{
+                              kind: t("guides.fieldCalloutKind"),
+                              label: t("guides.fieldLabel"),
+                              body: t("guides.fieldBody"),
+                              remove: t("guides.deleteCallout"),
+                              position: `${t("guides.callout")} ${c + 1}`,
+                              kindOption: (kind) => t(`guides.calloutKind.${kind}`),
+                            }}
+                            onPatch={(values) =>
+                              void run(async () => {
+                                await updateGuideCallout({ data: { id: callout.id, values } });
+                                if (selected) await loadOne(selected);
+                              })
+                            }
+                            onDelete={() =>
+                              void run(async () => {
+                                await deleteGuideCallout({ data: { id: callout.id } });
+                                if (selected) await loadOne(selected);
+                              })
+                            }
+                          />
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            void run(async () => {
+                              await createGuideCallout({
+                                data: { sectionId: section.id, position: section.callouts.length },
+                              });
+                              if (selected) await loadOne(selected);
+                            })
+                          }
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary"
+                        >
+                          <Plus className="h-3.5 w-3.5" /> {t("guides.addCallout")}
+                        </button>
+                      </div>
+
                     </div>
                   ))}
                 </div>
