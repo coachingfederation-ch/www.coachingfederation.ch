@@ -15,6 +15,7 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { soapCredentials } from "./icf-soap.server";
 import { loadIntegrationConfigAdmin } from "./integration-config.server";
 import { lookupEgressIp } from "./egress-ip.server";
+import { ABANDONED_RUN_MINUTES } from "./member-sync.server";
 import type { IntegrationMode } from "./integration";
 
 /** Green / amber / red, decided server-side so the UI stays presentational. */
