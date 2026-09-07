@@ -643,3 +643,127 @@ function SectionBody({ initial, onCommit }: { initial: string; onCommit: (next: 
   const [value, setValue] = useState(initial);
   return <RichTextField value={value} onChange={setValue} onBlur={() => onCommit(value)} />;
 }
+
+/**
+ * One callout row: type, label and body. Save-on-blur like the rest of the
+ * screen, so an editor can tab through several callouts without pressing save.
+ */
+function CalloutEditor({
+  callout,
+  labels,
+  onPatch,
+  onDelete,
+}: {
+  callout: AdminGuideCalloutRow;
+  labels: {
+    kind: string;
+    label: string;
+    body: string;
+    remove: string;
+    position: string;
+    kindOption: (kind: string) => string;
+  };
+  onPatch: (values: Partial<AdminGuideCalloutRow>) => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="rounded-lg border border-border p-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-xs font-semibold text-muted-foreground">{labels.position}</span>
+        <label className="text-xs text-muted-foreground">
+          {labels.kind}
+          <select
+            value={callout.kind}
+            onChange={(e) => onPatch({ kind: e.target.value })}
+            className={`ml-2 ${INPUT} inline-block w-auto`}
+          >
+            {GUIDE_CALLOUT_KINDS.map((kind) => (
+              <option key={kind} value={kind}>
+                {labels.kindOption(kind)}
+              </option>
+            ))}
+          </select>
+        </label>
+        <button
+          type="button"
+          onClick={onDelete}
+          className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-destructive"
+        >
+          <Trash2 className="h-3.5 w-3.5" /> {labels.remove}
+        </button>
+      </div>
+      <label className="mt-2 block text-xs text-muted-foreground">
+        {labels.label}
+        <input
+          defaultValue={callout.label}
+          onBlur={(e) => onPatch({ label: e.target.value })}
+          className={`mt-1 ${INPUT}`}
+        />
+      </label>
+      <label className="mt-2 block text-xs text-muted-foreground">
+        {labels.body}
+        <textarea
+          rows={2}
+          defaultValue={callout.body}
+          onBlur={(e) => onPatch({ body: e.target.value })}
+          className={`mt-1 ${INPUT}`}
+        />
+      </label>
+    </div>
+  );
+}
+
+/** One FAQ row: question, answer and the optional "say it like this" quote. */
+function FaqEditor({
+  item,
+  index,
+  labels,
+  onPatch,
+  onDelete,
+}: {
+  item: AdminGuideFaqRow;
+  index: number;
+  labels: { question: string; answer: string; quote: string; remove: string; position: string };
+  onPatch: (values: Partial<AdminGuideFaqRow>) => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="rounded-lg border border-border p-3">
+      <div className="flex items-center gap-3">
+        <span className="text-xs font-semibold text-muted-foreground">{labels.position}</span>
+        <button
+          type="button"
+          onClick={onDelete}
+          className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-destructive"
+        >
+          <Trash2 className="h-3.5 w-3.5" /> {labels.remove}
+        </button>
+      </div>
+      <label className="mt-2 block text-xs text-muted-foreground">
+        {labels.question}
+        <input
+          defaultValue={item.question}
+          onBlur={(e) => onPatch({ question: e.target.value })}
+          className={`mt-1 ${INPUT}`}
+        />
+      </label>
+      <div className="mt-2">
+        <p className="text-xs text-muted-foreground">{labels.answer}</p>
+        <SectionBody
+          key={`${item.id}-answer-${index}`}
+          initial={item.answer}
+          onCommit={(next) => onPatch({ answer: next })}
+        />
+      </div>
+      <label className="mt-2 block text-xs text-muted-foreground">
+        {labels.quote}
+        <textarea
+          rows={2}
+          defaultValue={item.quote}
+          onBlur={(e) => onPatch({ quote: e.target.value })}
+          className={`mt-1 ${INPUT}`}
+        />
+      </label>
+    </div>
+  );
+}
