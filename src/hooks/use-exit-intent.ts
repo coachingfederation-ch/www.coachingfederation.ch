@@ -52,36 +52,13 @@ export function useExitIntent({ enabled, minScroll = 0.5, onTrigger }: ExitInten
       if (document.visibilityState === "visible") trigger();
     };
 
-    // Sentinel entry: a back press pops it, we prompt, and the reader keeps the
-    // real history untouched — pressing back again simply leaves.
-    let sentinel = false;
-    try {
-      window.history.pushState({ feedbackExitGuard: true }, "");
-      sentinel = true;
-    } catch {
-      /* history is unavailable in some embedded browsers */
-    }
-
-    const onPopState = () => {
-      sentinel = false;
-      trigger();
-    };
-
     document.addEventListener("mouseout", onMouseOut);
     document.addEventListener("visibilitychange", onVisibility);
-    window.addEventListener("popstate", onPopState);
 
     return () => {
       document.removeEventListener("mouseout", onMouseOut);
       document.removeEventListener("visibilitychange", onVisibility);
-      window.removeEventListener("popstate", onPopState);
-      if (sentinel) {
-        try {
-          window.history.back();
-        } catch {
-          /* nothing to unwind */
-        }
-      }
     };
+
   }, [enabled, minScroll]);
 }
