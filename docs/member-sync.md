@@ -289,6 +289,8 @@ member. The panel's expandable run history shows all three without a query.
 | A member vanished from the public directory       | Check their activity state. `grace` means they were missing from the feed and their profile was demoted; a published profile is also demoted when a credential lapses. |
 | A member is back with ICF but still hidden        | They are restored on the next run. Trigger a manual sync rather than editing the row.                                                                                  |
 | One field looks stale                             | The snapshot for that member and run shows exactly what the feed sent and which fields changed. If the field is not in the imported set, the sync does not own it.     |
+| A run is stuck on "running"                       | The process was cut off before it could write a status. It is closed as failed after 30 minutes; see "Abandoned runs". Re-run manually from the panel.                 |
+
 
 ---
 
