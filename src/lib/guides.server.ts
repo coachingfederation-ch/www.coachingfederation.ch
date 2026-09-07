@@ -92,7 +92,7 @@ export async function loadPublishedGuide(slug: string, locale: string): Promise<
   const byLocale = (rows: unknown, key = "locale"): Row =>
     ((rows as Row[] | null) ?? []).find((t) => t[key] === locale) ?? {};
 
-  const sections = ((sectionData ?? []) as Row[]).map((section) => {
+  const sections = ((sectionData ?? []) as unknown as Row[]).map((section) => {
     const st = byLocale(section.guide_section_translations);
 
     const callouts = ((section.guide_section_callouts as Row[] | null) ?? [])
