@@ -25,6 +25,7 @@ before adding a new file.
 | `member-claim.server.ts`                     | Account claim token state machine — hashing, expiry, attempt limiting, single use.                                                                                                                         |
 | `member-email.server.ts`                     | Email dispatch. Currently logs every intended send and delivers nothing; see operations doc.                                                                                                               |
 | `member-translations.*`                      | Per-locale coach profile content: translatable field list, derived states, AI translation and the member RPC surface. See `docs/member-translations.md`.                                                   |
+| `member-engagement/dispatch.server.ts`       | Sends engagement campaigns, picking copy by the member's `correspondence_locale`. See `docs/member-translations.md`.                                                                                       |
 
 ### Insights CMS
 
@@ -35,6 +36,16 @@ before adding a new file.
 | `articles.functions.ts`     | The CMS RPC surface, with `assertStaff` guards.                                                                        |
 | `insights.functions.ts`     | Public reads for the published blog.                                                                                   |
 | `translations.functions.ts` | Per-locale translation rows and AI-assisted translation.                                                               |
+| `article-notifications.server.ts` | Review nudge: emails publishers when an article enters `review`. See `docs/article-publishing.md`.               |
+
+### Member guides
+
+| Module                             | Responsibility                                                                                             |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `guides.ts`                        | Client-safe types plus the tone and callout style maps. See `docs/member-guides.md`.                       |
+| `guides.server.ts` / `.functions.ts` | Public reads for `/guides` and `/guides/:slug`, merged to the reader's locale.                            |
+| `guides-admin.functions.ts`        | Editor CRUD for guides, sections, callouts and FAQ items, each behind `assertEditor`.                      |
+| `guide-translations.functions.ts`  | Flattened DE/FR/IT field map, load, save and whole-guide AI translation.                                   |
 
 ### Events
 
