@@ -156,6 +156,7 @@ wiring it up.
 | Index filters and labels      | `src/routes/_staff/articles.index.tsx`                                  |
 | Role grants and detail panel  | `src/routes/_staff/roles.tsx`, `src/components/cms/RoleDetailPanel.tsx` |
 | Role model and staff routing  | `src/lib/role-model.ts`, `src/lib/staff-guard.ts`                       |
+| Review nudge emails           | `src/lib/article-notifications.server.ts`                               |
 | Database guard                | `tg_articles_publish_guard` on `articles`                               |
 
 Status labels and action wording are translated in
