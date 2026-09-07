@@ -50,16 +50,46 @@ Two conditions gate the `publish` and `schedule` actions:
 2. The actor is **not** the article's `created_by`.
 
 `unpublish` requires the publishing right too, but not rule 2 — taking
-something offline is never the risky direction. Admins bypass both rules; see
-the table below. `created_by` is the account that
-created the record, deliberately distinct from the `author_id` shown to
+something offline is never the risky direction. Only the **Super Admin** grant
+(`admin`) bypasses both rules; see the table below. `created_by` is the account
+that created the record, deliberately distinct from the `author_id` shown to
 readers: a ghost-written piece is still blocked for the person who typed it.
 
-| Actor                | submit | publish own | publish other's | unpublish |
-| -------------------- | ------ | ----------- | --------------- | --------- |
-| Contributor / editor | yes    | no          | no              | no        |
-| Publisher            | yes    | no          | yes             | yes       |
-| Admin                | yes    | yes         | yes             | yes       |
+The **Administrator** grant (`administrator`) is a platform role, not an
+editorial one. It never confers publishing rights, and it never lifts the
+self-publish block: an administrator who also holds `publisher` still needs a
+second pair of eyes on their own article. `ArticlePermissions.isSuperAdmin` is
+true only for `admin` — the naming matters, because an earlier version of this
+flow treated any admin-ish grant as an override.
+
+| Actor                | submit | publish own | publish other's   | unpublish         |
+| -------------------- | ------ | ----------- | ----------------- | ----------------- |
+| Contributor / editor | yes    | no          | no                | no                |
+| Publisher            | yes    | no          | yes               | yes               |
+| Administrator        | yes    | no          | only as publisher | only as publisher |
+| Super Admin          | yes    | yes         | yes               | yes               |
+
+Whoever created the article sees a note in the editor saying another publisher
+has to review it, instead of a disabled button with no explanation.
+
+## The review nudge
+
+Submitting an article is now visible to the people who can act on it. When a
+transition moves an article into `review`, `notifyReviewRequested`
+(`src/lib/article-notifications.server.ts`) emails every account holding the
+`publisher` role — minus the submitter, who cannot publish it anyway.
+
+- Recipients are resolved from `user_roles` through the admin client, then
+  their addresses from the auth records; duplicates are dropped.
+- The mail uses the `article-review-request` template and carries the title,
+  the submitter's name, the language, the category and a link to the editor.
+- The idempotency key includes the article's `updated_at`, so retrying the same
+  submission is deduplicated while a genuine re-submission nudges again.
+- Sending is best effort: a failed email never undoes the submission.
+
+`articles.published_by` records who released an article; the article list shows
+it as the **Released by** column next to the author, so the four-eye trail is
+readable without opening each record.
 
 ## Enforced twice, on purpose
 
@@ -125,6 +155,7 @@ wiring it up.
 | Index filters and labels      | `src/routes/_staff/articles.index.tsx`                                  |
 | Role grants and detail panel  | `src/routes/_staff/roles.tsx`, `src/components/cms/RoleDetailPanel.tsx` |
 | Role model and staff routing  | `src/lib/role-model.ts`, `src/lib/staff-guard.ts`                       |
+| Review nudge emails           | `src/lib/article-notifications.server.ts`                               |
 | Database guard                | `tg_articles_publish_guard` on `articles`                               |
 
 Status labels and action wording are translated in
