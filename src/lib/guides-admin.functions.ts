@@ -139,11 +139,14 @@ export const updateGuide = createServerFn({ method: "POST" })
   .inputValidator((data) => guidePatchSchema.parse(data))
   .handler(async ({ data, context }) => {
     await assertEditor(context);
-    const values: Record<string, unknown> = { ...data.values };
-    // `published_at` records the first release; it is never taken from the client.
-    if (values.is_published === true) values.published_at = new Date().toISOString();
-    if (values.is_published === false) values.published_at = null;
+    // `published_at` records the release moment; it is never taken from the client.
+    const values = {
+      ...data.values,
+      ...(data.values.is_published === true ? { published_at: new Date().toISOString() } : {}),
+      ...(data.values.is_published === false ? { published_at: null } : {}),
+    };
     const { error } = await context.supabase.from("guides").update(values).eq("id", data.id);
+
     if (error) throw new Error(error.message);
     return { ok: true };
   });
