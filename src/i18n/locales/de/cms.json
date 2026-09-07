@@ -403,7 +403,32 @@
       "resend": "Einladung erneut senden",
       "result": "Ergebnis:"
     },
-    "colPilot": "Pilot"
+    "colPilot": "Pilot",
+    "signIn": {
+      "title": "Anmeldestatus",
+      "note": "Was das Konto selbst sagt. Ein Link zum Zurücksetzen geht immer an die untenstehende Adresse – nie an eine hier eingetippte.",
+      "loading": "Wird geladen…",
+      "notClaimed": "Dieses Mitglied hat noch kein Konto beansprucht.",
+      "address": "Anmeldeadresse",
+      "confirmed": "Adresse bestätigt",
+      "yes": "Ja",
+      "no": "Nein",
+      "lastSignIn": "Letzte Anmeldung",
+      "created": "Konto erstellt",
+      "pendingTitle": "Eine neue Adresse von ICF Global wartet auf Bestätigung",
+      "pendingBody": "Neue Adresse:",
+      "pendingHint": "Nur das Mitglied kann das bestätigen – über den Hinweis im Mitgliederbereich. Bis dahin bleibt die Anmeldung bei der aktuellen Adresse.",
+      "pendingBlockedTitle": "Die neue Adresse von ICF Global kann nicht verwendet werden",
+      "pendingBlockedHint": "Ein anderes Konto meldet sich bereits mit dieser Adresse an. Klären Sie die Dopplung, bevor die Änderung greifen kann.",
+      "sendReset": "Link zum Zurücksetzen senden",
+      "sending": "Wird gesendet…",
+      "refresh": "Aktualisieren",
+      "resetSent": "Link wurde gesendet.",
+      "reset_not_claimed": "Mit diesem Mitglied ist kein Konto verknüpft.",
+      "reset_no_address": "Das Konto hat keine Adresse.",
+      "reset_rate_limited": "Heute wurden bereits zu viele solcher E-Mails an diese Adresse gesendet. Bitte später erneut versuchen.",
+      "reset_failed": "Der Link konnte nicht gesendet werden."
+    }
   },
   "integration": {
     "title": "Integrationsstatus",
@@ -859,6 +884,21 @@
       "completedOn": "Abgeschlossen am",
       "serial": "Nummer",
       "open": "Öffnen"
+    },
+    "emailChange": {
+      "title": "Bestätigen Sie Ihre neue E-Mail-Adresse",
+      "body": "ICF Global meldet uns eine geänderte E-Mail-Adresse. Ihre Anmeldeadresse bleibt unverändert, bis Sie die neue bestätigen – senden Sie sich den Bestätigungslink und klicken Sie ihn im neuen Postfach an.",
+      "newAddress": "Neue Adresse",
+      "current": "Sie melden sich derzeit an mit",
+      "send": "Bestätigungslink senden",
+      "resend": "Link erneut senden",
+      "sending": "Wird gesendet…",
+      "hint": "Der Link geht an die neue Adresse.",
+      "sentHint": "Gesendet. Schauen Sie im neuen Postfach nach – der Link ist begrenzt gültig.",
+      "error": "Das hat nicht geklappt. Bitte versuchen Sie es erneut oder wenden Sie sich an das Büro.",
+      "blockedTitle": "Wir können Ihre Anmeldeadresse nicht ändern",
+      "blockedBody": "ICF Global meldet eine Adresse, die hier bereits ein anderes Konto nutzt. Deshalb können wir Ihre Anmeldung nicht darauf umstellen.",
+      "blockedHint": "Bitte wenden Sie sich an office@coachingfederation.ch, wir klären das."
     }
   },
   "noAccess": {
@@ -963,14 +1003,14 @@
   "roles": {
     "title": "Rollen",
     "intro": "Zwei Arten von Konten können sich anmelden: interne Administratorinnen und Administratoren, die keinen ICF-Mitgliedsdatensatz benötigen, und aktivierte Mitglieder, die mit einem importierten Mitgliedsdatensatz verknüpft sind. Der Redaktions-Zugriff wird hier zusätzlich zu einer aktivierten Mitgliedschaft gewährt — er ändert nie den Zugang zum Mitgliederbereich oder das Verzeichnisprofil. Ein Konto kann sowohl Mitglied als auch Administrator sein; diese Konten sind in der folgenden Tabelle aufgeführt, nicht unter den internen Konten.",
-    "searchPlaceholder": "Nach Name oder E-Mail suchen",
+    "searchPlaceholder": "Suche nach Name, E-Mail oder Mitgliedsnummer",
     "colName": "Mitglied",
     "colEmail": "E-Mail",
     "colAccess": "Zugriff",
     "memberBadge": "Mitglied",
     "editorBadge": "Redaktor",
     "loading": "Mitglieder werden geladen…",
-    "empty": "Noch keine aktivierten Mitgliederkonten.",
+    "empty": "Noch niemand hat eine Rolle über die gewöhnliche Mitgliedschaft hinaus. Suchen Sie oben nach einem Mitglied, um eine Rolle zu vergeben.",
     "loadError": "Rollendaten konnten nicht geladen werden.",
     "saveError": "Änderung konnte nicht gespeichert werden.",
     "adminOnly": "Nur Administratorinnen und Administratoren können Rollen verwalten.",
@@ -1051,7 +1091,10 @@
     "revokeAccount": "Konto entziehen",
     "revokeAccountConfirm": "Internes Konto von {name} entziehen? Alle Zugriffe werden entfernt und das Konto wird gelöscht. Das lässt sich nicht rückgängig machen.",
     "revokeAccountDone": "Internes Konto von {name} wurde entzogen.",
-    "revokeAccountAdminHint": "Super Admin zuerst deaktivieren, bevor dieses Konto entzogen wird."
+    "revokeAccountAdminHint": "Super Admin zuerst deaktivieren, bevor dieses Konto entzogen wird.",
+    "searchEmpty": "Kein verknüpftes Mitglied passt zu dieser Suche.",
+    "tableHint": "Aufgeführt sind nur Mitglieder mit einer Rolle über die gewöhnliche Mitgliedschaft hinaus. Wird die letzte Rolle entfernt, sind sie wieder gewöhnliche Mitglieder. Die Verknüpfung eines Kontos lösen Sie auf der Mitgliederdetailseite.",
+    "searchHint": "Alle passenden verknüpften Mitglieder werden angezeigt. Über «Verwalten» vergeben Sie eine Rolle."
   },
   "events": {
     "title": "Events",

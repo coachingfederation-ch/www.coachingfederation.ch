@@ -311,6 +311,44 @@ export const unbindMemberAccount = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+/**
+ * "Why can this member not sign in?" — the account facts staff need when a
+ * member calls the office: which address the account uses, whether it was
+ * confirmed, when it was last used, and any address change waiting for the
+ * member. No tokens, no password data.
+ */
+export const getMemberSignInHealth = createServerFn({ method: "POST" })
+  .inputValidator((input) => z.object({ memberId: z.string().uuid() }).parse(input))
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { loadSignInHealth } = await import("./member-email-change.server");
+    return await loadSignInHealth(data.memberId);
+  });
+
+/**
+ * Sends the standard reset mail to the address the account actually signs in
+ * with — never to a staff-supplied address, so this cannot be used to take a
+ * member's account over. The member still sets their own password.
+ */
+export const sendMemberPasswordReset = createServerFn({ method: "POST" })
+  .inputValidator((input) =>
+    z
+      .object({
+        memberId: z.string().uuid(),
+        locale: z.enum(["en", "de", "fr", "it"]).default("en"),
+        redirectOrigin: z.string().url().max(255),
+      })
+      .parse(input),
+  )
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context, data }) => {
+    const userId = await assertAdmin(context);
+    const { sendResetForMember } = await import("./member-admin.server");
+    return await sendResetForMember(userId, data.memberId, data.locale, data.redirectOrigin);
+  });
+
+
 /** Read model behind the claim-campaign card on /integration (admin only). */
 export const getClaimCampaign = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

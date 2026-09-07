@@ -33,7 +33,7 @@ function SponsorCard({
   aiLabel: string;
 }) {
   return (
-    <article className="group/card relative flex h-full w-[19rem] shrink-0 flex-col overflow-hidden rounded-3xl border border-white/10 bg-hero text-hero-foreground shadow-[0_25px_50px_-12px_color-mix(in_oklab,var(--hero)_45%,transparent)] sm:w-[21rem]">
+    <article className="group/card relative flex h-full w-[19rem] shrink-0 flex-col overflow-hidden rounded-3xl border border-white/10 bg-hero text-hero-foreground shadow-soft sm:w-[21rem]">
       <div className="relative h-44 w-full overflow-hidden">
         {item.image ? (
           <img
@@ -56,7 +56,7 @@ function SponsorCard({
       <div className="relative flex flex-1 flex-col p-7">
         <div className="flex items-center gap-2">
           <span aria-hidden="true" className="h-[2px] w-4 bg-accent" />
-          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
+          <p className="eyebrow-accent">
             {item.category}
           </p>
         </div>

@@ -150,3 +150,40 @@ type, keeps `next` same-origin, rebuilds the provider verification address from
 expiry are unchanged — only the address the member clicks moved. If the
 incoming URL cannot be parsed, the original link is sent unchanged so an auth
 email can never go out broken.
+
+## When ICF Global reports a new email address
+
+ICF Global masters contact data, but it is never allowed to move the address an
+account signs in with: an address handed to us by a third system has not been
+proven to belong to the person holding the account. So the sync splits the two.
+
+1. The feed value is written to `members.email` (contact data) as usual.
+2. For **claimed** records whose feed address no longer matches the auth
+   account's address, the sync parks it: `members.pending_email`,
+   `pending_email_since` and `email_change_state`
+   (`none` | `pending` | `sent` | `blocked`). `blocked` means another claimed
+   account already signs in with that address — staff have to resolve the
+   duplicate. Detection lives in `src/lib/member-email-change.server.ts` and is
+   called from `runMemberSync`; a failure there is logged as a warning and
+   never fails the run.
+3. The member sees a notice in the Member Area
+   (`src/components/member/EmailChangeNotice.tsx`) and presses one button.
+   `startEmailChangeConfirmation` (`src/lib/account-security.functions.ts`)
+   calls `auth.updateUser({ email })` **through the member's own session**, so
+   the provider sends its confirmation link to the new address. Nothing moves
+   until they click it. That mail is the `email_change` template, already
+   branded and already rewritten onto our own domain by the webhook above.
+4. Once the account actually signs in with the new address, the pending state
+   is cleared the next time it is read (sync, member notice, or staff panel).
+
+No admin can perform step 3 for someone — that would defeat the confirmation.
+
+### What staff can do
+
+`src/components/cms/MemberSignInHealthPanel.tsx` on the member detail page shows
+the account's own facts (sign-in address, whether it is confirmed, last sign-in,
+creation date, any pending address change) and offers one action: send a
+password reset link. The link always goes to the address the **account** holds —
+never one typed in by staff — so the control can restore access but can never
+redirect it. It shares the public form's per-address rate-limit buckets and
+writes a `member_password_reset_sent_by_staff` audit event.

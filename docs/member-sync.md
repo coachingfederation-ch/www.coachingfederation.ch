@@ -301,3 +301,11 @@ member. The panel's expandable run history shows all three without a query.
   member's behalf. See `docs/public-directory.md`.
 - Claiming and account binding are a separate flow with their own gating. See
   `docs/auth-and-claim-flow.md`.
+
+## Email changes from the feed
+
+A changed `email` on a claimed record does **not** move the sign-in address. The
+run parks the new address on the member record (`pending_email`,
+`email_change_state`) and logs `email_change_pending`, `email_change_blocked` or
+`email_change_detected`; the member confirms it themselves from the Member Area.
+Full flow in `docs/auth-and-claim-flow.md`.

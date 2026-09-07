@@ -31,6 +31,8 @@ import { joinCommunity } from "@/lib/community-join.functions";
 import { listPublicEvents } from "@/lib/events.functions";
 import { eventPlace, formatEventDate } from "@/lib/events";
 import { GuestPassesCard } from "./GuestPassesCard";
+import { EmailChangeNotice } from "./EmailChangeNotice";
+
 
 const ENGAGE_URL =
   "https://engage.coachingfederation.org/communities/community-home?CommunityKey=230cb83a-26a7-4ffb-a2c4-fd9309091489";
@@ -180,7 +182,12 @@ export function MemberHome() {
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("member.home.intro")}</p>
       </header>
 
+      <div className="mt-8">
+        <EmailChangeNotice />
+      </div>
+
       <div className="mt-8 grid gap-5 sm:grid-cols-2">
+
         <section className={CARD}>
           <UserRound className="h-5 w-5 text-primary" aria-hidden />
           <h2 className="mt-3 text-lg font-bold">{t("member.home.profile.title")}</h2>

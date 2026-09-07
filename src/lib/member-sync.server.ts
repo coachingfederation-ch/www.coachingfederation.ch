@@ -222,6 +222,37 @@ export async function runMemberSync(options: {
 
     await upsertFeedAndSnapshot({ feed, runId, now, changedByRecno, createdRecnos });
 
+    // A changed feed address must not silently move the address someone signs
+    // in with — park it and let the member confirm it. Never fatal: a failure
+    // here leaves the sign-in address exactly where it was.
+    try {
+      const emailChanged = [...changedByRecno.entries()]
+        .filter(([, fields]) => fields.includes("email"))
+        .map(([recno]) => recno);
+      if (emailChanged.length) {
+        const { detectEmailDriftForRun } = await import("./member-email-change.server");
+        const drift = await detectEmailDriftForRun(emailChanged, (type, message, extra) =>
+          logEvent(runId, type, message, extra),
+        );
+        if (drift.pending || drift.blocked) {
+          await logEvent(
+            runId,
+            "email_change_detected",
+            `${drift.pending} member(s) have to confirm a new sign-in address; ${drift.blocked} blocked.`,
+            { severity: drift.blocked ? "warning" : "info" },
+          );
+        }
+      }
+    } catch (driftError) {
+      await logEvent(
+        runId,
+        "email_change_failed",
+        driftError instanceof Error ? driftError.message : String(driftError),
+        { severity: "warning" },
+      );
+    }
+
+
     // Absent from the feed -> inactive, entering the grace window.
     const feedRecnos = new Set(feed.map((m) => m.cst_recno));
     const missing = [...byRecno.values()].filter(

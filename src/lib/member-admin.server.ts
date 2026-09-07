@@ -348,6 +348,65 @@ export async function unbindMemberAuthUser(actorUserId: string, memberId: string
 }
 
 /**
+ * Staff-triggered password reset.
+ *
+ * Deliberately narrow: the mail always goes to the address the auth account
+ * itself holds, never to one staff types in, so this helper can restore access
+ * but can never redirect it. Rate limited on the same buckets as the public
+ * form so an internal caller cannot mail-bomb a member either.
+ */
+export async function sendResetForMember(
+  actorUserId: string,
+  memberId: string,
+  locale: "en" | "de" | "fr" | "it",
+  redirectOrigin: string,
+): Promise<{ ok: boolean; reason?: "not_claimed" | "no_address" | "rate_limited" | "failed" }> {
+  const { data: member, error } = await supabaseAdmin
+    .from("members")
+    .select("auth_user_id")
+    .eq("id", memberId)
+    .maybeSingle();
+  if (error) throw error;
+  if (!member?.auth_user_id) return { ok: false, reason: "not_claimed" };
+
+  const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.getUserById(
+    member.auth_user_id,
+  );
+  if (authError) throw authError;
+  const email = authUser.user?.email;
+  if (!email) return { ok: false, reason: "no_address" };
+
+  const { checkRateLimit } = await import("./rate-limit.server");
+  const allowed = await checkRateLimit("password-reset-email", `email:${email.toLowerCase()}`, [
+    { windowSeconds: 3_600, max: 3 },
+    { windowSeconds: 86_400, max: 8 },
+  ]);
+  if (!allowed.allowed) return { ok: false, reason: "rate_limited" };
+
+  const origin = redirectOrigin.replace(/\/$/, "");
+  const { publicSupabaseClient } = await import("./supabase-public.server");
+  const { error: sendError } = await publicSupabaseClient().auth.resetPasswordForEmail(email, {
+    redirectTo: `${origin}/reset-password?lang=${locale}`,
+  });
+  if (sendError) {
+    console.error("staff password reset failed", sendError.message);
+    return { ok: false, reason: "failed" };
+  }
+
+  await supabaseAdmin.from("member_sync_events").insert({
+    member_id: memberId,
+    event_type: "member_password_reset_sent_by_staff",
+    severity: "info",
+    message: "Staff sent a password reset link to the account's own address.",
+    actor_user_id: actorUserId,
+    details: {},
+  });
+
+  return { ok: true };
+}
+
+
+/**
  * Claim readiness for the members list.
  *
  * Derived, never stored: a member is `claimed` once the explicit `auth_user_id`
