@@ -3502,6 +3502,216 @@ export type Database = {
           },
         ]
       }
+      guide_section_translations: {
+        Row: {
+          body: string
+          callout: string
+          created_at: string
+          eyebrow: string
+          heading: string
+          id: string
+          lead: string
+          locale: string
+          manually_edited: boolean
+          section_id: string
+          source_updated_at: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          callout?: string
+          created_at?: string
+          eyebrow?: string
+          heading?: string
+          id?: string
+          lead?: string
+          locale: string
+          manually_edited?: boolean
+          section_id: string
+          source_updated_at?: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          callout?: string
+          created_at?: string
+          eyebrow?: string
+          heading?: string
+          id?: string
+          lead?: string
+          locale?: string
+          manually_edited?: boolean
+          section_id?: string
+          source_updated_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_section_translations_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "guide_sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guide_sections: {
+        Row: {
+          body: string
+          callout: string
+          created_at: string
+          eyebrow: string
+          guide_id: string
+          heading: string
+          id: string
+          lead: string
+          position: number
+          tone: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          callout?: string
+          created_at?: string
+          eyebrow?: string
+          guide_id: string
+          heading?: string
+          id?: string
+          lead?: string
+          position?: number
+          tone?: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          callout?: string
+          created_at?: string
+          eyebrow?: string
+          guide_id?: string
+          heading?: string
+          id?: string
+          lead?: string
+          position?: number
+          tone?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_sections_guide_id_fkey"
+            columns: ["guide_id"]
+            isOneToOne: false
+            referencedRelation: "guides"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guide_translations: {
+        Row: {
+          created_at: string
+          eyebrow: string
+          footnote: string
+          guide_id: string
+          id: string
+          intro: string
+          locale: string
+          manually_edited: boolean
+          source_updated_at: string
+          summary: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          eyebrow?: string
+          footnote?: string
+          guide_id: string
+          id?: string
+          intro?: string
+          locale: string
+          manually_edited?: boolean
+          source_updated_at?: string
+          summary?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          eyebrow?: string
+          footnote?: string
+          guide_id?: string
+          id?: string
+          intro?: string
+          locale?: string
+          manually_edited?: boolean
+          source_updated_at?: string
+          summary?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_translations_guide_id_fkey"
+            columns: ["guide_id"]
+            isOneToOne: false
+            referencedRelation: "guides"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guides: {
+        Row: {
+          contact_email: string | null
+          content_updated_at: string
+          created_at: string
+          eyebrow: string
+          footnote: string
+          id: string
+          intro: string
+          is_published: boolean
+          published_at: string | null
+          slug: string
+          sort_order: number
+          summary: string
+          title: string
+          updated_at: string
+          version_label: string
+        }
+        Insert: {
+          contact_email?: string | null
+          content_updated_at?: string
+          created_at?: string
+          eyebrow?: string
+          footnote?: string
+          id?: string
+          intro?: string
+          is_published?: boolean
+          published_at?: string | null
+          slug: string
+          sort_order?: number
+          summary?: string
+          title?: string
+          updated_at?: string
+          version_label?: string
+        }
+        Update: {
+          contact_email?: string | null
+          content_updated_at?: string
+          created_at?: string
+          eyebrow?: string
+          footnote?: string
+          id?: string
+          intro?: string
+          is_published?: boolean
+          published_at?: string | null
+          slug?: string
+          sort_order?: number
+          summary?: string
+          title?: string
+          updated_at?: string
+          version_label?: string
+        }
+        Relationships: []
+      }
       integration_config: {
         Row: {
           account_claim_enabled: boolean

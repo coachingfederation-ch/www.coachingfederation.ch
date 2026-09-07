@@ -25,7 +25,8 @@
     "guestPasses": "Guest passes",
     "memberEngagement": "Member engagement",
     "overview": "Overview",
-    "editorialSignals": "Editorial signals"
+    "editorialSignals": "Editorial signals",
+    "guides": "Member guides"
   },
   "auth": {
     "signInSub": "Sign in to continue",
@@ -2579,5 +2580,41 @@
     "noComments": "No comments yet.",
     "perArticle": "By article",
     "article": "Article"
+  },
+  "guides": {
+    "title": "Member guides",
+    "subtitle": "Write the English source here, then translate it into German, French and Italian. Only published guides are visible on the website.",
+    "details": "Guide details",
+    "sections": "Sections",
+    "section": "Section",
+    "draft": "Draft",
+    "published": "Published on the website",
+    "newTitle": "New guide title",
+    "add": "Add guide",
+    "addSection": "Add section",
+    "delete": "Delete guide",
+    "deleteSection": "Delete section",
+    "confirmDelete": "Delete this guide and all its sections?",
+    "emptyState": "Select a guide, or add your first one.",
+    "fieldTitle": "Title",
+    "fieldSlug": "Web address",
+    "fieldEyebrow": "Eyebrow",
+    "fieldSummary": "Summary",
+    "fieldIntro": "Introduction",
+    "fieldFootnote": "Footnote",
+    "fieldVersion": "Version label",
+    "fieldContact": "Contact e-mail",
+    "fieldOrder": "Order",
+    "fieldTone": "Tone",
+    "fieldHeading": "Heading",
+    "fieldLead": "Lead",
+    "fieldBody": "Body",
+    "fieldCallout": "Callout",
+    "tone": {
+      "neutral": "Neutral",
+      "positive": "Encouraged",
+      "caution": "Take care",
+      "critical": "Not allowed"
+    }
   }
 }

@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "title": "Guide — The Switzerland Chapter of ICF",
+    "description": "Indicazioni pratiche per i membri e i volontari di The Switzerland Chapter of ICF."
+  },
+  "hero": {
+    "eyebrow": "Per membri e volontari",
+    "titlePre": "Guide per restare ",
+    "titleAccent": "chiari e coerenti",
+    "lede": "Indicazioni pratiche per i momenti in cui parlate, scrivete o agite a nome del nostro chapter."
+  },
+  "loading": "Caricamento…",
+  "empty": "Non ci sono ancora guide pubblicate. Torna presto a trovarci.",
+  "backToAll": "Tutte le guide",
+  "missing": {
+    "title": "Non abbiamo trovato questa guida",
+    "body": "Potrebbe essere stata rinominata o non essere ancora pubblicata."
+  },
+  "contact": {
+    "eyebrow": "Domande",
+    "body": "Se non sai come applicare una regola alla tua situazione, scrivici prima di pubblicare."
+  }
+}

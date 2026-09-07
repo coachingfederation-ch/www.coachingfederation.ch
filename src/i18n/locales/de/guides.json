@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "title": "Leitfäden — The Switzerland Chapter of ICF",
+    "description": "Praktische Leitfäden für Mitglieder und Freiwillige von The Switzerland Chapter of ICF."
+  },
+  "hero": {
+    "eyebrow": "Für Mitglieder und Freiwillige",
+    "titlePre": "Leitfäden für ein ",
+    "titleAccent": "klares, stimmiges Auftreten",
+    "lede": "Praktische Orientierung für Momente, in denen Sie im Namen unseres Chapters sprechen, schreiben oder handeln."
+  },
+  "loading": "Wird geladen…",
+  "empty": "Es sind noch keine Leitfäden veröffentlicht. Schauen Sie bald wieder vorbei.",
+  "backToAll": "Alle Leitfäden",
+  "missing": {
+    "title": "Diesen Leitfaden konnten wir nicht finden",
+    "body": "Möglicherweise wurde er umbenannt oder ist noch nicht veröffentlicht."
+  },
+  "contact": {
+    "eyebrow": "Fragen",
+    "body": "Wenn Sie unsicher sind, wie eine Regel auf Ihre Situation zutrifft, schreiben Sie uns, bevor Sie posten."
+  }
+}

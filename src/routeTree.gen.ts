@@ -69,6 +69,8 @@ import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as FormTokenRouteImport } from './routes/form.$token'
 import { Route as GuestPassTokenRouteImport } from './routes/guest-pass.$token'
+import { Route as GuidesIndexRouteImport } from './routes/guides.index'
+import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as InsightsIdRouteImport } from './routes/insights.$id'
 import { Route as NewslettersIndexRouteImport } from './routes/newsletters.index'
@@ -81,6 +83,8 @@ import { Route as LocaleCommunitiesIndexRouteImport } from './routes/$locale/com
 import { Route as LocaleCommunitiesSlugRouteImport } from './routes/$locale/communities.$slug'
 import { Route as LocaleEventsIndexRouteImport } from './routes/$locale/events.index'
 import { Route as LocaleEventsSlugRouteImport } from './routes/$locale/events.$slug'
+import { Route as LocaleGuidesIndexRouteImport } from './routes/$locale/guides.index'
+import { Route as LocaleGuidesSlugRouteImport } from './routes/$locale/guides.$slug'
 import { Route as LocaleInsightsIndexRouteImport } from './routes/$locale/insights.index'
 import { Route as LocaleInsightsIdRouteImport } from './routes/$locale/insights.$id'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
@@ -96,6 +100,7 @@ import { Route as StaffManageEditorialSignalsRouteImport } from './routes/_staff
 import { Route as StaffManageEuropePulseRouteImport } from './routes/_staff/manage.europe-pulse'
 import { Route as StaffManageGovernanceRouteImport } from './routes/_staff/manage.governance'
 import { Route as StaffManageGuestPassesRouteImport } from './routes/_staff/manage.guest-passes'
+import { Route as StaffManageGuidesRouteImport } from './routes/_staff/manage.guides'
 import { Route as StaffManageKnowledgeRouteImport } from './routes/_staff/manage.knowledge'
 import { Route as StaffManageLiveChatRouteImport } from './routes/_staff/manage.live-chat'
 import { Route as StaffManageMemberEngagementRouteImport } from './routes/_staff/manage.member-engagement'
@@ -439,6 +444,16 @@ const GuestPassTokenRoute = GuestPassTokenRouteImport.update({
   path: '/guest-pass/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidesIndexRoute = GuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesSlugRoute = GuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InsightsIndexRoute = InsightsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -497,6 +512,16 @@ const LocaleEventsIndexRoute = LocaleEventsIndexRouteImport.update({
 const LocaleEventsSlugRoute = LocaleEventsSlugRouteImport.update({
   id: '/events/$slug',
   path: '/events/$slug',
+  getParentRoute: () => LocaleRouteRoute,
+} as any)
+const LocaleGuidesIndexRoute = LocaleGuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => LocaleRouteRoute,
+} as any)
+const LocaleGuidesSlugRoute = LocaleGuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
   getParentRoute: () => LocaleRouteRoute,
 } as any)
 const LocaleInsightsIndexRoute = LocaleInsightsIndexRouteImport.update({
@@ -575,6 +600,11 @@ const StaffManageGovernanceRoute = StaffManageGovernanceRouteImport.update({
 const StaffManageGuestPassesRoute = StaffManageGuestPassesRouteImport.update({
   id: '/manage/guest-passes',
   path: '/manage/guest-passes',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
+const StaffManageGuidesRoute = StaffManageGuidesRouteImport.update({
+  id: '/manage/guides',
+  path: '/manage/guides',
   getParentRoute: () => StaffRouteRoute,
 } as any)
 const StaffManageKnowledgeRoute = StaffManageKnowledgeRouteImport.update({
@@ -855,6 +885,7 @@ export interface FileRoutesByFullPath {
   '/events/$slug': typeof EventsSlugRoute
   '/form/$token': typeof FormTokenRoute
   '/guest-pass/$token': typeof GuestPassTokenRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/insights/$id': typeof InsightsIdRoute
   '/newsletters/$slug': typeof NewslettersSlugRoute
   '/ticket/$token': typeof TicketTokenRoute
@@ -863,12 +894,14 @@ export interface FileRoutesByFullPath {
   '/claim/': typeof ClaimIndexRoute
   '/communities/': typeof CommunitiesIndexRoute
   '/events/': typeof EventsIndexRoute
+  '/guides/': typeof GuidesIndexRoute
   '/insights/': typeof InsightsIndexRoute
   '/newsletters/': typeof NewslettersIndexRoute
   '/volunteer-login/': typeof VolunteerLoginIndexRoute
   '/$locale/coach/$profileId': typeof LocaleCoachProfileIdRoute
   '/$locale/communities/$slug': typeof LocaleCommunitiesSlugRoute
   '/$locale/events/$slug': typeof LocaleEventsSlugRoute
+  '/$locale/guides/$slug': typeof LocaleGuidesSlugRoute
   '/$locale/insights/$id': typeof LocaleInsightsIdRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -881,6 +914,7 @@ export interface FileRoutesByFullPath {
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/manage/governance': typeof StaffManageGovernanceRoute
   '/manage/guest-passes': typeof StaffManageGuestPassesRoute
+  '/manage/guides': typeof StaffManageGuidesRoute
   '/manage/knowledge': typeof StaffManageKnowledgeRoute
   '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/manage/member-engagement': typeof StaffManageMemberEngagementRoute
@@ -905,6 +939,7 @@ export interface FileRoutesByFullPath {
   '/verify/certificate/$token': typeof VerifyCertificateTokenRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
+  '/$locale/guides/': typeof LocaleGuidesIndexRoute
   '/$locale/insights/': typeof LocaleInsightsIndexRoute
   '/articles/': typeof StaffArticlesIndexRoute
   '/manage/': typeof StaffManageIndexRoute
@@ -979,6 +1014,7 @@ export interface FileRoutesByTo {
   '/events/$slug': typeof EventsSlugRoute
   '/form/$token': typeof FormTokenRoute
   '/guest-pass/$token': typeof GuestPassTokenRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/insights/$id': typeof InsightsIdRoute
   '/newsletters/$slug': typeof NewslettersSlugRoute
   '/ticket/$token': typeof TicketTokenRoute
@@ -987,12 +1023,14 @@ export interface FileRoutesByTo {
   '/claim': typeof ClaimIndexRoute
   '/communities': typeof CommunitiesIndexRoute
   '/events': typeof EventsIndexRoute
+  '/guides': typeof GuidesIndexRoute
   '/insights': typeof InsightsIndexRoute
   '/newsletters': typeof NewslettersIndexRoute
   '/volunteer-login': typeof VolunteerLoginIndexRoute
   '/$locale/coach/$profileId': typeof LocaleCoachProfileIdRoute
   '/$locale/communities/$slug': typeof LocaleCommunitiesSlugRoute
   '/$locale/events/$slug': typeof LocaleEventsSlugRoute
+  '/$locale/guides/$slug': typeof LocaleGuidesSlugRoute
   '/$locale/insights/$id': typeof LocaleInsightsIdRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -1005,6 +1043,7 @@ export interface FileRoutesByTo {
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/manage/governance': typeof StaffManageGovernanceRoute
   '/manage/guest-passes': typeof StaffManageGuestPassesRoute
+  '/manage/guides': typeof StaffManageGuidesRoute
   '/manage/knowledge': typeof StaffManageKnowledgeRoute
   '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/manage/member-engagement': typeof StaffManageMemberEngagementRoute
@@ -1029,6 +1068,7 @@ export interface FileRoutesByTo {
   '/verify/certificate/$token': typeof VerifyCertificateTokenRoute
   '/$locale/communities': typeof LocaleCommunitiesIndexRoute
   '/$locale/events': typeof LocaleEventsIndexRoute
+  '/$locale/guides': typeof LocaleGuidesIndexRoute
   '/$locale/insights': typeof LocaleInsightsIndexRoute
   '/articles': typeof StaffArticlesIndexRoute
   '/manage': typeof StaffManageIndexRoute
@@ -1110,6 +1150,7 @@ export interface FileRoutesById {
   '/events/$slug': typeof EventsSlugRoute
   '/form/$token': typeof FormTokenRoute
   '/guest-pass/$token': typeof GuestPassTokenRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/insights/$id': typeof InsightsIdRoute
   '/newsletters/$slug': typeof NewslettersSlugRoute
   '/ticket/$token': typeof TicketTokenRoute
@@ -1118,12 +1159,14 @@ export interface FileRoutesById {
   '/claim/': typeof ClaimIndexRoute
   '/communities/': typeof CommunitiesIndexRoute
   '/events/': typeof EventsIndexRoute
+  '/guides/': typeof GuidesIndexRoute
   '/insights/': typeof InsightsIndexRoute
   '/newsletters/': typeof NewslettersIndexRoute
   '/volunteer-login/': typeof VolunteerLoginIndexRoute
   '/$locale/coach/$profileId': typeof LocaleCoachProfileIdRoute
   '/$locale/communities/$slug': typeof LocaleCommunitiesSlugRoute
   '/$locale/events/$slug': typeof LocaleEventsSlugRoute
+  '/$locale/guides/$slug': typeof LocaleGuidesSlugRoute
   '/$locale/insights/$id': typeof LocaleInsightsIdRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -1136,6 +1179,7 @@ export interface FileRoutesById {
   '/_staff/manage/europe-pulse': typeof StaffManageEuropePulseRoute
   '/_staff/manage/governance': typeof StaffManageGovernanceRoute
   '/_staff/manage/guest-passes': typeof StaffManageGuestPassesRoute
+  '/_staff/manage/guides': typeof StaffManageGuidesRoute
   '/_staff/manage/knowledge': typeof StaffManageKnowledgeRoute
   '/_staff/manage/live-chat': typeof StaffManageLiveChatRoute
   '/_staff/manage/member-engagement': typeof StaffManageMemberEngagementRoute
@@ -1160,6 +1204,7 @@ export interface FileRoutesById {
   '/verify/certificate/$token': typeof VerifyCertificateTokenRoute
   '/$locale/communities/': typeof LocaleCommunitiesIndexRoute
   '/$locale/events/': typeof LocaleEventsIndexRoute
+  '/$locale/guides/': typeof LocaleGuidesIndexRoute
   '/$locale/insights/': typeof LocaleInsightsIndexRoute
   '/_staff/articles/': typeof StaffArticlesIndexRoute
   '/_staff/manage/': typeof StaffManageIndexRoute
@@ -1240,6 +1285,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/form/$token'
     | '/guest-pass/$token'
+    | '/guides/$slug'
     | '/insights/$id'
     | '/newsletters/$slug'
     | '/ticket/$token'
@@ -1248,12 +1294,14 @@ export interface FileRouteTypes {
     | '/claim/'
     | '/communities/'
     | '/events/'
+    | '/guides/'
     | '/insights/'
     | '/newsletters/'
     | '/volunteer-login/'
     | '/$locale/coach/$profileId'
     | '/$locale/communities/$slug'
     | '/$locale/events/$slug'
+    | '/$locale/guides/$slug'
     | '/$locale/insights/$id'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -1266,6 +1314,7 @@ export interface FileRouteTypes {
     | '/manage/europe-pulse'
     | '/manage/governance'
     | '/manage/guest-passes'
+    | '/manage/guides'
     | '/manage/knowledge'
     | '/manage/live-chat'
     | '/manage/member-engagement'
@@ -1290,6 +1339,7 @@ export interface FileRouteTypes {
     | '/verify/certificate/$token'
     | '/$locale/communities/'
     | '/$locale/events/'
+    | '/$locale/guides/'
     | '/$locale/insights/'
     | '/articles/'
     | '/manage/'
@@ -1364,6 +1414,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/form/$token'
     | '/guest-pass/$token'
+    | '/guides/$slug'
     | '/insights/$id'
     | '/newsletters/$slug'
     | '/ticket/$token'
@@ -1372,12 +1423,14 @@ export interface FileRouteTypes {
     | '/claim'
     | '/communities'
     | '/events'
+    | '/guides'
     | '/insights'
     | '/newsletters'
     | '/volunteer-login'
     | '/$locale/coach/$profileId'
     | '/$locale/communities/$slug'
     | '/$locale/events/$slug'
+    | '/$locale/guides/$slug'
     | '/$locale/insights/$id'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -1390,6 +1443,7 @@ export interface FileRouteTypes {
     | '/manage/europe-pulse'
     | '/manage/governance'
     | '/manage/guest-passes'
+    | '/manage/guides'
     | '/manage/knowledge'
     | '/manage/live-chat'
     | '/manage/member-engagement'
@@ -1414,6 +1468,7 @@ export interface FileRouteTypes {
     | '/verify/certificate/$token'
     | '/$locale/communities'
     | '/$locale/events'
+    | '/$locale/guides'
     | '/$locale/insights'
     | '/articles'
     | '/manage'
@@ -1494,6 +1549,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/form/$token'
     | '/guest-pass/$token'
+    | '/guides/$slug'
     | '/insights/$id'
     | '/newsletters/$slug'
     | '/ticket/$token'
@@ -1502,12 +1558,14 @@ export interface FileRouteTypes {
     | '/claim/'
     | '/communities/'
     | '/events/'
+    | '/guides/'
     | '/insights/'
     | '/newsletters/'
     | '/volunteer-login/'
     | '/$locale/coach/$profileId'
     | '/$locale/communities/$slug'
     | '/$locale/events/$slug'
+    | '/$locale/guides/$slug'
     | '/$locale/insights/$id'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -1520,6 +1578,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/europe-pulse'
     | '/_staff/manage/governance'
     | '/_staff/manage/guest-passes'
+    | '/_staff/manage/guides'
     | '/_staff/manage/knowledge'
     | '/_staff/manage/live-chat'
     | '/_staff/manage/member-engagement'
@@ -1544,6 +1603,7 @@ export interface FileRouteTypes {
     | '/verify/certificate/$token'
     | '/$locale/communities/'
     | '/$locale/events/'
+    | '/$locale/guides/'
     | '/$locale/insights/'
     | '/_staff/articles/'
     | '/_staff/manage/'
@@ -1604,12 +1664,14 @@ export interface RootRouteChildren {
   EventsSlugRoute: typeof EventsSlugRoute
   FormTokenRoute: typeof FormTokenRoute
   GuestPassTokenRoute: typeof GuestPassTokenRoute
+  GuidesSlugRoute: typeof GuidesSlugRoute
   NewslettersSlugRoute: typeof NewslettersSlugRoute
   TicketTokenRoute: typeof TicketTokenRoute
   VolunteerLoginTokenRoute: typeof VolunteerLoginTokenRoute
   ClaimIndexRoute: typeof ClaimIndexRoute
   CommunitiesIndexRoute: typeof CommunitiesIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
+  GuidesIndexRoute: typeof GuidesIndexRoute
   NewslettersIndexRoute: typeof NewslettersIndexRoute
   VolunteerLoginIndexRoute: typeof VolunteerLoginIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -2064,6 +2126,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuestPassTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guides/': {
+      id: '/guides/'
+      path: '/guides'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof GuidesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/$slug': {
+      id: '/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/guides/$slug'
+      preLoaderRoute: typeof GuidesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/insights/': {
       id: '/insights/'
       path: '/'
@@ -2146,6 +2222,20 @@ declare module '@tanstack/react-router' {
       path: '/events/$slug'
       fullPath: '/$locale/events/$slug'
       preLoaderRoute: typeof LocaleEventsSlugRouteImport
+      parentRoute: typeof LocaleRouteRoute
+    }
+    '/$locale/guides/': {
+      id: '/$locale/guides/'
+      path: '/guides'
+      fullPath: '/$locale/guides/'
+      preLoaderRoute: typeof LocaleGuidesIndexRouteImport
+      parentRoute: typeof LocaleRouteRoute
+    }
+    '/$locale/guides/$slug': {
+      id: '/$locale/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/$locale/guides/$slug'
+      preLoaderRoute: typeof LocaleGuidesSlugRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
     '/$locale/insights/': {
@@ -2251,6 +2341,13 @@ declare module '@tanstack/react-router' {
       path: '/manage/guest-passes'
       fullPath: '/manage/guest-passes'
       preLoaderRoute: typeof StaffManageGuestPassesRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/guides': {
+      id: '/_staff/manage/guides'
+      path: '/manage/guides'
+      fullPath: '/manage/guides'
+      preLoaderRoute: typeof StaffManageGuidesRouteImport
       parentRoute: typeof StaffRouteRoute
     }
     '/_staff/manage/knowledge': {
@@ -2572,8 +2669,10 @@ interface LocaleRouteRouteChildren {
   LocaleCoachProfileIdRoute: typeof LocaleCoachProfileIdRoute
   LocaleCommunitiesSlugRoute: typeof LocaleCommunitiesSlugRoute
   LocaleEventsSlugRoute: typeof LocaleEventsSlugRoute
+  LocaleGuidesSlugRoute: typeof LocaleGuidesSlugRoute
   LocaleCommunitiesIndexRoute: typeof LocaleCommunitiesIndexRoute
   LocaleEventsIndexRoute: typeof LocaleEventsIndexRoute
+  LocaleGuidesIndexRoute: typeof LocaleGuidesIndexRoute
 }
 
 const LocaleRouteRouteChildren: LocaleRouteRouteChildren = {
@@ -2591,8 +2690,10 @@ const LocaleRouteRouteChildren: LocaleRouteRouteChildren = {
   LocaleCoachProfileIdRoute: LocaleCoachProfileIdRoute,
   LocaleCommunitiesSlugRoute: LocaleCommunitiesSlugRoute,
   LocaleEventsSlugRoute: LocaleEventsSlugRoute,
+  LocaleGuidesSlugRoute: LocaleGuidesSlugRoute,
   LocaleCommunitiesIndexRoute: LocaleCommunitiesIndexRoute,
   LocaleEventsIndexRoute: LocaleEventsIndexRoute,
+  LocaleGuidesIndexRoute: LocaleGuidesIndexRoute,
 }
 
 const LocaleRouteRouteWithChildren = LocaleRouteRoute._addFileChildren(
@@ -2659,6 +2760,7 @@ interface StaffRouteRouteChildren {
   StaffManageEuropePulseRoute: typeof StaffManageEuropePulseRoute
   StaffManageGovernanceRoute: typeof StaffManageGovernanceRoute
   StaffManageGuestPassesRoute: typeof StaffManageGuestPassesRoute
+  StaffManageGuidesRoute: typeof StaffManageGuidesRoute
   StaffManageKnowledgeRoute: typeof StaffManageKnowledgeRoute
   StaffManageLiveChatRoute: typeof StaffManageLiveChatRoute
   StaffManageMemberEngagementRoute: typeof StaffManageMemberEngagementRoute
@@ -2689,6 +2791,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffManageEuropePulseRoute: StaffManageEuropePulseRoute,
   StaffManageGovernanceRoute: StaffManageGovernanceRoute,
   StaffManageGuestPassesRoute: StaffManageGuestPassesRoute,
+  StaffManageGuidesRoute: StaffManageGuidesRoute,
   StaffManageKnowledgeRoute: StaffManageKnowledgeRoute,
   StaffManageLiveChatRoute: StaffManageLiveChatRoute,
   StaffManageMemberEngagementRoute: StaffManageMemberEngagementRoute,
@@ -2772,12 +2875,14 @@ const rootRouteChildren: RootRouteChildren = {
   EventsSlugRoute: EventsSlugRoute,
   FormTokenRoute: FormTokenRoute,
   GuestPassTokenRoute: GuestPassTokenRoute,
+  GuidesSlugRoute: GuidesSlugRoute,
   NewslettersSlugRoute: NewslettersSlugRoute,
   TicketTokenRoute: TicketTokenRoute,
   VolunteerLoginTokenRoute: VolunteerLoginTokenRoute,
   ClaimIndexRoute: ClaimIndexRoute,
   CommunitiesIndexRoute: CommunitiesIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
+  GuidesIndexRoute: GuidesIndexRoute,
   NewslettersIndexRoute: NewslettersIndexRoute,
   VolunteerLoginIndexRoute: VolunteerLoginIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
