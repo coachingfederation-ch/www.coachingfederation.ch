@@ -65,3 +65,21 @@ from the site language.
 Directory _search_ deliberately matches primary-language text only.
 Translations are a display concern; making them searchable would need a
 per-locale index that the current volume does not justify.
+
+## Correspondence language
+
+Separate from the *profile* languages above: a member also chooses the language
+we write **to** them in. It is one column, `members.correspondence_locale`
+(`en` / `de` / `fr` / `it`, nullable), edited in `/my-profile` under
+*Correspondence language* (`CorrespondenceSection.tsx`, state in
+`useMemberProfileForm.ts`), validated in `member-profile.functions.ts` and
+written by `member-profile.server.ts`.
+
+Outgoing member mail follows it: the engagement dispatcher selects campaign copy
+with `pickCopy(campaign.copy, member.correspondence_locale)`
+(`src/lib/member-engagement/dispatch.server.ts`). A null value means "no
+preference recorded" and falls back to English.
+
+The two settings answer different questions and must not be conflated: the
+profile's `primary_locale` is what the *public* reads on the coach's directory
+page; `correspondence_locale` is what *we* send them.
