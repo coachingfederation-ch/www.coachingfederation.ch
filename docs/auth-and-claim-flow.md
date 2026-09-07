@@ -137,3 +137,16 @@ Two traps:
   layout.
 - Client-side `functionMiddleware` in `src/start.ts` attaches the bearer token.
   Append to that array; do not replace it.
+
+## Auth email links go through our own domain
+
+Auth emails never contain the backend provider's host. The webhook
+(`src/routes/lovable/email/auth/webhook.ts`) rewrites every `confirmationUrl`
+into `https://new.coachingfederation.ch/auth/confirm?token=…&type=…&next=…`.
+
+`src/routes/auth.confirm.ts` is a public server route that validates the action
+type, keeps `next` same-origin, rebuilds the provider verification address from
+`SUPABASE_URL` server-side, and 302s to it. Token issuing, validation and
+expiry are unchanged — only the address the member clicks moved. If the
+incoming URL cannot be parsed, the original link is sent unchanged so an auth
+email can never go out broken.

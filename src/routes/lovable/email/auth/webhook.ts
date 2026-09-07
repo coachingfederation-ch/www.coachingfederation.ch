@@ -14,6 +14,32 @@ const SENDER_DOMAIN = "notify.coachingfederation.ch";
 const ROOT_DOMAIN = "coachingfederation.ch";
 const FROM_DOMAIN = "notify.coachingfederation.ch";
 const SITE_URL = `https://${ROOT_DOMAIN}`;
+/** Host that owns the links inside auth emails (must serve /auth/confirm). */
+const LINK_ORIGIN = "https://new.coachingfederation.ch";
+
+/**
+ * Rewrites the provider's verification address into one on the chapter domain.
+ * `/auth/confirm` redirects back to the provider server-side, so members never
+ * see a foreign host. Any parsing failure falls back to the original URL —
+ * a plain-looking link is never worth a broken one.
+ */
+function chapterAuthUrl(rawUrl: string): string {
+  try {
+    const outer = new URL(rawUrl);
+    const token = outer.searchParams.get("token");
+    const type = outer.searchParams.get("type");
+    if (!token || !type) return rawUrl;
+    const redirect = outer.searchParams.get("redirect_to");
+    const next = redirect ? new URL(redirect) : null;
+    const link = new URL("/auth/confirm", LINK_ORIGIN);
+    link.searchParams.set("token", token);
+    link.searchParams.set("type", type);
+    link.searchParams.set("next", next ? `${next.pathname}${next.search}` : "/");
+    return link.toString();
+  } catch {
+    return rawUrl;
+  }
+}
 
 /**
  * The reset link carries the language the member chose on the sign-in screen
@@ -51,7 +77,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
                   siteName: SITE_NAME,
                   siteUrl: SITE_URL,
                   recipient: data.email,
-                  confirmationUrl: data.url,
+                  confirmationUrl: chapterAuthUrl(data.url),
                 }),
             },
             invite: {
@@ -60,7 +86,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
                 React.createElement(InviteEmail, {
                   siteName: SITE_NAME,
                   siteUrl: SITE_URL,
-                  confirmationUrl: data.url,
+                  confirmationUrl: chapterAuthUrl(data.url),
                 }),
             },
             magiclink: {
@@ -68,7 +94,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
               render: (data) =>
                 React.createElement(MagicLinkEmail, {
                   siteName: SITE_NAME,
-                  confirmationUrl: data.url,
+                  confirmationUrl: chapterAuthUrl(data.url),
                 }),
             },
             // Function form: the subject is localised alongside the body.
@@ -77,7 +103,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
               return {
                 subject: recoverySubject(locale),
                 element: React.createElement(RecoveryEmail, {
-                  confirmationUrl: data.url,
+                  confirmationUrl: chapterAuthUrl(data.url),
                   locale,
                 }),
               };
@@ -90,7 +116,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
                   oldEmail: data.old_email ?? "",
                   email: data.email,
                   newEmail: data.new_email ?? "",
-                  confirmationUrl: data.url,
+                  confirmationUrl: chapterAuthUrl(data.url),
                 }),
             },
             reauthentication: {
