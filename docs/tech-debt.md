@@ -111,6 +111,19 @@ Two `no-control-regex` sites (`member-profile.server.ts`,
 stripping control characters from pasted text is the whole point of those
 sanitizers.
 
+## Known gaps in recent features
+
+- **Member guides** have no drag-and-drop reordering (positions are edited as
+  numbers), no version history and no PDF export. Guide content is authored in
+  the CMS; nothing validates that every section has been translated before a
+  guide is published.
+- **Member sync liveness** is a fixed 30-minute timeout, not a heartbeat. Europe
+  Pulse has a real heartbeat; the member sync reaper only infers death from age,
+  so a genuinely long run would be mislabelled as abandoned.
+- **No alert when a scheduled sync produces no run at all.** The reaper closes a
+  run that started and died; a night where the cron request never arrived leaves
+  nothing to reap, and only the staleness of the last successful run reveals it.
+
 ## Historical planning documents
 
 `.lovable/plan*.md` records how decisions were reached across several

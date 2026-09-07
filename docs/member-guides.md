@@ -18,10 +18,10 @@ contact email, and a footnote — plus an ordered list of sections.
 
 Every section has a **kind** and a **tone**:
 
-| Concept  | Values                                       | Effect                                                                    |
-| -------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `kind`   | `article`, `faq`                             | Article renders heading + lead + body; FAQ renders an accordion.          |
-| `tone`   | `neutral`, `positive`, `caution`, `critical` | Surface treatment of the section card (`TONE_CARD` / `TONE_TEXT`).        |
+| Concept | Values                                       | Effect                                                             |
+| ------- | -------------------------------------------- | ------------------------------------------------------------------ |
+| `kind`  | `article`, `faq`                             | Article renders heading + lead + body; FAQ renders an accordion.   |
+| `tone`  | `neutral`, `positive`, `caution`, `critical` | Surface treatment of the section card (`TONE_CARD` / `TONE_TEXT`). |
 
 An **article** section carries an ordered list of callouts. A callout has its
 own `kind` — `info`, `warning`, `critical` — an optional bold label, and body
@@ -37,16 +37,16 @@ Ordering is position-based in both lists; there is no drag and drop.
 
 ## Data model
 
-| Table                            | Holds                                                              |
-| -------------------------------- | -------------------------------------------------------------------- |
-| `guides`                         | Slug, English source copy, `is_published`, `published_at`, `sort_order`. |
-| `guide_sections`                 | `position`, `kind` (CHECK `article`/`faq`), `tone`, eyebrow, heading, lead, body. |
-| `guide_section_callouts`         | `position`, `kind` (CHECK `info`/`warning`/`critical`), label, body.  |
-| `guide_faq_items`                | `position`, question, answer, quote.                                 |
-| `guide_translations`             | One row per (guide, locale).                                         |
-| `guide_section_translations`     | One row per (section, locale).                                       |
-| `guide_callout_translations`     | One row per (callout, locale).                                       |
-| `guide_faq_item_translations`    | One row per (FAQ item, locale).                                      |
+| Table                         | Holds                                                                             |
+| ----------------------------- | --------------------------------------------------------------------------------- |
+| `guides`                      | Slug, English source copy, `is_published`, `published_at`, `sort_order`.          |
+| `guide_sections`              | `position`, `kind` (CHECK `article`/`faq`), `tone`, eyebrow, heading, lead, body. |
+| `guide_section_callouts`      | `position`, `kind` (CHECK `info`/`warning`/`critical`), label, body.              |
+| `guide_faq_items`             | `position`, question, answer, quote.                                              |
+| `guide_translations`          | One row per (guide, locale).                                                      |
+| `guide_section_translations`  | One row per (section, locale).                                                    |
+| `guide_callout_translations`  | One row per (callout, locale).                                                    |
+| `guide_faq_item_translations` | One row per (FAQ item, locale).                                                   |
 
 Every translation table is restricted to `de`, `fr`, `it` by CHECK — English is
 the source and lives on the base row, never as a translation. Each translation
@@ -89,12 +89,12 @@ re-translation.
 
 ## Where things live
 
-| Concern                          | File                                          |
-| -------------------------------- | ----------------------------------------------- |
-| Shared types, tone/callout maps  | `src/lib/guides.ts`                            |
-| Public reads, locale merge       | `src/lib/guides.server.ts`, `guides.functions.ts` |
-| Editor CRUD (editor-gated)       | `src/lib/guides-admin.functions.ts`            |
-| Translation load/save/AI         | `src/lib/guide-translations.functions.ts`      |
-| Staff editor screen              | `src/routes/_staff/manage.guides.tsx`          |
-| Public pages                     | `src/pages/GuidesIndex.tsx`, `src/pages/GuideDetail.tsx` |
-| Copy keys                        | `src/i18n/locales/<lang>/guides.json`, `cms.json` |
+| Concern                         | File                                                     |
+| ------------------------------- | -------------------------------------------------------- |
+| Shared types, tone/callout maps | `src/lib/guides.ts`                                      |
+| Public reads, locale merge      | `src/lib/guides.server.ts`, `guides.functions.ts`        |
+| Editor CRUD (editor-gated)      | `src/lib/guides-admin.functions.ts`                      |
+| Translation load/save/AI        | `src/lib/guide-translations.functions.ts`                |
+| Staff editor screen             | `src/routes/_staff/manage.guides.tsx`                    |
+| Public pages                    | `src/pages/GuidesIndex.tsx`, `src/pages/GuideDetail.tsx` |
+| Copy keys                       | `src/i18n/locales/<lang>/guides.json`, `cms.json`        |

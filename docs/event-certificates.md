@@ -14,19 +14,19 @@ hybrid CCE events so hours have something real to grant against.
 
 ## Settled decisions (2026-08-27b)
 
-| # | Decision | Locked as |
-| --- | --- | --- |
-| **A** | When to issue certificates | **After the event**, as an explicit staff batch. Check-in is attendance, not completion. |
-| **E** | Self-confirm identity | **Ticket token only.** Session QR names the window; the attendee’s `check_in_token` names the person. No login. Session QR alone never checks anyone in. |
-| **H** | Guests | **Certificate yes, and a CCE award row yes**, keyed on the registration, before the tracker exists. See §8.5. This **amends** tracker decision 1 (guests skipped). |
-| **K** | Tracker timing | **Tracker ships later.** This feature does not create `cce_credits`, does not wait for it, and does not paste tracker prompts. It writes `event_cce_awards` the tracker will copy from. |
-| **B** | Template | Single A4 portrait, chapter lockup, print-to-PDF. No designer. |
-| **C** | Auto-enable | UI defaults `certificates_enabled` on when the organizer turns `cce_enabled` on. Not a DB side-effect. Attendance-only certs remain allowed on non-CCE events. |
-| **D** | GDPR / member deleted | Revoke. Verify page: “withdrawn”. Serial kept internally without the name. |
-| **F** | Grace window | 30 minutes after `events.ends_at` (or `now()+30min` if opened after end). Staff may close earlier. |
-| **G** | Import duration | 80 % of scheduled length, floor 15 minutes, per-event override. |
-| **I** | Live Zoom/Meet API | Not this MVP. CSV only. |
-| **J** | Serial | `ICFS-YYYY-#####` per year. Not a capability URL. |
+| #     | Decision                   | Locked as                                                                                                                                                                               |
+| ----- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **A** | When to issue certificates | **After the event**, as an explicit staff batch. Check-in is attendance, not completion.                                                                                                |
+| **E** | Self-confirm identity      | **Ticket token only.** Session QR names the window; the attendee’s `check_in_token` names the person. No login. Session QR alone never checks anyone in.                                |
+| **H** | Guests                     | **Certificate yes, and a CCE award row yes**, keyed on the registration, before the tracker exists. See §8.5. This **amends** tracker decision 1 (guests skipped).                      |
+| **K** | Tracker timing             | **Tracker ships later.** This feature does not create `cce_credits`, does not wait for it, and does not paste tracker prompts. It writes `event_cce_awards` the tracker will copy from. |
+| **B** | Template                   | Single A4 portrait, chapter lockup, print-to-PDF. No designer.                                                                                                                          |
+| **C** | Auto-enable                | UI defaults `certificates_enabled` on when the organizer turns `cce_enabled` on. Not a DB side-effect. Attendance-only certs remain allowed on non-CCE events.                          |
+| **D** | GDPR / member deleted      | Revoke. Verify page: “withdrawn”. Serial kept internally without the name.                                                                                                              |
+| **F** | Grace window               | 30 minutes after `events.ends_at` (or `now()+30min` if opened after end). Staff may close earlier.                                                                                      |
+| **G** | Import duration            | 80 % of scheduled length, floor 15 minutes, per-event override.                                                                                                                         |
+| **I** | Live Zoom/Meet API         | Not this MVP. CSV only.                                                                                                                                                                 |
+| **J** | Serial                     | `ICFS-YYYY-#####` per year. Not a capability URL.                                                                                                                                       |
 
 ---
 
@@ -40,13 +40,13 @@ Three capabilities, one pipeline:
    does not).
 2. **Issue a verifiable certificate** of attendance / CCE completion, with a
    public QR that anyone can scan — **staff batch after the event**.
-3. **Record a CCE award per registration** (member *and* guest) so the
+3. **Record a CCE award per registration** (member _and_ guest) so the
    tracker, when it ships, has rows to copy. Guests are not skipped here.
 
 Do **not** clone SimpleCert’s designer, credit packs, LinkedIn posting, or
 recipient portal. We already have registrations, tickets, branding, and a
 member area. We need the one thing SimpleCert is paid for today: a
-document an auditor can trust because the QR resolves on *our* domain.
+document an auditor can trust because the QR resolves on _our_ domain.
 
 **Ship order (locked):** attendance (session QR + ticket token) → Zoom/Meet
 CSV import → certificates + CCE awards. Tracker is a later consumer.
@@ -60,19 +60,19 @@ export, plus an end-of-session QR, covers webinars without OAuth.
 
 Repository facts, not proposals.
 
-| Building block | Where | What it already does |
-| --- | --- | --- |
-| Registrations + payment | `event_registrations`, `tg_event_registration_guard`, `tickets.server.ts` | Confirmed / cancelled, paid / not_required, guests (`user_id` NULL) |
-| Door check-in | `check_in_registration(uuid, uuid)`, `_staff/manage.events.$id_.check-in.tsx` | Staff-only. Sets `checked_in_at` / `checked_in_by`. Double scan → `already`. Refunded / unpaid / cancelled → `ineligible` |
-| Ticket QR | `check_in_token`, `/ticket/$token`, `/api/public/ticket-qr/$token` | Unguessable token; QR encodes the ticket URL; public page is `noindex`; cancelled tickets 404 the PNG |
-| Provider CCE | `event_cce_applications`, `events.cce_enabled`, `cce_approved_*_hours` | Chapter applies, editor records ICF outcome. Nothing posts to ICF |
-| CCE tracker | `docs/cce-tracker.md` + prompts | **Spec only — not in the database.** Do not create `cce_credits` in this feature. |
-| Print pattern | `_staff/manage.events.$id_.cce.tsx` | `print:hidden` chrome + `window.print()` |
-| QR library | `qrcode` in `package.json`, `check-in.server.ts` | Same generator, ICF Deep Blue (`#212251`) |
-| Event email | `event-confirmation.server.ts` (live path) | Not the inert member-claim pipeline (`member-email.server.ts`) |
-| Brand | `icf-welcome-design-system` lockups | Horizontal / vertical positive + negative PNGs |
-| Online events | `events.location_mode` = `in_person \| online \| hybrid`, `online_url` | URL is stored. **No attendance capture** |
-| Rate limit pattern | `tickets.server.ts` (`resolveMembership`) | 5 / 5 min, 30 / day per IP or user |
+| Building block          | Where                                                                         | What it already does                                                                                                      |
+| ----------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Registrations + payment | `event_registrations`, `tg_event_registration_guard`, `tickets.server.ts`     | Confirmed / cancelled, paid / not_required, guests (`user_id` NULL)                                                       |
+| Door check-in           | `check_in_registration(uuid, uuid)`, `_staff/manage.events.$id_.check-in.tsx` | Staff-only. Sets `checked_in_at` / `checked_in_by`. Double scan → `already`. Refunded / unpaid / cancelled → `ineligible` |
+| Ticket QR               | `check_in_token`, `/ticket/$token`, `/api/public/ticket-qr/$token`            | Unguessable token; QR encodes the ticket URL; public page is `noindex`; cancelled tickets 404 the PNG                     |
+| Provider CCE            | `event_cce_applications`, `events.cce_enabled`, `cce_approved_*_hours`        | Chapter applies, editor records ICF outcome. Nothing posts to ICF                                                         |
+| CCE tracker             | `docs/cce-tracker.md` + prompts                                               | **Spec only — not in the database.** Do not create `cce_credits` in this feature.                                         |
+| Print pattern           | `_staff/manage.events.$id_.cce.tsx`                                           | `print:hidden` chrome + `window.print()`                                                                                  |
+| QR library              | `qrcode` in `package.json`, `check-in.server.ts`                              | Same generator, ICF Deep Blue (`#212251`)                                                                                 |
+| Event email             | `event-confirmation.server.ts` (live path)                                    | Not the inert member-claim pipeline (`member-email.server.ts`)                                                            |
+| Brand                   | `icf-welcome-design-system` lockups                                           | Horizontal / vertical positive + negative PNGs                                                                            |
+| Online events           | `events.location_mode` = `in_person \| online \| hybrid`, `online_url`        | URL is stored. **No attendance capture**                                                                                  |
+| Rate limit pattern      | `tickets.server.ts` (`resolveMembership`)                                     | 5 / 5 min, 30 / day per IP or user                                                                                        |
 
 What does **not** exist: a certificate table, a public verify URL, a
 self-serve attendance path, Zoom/Meet import, PDF generation, `cce_credits`.
@@ -86,13 +86,13 @@ and consent are unknown.
 
 ### What we take
 
-| SimpleCert feature | ICFS need? | Why |
-| --- | --- | --- |
-| Unique QR → public verify page | **Yes — the product** | ICF audit + employer / chapter verification |
-| Per-recipient certificate | **Yes** | Name, event, date, CC/RD split |
-| Email + reprint | **Yes** | Replace the SimpleCert send |
-| Recipient portal | **Reuse Member Area + email link** | Guests have no account; the verify/print URL is their copy |
-| Designer / Cert Sets / credits / LinkedIn / Zapier | **No** | |
+| SimpleCert feature                                 | ICFS need?                         | Why                                                        |
+| -------------------------------------------------- | ---------------------------------- | ---------------------------------------------------------- |
+| Unique QR → public verify page                     | **Yes — the product**              | ICF audit + employer / chapter verification                |
+| Per-recipient certificate                          | **Yes**                            | Name, event, date, CC/RD split                             |
+| Email + reprint                                    | **Yes**                            | Replace the SimpleCert send                                |
+| Recipient portal                                   | **Reuse Member Area + email link** | Guests have no account; the verify/print URL is their copy |
+| Designer / Cert Sets / credits / LinkedIn / Zapier | **No**                             |                                                            |
 
 ICF’s CCE application already asks for “requirements participants must
 meet to receive a certificate of completion” and “how participant
@@ -105,13 +105,13 @@ feature is how they become true.
 
 ## 4. What changes versus today
 
-| Today | Proposed |
-| --- | --- |
-| In-person: staff scan the **ticket** QR at the door | Unchanged. Ticket QR stays the door credential |
-| Online / hybrid: attendance is tribal knowledge | Staff opens an **attendance window**; attendee proves identity with **their ticket token**; *or* staff uploads Zoom/Meet CSV |
-| CCE hours sit on the event; nobody gets a row | Staff batch after the event writes `event_cce_awards` per checked-in registration (guest included) |
-| Audit document = SimpleCert PDF, off-platform | Chapter-branded certificate at `coachingfederation.ch/verify/certificate/…` |
-| Tracker (later) skips guests | Tracker will **copy** `event_cce_awards` into `cce_credits` when `member_id` is known; guest awards stay on the registration until claim |
+| Today                                               | Proposed                                                                                                                                 |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| In-person: staff scan the **ticket** QR at the door | Unchanged. Ticket QR stays the door credential                                                                                           |
+| Online / hybrid: attendance is tribal knowledge     | Staff opens an **attendance window**; attendee proves identity with **their ticket token**; _or_ staff uploads Zoom/Meet CSV             |
+| CCE hours sit on the event; nobody gets a row       | Staff batch after the event writes `event_cce_awards` per checked-in registration (guest included)                                       |
+| Audit document = SimpleCert PDF, off-platform       | Chapter-branded certificate at `coachingfederation.ch/verify/certificate/…`                                                              |
+| Tracker (later) skips guests                        | Tracker will **copy** `event_cce_awards` into `cce_credits` when `member_id` is known; guest awards stay on the registration until claim |
 
 Two different QRs, on purpose:
 
@@ -157,7 +157,7 @@ credential on a document people forward to employers. Don’t.
    `/ticket/…`). Confirm → same eligibility as the door, source
    `self_qr`.
 4. Shortcut: an attendee who already has `/ticket/$token` open during
-   an open window sees **I’m here** — that page already *is* the ticket
+   an open window sees **I’m here** — that page already _is_ the ticket
    token.
 5. Window auto-closes at `ends_at + 30 min` or when staff close it.
 6. Drop-outs: staff upload Zoom/Meet CSV (prompt 2); unmatched rows
@@ -175,18 +175,18 @@ credential on a document people forward to employers. Don’t.
 
 ### 5.4 Failure / expiry paths
 
-| Situation | Behaviour |
-| --- | --- |
-| Session QR only, no ticket token | No check-in |
-| Scan after window closed | `window_closed`. Staff door / import still work |
-| Cancelled / refunded / unpaid | Same `ineligible` reasons as `check_in_registration` |
-| Already checked in | `already` — never a second attendance, never a second live certificate |
-| Issue batch before anyone checked in | No-op / empty |
-| Undo check-in (editor+) | Clears `checked_in_at`; live certificate → `revoked`; award → `revoked` |
-| Name misspelled | Staff **reissue**: revoke old, new serial. Old verify URL shows Revoked |
-| Event CCE declined after award | Awards revoked; certificate remains as attendance; verify stops claiming ICF hours |
-| Forged PDF, working QR | Verify page is the authority |
-| Enumerated serials | Human number is not a capability URL |
+| Situation                            | Behaviour                                                                          |
+| ------------------------------------ | ---------------------------------------------------------------------------------- |
+| Session QR only, no ticket token     | No check-in                                                                        |
+| Scan after window closed             | `window_closed`. Staff door / import still work                                    |
+| Cancelled / refunded / unpaid        | Same `ineligible` reasons as `check_in_registration`                               |
+| Already checked in                   | `already` — never a second attendance, never a second live certificate             |
+| Issue batch before anyone checked in | No-op / empty                                                                      |
+| Undo check-in (editor+)              | Clears `checked_in_at`; live certificate → `revoked`; award → `revoked`            |
+| Name misspelled                      | Staff **reissue**: revoke old, new serial. Old verify URL shows Revoked            |
+| Event CCE declined after award       | Awards revoked; certificate remains as attendance; verify stops claiming ICF hours |
+| Forged PDF, working QR               | Verify page is the authority                                                       |
+| Enumerated serials                   | Human number is not a capability URL                                               |
 
 ---
 
@@ -277,7 +277,7 @@ event_attendance_sessions
   closed_by uuid
 ```
 
-One *open* session per event (partial unique index on `event_id WHERE
+One _open_ session per event (partial unique index on `event_id WHERE
 closed_at IS NULL`). Token: same alphabet as `check_in_token`
 (`TOKEN_PATTERN` in `src/lib/check-in.server.ts`).
 
@@ -395,13 +395,13 @@ events.attendance_min_percent int NOT NULL DEFAULT 80
 
 ### 8.7 Data classification
 
-| Field | Class | Public verify? |
-| --- | --- | --- |
-| Holder name, event title, date, CC/RD hours, serial, issuer | Attendance fact | Yes |
-| `cst_recno` / ICF member number | Member identifier | **No** |
-| Email, phone, payment, ticket token | Private | **No** |
-| Import CSV (Zoom emails, join times) | Operational PII | Staff only |
-| `public_token` | Capability | In the QR, not in the sitemap |
+| Field                                                       | Class             | Public verify?                |
+| ----------------------------------------------------------- | ----------------- | ----------------------------- |
+| Holder name, event title, date, CC/RD hours, serial, issuer | Attendance fact   | Yes                           |
+| `cst_recno` / ICF member number                             | Member identifier | **No**                        |
+| Email, phone, payment, ticket token                         | Private           | **No**                        |
+| Import CSV (Zoom emails, join times)                        | Operational PII   | Staff only                    |
+| `public_token`                                              | Capability        | In the QR, not in the sitemap |
 
 No real member data in fixtures, docs, or prompts. Placeholders:
 `Anna Muster`, `anna.muster@example.com`, `ICF 000000`.
@@ -429,13 +429,13 @@ No real member data in fixtures, docs, or prompts. Placeholders:
 
 ## 10. Notifications
 
-| Event | Channel | Notes |
-| --- | --- | --- |
-| Certificate issued | Email to `registration.email` | Link to verify/print URL. No PDF attachment |
-| Certificate revoked | Email | Short; office@coachingfederation.ch |
-| Attendance window opened | None (organizer is on the call) | Ticket page shows “I’m here” |
-| Import applied | Staff toast only | Do not email the room |
-| LinkedIn | Out of scope | |
+| Event                    | Channel                         | Notes                                       |
+| ------------------------ | ------------------------------- | ------------------------------------------- |
+| Certificate issued       | Email to `registration.email`   | Link to verify/print URL. No PDF attachment |
+| Certificate revoked      | Email                           | Short; office@coachingfederation.ch         |
+| Attendance window opened | None (organizer is on the call) | Ticket page shows “I’m here”                |
+| Import applied           | Staff toast only                | Do not email the room                       |
+| LinkedIn                 | Out of scope                    |                                             |
 
 Do not route through `member-email.server.ts`. Event mail already sends.
 
@@ -443,21 +443,21 @@ Do not route through `member-email.server.ts`. Event mail already sends.
 
 ## 11. Routes / modules
 
-| Surface | Role |
-| --- | --- |
-| `_staff/manage.events.$id_.check-in.tsx` | Open/close window, full-screen QR, import (prompt 2), issue batch (prompt 3) |
-| `_staff/manage.events.$id_.cce.tsx` | Awards granted N / pending |
-| `EventEditorSections.tsx` attendee table | Certificate status; reissue |
-| `src/routes/attend.$token.tsx` | Public confirm (ticket token) |
-| `src/routes/ticket.$token.tsx` | “I’m here” while session open |
-| `src/routes/verify.certificate.$token.tsx` | Public authenticity + print |
-| `src/routes/api/public/certificate-qr.$token.ts` | PNG, clone of `ticket-qr.$token.ts` |
-| `_member/certificates.tsx` | Reprint for claimed accounts |
-| `src/lib/check-in.server.ts` / `check-in.functions.ts` | Session mint, self-check-in |
-| `src/lib/certificates.server.ts` | Issue, QR, verify, email |
-| `src/lib/attendance-import.server.ts` | Parse Zoom / Meet CSV |
-| `src/lib/storage.ts` | Bucket `event-attendance-imports` |
-| i18n four `cms.json` | `events.attendance.*`, `certificates.*` |
+| Surface                                                | Role                                                                         |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| `_staff/manage.events.$id_.check-in.tsx`               | Open/close window, full-screen QR, import (prompt 2), issue batch (prompt 3) |
+| `_staff/manage.events.$id_.cce.tsx`                    | Awards granted N / pending                                                   |
+| `EventEditorSections.tsx` attendee table               | Certificate status; reissue                                                  |
+| `src/routes/attend.$token.tsx`                         | Public confirm (ticket token)                                                |
+| `src/routes/ticket.$token.tsx`                         | “I’m here” while session open                                                |
+| `src/routes/verify.certificate.$token.tsx`             | Public authenticity + print                                                  |
+| `src/routes/api/public/certificate-qr.$token.ts`       | PNG, clone of `ticket-qr.$token.ts`                                          |
+| `_member/certificates.tsx`                             | Reprint for claimed accounts                                                 |
+| `src/lib/check-in.server.ts` / `check-in.functions.ts` | Session mint, self-check-in                                                  |
+| `src/lib/certificates.server.ts`                       | Issue, QR, verify, email                                                     |
+| `src/lib/attendance-import.server.ts`                  | Parse Zoom / Meet CSV                                                        |
+| `src/lib/storage.ts`                                   | Bucket `event-attendance-imports`                                            |
+| i18n four `cms.json`                                   | `events.attendance.*`, `certificates.*`                                      |
 
 `src/routeTree.gen.ts` is generated — never edit by hand.
 
@@ -492,10 +492,10 @@ English-only literals in `ticket.$token.tsx` (known debt).
 
 ## 13. Phased delivery
 
-| Phase | Scope |
-| --- | --- |
-| **A** | Sessions, self-confirm by ticket token, source column, I’m-here button |
-| **B** | Zoom / Meet CSV + review queue |
+| Phase | Scope                                                                   |
+| ----- | ----------------------------------------------------------------------- |
+| **A** | Sessions, self-confirm by ticket token, source column, I’m-here button  |
+| **B** | Zoom / Meet CSV + review queue                                          |
 | **C** | Staff batch issue, verify/print, email, `event_cce_awards` incl. guests |
 
 Review Lovable’s plan against §16 before each build. Do not paste

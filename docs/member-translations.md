@@ -68,10 +68,10 @@ per-locale index that the current volume does not justify.
 
 ## Correspondence language
 
-Separate from the *profile* languages above: a member also chooses the language
+Separate from the _profile_ languages above: a member also chooses the language
 we write **to** them in. It is one column, `members.correspondence_locale`
 (`en` / `de` / `fr` / `it`, nullable), edited in `/my-profile` under
-*Correspondence language* (`CorrespondenceSection.tsx`, state in
+_Correspondence language_ (`CorrespondenceSection.tsx`, state in
 `useMemberProfileForm.ts`), validated in `member-profile.functions.ts` and
 written by `member-profile.server.ts`.
 
@@ -81,5 +81,5 @@ with `pickCopy(campaign.copy, member.correspondence_locale)`
 preference recorded" and falls back to English.
 
 The two settings answer different questions and must not be conflated: the
-profile's `primary_locale` is what the *public* reads on the coach's directory
-page; `correspondence_locale` is what *we* send them.
+profile's `primary_locale` is what the _public_ reads on the coach's directory
+page; `correspondence_locale` is what _we_ send them.

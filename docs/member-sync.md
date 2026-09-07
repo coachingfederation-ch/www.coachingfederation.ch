@@ -241,7 +241,7 @@ Manual runs from the panel go through an authenticated admin server function, no
 this endpoint. Schedule and job names are in `docs/operations-and-go-live.md`.
 
 **"Scheduler finished" never means "sync finished".** The schedule only fires the
-request and reports whether it was *sent*; it stops waiting after a few seconds
+request and reports whether it was _sent_; it stops waiting after a few seconds
 regardless of what the sync is doing. Judge a run by its row, not by the job log.
 
 ### Abandoned runs
@@ -268,12 +268,11 @@ The health card follows the same cut-off: a `running` row younger than 30 minute
 is a warning, older than that it is a failure (`src/lib/relay-health.server.ts`),
 so a silently lost sync turns the panel red instead of looking merely slow.
 
-A reaped run tells you *that* a sync died, not *why* — a process cut off in its
+A reaped run tells you _that_ a sync died, not _why_ — a process cut off in its
 first seconds writes no events at all. The failed row with its timestamp is the
 starting point for that investigation.
 
 ---
-
 
 ## 7. When something looks wrong
 
@@ -290,7 +289,6 @@ member. The panel's expandable run history shows all three without a query.
 | A member is back with ICF but still hidden        | They are restored on the next run. Trigger a manual sync rather than editing the row.                                                                                  |
 | One field looks stale                             | The snapshot for that member and run shows exactly what the feed sent and which fields changed. If the field is not in the imported set, the sync does not own it.     |
 | A run is stuck on "running"                       | The process was cut off before it could write a status. It is closed as failed after 30 minutes; see "Abandoned runs". Re-run manually from the panel.                 |
-
 
 ---
 

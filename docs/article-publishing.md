@@ -62,12 +62,12 @@ second pair of eyes on their own article. `ArticlePermissions.isSuperAdmin` is
 true only for `admin` — the naming matters, because an earlier version of this
 flow treated any admin-ish grant as an override.
 
-| Actor                     | submit | publish own | publish other's | unpublish |
-| ------------------------- | ------ | ----------- | --------------- | --------- |
-| Contributor / editor      | yes    | no          | no              | no        |
-| Publisher                 | yes    | no          | yes             | yes       |
-| Administrator             | yes    | no          | only as publisher | only as publisher |
-| Super Admin               | yes    | yes         | yes             | yes       |
+| Actor                | submit | publish own | publish other's   | unpublish         |
+| -------------------- | ------ | ----------- | ----------------- | ----------------- |
+| Contributor / editor | yes    | no          | no                | no                |
+| Publisher            | yes    | no          | yes               | yes               |
+| Administrator        | yes    | no          | only as publisher | only as publisher |
+| Super Admin          | yes    | yes         | yes               | yes               |
 
 Whoever created the article sees a note in the editor saying another publisher
 has to review it, instead of a disabled button with no explanation.
@@ -90,7 +90,6 @@ transition moves an article into `review`, `notifyReviewRequested`
 `articles.published_by` records who released an article; the article list shows
 it as the **Released by** column next to the author, so the four-eye trail is
 readable without opening each record.
-
 
 ## Enforced twice, on purpose
 
