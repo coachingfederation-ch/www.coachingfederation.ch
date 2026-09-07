@@ -15,16 +15,24 @@ import { RichTextField } from "@/components/cms/RichTextField";
 import { GenericTranslationsPanel } from "@/components/cms/translations/GenericTranslationsPanel";
 import type { TranslationFieldConfig } from "@/components/cms/translations/types";
 import { useCms } from "@/i18n/cms";
-import { GUIDE_TONES } from "@/lib/guides";
+import { GUIDE_CALLOUT_KINDS, GUIDE_SECTION_KINDS, GUIDE_TONES } from "@/lib/guides";
 import {
   createGuide,
+  createGuideCallout,
+  createGuideFaqItem,
   createGuideSection,
   deleteGuide,
+  deleteGuideCallout,
+  deleteGuideFaqItem,
   deleteGuideSection,
   getAdminGuide,
   listAdminGuides,
   updateGuide,
+  updateGuideCallout,
+  updateGuideFaqItem,
   updateGuideSection,
+  type AdminGuideCalloutRow,
+  type AdminGuideFaqRow,
   type AdminGuideRow,
   type AdminGuideSectionRow,
 } from "@/lib/guides-admin.functions";
@@ -118,7 +126,13 @@ function GuidesCmsRoute() {
       setSelected(id);
     });
 
-  const sectionCount = sections.length;
+  const shape = useMemo(
+    () => sections.map((s) => ({ callouts: s.callouts.length, faq: s.faq.length })),
+    [sections],
+  );
+  /** Stable signature so the translation panel reloads when the shape changes. */
+  const shapeKey = shape.map((s) => `${s.callouts}:${s.faq}`).join("|");
+
   const fields: TranslationFieldConfig[] = useMemo(() => {
     const list: TranslationFieldConfig[] = [
       { key: "eyebrow", label: t("guides.fieldEyebrow"), type: "input" },
@@ -147,17 +161,48 @@ function GuidesCmsRoute() {
           rows: 2,
         },
         { key: `s${index}_body`, label: `${prefix} · ${t("guides.fieldBody")}`, type: "rich" },
-        {
-          key: `s${index}_callout`,
-          label: `${prefix} · ${t("guides.fieldCallout")}`,
-          type: "textarea",
-          rows: 2,
-        },
       );
+      section.callouts.forEach((_, c) => {
+        const callout = `${prefix} · ${t("guides.callout")} ${c + 1}`;
+        list.push(
+          {
+            key: `s${index}_c${c}_label`,
+            label: `${callout} · ${t("guides.fieldLabel")}`,
+            type: "input",
+          },
+          {
+            key: `s${index}_c${c}_body`,
+            label: `${callout} · ${t("guides.fieldBody")}`,
+            type: "textarea",
+            rows: 2,
+          },
+        );
+      });
+      section.faq.forEach((_, q) => {
+        const item = `${prefix} · ${t("guides.question")} ${q + 1}`;
+        list.push(
+          {
+            key: `s${index}_q${q}_question`,
+            label: `${item} · ${t("guides.fieldQuestion")}`,
+            type: "input",
+          },
+          {
+            key: `s${index}_q${q}_answer`,
+            label: `${item} · ${t("guides.fieldAnswer")}`,
+            type: "rich",
+          },
+          {
+            key: `s${index}_q${q}_quote`,
+            label: `${item} · ${t("guides.fieldQuote")}`,
+            type: "textarea",
+            rows: 2,
+          },
+        );
+      });
     });
     return list;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sectionCount, t]);
+  }, [shapeKey, t]);
 
   return (
     <Shell>
@@ -344,6 +389,22 @@ function GuidesCmsRoute() {
                           {t("guides.section")} {index + 1}
                         </span>
                         <label className="text-xs text-muted-foreground">
+                          {t("guides.fieldKind")}
+                          <select
+                            value={section.kind}
+                            onChange={(e) =>
+                              void patchSection(section.id, { kind: e.target.value })
+                            }
+                            className={`ml-2 ${INPUT} inline-block w-auto`}
+                          >
+                            {GUIDE_SECTION_KINDS.map((kind) => (
+                              <option key={kind} value={kind}>
+                                {t(`guides.kind.${kind}`)}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                        <label className="text-xs text-muted-foreground">
                           {t("guides.fieldTone")}
                           <select
                             value={section.tone}
@@ -412,15 +473,99 @@ function GuidesCmsRoute() {
                           onCommit={(next) => void patchSection(section.id, { body: next })}
                         />
                       </div>
-                      <label className="mt-3 block text-xs text-muted-foreground">
-                        {t("guides.fieldCallout")}
-                        <textarea
-                          rows={2}
-                          defaultValue={section.callout}
-                          onBlur={(e) => void patchSection(section.id, { callout: e.target.value })}
-                          className={`mt-1 ${INPUT}`}
-                        />
-                      </label>
+                      {section.kind === "faq" ? (
+                        <div className="mt-4 space-y-3">
+                          <p className="text-xs font-semibold text-muted-foreground">
+                            {t("guides.questions")}
+                          </p>
+                          {section.faq.map((item, q) => (
+                            <FaqEditor
+                              key={item.id}
+                              item={item}
+                              index={q}
+                              labels={{
+                                question: t("guides.fieldQuestion"),
+                                answer: t("guides.fieldAnswer"),
+                                quote: t("guides.fieldQuote"),
+                                remove: t("guides.deleteQuestion"),
+                                position: `${t("guides.question")} ${q + 1}`,
+                              }}
+                              onPatch={(values) =>
+                                void run(async () => {
+                                  await updateGuideFaqItem({ data: { id: item.id, values } });
+                                  if (selected) await loadOne(selected);
+                                })
+                              }
+                              onDelete={() =>
+                                void run(async () => {
+                                  await deleteGuideFaqItem({ data: { id: item.id } });
+                                  if (selected) await loadOne(selected);
+                                })
+                              }
+                            />
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() =>
+                              void run(async () => {
+                                await createGuideFaqItem({
+                                  data: { sectionId: section.id, position: section.faq.length },
+                                });
+                                if (selected) await loadOne(selected);
+                              })
+                            }
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary"
+                          >
+                            <Plus className="h-3.5 w-3.5" /> {t("guides.addQuestion")}
+                          </button>
+                        </div>
+                      ) : null}
+
+                      <div className="mt-4 space-y-3">
+                        <p className="text-xs font-semibold text-muted-foreground">
+                          {t("guides.callouts")}
+                        </p>
+                        {section.callouts.map((callout, c) => (
+                          <CalloutEditor
+                            key={callout.id}
+                            callout={callout}
+                            labels={{
+                              kind: t("guides.fieldCalloutKind"),
+                              label: t("guides.fieldLabel"),
+                              body: t("guides.fieldBody"),
+                              remove: t("guides.deleteCallout"),
+                              position: `${t("guides.callout")} ${c + 1}`,
+                              kindOption: (kind) => t(`guides.calloutKind.${kind}`),
+                            }}
+                            onPatch={(values) =>
+                              void run(async () => {
+                                await updateGuideCallout({ data: { id: callout.id, values } });
+                                if (selected) await loadOne(selected);
+                              })
+                            }
+                            onDelete={() =>
+                              void run(async () => {
+                                await deleteGuideCallout({ data: { id: callout.id } });
+                                if (selected) await loadOne(selected);
+                              })
+                            }
+                          />
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            void run(async () => {
+                              await createGuideCallout({
+                                data: { sectionId: section.id, position: section.callouts.length },
+                              });
+                              if (selected) await loadOne(selected);
+                            })
+                          }
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary"
+                        >
+                          <Plus className="h-3.5 w-3.5" /> {t("guides.addCallout")}
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -441,7 +586,7 @@ function GuidesCmsRoute() {
               </section>
 
               <GenericTranslationsPanel<GuideTranslationRow, Record<string, string | null>>
-                deps={[guide.id, sectionCount, guide.content_updated_at]}
+                deps={[guide.id, shapeKey, guide.content_updated_at]}
                 adapter={{
                   sourceLanguage: "en",
                   contentUpdatedAt: guide.content_updated_at,
@@ -462,7 +607,7 @@ function GuidesCmsRoute() {
                     }),
                   valuesFromRow: (row) =>
                     Object.fromEntries(
-                      guideTranslationFieldKeys(sectionCount).map((key) => [
+                      guideTranslationFieldKeys(shape).map((key) => [
                         key,
                         (row[key] as string | null) ?? "",
                       ]),
@@ -503,4 +648,128 @@ function GuidesCmsRoute() {
 function SectionBody({ initial, onCommit }: { initial: string; onCommit: (next: string) => void }) {
   const [value, setValue] = useState(initial);
   return <RichTextField value={value} onChange={setValue} onBlur={() => onCommit(value)} />;
+}
+
+/**
+ * One callout row: type, label and body. Save-on-blur like the rest of the
+ * screen, so an editor can tab through several callouts without pressing save.
+ */
+function CalloutEditor({
+  callout,
+  labels,
+  onPatch,
+  onDelete,
+}: {
+  callout: AdminGuideCalloutRow;
+  labels: {
+    kind: string;
+    label: string;
+    body: string;
+    remove: string;
+    position: string;
+    kindOption: (kind: string) => string;
+  };
+  onPatch: (values: Partial<AdminGuideCalloutRow>) => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="rounded-lg border border-border p-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-xs font-semibold text-muted-foreground">{labels.position}</span>
+        <label className="text-xs text-muted-foreground">
+          {labels.kind}
+          <select
+            value={callout.kind}
+            onChange={(e) => onPatch({ kind: e.target.value })}
+            className={`ml-2 ${INPUT} inline-block w-auto`}
+          >
+            {GUIDE_CALLOUT_KINDS.map((kind) => (
+              <option key={kind} value={kind}>
+                {labels.kindOption(kind)}
+              </option>
+            ))}
+          </select>
+        </label>
+        <button
+          type="button"
+          onClick={onDelete}
+          className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-destructive"
+        >
+          <Trash2 className="h-3.5 w-3.5" /> {labels.remove}
+        </button>
+      </div>
+      <label className="mt-2 block text-xs text-muted-foreground">
+        {labels.label}
+        <input
+          defaultValue={callout.label}
+          onBlur={(e) => onPatch({ label: e.target.value })}
+          className={`mt-1 ${INPUT}`}
+        />
+      </label>
+      <label className="mt-2 block text-xs text-muted-foreground">
+        {labels.body}
+        <textarea
+          rows={2}
+          defaultValue={callout.body}
+          onBlur={(e) => onPatch({ body: e.target.value })}
+          className={`mt-1 ${INPUT}`}
+        />
+      </label>
+    </div>
+  );
+}
+
+/** One FAQ row: question, answer and the optional "say it like this" quote. */
+function FaqEditor({
+  item,
+  index,
+  labels,
+  onPatch,
+  onDelete,
+}: {
+  item: AdminGuideFaqRow;
+  index: number;
+  labels: { question: string; answer: string; quote: string; remove: string; position: string };
+  onPatch: (values: Partial<AdminGuideFaqRow>) => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="rounded-lg border border-border p-3">
+      <div className="flex items-center gap-3">
+        <span className="text-xs font-semibold text-muted-foreground">{labels.position}</span>
+        <button
+          type="button"
+          onClick={onDelete}
+          className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-destructive"
+        >
+          <Trash2 className="h-3.5 w-3.5" /> {labels.remove}
+        </button>
+      </div>
+      <label className="mt-2 block text-xs text-muted-foreground">
+        {labels.question}
+        <input
+          defaultValue={item.question}
+          onBlur={(e) => onPatch({ question: e.target.value })}
+          className={`mt-1 ${INPUT}`}
+        />
+      </label>
+      <div className="mt-2">
+        <p className="text-xs text-muted-foreground">{labels.answer}</p>
+        <SectionBody
+          key={`${item.id}-answer-${index}`}
+          initial={item.answer}
+          onCommit={(next) => onPatch({ answer: next })}
+        />
+      </div>
+      <label className="mt-2 block text-xs text-muted-foreground">
+        {labels.quote}
+        <textarea
+          rows={2}
+          defaultValue={item.quote}
+          onBlur={(e) => onPatch({ quote: e.target.value })}
+          className={`mt-1 ${INPUT}`}
+        />
+      </label>
+    </div>
+  );
 }

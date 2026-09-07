@@ -9,12 +9,24 @@
  * eyebrow always names the tone in words.
  */
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Info, XCircle } from "lucide-react";
 import { Markdown } from "@/components/markdown";
 import { CompactHero, SiteFooter } from "@/components/site-chrome";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df/components/ui/accordion";
 import { LocaleLink, useI18n, useLocale } from "@/i18n";
 import { getGuide } from "@/lib/guides.functions";
-import { TONE_CALLOUT, TONE_CARD, TONE_TEXT } from "@/lib/guides";
+import { CALLOUT_KIND, TONE_CARD, TONE_TEXT, type GuideCalloutKind } from "@/lib/guides";
+
+const CALLOUT_ICON: Record<GuideCalloutKind, typeof Info> = {
+  info: Info,
+  warning: AlertTriangle,
+  critical: XCircle,
+};
 
 export default function GuideDetailPage({ slug }: { slug: string }) {
   const { t } = useI18n();
@@ -103,12 +115,49 @@ export default function GuideDetailPage({ slug }: { slug: string }) {
                       <Markdown>{section.body}</Markdown>
                     </div>
                   ) : null}
-                  {section.callout ? (
-                    <p
-                      className={`mt-5 rounded-2xl px-5 py-4 text-sm leading-relaxed ${TONE_CALLOUT[section.tone]}`}
-                    >
-                      {section.callout}
-                    </p>
+
+                  {section.kind === "faq" && section.faq.length > 0 ? (
+                    <Accordion type="single" collapsible className="mt-4">
+                      {section.faq.map((item) => (
+                        <AccordionItem key={item.id} value={item.id}>
+                          <AccordionTrigger>{item.question}</AccordionTrigger>
+                          <AccordionContent>
+                            {item.answer ? <Markdown>{item.answer}</Markdown> : null}
+                            {item.quote ? (
+                              <p className="mt-3 border-l-2 border-accent pl-4 italic">
+                                <span className="eyebrow block not-italic text-muted-foreground">
+                                  {t("guides.faq.sayThis")}
+                                </span>
+                                {item.quote}
+                              </p>
+                            ) : null}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  ) : null}
+
+                  {section.callouts.length > 0 ? (
+                    <div className="mt-5 space-y-3">
+                      {section.callouts.map((callout) => {
+                        const style = CALLOUT_KIND[callout.kind];
+                        const Icon = CALLOUT_ICON[callout.kind];
+                        return (
+                          <div
+                            key={callout.id}
+                            className={`flex gap-3 rounded-2xl px-5 py-4 text-sm leading-relaxed ${style.surface}`}
+                          >
+                            <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${style.icon}`} aria-hidden />
+                            <div>
+                              {callout.label ? (
+                                <p className="font-semibold">{callout.label}</p>
+                              ) : null}
+                              {callout.body ? <p>{callout.body}</p> : null}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   ) : null}
                 </article>
               ))}

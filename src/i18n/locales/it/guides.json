@@ -19,5 +19,8 @@
   "contact": {
     "eyebrow": "Domande",
     "body": "Se non sai come applicare una regola alla tua situazione, scrivici prima di pubblicare."
+  },
+  "faq": {
+    "sayThis": "Dillo così"
   }
 }

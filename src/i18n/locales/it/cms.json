@@ -2609,12 +2609,34 @@
     "fieldHeading": "Titolo",
     "fieldLead": "Occhiello lungo",
     "fieldBody": "Testo",
-    "fieldCallout": "Riquadro",
     "tone": {
       "neutral": "Neutro",
       "positive": "Consigliato",
       "caution": "Attenzione",
       "critical": "Non consentito"
-    }
+    },
+    "fieldKind": "Layout",
+    "kind": {
+      "article": "Articolo",
+      "faq": "Domande"
+    },
+    "callouts": "Riquadri",
+    "callout": "Riquadro",
+    "addCallout": "Aggiungi riquadro",
+    "deleteCallout": "Rimuovi",
+    "fieldCalloutKind": "Tipo",
+    "fieldLabel": "Titolo",
+    "calloutKind": {
+      "info": "Nota",
+      "warning": "Attenzione",
+      "critical": "Non consentito"
+    },
+    "questions": "Domande",
+    "question": "Domanda",
+    "addQuestion": "Aggiungi domanda",
+    "deleteQuestion": "Rimuovi",
+    "fieldQuestion": "Domanda",
+    "fieldAnswer": "Risposta",
+    "fieldQuote": "Dillo così"
   }
 }

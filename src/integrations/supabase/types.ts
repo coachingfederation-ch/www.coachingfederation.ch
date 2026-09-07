@@ -3502,10 +3502,182 @@ export type Database = {
           },
         ]
       }
+      guide_callout_translations: {
+        Row: {
+          body: string
+          callout_id: string
+          created_at: string
+          id: string
+          label: string
+          locale: string
+          manually_edited: boolean
+          source_updated_at: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          callout_id: string
+          created_at?: string
+          id?: string
+          label?: string
+          locale: string
+          manually_edited?: boolean
+          source_updated_at?: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          callout_id?: string
+          created_at?: string
+          id?: string
+          label?: string
+          locale?: string
+          manually_edited?: boolean
+          source_updated_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_callout_translations_callout_id_fkey"
+            columns: ["callout_id"]
+            isOneToOne: false
+            referencedRelation: "guide_section_callouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guide_faq_item_translations: {
+        Row: {
+          answer: string
+          created_at: string
+          id: string
+          item_id: string
+          locale: string
+          manually_edited: boolean
+          question: string
+          quote: string
+          source_updated_at: string
+          updated_at: string
+        }
+        Insert: {
+          answer?: string
+          created_at?: string
+          id?: string
+          item_id: string
+          locale: string
+          manually_edited?: boolean
+          question?: string
+          quote?: string
+          source_updated_at?: string
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          id?: string
+          item_id?: string
+          locale?: string
+          manually_edited?: boolean
+          question?: string
+          quote?: string
+          source_updated_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_faq_item_translations_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "guide_faq_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guide_faq_items: {
+        Row: {
+          answer: string
+          created_at: string
+          id: string
+          position: number
+          question: string
+          quote: string
+          section_id: string
+          updated_at: string
+        }
+        Insert: {
+          answer?: string
+          created_at?: string
+          id?: string
+          position?: number
+          question?: string
+          quote?: string
+          section_id: string
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          id?: string
+          position?: number
+          question?: string
+          quote?: string
+          section_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_faq_items_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "guide_sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guide_section_callouts: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          kind: string
+          label: string
+          position: number
+          section_id: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          label?: string
+          position?: number
+          section_id: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          label?: string
+          position?: number
+          section_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_section_callouts_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "guide_sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       guide_section_translations: {
         Row: {
           body: string
-          callout: string
           created_at: string
           eyebrow: string
           heading: string
@@ -3519,7 +3691,6 @@ export type Database = {
         }
         Insert: {
           body?: string
-          callout?: string
           created_at?: string
           eyebrow?: string
           heading?: string
@@ -3533,7 +3704,6 @@ export type Database = {
         }
         Update: {
           body?: string
-          callout?: string
           created_at?: string
           eyebrow?: string
           heading?: string
@@ -3558,12 +3728,12 @@ export type Database = {
       guide_sections: {
         Row: {
           body: string
-          callout: string
           created_at: string
           eyebrow: string
           guide_id: string
           heading: string
           id: string
+          kind: string
           lead: string
           position: number
           tone: string
@@ -3571,12 +3741,12 @@ export type Database = {
         }
         Insert: {
           body?: string
-          callout?: string
           created_at?: string
           eyebrow?: string
           guide_id: string
           heading?: string
           id?: string
+          kind?: string
           lead?: string
           position?: number
           tone?: string
@@ -3584,12 +3754,12 @@ export type Database = {
         }
         Update: {
           body?: string
-          callout?: string
           created_at?: string
           eyebrow?: string
           guide_id?: string
           heading?: string
           id?: string
+          kind?: string
           lead?: string
           position?: number
           tone?: string

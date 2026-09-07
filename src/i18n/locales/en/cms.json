@@ -2609,12 +2609,34 @@
     "fieldHeading": "Heading",
     "fieldLead": "Lead",
     "fieldBody": "Body",
-    "fieldCallout": "Callout",
     "tone": {
       "neutral": "Neutral",
       "positive": "Encouraged",
       "caution": "Take care",
       "critical": "Not allowed"
-    }
+    },
+    "fieldKind": "Layout",
+    "kind": {
+      "article": "Article",
+      "faq": "Questions"
+    },
+    "callouts": "Callouts",
+    "callout": "Callout",
+    "addCallout": "Add callout",
+    "deleteCallout": "Remove",
+    "fieldCalloutKind": "Type",
+    "fieldLabel": "Label",
+    "calloutKind": {
+      "info": "Note",
+      "warning": "Take care",
+      "critical": "Not allowed"
+    },
+    "questions": "Questions",
+    "question": "Question",
+    "addQuestion": "Add question",
+    "deleteQuestion": "Remove",
+    "fieldQuestion": "Question",
+    "fieldAnswer": "Answer",
+    "fieldQuote": "Say it like this"
   }
 }

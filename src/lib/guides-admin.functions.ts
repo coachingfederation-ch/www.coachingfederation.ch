@@ -8,7 +8,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertEditor } from "./authz";
-import { GUIDE_TONES } from "./guides";
+import { GUIDE_CALLOUT_KINDS, GUIDE_SECTION_KINDS, GUIDE_TONES } from "./guides";
 
 export type AdminGuideRow = {
   id: string;
@@ -27,21 +27,43 @@ export type AdminGuideRow = {
   content_updated_at: string;
 };
 
+export type AdminGuideCalloutRow = {
+  id: string;
+  section_id: string;
+  position: number;
+  kind: string;
+  label: string;
+  body: string;
+};
+
+export type AdminGuideFaqRow = {
+  id: string;
+  section_id: string;
+  position: number;
+  question: string;
+  answer: string;
+  quote: string;
+};
+
 export type AdminGuideSectionRow = {
   id: string;
   guide_id: string;
   position: number;
+  kind: string;
   tone: string;
   eyebrow: string;
   heading: string;
   lead: string;
   body: string;
-  callout: string;
+  callouts: AdminGuideCalloutRow[];
+  faq: AdminGuideFaqRow[];
 };
 
 const GUIDE_COLUMNS =
   "id, slug, title, summary, eyebrow, intro, version_label, contact_email, footnote, is_published, published_at, sort_order, updated_at, content_updated_at";
-const SECTION_COLUMNS = "id, guide_id, position, tone, eyebrow, heading, lead, body, callout";
+const SECTION_COLUMNS = "id, guide_id, position, kind, tone, eyebrow, heading, lead, body";
+const CALLOUT_COLUMNS = "id, section_id, position, kind, label, body";
+const FAQ_COLUMNS = "id, section_id, position, question, answer, quote";
 
 export const listAdminGuides = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -74,13 +96,23 @@ export const getAdminGuide = createServerFn({ method: "GET" })
       if (!guide) return null;
       const { data: sections, error: sectionError } = await context.supabase
         .from("guide_sections")
-        .select(SECTION_COLUMNS)
+        .select(
+          `${SECTION_COLUMNS}, guide_section_callouts(${CALLOUT_COLUMNS}), guide_faq_items(${FAQ_COLUMNS})`,
+        )
         .eq("guide_id", data.id)
         .order("position", { ascending: true });
       if (sectionError) throw new Error(sectionError.message);
+
+      const byPosition = <T extends { position: number }>(rows: T[] | null | undefined): T[] =>
+        (rows ?? []).slice().sort((a, b) => a.position - b.position);
+
       return {
         guide: guide as AdminGuideRow,
-        sections: (sections ?? []) as AdminGuideSectionRow[],
+        sections: ((sections ?? []) as Record<string, unknown>[]).map((section) => ({
+          ...(section as unknown as AdminGuideSectionRow),
+          callouts: byPosition(section.guide_section_callouts as AdminGuideCalloutRow[]),
+          faq: byPosition(section.guide_faq_items as AdminGuideFaqRow[]),
+        })),
       };
     },
   );
@@ -186,12 +218,12 @@ export const updateGuideSection = createServerFn({ method: "POST" })
         values: z
           .object({
             position: z.number().int().min(0).max(999),
+            kind: z.enum(GUIDE_SECTION_KINDS),
             tone: z.enum(GUIDE_TONES),
             eyebrow: z.string().max(120),
             heading: z.string().max(200),
             lead: z.string().max(600),
             body: z.string().max(8000),
-            callout: z.string().max(2000),
           })
           .partial(),
       })
@@ -213,6 +245,123 @@ export const deleteGuideSection = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertEditor(context);
     const { error } = await context.supabase.from("guide_sections").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+/* ------------------------------------------------------------------ *
+ * Callouts — several per article section, each with its own type.
+ * ------------------------------------------------------------------ */
+
+export const createGuideCallout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z.object({ sectionId: z.string().uuid(), position: z.number().int().min(0) }).parse(data),
+  )
+  .handler(async ({ data, context }): Promise<{ id: string }> => {
+    await assertEditor(context);
+    const { data: row, error } = await context.supabase
+      .from("guide_section_callouts")
+      .insert({ section_id: data.sectionId, position: data.position })
+      .select("id")
+      .single();
+    if (error) throw new Error(error.message);
+    return { id: (row as { id: string }).id };
+  });
+
+export const updateGuideCallout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z
+      .object({
+        id: z.string().uuid(),
+        values: z
+          .object({
+            position: z.number().int().min(0).max(999),
+            kind: z.enum(GUIDE_CALLOUT_KINDS),
+            label: z.string().max(200),
+            body: z.string().max(4000),
+          })
+          .partial(),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    await assertEditor(context);
+    const { error } = await context.supabase
+      .from("guide_section_callouts")
+      .update(data.values)
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteGuideCallout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .handler(async ({ data, context }) => {
+    await assertEditor(context);
+    const { error } = await context.supabase
+      .from("guide_section_callouts")
+      .delete()
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+/* ------------------------------------------------------------------ *
+ * FAQ rows — the questions of a section switched to the FAQ layout.
+ * ------------------------------------------------------------------ */
+
+export const createGuideFaqItem = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z.object({ sectionId: z.string().uuid(), position: z.number().int().min(0) }).parse(data),
+  )
+  .handler(async ({ data, context }): Promise<{ id: string }> => {
+    await assertEditor(context);
+    const { data: row, error } = await context.supabase
+      .from("guide_faq_items")
+      .insert({ section_id: data.sectionId, position: data.position })
+      .select("id")
+      .single();
+    if (error) throw new Error(error.message);
+    return { id: (row as { id: string }).id };
+  });
+
+export const updateGuideFaqItem = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z
+      .object({
+        id: z.string().uuid(),
+        values: z
+          .object({
+            position: z.number().int().min(0).max(999),
+            question: z.string().max(400),
+            answer: z.string().max(8000),
+            quote: z.string().max(600),
+          })
+          .partial(),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    await assertEditor(context);
+    const { error } = await context.supabase
+      .from("guide_faq_items")
+      .update(data.values)
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteGuideFaqItem = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .handler(async ({ data, context }) => {
+    await assertEditor(context);
+    const { error } = await context.supabase.from("guide_faq_items").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });

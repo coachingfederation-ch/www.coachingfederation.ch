@@ -2609,12 +2609,34 @@
     "fieldHeading": "Titre de section",
     "fieldLead": "Chapeau",
     "fieldBody": "Texte",
-    "fieldCallout": "Encadré",
     "tone": {
       "neutral": "Neutre",
       "positive": "Encouragé",
       "caution": "Prudence",
       "critical": "Interdit"
-    }
+    },
+    "fieldKind": "Mise en page",
+    "kind": {
+      "article": "Article",
+      "faq": "Questions"
+    },
+    "callouts": "Encadrés",
+    "callout": "Encadré",
+    "addCallout": "Ajouter un encadré",
+    "deleteCallout": "Supprimer",
+    "fieldCalloutKind": "Type",
+    "fieldLabel": "Titre",
+    "calloutKind": {
+      "info": "Info",
+      "warning": "Attention",
+      "critical": "Interdit"
+    },
+    "questions": "Questions",
+    "question": "Question",
+    "addQuestion": "Ajouter une question",
+    "deleteQuestion": "Supprimer",
+    "fieldQuestion": "Question",
+    "fieldAnswer": "Réponse",
+    "fieldQuote": "À dire ainsi"
   }
 }
