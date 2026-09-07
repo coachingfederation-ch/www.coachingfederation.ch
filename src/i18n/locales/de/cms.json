@@ -25,7 +25,8 @@
     "guestPasses": "Gastpässe",
     "memberEngagement": "Mitglieder-Kommunikation",
     "overview": "Übersicht",
-    "editorialSignals": "Redaktionssignale"
+    "editorialSignals": "Redaktionssignale",
+    "guides": "Leitfäden"
   },
   "auth": {
     "signInSub": "Melden Sie sich an, um fortzufahren",
@@ -2579,5 +2580,41 @@
     "noComments": "Noch keine Kommentare.",
     "perArticle": "Nach Artikel",
     "article": "Artikel"
+  },
+  "guides": {
+    "title": "Leitfäden für Mitglieder",
+    "subtitle": "Verfassen Sie hier die englische Fassung und übersetzen Sie sie anschliessend ins Deutsche, Französische und Italienische. Nur veröffentlichte Leitfäden erscheinen auf der Website.",
+    "details": "Angaben zum Leitfaden",
+    "sections": "Abschnitte",
+    "section": "Abschnitt",
+    "draft": "Entwurf",
+    "published": "Auf der Website veröffentlicht",
+    "newTitle": "Titel des neuen Leitfadens",
+    "add": "Leitfaden hinzufügen",
+    "addSection": "Abschnitt hinzufügen",
+    "delete": "Leitfaden löschen",
+    "deleteSection": "Abschnitt löschen",
+    "confirmDelete": "Diesen Leitfaden samt allen Abschnitten löschen?",
+    "emptyState": "Wählen Sie einen Leitfaden oder legen Sie den ersten an.",
+    "fieldTitle": "Titel",
+    "fieldSlug": "Webadresse",
+    "fieldEyebrow": "Kurzzeile",
+    "fieldSummary": "Kurzbeschreibung",
+    "fieldIntro": "Einleitung",
+    "fieldFootnote": "Fussnote",
+    "fieldVersion": "Versionsangabe",
+    "fieldContact": "Kontakt-E-Mail",
+    "fieldOrder": "Reihenfolge",
+    "fieldTone": "Tonalität",
+    "fieldHeading": "Überschrift",
+    "fieldLead": "Lead",
+    "fieldBody": "Text",
+    "fieldCallout": "Hinweisbox",
+    "tone": {
+      "neutral": "Neutral",
+      "positive": "Empfohlen",
+      "caution": "Vorsicht",
+      "critical": "Nicht erlaubt"
+    }
   }
 }

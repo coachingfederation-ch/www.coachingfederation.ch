@@ -25,7 +25,8 @@
     "guestPasses": "Pass ospiti",
     "memberEngagement": "Coinvolgimento dei membri",
     "overview": "Panoramica",
-    "editorialSignals": "Segnali editoriali"
+    "editorialSignals": "Segnali editoriali",
+    "guides": "Guide"
   },
   "auth": {
     "signInSub": "Accedi per continuare",
@@ -2579,5 +2580,41 @@
     "noComments": "Ancora nessun commento.",
     "perArticle": "Per articolo",
     "article": "Articolo"
+  },
+  "guides": {
+    "title": "Guide per i membri",
+    "subtitle": "Scrivi qui la versione inglese, poi traducila in tedesco, francese e italiano. Sul sito appaiono solo le guide pubblicate.",
+    "details": "Dettagli della guida",
+    "sections": "Sezioni",
+    "section": "Sezione",
+    "draft": "Bozza",
+    "published": "Pubblicata sul sito",
+    "newTitle": "Titolo della nuova guida",
+    "add": "Aggiungi guida",
+    "addSection": "Aggiungi sezione",
+    "delete": "Elimina guida",
+    "deleteSection": "Elimina sezione",
+    "confirmDelete": "Eliminare questa guida e tutte le sue sezioni?",
+    "emptyState": "Seleziona una guida oppure creane una.",
+    "fieldTitle": "Titolo",
+    "fieldSlug": "Indirizzo web",
+    "fieldEyebrow": "Occhiello",
+    "fieldSummary": "Sintesi",
+    "fieldIntro": "Introduzione",
+    "fieldFootnote": "Nota",
+    "fieldVersion": "Versione",
+    "fieldContact": "E-mail di contatto",
+    "fieldOrder": "Ordine",
+    "fieldTone": "Tono",
+    "fieldHeading": "Titolo",
+    "fieldLead": "Occhiello lungo",
+    "fieldBody": "Testo",
+    "fieldCallout": "Riquadro",
+    "tone": {
+      "neutral": "Neutro",
+      "positive": "Consigliato",
+      "caution": "Attenzione",
+      "critical": "Non consentito"
+    }
   }
 }

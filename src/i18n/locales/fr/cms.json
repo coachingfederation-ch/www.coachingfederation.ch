@@ -25,7 +25,8 @@
     "guestPasses": "Pass invités",
     "memberEngagement": "Engagement des membres",
     "overview": "Vue d’ensemble",
-    "editorialSignals": "Signaux éditoriaux"
+    "editorialSignals": "Signaux éditoriaux",
+    "guides": "Guides"
   },
   "auth": {
     "signInSub": "Connectez-vous pour continuer",
@@ -2579,5 +2580,41 @@
     "noComments": "Pas encore de commentaires.",
     "perArticle": "Par article",
     "article": "Article"
+  },
+  "guides": {
+    "title": "Guides pour les membres",
+    "subtitle": "Rédigez ici la version anglaise, puis traduisez-la en allemand, français et italien. Seuls les guides publiés apparaissent sur le site.",
+    "details": "Détails du guide",
+    "sections": "Sections",
+    "section": "Section",
+    "draft": "Brouillon",
+    "published": "Publié sur le site",
+    "newTitle": "Titre du nouveau guide",
+    "add": "Ajouter un guide",
+    "addSection": "Ajouter une section",
+    "delete": "Supprimer le guide",
+    "deleteSection": "Supprimer la section",
+    "confirmDelete": "Supprimer ce guide et toutes ses sections ?",
+    "emptyState": "Sélectionnez un guide ou créez le premier.",
+    "fieldTitle": "Titre",
+    "fieldSlug": "Adresse web",
+    "fieldEyebrow": "Surtitre",
+    "fieldSummary": "Résumé",
+    "fieldIntro": "Introduction",
+    "fieldFootnote": "Note de bas de page",
+    "fieldVersion": "Version",
+    "fieldContact": "Adresse e-mail de contact",
+    "fieldOrder": "Ordre",
+    "fieldTone": "Tonalité",
+    "fieldHeading": "Titre de section",
+    "fieldLead": "Chapeau",
+    "fieldBody": "Texte",
+    "fieldCallout": "Encadré",
+    "tone": {
+      "neutral": "Neutre",
+      "positive": "Encouragé",
+      "caution": "Prudence",
+      "critical": "Interdit"
+    }
   }
 }
