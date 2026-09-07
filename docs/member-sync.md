@@ -240,7 +240,40 @@ A nightly cron job posts to `/api/public/member-sync`. Two things protect it:
 Manual runs from the panel go through an authenticated admin server function, not
 this endpoint. Schedule and job names are in `docs/operations-and-go-live.md`.
 
+**"Scheduler finished" never means "sync finished".** The schedule only fires the
+request and reports whether it was *sent*; it stops waiting after a few seconds
+regardless of what the sync is doing. Judge a run by its row, not by the job log.
+
+### Abandoned runs
+
+A run's status is only written at the end — succeeded, failed, or aborted. A
+process cut off before that leaves its row on `running` forever, which used to
+hide the fact that a night's sync never happened: the health card treated
+`running` as a mild warning indefinitely.
+
+`reapAbandonedRuns()` in `src/lib/member-sync.server.ts` closes those rows. Any
+run still `running` whose `started_at` is older than `ABANDONED_RUN_MINUTES`
+(30 minutes, against the roughly one minute a real run takes) is set to `failed`
+with `finished_at` now and the message "Abandoned — the sync process stopped
+before it could finish."
+
+It runs in two places, so the system self-heals without anyone asking:
+
+- at the top of `runMemberSync`, before the new run row is inserted — which also
+  prevents two runs appearing to overlap;
+- when the `/integration` screen loads its run list, through the admin-gated
+  `reapAbandonedSyncRuns` server function in `src/lib/members.functions.ts`.
+
+The health card follows the same cut-off: a `running` row younger than 30 minutes
+is a warning, older than that it is a failure (`src/lib/relay-health.server.ts`),
+so a silently lost sync turns the panel red instead of looking merely slow.
+
+A reaped run tells you *that* a sync died, not *why* — a process cut off in its
+first seconds writes no events at all. The failed row with its timestamp is the
+starting point for that investigation.
+
 ---
+
 
 ## 7. When something looks wrong
 
