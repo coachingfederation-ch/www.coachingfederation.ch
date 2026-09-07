@@ -15,16 +15,24 @@ import { RichTextField } from "@/components/cms/RichTextField";
 import { GenericTranslationsPanel } from "@/components/cms/translations/GenericTranslationsPanel";
 import type { TranslationFieldConfig } from "@/components/cms/translations/types";
 import { useCms } from "@/i18n/cms";
-import { GUIDE_TONES } from "@/lib/guides";
+import { GUIDE_CALLOUT_KINDS, GUIDE_SECTION_KINDS, GUIDE_TONES } from "@/lib/guides";
 import {
   createGuide,
+  createGuideCallout,
+  createGuideFaqItem,
   createGuideSection,
   deleteGuide,
+  deleteGuideCallout,
+  deleteGuideFaqItem,
   deleteGuideSection,
   getAdminGuide,
   listAdminGuides,
   updateGuide,
+  updateGuideCallout,
+  updateGuideFaqItem,
   updateGuideSection,
+  type AdminGuideCalloutRow,
+  type AdminGuideFaqRow,
   type AdminGuideRow,
   type AdminGuideSectionRow,
 } from "@/lib/guides-admin.functions";
@@ -35,6 +43,7 @@ import {
   translateGuide,
   type GuideTranslationRow,
 } from "@/lib/guide-translations.functions";
+
 
 export const Route = createFileRoute("/_staff/manage/guides")({
   component: GuidesCmsRoute,
@@ -118,7 +127,13 @@ function GuidesCmsRoute() {
       setSelected(id);
     });
 
-  const sectionCount = sections.length;
+  const shape = useMemo(
+    () => sections.map((s) => ({ callouts: s.callouts.length, faq: s.faq.length })),
+    [sections],
+  );
+  /** Stable signature so the translation panel reloads when the shape changes. */
+  const shapeKey = shape.map((s) => `${s.callouts}:${s.faq}`).join("|");
+
   const fields: TranslationFieldConfig[] = useMemo(() => {
     const list: TranslationFieldConfig[] = [
       { key: "eyebrow", label: t("guides.fieldEyebrow"), type: "input" },
@@ -147,17 +162,41 @@ function GuidesCmsRoute() {
           rows: 2,
         },
         { key: `s${index}_body`, label: `${prefix} · ${t("guides.fieldBody")}`, type: "rich" },
-        {
-          key: `s${index}_callout`,
-          label: `${prefix} · ${t("guides.fieldCallout")}`,
-          type: "textarea",
-          rows: 2,
-        },
       );
+      section.callouts.forEach((_, c) => {
+        const callout = `${prefix} · ${t("guides.callout")} ${c + 1}`;
+        list.push(
+          { key: `s${index}_c${c}_label`, label: `${callout} · ${t("guides.fieldLabel")}`, type: "input" },
+          {
+            key: `s${index}_c${c}_body`,
+            label: `${callout} · ${t("guides.fieldBody")}`,
+            type: "textarea",
+            rows: 2,
+          },
+        );
+      });
+      section.faq.forEach((_, q) => {
+        const item = `${prefix} · ${t("guides.question")} ${q + 1}`;
+        list.push(
+          {
+            key: `s${index}_q${q}_question`,
+            label: `${item} · ${t("guides.fieldQuestion")}`,
+            type: "input",
+          },
+          { key: `s${index}_q${q}_answer`, label: `${item} · ${t("guides.fieldAnswer")}`, type: "rich" },
+          {
+            key: `s${index}_q${q}_quote`,
+            label: `${item} · ${t("guides.fieldQuote")}`,
+            type: "textarea",
+            rows: 2,
+          },
+        );
+      });
     });
     return list;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sectionCount, t]);
+  }, [shapeKey, t]);
+
 
   return (
     <Shell>
@@ -344,6 +383,21 @@ function GuidesCmsRoute() {
                           {t("guides.section")} {index + 1}
                         </span>
                         <label className="text-xs text-muted-foreground">
+                          {t("guides.fieldKind")}
+                          <select
+                            value={section.kind}
+                            onChange={(e) => void patchSection(section.id, { kind: e.target.value })}
+                            className={`ml-2 ${INPUT} inline-block w-auto`}
+                          >
+                            {GUIDE_SECTION_KINDS.map((kind) => (
+                              <option key={kind} value={kind}>
+                                {t(`guides.kind.${kind}`)}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                        <label className="text-xs text-muted-foreground">
+
                           {t("guides.fieldTone")}
                           <select
                             value={section.tone}

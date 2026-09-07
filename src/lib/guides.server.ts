@@ -6,7 +6,17 @@
  * these pages show. Localized copy is merged over the English source, field by
  * field, so a partial translation still renders a complete page.
  */
-import type { Guide, GuideSection, GuideSummary, GuideTone } from "./guides";
+import type {
+  Guide,
+  GuideCallout,
+  GuideCalloutKind,
+  GuideFaqItem,
+  GuideSection,
+  GuideSectionKind,
+  GuideSummary,
+  GuideTone,
+} from "./guides";
+
 
 type Row = Record<string, unknown>;
 
@@ -68,28 +78,65 @@ export async function loadPublishedGuide(slug: string, locale: string): Promise<
   const { data: sectionData, error: sectionError } = await client
     .from("guide_sections")
     .select(
-      "id, position, tone, eyebrow, heading, lead, body, callout, guide_section_translations(locale, eyebrow, heading, lead, body, callout)",
+      [
+        "id, position, kind, tone, eyebrow, heading, lead, body",
+        "guide_section_translations(locale, eyebrow, heading, lead, body)",
+        "guide_section_callouts(id, position, kind, label, body, guide_callout_translations(locale, label, body))",
+        "guide_faq_items(id, position, question, answer, quote, guide_faq_item_translations(locale, question, answer, quote))",
+      ].join(", "),
     )
     .eq("guide_id", row.id as string)
     .order("position", { ascending: true });
   if (sectionError) throw sectionError;
 
+  const byLocale = (rows: unknown, key = "locale"): Row =>
+    ((rows as Row[] | null) ?? []).find((t) => t[key] === locale) ?? {};
+
   const sections = ((sectionData ?? []) as Row[]).map((section) => {
-    const st =
-      ((section.guide_section_translations as Row[] | null) ?? []).find(
-        (t) => t.locale === locale,
-      ) ?? {};
+    const st = byLocale(section.guide_section_translations);
+
+    const callouts = ((section.guide_section_callouts as Row[] | null) ?? [])
+      .slice()
+      .sort((a, b) => Number(a.position ?? 0) - Number(b.position ?? 0))
+      .map((callout) => {
+        const ct = byLocale(callout.guide_callout_translations);
+        return {
+          id: String(callout.id),
+          position: Number(callout.position ?? 0),
+          kind: (str(callout.kind) || "info") as GuideCalloutKind,
+          label: pick(ct.label, callout.label),
+          body: pick(ct.body, callout.body),
+        } satisfies GuideCallout;
+      });
+
+    const faq = ((section.guide_faq_items as Row[] | null) ?? [])
+      .slice()
+      .sort((a, b) => Number(a.position ?? 0) - Number(b.position ?? 0))
+      .map((item) => {
+        const it = byLocale(item.guide_faq_item_translations);
+        return {
+          id: String(item.id),
+          position: Number(item.position ?? 0),
+          question: pick(it.question, item.question),
+          answer: pick(it.answer, item.answer),
+          quote: pick(it.quote, item.quote),
+        } satisfies GuideFaqItem;
+      });
+
     return {
       id: String(section.id),
       position: Number(section.position ?? 0),
+      kind: (str(section.kind) || "article") as GuideSectionKind,
       tone: (str(section.tone) || "neutral") as GuideTone,
       eyebrow: pick(st.eyebrow, section.eyebrow),
       heading: pick(st.heading, section.heading),
       lead: pick(st.lead, section.lead),
       body: pick(st.body, section.body),
-      callout: pick(st.callout, section.callout),
+      callouts,
+      faq,
     } satisfies GuideSection;
   });
+
 
   return {
     id: String(row.id),

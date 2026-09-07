@@ -4,12 +4,12 @@
  * Deliberately close to `event-translations.functions.ts`: same gateway, same
  * prompt shape, same "one row per (entity, locale)" storage, so editors meet
  * one translation model across the CMS. A guide travels as one document —
- * guide-level copy plus every section — so the model keeps the tone consistent
- * across the whole page.
+ * guide-level copy plus every section, its callouts and its questions — so the
+ * model keeps the tone consistent across the whole page.
  *
- * The flat field keys (`title`, `s<n>_heading`, …) are what the shared
- * translation panel edits; they are mapped back onto the two translation
- * tables on save.
+ * The flat field keys (`title`, `s<n>_heading`, `s<n>_c<m>_body`,
+ * `s<n>_q<m>_answer`, …) are what the shared translation panel edits; they are
+ * mapped back onto the four translation tables on save.
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -23,13 +23,18 @@ const LOCALE_NAMES: Record<string, string> = {
 };
 
 const GUIDE_FIELDS = ["title", "summary", "eyebrow", "intro", "footnote"] as const;
-const SECTION_FIELDS = ["eyebrow", "heading", "lead", "body", "callout"] as const;
+const SECTION_FIELDS = ["eyebrow", "heading", "lead", "body"] as const;
+const CALLOUT_FIELDS = ["label", "body"] as const;
+const FAQ_FIELDS = ["question", "answer", "quote"] as const;
 
 export type GuideTranslationRow = {
   locale: string;
   manually_edited: boolean;
   source_updated_at: string;
 } & Record<string, string | boolean | null>;
+
+type CalloutRow = { id: string; position: number; label: string; body: string };
+type FaqRow = { id: string; position: number; question: string; answer: string; quote: string };
 
 type SectionRow = {
   id: string;
@@ -38,17 +43,30 @@ type SectionRow = {
   heading: string;
   lead: string;
   body: string;
-  callout: string;
+  guide_section_callouts?: CalloutRow[] | null;
+  guide_faq_items?: FaqRow[] | null;
 };
 
+/** Shape the CMS passes so the panel knows which keys exist. */
+export type GuideTranslationShape = { callouts: number; faq: number }[];
+
 /** Field keys the translation panel edits, derived from the section order. */
-export function guideTranslationFieldKeys(sectionCount: number): string[] {
+export function guideTranslationFieldKeys(shape: GuideTranslationShape): string[] {
   const keys: string[] = [...GUIDE_FIELDS];
-  for (let i = 0; i < sectionCount; i += 1) {
+  shape.forEach((section, i) => {
     for (const field of SECTION_FIELDS) keys.push(`s${i}_${field}`);
-  }
+    for (let c = 0; c < section.callouts; c += 1) {
+      for (const field of CALLOUT_FIELDS) keys.push(`s${i}_c${c}_${field}`);
+    }
+    for (let q = 0; q < section.faq; q += 1) {
+      for (const field of FAQ_FIELDS) keys.push(`s${i}_q${q}_${field}`);
+    }
+  });
   return keys;
 }
+
+const sorted = <T extends { position: number }>(rows: T[] | null | undefined): T[] =>
+  (rows ?? []).slice().sort((a, b) => a.position - b.position);
 
 async function loadSource(
   supabase: { from: (t: string) => any }, // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -63,7 +81,9 @@ async function loadSource(
   if (!guide) throw new Error("Guide not found");
   const { data: sections, error: sectionError } = await supabase
     .from("guide_sections")
-    .select("id, position, eyebrow, heading, lead, body, callout")
+    .select(
+      "id, position, eyebrow, heading, lead, body, guide_section_callouts(id, position, label, body), guide_faq_items(id, position, question, answer, quote)",
+    )
     .eq("guide_id", guideId)
     .order("position", { ascending: true });
   if (sectionError) throw new Error(sectionError.message);
@@ -89,10 +109,26 @@ export const loadGuideTranslations = createServerFn({ method: "GET" })
     const { data: sectionRows, error: sectionError } = sectionIds.length
       ? await context.supabase
           .from("guide_section_translations")
-          .select("section_id, locale, eyebrow, heading, lead, body, callout")
+          .select("section_id, locale, eyebrow, heading, lead, body")
           .in("section_id", sectionIds)
       : { data: [], error: null };
     if (sectionError) throw new Error(sectionError.message);
+
+    const calloutIds = sections.flatMap((s) => sorted(s.guide_section_callouts).map((c) => c.id));
+    const { data: calloutRows } = calloutIds.length
+      ? await context.supabase
+          .from("guide_callout_translations")
+          .select("callout_id, locale, label, body")
+          .in("callout_id", calloutIds)
+      : { data: [] };
+
+    const faqIds = sections.flatMap((s) => sorted(s.guide_faq_items).map((f) => f.id));
+    const { data: faqRows } = faqIds.length
+      ? await context.supabase
+          .from("guide_faq_item_translations")
+          .select("item_id, locale, question, answer, quote")
+          .in("item_id", faqIds)
+      : { data: [] };
 
     return ((guideRows ?? []) as Record<string, unknown>[]).map((row) => {
       const merged: GuideTranslationRow = {
@@ -108,6 +144,22 @@ export const loadGuideTranslations = createServerFn({ method: "GET" })
         for (const field of SECTION_FIELDS) {
           merged[`s${index}_${field}`] = ((st?.[field] as string | null) ?? "") || "";
         }
+        sorted(section.guide_section_callouts).forEach((callout, c) => {
+          const ct = ((calloutRows ?? []) as Record<string, unknown>[]).find(
+            (r) => r.callout_id === callout.id && r.locale === row.locale,
+          );
+          for (const field of CALLOUT_FIELDS) {
+            merged[`s${index}_c${c}_${field}`] = ((ct?.[field] as string | null) ?? "") || "";
+          }
+        });
+        sorted(section.guide_faq_items).forEach((item, q) => {
+          const it = ((faqRows ?? []) as Record<string, unknown>[]).find(
+            (r) => r.item_id === item.id && r.locale === row.locale,
+          );
+          for (const field of FAQ_FIELDS) {
+            merged[`s${index}_q${q}_${field}`] = ((it?.[field] as string | null) ?? "") || "";
+          }
+        });
       });
       return merged;
     });
@@ -156,7 +208,6 @@ export const saveGuideTranslation = createServerFn({ method: "POST" })
         heading: text(`s${index}_heading`),
         lead: text(`s${index}_lead`),
         body: text(`s${index}_body`),
-        callout: text(`s${index}_callout`),
         manually_edited: true,
         source_updated_at: sourceUpdatedAt,
       }));
@@ -165,6 +216,42 @@ export const saveGuideTranslation = createServerFn({ method: "POST" })
         .upsert(rows, { onConflict: "section_id,locale" });
       if (sectionError) return { error: sectionError.message };
     }
+
+    const calloutRows = sections.flatMap((section, index) =>
+      sorted(section.guide_section_callouts).map((callout, c) => ({
+        callout_id: callout.id,
+        locale: data.locale,
+        label: text(`s${index}_c${c}_label`),
+        body: text(`s${index}_c${c}_body`),
+        manually_edited: true,
+        source_updated_at: sourceUpdatedAt,
+      })),
+    );
+    if (calloutRows.length > 0) {
+      const { error: calloutError } = await context.supabase
+        .from("guide_callout_translations")
+        .upsert(calloutRows, { onConflict: "callout_id,locale" });
+      if (calloutError) return { error: calloutError.message };
+    }
+
+    const faqRows = sections.flatMap((section, index) =>
+      sorted(section.guide_faq_items).map((item, q) => ({
+        item_id: item.id,
+        locale: data.locale,
+        question: text(`s${index}_q${q}_question`),
+        answer: text(`s${index}_q${q}_answer`),
+        quote: text(`s${index}_q${q}_quote`),
+        manually_edited: true,
+        source_updated_at: sourceUpdatedAt,
+      })),
+    );
+    if (faqRows.length > 0) {
+      const { error: faqError } = await context.supabase
+        .from("guide_faq_item_translations")
+        .upsert(faqRows, { onConflict: "item_id,locale" });
+      if (faqError) return { error: faqError.message };
+    }
+
     return { error: null };
   });
 
@@ -193,7 +280,12 @@ export const translateGuide = createServerFn({ method: "POST" })
         heading: s.heading,
         lead: s.lead,
         body: s.body,
-        callout: s.callout,
+        callouts: sorted(s.guide_section_callouts).map((c) => ({ label: c.label, body: c.body })),
+        faq: sorted(s.guide_faq_items).map((f) => ({
+          question: f.question,
+          answer: f.answer,
+          quote: f.quote,
+        })),
       })),
     };
 
@@ -202,7 +294,7 @@ export const translateGuide = createServerFn({ method: "POST" })
       "Keep Markdown formatting, bullet lists and paragraph structure exactly as they are.",
       "Use a warm, clear, professional tone suitable for The Switzerland Chapter of ICF.",
       "Do not translate proper nouns such as ICF, ACC, PCC, MCC, LinkedIn, or e-mail addresses.",
-      "Keep the sections array in the same order and with the same number of entries.",
+      "Keep every array (sections, callouts, faq) in the same order and with the same number of entries.",
       "Respond with JSON only, in exactly the same shape as the input.",
       "",
       JSON.stringify(document),
@@ -248,6 +340,7 @@ export const translateGuide = createServerFn({ method: "POST" })
       const trimmed = typeof value === "string" ? value.trim() : "";
       return trimmed.length > 0 ? trimmed : fallback;
     };
+    const now = new Date().toISOString();
 
     const { error } = await context.supabase.from("guide_translations").upsert(
       {
@@ -260,16 +353,17 @@ export const translateGuide = createServerFn({ method: "POST" })
         footnote: clean(parsed.footnote, ""),
         manually_edited: false,
         source_updated_at: sourceUpdatedAt,
-        updated_at: new Date().toISOString(),
+        updated_at: now,
       },
       { onConflict: "guide_id,locale" },
     );
     if (error) throw new Error(error.message);
 
+    const translatedSections = Array.isArray(parsed.sections) ? parsed.sections : [];
+
     if (sections.length > 0) {
-      const translatedSections = Array.isArray(parsed.sections) ? parsed.sections : [];
       const rows = sections.map((section, index) => {
-        const t = translatedSections[index] ?? {};
+        const t = translatedSections[index] ?? ({} as (typeof document.sections)[number]);
         return {
           section_id: section.id,
           locale: data.locale,
@@ -277,16 +371,54 @@ export const translateGuide = createServerFn({ method: "POST" })
           heading: clean(t.heading, ""),
           lead: clean(t.lead, ""),
           body: clean(t.body, ""),
-          callout: clean(t.callout, ""),
           manually_edited: false,
           source_updated_at: sourceUpdatedAt,
-          updated_at: new Date().toISOString(),
+          updated_at: now,
         };
       });
       const { error: sectionError } = await context.supabase
         .from("guide_section_translations")
         .upsert(rows, { onConflict: "section_id,locale" });
       if (sectionError) throw new Error(sectionError.message);
+    }
+
+    const calloutRows = sections.flatMap((section, index) => {
+      const translated = translatedSections[index]?.callouts ?? [];
+      return sorted(section.guide_section_callouts).map((callout, c) => ({
+        callout_id: callout.id,
+        locale: data.locale,
+        label: clean(translated[c]?.label, ""),
+        body: clean(translated[c]?.body, ""),
+        manually_edited: false,
+        source_updated_at: sourceUpdatedAt,
+        updated_at: now,
+      }));
+    });
+    if (calloutRows.length > 0) {
+      const { error: calloutError } = await context.supabase
+        .from("guide_callout_translations")
+        .upsert(calloutRows, { onConflict: "callout_id,locale" });
+      if (calloutError) throw new Error(calloutError.message);
+    }
+
+    const faqRows = sections.flatMap((section, index) => {
+      const translated = translatedSections[index]?.faq ?? [];
+      return sorted(section.guide_faq_items).map((item, q) => ({
+        item_id: item.id,
+        locale: data.locale,
+        question: clean(translated[q]?.question, ""),
+        answer: clean(translated[q]?.answer, ""),
+        quote: clean(translated[q]?.quote, ""),
+        manually_edited: false,
+        source_updated_at: sourceUpdatedAt,
+        updated_at: now,
+      }));
+    });
+    if (faqRows.length > 0) {
+      const { error: faqError } = await context.supabase
+        .from("guide_faq_item_translations")
+        .upsert(faqRows, { onConflict: "item_id,locale" });
+      if (faqError) throw new Error(faqError.message);
     }
 
     return { ok: true };

@@ -10,16 +10,42 @@ export const GUIDE_TONES = ["neutral", "positive", "caution", "critical"] as con
 
 export type GuideTone = (typeof GUIDE_TONES)[number];
 
+/** A section is either a regular article block or a set of questions. */
+export const GUIDE_SECTION_KINDS = ["article", "faq"] as const;
+export type GuideSectionKind = (typeof GUIDE_SECTION_KINDS)[number];
+
+/** Callout types carry their own icon and colour, independent of the tone. */
+export const GUIDE_CALLOUT_KINDS = ["info", "warning", "critical"] as const;
+export type GuideCalloutKind = (typeof GUIDE_CALLOUT_KINDS)[number];
+
+export type GuideCallout = {
+  id: string;
+  position: number;
+  kind: GuideCalloutKind;
+  label: string;
+  body: string;
+};
+
+export type GuideFaqItem = {
+  id: string;
+  position: number;
+  question: string;
+  answer: string;
+  quote: string;
+};
+
 /** One ordered section of a guide, already resolved to the reader's locale. */
 export type GuideSection = {
   id: string;
   position: number;
+  kind: GuideSectionKind;
   tone: GuideTone;
   eyebrow: string;
   heading: string;
   lead: string;
   body: string;
-  callout: string;
+  callouts: GuideCallout[];
+  faq: GuideFaqItem[];
 };
 
 /** A published guide, already resolved to the reader's locale. */
@@ -61,9 +87,25 @@ export const TONE_TEXT: Record<GuideTone, string> = {
   critical: "text-destructive",
 };
 
-export const TONE_CALLOUT: Record<GuideTone, string> = {
-  neutral: "bg-secondary text-foreground",
-  positive: "bg-teal-soft text-teal-foreground",
-  caution: "bg-warn-soft text-warn-foreground",
-  critical: "bg-destructive/10 text-destructive",
+/**
+ * Callout treatment per callout type. The icon is named here rather than
+ * imported so this module stays free of component imports; GuideDetail maps
+ * the name onto the lucide icon it renders.
+ */
+export const CALLOUT_KIND: Record<
+  GuideCalloutKind,
+  { surface: string; icon: string; iconName: "info" | "warning" | "critical" }
+> = {
+  info: { surface: "bg-teal-soft text-teal-foreground", icon: "text-teal", iconName: "info" },
+  warning: {
+    surface: "bg-warn-soft text-warn-foreground",
+    icon: "text-warn-foreground",
+    iconName: "warning",
+  },
+  critical: {
+    surface: "bg-destructive/10 text-destructive",
+    icon: "text-destructive",
+    iconName: "critical",
+  },
 };
+
