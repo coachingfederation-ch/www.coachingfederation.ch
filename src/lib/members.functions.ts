@@ -36,6 +36,19 @@ export const runSyncNow = createServerFn({ method: "POST" })
     });
   });
 
+/**
+ * Close sync runs left on `running` by an interrupted process (admin only).
+ * Called before the integration screen reads its run list, so a stuck row
+ * self-heals instead of showing a sync that never ends.
+ */
+export const reapAbandonedSyncRuns = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { reapAbandonedRuns } = await import("./member-sync.server");
+    return { reaped: await reapAbandonedRuns() };
+  });
+
 /** Admin "Clean up": anonymise members past their scheduled deletion date. */
 export const getSyncRunDetail = createServerFn({ method: "POST" })
   .inputValidator((input) => z.object({ runId: z.string().uuid() }).parse(input))

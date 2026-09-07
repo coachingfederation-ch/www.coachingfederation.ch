@@ -15,6 +15,7 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { soapCredentials } from "./icf-soap.server";
 import { loadIntegrationConfigAdmin } from "./integration-config.server";
 import { lookupEgressIp } from "./egress-ip.server";
+import { ABANDONED_RUN_MINUTES } from "./member-sync.server";
 import type { IntegrationMode } from "./integration";
 
 /** Green / amber / red, decided server-side so the UI stays presentational. */
@@ -147,7 +148,11 @@ export async function loadRelayHealth(): Promise<RelayHealth> {
         ? ageHours !== null && ageHours > STALE_AFTER_HOURS
           ? "warn"
           : "ok"
-        : run.status === "running"
+        : // A `running` row only means "alive" for as long as a run can plausibly
+          // take; past that the process died without ever writing its status.
+          run.status === "running" &&
+            ageHours !== null &&
+            ageHours * 60 < ABANDONED_RUN_MINUTES
           ? "warn"
           : "fail",
     status: run?.status ?? null,

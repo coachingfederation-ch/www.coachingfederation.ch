@@ -48,12 +48,50 @@ async function logEvent(
   });
 }
 
+/**
+ * A run's status is only written when it ends, so a process cut off mid-run
+ * (worker eviction, deploy, timeout) leaves the row on `running` forever — the
+ * integration screen then shows a sync that never finished and the health card
+ * stays on a soft warning while a whole day of syncing silently went missing.
+ *
+ * Real runs complete in roughly a minute, so anything still `running` after
+ * this window is dead, not slow.
+ */
+export const ABANDONED_RUN_MINUTES = 30;
+
+const ABANDONED_MESSAGE = "Abandoned — the sync process stopped before it could finish.";
+
+/** Close runs left on `running` by an interrupted process. Best effort. */
+export async function reapAbandonedRuns(): Promise<number> {
+  const cutoff = new Date(Date.now() - ABANDONED_RUN_MINUTES * 60_000).toISOString();
+  const { data, error } = await supabaseAdmin
+    .from("member_sync_runs")
+    .update({
+      status: "failed",
+      finished_at: new Date().toISOString(),
+      error_message: ABANDONED_MESSAGE,
+    })
+    .eq("status", "running")
+    .lt("started_at", cutoff)
+    .select("id");
+  if (error) {
+    console.error(`[member-sync] reap failed error=${JSON.stringify(error.message)}`);
+    return 0;
+  }
+  const reaped = data?.length ?? 0;
+  if (reaped) console.warn(`[member-sync] reaped ${reaped} abandoned run(s)`);
+  return reaped;
+}
+
 export async function runMemberSync(options: {
   triggerSource: "cron" | "manual" | "cutover";
   actorUserId?: string | null;
   /** Admin one-off escape hatch: skip the percentage drop guard (never the empty-feed abort). */
   ignoreDropGuard?: boolean;
 }): Promise<SyncResult> {
+  // Close any dead run first, so two runs never appear to overlap.
+  await reapAbandonedRuns();
+
   const config = await loadIntegrationConfigAdmin();
 
   const { data: runRow, error: runError } = await supabaseAdmin

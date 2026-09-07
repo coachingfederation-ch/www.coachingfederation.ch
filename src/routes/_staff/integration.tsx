@@ -30,6 +30,7 @@ import {
   checkIcfCredentials,
   getOutboundIpDiagnostics,
   getRelayHealth,
+  reapAbandonedSyncRuns,
 } from "@/lib/members.functions";
 
 export const Route = createFileRoute("/_staff/integration")({
@@ -531,6 +532,9 @@ function IntegrationPageBody() {
 
   const reload = async () => {
     try {
+      // Close runs abandoned by an interrupted process before reading the list,
+      // otherwise a dead run keeps showing as "running" forever.
+      await reapAbandonedSyncRuns().catch(() => undefined);
       const [c, r] = await Promise.all([fetchIntegrationConfig(), fetchRecentSyncRuns()]);
       setConfig(c);
       setRuns(r);
