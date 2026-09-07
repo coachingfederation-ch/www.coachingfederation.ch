@@ -58,7 +58,11 @@ export const Route = createFileRoute("/api/public/europe-pulse-scan")({
               `failed=${progress.chaptersFailed} ms=${Date.now() - startedAt}`,
           );
 
-          if (progress.status === "running") kickNextSlice(new URL(request.url).origin);
+          // Awaited: the runtime drops in-flight work as soon as we respond,
+          // so an un-awaited hand-over never reached the next slice.
+          if (progress.status === "running") {
+            await kickNextSlice(new URL(request.url).origin);
+          }
           return Response.json(progress, { status: progress.status === "failed" ? 500 : 200 });
         } catch (err) {
           const message = err instanceof Error ? err.message : "Europe Pulse run threw";

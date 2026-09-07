@@ -47,8 +47,15 @@ export type { PulseRunResult } from "./europe-pulse/store.server";
 const SLICE_SIZE = 6;
 /** A slice holds its lock this long; a crashed slice self-releases after it. */
 const LOCK_MINUTES = 4;
-/** No progress for this long means the run is dead and gets reaped. */
-const STALE_MINUTES = 15;
+/**
+ * No progress for this long means the run is dead and gets reaped.
+ *
+ * Must stay comfortably longer than the backstop cron interval. It used to be
+ * 15 minutes against an hourly backstop, so any run that lost its slice
+ * hand-over was guaranteed to be reaped by the very call that should have
+ * resumed it.
+ */
+const STALE_MINUTES = 90;
 
 export type { PulsePhase, PulseProgress } from "./europe-pulse";
 
@@ -325,10 +332,16 @@ async function failRun(runId: string, message: string): Promise<void> {
  */
 export async function advanceEuropePulseRun(runId?: string): Promise<PulseProgress | null> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  await reapStaleRuns();
 
+  // Resume first, reap second. Reaping up front meant the backstop closed the
+  // exact runs it was meant to continue: a run whose slice hand-over was lost
+  // simply looks idle, and an idle-but-resumable run must be picked up, never
+  // failed. Anything we could not advance is reaped on the way out instead.
   const target = runId ?? (await currentRun())?.runId;
-  if (!target) return null;
+  if (!target) {
+    await reapStaleRuns();
+    return null;
+  }
 
   // Single-flight: only the invocation that wins this conditional update works
   // the slice. The lease expires by itself if that invocation is killed.
@@ -344,7 +357,12 @@ export async function advanceEuropePulseRun(runId?: string): Promise<PulseProgre
     .or(`locked_until.is.null,locked_until.lt.${now.toISOString()}`)
     .select(RUN_COLUMNS)
     .maybeSingle();
-  if (!claimed) return null;
+  if (!claimed) {
+    // Another slice holds the lease, or the run is locked with a dead worker
+    // behind it — the latter stops refreshing its heartbeat and is reaped here.
+    await reapStaleRuns();
+    return null;
+  }
 
   const run = claimed as unknown as RunRecord;
   const ids = run.chapter_ids ?? [];
@@ -428,18 +446,41 @@ export async function advanceEuropePulseRun(runId?: string): Promise<PulseProgre
 }
 
 /**
- * Best-effort hand-over to the next slice. Fire-and-forget on purpose: the
- * hourly backstop cron picks the run up again if this call never lands.
+ * Hand over to the next slice.
+ *
+ * This used to be fire-and-forget, which silently did nothing: the serverless
+ * runtime tears the request down the moment the response is written, so an
+ * un-awaited fetch never left the worker and every scan stopped after its
+ * first slice. The caller therefore awaits this before responding.
+ *
+ * We only need the next request to *land* — it then runs in its own worker for
+ * minutes. So we wait for the connection to be accepted and give up after a
+ * few seconds rather than blocking on the whole slice. The wait is deliberately
+ * not an abort: cancelling would kill the slice we just started. The backstop
+ * cron remains the safety net if the call never lands at all.
  */
-export function kickNextSlice(origin: string): void {
+const HANDOVER_WAIT_MS = 8_000;
+
+export async function kickNextSlice(origin: string): Promise<void> {
   const token =
     process.env["EUROPE_PULSE_CRON_TOKEN"] ?? process.env["MEMBER_SYNC_CRON_TOKEN"] ?? "";
-  if (!token) return;
-  void fetch(`${origin}/api/public/europe-pulse-scan`, {
+  if (!token) {
+    console.warn("[europe-pulse] no cron token configured; relying on the backstop cron");
+    return;
+  }
+  const request = fetch(`${origin}/api/public/europe-pulse-scan`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-cron-token": token },
     body: JSON.stringify({ advance: true }),
-  }).catch(() => {
-    /* the backstop cron will resume the run */
+  }).catch((err) => {
+    console.warn(
+      `[europe-pulse] hand-over failed error=${JSON.stringify(
+        err instanceof Error ? err.message : String(err),
+      )}`,
+    );
   });
+  await Promise.race([
+    request,
+    new Promise<void>((resolve) => setTimeout(resolve, HANDOVER_WAIT_MS)),
+  ]);
 }
