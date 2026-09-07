@@ -108,4 +108,3 @@ export const CALLOUT_KIND: Record<
     iconName: "critical",
   },
 };
-

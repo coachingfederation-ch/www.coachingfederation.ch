@@ -17,7 +17,6 @@ import type {
   GuideTone,
 } from "./guides";
 
-
 type Row = Record<string, unknown>;
 
 const str = (value: unknown): string => (typeof value === "string" ? value : "");
@@ -136,7 +135,6 @@ export async function loadPublishedGuide(slug: string, locale: string): Promise<
       faq,
     } satisfies GuideSection;
   });
-
 
   return {
     id: String(row.id),

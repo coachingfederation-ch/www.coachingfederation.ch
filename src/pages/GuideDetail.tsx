@@ -28,7 +28,6 @@ const CALLOUT_ICON: Record<GuideCalloutKind, typeof Info> = {
   critical: XCircle,
 };
 
-
 export default function GuideDetailPage({ slug }: { slug: string }) {
   const { t } = useI18n();
   const locale = useLocale();
@@ -163,7 +162,6 @@ export default function GuideDetailPage({ slug }: { slug: string }) {
                 </article>
               ))}
             </div>
-
 
             {guide.contactEmail ? (
               <div className="mt-10 rounded-3xl bg-hero p-8 text-hero-foreground">

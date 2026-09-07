@@ -65,7 +65,6 @@ const SECTION_COLUMNS = "id, guide_id, position, kind, tone, eyebrow, heading, l
 const CALLOUT_COLUMNS = "id, section_id, position, kind, label, body";
 const FAQ_COLUMNS = "id, section_id, position, question, answer, quote";
 
-
 export const listAdminGuides = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<AdminGuideRow[]> => {
@@ -115,7 +114,6 @@ export const getAdminGuide = createServerFn({ method: "GET" })
           faq: byPosition(section.guide_faq_items as AdminGuideFaqRow[]),
         })),
       };
-
     },
   );
 
@@ -226,7 +224,6 @@ export const updateGuideSection = createServerFn({ method: "POST" })
             heading: z.string().max(200),
             lead: z.string().max(600),
             body: z.string().max(8000),
-
           })
           .partial(),
       })

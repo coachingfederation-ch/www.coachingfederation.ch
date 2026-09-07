@@ -44,7 +44,6 @@ import {
   type GuideTranslationRow,
 } from "@/lib/guide-translations.functions";
 
-
 export const Route = createFileRoute("/_staff/manage/guides")({
   component: GuidesCmsRoute,
 });
@@ -166,7 +165,11 @@ function GuidesCmsRoute() {
       section.callouts.forEach((_, c) => {
         const callout = `${prefix} · ${t("guides.callout")} ${c + 1}`;
         list.push(
-          { key: `s${index}_c${c}_label`, label: `${callout} · ${t("guides.fieldLabel")}`, type: "input" },
+          {
+            key: `s${index}_c${c}_label`,
+            label: `${callout} · ${t("guides.fieldLabel")}`,
+            type: "input",
+          },
           {
             key: `s${index}_c${c}_body`,
             label: `${callout} · ${t("guides.fieldBody")}`,
@@ -183,7 +186,11 @@ function GuidesCmsRoute() {
             label: `${item} · ${t("guides.fieldQuestion")}`,
             type: "input",
           },
-          { key: `s${index}_q${q}_answer`, label: `${item} · ${t("guides.fieldAnswer")}`, type: "rich" },
+          {
+            key: `s${index}_q${q}_answer`,
+            label: `${item} · ${t("guides.fieldAnswer")}`,
+            type: "rich",
+          },
           {
             key: `s${index}_q${q}_quote`,
             label: `${item} · ${t("guides.fieldQuote")}`,
@@ -196,7 +203,6 @@ function GuidesCmsRoute() {
     return list;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shapeKey, t]);
-
 
   return (
     <Shell>
@@ -386,7 +392,9 @@ function GuidesCmsRoute() {
                           {t("guides.fieldKind")}
                           <select
                             value={section.kind}
-                            onChange={(e) => void patchSection(section.id, { kind: e.target.value })}
+                            onChange={(e) =>
+                              void patchSection(section.id, { kind: e.target.value })
+                            }
                             className={`ml-2 ${INPUT} inline-block w-auto`}
                           >
                             {GUIDE_SECTION_KINDS.map((kind) => (
@@ -397,7 +405,6 @@ function GuidesCmsRoute() {
                           </select>
                         </label>
                         <label className="text-xs text-muted-foreground">
-
                           {t("guides.fieldTone")}
                           <select
                             value={section.tone}
@@ -559,7 +566,6 @@ function GuidesCmsRoute() {
                           <Plus className="h-3.5 w-3.5" /> {t("guides.addCallout")}
                         </button>
                       </div>
-
                     </div>
                   ))}
                 </div>
