@@ -2,12 +2,14 @@
 
 /**
  * Fires once when a reader looks like they are leaving the page: the pointer
- * exits through the top edge (desktop), a back navigation is attempted, or the
- * tab is hidden and later returned to. Gated on scroll depth so a bounce in the
- * first seconds never triggers it. Never blocks navigation — the back guard
- * pushes a single sentinel history entry and gives it straight back.
+ * exits through the top edge (desktop), or the tab is hidden and later
+ * returned to. Gated on scroll depth so a bounce in the first seconds never
+ * triggers it. Deliberately does NOT touch history — an earlier version pushed
+ * a sentinel entry and popped it on cleanup, which undid genuine navigations
+ * and bounced readers back to the article they had just left.
  *
  * Exports: useExitIntent.
+
  */
 import { useEffect, useRef } from "react";
 
@@ -50,36 +52,13 @@ export function useExitIntent({ enabled, minScroll = 0.5, onTrigger }: ExitInten
       if (document.visibilityState === "visible") trigger();
     };
 
-    // Sentinel entry: a back press pops it, we prompt, and the reader keeps the
-    // real history untouched — pressing back again simply leaves.
-    let sentinel = false;
-    try {
-      window.history.pushState({ feedbackExitGuard: true }, "");
-      sentinel = true;
-    } catch {
-      /* history is unavailable in some embedded browsers */
-    }
-
-    const onPopState = () => {
-      sentinel = false;
-      trigger();
-    };
-
     document.addEventListener("mouseout", onMouseOut);
     document.addEventListener("visibilitychange", onVisibility);
-    window.addEventListener("popstate", onPopState);
 
     return () => {
       document.removeEventListener("mouseout", onMouseOut);
       document.removeEventListener("visibilitychange", onVisibility);
-      window.removeEventListener("popstate", onPopState);
-      if (sentinel) {
-        try {
-          window.history.back();
-        } catch {
-          /* nothing to unwind */
-        }
-      }
     };
+
   }, [enabled, minScroll]);
 }

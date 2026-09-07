@@ -35,7 +35,7 @@ export function DeibCommitment() {
             {items.map((item) => (
               <li
                 key={item}
-                className="rounded-2xl border border-border/70 bg-card p-6 shadow-[var(--shadow-soft)]"
+                className="rounded-2xl border border-border/70 bg-card p-6 shadow-soft"
               >
                 <div className="flex items-start gap-3">
                   <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
