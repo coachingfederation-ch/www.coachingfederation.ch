@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "title": "Guides — The Switzerland Chapter of ICF",
+    "description": "Practical guidelines for members and volunteers of The Switzerland Chapter of ICF."
+  },
+  "hero": {
+    "eyebrow": "For members and volunteers",
+    "titlePre": "Guides that keep us ",
+    "titleAccent": "clear and consistent",
+    "lede": "Practical guidance for the moments when you speak, write, or act as part of our chapter."
+  },
+  "loading": "Loading…",
+  "empty": "No guides are published yet. Please check back soon.",
+  "backToAll": "All guides",
+  "missing": {
+    "title": "We could not find that guide",
+    "body": "It may have been renamed or is not published yet."
+  },
+  "contact": {
+    "eyebrow": "Questions",
+    "body": "If you are unsure how a guideline applies to your situation, write to us before you post."
+  }
+}

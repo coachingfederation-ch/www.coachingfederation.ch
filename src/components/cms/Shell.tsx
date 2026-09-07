@@ -96,6 +96,9 @@ const nav = [
     icon: FileText,
     allowedRoles: PLATFORM_ADMIN,
   },
+  // Member-facing guidelines (social media, volunteering) — editorial work.
+  { to: "/manage/guides", key: "nav.guides", icon: BookOpen, allowedRoles: ["editor"] },
+
   {
     to: "/manage/chat-insights",
     key: "nav.chatInsights",
