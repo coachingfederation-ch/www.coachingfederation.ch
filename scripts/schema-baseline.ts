@@ -88,12 +88,17 @@ const QUERIES: { title: string; sql: string }[] = [
           order by n.nspname, t.typname`,
   },
   {
+    // Bodies are not validated during replay (check_function_bodies = false), so
+    // a function may precede the tables its body touches. A signature that names
+    // a table's composite type cannot — those are deferred to a second pass that
+    // runs after the tables exist.
     title: "Functions",
     sql: `select pg_get_functiondef(p.oid) || ';'
           from pg_proc p join pg_namespace n on n.oid = p.pronamespace
           where n.nspname in (${schemaList}) and p.prokind = 'f'
             and not exists (select 1 from pg_depend d
                             where d.objid = p.oid and d.deptype = 'e')
+            and not (${DEPENDS_ON_TABLE_TYPE})
           order by n.nspname, p.proname, p.oid`,
   },
   {
