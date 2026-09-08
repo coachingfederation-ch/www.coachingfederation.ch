@@ -454,16 +454,17 @@ blocked as test-shaped) → provider delivery events → `member_sync_events` fo
 
 ## Migration hygiene
 
-- Do not reorder the migration history while the project is in TEST/cutover.
-- Replaying the 46 existing migrations in order is correct, but many files are
-  follow-up hardening passes on the same objects. If you need to understand the
-  final RLS shape, read the last few migrations rather than the whole chain.
-- Squashing the migration history into a single initial file is safe **only** for
-  fresh environments. The current database already contains 501 test members and
-  member-authored profiles, so any squash must be applied as metadata-only and
-  verified against a throwaway copy. After go-live, the migrations can be squashed
-  as a cleanup step; before go-live, keep them intact because they are the audit
-  trail for the cutover rehearsal.
+- Do not reorder the migration history, and do not squash it — not before
+  go-live and not after. The platform applies and records each of the 199 files
+  in `supabase/migrations/` individually, so rewriting them puts the folder and
+  the ledger out of agreement and destroys the audit trail. "A stable starting
+  point" is the derived snapshot in `supabase/baseline/`, not a rewritten history.
+- Many files are follow-up hardening passes on the same objects. To understand
+  the final access rules, read the snapshot — it is the flattened current state —
+  rather than replaying the chain in your head.
+- Regenerate and verify the snapshot after any migration that changes structure,
+  and use `bun run baseline:check` as the cheap guard that a data operation
+  changed no structure.
 
 ## Appendix — where the rules actually live
 
