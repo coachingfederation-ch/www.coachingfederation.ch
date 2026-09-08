@@ -173,10 +173,7 @@
       },
       {
         "group": "The Switzerland Chapter of ICF",
-        "items": [
-          "Sondaggio tra i membri del Chapter",
-          "Briefing organizzativo 2026"
-        ]
+        "items": ["Sondaggio tra i membri del Chapter", "Briefing organizzativo 2026"]
       }
     ],
     "download": {
@@ -234,28 +231,28 @@
   },
   "initiatives": {
     "eyebrow": "Come collaborare con noi",
-    "title": "Tre percorsi di coaching, a seconda delle vostre esigenze.",
+    "title": "Un percorso chiaro dall'ambizione all'impatto.",
     "items": [
       {
-        "tag": "Inizia da qui",
-        "title": "Un progetto pilota di executive coaching mirato.",
-        "desc": "Vi aiutiamo a definire un percorso circoscritto e ben misurato per un gruppo definito di leader, abbinando poi coach credenziali con esperienza adatta al vostro settore e alla vostra regione linguistica.",
-        "lead": "Orizzonte tipico: 4-6 mesi",
-        "cta": "Definisci un progetto pilota"
+        "tag": "Scoperta",
+        "title": "Partiamo dal vostro contesto, non da un catalogo.",
+        "desc": "Dedichiamo tempo a comprendere la vostra organizzazione, le persone coinvolte e i risultati che contano davvero, così il percorso nasce attorno a una domanda reale e non a un programma standard.",
+        "lead": "In genere due o tre colloqui",
+        "cta": "Avvia un primo colloquio"
       },
       {
-        "tag": "Amplia la portata",
-        "title": "Team coaching per reparti sotto pressione.",
-        "desc": "Percorsi rivolti all'intero team per far emergere il non detto, ricostruire la fiducia dopo i cambiamenti e trasformare le buone intenzioni in prassi di lavoro condivise.",
-        "lead": "Orizzonte tipico: 6-9 mesi",
-        "cta": "Scopri il team coaching"
+        "tag": "Abbinamento",
+        "title": "Coach scelti per i vostri obiettivi, non per disponibilità.",
+        "desc": "Vi mettiamo in contatto con coach credenziali ICF la cui esperienza si adatta al vostro settore, alla vostra regione linguistica e ai vostri obiettivi, spiegando il motivo di ogni abbinamento proposto.",
+        "lead": "Di solito entro due settimane dal primo colloquio",
+        "cta": "Scopri come abbiniamo i coach"
       },
       {
-        "tag": "Integra",
-        "title": "Creare una cultura interna del coaching.",
-        "desc": "Programmi per sviluppare le competenze di coaching nei vostri manager, sostenere gruppi interni di coach e stabilire standard di qualità allineati alle competenze e all'etica ICF.",
-        "lead": "Orizzonte tipico: da 12 mesi in su",
-        "cta": "Pianifica un programma culturale"
+        "tag": "Misurazione",
+        "title": "Tappe intermedie, feedback e una valutazione onesta.",
+        "desc": "Sosteniamo il percorso dall'inizio alla chiusura con tappe concordate, feedback strutturati di partecipanti e committenti e una valutazione chiara di ciò che è cambiato.",
+        "lead": "Monitorato lungo il percorso, valutato alla chiusura",
+        "cta": "Parla di misurazione"
       }
     ]
   },
@@ -447,27 +444,6 @@
         "stat": "86%",
         "title": "ROI registrato",
         "desc": "Le organizzazioni che investono nel coaching registrano ritorni misurabili entro dodici mesi."
-      }
-    ]
-  },
-  "steps": {
-    "eyebrow": "Come lavoriamo",
-    "title": "Un percorso chiaro dall'ambizione all'impatto.",
-    "items": [
-      {
-        "n": "01",
-        "title": "Scoperta",
-        "desc": "Comprendiamo il vostro contesto, le vostre persone e gli obiettivi fondamentali."
-      },
-      {
-        "n": "02",
-        "title": "Abbinamento",
-        "desc": "Vi mettiamo in contatto con coach credenziali ICF la cui esperienza si adatta ai vostri obiettivi."
-      },
-      {
-        "n": "03",
-        "title": "Misurazione",
-        "desc": "Sosteniamo il percorso con tappe intermedie, feedback e una valutazione chiara."
       }
     ]
   },

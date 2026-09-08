@@ -173,10 +173,7 @@
       },
       {
         "group": "The Switzerland Chapter of ICF",
-        "items": [
-          "Sondage auprès des membres du chapitre",
-          "Briefing organisationnel 2026"
-        ]
+        "items": ["Sondage auprès des membres du chapitre", "Briefing organisationnel 2026"]
       }
     ],
     "download": {
@@ -234,28 +231,28 @@
   },
   "initiatives": {
     "eyebrow": "Manières de collaborer avec nous",
-    "title": "Trois voies d'accès au coaching, selon votre maturité.",
+    "title": "Un parcours clair de vos ambitions jusqu'à l'impact.",
     "items": [
       {
-        "tag": "Point de départ",
-        "title": "Un projet pilote ciblé de coaching de dirigeants.",
-        "desc": "Nous vous aidons à définir un accompagnement de périmètre restreint et bien mesuré pour un groupe de leaders ciblé, puis nous sélectionnons des coachs certifiés dont l'expérience correspond à votre secteur et à votre région linguistique.",
-        "lead": "Horizon typique : 4-6 mois",
-        "cta": "Définir un projet pilote"
+        "tag": "Découvrir",
+        "title": "Nous partons de votre contexte, pas d'un catalogue.",
+        "desc": "Nous prenons le temps de comprendre votre organisation, les personnes concernées et les résultats qui comptent vraiment, afin de construire l'accompagnement autour d'une question réelle plutôt que d'un programme générique.",
+        "lead": "En général deux à trois entretiens",
+        "cta": "Engager un premier échange"
       },
       {
-        "tag": "Passage à l'échelle",
-        "title": "Coaching d'équipe pour les unités sous pression.",
-        "desc": "Des accompagnements d'équipes complètes pour faire émerger les non-dits, restaurer la confiance après un changement et traduire les bonnes intentions en pratiques de travail concrètes.",
-        "lead": "Horizon typique : 6-9 mois",
-        "cta": "Discuter du coaching d'équipe"
+        "tag": "Associer",
+        "title": "Des coachs choisis pour vos objectifs, pas pour leur disponibilité.",
+        "desc": "Nous vous mettons en relation avec des coachs certifiés ICF dont l'expérience correspond à votre secteur, votre région linguistique et vos objectifs, en explicitant le raisonnement derrière chaque proposition.",
+        "lead": "Généralement sous deux semaines après le premier échange",
+        "cta": "Comprendre notre sélection"
       },
       {
-        "tag": "Ancrage",
-        "title": "Création d'une culture interne du coaching.",
-        "desc": "Des programmes pour développer les compétences de coaching chez vos managers, soutenir un pool de coachs internes et fixer des normes de qualité alignées sur les compétences et la déontologie ICF.",
-        "lead": "Horizon typique : 12 mois et plus",
-        "cta": "Planifier un programme sur la culture"
+        "tag": "Mesurer",
+        "title": "Des jalons, des retours et une évaluation honnête.",
+        "desc": "Nous accompagnons la démarche du début à la fin avec des jalons convenus, des retours structurés des participants et des sponsors, et une évaluation claire de ce qui a changé.",
+        "lead": "Suivi en continu, évalué à la clôture",
+        "cta": "Parler de la mesure d'impact"
       }
     ]
   },
@@ -447,27 +444,6 @@
         "stat": "86%",
         "title": "ROI constaté",
         "desc": "Les organisations qui investissent dans le coaching constatent des retours mesurables dans les douze mois."
-      }
-    ]
-  },
-  "steps": {
-    "eyebrow": "Notre approche",
-    "title": "Un parcours clair de vos ambitions jusqu'à l'impact.",
-    "items": [
-      {
-        "n": "01",
-        "title": "Découvrir",
-        "desc": "Nous appréhendons votre contexte, vos équipes et les résultats prioritaires pour vous."
-      },
-      {
-        "n": "02",
-        "title": "Associer",
-        "desc": "Nous vous mettons en relation avec des coachs certifiés ICF dont l'expérience correspond à vos objectifs."
-      },
-      {
-        "n": "03",
-        "title": "Mesurer",
-        "desc": "Nous accompagnons le processus avec des jalons, des retours d'expérience et une évaluation précise."
       }
     ]
   },
