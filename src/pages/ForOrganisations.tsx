@@ -77,9 +77,10 @@ export default function ForOrganisationsPage() {
 
         <WhoWeServe selected={segment} onSelect={setSegment} />
 
+        <CultureSurvey />
+
         <Initiatives contextLine={contextLine} />
 
-        <CultureSurvey />
 
         <EventsStrip />
 
