@@ -137,6 +137,17 @@ const QUERIES: { title: string; sql: string }[] = [
           order by n.nspname, c.relname`,
   },
   {
+    // Second function pass: signatures that name a table row type, now creatable.
+    title: "Functions over table types",
+    sql: `select pg_get_functiondef(p.oid) || ';'
+          from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+          where n.nspname in (${schemaList}) and p.prokind = 'f'
+            and not exists (select 1 from pg_depend d
+                            where d.objid = p.oid and d.deptype = 'e')
+            and ${DEPENDS_ON_TABLE_TYPE}
+          order by n.nspname, p.proname, p.oid`,
+  },
+  {
     title: "Primary keys and unique constraints",
     sql: `select format('alter table %I.%I add constraint %I %s;', n.nspname, c.relname, con.conname,
                         pg_get_constraintdef(con.oid))
