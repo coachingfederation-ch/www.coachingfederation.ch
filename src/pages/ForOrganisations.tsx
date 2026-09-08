@@ -17,14 +17,12 @@ import {
 import { useI18n } from "@/i18n";
 import { askAssistant } from "@/lib/assistant-open";
 
-
 export default function ForOrganisationsPage() {
   const { t, tList } = useI18n();
   const outcomes = tList<{ stat: string; title: string; desc: string }>(
     "organisations.outcomes.items",
   );
 
-  
   const segments = tList<{ label: string; route: string }>("organisations.segments.items");
   const [segment, setSegment] = useState<SegmentId | null>(null);
 
@@ -35,9 +33,6 @@ export default function ForOrganisationsPage() {
         .replace("{segment}", segmentCopy.label)
         .replace("{route}", segmentCopy.route)
     : undefined;
-
-
-
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -83,9 +78,6 @@ export default function ForOrganisationsPage() {
         <WhoWeServe selected={segment} onSelect={setSegment} />
 
         <Initiatives contextLine={contextLine} />
-
-
-
 
         <CultureSurvey />
 
