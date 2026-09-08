@@ -2,10 +2,13 @@
  * Structural sections for the "For Organisations" landing page, covering proof points and initiatives.
  * Exports: ProofBar, Differentiators, Initiatives, EventsStrip. Rendered by the organisations landing route.
  */
+import { useQuery } from "@tanstack/react-query";
 import { Mark, type MarkName } from "@/components/marks";
 import { AnimatedStat } from "@/components/organisations/AnimatedStat";
 import { CARD_SHADOW } from "@/components/site-chrome";
 import { LocaleLink, useI18n } from "@/i18n";
+import { formatEventDate } from "@/lib/events";
+import { listPublicEvents } from "@/lib/events.functions";
 
 export function ProofBar() {
   const { tList } = useI18n();
@@ -136,9 +139,24 @@ export function Initiatives({ contextLine }: { contextLine?: string }) {
   );
 }
 
+/** Event categories this section surfaces, in display priority order. */
+const ORG_EVENT_CATEGORIES = ["learning", "flagship", "partner"];
+const ORG_EVENT_LIMIT = 4;
+
 export function EventsStrip() {
-  const { t, tList } = useI18n();
-  const items = tList<{ date: string; title: string; desc: string }>("organisations.events.items");
+  const { t, locale } = useI18n();
+  const { data } = useQuery({
+    queryKey: ["organisation-events", locale],
+    queryFn: () => listPublicEvents({ data: { locale } }),
+  });
+
+  // The featured event is served separately from the list, so put it back in
+  // before filtering — otherwise a featured learning event disappears here.
+  const all = data ? [data.featured, ...data.upcoming].filter(Boolean) : [];
+  const items = all
+    .filter((e) => e && ORG_EVENT_CATEGORIES.includes(e.category_slug ?? ""))
+    .slice(0, ORG_EVENT_LIMIT);
+
   return (
     // Raised surface: card/list section.
     <section className="bg-card py-24">
@@ -155,18 +173,48 @@ export function EventsStrip() {
             {t("organisations.events.cta")} →
           </LocaleLink>
         </div>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map((e) => (
-            <div
-              key={e.title}
-              className={"rounded-2xl border border-border bg-card p-6 " + CARD_SHADOW}
+        {items.length === 0 ? (
+          <div className={"mt-10 rounded-2xl border border-border bg-card p-8 " + CARD_SHADOW}>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              {t("organisations.events.empty")}
+            </p>
+            <LocaleLink
+              to="/events"
+              className="mt-4 inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
             >
-              <p className="btn-mono text-xs font-bold !text-teal-foreground">{e.date}</p>
-              <h3 className="mt-3 text-sm font-semibold leading-snug tracking-tight">{e.title}</h3>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{e.desc}</p>
-            </div>
-          ))}
-        </div>
+              {t("organisations.events.emptyCta")} →
+            </LocaleLink>
+          </div>
+        ) : (
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {items.map((e) => (
+              <LocaleLink
+                key={e!.id}
+                to={`/events/${e!.slug}`}
+                className={
+                  "rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-0.5 " +
+                  CARD_SHADOW
+                }
+              >
+                <p className="btn-mono text-xs font-bold !text-teal-foreground">
+                  {formatEventDate(e!.starts_at!, locale, e!.timezone ?? undefined)}
+                </p>
+                <h3 className="mt-3 text-sm font-semibold leading-snug tracking-tight">
+                  {e!.title}
+                  {e!.city ? `, ${e!.city}` : ""}
+                </h3>
+                {e!.summary ? (
+                  <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-muted-foreground">
+                    {e!.summary}
+                  </p>
+                ) : null}
+                {e!.category_name ? (
+                  <p className="mt-3 text-xs font-semibold text-primary">{e!.category_name}</p>
+                ) : null}
+              </LocaleLink>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
