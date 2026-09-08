@@ -234,28 +234,28 @@
   },
   "initiatives": {
     "eyebrow": "Ways to work with us",
-    "title": "Three routes into coaching, depending on where you are.",
+    "title": "A clear path from ambition to impact.",
     "items": [
       {
-        "tag": "Start here",
-        "title": "A focused executive coaching pilot.",
-        "desc": "We help you scope a small, well-measured engagement for a defined leadership population, then match credentialed coaches whose experience fits your sector and language region.",
-        "lead": "Typical horizon: 4-6 months",
-        "cta": "Scope a pilot"
+        "tag": "Discover",
+        "title": "We start with your context, not a catalogue.",
+        "desc": "We take the time to understand your organisation, the people involved and the outcomes that actually matter, so the engagement is scoped around a real question rather than a generic programme.",
+        "lead": "Typically two to three conversations",
+        "cta": "Start a discovery conversation"
       },
       {
-        "tag": "Scale up",
-        "title": "Team coaching for units under pressure.",
-        "desc": "Whole-team engagements that surface what is unsaid, rebuild trust after change and convert good intentions into agreed working practices.",
-        "lead": "Typical horizon: 6-9 months",
-        "cta": "Discuss team coaching"
+        "tag": "Match",
+        "title": "Coaches chosen for your goals, not for availability.",
+        "desc": "We connect you with ICF credentialed coaches whose experience fits your sector, language region and objectives, and we make the reasoning behind every proposed match explicit.",
+        "lead": "Usually within two weeks of discovery",
+        "cta": "See how matching works"
       },
       {
-        "tag": "Embed",
-        "title": "Building an internal coaching culture.",
-        "desc": "Programmes that develop coaching skills in your managers, support internal coach pools and set quality standards aligned to ICF competencies and ethics.",
-        "lead": "Typical horizon: 12 months and beyond",
-        "cta": "Plan a culture programme"
+        "tag": "Measure",
+        "title": "Milestones, feedback and an honest evaluation.",
+        "desc": "We support the engagement from start to close with agreed milestones, structured feedback from participants and sponsors, and a clear evaluation of what changed.",
+        "lead": "Reviewed throughout, evaluated at close",
+        "cta": "Discuss measurement"
       }
     ]
   },
@@ -447,27 +447,6 @@
         "stat": "86%",
         "title": "ROI reported",
         "desc": "Organisations investing in coaching report measurable returns within twelve months."
-      }
-    ]
-  },
-  "steps": {
-    "eyebrow": "How we work",
-    "title": "A clear path from ambition to impact.",
-    "items": [
-      {
-        "n": "01",
-        "title": "Discover",
-        "desc": "We understand your context, your people and the outcomes that matter."
-      },
-      {
-        "n": "02",
-        "title": "Match",
-        "desc": "We connect you with ICF credentialed coaches whose experience fits your goals."
-      },
-      {
-        "n": "03",
-        "title": "Measure",
-        "desc": "We support the engagement with milestones, feedback and clear evaluation."
       }
     ]
   },

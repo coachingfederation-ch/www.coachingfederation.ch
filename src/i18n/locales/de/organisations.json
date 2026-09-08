@@ -234,28 +234,28 @@
   },
   "initiatives": {
     "eyebrow": "Möglichkeiten der Zusammenarbeit",
-    "title": "Drei Wege zu Coaching, je nachdem, wo Sie stehen.",
+    "title": "Ein klarer Weg von der Ambition zur Wirkung.",
     "items": [
       {
-        "tag": "Hier starten",
-        "title": "Ein gezieltes Executive-Coaching-Pilotprojekt.",
-        "desc": "Wir helfen Ihnen bei der Konzeption eines kleinen, gut messbaren Engagements für eine definierte Führungsgruppe und vermitteln anschliessend zertifizierte Coaches, deren Erfahrung zu Ihrer Branche und Sprachregion passt.",
-        "lead": "Typischer Zeithorizont: 4–6 Monate",
-        "cta": "Pilotprojekt konzipieren"
+        "tag": "Verstehen",
+        "title": "Wir beginnen mit Ihrem Kontext, nicht mit einem Katalog.",
+        "desc": "Wir nehmen uns Zeit, um Ihre Organisation, die beteiligten Menschen und die Ergebnisse zu verstehen, auf die es wirklich ankommt – so entsteht ein Vorhaben rund um eine echte Fragestellung statt ein Standardprogramm.",
+        "lead": "In der Regel zwei bis drei Gespräche",
+        "cta": "Erstgespräch vereinbaren"
       },
       {
-        "tag": "Ausbauen",
-        "title": "Team-Coaching für Einheiten unter Druck.",
-        "desc": "Massnahmen für ganze Teams, die Ungesagtes ansprechen, Vertrauen nach Veränderungen wiederaufbauen und gute Absichten in verbindliche Arbeitsweisen umwandeln.",
-        "lead": "Typischer Zeithorizont: 6–9 Monate",
-        "cta": "Team-Coaching besprechen"
+        "tag": "Zuordnen",
+        "title": "Coaches nach Ihren Zielen ausgewählt, nicht nach Verfügbarkeit.",
+        "desc": "Wir verbinden Sie mit ICF-zertifizierten Coaches, deren Erfahrung zu Ihrer Branche, Sprachregion und Zielsetzung passt – und machen die Begründung für jeden Vorschlag transparent.",
+        "lead": "Meist innerhalb von zwei Wochen nach dem Erstgespräch",
+        "cta": "Auswahlprozess kennenlernen"
       },
       {
-        "tag": "Verankern",
-        "title": "Aufbau einer internen Coaching-Kultur.",
-        "desc": "Programme, die Coaching-Kompetenzen bei Ihren Führungskräften entwickeln, interne Coach-Pools unterstützen und Qualitätsstandards festlegen, die an den ICF-Kompetenzen und -Ethikregeln ausgerichtet sind.",
-        "lead": "Typischer Zeithorizont: 12 Monate und mehr",
-        "cta": "Kulturprogramm planen"
+        "tag": "Messen",
+        "title": "Meilensteine, Feedback und eine ehrliche Auswertung.",
+        "desc": "Wir begleiten das Vorhaben von Beginn bis Abschluss mit vereinbarten Meilensteinen, strukturiertem Feedback von Teilnehmenden und Auftraggebenden sowie einer klaren Auswertung dessen, was sich verändert hat.",
+        "lead": "Laufend überprüft, zum Abschluss ausgewertet",
+        "cta": "Wirkungsmessung besprechen"
       }
     ]
   },
@@ -447,27 +447,6 @@
         "stat": "86%",
         "title": "Ausgewiesener ROI",
         "desc": "Organisationen, die in Coaching investieren, berichten innerhalb von zwölf Monaten von messbarem Ertrag."
-      }
-    ]
-  },
-  "steps": {
-    "eyebrow": "Wie wir arbeiten",
-    "title": "Ein klarer Weg von der Ambition zur Wirkung.",
-    "items": [
-      {
-        "n": "01",
-        "title": "Verstehen",
-        "desc": "Wir erfassen Ihren Kontext, Ihre Mitarbeitenden und die Ergebnisse, auf die es ankommt."
-      },
-      {
-        "n": "02",
-        "title": "Zuordnen",
-        "desc": "Wir verbinden Sie mit ICF-zertifizierten Coaches, deren Erfahrung zu Ihren Zielen passt."
-      },
-      {
-        "n": "03",
-        "title": "Messen",
-        "desc": "Wir begleiten die Massnahme mit Meilensteinen, Feedback und klarer Evaluation."
       }
     ]
   },
