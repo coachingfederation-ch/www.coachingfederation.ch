@@ -76,6 +76,13 @@ when one exists.
   `supabase/baseline/`, `baseline:verify` proves it rebuilds an empty Postgres,
   and `baseline:check` fails on drift. The baseline is documentation and
   disaster recovery, not the source of truth, and holds no data.
+  Refreshed 2026-09-08 (111 tables, 246 policies); the previous snapshot had gone
+  stale at 53 tables, which is the failure mode to watch — a snapshot nobody
+  regenerates is worse than none, because it looks authoritative. Regenerating
+  it exposed a generator ordering bug (a function whose signature names a table's
+  row type was emitted before that table), now fixed with a second function pass;
+  nothing enforces regeneration automatically, so `baseline:check` in CI remains
+  open work.
 - CSP is report-only in `src/server.ts` until a clean report pass justifies
   enforcement.
 

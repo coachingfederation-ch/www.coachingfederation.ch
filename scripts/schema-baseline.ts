@@ -66,6 +66,19 @@ function statements(sql: string): string[] {
 
 const schemaList = OWNED_SCHEMAS.map((s) => `'${s}'`).join(",");
 
+/**
+ * True when a function's signature (argument or return type) is the composite
+ * row type of a table or view. Such a function cannot be created before that
+ * relation exists, so it is emitted in a later pass.
+ */
+const DEPENDS_ON_TABLE_TYPE = `exists (
+    select 1
+      from unnest(array[p.prorettype] || p.proargtypes::oid[]) as sig(oid)
+      join pg_type ty on ty.oid = sig.oid
+      join pg_class rc on rc.oid = ty.typrelid
+     where rc.relkind in ('r','p','v','m')
+  )`;
+
 const QUERIES: { title: string; sql: string }[] = [
   {
     title: "Extensions",
@@ -88,12 +101,17 @@ const QUERIES: { title: string; sql: string }[] = [
           order by n.nspname, t.typname`,
   },
   {
+    // Bodies are not validated during replay (check_function_bodies = false), so
+    // a function may precede the tables its body touches. A signature that names
+    // a table's composite type cannot — those are deferred to a second pass that
+    // runs after the tables exist.
     title: "Functions",
     sql: `select pg_get_functiondef(p.oid) || ';'
           from pg_proc p join pg_namespace n on n.oid = p.pronamespace
           where n.nspname in (${schemaList}) and p.prokind = 'f'
             and not exists (select 1 from pg_depend d
                             where d.objid = p.oid and d.deptype = 'e')
+            and not (${DEPENDS_ON_TABLE_TYPE})
           order by n.nspname, p.proname, p.oid`,
   },
   {
@@ -117,6 +135,17 @@ const QUERIES: { title: string; sql: string }[] = [
           from pg_class c join pg_namespace n on n.oid = c.relnamespace
           where c.relkind = 'r' and n.nspname in (${schemaList})
           order by n.nspname, c.relname`,
+  },
+  {
+    // Second function pass: signatures that name a table row type, now creatable.
+    title: "Functions over table types",
+    sql: `select pg_get_functiondef(p.oid) || ';'
+          from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+          where n.nspname in (${schemaList}) and p.prokind = 'f'
+            and not exists (select 1 from pg_depend d
+                            where d.objid = p.oid and d.deptype = 'e')
+            and ${DEPENDS_ON_TABLE_TYPE}
+          order by n.nspname, p.proname, p.oid`,
   },
   {
     title: "Primary keys and unique constraints",
