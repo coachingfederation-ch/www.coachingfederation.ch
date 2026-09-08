@@ -38,7 +38,7 @@ export default function ForOrganisationsPage() {
   const outcomes = tList<{ stat: string; title: string; desc: string }>(
     "organisations.outcomes.items",
   );
-  const steps = tList<{ n: string; title: string; desc: string }>("organisations.steps.items");
+  
   const programmes = tList<{ tag: string; title: string }>("organisations.programmes.items");
   const segments = tList<{ label: string; route: string }>("organisations.segments.items");
   const [segment, setSegment] = useState<SegmentId | null>(null);
