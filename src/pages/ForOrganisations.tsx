@@ -104,26 +104,6 @@ export default function ForOrganisationsPage() {
 
         <WhoWeServe selected={segment} onSelect={setSegment} />
 
-        {/* Raised surface: the numbered "how it works" list. */}
-        <section className="bg-card py-24">
-          <div className="mx-auto max-w-7xl px-8">
-            <p className="eyebrow">{t("organisations.steps.eyebrow")}</p>
-            <h2 className="mt-3 max-w-2xl display-lg">{t("organisations.steps.title")}</h2>
-            <div className="mt-14 grid gap-8 md:grid-cols-3">
-              {steps.map((s) => (
-                <div key={s.n}>
-                  <div className="mb-5 flex items-center gap-3">
-                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-accent/15 btn-mono font-bold">
-                      {s.n}
-                    </span>
-                    <h3 className="text-lg font-semibold tracking-tight">{s.title}</h3>
-                  </div>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         <Initiatives contextLine={contextLine} />
 
