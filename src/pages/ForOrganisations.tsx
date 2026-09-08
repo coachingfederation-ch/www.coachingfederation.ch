@@ -106,45 +106,8 @@ export default function ForOrganisationsPage() {
 
         <Initiatives contextLine={contextLine} />
 
-        {/* Raised surface: programme cards. */}
-        <section className="bg-card py-24">
-          <div className="mx-auto max-w-7xl px-8">
-            <p className="eyebrow">{t("organisations.programmes.eyebrow")}</p>
-            <h2 className="mt-3 max-w-2xl display-lg">{t("organisations.programmes.title")}</h2>
-            <div className="mt-12 grid gap-4 md:grid-cols-3">
-              {orderedProgrammes.map(({ item: p, visual }) => {
-                const v = programmeVisuals[visual];
-                return (
-                  <a
-                    key={p.tag}
-                    // There are no programme detail pages yet, so the honest next
-                    // step is an enquiry to the office with the programme prefilled.
-                    href={`mailto:office@coachingfederation.ch?subject=${encodeURIComponent(
-                      `${t("organisations.programmes.enquirySubject")}: ${p.tag}`,
-                    )}`}
-                    target="_top"
-                    className={
-                      "group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-0.5 " +
-                      CARD_SHADOW
-                    }
-                  >
-                    <div
-                      className={"grid aspect-[4/3] w-full place-items-center " + v.bg + " " + v.fg}
-                    >
-                      <Mark name={v.mark} className="h-1/2 w-1/2" />
-                    </div>
-                    <div className="p-6">
-                      <p className="section-label">{p.tag}</p>
-                      <h3 className="mt-2 text-base font-semibold leading-snug tracking-tight">
-                        {p.title}
-                      </h3>
-                    </div>
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+
+
 
         <CultureSurvey />
 
