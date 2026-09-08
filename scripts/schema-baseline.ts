@@ -66,6 +66,19 @@ function statements(sql: string): string[] {
 
 const schemaList = OWNED_SCHEMAS.map((s) => `'${s}'`).join(",");
 
+/**
+ * True when a function's signature (argument or return type) is the composite
+ * row type of a table or view. Such a function cannot be created before that
+ * relation exists, so it is emitted in a later pass.
+ */
+const DEPENDS_ON_TABLE_TYPE = `exists (
+    select 1
+      from unnest(array[p.prorettype] || p.proargtypes::oid[]) as sig(oid)
+      join pg_type ty on ty.oid = sig.oid
+      join pg_class rc on rc.oid = ty.typrelid
+     where rc.relkind in ('r','p','v','m')
+  )`;
+
 const QUERIES: { title: string; sql: string }[] = [
   {
     title: "Extensions",
