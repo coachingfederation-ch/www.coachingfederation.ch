@@ -1,13 +1,14 @@
 {
-  "file": "20260908091015_baseline.sql",
-  "generated_at": "2026-09-08T09:10:15.917Z",
+  "file": "20260908091327_baseline.sql",
+  "generated_at": "2026-09-08T09:13:27.897Z",
   "migration_ledger_version": "unreadable",
   "counts": {
     "Extensions": 6,
     "Schemas": 1,
     "Enum types": 33,
-    "Functions": 77,
+    "Functions": 76,
     "Tables": 111,
+    "Functions over table types": 1,
     "Primary keys and unique constraints": 162,
     "Check constraints": 86,
     "Foreign keys": 116,

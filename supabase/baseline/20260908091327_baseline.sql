@@ -25,7 +25,7 @@ set client_min_messages = warning;
 set check_function_bodies = false;
 set search_path = public, extensions;
 
--- generated at 2026-09-08T09:10:15.914Z
+-- generated at 2026-09-08T09:13:27.895Z
 
 -- ---------------------------------------------------------------------------
 -- Extensions (6)
@@ -120,7 +120,7 @@ create type public.pulse_run_status as enum ('running', 'succeeded', 'failed');
 create type public.sync_run_status as enum ('running', 'succeeded', 'failed', 'aborted');
 
 -- ---------------------------------------------------------------------------
--- Functions (77)
+-- Functions (76)
 -- ---------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION private.archive_old_role_grants(_older_than interval DEFAULT '2 years'::interval)
@@ -602,21 +602,6 @@ CREATE OR REPLACE FUNCTION private.registration_holds_seat(_status event_registr
 AS $function$
   SELECT _status = 'confirmed'
      AND (_payment_status <> 'pending' OR (_hold_expires_at IS NOT NULL AND _hold_expires_at > now()))
-$function$
-;
-
-CREATE OR REPLACE FUNCTION private.registration_is_check_in_eligible(r event_registrations)
- RETURNS text
- LANGUAGE sql
- IMMUTABLE
- SET search_path TO 'public'
-AS $function$
-  SELECT CASE
-    WHEN r.status <> 'confirmed' THEN 'cancelled'
-    WHEN r.refund_status IN ('refunded', 'pending') THEN 'refunded'
-    WHEN r.payment_status NOT IN ('not_required', 'paid') THEN r.payment_status::text
-    ELSE NULL
-  END
 $function$
 ;
 
@@ -3841,6 +3826,25 @@ create table if not exists public.user_roles (
   user_id uuid not null,
   role app_role not null,
   created_at timestamp with time zone not null default now());
+
+-- ---------------------------------------------------------------------------
+-- Functions over table types (1)
+-- ---------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION private.registration_is_check_in_eligible(r event_registrations)
+ RETURNS text
+ LANGUAGE sql
+ IMMUTABLE
+ SET search_path TO 'public'
+AS $function$
+  SELECT CASE
+    WHEN r.status <> 'confirmed' THEN 'cancelled'
+    WHEN r.refund_status IN ('refunded', 'pending') THEN 'refunded'
+    WHEN r.payment_status NOT IN ('not_required', 'paid') THEN r.payment_status::text
+    ELSE NULL
+  END
+$function$
+;
 
 -- ---------------------------------------------------------------------------
 -- Primary keys and unique constraints (162)
