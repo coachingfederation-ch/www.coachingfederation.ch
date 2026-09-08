@@ -403,28 +403,8 @@
     "eyebrow": "Pour les responsables d'organisations",
     "title": "Où nous rencontrer prochainement.",
     "cta": "Tous les événements",
-    "items": [
-      {
-        "date": "Jeu 17 sep 2026",
-        "title": "Table ronde sur les cultures du coaching, Zürich",
-        "desc": "Pour les responsables RH et L&D qui développent des compétences internes de coaching."
-      },
-      {
-        "date": "Mer 14 oct 2026",
-        "title": "Le leadership en période de transition, Lausanne",
-        "desc": "Le coaching de dirigeants dans le cadre de restructurations et de fusions."
-      },
-      {
-        "date": "Mar 10 nov 2026",
-        "title": "IA, confiance et équipes, en ligne",
-        "desc": "Ce que la transformation numérique exige des leaders et de leurs équipes."
-      },
-      {
-        "date": "Jeu 3 déc 2026",
-        "title": "Mesurer l'impact du coaching, Lugano",
-        "desc": "Méthodes d'évaluation pratiques et rigoureuses."
-      }
-    ]
+    "empty": "Aucun événement pour les organisations n'est prévu pour le moment. Découvrez ici nos prochains événements.",
+    "emptyCta": "Voir tous les événements"
   },
   "outcomes": {
     "eyebrow": "Résultats",

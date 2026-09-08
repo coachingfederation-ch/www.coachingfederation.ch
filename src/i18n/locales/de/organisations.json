@@ -403,28 +403,8 @@
     "eyebrow": "Für Führungskräfte in Organisationen",
     "title": "Wo Sie uns als Nächstes treffen.",
     "cta": "Alle Veranstaltungen",
-    "items": [
-      {
-        "date": "Do., 17. Sept. 2026",
-        "title": "Roundtable Coaching-Kulturen, Zürich",
-        "desc": "Für HR- und L&D-Verantwortliche, die interne Coaching-Kompetenzen aufbauen."
-      },
-      {
-        "date": "Mi., 14. Okt. 2026",
-        "title": "Führung im Wandel, Lausanne",
-        "desc": "Executive Coaching bei Umstrukturierungen und Fusionen."
-      },
-      {
-        "date": "Di., 10. Nov. 2026",
-        "title": "KI, Vertrauen und Teams, online",
-        "desc": "Was der technologische Wandel von Führungskräften und ihren Teams fordert."
-      },
-      {
-        "date": "Do., 3. Dez. 2026",
-        "title": "Wirkung von Coaching messen, Lugano",
-        "desc": "Praktische Evaluationsansätze, die jeder Überprüfung standhalten."
-      }
-    ]
+    "empty": "Aktuell sind keine Veranstaltungen für Organisationen geplant. Erfahren Sie hier mehr über unsere kommenden Veranstaltungen.",
+    "emptyCta": "Alle Veranstaltungen"
   },
   "outcomes": {
     "eyebrow": "Ergebnisse",
