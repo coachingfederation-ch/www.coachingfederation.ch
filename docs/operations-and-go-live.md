@@ -302,10 +302,31 @@ The public site is untouched throughout. This is a data event on `new.` only.
         buckets, no rows. The migration history under `supabase/migrations/` stays
         authoritative and is not squashed or moved.
 
-        A baseline already exists in `supabase/baseline/` from a pre-cutover dry
-        run. It proves the generator and the replay work; it is **not** the cutover
-        artifact. Regenerate at the freeze point so the committed snapshot matches
-        the schema actually shipped.
+        A refreshed baseline already exists in `supabase/baseline/` (generated
+        2026-09-08: 111 tables, 246 policies, 88 triggers, 337 table grants;
+        replayed onto a scratch Postgres with no errors, `baseline:check` clean
+        twice). It proves the generator and the replay work against the current
+        schema; it is **not** the cutover artifact. Regenerate at the freeze point
+        so the committed snapshot matches the schema actually shipped.
+
+    3b. Record the pre-import reference state, so anything odd after the first
+    LIVE import can be compared against a known-good "before":
+
+        - Database size, connection count and deadlock/rollback counters.
+        - The database linter output, with every finding either fixed or written
+          down as a deliberate exception and why.
+
+        Reference taken 2026-09-08: 32 MB total, 15 of 60 connections in use,
+        zero deadlocks since the July 15 counter reset. Linter: seven tables have
+        row level security on with no policies —
+        `article_feedback_themes`, `contact_enquiries`,
+        `live_chat_apns_subscriptions`, `live_chat_device_tokens`,
+        `live_chat_login_tokens`, `live_chat_push_subscriptions`,
+        `role_grants_archive` — which is deliberate: none of them grants anything
+        to `anon` or `authenticated`, so they are reachable only by trusted
+        server code, and "no policy" is the strictest possible setting rather
+        than a gap. The one warning, `pg_net` living in the `public` schema, is
+        platform-managed and cannot be relocated from this project.
 
 4.  Execute the cutover. `runCutover` performs, in order: preflight → archive →
     freeze → purge → switch `mode` to `live` → first LIVE import → validate →
