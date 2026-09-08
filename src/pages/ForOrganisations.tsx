@@ -39,7 +39,7 @@ export default function ForOrganisationsPage() {
     "organisations.outcomes.items",
   );
 
-  const programmes = tList<{ tag: string; title: string }>("organisations.programmes.items");
+  
   const segments = tList<{ label: string; route: string }>("organisations.segments.items");
   const [segment, setSegment] = useState<SegmentId | null>(null);
 
