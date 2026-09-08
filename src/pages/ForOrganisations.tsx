@@ -3,8 +3,7 @@
  * Exports: ForOrganisationsPage (default). Rendered by src/routes/for-organisations.tsx
  * and the locale-prefixed equivalent in src/routes/$locale/for-organisations.tsx.
  */
-import { useMemo, useState } from "react";
-import { Mark, type MarkName } from "@/components/marks";
+import { useState } from "react";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { CultureSurvey } from "@/components/organisations/CultureSurvey";
 import { DeckSection } from "@/components/organisations/DeckSection";
@@ -18,20 +17,6 @@ import {
 import { useI18n } from "@/i18n";
 import { askAssistant } from "@/lib/assistant-open";
 
-const programmeVisuals: { bg: string; fg: string; mark: MarkName }[] = [
-  { bg: "bg-mark-cream", fg: "text-mark-indigo", mark: "circular1" },
-  { bg: "bg-mark-indigo", fg: "text-mark-cream", mark: "star" },
-  { bg: "bg-mark-yellow", fg: "text-mark-indigo", mark: "asterisk1" },
-];
-
-/** Index of the programme card (executive / team / cultures) surfaced first per segment. */
-const segmentProgrammeLead: Record<SegmentId, number> = {
-  igo: 0,
-  ngo: 1,
-  gov: 2,
-  commercial: 0,
-  societal: 1,
-};
 
 export default function ForOrganisationsPage() {
   const { t, tList } = useI18n();
