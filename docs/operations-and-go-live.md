@@ -263,19 +263,19 @@ Record each number; they are the baseline every later count is checked against.
 
 ## Gate 1 — go / no-go for cutover
 
-| Check                                                                     | Signed                                                                          |
-| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| LIVE credentials present **and a real LIVE authenticate call succeeded**  |                                                                                 |
-| Feed audit complete; all four counts recorded                             |                                                                                 |
-| ICF confirmed lapsed members are marked, not omitted                      |                                                                                 |
-| `new.` live, `noindex`, SSL verified                                      | ✅ host live, SSL verified, `robots.txt` disallows all                          |
-| Email sending domain verified                                             | ✅ `notify.coachingfederation.ch`                                               |
-| Email transport wired, deployed, verified through `email_redirect_to`     | ✅ wired and deployed; end-to-end send through `email_redirect_to` still to run |
+| Check                                                                     | Signed                                                                                |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| LIVE credentials present **and a real LIVE authenticate call succeeded**  |                                                                                       |
+| Feed audit complete; all four counts recorded                             |                                                                                       |
+| ICF confirmed lapsed members are marked, not omitted                      |                                                                                       |
+| `new.` live, `noindex`, SSL verified                                      | ✅ host live, SSL verified, `robots.txt` disallows all                                |
+| Email sending domain verified                                             | ✅ `notify.coachingfederation.ch`                                                     |
+| Email transport wired, deployed, verified through `email_redirect_to`     | ✅ wired and deployed; end-to-end send through `email_redirect_to` still to run       |
 | `SITE_URL`, robots, auth allowlists and OAuth origins updated, redeployed | ✅ `SITE_URL`, robots and the auth allow-list done; OAuth origins are Lovable-managed |
-| Claim flow verified end to end via a staff-issued link                    |                                                                                 |
-| Privacy policy live on `new.`                                             |                                                                                 |
-| Cron job state known and correct                                          |                                                                                 |
-| Containment owner named and available                                     |                                                                                 |
+| Claim flow verified end to end via a staff-issued link                    |                                                                                       |
+| Privacy policy live on `new.`                                             |                                                                                       |
+| Cron job state known and correct                                          |                                                                                       |
+| Containment owner named and available                                     |                                                                                       |
 
 ## Phase B — Cutover (irreversible)
 
