@@ -69,6 +69,15 @@ export const cleanupExpiredMembers = createServerFn({ method: "POST" })
     return await runLifecycleCleanup(userId);
   });
 
+/** Counts behind the retention card: who is in grace, who was warned, what is due. */
+export const getLifecycleRetentionSummary = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { loadRetentionSummary } = await import("./member-lifecycle.server");
+    return await loadRetentionSummary();
+  });
+
 /**
  * Which outbound IP the ICF SOAP sync connects from. Runs in the same runtime
  * as the sync, so the answer is the address ICF Global actually sees.
