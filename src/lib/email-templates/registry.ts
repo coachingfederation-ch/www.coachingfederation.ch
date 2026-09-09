@@ -92,4 +92,9 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "article-review-request": articleReviewRequest,
   "member-grace-notice": memberGraceNotice,
   "member-grace-final-notice": memberGraceFinalNotice,
+  "member-welcome": memberWelcome,
+  "member-credential-change": memberCredentialChange,
+  "member-specialisation": memberSpecialisation,
+  "member-grace-reengagement": memberGraceReengagement,
 };
+
