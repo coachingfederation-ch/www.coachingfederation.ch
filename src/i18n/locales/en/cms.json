@@ -617,7 +617,15 @@
       "feedDrop": "Member feed drop threshold (%)",
       "retention": "Import history retention (months)",
       "csvCap": "CSV export row limit"
-    }
+    },
+    "retentionTitle": "Grace period and retention",
+    "retentionIntro": "Members whose ICF membership has lapsed. They get a warning 30 and 7 days before their record is removed; removal itself is always confirmed by staff with “Clean up” above.",
+    "retentionInGrace": "In grace period",
+    "retentionWarned30": "30-day warning sent",
+    "retentionWarned7": "7-day warning sent",
+    "retentionDue": "Due for removal",
+    "retentionNext": "Next record reaches its date on",
+    "retentionNextNone": "No record reaches its date yet."
   },
   "member": {
     "title": "My coach profile",

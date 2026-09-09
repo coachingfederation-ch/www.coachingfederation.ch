@@ -617,7 +617,15 @@
       "feedDrop": "Mitglieder-Feed Drop-Schwellenwert (%)",
       "retention": "Aufbewahrungsdauer Import-Historie (Monate)",
       "csvCap": "Zeilenlimit CSV-Export"
-    }
+    },
+    "retentionTitle": "Auslaufphase und Aufbewahrung",
+    "retentionIntro": "Mitglieder, deren ICF Mitgliedschaft abgelaufen ist. Sie erhalten 30 und 7 Tage vor der Löschung eine Warnung; die Löschung selbst bestätigt das Team immer über „Aufräumen“ oben.",
+    "retentionInGrace": "In der Auslaufphase",
+    "retentionWarned30": "30-Tage-Warnung gesendet",
+    "retentionWarned7": "7-Tage-Warnung gesendet",
+    "retentionDue": "Zur Löschung fällig",
+    "retentionNext": "Nächster Eintrag erreicht sein Datum am",
+    "retentionNextNone": "Noch kein Eintrag erreicht sein Datum."
   },
   "member": {
     "title": "Mein Coach-Profil",
