@@ -1,12 +1,13 @@
 /**
  * Member engagement admin panel.
  *
- * Two halves: the campaign editor (mode, daily cap, localized subject/body)
- * and the queue/history table. Copy edits are buffered locally and only
- * written on Save, so switching campaigns can never clobber unsaved text.
+ * Two halves: the campaign settings (mode, daily cap) and the queue/history
+ * table. The wording of each campaign is code-owned and previewed under
+ * Cloud → Emails, so it is not editable here.
  */
 import { useEffect, useMemo, useState } from "react";
-import { Loader2, Mail, Send, Check, X, Languages } from "lucide-react";
+import { Loader2, Mail, Send, Check, X } from "lucide-react";
+
 import { toast } from "sonner";
 import {
   Badge,
