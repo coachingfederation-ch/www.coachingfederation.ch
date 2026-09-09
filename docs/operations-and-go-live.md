@@ -176,7 +176,7 @@ invisible.
       but have never been exercised against the LIVE endpoint, and the cutover
       preflight only checks that they _exist_. Execute a real LIVE
       `authenticate()` call and confirm a token comes back before Gate 1.
-- [ ] **Auth allowlists.** Console work, no code. In Cloud → Users → Auth
+- [x] **Auth allowlists.** Done. Console work, no code. In Cloud → Users → Auth
       Settings → URL configuration, set the Site URL to
       `https://new.coachingfederation.ch` and add to the redirect allow-list:
       `https://new.coachingfederation.ch/**`,
@@ -238,10 +238,14 @@ Record each number; they are the baseline every later count is checked against.
       the `apikey` assumption returns 401 every night, silently. Rotate the
       token at cutover; the current value has been in test circulation. Update
       both cron URLs to the apex after Phase D.
-- [ ] **Nothing currently reads `member_lifecycle_queue`.** The grace-period
-      notice and the scheduled deletion never run. This is an unimplemented
-      retention commitment, not an untuned setting. It probably does not block
-      launch, but it must be scheduled.
+- [x] **`member_lifecycle_queue` is now read nightly.** The
+      `icf-member-lifecycle-daily` cron job (04:15 UTC) calls
+      `/api/public/member-lifecycle`, which runs `runLifecycleSweep()`: it closes
+      queue rows for members who came back, emails the member a warning 30 days
+      and again 7 days before their scheduled deletion date, and sends the
+      chapter office one digest per day listing how many records are overdue.
+      Anonymisation itself stays a confirmed staff action — the sweep never
+      deletes. The `/integration` retention card shows the counts.
 - [ ] Auth policy: leaked-password protection on, email signups disabled or
       restricted so the claim flow is the only member entry path, and
       `member-profile-images` stays a private bucket.
@@ -267,7 +271,7 @@ Record each number; they are the baseline every later count is checked against.
 | `new.` live, `noindex`, SSL verified                                      | ✅ host live, SSL verified, `robots.txt` disallows all                          |
 | Email sending domain verified                                             | ✅ `notify.coachingfederation.ch`                                               |
 | Email transport wired, deployed, verified through `email_redirect_to`     | ✅ wired and deployed; end-to-end send through `email_redirect_to` still to run |
-| `SITE_URL`, robots, auth allowlists and OAuth origins updated, redeployed | partly — `SITE_URL` and robots done; auth allow-list still to set               |
+| `SITE_URL`, robots, auth allowlists and OAuth origins updated, redeployed | ✅ `SITE_URL`, robots and the auth allow-list done; OAuth origins are Lovable-managed |
 | Claim flow verified end to end via a staff-issued link                    |                                                                                 |
 | Privacy policy live on `new.`                                             |                                                                                 |
 | Cron job state known and correct                                          |                                                                                 |
