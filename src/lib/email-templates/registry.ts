@@ -50,6 +50,13 @@ import {
   noticeTemplate as memberGraceNotice,
   finalNoticeTemplate as memberGraceFinalNotice,
 } from "./member-grace-notice";
+import {
+  welcomeTemplate as memberWelcome,
+  credentialUpgradeTemplate as memberCredentialChange,
+  specialisationTemplate as memberSpecialisation,
+  graceReengagementTemplate as memberGraceReengagement,
+} from "./member-campaigns";
+
 
 /**
  * Template registry — maps template names to their React Email components.
