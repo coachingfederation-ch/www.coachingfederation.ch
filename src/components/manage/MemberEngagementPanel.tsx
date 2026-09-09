@@ -283,60 +283,19 @@ export function MemberEngagementPanel() {
                 </div>
               </div>
 
-              <Tabs value={locale} onValueChange={(value) => setLocale(value as EngagementLocale)}>
-                <TabsList>
-                  {ENGAGEMENT_LOCALES.map((code) => (
-                    <TabsTrigger key={code} value={code}>
-                      {code.toUpperCase()}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
-
-              <div className="space-y-2">
-                <Label htmlFor="subject">Subject</Label>
-                <Input
-                  id="subject"
-                  value={draft.copy[locale]?.subject ?? ""}
-                  onChange={(event) => updateCopy("subject", event.target.value)}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="body">Body</Label>
-                <Textarea
-                  id="body"
-                  rows={12}
-                  value={draft.copy[locale]?.body ?? ""}
-                  onChange={(event) => updateCopy("body", event.target.value)}
-                />
-                <p className="text-xs text-muted-foreground">
-                  Placeholders: {CAMPAIGN_PLACEHOLDERS[draft.key].map((p) => `{{${p}}}`).join(", ")}
-                </p>
-              </div>
+              <p className="text-sm text-muted-foreground">
+                The wording of this email lives with every other chapter email, under Cloud →
+                Emails, in German, French, Italian and English. Members receive it in their
+                correspondence language.
+              </p>
 
               <div className="flex flex-wrap items-center justify-end gap-3">
-                <p className="mr-auto text-xs text-muted-foreground">
-                  Translations fill the DE, FR and IT tabs from the English copy. Review them, then
-                  save.
-                </p>
-                <Button
-                  variant="outline"
-                  onClick={translate}
-                  disabled={translating || !canTranslate}
-                >
-                  {translating ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <Languages className="mr-2 h-4 w-4" />
-                  )}
-                  Translate to DE, FR, IT
-                </Button>
                 <Button onClick={save} disabled={saving}>
                   {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                   Save campaign
                 </Button>
               </div>
+
             </div>
           ) : null}
         </CardContent>
