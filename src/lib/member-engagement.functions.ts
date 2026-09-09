@@ -39,7 +39,7 @@ export type EngagementSendRow = {
 
 export type EngagementStats = { pending: number; sentLast30Days: number; failed: number };
 
-/** Every campaign with its authored copy — the panel's initial state. */
+/** Every campaign with its delivery settings — the panel's initial state. */
 export const listEngagementCampaigns = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<EngagementCampaign[]> => {
@@ -48,13 +48,13 @@ export const listEngagementCampaigns = createServerFn({ method: "POST" })
 
     const { data, error } = await context.supabase
       .from("member_engagement_campaigns")
-      .select("key, mode, daily_cap, copy, updated_at")
+      .select("key, mode, daily_cap, updated_at")
       .order("key");
     if (error) throw new Error(error.message);
     return (data ?? []) as unknown as EngagementCampaign[];
   });
 
-/** Saves one campaign's copy and delivery settings. */
+/** Saves one campaign's delivery settings. Wording lives in the templates. */
 export const saveEngagementCampaign = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
@@ -63,7 +63,6 @@ export const saveEngagementCampaign = createServerFn({ method: "POST" })
         key: campaignKey,
         mode: z.enum(["off", "automatic", "queued"]),
         dailyCap: z.number().int().min(1).max(500),
-        copy: copySchema,
       })
       .parse(input),
   )
@@ -76,13 +75,13 @@ export const saveEngagementCampaign = createServerFn({ method: "POST" })
       .update({
         mode: data.mode,
         daily_cap: data.dailyCap,
-        copy: data.copy as never,
         updated_at: new Date().toISOString(),
       })
       .eq("key", data.key);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
 
 /** Queue and history, optionally narrowed to one campaign or status. */
 export const listEngagementSends = createServerFn({ method: "POST" })
