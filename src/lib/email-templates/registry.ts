@@ -46,7 +46,10 @@ import { template as contactEnquiryVerify } from "./contact-enquiry-verify";
 import { template as memberEngagement } from "./member-engagement";
 import { template as contactEnquiryCopy } from "./contact-enquiry-copy-mail";
 import { template as articleReviewRequest } from "./article-review-request";
-
+import {
+  noticeTemplate as memberGraceNotice,
+  finalNoticeTemplate as memberGraceFinalNotice,
+} from "./member-grace-notice";
 
 /**
  * Template registry — maps template names to their React Email components.
@@ -80,5 +83,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "contact-enquiry-verify": contactEnquiryVerify,
   "contact-enquiry-copy": contactEnquiryCopy,
   "article-review-request": articleReviewRequest,
-
+  "member-grace-notice": memberGraceNotice,
+  "member-grace-final-notice": memberGraceFinalNotice,
 };

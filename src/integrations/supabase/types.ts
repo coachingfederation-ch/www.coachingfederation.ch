@@ -4716,6 +4716,7 @@ export type Database = {
         Row: {
           created_at: string
           entered_grace_at: string
+          final_notice_at: string | null
           id: string
           member_id: string
           notified_at: string | null
@@ -4727,6 +4728,7 @@ export type Database = {
         Insert: {
           created_at?: string
           entered_grace_at?: string
+          final_notice_at?: string | null
           id?: string
           member_id: string
           notified_at?: string | null
@@ -4738,6 +4740,7 @@ export type Database = {
         Update: {
           created_at?: string
           entered_grace_at?: string
+          final_notice_at?: string | null
           id?: string
           member_id?: string
           notified_at?: string | null

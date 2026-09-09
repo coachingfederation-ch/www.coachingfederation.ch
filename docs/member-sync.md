@@ -177,7 +177,23 @@ sync history and content authorship remain coherent.
 Two things to be clear about:
 
 - **Nothing deletes automatically.** Anonymisation only happens when an admin runs
-  cleanup. An expired grace period is a to-do, not a scheduled job.
+  cleanup. An expired grace period is a to-do that the nightly sweep raises, never
+  something it executes.
+- **The member is warned twice.** `icf-member-lifecycle-daily` (04:15 UTC) posts to
+  `/api/public/member-lifecycle`, which runs `runLifecycleSweep()` in
+  `src/lib/member-lifecycle.server.ts`. For every open queue row it:
+  resolves the row when the member is no longer in `grace` (returned, or already
+  anonymised); sends the `member-grace-notice` email 30 days before the scheduled
+  date and stamps `notified_at`; sends `member-grace-final-notice` 7 days before
+  and stamps `final_notice_at`; and counts rows past their date. Both emails go
+  through `sendMemberEmail`, so suppression, the test redirect and
+  `member_email_log` all apply, and the stamp is only written when the send
+  succeeded — a suppressed send is retried on a later night. Copy is written in
+  the member's `correspondence_locale` (DE/FR/IT/EN).
+- **The office is nudged, not the database.** When at least one row is overdue,
+  the sweep sends one digest per day to `office@coachingfederation.ch` with counts
+  only — no member data — pointing at the retention card on `/integration` and the
+  existing _Clean up_ action.
 - The data model also has an `inactive` state, but no code path writes it today.
   The sync uses `active`, `grace` and `anonymized` only. Do not build logic that
   waits for `inactive`.

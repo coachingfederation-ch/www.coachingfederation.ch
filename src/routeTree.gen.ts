@@ -118,6 +118,7 @@ import { Route as ApiPublicEventsFeedDoticsRouteImport } from './routes/api/publ
 import { Route as ApiPublicGuestPassPurgeRouteImport } from './routes/api/public/guest-pass-purge'
 import { Route as ApiPublicLiveChatRouteImport } from './routes/api/public/live-chat'
 import { Route as ApiPublicLiveChatPurgeRouteImport } from './routes/api/public/live-chat-purge'
+import { Route as ApiPublicMemberLifecycleRouteImport } from './routes/api/public/member-lifecycle'
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
 import { Route as ApiPublicNewsletterRefreshRouteImport } from './routes/api/public/newsletter-refresh'
 import { Route as ApiPublicOpStructureRouteImport } from './routes/api/public/op-structure'
@@ -698,6 +699,12 @@ const ApiPublicLiveChatPurgeRoute = ApiPublicLiveChatPurgeRouteImport.update({
   path: '/api/public/live-chat-purge',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicMemberLifecycleRoute =
+  ApiPublicMemberLifecycleRouteImport.update({
+    id: '/api/public/member-lifecycle',
+    path: '/api/public/member-lifecycle',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicMemberSyncRoute = ApiPublicMemberSyncRouteImport.update({
   id: '/api/public/member-sync',
   path: '/api/public/member-sync',
@@ -937,6 +944,7 @@ export interface FileRoutesByFullPath {
   '/api/public/guest-pass-purge': typeof ApiPublicGuestPassPurgeRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
+  '/api/public/member-lifecycle': typeof ApiPublicMemberLifecycleRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/op-structure': typeof ApiPublicOpStructureRoute
@@ -1067,6 +1075,7 @@ export interface FileRoutesByTo {
   '/api/public/guest-pass-purge': typeof ApiPublicGuestPassPurgeRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
+  '/api/public/member-lifecycle': typeof ApiPublicMemberLifecycleRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/op-structure': typeof ApiPublicOpStructureRoute
@@ -1204,6 +1213,7 @@ export interface FileRoutesById {
   '/api/public/guest-pass-purge': typeof ApiPublicGuestPassPurgeRoute
   '/api/public/live-chat': typeof ApiPublicLiveChatRoute
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
+  '/api/public/member-lifecycle': typeof ApiPublicMemberLifecycleRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/op-structure': typeof ApiPublicOpStructureRoute
@@ -1340,6 +1350,7 @@ export interface FileRouteTypes {
     | '/api/public/guest-pass-purge'
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
+    | '/api/public/member-lifecycle'
     | '/api/public/member-sync'
     | '/api/public/newsletter-refresh'
     | '/api/public/op-structure'
@@ -1470,6 +1481,7 @@ export interface FileRouteTypes {
     | '/api/public/guest-pass-purge'
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
+    | '/api/public/member-lifecycle'
     | '/api/public/member-sync'
     | '/api/public/newsletter-refresh'
     | '/api/public/op-structure'
@@ -1606,6 +1618,7 @@ export interface FileRouteTypes {
     | '/api/public/guest-pass-purge'
     | '/api/public/live-chat'
     | '/api/public/live-chat-purge'
+    | '/api/public/member-lifecycle'
     | '/api/public/member-sync'
     | '/api/public/newsletter-refresh'
     | '/api/public/op-structure'
@@ -1699,6 +1712,7 @@ export interface RootRouteChildren {
   ApiPublicGuestPassPurgeRoute: typeof ApiPublicGuestPassPurgeRoute
   ApiPublicLiveChatRoute: typeof ApiPublicLiveChatRoute
   ApiPublicLiveChatPurgeRoute: typeof ApiPublicLiveChatPurgeRoute
+  ApiPublicMemberLifecycleRoute: typeof ApiPublicMemberLifecycleRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
   ApiPublicNewsletterRefreshRoute: typeof ApiPublicNewsletterRefreshRoute
   ApiPublicOpStructureRoute: typeof ApiPublicOpStructureRoute
@@ -2481,6 +2495,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicLiveChatPurgeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/member-lifecycle': {
+      id: '/api/public/member-lifecycle'
+      path: '/api/public/member-lifecycle'
+      fullPath: '/api/public/member-lifecycle'
+      preLoaderRoute: typeof ApiPublicMemberLifecycleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/member-sync': {
       id: '/api/public/member-sync'
       path: '/api/public/member-sync'
@@ -2919,6 +2940,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicGuestPassPurgeRoute: ApiPublicGuestPassPurgeRoute,
   ApiPublicLiveChatRoute: ApiPublicLiveChatRoute,
   ApiPublicLiveChatPurgeRoute: ApiPublicLiveChatPurgeRoute,
+  ApiPublicMemberLifecycleRoute: ApiPublicMemberLifecycleRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,
   ApiPublicNewsletterRefreshRoute: ApiPublicNewsletterRefreshRoute,
   ApiPublicOpStructureRoute: ApiPublicOpStructureRoute,

@@ -617,7 +617,15 @@
       "feedDrop": "Seuil de baisse du flux de membres (%)",
       "retention": "Rétention de l'historique d'importation (mois)",
       "csvCap": "Limite de lignes d'exportation CSV"
-    }
+    },
+    "retentionTitle": "Période de clôture et conservation",
+    "retentionIntro": "Membres dont l'adhésion ICF a expiré. Ils reçoivent un avertissement 30 et 7 jours avant la suppression ; la suppression est toujours confirmée par l'équipe via « Nettoyer » ci-dessus.",
+    "retentionInGrace": "En période de clôture",
+    "retentionWarned30": "Avertissement à 30 jours envoyé",
+    "retentionWarned7": "Avertissement à 7 jours envoyé",
+    "retentionDue": "À supprimer",
+    "retentionNext": "Prochaine fiche à échéance le",
+    "retentionNextNone": "Aucune fiche n'arrive encore à échéance."
   },
   "member": {
     "title": "Mon profil de coach",
@@ -850,10 +858,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Piloter des projets",
-            "Être reconnu par ICFS pour avoir mené des initiatives"
-          ]
+          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
         },
         "status": {
           "title": "Status",
