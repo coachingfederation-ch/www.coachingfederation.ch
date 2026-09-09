@@ -36,14 +36,21 @@ async function sentToday(campaignKey: string): Promise<number> {
   return count ?? 0;
 }
 
+/** Values the campaign copy interpolates, in the member's own language. */
 function variablesFor(
-  campaignKey: EngagementCampaignKey,
   member: { first_name: string | null; full_name: string | null },
   trigger: Record<string, unknown>,
-): Record<string, string | undefined> {
+  locale: CampaignLocale,
+): CampaignCopyVars {
   const graceEnd = trigger["scheduled_deletion_at"];
+  const dateLocale: Record<CampaignLocale, string> = {
+    en: "en-CH",
+    de: "de-CH",
+    fr: "fr-CH",
+    it: "it-CH",
+  };
   return {
-    first_name: member.first_name ?? member.full_name ?? "there",
+    first_name: member.first_name ?? member.full_name ?? undefined,
     events_link: `${SITE_URL}/events`,
     leader_link: "mailto:office@coachingfederation.ch",
     credential_from: (trigger["credential_from"] as string | undefined) ?? undefined,
@@ -51,15 +58,15 @@ function variablesFor(
     specialisation: (trigger["specialisation"] as string | undefined) ?? undefined,
     grace_end_date:
       typeof graceEnd === "string"
-        ? new Date(graceEnd).toLocaleDateString("en-CH", {
+        ? new Date(graceEnd).toLocaleDateString(dateLocale[locale], {
             day: "numeric",
             month: "long",
             year: "numeric",
           })
         : undefined,
-    campaign: campaignKey,
   };
 }
+
 
 /** Dispatches pending sends for every enabled campaign. */
 export async function dispatchEngagementSends(): Promise<Record<string, DispatchSummary>> {
