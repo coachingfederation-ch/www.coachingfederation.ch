@@ -103,11 +103,12 @@ export function MemberEngagementPanel() {
 
   useEffect(reloadSends, []);
 
-  // Buffer the selected campaign so unsaved edits stay per-campaign.
+  // Buffer the selected campaign so unsaved setting changes stay per-campaign.
   useEffect(() => {
     const found = campaigns?.find((row) => row.key === active) ?? null;
-    setDraft(found ? { ...found, copy: { ...found.copy } } : null);
+    setDraft(found ? { ...found } : null);
   }, [campaigns, active]);
+
 
   const pendingIds = useMemo(
     () => sends.filter((row) => row.status === "pending").map((row) => row.id),
