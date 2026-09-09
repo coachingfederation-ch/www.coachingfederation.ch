@@ -6,16 +6,10 @@
  * members who returned, and notifies the office about records due for removal.
  * It never deletes anything — anonymisation stays a confirmed staff action.
  *
- * Schedule (daily, 04:15 UTC), created with supabase run_sql, not a migration:
- *
- *   select cron.schedule(
- *     'icf-member-lifecycle-daily',
- *     '15 4 * * *',
- *     $$ select net.http_post(
- *          url:='https://project--9b53a55c-a944-4840-b29d-ad56f7d750f4.lovable.app/api/public/member-lifecycle',
- *          headers:='{"Content-Type":"application/json","x-cron-token":"<MEMBER_SYNC_CRON_TOKEN>"}'::jsonb,
- *          body:='{}'::jsonb
- *        ) $$);
+ * Scheduled as `icf-member-lifecycle-daily` at 04:15 UTC, created with run_sql
+ * (not a migration — the command carries environment-specific values). It has
+ * the same shape as the other jobs: the token is read from
+ * `private.app_config` inside the job command, never inlined.
  */
 import { createFileRoute } from "@tanstack/react-router";
 
