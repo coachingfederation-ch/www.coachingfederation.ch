@@ -13,12 +13,13 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { SITE_URL } from "@/i18n/config";
 import {
-  isDormant,
-  pickCopy,
-  renderCopyText,
-  type EngagementCampaign,
-  type EngagementCampaignKey,
-} from "../member-engagement";
+  campaignCopy,
+  type CampaignCopyVars,
+  type CampaignLocale,
+} from "@/lib/email-templates/member-campaign-copy";
+import { CAMPAIGN_TEMPLATE_NAMES } from "@/lib/email-templates/member-campaigns";
+import { isDormant, type EngagementCampaign, type EngagementCampaignKey } from "../member-engagement";
+
 
 export type DispatchSummary = { attempted: number; sent: number; skipped: number; failed: number };
 
