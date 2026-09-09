@@ -75,10 +75,9 @@ const MODE_LABELS: Record<EngagementMode, string> = {
 export function MemberEngagementPanel() {
   const [campaigns, setCampaigns] = useState<EngagementCampaign[] | null>(null);
   const [active, setActive] = useState<EngagementCampaignKey>("welcome_new_member");
-  const [locale, setLocale] = useState<EngagementLocale>("en");
   const [draft, setDraft] = useState<EngagementCampaign | null>(null);
   const [saving, setSaving] = useState(false);
-  const [translating, setTranslating] = useState(false);
+
 
   const [sends, setSends] = useState<EngagementSendRow[]>([]);
   const [stats, setStats] = useState<EngagementStats | null>(null);
