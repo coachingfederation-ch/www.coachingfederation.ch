@@ -157,7 +157,7 @@ export async function dispatchCampaign(campaign: EngagementCampaign): Promise<Di
         subject,
         body,
         template: {
-          name: "member-engagement",
+          name: CAMPAIGN_TEMPLATE_NAMES[campaign.key],
           data: { subject, body, baseUrl: SITE_URL },
           idempotencyKey: `engagement-${send.id}`,
         },
