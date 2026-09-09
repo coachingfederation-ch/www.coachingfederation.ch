@@ -50,6 +50,17 @@ export function MemberSyncStatusPanel({
 }) {
   const rules = { allowNonCredentialed: detail.allowNonCredentialed };
   const reason = directoryEligibilityReason(detail.member, rules);
+  // Extra ICF feed tags with no dedicated column yet — read-only, like the rest
+  // of this panel. Their dates arrive as US MM/DD/YYYY, unlike the promoted
+  // credential columns which are already ISO.
+  const diag = (detail.member.diagnostics ?? {}) as Record<string, string | undefined>;
+  const teamCredential = diag.actc_credential ?? null;
+  const autoRenewal =
+    diag.auto_renewal == null
+      ? null
+      : /^y/i.test(diag.auto_renewal)
+        ? t("members.detail.yes")
+        : t("members.detail.no");
   return (
     <>
       <section className="mt-6 rounded-2xl border border-border bg-card p-5">
