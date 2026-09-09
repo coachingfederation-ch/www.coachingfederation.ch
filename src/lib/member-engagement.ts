@@ -2,9 +2,9 @@
  * Member engagement campaigns — shared, client-safe definitions.
  *
  * The four lifecycle emails triggered by what the ICF member sync detects.
- * Copy is authored by staff per campaign per chapter language and stored in
- * `member_engagement_campaigns.copy`; this module owns the vocabulary both
- * the admin panel and the server dispatcher agree on.
+ * The wording lives with every other email in `src/lib/email-templates/`; this
+ * module owns the vocabulary both the admin panel and the server dispatcher
+ * agree on (keys, modes, send states).
  */
 
 export const ENGAGEMENT_CAMPAIGN_KEYS = [
@@ -19,19 +19,13 @@ export type EngagementCampaignKey = (typeof ENGAGEMENT_CAMPAIGN_KEYS)[number];
 export type EngagementMode = "off" | "automatic" | "queued";
 export type EngagementSendStatus = "pending" | "sent" | "skipped" | "suppressed" | "failed";
 
-/** Chapter languages the copy is authored in. */
-export const ENGAGEMENT_LOCALES = ["en", "de", "fr", "it"] as const;
-export type EngagementLocale = (typeof ENGAGEMENT_LOCALES)[number];
-
-export type EngagementCopy = Partial<Record<EngagementLocale, { subject: string; body: string }>>;
-
 export type EngagementCampaign = {
   key: EngagementCampaignKey;
   mode: EngagementMode;
   daily_cap: number;
-  copy: EngagementCopy;
   updated_at: string;
 };
+
 
 export type EngagementSend = {
   id: string;
