@@ -39,7 +39,8 @@ function assetUrl(path: string, baseUrl?: string) {
   return `${(baseUrl || SITE_URL).replace(/\/$/, "")}${path}`;
 }
 
-const Email = ({ subject, heading, body, baseUrl }: MemberEngagementProps) => {
+/** Shared shell: also used by the grace-period notices, same layout and footer. */
+export const Email = ({ subject, heading, body, baseUrl }: MemberEngagementProps) => {
   const paragraphs = (body ?? "")
     .split(/\n\s*\n/)
     .map((block) => block.trim())
