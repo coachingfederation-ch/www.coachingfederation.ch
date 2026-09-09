@@ -24,6 +24,15 @@ function Row({ label, value }: { label: string; value: string | null | undefined
   );
 }
 
+/** Feed dates in diagnostics are US MM/DD/YYYY; show them like the ISO columns. */
+function isoDate(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const us = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!us) return value;
+  const [, m, d, y] = us;
+  return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+}
+
 function Flag({ label, on }: { label: string; on: boolean }) {
   return (
     <div className="flex items-center gap-2">
@@ -50,6 +59,17 @@ export function MemberSyncStatusPanel({
 }) {
   const rules = { allowNonCredentialed: detail.allowNonCredentialed };
   const reason = directoryEligibilityReason(detail.member, rules);
+  // Extra ICF feed tags with no dedicated column yet — read-only, like the rest
+  // of this panel. Their dates arrive as US MM/DD/YYYY, unlike the promoted
+  // credential columns which are already ISO.
+  const diag = (detail.member.diagnostics ?? {}) as Record<string, string | undefined>;
+  const teamCredential = diag.actc_credential ?? null;
+  const autoRenewal =
+    diag.auto_renewal == null
+      ? null
+      : /^y/i.test(diag.auto_renewal)
+        ? t("members.detail.yes")
+        : t("members.detail.no");
   return (
     <>
       <section className="mt-6 rounded-2xl border border-border bg-card p-5">
@@ -66,6 +86,20 @@ export function MemberSyncStatusPanel({
             label={t("members.detail.credExpires")}
             value={detail.member.credential_expires_on}
           />
+          <Row label={t("members.detail.teamCredential")} value={teamCredential} />
+          {teamCredential ? (
+            <>
+              <Row
+                label={t("members.detail.teamAwarded")}
+                value={isoDate(diag.actc_credential_award_date)}
+              />
+              <Row
+                label={t("members.detail.teamExpires")}
+                value={isoDate(diag.actc_credential_expire_date)}
+              />
+            </>
+          ) : null}
+          <Row label={t("members.detail.autoRenewal")} value={autoRenewal} />
           <Row label={t("members.detail.memberType")} value={detail.member.member_type} />
           <Row label={t("members.detail.joined")} value={detail.member.membership_join_date} />
           <Row
