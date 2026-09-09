@@ -89,8 +89,14 @@ export function MemberSyncStatusPanel({
           <Row label={t("members.detail.teamCredential")} value={teamCredential} />
           {teamCredential ? (
             <>
-              <Row label={t("members.detail.teamAwarded")} value={isoDate(diag.actc_credential_award_date)} />
-              <Row label={t("members.detail.teamExpires")} value={isoDate(diag.actc_credential_expire_date)} />
+              <Row
+                label={t("members.detail.teamAwarded")}
+                value={isoDate(diag.actc_credential_award_date)}
+              />
+              <Row
+                label={t("members.detail.teamExpires")}
+                value={isoDate(diag.actc_credential_expire_date)}
+              />
             </>
           ) : null}
           <Row label={t("members.detail.autoRenewal")} value={autoRenewal} />
