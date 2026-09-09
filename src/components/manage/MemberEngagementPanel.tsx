@@ -62,7 +62,8 @@ const CAMPAIGN_HINTS: Record<EngagementCampaignKey, string> = {
   welcome_new_member: "Sent when a member appears in the ICF feed for the first time.",
   credential_upgrade: "Sent when a member moves forward on the ACC → PCC → MCC ladder.",
   credential_specialisation:
-    "Specialisation tags (ACTC, MCS-ACC, MCS-PCC, MCS-MCC) are not in the ICF feed yet, so nothing is detected. The copy can be written now and will start sending once the feed carries them.",
+    "Specialisation tags (ACTC, MCS-ACC, MCS-PCC, MCS-MCC) are not in the ICF feed yet, so nothing is detected. The email is ready and starts sending once the feed carries them.",
+
   grace_reengagement: "Sent when a membership lapses and the member enters the grace window.",
 };
 
