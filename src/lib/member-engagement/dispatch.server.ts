@@ -134,20 +134,20 @@ export async function dispatchCampaign(campaign: EngagementCampaign): Promise<Di
     }
 
     // Write to the member in the language they asked for, when they picked one.
-    const copy = pickCopy(campaign.copy, member?.correspondence_locale ?? null);
-    if (!copy) {
-      await finish("skipped", "No copy authored for this campaign");
-      result.skipped += 1;
-      continue;
-    }
+    const raw = (member.correspondence_locale as string | null) ?? "en";
+    const locale = (["en", "de", "fr", "it"] as const).includes(
+      raw.slice(0, 2).toLowerCase() as CampaignLocale,
+    )
+      ? (raw.slice(0, 2).toLowerCase() as CampaignLocale)
+      : "en";
 
     const vars = variablesFor(
-      campaign.key,
       member as { first_name: string | null; full_name: string | null },
       (send.trigger_details ?? {}) as Record<string, unknown>,
+      locale,
     );
-    const subject = renderCopyText(copy.subject, vars);
-    const body = renderCopyText(copy.body, vars);
+    const { subject, body } = campaignCopy(campaign.key, locale, vars);
+
 
     try {
       const outcome = await sendMemberEmail({
