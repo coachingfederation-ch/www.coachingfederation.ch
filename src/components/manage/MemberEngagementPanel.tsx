@@ -114,49 +114,6 @@ export function MemberEngagementPanel() {
     [sends],
   );
 
-  const updateCopy = (field: "subject" | "body", value: string) => {
-    setDraft((current) =>
-      current
-        ? {
-            ...current,
-            copy: {
-              ...current.copy,
-              [locale]: {
-                subject: field === "subject" ? value : (current.copy[locale]?.subject ?? ""),
-                body: field === "body" ? value : (current.copy[locale]?.body ?? ""),
-              },
-            },
-          }
-        : current,
-    );
-  };
-
-  const englishCopy = draft?.copy.en;
-  const canTranslate = Boolean(englishCopy?.subject?.trim() && englishCopy?.body?.trim());
-
-  /** Translates the English copy into the other chapter languages, into the draft only. */
-  const translate = async () => {
-    if (!draft || !englishCopy) return;
-    setTranslating(true);
-    try {
-      const result = await translateEngagementCopy({
-        data: {
-          subject: englishCopy.subject,
-          body: englishCopy.body,
-          locales: ["de", "fr", "it"],
-        },
-      });
-      setDraft((current) =>
-        current ? { ...current, copy: { ...current.copy, ...result } } : current,
-      );
-      toast.success("Translated — review the DE, FR and IT tabs, then save");
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Could not translate the copy");
-    } finally {
-      setTranslating(false);
-    }
-  };
-
   const save = async () => {
     if (!draft) return;
     setSaving(true);
@@ -166,9 +123,9 @@ export function MemberEngagementPanel() {
           key: draft.key,
           mode: draft.mode,
           dailyCap: draft.daily_cap,
-          copy: draft.copy,
         },
       });
+
       setCampaigns((current) =>
         (current ?? []).map((row) => (row.key === draft.key ? draft : row)),
       );
