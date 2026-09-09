@@ -24,6 +24,15 @@ function Row({ label, value }: { label: string; value: string | null | undefined
   );
 }
 
+/** Feed dates in diagnostics are US MM/DD/YYYY; show them like the ISO columns. */
+function isoDate(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const us = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!us) return value;
+  const [, m, d, y] = us;
+  return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+}
+
 function Flag({ label, on }: { label: string; on: boolean }) {
   return (
     <div className="flex items-center gap-2">
