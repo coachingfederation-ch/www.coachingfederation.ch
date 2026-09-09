@@ -1,10 +1,13 @@
 /**
  * Member engagement — staff server functions.
  *
- * Reads and writes for the admin panel: campaign copy and mode, the pending
+ * Reads and writes for the admin panel: campaign delivery settings, the pending
  * queue, and the send history. Every call is re-authorised server-side as
- * Membership & Engagement staff; the client never decides who may edit copy
- * or release a queued send.
+ * Membership & Engagement staff; the client never decides who may change a
+ * campaign or release a queued send.
+ *
+ * The wording of each campaign lives with every other email text, in
+ * `src/lib/email-templates/`, so it is not editable here.
  *
  * Exports: listEngagementCampaigns, saveEngagementCampaign, listEngagementSends,
  * releaseEngagementSends, cancelEngagementSends, runEngagementDispatch.
@@ -14,17 +17,12 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import {
   ENGAGEMENT_CAMPAIGN_KEYS,
-  ENGAGEMENT_LOCALES,
   type EngagementCampaign,
   type EngagementSendStatus,
 } from "./member-engagement";
 
 const campaignKey = z.enum(ENGAGEMENT_CAMPAIGN_KEYS);
 
-const copySchema = z.record(
-  z.enum(ENGAGEMENT_LOCALES),
-  z.object({ subject: z.string().max(200), body: z.string().max(8000) }),
-);
 
 export type EngagementSendRow = {
   id: string;
