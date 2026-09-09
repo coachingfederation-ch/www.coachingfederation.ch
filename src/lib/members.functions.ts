@@ -357,7 +357,6 @@ export const sendMemberPasswordReset = createServerFn({ method: "POST" })
     return await sendResetForMember(userId, data.memberId, data.locale, data.redirectOrigin);
   });
 
-
 /** Read model behind the claim-campaign card on /integration (admin only). */
 export const getClaimCampaign = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

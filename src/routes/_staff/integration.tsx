@@ -14,6 +14,7 @@ import { LinkedInPageSettings } from "@/components/cms/LinkedInPageSettings";
 import { SyncRunDetail } from "@/components/cms/SyncRunDetail";
 import { ClaimCampaignCard } from "@/components/cms/ClaimCampaignCard";
 import { SyncLimitsCard } from "@/components/cms/SyncLimitsCard";
+import { RetentionCard } from "@/components/cms/RetentionCard";
 import { useCms } from "@/i18n/cms";
 import {
   fetchIntegrationConfig,
@@ -695,6 +696,8 @@ function IntegrationPageBody() {
                 </button>
               </div>
             </section>
+
+            <RetentionCard />
 
             <RelayHealthCard t={t} />
             <CredentialCheckCard t={t} />

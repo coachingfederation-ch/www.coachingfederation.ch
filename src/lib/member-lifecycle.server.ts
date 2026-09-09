@@ -93,7 +93,12 @@ async function sendWarning(
   if (!member.email || member.activity_state === "anonymized") return false;
 
   const firstName = member.first_name || member.full_name || "there";
-  const copy = graceNoticeCopy(stage, member.correspondence_locale, firstName, row.scheduled_deletion_at);
+  const copy = graceNoticeCopy(
+    stage,
+    member.correspondence_locale,
+    firstName,
+    row.scheduled_deletion_at,
+  );
   const { sendMemberEmail } = await import("./member-email.server");
 
   const result = await sendMemberEmail({
