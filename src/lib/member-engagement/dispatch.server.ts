@@ -13,9 +13,13 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { SITE_URL } from "@/i18n/config";
 import {
+  campaignCopy,
+  type CampaignCopyVars,
+  type CampaignLocale,
+} from "@/lib/email-templates/member-campaign-copy";
+import { CAMPAIGN_TEMPLATE_NAMES } from "@/lib/email-templates/member-campaigns";
+import {
   isDormant,
-  pickCopy,
-  renderCopyText,
   type EngagementCampaign,
   type EngagementCampaignKey,
 } from "../member-engagement";
@@ -35,14 +39,21 @@ async function sentToday(campaignKey: string): Promise<number> {
   return count ?? 0;
 }
 
+/** Values the campaign copy interpolates, in the member's own language. */
 function variablesFor(
-  campaignKey: EngagementCampaignKey,
   member: { first_name: string | null; full_name: string | null },
   trigger: Record<string, unknown>,
-): Record<string, string | undefined> {
+  locale: CampaignLocale,
+): CampaignCopyVars {
   const graceEnd = trigger["scheduled_deletion_at"];
+  const dateLocale: Record<CampaignLocale, string> = {
+    en: "en-CH",
+    de: "de-CH",
+    fr: "fr-CH",
+    it: "it-CH",
+  };
   return {
-    first_name: member.first_name ?? member.full_name ?? "there",
+    first_name: member.first_name ?? member.full_name ?? undefined,
     events_link: `${SITE_URL}/events`,
     leader_link: "mailto:office@coachingfederation.ch",
     credential_from: (trigger["credential_from"] as string | undefined) ?? undefined,
@@ -50,13 +61,12 @@ function variablesFor(
     specialisation: (trigger["specialisation"] as string | undefined) ?? undefined,
     grace_end_date:
       typeof graceEnd === "string"
-        ? new Date(graceEnd).toLocaleDateString("en-CH", {
+        ? new Date(graceEnd).toLocaleDateString(dateLocale[locale], {
             day: "numeric",
             month: "long",
             year: "numeric",
           })
         : undefined,
-    campaign: campaignKey,
   };
 }
 
@@ -64,7 +74,7 @@ function variablesFor(
 export async function dispatchEngagementSends(): Promise<Record<string, DispatchSummary>> {
   const { data: campaigns, error } = await supabaseAdmin
     .from("member_engagement_campaigns")
-    .select("key, mode, daily_cap, copy, updated_at");
+    .select("key, mode, daily_cap, updated_at");
   if (error) throw error;
 
   const summary: Record<string, DispatchSummary> = {};
@@ -126,20 +136,19 @@ export async function dispatchCampaign(campaign: EngagementCampaign): Promise<Di
     }
 
     // Write to the member in the language they asked for, when they picked one.
-    const copy = pickCopy(campaign.copy, member?.correspondence_locale ?? null);
-    if (!copy) {
-      await finish("skipped", "No copy authored for this campaign");
-      result.skipped += 1;
-      continue;
-    }
+    const raw = (member.correspondence_locale as string | null) ?? "en";
+    const locale = (["en", "de", "fr", "it"] as const).includes(
+      raw.slice(0, 2).toLowerCase() as CampaignLocale,
+    )
+      ? (raw.slice(0, 2).toLowerCase() as CampaignLocale)
+      : "en";
 
     const vars = variablesFor(
-      campaign.key,
       member as { first_name: string | null; full_name: string | null },
       (send.trigger_details ?? {}) as Record<string, unknown>,
+      locale,
     );
-    const subject = renderCopyText(copy.subject, vars);
-    const body = renderCopyText(copy.body, vars);
+    const { subject, body } = campaignCopy(campaign.key, locale, vars);
 
     try {
       const outcome = await sendMemberEmail({
@@ -149,7 +158,7 @@ export async function dispatchCampaign(campaign: EngagementCampaign): Promise<Di
         subject,
         body,
         template: {
-          name: "member-engagement",
+          name: CAMPAIGN_TEMPLATE_NAMES[campaign.key],
           data: { subject, body, baseUrl: SITE_URL },
           idempotencyKey: `engagement-${send.id}`,
         },

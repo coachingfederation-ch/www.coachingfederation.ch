@@ -1,12 +1,13 @@
 /**
  * Member engagement admin panel.
  *
- * Two halves: the campaign editor (mode, daily cap, localized subject/body)
- * and the queue/history table. Copy edits are buffered locally and only
- * written on Save, so switching campaigns can never clobber unsaved text.
+ * Two halves: the campaign settings (mode, daily cap) and the queue/history
+ * table. The wording of each campaign is code-owned and previewed under
+ * Cloud → Emails, so it is not editable here.
  */
 import { useEffect, useMemo, useState } from "react";
-import { Loader2, Mail, Send, Check, X, Languages } from "lucide-react";
+import { Loader2, Mail, Send, Check, X } from "lucide-react";
+
 import { toast } from "sonner";
 import {
   Badge,
@@ -31,15 +32,11 @@ import {
   Tabs,
   TabsList,
   TabsTrigger,
-  Textarea,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import {
-  CAMPAIGN_PLACEHOLDERS,
-  ENGAGEMENT_LOCALES,
   isDormant,
   type EngagementCampaign,
   type EngagementCampaignKey,
-  type EngagementLocale,
   type EngagementMode,
 } from "@/lib/member-engagement";
 import {
@@ -49,7 +46,6 @@ import {
   releaseEngagementSends,
   runEngagementDispatch,
   saveEngagementCampaign,
-  translateEngagementCopy,
   type EngagementSendRow,
   type EngagementStats,
 } from "@/lib/member-engagement.functions";
@@ -65,7 +61,8 @@ const CAMPAIGN_HINTS: Record<EngagementCampaignKey, string> = {
   welcome_new_member: "Sent when a member appears in the ICF feed for the first time.",
   credential_upgrade: "Sent when a member moves forward on the ACC → PCC → MCC ladder.",
   credential_specialisation:
-    "Specialisation tags (ACTC, MCS-ACC, MCS-PCC, MCS-MCC) are not in the ICF feed yet, so nothing is detected. The copy can be written now and will start sending once the feed carries them.",
+    "Specialisation tags (ACTC, MCS-ACC, MCS-PCC, MCS-MCC) are not in the ICF feed yet, so nothing is detected. The email is ready and starts sending once the feed carries them.",
+
   grace_reengagement: "Sent when a membership lapses and the member enters the grace window.",
 };
 
@@ -78,10 +75,8 @@ const MODE_LABELS: Record<EngagementMode, string> = {
 export function MemberEngagementPanel() {
   const [campaigns, setCampaigns] = useState<EngagementCampaign[] | null>(null);
   const [active, setActive] = useState<EngagementCampaignKey>("welcome_new_member");
-  const [locale, setLocale] = useState<EngagementLocale>("en");
   const [draft, setDraft] = useState<EngagementCampaign | null>(null);
   const [saving, setSaving] = useState(false);
-  const [translating, setTranslating] = useState(false);
 
   const [sends, setSends] = useState<EngagementSendRow[]>([]);
   const [stats, setStats] = useState<EngagementStats | null>(null);
@@ -106,59 +101,16 @@ export function MemberEngagementPanel() {
 
   useEffect(reloadSends, []);
 
-  // Buffer the selected campaign so unsaved edits stay per-campaign.
+  // Buffer the selected campaign so unsaved setting changes stay per-campaign.
   useEffect(() => {
     const found = campaigns?.find((row) => row.key === active) ?? null;
-    setDraft(found ? { ...found, copy: { ...found.copy } } : null);
+    setDraft(found ? { ...found } : null);
   }, [campaigns, active]);
 
   const pendingIds = useMemo(
     () => sends.filter((row) => row.status === "pending").map((row) => row.id),
     [sends],
   );
-
-  const updateCopy = (field: "subject" | "body", value: string) => {
-    setDraft((current) =>
-      current
-        ? {
-            ...current,
-            copy: {
-              ...current.copy,
-              [locale]: {
-                subject: field === "subject" ? value : (current.copy[locale]?.subject ?? ""),
-                body: field === "body" ? value : (current.copy[locale]?.body ?? ""),
-              },
-            },
-          }
-        : current,
-    );
-  };
-
-  const englishCopy = draft?.copy.en;
-  const canTranslate = Boolean(englishCopy?.subject?.trim() && englishCopy?.body?.trim());
-
-  /** Translates the English copy into the other chapter languages, into the draft only. */
-  const translate = async () => {
-    if (!draft || !englishCopy) return;
-    setTranslating(true);
-    try {
-      const result = await translateEngagementCopy({
-        data: {
-          subject: englishCopy.subject,
-          body: englishCopy.body,
-          locales: ["de", "fr", "it"],
-        },
-      });
-      setDraft((current) =>
-        current ? { ...current, copy: { ...current.copy, ...result } } : current,
-      );
-      toast.success("Translated — review the DE, FR and IT tabs, then save");
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Could not translate the copy");
-    } finally {
-      setTranslating(false);
-    }
-  };
 
   const save = async () => {
     if (!draft) return;
@@ -169,9 +121,9 @@ export function MemberEngagementPanel() {
           key: draft.key,
           mode: draft.mode,
           dailyCap: draft.daily_cap,
-          copy: draft.copy,
         },
       });
+
       setCampaigns((current) =>
         (current ?? []).map((row) => (row.key === draft.key ? draft : row)),
       );
@@ -283,55 +235,13 @@ export function MemberEngagementPanel() {
                 </div>
               </div>
 
-              <Tabs value={locale} onValueChange={(value) => setLocale(value as EngagementLocale)}>
-                <TabsList>
-                  {ENGAGEMENT_LOCALES.map((code) => (
-                    <TabsTrigger key={code} value={code}>
-                      {code.toUpperCase()}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
-
-              <div className="space-y-2">
-                <Label htmlFor="subject">Subject</Label>
-                <Input
-                  id="subject"
-                  value={draft.copy[locale]?.subject ?? ""}
-                  onChange={(event) => updateCopy("subject", event.target.value)}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="body">Body</Label>
-                <Textarea
-                  id="body"
-                  rows={12}
-                  value={draft.copy[locale]?.body ?? ""}
-                  onChange={(event) => updateCopy("body", event.target.value)}
-                />
-                <p className="text-xs text-muted-foreground">
-                  Placeholders: {CAMPAIGN_PLACEHOLDERS[draft.key].map((p) => `{{${p}}}`).join(", ")}
-                </p>
-              </div>
+              <p className="text-sm text-muted-foreground">
+                The wording of this email lives with every other chapter email, under Cloud →
+                Emails, in German, French, Italian and English. Members receive it in their
+                correspondence language.
+              </p>
 
               <div className="flex flex-wrap items-center justify-end gap-3">
-                <p className="mr-auto text-xs text-muted-foreground">
-                  Translations fill the DE, FR and IT tabs from the English copy. Review them, then
-                  save.
-                </p>
-                <Button
-                  variant="outline"
-                  onClick={translate}
-                  disabled={translating || !canTranslate}
-                >
-                  {translating ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <Languages className="mr-2 h-4 w-4" />
-                  )}
-                  Translate to DE, FR, IT
-                </Button>
                 <Button onClick={save} disabled={saving}>
                   {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                   Save campaign

@@ -75,10 +75,12 @@ _Correspondence language_ (`CorrespondenceSection.tsx`, state in
 `useMemberProfileForm.ts`), validated in `member-profile.functions.ts` and
 written by `member-profile.server.ts`.
 
-Outgoing member mail follows it: the engagement dispatcher selects campaign copy
-with `pickCopy(campaign.copy, member.correspondence_locale)`
-(`src/lib/member-engagement/dispatch.server.ts`). A null value means "no
+Outgoing member mail follows it: the engagement dispatcher resolves the member's
+`correspondence_locale` and renders the campaign's registered email template in
+that language (`src/lib/member-engagement/dispatch.server.ts`, copy in
+`src/lib/email-templates/member-campaign-copy.ts`). A null value means "no
 preference recorded" and falls back to English.
+
 
 The two settings answer different questions and must not be conflated: the
 profile's `primary_locale` is what the _public_ reads on the coach's directory

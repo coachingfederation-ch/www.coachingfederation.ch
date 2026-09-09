@@ -50,6 +50,12 @@ import {
   noticeTemplate as memberGraceNotice,
   finalNoticeTemplate as memberGraceFinalNotice,
 } from "./member-grace-notice";
+import {
+  welcomeTemplate as memberWelcome,
+  credentialUpgradeTemplate as memberCredentialChange,
+  specialisationTemplate as memberSpecialisation,
+  graceReengagementTemplate as memberGraceReengagement,
+} from "./member-campaigns";
 
 /**
  * Template registry — maps template names to their React Email components.
@@ -85,4 +91,8 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "article-review-request": articleReviewRequest,
   "member-grace-notice": memberGraceNotice,
   "member-grace-final-notice": memberGraceFinalNotice,
+  "member-welcome": memberWelcome,
+  "member-credential-change": memberCredentialChange,
+  "member-specialisation": memberSpecialisation,
+  "member-grace-reengagement": memberGraceReengagement,
 };

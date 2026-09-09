@@ -1,10 +1,13 @@
 /**
  * Member engagement — staff server functions.
  *
- * Reads and writes for the admin panel: campaign copy and mode, the pending
+ * Reads and writes for the admin panel: campaign delivery settings, the pending
  * queue, and the send history. Every call is re-authorised server-side as
- * Membership & Engagement staff; the client never decides who may edit copy
- * or release a queued send.
+ * Membership & Engagement staff; the client never decides who may change a
+ * campaign or release a queued send.
+ *
+ * The wording of each campaign lives with every other email text, in
+ * `src/lib/email-templates/`, so it is not editable here.
  *
  * Exports: listEngagementCampaigns, saveEngagementCampaign, listEngagementSends,
  * releaseEngagementSends, cancelEngagementSends, runEngagementDispatch.
@@ -14,17 +17,11 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import {
   ENGAGEMENT_CAMPAIGN_KEYS,
-  ENGAGEMENT_LOCALES,
   type EngagementCampaign,
   type EngagementSendStatus,
 } from "./member-engagement";
 
 const campaignKey = z.enum(ENGAGEMENT_CAMPAIGN_KEYS);
-
-const copySchema = z.record(
-  z.enum(ENGAGEMENT_LOCALES),
-  z.object({ subject: z.string().max(200), body: z.string().max(8000) }),
-);
 
 export type EngagementSendRow = {
   id: string;
@@ -41,7 +38,7 @@ export type EngagementSendRow = {
 
 export type EngagementStats = { pending: number; sentLast30Days: number; failed: number };
 
-/** Every campaign with its authored copy — the panel's initial state. */
+/** Every campaign with its delivery settings — the panel's initial state. */
 export const listEngagementCampaigns = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<EngagementCampaign[]> => {
@@ -50,13 +47,13 @@ export const listEngagementCampaigns = createServerFn({ method: "POST" })
 
     const { data, error } = await context.supabase
       .from("member_engagement_campaigns")
-      .select("key, mode, daily_cap, copy, updated_at")
+      .select("key, mode, daily_cap, updated_at")
       .order("key");
     if (error) throw new Error(error.message);
     return (data ?? []) as unknown as EngagementCampaign[];
   });
 
-/** Saves one campaign's copy and delivery settings. */
+/** Saves one campaign's delivery settings. Wording lives in the templates. */
 export const saveEngagementCampaign = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
@@ -65,7 +62,6 @@ export const saveEngagementCampaign = createServerFn({ method: "POST" })
         key: campaignKey,
         mode: z.enum(["off", "automatic", "queued"]),
         dailyCap: z.number().int().min(1).max(500),
-        copy: copySchema,
       })
       .parse(input),
   )
@@ -78,7 +74,6 @@ export const saveEngagementCampaign = createServerFn({ method: "POST" })
       .update({
         mode: data.mode,
         daily_cap: data.dailyCap,
-        copy: data.copy as never,
         updated_at: new Date().toISOString(),
       })
       .eq("key", data.key);
@@ -215,104 +210,4 @@ export const runEngagementDispatch = createServerFn({ method: "POST" })
       (total, row) => ({ sent: total.sent + row.sent, failed: total.failed + row.failed }),
       { sent: 0, failed: 0 },
     );
-  });
-
-const TRANSLATE_LOCALE_NAMES: Record<string, string> = {
-  de: "Swiss Standard German (no ß, use ss)",
-  fr: "Swiss French",
-  it: "Swiss Italian",
-};
-
-export type EngagementTranslationResult = Partial<
-  Record<"de" | "fr" | "it", { subject: string; body: string }>
->;
-
-/**
- * Machine-translates the English campaign copy into the other chapter
- * languages. Returns the copy only — the panel merges it into its draft and
- * `saveEngagementCampaign` stays the single write path.
- */
-export const translateEngagementCopy = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) =>
-    z
-      .object({
-        subject: z.string().min(1).max(200),
-        body: z.string().min(1).max(8000),
-        locales: z
-          .array(z.enum(["de", "fr", "it"]))
-          .min(1)
-          .max(3),
-      })
-      .parse(input),
-  )
-  .handler(async ({ data, context }): Promise<EngagementTranslationResult> => {
-    // Paid AI call: gate before touching the gateway.
-    const { assertMembership } = await import("./authz");
-    await assertMembership(context);
-
-    const apiKey = process.env.LOVABLE_API_KEY;
-    if (!apiKey) throw new Error("Translation service is not configured");
-
-    const translateOne = async (locale: "de" | "fr" | "it") => {
-      const prompt = [
-        `Translate the following member email from English into ${TRANSLATE_LOCALE_NAMES[locale]}.`,
-        "Keep every {{placeholder}} token exactly as written, including the double braces.",
-        "Keep line breaks and paragraph structure exactly as they are.",
-        "Use a warm, professional tone suitable for The Switzerland Chapter of ICF.",
-        "Do not translate 'The Switzerland Chapter of ICF', credential names ACC, PCC, MCC, or Swiss place names such as Zürich, Basel, Bern, Lausanne, Genève, Lugano.",
-        'Respond with JSON only, in the shape {"subject": "...", "body": "..."}.',
-        "",
-        `SUBJECT: ${data.subject}`,
-        "BODY:",
-        data.body,
-      ].join("\n");
-
-      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "google/gemini-3-flash-preview",
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are a professional Swiss editorial translator. You reply with JSON only.",
-            },
-            { role: "user", content: prompt },
-          ],
-          response_format: { type: "json_object" },
-        }),
-      });
-
-      if (response.status === 429)
-        throw new Error("Rate limit reached — please try again shortly.");
-      if (response.status === 402)
-        throw new Error("AI credits exhausted — please top up the workspace.");
-      if (!response.ok) throw new Error(`Translation service error (${response.status})`);
-
-      const payload = (await response.json()) as { choices?: { message?: { content?: string } }[] };
-      const raw = payload.choices?.[0]?.message?.content ?? "";
-      let parsed: { subject?: string; body?: string };
-      try {
-        parsed = JSON.parse(
-          raw
-            .replace(/^```(?:json)?/i, "")
-            .replace(/```$/, "")
-            .trim(),
-        );
-      } catch {
-        throw new Error("Translation service returned an unexpected response");
-      }
-
-      return {
-        subject: (parsed.subject ?? "").trim() || data.subject,
-        body: (parsed.body ?? "").trim() || data.body,
-      };
-    };
-
-    const entries = await Promise.all(
-      data.locales.map(async (locale) => [locale, await translateOne(locale)] as const),
-    );
-    return Object.fromEntries(entries) as EngagementTranslationResult;
   });
