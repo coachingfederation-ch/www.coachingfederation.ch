@@ -50,7 +50,6 @@ import {
   type EngagementStats,
 } from "@/lib/member-engagement.functions";
 
-
 const CAMPAIGN_LABELS: Record<EngagementCampaignKey, string> = {
   welcome_new_member: "Welcome new members",
   credential_upgrade: "Credential upgrade",
@@ -78,7 +77,6 @@ export function MemberEngagementPanel() {
   const [active, setActive] = useState<EngagementCampaignKey>("welcome_new_member");
   const [draft, setDraft] = useState<EngagementCampaign | null>(null);
   const [saving, setSaving] = useState(false);
-
 
   const [sends, setSends] = useState<EngagementSendRow[]>([]);
   const [stats, setStats] = useState<EngagementStats | null>(null);
@@ -108,7 +106,6 @@ export function MemberEngagementPanel() {
     const found = campaigns?.find((row) => row.key === active) ?? null;
     setDraft(found ? { ...found } : null);
   }, [campaigns, active]);
-
 
   const pendingIds = useMemo(
     () => sends.filter((row) => row.status === "pending").map((row) => row.id),
@@ -250,7 +247,6 @@ export function MemberEngagementPanel() {
                   Save campaign
                 </Button>
               </div>
-
             </div>
           ) : null}
         </CardContent>

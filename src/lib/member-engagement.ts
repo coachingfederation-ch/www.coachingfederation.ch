@@ -26,7 +26,6 @@ export type EngagementCampaign = {
   updated_at: string;
 };
 
-
 export type EngagementSend = {
   id: string;
   campaign_key: EngagementCampaignKey;
@@ -57,4 +56,3 @@ export function credentialRank(slug: string | null | undefined): number {
   if (!slug) return -1;
   return (CREDENTIAL_LADDER as readonly string[]).indexOf(slug.toUpperCase());
 }
-

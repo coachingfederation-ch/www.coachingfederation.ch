@@ -57,7 +57,6 @@ import {
   graceReengagementTemplate as memberGraceReengagement,
 } from "./member-campaigns";
 
-
 /**
  * Template registry — maps template names to their React Email components.
  * Import and register new templates here after creating them in this directory.
@@ -97,4 +96,3 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "member-specialisation": memberSpecialisation,
   "member-grace-reengagement": memberGraceReengagement,
 };
-

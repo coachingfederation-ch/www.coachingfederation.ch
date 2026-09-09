@@ -18,8 +18,11 @@ import {
   type CampaignLocale,
 } from "@/lib/email-templates/member-campaign-copy";
 import { CAMPAIGN_TEMPLATE_NAMES } from "@/lib/email-templates/member-campaigns";
-import { isDormant, type EngagementCampaign, type EngagementCampaignKey } from "../member-engagement";
-
+import {
+  isDormant,
+  type EngagementCampaign,
+  type EngagementCampaignKey,
+} from "../member-engagement";
 
 export type DispatchSummary = { attempted: number; sent: number; skipped: number; failed: number };
 
@@ -67,12 +70,11 @@ function variablesFor(
   };
 }
 
-
 /** Dispatches pending sends for every enabled campaign. */
 export async function dispatchEngagementSends(): Promise<Record<string, DispatchSummary>> {
   const { data: campaigns, error } = await supabaseAdmin
     .from("member_engagement_campaigns")
-    .select("key, mode, daily_cap, copy, updated_at");
+    .select("key, mode, daily_cap, updated_at");
   if (error) throw error;
 
   const summary: Record<string, DispatchSummary> = {};
@@ -147,7 +149,6 @@ export async function dispatchCampaign(campaign: EngagementCampaign): Promise<Di
       locale,
     );
     const { subject, body } = campaignCopy(campaign.key, locale, vars);
-
 
     try {
       const outcome = await sendMemberEmail({
