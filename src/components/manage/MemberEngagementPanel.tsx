@@ -32,15 +32,11 @@ import {
   Tabs,
   TabsList,
   TabsTrigger,
-  Textarea,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import {
-  CAMPAIGN_PLACEHOLDERS,
-  ENGAGEMENT_LOCALES,
   isDormant,
   type EngagementCampaign,
   type EngagementCampaignKey,
-  type EngagementLocale,
   type EngagementMode,
 } from "@/lib/member-engagement";
 import {
@@ -50,10 +46,10 @@ import {
   releaseEngagementSends,
   runEngagementDispatch,
   saveEngagementCampaign,
-  translateEngagementCopy,
   type EngagementSendRow,
   type EngagementStats,
 } from "@/lib/member-engagement.functions";
+
 
 const CAMPAIGN_LABELS: Record<EngagementCampaignKey, string> = {
   welcome_new_member: "Welcome new members",
