@@ -1,25 +1,33 @@
 /**
  * Grace-period retention sweep.
  *
- * A member who drops out of the ICF feed is moved into a grace window by the
- * sync, and a row is written to `member_lifecycle_queue`. This module is what
- * finally reads that queue: it warns the member twice, closes the row when the
- * member comes back, and tells the chapter office when records are due for
- * removal.
+ * ICF Global keeps a lapsed membership in the data feed for two more months
+ * before dropping it, so the whole conversation with a lapsing member starts
+ * at their membership expiry date, not at the feed drop:
  *
- * Deletion stays a deliberate human act — the sweep never anonymises anyone.
- * It only makes sure nobody is deleted without warning and no due record goes
- * unnoticed.
+ *   expiry               -> re-engagement email (names expiry + 2 months)
+ *   expiry + 30 days     -> first warning
+ *   expiry + 2mo - 7 days-> final warning
+ *   feed drop            -> access ends, record scheduled for removal
+ *
+ * All three messages are queued into `member_engagement_sends`, so they carry
+ * the same staff controls as every other campaign: on / hold / off, a daily
+ * cap, a waiting queue and a send history. A member who renews gets a new
+ * expiry date from the feed and simply stops matching.
+ *
+ * Everything after the feed drop is unchanged, and the sweep never anonymises
+ * anyone — deletion stays a deliberate staff action.
  *
  * Exports: runLifecycleSweep, loadRetentionSummary, GRACE_NOTICE_DAYS,
- * GRACE_FINAL_NOTICE_DAYS.
+ * GRACE_FINAL_NOTICE_DAYS, ICF_GRACE_MONTHS.
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { graceNoticeCopy } from "./email-templates/member-grace-copy";
 
-/** Lead time of the first warning, in days before the scheduled deletion. */
+/** Months ICF Global keeps a lapsed membership in the feed after expiry. */
+export const ICF_GRACE_MONTHS = 2;
+/** Days after the expiry date at which the first warning goes out. */
 export const GRACE_NOTICE_DAYS = 30;
-/** Lead time of the final warning, in days before the scheduled deletion. */
+/** Days before the end of the ICF grace window for the final warning. */
 export const GRACE_FINAL_NOTICE_DAYS = 7;
 
 const OFFICE_EMAIL = "office@coachingfederation.ch";
@@ -27,6 +35,7 @@ const DAY_MS = 86400000;
 
 export type LifecycleSweepResult = {
   resolved: number;
+  queuedReengagement: number;
   warned30: number;
   warned7: number;
   due: number;
@@ -34,6 +43,7 @@ export type LifecycleSweepResult = {
 };
 
 export type RetentionSummary = {
+  pastExpiry: number;
   inGrace: number;
   warned30: number;
   warned7: number;
@@ -49,13 +59,11 @@ type QueueRow = {
   final_notice_at: string | null;
 };
 
-type MemberRow = {
+type LapsedMember = {
   id: string;
-  first_name: string | null;
-  full_name: string | null;
   email: string | null;
   activity_state: string | null;
-  correspondence_locale: string | null;
+  membership_expiration_date: string | null;
 };
 
 /** Open queue rows — never resolved, so a returned member drops out at once. */
@@ -68,65 +76,100 @@ async function openQueueRows(): Promise<QueueRow[]> {
   return (data ?? []) as unknown as QueueRow[];
 }
 
-async function membersById(ids: string[]): Promise<Map<string, MemberRow>> {
-  if (!ids.length) return new Map();
+/** End of the ICF grace window for one expiry date, as an ISO date string. */
+export function icfGraceEnd(expiryDate: string): string {
+  const end = new Date(`${expiryDate}T00:00:00Z`);
+  end.setUTCMonth(end.getUTCMonth() + ICF_GRACE_MONTHS);
+  return end.toISOString().slice(0, 10);
+}
+
+/** Members whose membership expiry has passed and who still have a record. */
+async function lapsedMembers(): Promise<LapsedMember[]> {
+  const today = new Date().toISOString().slice(0, 10);
   const { data, error } = await supabaseAdmin
     .from("members")
-    .select("id, first_name, full_name, email, activity_state, correspondence_locale")
-    .in("id", ids);
+    .select("id, email, activity_state, membership_expiration_date")
+    .not("membership_expiration_date", "is", null)
+    .lte("membership_expiration_date", today)
+    .neq("activity_state", "anonymized");
   if (error) throw error;
-  const map = new Map<string, MemberRow>();
-  for (const row of (data ?? []) as unknown as MemberRow[]) map.set(row.id, row);
-  return map;
+  return (data ?? []) as unknown as LapsedMember[];
 }
+
+type PendingSend = {
+  campaign_key: string;
+  member_id: string;
+  dedupe_key: string;
+  trigger_details: Record<string, string>;
+};
 
 /**
- * Sends one warning and stamps the queue row. Returns true only when the email
- * actually left the building, so a suppressed send is retried on a later run
- * rather than silently marked as warned.
+ * Queues the three lapse messages at their milestone. Every row is dedupe-keyed
+ * to one expiry date, so the sweep can run any number of times a day and a
+ * member who renews never receives the rest of the sequence.
  */
-async function sendWarning(
-  stage: "notice" | "final",
-  row: QueueRow,
-  member: MemberRow,
-): Promise<boolean> {
-  if (!member.email || member.activity_state === "anonymized") return false;
+async function queueLapseSends(): Promise<{
+  queuedReengagement: number;
+  warned30: number;
+  warned7: number;
+}> {
+  const members = await lapsedMembers();
+  const now = Date.now();
+  const sends: PendingSend[] = [];
+  const counts = { queuedReengagement: 0, warned30: 0, warned7: 0 };
 
-  const firstName = member.first_name || member.full_name || "there";
-  const copy = graceNoticeCopy(
-    stage,
-    member.correspondence_locale,
-    firstName,
-    row.scheduled_deletion_at,
-  );
-  const { sendMemberEmail } = await import("./member-email.server");
+  for (const member of members) {
+    const expiry = member.membership_expiration_date;
+    if (!expiry || !member.email) continue;
 
-  const result = await sendMemberEmail({
-    memberId: member.id,
-    to: member.email,
-    templateKey: stage === "notice" ? "member-grace-notice" : "member-grace-final-notice",
-    subject: copy.subject,
-    body: copy.body,
-    template: {
-      name: stage === "notice" ? "member-grace-notice" : "member-grace-final-notice",
-      data: { subject: copy.subject, body: copy.body },
-      // Keyed by the grace window, so one window can never mail twice even if
-      // the sweep runs more than once in a day.
-      idempotencyKey: `grace-${stage}-${row.member_id}-${row.scheduled_deletion_at.slice(0, 10)}`,
-    },
-  });
-  if (!result.sent) return false;
+    const graceEnd = icfGraceEnd(expiry);
+    const daysSinceExpiry = Math.floor((now - new Date(`${expiry}T00:00:00Z`).getTime()) / DAY_MS);
+    const daysToGraceEnd = Math.ceil((new Date(`${graceEnd}T00:00:00Z`).getTime() - now) / DAY_MS);
+    const details = { grace_end_date: graceEnd, membership_expiration_date: expiry };
 
-  await supabaseAdmin
-    .from("member_lifecycle_queue")
-    .update(
-      stage === "notice"
-        ? { notified_at: new Date().toISOString() }
-        : { final_notice_at: new Date().toISOString() },
-    )
-    .eq("id", row.id);
-  return true;
+    const push = (campaign: string) => {
+      sends.push({
+        campaign_key: campaign,
+        member_id: member.id,
+        dedupe_key: `${campaign}:${member.id}:${expiry}`,
+        trigger_details: details,
+      });
+    };
+
+    // From the expiry date onwards. Late arrivals (a record imported after the
+    // date has passed) still get the opening message once.
+    if (daysSinceExpiry >= 0) {
+      push("grace_reengagement");
+      counts.queuedReengagement += 1;
+    }
+    if (daysSinceExpiry >= GRACE_NOTICE_DAYS && daysToGraceEnd > GRACE_FINAL_NOTICE_DAYS) {
+      push("grace_first_warning");
+      counts.warned30 += 1;
+    }
+    if (daysToGraceEnd <= GRACE_FINAL_NOTICE_DAYS) {
+      push("grace_final_warning");
+      counts.warned7 += 1;
+    }
+  }
+
+  if (!sends.length) return { queuedReengagement: 0, warned30: 0, warned7: 0 };
+
+  const { data: inserted, error } = await supabaseAdmin
+    .from("member_engagement_sends")
+    .upsert(sends as never, { onConflict: "dedupe_key", ignoreDuplicates: true })
+    .select("campaign_key");
+  if (error) throw error;
+
+  // Report what this run actually added, not what matched a milestone.
+  const added = { queuedReengagement: 0, warned30: 0, warned7: 0 };
+  for (const row of (inserted ?? []) as unknown as { campaign_key: string }[]) {
+    if (row.campaign_key === "grace_reengagement") added.queuedReengagement += 1;
+    if (row.campaign_key === "grace_first_warning") added.warned30 += 1;
+    if (row.campaign_key === "grace_final_warning") added.warned7 += 1;
+  }
+  return added;
 }
+
 
 /** One daily notice to the chapter office — counts only, never member data. */
 async function sendOfficeDigest(due: number, nextDeletionAt: string | null): Promise<boolean> {
@@ -157,15 +200,36 @@ ${nextDeletionAt ? `Next scheduled date after today: ${nextDeletionAt.slice(0, 1
   }
 }
 
-/** Nightly sweep: close returned members, warn the rest, alert on overdue rows. */
+/** Activity state per member id, for the queue rows we are about to review. */
+async function activityStates(ids: string[]): Promise<Map<string, string | null>> {
+  if (!ids.length) return new Map();
+  const { data, error } = await supabaseAdmin
+    .from("members")
+    .select("id, activity_state")
+    .in("id", ids);
+  if (error) throw error;
+  const map = new Map<string, string | null>();
+  for (const row of (data ?? []) as unknown as { id: string; activity_state: string | null }[]) {
+    map.set(row.id, row.activity_state);
+  }
+  return map;
+}
+
+/**
+ * Nightly sweep: queue the lapse messages from the expiry date, close queue
+ * rows for members who came back, and alert the office about overdue records.
+ */
 export async function runLifecycleSweep(): Promise<LifecycleSweepResult> {
+  const queued = await queueLapseSends();
+
   const rows = await openQueueRows();
-  const members = await membersById(rows.map((row) => row.member_id));
+  const states = await activityStates(rows.map((row) => row.member_id));
   const now = Date.now();
   const result: LifecycleSweepResult = {
     resolved: 0,
-    warned30: 0,
-    warned7: 0,
+    queuedReengagement: queued.queuedReengagement,
+    warned30: queued.warned30,
+    warned7: queued.warned7,
     due: 0,
     digestSent: false,
   };
@@ -173,40 +237,27 @@ export async function runLifecycleSweep(): Promise<LifecycleSweepResult> {
   let nextDeletionAt: string | null = null;
 
   for (const row of rows) {
-    const member = members.get(row.member_id);
+    const state = states.get(row.member_id);
 
     // Back in the feed (or already anonymised): the row has no further work.
-    if (!member || member.activity_state !== "grace") {
+    if (state !== "grace") {
       await supabaseAdmin
         .from("member_lifecycle_queue")
         .update({
           resolved_at: new Date().toISOString(),
-          resolution: member?.activity_state === "anonymized" ? "anonymized" : "reactivated",
+          resolution: state === "anonymized" ? "anonymized" : "reactivated",
         })
         .eq("id", row.id);
       result.resolved += 1;
       continue;
     }
 
-    const deletionAt = new Date(row.scheduled_deletion_at).getTime();
-    const daysLeft = Math.ceil((deletionAt - now) / DAY_MS);
-
-    if (daysLeft <= 0) {
+    if (new Date(row.scheduled_deletion_at).getTime() <= now) {
       result.due += 1;
       continue;
     }
     if (!nextDeletionAt || row.scheduled_deletion_at < nextDeletionAt) {
       nextDeletionAt = row.scheduled_deletion_at;
-    }
-
-    // A grace window shorter than the first lead time collapses to one
-    // warning: we never mail two messages on the same day.
-    if (daysLeft <= GRACE_FINAL_NOTICE_DAYS) {
-      if (!row.final_notice_at && (await sendWarning("final", row, member))) result.warned7 += 1;
-      continue;
-    }
-    if (daysLeft <= GRACE_NOTICE_DAYS && !row.notified_at) {
-      if (await sendWarning("notice", row, member)) result.warned30 += 1;
     }
   }
 
@@ -214,7 +265,30 @@ export async function runLifecycleSweep(): Promise<LifecycleSweepResult> {
     result.digestSent = await sendOfficeDigest(result.due, nextDeletionAt);
   }
 
+  // Send whatever the milestones queued, honouring each campaign's own mode,
+  // daily cap and suppression rules — exactly like a sync-triggered send.
+  try {
+    const { dispatchEngagementSends } = await import("./member-engagement/dispatch.server");
+    await dispatchEngagementSends();
+  } catch (err) {
+    console.error(
+      `[member-lifecycle] dispatch failed error=${JSON.stringify(
+        err instanceof Error ? err.message : String(err),
+      )}`,
+    );
+  }
+
   return result;
+}
+
+/** How many of one warning campaign have actually gone out. */
+async function sentCount(campaignKey: string): Promise<number> {
+  const { count } = await supabaseAdmin
+    .from("member_engagement_sends")
+    .select("id", { count: "exact", head: true })
+    .eq("campaign_key", campaignKey)
+    .eq("status", "sent");
+  return count ?? 0;
 }
 
 /** Read-only counts for the staff retention card. */
@@ -222,24 +296,24 @@ export async function loadRetentionSummary(): Promise<RetentionSummary> {
   const rows = await openQueueRows();
   const now = Date.now();
   let inGrace = 0;
-  let warned30 = 0;
-  let warned7 = 0;
   let due = 0;
   let nextDeletionAt: string | null = null;
 
   for (const row of rows) {
-    const deletionAt = new Date(row.scheduled_deletion_at).getTime();
-    if (deletionAt <= now) {
+    if (new Date(row.scheduled_deletion_at).getTime() <= now) {
       due += 1;
       continue;
     }
     inGrace += 1;
-    if (row.notified_at) warned30 += 1;
-    if (row.final_notice_at) warned7 += 1;
     if (!nextDeletionAt || row.scheduled_deletion_at < nextDeletionAt) {
       nextDeletionAt = row.scheduled_deletion_at;
     }
   }
 
-  return { inGrace, warned30, warned7, due, nextDeletionAt };
+  const pastExpiry = (await lapsedMembers()).length;
+  const warned30 = await sentCount("grace_first_warning");
+  const warned7 = await sentCount("grace_final_warning");
+
+  return { pastExpiry, inGrace, warned30, warned7, due, nextDeletionAt };
 }
+

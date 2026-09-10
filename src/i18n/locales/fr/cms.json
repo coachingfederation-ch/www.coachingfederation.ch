@@ -624,9 +624,10 @@
     },
     "retentionTitle": "Période de clôture et conservation",
     "retentionIntro": "Membres dont l'adhésion ICF a expiré. Ils reçoivent un avertissement 30 et 7 jours avant la suppression ; la suppression est toujours confirmée par l'équipe via « Nettoyer » ci-dessus.",
+    "retentionPastExpiry": "Après la date d'échéance",
     "retentionInGrace": "En période de clôture",
-    "retentionWarned30": "Avertissement à 30 jours envoyé",
-    "retentionWarned7": "Avertissement à 7 jours envoyé",
+    "retentionWarned30": "Premier avertissement envoyé",
+    "retentionWarned7": "Dernier avertissement envoyé",
     "retentionDue": "À supprimer",
     "retentionNext": "Prochaine fiche à échéance le",
     "retentionNextNone": "Aucune fiche n'arrive encore à échéance."
@@ -862,7 +863,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
+          "items": [
+            "Piloter des projets",
+            "Être reconnu par ICFS pour avoir mené des initiatives"
+          ]
         },
         "status": {
           "title": "Status",

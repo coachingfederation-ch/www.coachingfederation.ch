@@ -20,7 +20,11 @@ export const CAMPAIGN_TEMPLATE_NAMES: Record<EngagementCampaignKey, string> = {
   credential_upgrade: "member-credential-change",
   credential_specialisation: "member-specialisation",
   grace_reengagement: "member-grace-reengagement",
+  // The two warnings send through the templates already registered for them.
+  grace_first_warning: "member-grace-notice",
+  grace_final_warning: "member-grace-final-notice",
 };
+
 
 const preview = (key: EngagementCampaignKey, vars: CampaignCopyVars) => {
   const copy = campaignCopy(key, "en", vars);

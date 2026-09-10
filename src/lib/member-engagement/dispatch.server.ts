@@ -45,7 +45,10 @@ function variablesFor(
   trigger: Record<string, unknown>,
   locale: CampaignLocale,
 ): CampaignCopyVars {
-  const graceEnd = trigger["scheduled_deletion_at"];
+  // `grace_end_date` is the ICF grace end computed from the membership expiry
+  // date; `scheduled_deletion_at` is the older, feed-drop shaped value still
+  // present on rows queued before that change.
+  const graceEnd = trigger["grace_end_date"] ?? trigger["scheduled_deletion_at"];
   const dateLocale: Record<CampaignLocale, string> = {
     en: "en-CH",
     de: "de-CH",
@@ -61,14 +64,14 @@ function variablesFor(
     specialisation: (trigger["specialisation"] as string | undefined) ?? undefined,
     grace_end_date:
       typeof graceEnd === "string"
-        ? new Date(graceEnd).toLocaleDateString(dateLocale[locale], {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })
+        ? new Date(graceEnd.length === 10 ? `${graceEnd}T00:00:00Z` : graceEnd).toLocaleDateString(
+            dateLocale[locale],
+            { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" },
+          )
         : undefined,
   };
 }
+
 
 /** Dispatches pending sends for every enabled campaign. */
 export async function dispatchEngagementSends(): Promise<Record<string, DispatchSummary>> {

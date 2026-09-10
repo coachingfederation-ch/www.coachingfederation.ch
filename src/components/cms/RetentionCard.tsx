@@ -35,12 +35,14 @@ export function RetentionCard() {
 
   const stats: { label: string; value: number | string }[] = summary
     ? [
+        { label: t("integration.retentionPastExpiry"), value: summary.pastExpiry },
         { label: t("integration.retentionInGrace"), value: summary.inGrace },
         { label: t("integration.retentionWarned30"), value: summary.warned30 },
         { label: t("integration.retentionWarned7"), value: summary.warned7 },
         { label: t("integration.retentionDue"), value: summary.due },
       ]
     : [];
+
 
   return (
     <section className={CARD}>

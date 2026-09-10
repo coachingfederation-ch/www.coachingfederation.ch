@@ -624,9 +624,10 @@
     },
     "retentionTitle": "Periodo di chiusura e conservazione",
     "retentionIntro": "Soci la cui adesione ICF è scaduta. Ricevono un avviso 30 e 7 giorni prima della cancellazione; la cancellazione è sempre confermata dal team con «Pulizia» qui sopra.",
+    "retentionPastExpiry": "Dopo la data di scadenza",
     "retentionInGrace": "In periodo di chiusura",
-    "retentionWarned30": "Avviso a 30 giorni inviato",
-    "retentionWarned7": "Avviso a 7 giorni inviato",
+    "retentionWarned30": "Primo avviso inviato",
+    "retentionWarned7": "Ultimo avviso inviato",
     "retentionDue": "Da cancellare",
     "retentionNext": "La prossima scheda scade il",
     "retentionNextNone": "Nessuna scheda è ancora in scadenza."
@@ -862,7 +863,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
+          "items": [
+            "Guidare progetti",
+            "Essere riconosciuti da ICFS per aver guidato iniziative"
+          ]
         },
         "status": {
           "title": "Status",
@@ -2613,7 +2617,13 @@
       "Un po' tecnico",
       "Troppo tecnico"
     ],
-    "usefulnessScale": ["Non fa per me", "Poco interessante", "Interessante", "Utile", "Lo userò"],
+    "usefulnessScale": [
+      "Non fa per me",
+      "Poco interessante",
+      "Interessante",
+      "Utile",
+      "Lo userò"
+    ],
     "topicsTitle": "Temi richiesti",
     "noTopics": "Nessun tema richiesto finora.",
     "themesTitle": "Temi IA",

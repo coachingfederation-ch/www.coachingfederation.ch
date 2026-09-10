@@ -12,7 +12,10 @@ export const ENGAGEMENT_CAMPAIGN_KEYS = [
   "credential_upgrade",
   "credential_specialisation",
   "grace_reengagement",
+  "grace_first_warning",
+  "grace_final_warning",
 ] as const;
+
 
 export type EngagementCampaignKey = (typeof ENGAGEMENT_CAMPAIGN_KEYS)[number];
 
