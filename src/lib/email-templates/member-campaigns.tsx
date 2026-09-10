@@ -25,7 +25,6 @@ export const CAMPAIGN_TEMPLATE_NAMES: Record<EngagementCampaignKey, string> = {
   grace_final_warning: "member-grace-final-notice",
 };
 
-
 const preview = (key: EngagementCampaignKey, vars: CampaignCopyVars) => {
   const copy = campaignCopy(key, "en", vars);
   return { subject: copy.subject, body: copy.body, baseUrl: SITE_URL };

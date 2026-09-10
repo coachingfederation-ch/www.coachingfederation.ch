@@ -43,7 +43,6 @@ export function RetentionCard() {
       ]
     : [];
 
-
   return (
     <section className={CARD}>
       <h2 className="flex items-center gap-2 text-sm font-bold">

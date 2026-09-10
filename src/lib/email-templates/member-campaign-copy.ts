@@ -13,7 +13,6 @@
 import type { EngagementCampaignKey } from "@/lib/member-engagement";
 import { graceNoticeCopyWithDate } from "./member-grace-copy";
 
-
 export type CampaignLocale = "en" | "de" | "fr" | "it";
 
 /** Values the copy may interpolate. Missing values collapse to a safe phrase. */
@@ -51,7 +50,6 @@ const FALLBACK_DATE: Record<CampaignLocale, string> = {
   it: "la data indicata nella tua area membri",
 };
 
-
 type Builder = (v: CampaignCopyVars, locale: CampaignLocale) => CampaignCopy;
 
 const name = (v: CampaignCopyVars, locale: CampaignLocale) =>
@@ -60,15 +58,9 @@ const name = (v: CampaignCopyVars, locale: CampaignLocale) =>
 /** One warning stage in all four languages, delegating to the grace wording. */
 function warningBuilders(stage: "notice" | "final"): Record<CampaignLocale, Builder> {
   const build: Builder = (v, l) =>
-    graceNoticeCopyWithDate(
-      stage,
-      l,
-      name(v, l),
-      v.grace_end_date ?? FALLBACK_DATE[l],
-    );
+    graceNoticeCopyWithDate(stage, l, name(v, l), v.grace_end_date ?? FALLBACK_DATE[l]);
   return { en: build, de: build, fr: build, it: build };
 }
-
 
 const BUILDERS: Record<EngagementCampaignKey, Record<CampaignLocale, Builder>> = {
   welcome_new_member: {
@@ -248,7 +240,6 @@ ${SIGNOFF.it}`,
   grace_first_warning: warningBuilders("notice"),
   grace_final_warning: warningBuilders("final"),
 };
-
 
 const LOCALES: readonly CampaignLocale[] = ["en", "de", "fr", "it"];
 

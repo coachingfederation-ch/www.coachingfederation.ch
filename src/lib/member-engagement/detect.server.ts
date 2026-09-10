@@ -92,7 +92,6 @@ export async function detectEngagementForRun(runId: string): Promise<{ queued: n
   // weeks late. They are queued from the membership expiry date instead, by
   // the nightly sweep in lib/member-lifecycle.server.ts.
 
-
   const eligible = sends.filter((send) => !isDormant(send.campaign_key));
   if (!eligible.length) return { queued: 0 };
 

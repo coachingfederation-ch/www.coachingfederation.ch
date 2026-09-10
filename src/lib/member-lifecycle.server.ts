@@ -170,7 +170,6 @@ async function queueLapseSends(): Promise<{
   return added;
 }
 
-
 /** One daily notice to the chapter office — counts only, never member data. */
 async function sendOfficeDigest(due: number, nextDeletionAt: string | null): Promise<boolean> {
   const today = new Date().toISOString().slice(0, 10);
@@ -316,4 +315,3 @@ export async function loadRetentionSummary(): Promise<RetentionSummary> {
 
   return { pastExpiry, inGrace, warned30, warned7, due, nextDeletionAt };
 }
-
