@@ -375,7 +375,6 @@ export function MemberEngagementPanel() {
   );
 }
 
-
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
     <Card>
