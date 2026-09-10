@@ -142,15 +142,31 @@ The Switzerland Chapter of ICF`,
   },
 };
 
-/** Localised subject and body for one warning. */
+function resolveLocale(locale: string | null | undefined): GraceLocale {
+  const candidate = (locale ?? "").slice(0, 2).toLowerCase() as GraceLocale;
+  return (["en", "de", "fr", "it"] as const).includes(candidate) ? candidate : "en";
+}
+
+/** Localised subject and body for one warning, from an ISO date. */
 export function graceNoticeCopy(
   stage: GraceStage,
   locale: string | null,
   firstName: string,
   deletionAtIso: string,
 ): { subject: string; body: string } {
-  const key = (["en", "de", "fr", "it"] as const).includes(locale as GraceLocale)
-    ? (locale as GraceLocale)
-    : "en";
+  const key = resolveLocale(locale);
   return BUILDERS[key][stage](firstName, formatDate(deletionAtIso, key));
+}
+
+/**
+ * Same copy, but from a date the caller already formatted. Used by the
+ * engagement dispatcher, which formats every campaign date in one place.
+ */
+export function graceNoticeCopyWithDate(
+  stage: GraceStage,
+  locale: string | null | undefined,
+  firstName: string,
+  dateLabel: string,
+): { subject: string; body: string } {
+  return BUILDERS[resolveLocale(locale)][stage](firstName, dateLabel);
 }

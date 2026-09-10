@@ -26,8 +26,9 @@ export const Route = createFileRoute("/api/public/member-lifecycle")({
           const { runLifecycleSweep } = await import("@/lib/member-lifecycle.server");
           const result = await runLifecycleSweep();
           console.log(
-            `[member-lifecycle] resolved=${result.resolved} warned30=${result.warned30} warned7=${result.warned7} due=${result.due} digest=${result.digestSent}`,
+            `[member-lifecycle] resolved=${result.resolved} reengagement=${result.queuedReengagement} warned30=${result.warned30} warned7=${result.warned7} due=${result.due} digest=${result.digestSent}`,
           );
+
           return Response.json(result);
         } catch (err) {
           const message = err instanceof Error ? err.message : "sweep threw";

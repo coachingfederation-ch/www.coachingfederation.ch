@@ -11,6 +11,7 @@
  * (`member-engagement.tsx`) — so no markup can break a send.
  */
 import type { EngagementCampaignKey } from "@/lib/member-engagement";
+import { graceNoticeCopyWithDate } from "./member-grace-copy";
 
 export type CampaignLocale = "en" | "de" | "fr" | "it";
 
@@ -41,10 +42,25 @@ const FALLBACK_NAME: Record<CampaignLocale, string> = {
   it: "a te",
 };
 
+/** Used only if a warning is somehow queued without its date. */
+const FALLBACK_DATE: Record<CampaignLocale, string> = {
+  en: "the date shown in your Member Area",
+  de: "dem in Ihrem Mitgliederbereich genannten Datum",
+  fr: "la date indiquée dans votre espace membre",
+  it: "la data indicata nella tua area membri",
+};
+
 type Builder = (v: CampaignCopyVars, locale: CampaignLocale) => CampaignCopy;
 
 const name = (v: CampaignCopyVars, locale: CampaignLocale) =>
   v.first_name?.trim() || FALLBACK_NAME[locale];
+
+/** One warning stage in all four languages, delegating to the grace wording. */
+function warningBuilders(stage: "notice" | "final"): Record<CampaignLocale, Builder> {
+  const build: Builder = (v, l) =>
+    graceNoticeCopyWithDate(stage, l, name(v, l), v.grace_end_date ?? FALLBACK_DATE[l]);
+  return { en: build, de: build, fr: build, it: build };
+}
 
 const BUILDERS: Record<EngagementCampaignKey, Record<CampaignLocale, Builder>> = {
   welcome_new_member: {
@@ -218,6 +234,11 @@ Se non era questa la tua intenzione, o se semplicemente vuoi parlarne, una delle
 ${SIGNOFF.it}`,
     }),
   },
+
+  // The two lapse warnings reuse the wording already written for them in
+  // member-grace-copy.ts, so Cloud → Emails keeps one text per message.
+  grace_first_warning: warningBuilders("notice"),
+  grace_final_warning: warningBuilders("final"),
 };
 
 const LOCALES: readonly CampaignLocale[] = ["en", "de", "fr", "it"];

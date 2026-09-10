@@ -86,31 +86,11 @@ export async function detectEngagementForRun(runId: string): Promise<{ queued: n
     });
   }
 
-  // Members this run moved into the grace window.
-  const { data: deactivations } = await supabaseAdmin
-    .from("member_sync_events")
-    .select("member_id, details")
-    .eq("sync_run_id", runId)
-    .eq("event_type", "member_deactivated");
-
-  for (const event of deactivations ?? []) {
-    const memberId = event.member_id as string | null;
-    if (!memberId) continue;
-    const details = (event.details ?? {}) as Record<string, unknown>;
-    const deletionAt =
-      typeof details["scheduled_deletion_at"] === "string"
-        ? (details["scheduled_deletion_at"] as string)
-        : null;
-    sends.push({
-      campaign_key: "grace_reengagement",
-      member_id: memberId,
-      // Keyed by the grace window, so a member who leaves and returns later
-      // can be reached again, but one window never mails twice.
-      dedupe_key: `grace_reengagement:${memberId}:${(deletionAt ?? "").slice(0, 10)}`,
-      sync_run_id: runId,
-      trigger_details: { scheduled_deletion_at: deletionAt },
-    });
-  }
+  // The three lapse messages (re-engagement and the two warnings) are no
+  // longer triggered here. ICF Global keeps a lapsed member in the feed for
+  // two more months, so waiting for the feed drop reached the member eight
+  // weeks late. They are queued from the membership expiry date instead, by
+  // the nightly sweep in lib/member-lifecycle.server.ts.
 
   const eligible = sends.filter((send) => !isDormant(send.campaign_key));
   if (!eligible.length) return { queued: 0 };

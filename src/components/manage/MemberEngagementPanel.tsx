@@ -55,6 +55,8 @@ const CAMPAIGN_LABELS: Record<EngagementCampaignKey, string> = {
   credential_upgrade: "Credential upgrade",
   credential_specialisation: "Credential specialisation",
   grace_reengagement: "Grace period re-engagement",
+  grace_first_warning: "Grace period first warning",
+  grace_final_warning: "Grace period final warning",
 };
 
 const CAMPAIGN_HINTS: Record<EngagementCampaignKey, string> = {
@@ -63,7 +65,10 @@ const CAMPAIGN_HINTS: Record<EngagementCampaignKey, string> = {
   credential_specialisation:
     "Specialisation tags (ACTC, MCS-ACC, MCS-PCC, MCS-MCC) are not in the ICF feed yet, so nothing is detected. The email is ready and starts sending once the feed carries them.",
 
-  grace_reengagement: "Sent when a membership lapses and the member enters the grace window.",
+  grace_reengagement:
+    "Sent on the membership expiry date, naming the end of ICF's two-month grace.",
+  grace_first_warning: "Sent one month after the membership expiry date.",
+  grace_final_warning: "Sent seven days before the end of ICF's two-month grace period.",
 };
 
 const MODE_LABELS: Record<EngagementMode, string> = {
