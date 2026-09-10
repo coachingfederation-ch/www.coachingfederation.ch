@@ -29,9 +29,6 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  Tabs,
-  TabsList,
-  TabsTrigger,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import {
   isDormant,
@@ -166,6 +163,9 @@ export function MemberEngagementPanel() {
     );
   }
 
+  const modeBadge = (mode: EngagementMode) =>
+    mode === "automatic" ? "Sending" : mode === "queued" ? "On hold" : "Off";
+
   return (
     <div className="space-y-8">
       <header className="space-y-2">
@@ -184,93 +184,116 @@ export function MemberEngagementPanel() {
         </div>
       ) : null}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Campaigns</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <Tabs value={active} onValueChange={(value) => setActive(value as EngagementCampaignKey)}>
-            <TabsList className="flex-wrap">
-              {campaigns.map((campaign) => (
-                <TabsTrigger key={campaign.key} value={campaign.key}>
+      <Card className="overflow-hidden">
+        <div className="bg-hero px-6 py-6">
+          <h2 className="font-heading text-xl text-hero-foreground">Campaigns</h2>
+          <p className="mt-1 text-sm text-hero-foreground/70">
+            Pick a campaign to change how and when it sends.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {campaigns.map((campaign) => {
+              const selected = campaign.key === active;
+              return (
+                <Button
+                  key={campaign.key}
+                  variant={selected ? "inverse" : "inverse-ghost"}
+                  size="sm"
+                  aria-pressed={selected}
+                  onClick={() => setActive(campaign.key)}
+                >
                   {CAMPAIGN_LABELS[campaign.key]}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
+                  <span className="opacity-70">· {modeBadge(campaign.mode)}</span>
+                </Button>
+              );
+            })}
+          </div>
+        </div>
 
-          {draft ? (
-            <div className="space-y-6">
-              <p className="text-sm text-muted-foreground">{CAMPAIGN_HINTS[draft.key]}</p>
-              {isDormant(draft.key) ? (
-                <Badge variant="secondary">Waiting for feed data</Badge>
-              ) : null}
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Sending mode</Label>
-                  <Select
-                    value={draft.mode}
-                    onValueChange={(value) => setDraft({ ...draft, mode: value as EngagementMode })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {(Object.keys(MODE_LABELS) as EngagementMode[]).map((mode) => (
-                        <SelectItem key={mode} value={mode}>
-                          {MODE_LABELS[mode]}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="daily-cap">Daily cap</Label>
-                  <Input
-                    id="daily-cap"
-                    type="number"
-                    min={1}
-                    max={500}
-                    value={draft.daily_cap}
-                    onChange={(event) =>
-                      setDraft({ ...draft, daily_cap: Number(event.target.value) || 1 })
-                    }
-                  />
-                </div>
+        {draft ? (
+          <CardContent className="space-y-6 pt-6">
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center gap-3">
+                <h3 className="font-heading text-lg text-foreground">
+                  {CAMPAIGN_LABELS[draft.key]}
+                </h3>
+                <Badge variant={draft.mode === "off" ? "secondary" : "default"}>
+                  {modeBadge(draft.mode)}
+                </Badge>
+                {isDormant(draft.key) ? (
+                  <Badge variant="secondary">Waiting for feed data</Badge>
+                ) : null}
               </div>
+              <p className="text-sm text-muted-foreground">{CAMPAIGN_HINTS[draft.key]}</p>
+            </div>
 
-              <p className="text-sm text-muted-foreground">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label>Sending mode</Label>
+                <Select
+                  value={draft.mode}
+                  onValueChange={(value) => setDraft({ ...draft, mode: value as EngagementMode })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(Object.keys(MODE_LABELS) as EngagementMode[]).map((mode) => (
+                      <SelectItem key={mode} value={mode}>
+                        {MODE_LABELS[mode]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="daily-cap">Daily cap</Label>
+                <Input
+                  id="daily-cap"
+                  type="number"
+                  min={1}
+                  max={500}
+                  value={draft.daily_cap}
+                  onChange={(event) =>
+                    setDraft({ ...draft, daily_cap: Number(event.target.value) || 1 })
+                  }
+                />
+                <p className="text-xs text-muted-foreground">
+                  Most emails this campaign may send in one day.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
+              <p className="max-w-xl text-sm text-muted-foreground">
                 The wording of this email lives with every other chapter email, under Cloud →
                 Emails, in German, French, Italian and English. Members receive it in their
                 correspondence language.
               </p>
-
-              <div className="flex flex-wrap items-center justify-end gap-3">
-                <Button onClick={save} disabled={saving}>
-                  {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                  Save campaign
-                </Button>
-              </div>
+              <Button onClick={save} disabled={saving}>
+                {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                Save campaign
+              </Button>
             </div>
-          ) : null}
-        </CardContent>
+          </CardContent>
+        ) : null}
       </Card>
 
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between gap-4">
-          <CardTitle>Queue and history</CardTitle>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => act("release")}
-              disabled={!pendingIds.length}
-            >
-              <Check className="mr-2 h-4 w-4" /> Release waiting
+        <CardHeader className="space-y-4">
+          <div className="space-y-1">
+            <CardTitle>Queue and history</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {pendingIds.length
+                ? `${pendingIds.length} email${pendingIds.length === 1 ? "" : "s"} waiting for your approval.`
+                : "Nothing is waiting for approval right now."}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button onClick={() => act("release")} disabled={!pendingIds.length}>
+              <Check className="mr-2 h-4 w-4" /> Approve all waiting
             </Button>
-            <Button variant="outline" size="sm" onClick={() => act("dispatch")}>
-              <Send className="mr-2 h-4 w-4" /> Send now
+            <Button variant="outline" onClick={() => act("dispatch")}>
+              <Send className="mr-2 h-4 w-4" /> Send approved emails now
             </Button>
           </div>
         </CardHeader>
@@ -298,12 +321,20 @@ export function MemberEngagementPanel() {
               <TableBody>
                 {sends.map((row) => (
                   <TableRow key={row.id}>
-                    <TableCell>{row.memberName ?? "—"}</TableCell>
-                    <TableCell>
+                    <TableCell className="font-medium">{row.memberName ?? "—"}</TableCell>
+                    <TableCell className="text-muted-foreground">
                       {CAMPAIGN_LABELS[row.campaignKey as EngagementCampaignKey] ?? row.campaignKey}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={row.status === "failed" ? "destructive" : "secondary"}>
+                      <Badge
+                        variant={
+                          row.status === "failed"
+                            ? "destructive"
+                            : row.status === "pending"
+                              ? "default"
+                              : "secondary"
+                        }
+                      >
                         {row.status}
                       </Badge>
                       {row.errorMessage ? (
@@ -318,22 +349,20 @@ export function MemberEngagementPanel() {
                     <TableCell className="text-right">
                       {row.status === "pending" ? (
                         <div className="flex justify-end gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => act("release", [row.id])}
-                          >
-                            <Check className="h-4 w-4" />
+                          <Button size="sm" onClick={() => act("release", [row.id])}>
+                            <Check className="mr-2 h-4 w-4" /> Approve
                           </Button>
                           <Button
                             size="sm"
                             variant="outline"
                             onClick={() => act("cancel", [row.id])}
                           >
-                            <X className="h-4 w-4" />
+                            <X className="mr-2 h-4 w-4" /> Cancel
                           </Button>
                         </div>
-                      ) : null}
+                      ) : (
+                        <span className="text-xs text-muted-foreground">No action needed</span>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
