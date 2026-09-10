@@ -29,9 +29,6 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  Tabs,
-  TabsList,
-  TabsTrigger,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import {
   isDormant,
