@@ -179,17 +179,23 @@ Two things to be clear about:
 - **Nothing deletes automatically.** Anonymisation only happens when an admin runs
   cleanup. An expired grace period is a to-do that the nightly sweep raises, never
   something it executes.
-- **The member is warned twice.** `icf-member-lifecycle-daily` (04:15 UTC) posts to
-  `/api/public/member-lifecycle`, which runs `runLifecycleSweep()` in
-  `src/lib/member-lifecycle.server.ts`. For every open queue row it:
-  resolves the row when the member is no longer in `grace` (returned, or already
-  anonymised); sends the `member-grace-notice` email 30 days before the scheduled
-  date and stamps `notified_at`; sends `member-grace-final-notice` 7 days before
-  and stamps `final_notice_at`; and counts rows past their date. Both emails go
-  through `sendMemberEmail`, so suppression, the test redirect and
-  `member_email_log` all apply, and the stamp is only written when the send
-  succeeded — a suppressed send is retried on a later night. Copy is written in
-  the member's `correspondence_locale` (DE/FR/IT/EN).
+- **The member hears from us three times, starting at their expiry date.** ICF
+  Global keeps a lapsed membership in the feed for two more months, so waiting for
+  the feed drop would reach the member eight weeks late. `icf-member-lifecycle-daily`
+  (04:15 UTC) posts to `/api/public/member-lifecycle`, which runs
+  `runLifecycleSweep()` in `src/lib/member-lifecycle.server.ts`. From
+  `members.membership_expiration_date` it queues, into `member_engagement_sends`:
+  `grace_reengagement` on the expiry date, `grace_first_warning` 30 days after it,
+  and `grace_final_warning` 7 days before expiry + 2 months. Each row is
+  dedupe-keyed `<campaign>:<member_id>:<expiry_date>`, so reruns are harmless and a
+  member who renews gets a new expiry date and simply drops out of the sequence.
+  Because they are ordinary campaign rows, the Member engagement screen's mode,
+  daily cap, queue and history apply, sends go through `sendMemberEmail`
+  (suppression, test redirect, `member_email_log`), and copy is written in the
+  member's `correspondence_locale` (DE/FR/IT/EN). Nothing is triggered from
+  `member_deactivated` any more. The queue row's `notified_at` / `final_notice_at`
+  columns are legacy and no longer written.
+
 - **The office is nudged, not the database.** When at least one row is overdue,
   the sweep sends one digest per day to `office@coachingfederation.ch` with counts
   only — no member data — pointing at the retention card on `/integration` and the
