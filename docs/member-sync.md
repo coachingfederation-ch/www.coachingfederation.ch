@@ -294,6 +294,41 @@ A reaped run tells you _that_ a sync died, not _why_ — a process cut off in it
 first seconds writes no events at all. The failed row with its timestamp is the
 starting point for that investigation.
 
+### Run time limit
+
+A healthy run finishes in seconds. `runMemberSync` therefore races its own work
+against a hard budget of `MAX_RUN_MINUTES` (5). When the budget expires the run
+is closed as `failed` with "Timed out after 5 minutes — the sync was still
+running and was stopped.", so the night's failure is visible immediately instead
+of half an hour later through the reaper, and the retries below can take over.
+The budget stops _waiting_; it cannot cancel a socket the runtime is still
+holding, so the reaper stays as the backstop. If timeouts start recurring, the
+SOAP fetch needs chunking rather than a longer budget.
+
+### Automatic retries
+
+Three cron jobs — `icf-member-sync-retry-1/2/3` at 03:30, 03:45 and 04:00 UTC —
+post to `/api/public/member-sync-retry` with `{"attempt": n}`, using the same
+`x-cron-token` secret. The schedule only decides _when to ask_;
+`runSyncRetry()` in `src/lib/member-sync-retry.server.ts` decides whether a retry
+is warranted, and skips when:
+
+- a run already succeeded within the last six hours (`already_succeeded`);
+- a run is genuinely still in progress, younger than the abandoned cut-off
+  (`still_running`);
+- the most recent run is `aborted` — a safety guard stopped it deliberately, and
+  repeating it would only hide the problem (`aborted`);
+- a cutover is in progress (`cutover_in_progress`).
+
+Otherwise it calls `runMemberSync` and writes a `sync_retry_attempt` event onto
+the new run, so the run log shows that the night needed help.
+
+If the third attempt also fails, every Super Admin (`user_roles.role = 'admin'`)
+receives the `member-sync-failed` alert once for that night — attempts, last
+message and a link to `/integration`. Sending is best effort and never throws
+inside the cron handler: an unreachable mailbox must not turn a failed sync into
+a failed endpoint.
+
 ---
 
 ## 7. When something looks wrong

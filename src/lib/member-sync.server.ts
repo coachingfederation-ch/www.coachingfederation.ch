@@ -61,6 +61,11 @@ export const ABANDONED_RUN_MINUTES = 30;
 
 const ABANDONED_MESSAGE = "Abandoned — the sync process stopped before it could finish.";
 
+/** Hard wall-clock budget for one run. A healthy run finishes in seconds. */
+export const MAX_RUN_MINUTES = 5;
+
+export const TIMEOUT_MESSAGE = `Timed out after ${MAX_RUN_MINUTES} minutes — the sync was still running and was stopped.`;
+
 /** Close runs left on `running` by an interrupted process. Best effort. */
 export async function reapAbandonedRuns(): Promise<number> {
   const cutoff = new Date(Date.now() - ABANDONED_RUN_MINUTES * 60_000).toISOString();
@@ -153,7 +158,15 @@ export async function runMemberSync(options: {
     return { runId, ...result };
   };
 
-  try {
+  // A healthy run takes seconds. Anything past the budget is stuck (a hanging
+  // SOAP socket, a wedged upsert): stop waiting, record the failure and let the
+  // retry job take over, instead of leaving a `running` row for the reaper.
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const budget = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error(TIMEOUT_MESSAGE)), MAX_RUN_MINUTES * 60_000);
+  });
+
+  const body = async (): Promise<SyncResult> => {
     const feed = await fetchActiveMemberFeed(config.mode);
 
     // Baseline is the *active* population only: that is what the feed mirrors.
@@ -252,7 +265,6 @@ export async function runMemberSync(options: {
       );
     }
 
-
     // Absent from the feed -> inactive, entering the grace window.
     const feedRecnos = new Set(feed.map((m) => m.cst_recno));
     const missing = [...byRecno.values()].filter(
@@ -335,6 +347,10 @@ export async function runMemberSync(options: {
       updated,
       deactivated,
     });
+  };
+
+  try {
+    return await Promise.race([body(), budget]);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     await logEvent(runId, "sync_failed", message, { severity: "error" });
@@ -346,6 +362,8 @@ export async function runMemberSync(options: {
       deactivated: 0,
       message,
     });
+  } finally {
+    if (timer) clearTimeout(timer);
   }
 }
 

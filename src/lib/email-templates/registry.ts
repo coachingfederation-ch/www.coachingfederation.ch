@@ -46,6 +46,8 @@ import { template as contactEnquiryVerify } from "./contact-enquiry-verify";
 import { template as memberEngagement } from "./member-engagement";
 import { template as contactEnquiryCopy } from "./contact-enquiry-copy-mail";
 import { template as articleReviewRequest } from "./article-review-request";
+import { template as memberSyncFailed } from "./member-sync-failed";
+
 import {
   noticeTemplate as memberGraceNotice,
   finalNoticeTemplate as memberGraceFinalNotice,
@@ -89,6 +91,8 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "contact-enquiry-verify": contactEnquiryVerify,
   "contact-enquiry-copy": contactEnquiryCopy,
   "article-review-request": articleReviewRequest,
+  "member-sync-failed": memberSyncFailed,
+
   "member-grace-notice": memberGraceNotice,
   "member-grace-final-notice": memberGraceFinalNotice,
   "member-welcome": memberWelcome,
