@@ -91,6 +91,8 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "contact-enquiry-verify": contactEnquiryVerify,
   "contact-enquiry-copy": contactEnquiryCopy,
   "article-review-request": articleReviewRequest,
+  "member-sync-failed": memberSyncFailed,
+
   "member-grace-notice": memberGraceNotice,
   "member-grace-final-notice": memberGraceFinalNotice,
   "member-welcome": memberWelcome,
