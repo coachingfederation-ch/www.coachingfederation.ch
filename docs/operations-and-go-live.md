@@ -23,7 +23,12 @@ not as something to work around.
 ## The nightly sync
 
 A cron job (`icf-member-sync-daily`, 03:15 UTC) calls
-`/api/public/member-sync`, which runs `member-sync.server.ts`:
+`/api/public/member-sync`, which runs `member-sync.server.ts`. A run gets a hard
+five-minute budget; if the night fails, three retry jobs
+(`icf-member-sync-retry-1/2/3`, 03:30 / 03:45 / 04:00 UTC) call
+`/api/public/member-sync-retry`, and a third failure alerts every Super Admin by
+email. Both are documented in `docs/member-sync.md`.
+
 
 The endpoint authenticates the caller with a dedicated token in the
 `x-cron-token` header. The token lives in exactly two places: the
