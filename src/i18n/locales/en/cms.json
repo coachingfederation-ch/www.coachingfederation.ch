@@ -40,7 +40,7 @@
     "genericError": "Something went wrong",
     "googleError": "Google sign-in failed",
     "memberTitle": "Member access",
-    "memberHelp": "First-time users need to claim their account before signing in. Use the \"Claim your account\" link below.",
+    "memberHelp": "Use the same E-mail registered at ICF Global.  First-time users need to claim their account before signing in using the \"Claim your account\" link below.",
     "claimAccount": "Claim your account",
     "internalSignIn": "Internal admin sign-in",
     "staffTitle": "Internal sign-in",
