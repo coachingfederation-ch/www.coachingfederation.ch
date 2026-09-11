@@ -445,7 +445,7 @@ export function EventSeriesUpdateSection({
               <Link
                 to="/manage/events/$id"
                 params={{ id: parent.id }}
-                className="font-semibold text-primary underline-offset-4 hover:underline"
+                className="font-semibold text-primary hover:underline"
               >
                 {day(parent.starts_at)}
               </Link>
@@ -462,7 +462,7 @@ export function EventSeriesUpdateSection({
             {later.map((d) => (
               <li key={d.id} className="flex items-center gap-3">
                 <span className="text-foreground">{day(d.starts_at)}</span>
-                <span className="text-xs uppercase tracking-wide text-muted-foreground">
+                <span className="eyebrow text-muted-foreground">
                   {t(`events.status.${d.status}`)}
                 </span>
                 {!d.inSync ? (
