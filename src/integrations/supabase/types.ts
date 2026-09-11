@@ -3144,6 +3144,8 @@ export type Database = {
           registration_mode: Database["public"]["Enums"]["event_registration_mode"]
           registration_opens_at: string | null
           series_id: string | null
+          series_source_hash: string | null
+          series_synced_at: string | null
           slug: string
           starts_at: string
           status: Database["public"]["Enums"]["event_status"]
@@ -3193,6 +3195,8 @@ export type Database = {
           registration_mode?: Database["public"]["Enums"]["event_registration_mode"]
           registration_opens_at?: string | null
           series_id?: string | null
+          series_source_hash?: string | null
+          series_synced_at?: string | null
           slug: string
           starts_at: string
           status?: Database["public"]["Enums"]["event_status"]
@@ -3242,6 +3246,8 @@ export type Database = {
           registration_mode?: Database["public"]["Enums"]["event_registration_mode"]
           registration_opens_at?: string | null
           series_id?: string | null
+          series_source_hash?: string | null
+          series_synced_at?: string | null
           slug?: string
           starts_at?: string
           status?: Database["public"]["Enums"]["event_status"]

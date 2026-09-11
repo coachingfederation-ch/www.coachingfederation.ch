@@ -1836,7 +1836,19 @@
       "invited": "Invited members only"
     },
     "fieldTickets": "Offer tickets",
-    "fieldTicketsHelp": "Shows ticket tiers and discount codes. Without a saved tier the event stays a plain free sign-up."
+    "fieldTicketsHelp": "Shows ticket tiers and discount codes. Without a saved tier the event stays a plain free sign-up.",
+    "series": {
+      "section": "Update later dates",
+      "hint": "Push this date's content and setup to the later dates of the series. Timing, status and attendees stay with each date.",
+      "notParent": "Later dates are updated from the next upcoming date of this series:",
+      "allPassed": "Every date of this series has passed.",
+      "noLater": "There are no later dates to update.",
+      "handEdited": "edited by hand — will be skipped",
+      "apply": "Apply to later dates",
+      "applying": "Updating…",
+      "updated": "Dates updated:",
+      "skipped": "edited by hand and skipped:"
+    }
   },
   "eventTranslations": {
     "title": "Translations",

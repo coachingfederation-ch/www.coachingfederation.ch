@@ -4,6 +4,7 @@
  * route so the page component stays a thin orchestrator over `event` state.
  */
 import * as React from "react";
+import { Link } from "@tanstack/react-router";
 import { ImagePlus, X } from "lucide-react";
 import { EventTranslationsPanel } from "@/components/cms/EventTranslationsPanel";
 import { EventHostsPanel } from "@/components/cms/EventHostsPanel";
@@ -24,7 +25,11 @@ import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
 import { EventHeroPreview } from "@/components/cms/EventHeroPreview";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
 import { displayEventStatus, hasEventStarted } from "@/lib/events";
-import type { getManagedEvent, listEventRegistrations } from "@/lib/events-admin.functions";
+import type {
+  getManagedEvent,
+  listEventRegistrations,
+  SeriesDate,
+} from "@/lib/events-admin.functions";
 import { exportEventRegistrations } from "@/lib/events-admin.functions";
 import {
   EventAttendeeToolbar,
@@ -390,6 +395,108 @@ export function EventRepeatSection({
           </div>
         </>
       ) : null}
+    </Section>
+  );
+}
+
+/**
+ * Series update panel: pushes the parent's content to the later dates.
+ *
+ * The parent is the next date of the series that has not started yet — only
+ * that one shows the button. Every other date of the series points at it, so
+ * staff always know where the current truth lives.
+ */
+export function EventSeriesUpdateSection({
+  eventId,
+  dates,
+  onApply,
+  canApply,
+  blockedReason,
+  t,
+}: {
+  eventId: string;
+  dates: SeriesDate[];
+  onApply: () => Promise<void>;
+  canApply: boolean;
+  blockedReason: string | null;
+  t: (k: string) => string;
+}) {
+  const [busy, setBusy] = React.useState(false);
+  if (dates.length < 2) return null;
+
+  const parent = dates.find((d) => d.isParent) ?? null;
+  const isParent = parent?.id === eventId;
+  const later = dates.filter((d) => d.isLater);
+
+  const day = (iso: string) =>
+    new Date(iso).toLocaleDateString(undefined, {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+
+  return (
+    <Section title={t("events.series.section")} hint={t("events.series.hint")}>
+      {!isParent ? (
+        <p className="text-sm text-muted-foreground">
+          {parent ? (
+            <>
+              {t("events.series.notParent")}{" "}
+              <Link
+                to="/manage/events/$id"
+                params={{ id: parent.id }}
+                className="font-semibold text-primary underline-offset-4 hover:underline"
+              >
+                {day(parent.starts_at)}
+              </Link>
+            </>
+          ) : (
+            t("events.series.allPassed")
+          )}
+        </p>
+      ) : later.length === 0 ? (
+        <p className="text-sm text-muted-foreground">{t("events.series.noLater")}</p>
+      ) : (
+        <>
+          <ul className="space-y-1 text-sm">
+            {later.map((d) => (
+              <li key={d.id} className="flex items-center gap-3">
+                <span className="text-foreground">{day(d.starts_at)}</span>
+                <span className="text-xs uppercase tracking-wide text-muted-foreground">
+                  {t(`events.status.${d.status}`)}
+                </span>
+                {!d.inSync ? (
+                  <span className="text-xs text-muted-foreground">
+                    {t("events.series.handEdited")}
+                  </span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+
+          {blockedReason ? (
+            <p className="mt-4 text-sm text-muted-foreground">{blockedReason}</p>
+          ) : null}
+
+          <div className="mt-4">
+            <Button
+              type="button"
+              size="pill"
+              disabled={busy || !canApply}
+              onClick={async () => {
+                setBusy(true);
+                try {
+                  await onApply();
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              {busy ? t("events.series.applying") : `${t("events.series.apply")} (${later.length})`}
+            </Button>
+          </div>
+        </>
+      )}
     </Section>
   );
 }

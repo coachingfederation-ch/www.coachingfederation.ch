@@ -22,6 +22,20 @@ Staff manage events at `/manage/events`; the public sees `/events` and
   `events-and-ticketing.md`.
 - Event copy is translated per locale in `event_translations`, with the same
   `manually_edited` protection as articles.
+- **Repeating series.** Occurrences generated from one event share a
+  `series_id`. The *parent* of a series is the earliest date that has not
+  started yet — passed dates are history and never push changes forward. On the
+  parent, "Update later dates" copies content and setup (title, summary,
+  description, language, image, location, category/region/community,
+  registration settings, tickets, guest passes, practical notes, hero marks and
+  hosts) to every later date; timing, slug, status, featured flag and attendee
+  data stay with each date. Each generated or refreshed date stores a
+  fingerprint of the copied fields (`events.series_source_hash`, with
+  `series_synced_at`); a date whose fields no longer match its fingerprint was
+  edited by hand and is skipped and reported instead of overwritten. Field list
+  and hashing live in `src/lib/events-series.ts`, the write in
+  `applySeriesUpdate` (`src/lib/events-admin.functions.ts`), both scoped by the
+  caller's client so RLS still decides ownership.
 
 ## Operational structure and the team page
 
