@@ -153,7 +153,19 @@ export async function runMemberSync(options: {
     return { runId, ...result };
   };
 
-  try {
+  // A healthy run takes seconds. Anything past the budget is stuck (a hanging
+  // SOAP socket, a wedged upsert): stop waiting, record the failure and let the
+  // retry job take over, instead of leaving a `running` row for the reaper.
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const budget = new Promise<never>((_, reject) => {
+    timer = setTimeout(
+      () => reject(new Error(TIMEOUT_MESSAGE)),
+      MAX_RUN_MINUTES * 60_000,
+    );
+  });
+
+  const body = async (): Promise<SyncResult> => {
+
     const feed = await fetchActiveMemberFeed(config.mode);
 
     // Baseline is the *active* population only: that is what the feed mirrors.
