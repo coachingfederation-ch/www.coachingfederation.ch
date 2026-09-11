@@ -61,6 +61,12 @@ export const ABANDONED_RUN_MINUTES = 30;
 
 const ABANDONED_MESSAGE = "Abandoned — the sync process stopped before it could finish.";
 
+/** Hard wall-clock budget for one run. A healthy run finishes in seconds. */
+export const MAX_RUN_MINUTES = 5;
+
+export const TIMEOUT_MESSAGE = `Timed out after ${MAX_RUN_MINUTES} minutes — the sync was still running and was stopped.`;
+
+
 /** Close runs left on `running` by an interrupted process. Best effort. */
 export async function reapAbandonedRuns(): Promise<number> {
   const cutoff = new Date(Date.now() - ABANDONED_RUN_MINUTES * 60_000).toISOString();
