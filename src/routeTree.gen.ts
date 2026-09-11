@@ -120,6 +120,7 @@ import { Route as ApiPublicLiveChatRouteImport } from './routes/api/public/live-
 import { Route as ApiPublicLiveChatPurgeRouteImport } from './routes/api/public/live-chat-purge'
 import { Route as ApiPublicMemberLifecycleRouteImport } from './routes/api/public/member-lifecycle'
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
+import { Route as ApiPublicMemberSyncRetryRouteImport } from './routes/api/public/member-sync-retry'
 import { Route as ApiPublicNewsletterRefreshRouteImport } from './routes/api/public/newsletter-refresh'
 import { Route as ApiPublicOpStructureRouteImport } from './routes/api/public/op-structure'
 import { Route as ApiPublicRoleDirectoryRouteImport } from './routes/api/public/role-directory'
@@ -710,6 +711,12 @@ const ApiPublicMemberSyncRoute = ApiPublicMemberSyncRouteImport.update({
   path: '/api/public/member-sync',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicMemberSyncRetryRoute =
+  ApiPublicMemberSyncRetryRouteImport.update({
+    id: '/api/public/member-sync-retry',
+    path: '/api/public/member-sync-retry',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicNewsletterRefreshRoute =
   ApiPublicNewsletterRefreshRouteImport.update({
     id: '/api/public/newsletter-refresh',
@@ -946,6 +953,7 @@ export interface FileRoutesByFullPath {
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-lifecycle': typeof ApiPublicMemberLifecycleRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
+  '/api/public/member-sync-retry': typeof ApiPublicMemberSyncRetryRoute
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/op-structure': typeof ApiPublicOpStructureRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
@@ -1077,6 +1085,7 @@ export interface FileRoutesByTo {
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-lifecycle': typeof ApiPublicMemberLifecycleRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
+  '/api/public/member-sync-retry': typeof ApiPublicMemberSyncRetryRoute
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/op-structure': typeof ApiPublicOpStructureRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
@@ -1215,6 +1224,7 @@ export interface FileRoutesById {
   '/api/public/live-chat-purge': typeof ApiPublicLiveChatPurgeRoute
   '/api/public/member-lifecycle': typeof ApiPublicMemberLifecycleRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
+  '/api/public/member-sync-retry': typeof ApiPublicMemberSyncRetryRoute
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/op-structure': typeof ApiPublicOpStructureRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
@@ -1352,6 +1362,7 @@ export interface FileRouteTypes {
     | '/api/public/live-chat-purge'
     | '/api/public/member-lifecycle'
     | '/api/public/member-sync'
+    | '/api/public/member-sync-retry'
     | '/api/public/newsletter-refresh'
     | '/api/public/op-structure'
     | '/api/public/role-directory'
@@ -1483,6 +1494,7 @@ export interface FileRouteTypes {
     | '/api/public/live-chat-purge'
     | '/api/public/member-lifecycle'
     | '/api/public/member-sync'
+    | '/api/public/member-sync-retry'
     | '/api/public/newsletter-refresh'
     | '/api/public/op-structure'
     | '/api/public/role-directory'
@@ -1620,6 +1632,7 @@ export interface FileRouteTypes {
     | '/api/public/live-chat-purge'
     | '/api/public/member-lifecycle'
     | '/api/public/member-sync'
+    | '/api/public/member-sync-retry'
     | '/api/public/newsletter-refresh'
     | '/api/public/op-structure'
     | '/api/public/role-directory'
@@ -1714,6 +1727,7 @@ export interface RootRouteChildren {
   ApiPublicLiveChatPurgeRoute: typeof ApiPublicLiveChatPurgeRoute
   ApiPublicMemberLifecycleRoute: typeof ApiPublicMemberLifecycleRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
+  ApiPublicMemberSyncRetryRoute: typeof ApiPublicMemberSyncRetryRoute
   ApiPublicNewsletterRefreshRoute: typeof ApiPublicNewsletterRefreshRoute
   ApiPublicOpStructureRoute: typeof ApiPublicOpStructureRoute
   ApiPublicRoleDirectoryRoute: typeof ApiPublicRoleDirectoryRoute
@@ -2509,6 +2523,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMemberSyncRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/member-sync-retry': {
+      id: '/api/public/member-sync-retry'
+      path: '/api/public/member-sync-retry'
+      fullPath: '/api/public/member-sync-retry'
+      preLoaderRoute: typeof ApiPublicMemberSyncRetryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/newsletter-refresh': {
       id: '/api/public/newsletter-refresh'
       path: '/api/public/newsletter-refresh'
@@ -2942,6 +2963,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicLiveChatPurgeRoute: ApiPublicLiveChatPurgeRoute,
   ApiPublicMemberLifecycleRoute: ApiPublicMemberLifecycleRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,
+  ApiPublicMemberSyncRetryRoute: ApiPublicMemberSyncRetryRoute,
   ApiPublicNewsletterRefreshRoute: ApiPublicNewsletterRefreshRoute,
   ApiPublicOpStructureRoute: ApiPublicOpStructureRoute,
   ApiPublicRoleDirectoryRoute: ApiPublicRoleDirectoryRoute,
