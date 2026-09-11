@@ -69,5 +69,10 @@ told.
   401 and that a cutover blocks the retry.
 - **Risks & rollback** — Low; retries are guarded against overlap and the drop guard
   still protects the data. Rollback = unschedule the three jobs.
-- **Follow-ups** — Root cause of the worker cut-off is untreated; if abandoned runs
-  recur, the SOAP fetch needs chunking or a time budget.
+- **Time limit** — A sync gets a hard 5-minute budget (real runs take seconds). If it
+  is still going, it stops itself, records the run as failed with "Timed out after 5
+  minutes" and hands over to the next retry — no more four-hour "running" rows. The
+  abandoned-run safety net stays as a backstop for a worker that dies outright.
+- **Follow-ups** — Root cause of the worker cut-off is untreated; if timeouts recur,
+  the ICF request needs chunking.
+
