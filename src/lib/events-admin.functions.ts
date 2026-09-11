@@ -13,11 +13,17 @@ import { assertOrganizer } from "./authz";
 import { MAX_EVENT_HOSTS } from "./event-hosts";
 import { HERO_MARK_LIMIT } from "./hero-design";
 import { expandRecurrence, occurrenceSlug, RECURRENCE_FREQUENCIES } from "./recurrence";
+import {
+  isSeriesChildInSync,
+  seriesFieldsHash,
+  seriesFieldValues,
+  seriesParent,
+} from "./events-series";
 
 const LIST_COLUMNS =
   "id, series_id, slug, title, summary, language, status, starts_at, ends_at, timezone, location_mode, venue_name, city, capacity, is_featured, is_internal, category_id, region_id, organizer_id, updated_at, cce_enabled, certificates_enabled";
 
-const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, tickets_enabled, guest_passes_allowed, practical_notes, published_at, content_updated_at, hero_marks, attendance_min_percent`;
+const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, series_synced_at, series_source_hash, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, tickets_enabled, guest_passes_allowed, practical_notes, published_at, content_updated_at, hero_marks, attendance_min_percent`;
 
 /** One row of the staff events list, enriched with filterable labels. */
 export type ListedEvent = {
@@ -628,12 +634,19 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
     if (takenError) throw new Error(takenError.message);
     const existing = new Set((taken ?? []).map((r) => r.slug as string));
 
+    // Fingerprint of the copied content: a later date still carrying it is
+    // known to be untouched, and may be refreshed from the parent later.
+    const sourceHash = seriesFieldsHash(source as unknown as Record<string, unknown>);
+    const syncedAt = new Date().toISOString();
+
     const rows = dates
       .map((iso, i) => ({ iso, slug: slugs[i]! }))
       .filter(({ slug }) => !existing.has(slug))
       .map(({ iso, slug }) => ({
         slug,
         series_id: seriesId,
+        series_source_hash: sourceHash,
+        series_synced_at: syncedAt,
         title: source.title,
         summary: source.summary,
         description: source.description,
@@ -650,6 +663,8 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
         image_url: source.image_url,
         image_credit_name: source.image_credit_name,
         image_credit_url: source.image_credit_url,
+        practical_notes: source.practical_notes,
+        hero_marks: source.hero_marks,
         capacity: source.capacity,
         registration_mode: source.registration_mode,
         guest_registration_allowed: source.guest_registration_allowed,
@@ -702,6 +717,168 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
     if (markError) throw new Error(markError.message);
 
     return { created: created.length, skipped: dates.length - rows.length };
+  });
+
+export type SeriesDate = {
+  id: string;
+  slug: string;
+  starts_at: string;
+  status: string;
+  /** Untouched since it was written from the parent, so safe to refresh. */
+  inSync: boolean;
+  isParent: boolean;
+  isLater: boolean;
+};
+
+/**
+ * The dates of the series this event belongs to, with the parent marked.
+ *
+ * The parent is the next date that has not started yet — that one date is
+ * allowed to push its content to the ones after it.
+ */
+export const listSeriesDates = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }): Promise<SeriesDate[]> => {
+    await assertOrganizer(context);
+
+    const { data: self, error: selfError } = await context.supabase
+      .from("events")
+      .select("series_id")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (selfError) throw new Error(selfError.message);
+    const seriesId = (self?.series_id as string | null) ?? null;
+    if (!seriesId) return [];
+
+    const { data: rows, error } = await context.supabase
+      .from("events")
+      .select(EDIT_COLUMNS)
+      .eq("series_id", seriesId)
+      .order("starts_at", { ascending: true });
+    if (error) throw new Error(error.message);
+
+    const all = (rows ?? []) as unknown as Record<string, unknown>[];
+    const parent = seriesParent(
+      all as unknown as { id: string; starts_at: string }[],
+    ) as unknown as Record<string, unknown> | null;
+
+    return all.map((row) => {
+      const isParent = parent !== null && parent["id"] === row["id"];
+      const isLater =
+        parent !== null && (row["starts_at"] as string) > (parent["starts_at"] as string);
+      return {
+        id: row["id"] as string,
+        slug: row["slug"] as string,
+        starts_at: row["starts_at"] as string,
+        status: row["status"] as string,
+        inSync: isSeriesChildInSync(row as never),
+        isParent,
+        isLater,
+      };
+    });
+  });
+
+/**
+ * Push the parent's content and setup to the later dates of its series.
+ *
+ * Timing, slug, status and "featured" stay with each date. A later date that
+ * was edited by hand — its fingerprint no longer matches what it was written
+ * with — is skipped and reported rather than overwritten.
+ */
+export const applySeriesUpdate = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+
+    const { data: source, error: loadError } = await context.supabase
+      .from("events")
+      .select(EDIT_COLUMNS)
+      .eq("id", data.id)
+      .maybeSingle();
+    if (loadError) throw new Error(loadError.message);
+    if (!source) throw new Error("Event not found.");
+    const seriesId = (source as { series_id?: string | null }).series_id ?? null;
+    if (!seriesId) throw new Error("This event is not part of a series.");
+
+    const { data: rows, error: rowsError } = await context.supabase
+      .from("events")
+      .select(EDIT_COLUMNS)
+      .eq("series_id", seriesId)
+      .order("starts_at", { ascending: true });
+    if (rowsError) throw new Error(rowsError.message);
+    const all = (rows ?? []) as unknown as Record<string, unknown>[];
+
+    // Only the next date that has not started yet may push changes forward.
+    const parent = seriesParent(all as unknown as { id: string; starts_at: string }[]);
+    if (!parent || parent.id !== data.id)
+      throw new Error("Only the next upcoming date of the series can update the later ones.");
+
+    const later = all.filter(
+      (row) =>
+        (row["starts_at"] as string) > ((source as Record<string, unknown>)["starts_at"] as string),
+    );
+
+    const values = seriesFieldValues(source as unknown as Record<string, unknown>);
+    const hash = seriesFieldsHash(source as unknown as Record<string, unknown>);
+    const syncedAt = new Date().toISOString();
+
+    const updated: string[] = [];
+    const skipped: { id: string; slug: string; starts_at: string }[] = [];
+
+    for (const row of later) {
+      if (!isSeriesChildInSync(row as never)) {
+        skipped.push({
+          id: row["id"] as string,
+          slug: row["slug"] as string,
+          starts_at: row["starts_at"] as string,
+        });
+        continue;
+      }
+      const { error: updateError } = await context.supabase
+        .from("events")
+        .update({
+          ...values,
+          // Derived from the audience, exactly as on create/update.
+          is_internal:
+            values["registration_mode"] === "rsvp_members" ||
+            values["registration_mode"] === "rsvp_invited",
+          series_source_hash: hash,
+          series_synced_at: syncedAt,
+        })
+        .eq("id", row["id"] as string);
+      if (updateError) throw new Error(updateError.message);
+      updated.push(row["id"] as string);
+    }
+
+    // Hosts travel with the content, so every refreshed date shows the same
+    // coaches as the parent.
+    if (updated.length > 0) {
+      const { data: hosts, error: hostsError } = await context.supabase
+        .from("event_hosts")
+        .select("profile_id, sort_order")
+        .eq("event_id", data.id);
+      if (hostsError) throw new Error(hostsError.message);
+      const { error: clearError } = await context.supabase
+        .from("event_hosts")
+        .delete()
+        .in("event_id", updated);
+      if (clearError) throw new Error(clearError.message);
+      if (hosts && hosts.length > 0) {
+        const hostRows = updated.flatMap((eventId) =>
+          hosts.map((h) => ({
+            event_id: eventId,
+            profile_id: h.profile_id as string,
+            sort_order: h.sort_order as number,
+          })),
+        );
+        const { error: hostError } = await context.supabase.from("event_hosts").insert(hostRows);
+        if (hostError) throw new Error(hostError.message);
+      }
+    }
+
+    return { updated: updated.length, skipped };
   });
 
 /**

@@ -1836,7 +1836,19 @@
       "invited": "Nur eingeladene Mitglieder"
     },
     "fieldTickets": "Tickets anbieten",
-    "fieldTicketsHelp": "Zeigt Ticketkategorien und Rabattcodes. Ohne gespeicherte Kategorie bleibt es eine einfache kostenlose Anmeldung."
+    "fieldTicketsHelp": "Zeigt Ticketkategorien und Rabattcodes. Ohne gespeicherte Kategorie bleibt es eine einfache kostenlose Anmeldung.",
+    "series": {
+      "section": "Spätere Termine aktualisieren",
+      "hint": "Überträgt Inhalt und Einstellungen dieses Termins auf die späteren Termine der Serie. Zeit, Status und Anmeldungen bleiben pro Termin bestehen.",
+      "notParent": "Spätere Termine werden vom nächsten anstehenden Termin dieser Serie aktualisiert:",
+      "allPassed": "Alle Termine dieser Serie sind vorbei.",
+      "noLater": "Es gibt keine späteren Termine zum Aktualisieren.",
+      "handEdited": "manuell bearbeitet – wird übersprungen",
+      "apply": "Auf spätere Termine anwenden",
+      "applying": "Wird aktualisiert…",
+      "updated": "Aktualisierte Termine:",
+      "skipped": "manuell bearbeitet und übersprungen:"
+    }
   },
   "eventTranslations": {
     "title": "Übersetzungen",

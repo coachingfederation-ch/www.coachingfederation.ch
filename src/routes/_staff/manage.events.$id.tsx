@@ -16,6 +16,7 @@ import {
   EventLocationSection,
   EventHostsSection,
   EventRepeatSection,
+  EventSeriesUpdateSection,
   EventPublishingSection,
   type Managed,
   type Registration,
@@ -35,17 +36,20 @@ import { useSaveShortcut } from "@/hooks/use-save-shortcut";
 import { useCms } from "@/i18n/cms";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
 import {
+  applySeriesUpdate,
   cancelRegistration,
   generateEventOccurrences,
   getManagedEvent,
   listCommunityOptions,
   listEventRegistrations,
   listEventTiers,
+  listSeriesDates,
   resendEventConfirmation,
   retryRegistrationRefund,
   setEventStatus,
   setRegistrationStatus,
   updateEvent,
+  type SeriesDate,
 } from "@/lib/events-admin.functions";
 
 export const Route = createFileRoute("/_staff/manage/events/$id")({
@@ -98,6 +102,8 @@ function EventEditor() {
   // Stored forms are their own proof the panel is needed — the toggle itself is
   // view state and does not survive a reload.
   const [hasForms, setHasForms] = useState(false);
+  // The dates of this event's series, with the parent (next upcoming) marked.
+  const [seriesDates, setSeriesDates] = useState<SeriesDate[]>([]);
 
   useEffect(() => {
     const handed = takeWizardExtras(id);
@@ -133,6 +139,7 @@ function EventEditor() {
 
     if (row) {
       setRegistrations(await listEventRegistrations({ data: { eventId: id } }));
+      setSeriesDates(await listSeriesDates({ data: { id } }).catch(() => []));
       if (row.tickets_enabled) {
         setTiers(
           (await listEventTiers({ data: { eventId: id } })).map((tier) => ({
@@ -464,6 +471,32 @@ function EventEditor() {
                   }}
                 />
               ) : null}
+              {/* Pushing content forward reads the stored row, so it follows the
+                  same "nothing unsaved" rule as creating dates. */}
+              <EventSeriesUpdateSection
+                eventId={event.id}
+                dates={seriesDates}
+                t={t}
+                canApply={!dirty}
+                blockedReason={dirty ? t("events.repeat.needsSave") : null}
+                onApply={async () => {
+                  setMessage(null);
+                  setError(null);
+                  try {
+                    const res = await applySeriesUpdate({ data: { id: event.id } });
+                    setMessage(
+                      `${t("events.series.updated")} ${res.updated}${
+                        res.skipped.length
+                          ? ` · ${t("events.series.skipped")} ${res.skipped.length}`
+                          : ""
+                      }`,
+                    );
+                    await load();
+                  } catch (e) {
+                    setError(e instanceof Error ? e.message : t("events.saveError"));
+                  }
+                }}
+              />
               {/* The recap closes the loop: last panel, because it is written
                   after the event has actually happened. */}
               <EventRecapEditor

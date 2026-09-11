@@ -1836,7 +1836,19 @@
       "invited": "Solo membri invitati"
     },
     "fieldTickets": "Offri biglietti",
-    "fieldTicketsHelp": "Mostra le categorie di biglietti e i codici sconto. Senza una categoria salvata resta una semplice iscrizione gratuita."
+    "fieldTicketsHelp": "Mostra le categorie di biglietti e i codici sconto. Senza una categoria salvata resta una semplice iscrizione gratuita.",
+    "series": {
+      "section": "Aggiorna le date successive",
+      "hint": "Trasferisce contenuto e impostazioni di questa data alle date successive della serie. Orari, stato e iscrizioni restano di ogni singola data.",
+      "notParent": "Le date successive vengono aggiornate dalla prossima data in programma di questa serie:",
+      "allPassed": "Tutte le date di questa serie sono passate.",
+      "noLater": "Non ci sono date successive da aggiornare.",
+      "handEdited": "modificata a mano — verrà saltata",
+      "apply": "Applica alle date successive",
+      "applying": "Aggiornamento…",
+      "updated": "Date aggiornate:",
+      "skipped": "modificate a mano e saltate:"
+    }
   },
   "eventTranslations": {
     "title": "Traduzioni",

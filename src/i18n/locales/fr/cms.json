@@ -1836,7 +1836,19 @@
       "invited": "Membres invités uniquement"
     },
     "fieldTickets": "Proposer des billets",
-    "fieldTicketsHelp": "Affiche les catégories de billets et les codes de réduction. Sans catégorie enregistrée, l'inscription reste simple et gratuite."
+    "fieldTicketsHelp": "Affiche les catégories de billets et les codes de réduction. Sans catégorie enregistrée, l'inscription reste simple et gratuite.",
+    "series": {
+      "section": "Mettre à jour les dates suivantes",
+      "hint": "Transmet le contenu et les réglages de cette date aux dates suivantes de la série. Horaires, statut et inscriptions restent propres à chaque date.",
+      "notParent": "Les dates suivantes sont mises à jour depuis la prochaine date à venir de cette série :",
+      "allPassed": "Toutes les dates de cette série sont passées.",
+      "noLater": "Il n'y a pas de dates suivantes à mettre à jour.",
+      "handEdited": "modifiée à la main — sera ignorée",
+      "apply": "Appliquer aux dates suivantes",
+      "applying": "Mise à jour…",
+      "updated": "Dates mises à jour :",
+      "skipped": "modifiées à la main et ignorées :"
+    }
   },
   "eventTranslations": {
     "title": "Traductions",
