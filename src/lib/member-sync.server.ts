@@ -347,6 +347,10 @@ export async function runMemberSync(options: {
       updated,
       deactivated,
     });
+  };
+
+  try {
+    return await Promise.race([body(), budget]);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     await logEvent(runId, "sync_failed", message, { severity: "error" });
@@ -358,7 +362,10 @@ export async function runMemberSync(options: {
       deactivated: 0,
       message,
     });
+  } finally {
+    if (timer) clearTimeout(timer);
   }
+
 }
 
 /** Admin "Clean up": anonymise members whose grace window has expired. */
