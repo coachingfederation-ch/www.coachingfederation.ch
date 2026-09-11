@@ -329,7 +329,6 @@ message and a link to `/integration`. Sending is best effort and never throws
 inside the cron handler: an unreachable mailbox must not turn a failed sync into
 a failed endpoint.
 
-
 ---
 
 ## 7. When something looks wrong

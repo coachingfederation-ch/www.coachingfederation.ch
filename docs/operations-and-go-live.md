@@ -29,7 +29,6 @@ five-minute budget; if the night fails, three retry jobs
 `/api/public/member-sync-retry`, and a third failure alerts every Super Admin by
 email. Both are documented in `docs/member-sync.md`.
 
-
 The endpoint authenticates the caller with a dedicated token in the
 `x-cron-token` header. The token lives in exactly two places: the
 `MEMBER_SYNC_CRON_TOKEN` server env var, and `private.app_config` (key
