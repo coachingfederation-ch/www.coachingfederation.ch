@@ -66,7 +66,6 @@ export const MAX_RUN_MINUTES = 5;
 
 export const TIMEOUT_MESSAGE = `Timed out after ${MAX_RUN_MINUTES} minutes — the sync was still running and was stopped.`;
 
-
 /** Close runs left on `running` by an interrupted process. Best effort. */
 export async function reapAbandonedRuns(): Promise<number> {
   const cutoff = new Date(Date.now() - ABANDONED_RUN_MINUTES * 60_000).toISOString();
@@ -164,14 +163,10 @@ export async function runMemberSync(options: {
   // retry job take over, instead of leaving a `running` row for the reaper.
   let timer: ReturnType<typeof setTimeout> | undefined;
   const budget = new Promise<never>((_, reject) => {
-    timer = setTimeout(
-      () => reject(new Error(TIMEOUT_MESSAGE)),
-      MAX_RUN_MINUTES * 60_000,
-    );
+    timer = setTimeout(() => reject(new Error(TIMEOUT_MESSAGE)), MAX_RUN_MINUTES * 60_000);
   });
 
   const body = async (): Promise<SyncResult> => {
-
     const feed = await fetchActiveMemberFeed(config.mode);
 
     // Baseline is the *active* population only: that is what the feed mirrors.
@@ -269,7 +264,6 @@ export async function runMemberSync(options: {
         { severity: "warning" },
       );
     }
-
 
     // Absent from the feed -> inactive, entering the grace window.
     const feedRecnos = new Set(feed.map((m) => m.cst_recno));
@@ -371,7 +365,6 @@ export async function runMemberSync(options: {
   } finally {
     if (timer) clearTimeout(timer);
   }
-
 }
 
 /** Admin "Clean up": anonymise members whose grace window has expired. */
