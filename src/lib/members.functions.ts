@@ -374,8 +374,9 @@ export const updateClaimCampaign = createServerFn({ method: "POST" })
         status: z.enum(["idle", "running", "paused", "completed"]).optional(),
         daily_cap: z.number().int().min(1).max(500).optional(),
         pilot_only: z.boolean().optional(),
-
+        reminder_enabled: z.boolean().optional(),
         reminder_after_days: z.number().int().min(1).max(60).optional(),
+
       })
       .parse(input),
   )
