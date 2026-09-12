@@ -398,6 +398,7 @@ export async function updateCampaign(
   patch: {
     status?: CampaignStatus;
     daily_cap?: number;
+    pilot_only?: boolean;
     reminder_enabled?: boolean;
     reminder_after_days?: number;
   },
@@ -405,12 +406,14 @@ export async function updateCampaign(
   const values: {
     status?: CampaignStatus;
     daily_cap?: number;
+    pilot_only?: boolean;
     reminder_enabled?: boolean;
     reminder_after_days?: number;
     updated_by: string;
     paused_reason?: string | null;
     started_at?: string;
   } = { ...patch, updated_by: actorUserId };
+
   if (patch.status === "running") {
     values.paused_reason = null;
     const current = await loadCampaign();
