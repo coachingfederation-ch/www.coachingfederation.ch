@@ -4317,6 +4317,7 @@ export type Database = {
           last_run_sent: number
           lease_until: string | null
           paused_reason: string | null
+          pilot_only: boolean
           reminder_after_days: number
           reminder_enabled: boolean
           started_at: string | null
@@ -4335,6 +4336,7 @@ export type Database = {
           last_run_sent?: number
           lease_until?: string | null
           paused_reason?: string | null
+          pilot_only?: boolean
           reminder_after_days?: number
           reminder_enabled?: boolean
           started_at?: string | null
@@ -4353,6 +4355,7 @@ export type Database = {
           last_run_sent?: number
           lease_until?: string | null
           paused_reason?: string | null
+          pilot_only?: boolean
           reminder_after_days?: number
           reminder_enabled?: boolean
           started_at?: string | null

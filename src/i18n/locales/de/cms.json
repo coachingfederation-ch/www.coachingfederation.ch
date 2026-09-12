@@ -592,6 +592,9 @@
     "campaignCap": "Pro Tag",
     "campaignReminderDays": "Erinnerung nach (Tagen)",
     "campaignReminderOn": "Erinnerungen senden",
+    "campaignPilotOnly": "Nur Pilotgruppe",
+    "campaignPilotOnlyHint": "Es werden ausschliesslich Mitglieder der Pilotliste eingeladen; danach endet die Kampagne.",
+
     "campaignStart": "Kampagne starten",
     "campaignPause": "Kampagne pausieren",
     "campaignRelease": "Heutige Welle senden",

@@ -378,6 +378,14 @@ working link and the support load settles before the next send. Do not start a
 wave on a Friday. Stop and diagnose if bounces exceed a few percent or if
 conversion in a wave falls below roughly half the previous one.
 
+The first wave is scoped by the **pilot-only** switch on the claim campaign card
+(`member_claim_campaign.pilot_only`, default on). While it is on, the wave engine
+builds its queue from the pilot list alone — reminders included — and marks the
+campaign `completed` once that list is exhausted, so a scheduled run cannot roll
+on into the wider membership. The card's remaining / invited / claimed counts are
+then pilot-scoped too. Turning the switch off returns the queue to all eligible
+members in the usual order; the campaign then has to be started again.
+
 Per wave, watch `member_email_log` for failures, provider delivery events for
 bounces and suppressions, and `member_sync_events` for
 `member_account_claimed`. Handle the exception queue: no email, duplicate

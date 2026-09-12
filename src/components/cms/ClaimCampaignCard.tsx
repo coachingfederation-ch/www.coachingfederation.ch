@@ -92,6 +92,12 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
         <p className="mt-2 text-xs text-destructive">{campaign.paused_reason}</p>
       ) : null}
 
+      {campaign.pilot_only ? (
+        <p className="mt-3 text-xs text-muted-foreground">
+          {t("integration.campaignPilotOnlyHint")}
+        </p>
+      ) : null}
+
       <div className="mt-4 grid gap-3 sm:grid-cols-4">
         <Stat label={t("integration.campaignRemaining")} value={data.remaining} />
         <Stat label={t("integration.campaignInvited")} value={data.invited} />
@@ -144,6 +150,21 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
             }}
             className="mt-1 w-24"
           />
+        </label>
+
+        <label className="flex items-center gap-2 pb-2 text-xs font-semibold">
+          <Checkbox
+            checked={campaign.pilot_only}
+            disabled={busy}
+            onCheckedChange={(value) => {
+              const checked = value === true;
+              void run(async () => {
+                await updateClaimCampaign({ data: { pilot_only: checked } });
+                return t("integration.saved");
+              });
+            }}
+          />
+          {t("integration.campaignPilotOnly")} ({data.pilotCount})
         </label>
 
         <label className="flex items-center gap-2 pb-2 text-xs font-semibold">

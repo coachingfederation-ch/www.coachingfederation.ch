@@ -592,6 +592,9 @@
     "campaignCap": "Per day",
     "campaignReminderDays": "Reminder after (days)",
     "campaignReminderOn": "Send reminders",
+    "campaignPilotOnly": "Pilot group only",
+    "campaignPilotOnlyHint": "Only members on the pilot list are invited, and the campaign stops once they are done.",
+
     "campaignStart": "Start campaign",
     "campaignPause": "Pause campaign",
     "campaignRelease": "Release today's wave",

@@ -19,6 +19,8 @@ import { loadIntegrationConfigAdmin } from "../integration-config.server";
 import { deliverClaimInvitation } from "./email.server";
 
 const LEASE_MINUTES = 10;
+/** Sentinel id so an empty pilot list filters to nothing rather than everything. */
+const NO_MEMBER_ID = "00000000-0000-0000-0000-000000000000";
 /** Statuses in `member_email_log` that mean the provider accepted the message. */
 const SENT_STATUSES = ["sent", "sent_redirected"];
 
@@ -27,6 +29,12 @@ export type CampaignStatus = "idle" | "running" | "paused" | "completed";
 export type ClaimCampaign = {
   status: CampaignStatus;
   daily_cap: number;
+  /**
+   * While true the queue is restricted to members on the pilot list, and the
+   * campaign completes once that list is exhausted instead of rolling on into
+   * the wider membership.
+   */
+  pilot_only: boolean;
   reminder_enabled: boolean;
   reminder_after_days: number;
   last_run_on: string | null;
@@ -39,7 +47,7 @@ export type ClaimCampaign = {
 };
 
 const CAMPAIGN_COLUMNS =
-  "status, daily_cap, reminder_enabled, reminder_after_days, last_run_on, last_run_at, last_run_sent, paused_reason, total_invited, total_reminders, started_at";
+  "status, daily_cap, pilot_only, reminder_enabled, reminder_after_days, last_run_on, last_run_at, last_run_sent, paused_reason, total_invited, total_reminders, started_at";
 
 export type WaveOutcome = {
   ran: boolean;
@@ -150,17 +158,21 @@ async function loadPilotIds(): Promise<Set<string>> {
  * Ordered work list: reminders first (they are time-critical — the first link
  * has just expired), then first invitations with the pilot group ahead of
  * everyone else, oldest membership first.
+ *
+ * With `pilot_only` the list is cut down to the pilot members, so a first
+ * rollout cannot spill into the wider membership.
  */
 async function buildQueue(campaign: ClaimCampaign): Promise<{
   reminders: Candidate[];
   invites: Candidate[];
   invited: number;
 }> {
-  const [members, history, pilot] = await Promise.all([
+  const [allMembers, history, pilot] = await Promise.all([
     loadEligibleMembers(),
     loadSendHistory(),
     loadPilotIds(),
   ]);
+  const members = campaign.pilot_only ? allMembers.filter((m) => pilot.has(m.id)) : allMembers;
 
   const reminderCutoff = Date.now() - campaign.reminder_after_days * 86_400_000;
   const reminders: Candidate[] = [];
@@ -209,16 +221,26 @@ async function buildQueue(campaign: ClaimCampaign): Promise<{
   };
 }
 
-/** Read model for the staff campaign card. */
+/**
+ * Read model for the staff campaign card. Progress counts follow the campaign
+ * scope: with `pilot_only` they describe the pilot group only, so the pilot can
+ * be judged before the wider rollout starts.
+ */
 export async function loadCampaignOverview() {
   const [campaign, config] = await Promise.all([loadCampaign(), loadIntegrationConfigAdmin()]);
   const queue = await buildQueue(campaign);
-  const { count: claimed } = await supabaseAdmin
+  const pilot = await loadPilotIds();
+
+  let claimedQuery = supabaseAdmin
     .from("members")
     .select("id", { count: "exact", head: true })
     .not("auth_user_id", "is", null)
     .eq("activity_state", "active");
-  const pilot = await loadPilotIds();
+  if (campaign.pilot_only) {
+    // An empty pilot list would make `in()` match everything, so short-circuit.
+    claimedQuery = claimedQuery.in("id", pilot.size ? [...pilot] : [NO_MEMBER_ID]);
+  }
+  const { count: claimed } = await claimedQuery;
 
   return {
     campaign,
@@ -234,6 +256,7 @@ export async function loadCampaignOverview() {
     remaining: queue.invites.length,
     invited: queue.invited,
     claimed: claimed ?? 0,
+
     ranToday: campaign.last_run_on === todayIso(),
   };
 }
@@ -372,6 +395,7 @@ export async function updateCampaign(
   patch: {
     status?: CampaignStatus;
     daily_cap?: number;
+    pilot_only?: boolean;
     reminder_enabled?: boolean;
     reminder_after_days?: number;
   },
@@ -379,12 +403,14 @@ export async function updateCampaign(
   const values: {
     status?: CampaignStatus;
     daily_cap?: number;
+    pilot_only?: boolean;
     reminder_enabled?: boolean;
     reminder_after_days?: number;
     updated_by: string;
     paused_reason?: string | null;
     started_at?: string;
   } = { ...patch, updated_by: actorUserId };
+
   if (patch.status === "running") {
     values.paused_reason = null;
     const current = await loadCampaign();
