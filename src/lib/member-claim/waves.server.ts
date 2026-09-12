@@ -27,6 +27,12 @@ export type CampaignStatus = "idle" | "running" | "paused" | "completed";
 export type ClaimCampaign = {
   status: CampaignStatus;
   daily_cap: number;
+  /**
+   * While true the queue is restricted to members on the pilot list, and the
+   * campaign completes once that list is exhausted instead of rolling on into
+   * the wider membership.
+   */
+  pilot_only: boolean;
   reminder_enabled: boolean;
   reminder_after_days: number;
   last_run_on: string | null;
@@ -39,7 +45,8 @@ export type ClaimCampaign = {
 };
 
 const CAMPAIGN_COLUMNS =
-  "status, daily_cap, reminder_enabled, reminder_after_days, last_run_on, last_run_at, last_run_sent, paused_reason, total_invited, total_reminders, started_at";
+  "status, daily_cap, pilot_only, reminder_enabled, reminder_after_days, last_run_on, last_run_at, last_run_sent, paused_reason, total_invited, total_reminders, started_at";
+
 
 export type WaveOutcome = {
   ran: boolean;
