@@ -157,22 +157,27 @@ async function loadPilotIds(): Promise<Set<string>> {
  * Ordered work list: reminders first (they are time-critical — the first link
  * has just expired), then first invitations with the pilot group ahead of
  * everyone else, oldest membership first.
+ *
+ * With `pilot_only` the list is cut down to the pilot members, so a first
+ * rollout cannot spill into the wider membership.
  */
 async function buildQueue(campaign: ClaimCampaign): Promise<{
   reminders: Candidate[];
   invites: Candidate[];
   invited: number;
 }> {
-  const [members, history, pilot] = await Promise.all([
+  const [allMembers, history, pilot] = await Promise.all([
     loadEligibleMembers(),
     loadSendHistory(),
     loadPilotIds(),
   ]);
+  const members = campaign.pilot_only ? allMembers.filter((m) => pilot.has(m.id)) : allMembers;
 
   const reminderCutoff = Date.now() - campaign.reminder_after_days * 86_400_000;
   const reminders: Candidate[] = [];
   const invites: MemberRow[] = [];
   let invited = 0;
+
 
   for (const member of members) {
     const seen = history.get(member.id);
