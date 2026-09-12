@@ -592,6 +592,9 @@
     "campaignCap": "Al giorno",
     "campaignReminderDays": "Promemoria dopo (giorni)",
     "campaignReminderOn": "Invia promemoria",
+    "campaignPilotOnly": "Solo gruppo pilota",
+    "campaignPilotOnlyHint": "Vengono invitati solo i membri della lista pilota; poi la campagna si conclude.",
+
     "campaignStart": "Avvia campagna",
     "campaignPause": "Metti in pausa",
     "campaignRelease": "Invia l'ondata di oggi",

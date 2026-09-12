@@ -592,6 +592,9 @@
     "campaignCap": "Par jour",
     "campaignReminderDays": "Rappel après (jours)",
     "campaignReminderOn": "Envoyer des rappels",
+    "campaignPilotOnly": "Groupe pilote uniquement",
+    "campaignPilotOnlyHint": "Seuls les membres de la liste pilote sont invités, puis la campagne s'arrête.",
+
     "campaignStart": "Démarrer la campagne",
     "campaignPause": "Mettre en pause",
     "campaignRelease": "Envoyer la vague du jour",
