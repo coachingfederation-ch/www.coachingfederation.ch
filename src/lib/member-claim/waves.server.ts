@@ -19,8 +19,11 @@ import { loadIntegrationConfigAdmin } from "../integration-config.server";
 import { deliverClaimInvitation } from "./email.server";
 
 const LEASE_MINUTES = 10;
+/** Sentinel id so an empty pilot list filters to nothing rather than everything. */
+const NO_MEMBER_ID = "00000000-0000-0000-0000-000000000000";
 /** Statuses in `member_email_log` that mean the provider accepted the message. */
 const SENT_STATUSES = ["sent", "sent_redirected"];
+
 
 export type CampaignStatus = "idle" | "running" | "paused" | "completed";
 
