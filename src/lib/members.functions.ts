@@ -376,7 +376,6 @@ export const updateClaimCampaign = createServerFn({ method: "POST" })
         pilot_only: z.boolean().optional(),
         reminder_enabled: z.boolean().optional(),
         reminder_after_days: z.number().int().min(1).max(60).optional(),
-
       })
       .parse(input),
   )

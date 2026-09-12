@@ -24,7 +24,6 @@ const NO_MEMBER_ID = "00000000-0000-0000-0000-000000000000";
 /** Statuses in `member_email_log` that mean the provider accepted the message. */
 const SENT_STATUSES = ["sent", "sent_redirected"];
 
-
 export type CampaignStatus = "idle" | "running" | "paused" | "completed";
 
 export type ClaimCampaign = {
@@ -49,7 +48,6 @@ export type ClaimCampaign = {
 
 const CAMPAIGN_COLUMNS =
   "status, daily_cap, pilot_only, reminder_enabled, reminder_after_days, last_run_on, last_run_at, last_run_sent, paused_reason, total_invited, total_reminders, started_at";
-
 
 export type WaveOutcome = {
   ran: boolean;
@@ -180,7 +178,6 @@ async function buildQueue(campaign: ClaimCampaign): Promise<{
   const reminders: Candidate[] = [];
   const invites: MemberRow[] = [];
   let invited = 0;
-
 
   for (const member of members) {
     const seen = history.get(member.id);

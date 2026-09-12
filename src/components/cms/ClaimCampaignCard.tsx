@@ -105,7 +105,6 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
         <Stat label={t("integration.campaignReminders")} value={data.pendingReminders} />
       </div>
 
-
       <div className="mt-4 flex flex-wrap items-end gap-3">
         <label className="text-xs font-semibold">
           <span className="block text-muted-foreground">{t("integration.campaignCap")}</span>
@@ -182,7 +181,6 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
           />
           {t("integration.campaignReminderOn")}
         </label>
-
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
