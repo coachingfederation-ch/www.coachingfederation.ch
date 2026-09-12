@@ -221,16 +221,26 @@ async function buildQueue(campaign: ClaimCampaign): Promise<{
   };
 }
 
-/** Read model for the staff campaign card. */
+/**
+ * Read model for the staff campaign card. Progress counts follow the campaign
+ * scope: with `pilot_only` they describe the pilot group only, so the pilot can
+ * be judged before the wider rollout starts.
+ */
 export async function loadCampaignOverview() {
   const [campaign, config] = await Promise.all([loadCampaign(), loadIntegrationConfigAdmin()]);
   const queue = await buildQueue(campaign);
-  const { count: claimed } = await supabaseAdmin
+  const pilot = await loadPilotIds();
+
+  let claimedQuery = supabaseAdmin
     .from("members")
     .select("id", { count: "exact", head: true })
     .not("auth_user_id", "is", null)
     .eq("activity_state", "active");
-  const pilot = await loadPilotIds();
+  if (campaign.pilot_only) {
+    // An empty pilot list would make `in()` match everything, so short-circuit.
+    claimedQuery = claimedQuery.in("id", pilot.size ? [...pilot] : [NO_MEMBER_ID]);
+  }
+  const { count: claimed } = await claimedQuery;
 
   return {
     campaign,
@@ -246,6 +256,7 @@ export async function loadCampaignOverview() {
     remaining: queue.invites.length,
     invited: queue.invited,
     claimed: claimed ?? 0,
+
     ranToday: campaign.last_run_on === todayIso(),
   };
 }
