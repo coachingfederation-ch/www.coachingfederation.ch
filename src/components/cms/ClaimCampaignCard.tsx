@@ -92,12 +92,19 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
         <p className="mt-2 text-xs text-destructive">{campaign.paused_reason}</p>
       ) : null}
 
+      {campaign.pilot_only ? (
+        <p className="mt-3 text-xs text-muted-foreground">
+          {t("integration.campaignPilotOnlyHint")}
+        </p>
+      ) : null}
+
       <div className="mt-4 grid gap-3 sm:grid-cols-4">
         <Stat label={t("integration.campaignRemaining")} value={data.remaining} />
         <Stat label={t("integration.campaignInvited")} value={data.invited} />
         <Stat label={t("integration.campaignClaimed")} value={data.claimed} />
         <Stat label={t("integration.campaignReminders")} value={data.pendingReminders} />
       </div>
+
 
       <div className="mt-4 flex flex-wrap items-end gap-3">
         <label className="text-xs font-semibold">
@@ -148,6 +155,21 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
 
         <label className="flex items-center gap-2 pb-2 text-xs font-semibold">
           <Checkbox
+            checked={campaign.pilot_only}
+            disabled={busy}
+            onCheckedChange={(value) => {
+              const checked = value === true;
+              void run(async () => {
+                await updateClaimCampaign({ data: { pilot_only: checked } });
+                return t("integration.saved");
+              });
+            }}
+          />
+          {t("integration.campaignPilotOnly")} ({data.pilotCount})
+        </label>
+
+        <label className="flex items-center gap-2 pb-2 text-xs font-semibold">
+          <Checkbox
             checked={campaign.reminder_enabled}
             disabled={busy}
             onCheckedChange={(value) => {
@@ -160,6 +182,7 @@ export function ClaimCampaignCard({ t }: { t: (key: string) => string }) {
           />
           {t("integration.campaignReminderOn")}
         </label>
+
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
