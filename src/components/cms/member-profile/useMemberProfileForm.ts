@@ -80,6 +80,7 @@ export function useMemberProfileForm() {
   const [imagePath, setImagePath] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [savedRevision, setSavedRevision] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -210,6 +211,10 @@ export function useMemberProfileForm() {
         },
       });
       apply(next as Profile);
+      // Dependent panels (e.g. profile translations) read the saved profile
+      // server-side; bump a revision so they refetch instead of showing the
+      // state the page was first loaded with.
+      setSavedRevision((n) => n + 1);
       setStatus("saved");
     } catch (err) {
       setStatus("idle");
@@ -261,6 +266,7 @@ export function useMemberProfileForm() {
     setImagePath,
     imageUrl,
     status,
+    savedRevision,
     error,
     fileRef,
     profile,

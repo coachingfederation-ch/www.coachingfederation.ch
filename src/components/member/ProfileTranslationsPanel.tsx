@@ -51,7 +51,13 @@ const BADGE: Record<TranslationState, string> = {
 export function ProfileTranslationsPanel({
   /** Team fields are irrelevant — and hidden — for members outside the operational structure. */
   showTeamFields = false,
-}: { showTeamFields?: boolean } = {}) {
+  /**
+   * Bumped by the profile editor after every successful save. The panel reads
+   * the *saved* profile server-side, so without this it would keep judging
+   * "is there anything to translate?" against the state the page loaded with.
+   */
+  refreshKey = 0,
+}: { showTeamFields?: boolean; refreshKey?: number } = {}) {
   const { t } = useCms();
   const fields = showTeamFields
     ? TRANSLATABLE_FIELDS
@@ -71,15 +77,21 @@ export function ProfileTranslationsPanel({
   const [savedNote, setSavedNote] = useState<string | null>(null);
 
   useEffect(() => {
+    let active = true;
     void (async () => {
       try {
-        setData((await load({})) as Payload);
+        const next = (await load({})) as Payload;
+        // A newer refresh may have resolved first; never clobber it.
+        if (active) setData(next);
       } catch (err) {
-        setError(err instanceof Error ? err.message : String(err));
+        if (active) setError(err instanceof Error ? err.message : String(err));
       }
     })();
+    return () => {
+      active = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refreshKey]);
 
   if (error && !data) {
     return <p className="text-sm text-destructive">{error}</p>;

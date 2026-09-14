@@ -50,6 +50,7 @@ export function MemberProfileEditor() {
     setImagePath,
     imageUrl,
     status,
+    savedRevision,
     error,
     fileRef,
     profile,
@@ -183,7 +184,7 @@ export function MemberProfileEditor() {
 
       {isTeamMember ? <TeamBioSection t={t} practice={practice} setPractice={setPractice} /> : null}
 
-      <ProfileTranslationsPanel showTeamFields={isTeamMember} />
+      <ProfileTranslationsPanel showTeamFields={isTeamMember} refreshKey={savedRevision} />
 
       <VisibilitySection
         t={t}
