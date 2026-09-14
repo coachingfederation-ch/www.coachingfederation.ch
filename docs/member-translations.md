@@ -53,7 +53,7 @@ In `/my-profile` → _Profile languages_ (`ProfileTranslationsPanel`):
 4. **Publish this language** sets `is_ready`. Publication is per language; the
    profile's own `visibility` still governs whether it appears at all.
 
-The panel reads the *saved* profile from the server, not the editor's draft, so
+The panel reads the _saved_ profile from the server, not the editor's draft, so
 translating an empty profile is refused. `MemberProfileEditor` therefore passes
 a `refreshKey` (the form's `savedRevision`, bumped after each successful save)
 and the panel refetches on it. Without that, a coach who filled in a blank
@@ -87,7 +87,6 @@ Outgoing member mail follows it: the engagement dispatcher resolves the member's
 that language (`src/lib/member-engagement/dispatch.server.ts`, copy in
 `src/lib/email-templates/member-campaign-copy.ts`). A null value means "no
 preference recorded" and falls back to English.
-
 
 The two settings answer different questions and must not be conflated: the
 profile's `primary_locale` is what the _public_ reads on the coach's directory
