@@ -80,8 +80,9 @@
     "accepting": "Disponibile per nuovi clienti",
     "waitlist": "Solo lista d'attesa",
     "credentialSince": "Credenziale dal {year}",
-    "viewProfile": "Vedi profilo",
-    "noAccreditation": "Senza accreditamento ICF"
+    "noAccreditation": "Senza accreditamento ICF",
+    "credentialPill": "{credential} · dal {year}",
+    "moreCount": "+{count} altri"
   },
   "formats": {
     "in-person": "In presenza",
