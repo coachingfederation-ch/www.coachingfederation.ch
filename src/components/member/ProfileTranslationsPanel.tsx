@@ -77,15 +77,21 @@ export function ProfileTranslationsPanel({
   const [savedNote, setSavedNote] = useState<string | null>(null);
 
   useEffect(() => {
+    let active = true;
     void (async () => {
       try {
-        setData((await load({})) as Payload);
+        const next = (await load({})) as Payload;
+        // A newer refresh may have resolved first; never clobber it.
+        if (active) setData(next);
       } catch (err) {
-        setError(err instanceof Error ? err.message : String(err));
+        if (active) setError(err instanceof Error ? err.message : String(err));
       }
     })();
+    return () => {
+      active = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refreshKey]);
 
   if (error && !data) {
     return <p className="text-sm text-destructive">{error}</p>;
