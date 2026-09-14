@@ -107,3 +107,20 @@ Almost every practice field is optional by design — most profiles will be
 sparse, especially right after cutover. The layout collapses cleanly rather
 than rendering empty headings, and this should be preserved when adding
 sections: always guard on content, never render a heading unconditionally.
+
+## Result tile (Coach Finder)
+
+The tile in `src/components/coaches/directory/CoachCard.tsx` shows the coach's full
+attribute set rather than a truncated subset:
+
+- Specialisations and formats share one chip block. Facets the visitor filtered on are
+  ordered first; beyond six chips the rest is summarised as "+N more".
+- `Switzerland` (and its DE/FR/IT spellings) is dropped from the location line — it is
+  implicit for a Swiss chapter directory.
+- The credential badge carries the award year ("ACC · since 2024"), so the former bottom
+  strip is reduced to the availability line. "View profile" was removed; the whole tile is
+  one stretched link.
+- Difference-first emphasis: once any filter is active, `CoachResultsGrid` computes the
+  attributes shared by _every_ result on screen and the tile renders those muted, so only
+  distinguishing attributes keep full contrast. Unfiltered browsing renders all chips
+  normally.
