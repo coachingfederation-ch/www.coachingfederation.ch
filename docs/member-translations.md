@@ -53,6 +53,13 @@ In `/my-profile` → _Profile languages_ (`ProfileTranslationsPanel`):
 4. **Publish this language** sets `is_ready`. Publication is per language; the
    profile's own `visibility` still governs whether it appears at all.
 
+The panel reads the *saved* profile from the server, not the editor's draft, so
+translating an empty profile is refused. `MemberProfileEditor` therefore passes
+a `refreshKey` (the form's `savedRevision`, bumped after each successful save)
+and the panel refetches on it. Without that, a coach who filled in a blank
+profile would see the translate buttons stay disabled until a full page reload
+— which is what switching the site language happens to do.
+
 ## Public resolution
 
 `coach_directory_public` aggregates ready translations into a `translations`
