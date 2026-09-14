@@ -266,6 +266,7 @@ export function useMemberProfileForm() {
     setImagePath,
     imageUrl,
     status,
+    savedRevision,
     error,
     fileRef,
     profile,
