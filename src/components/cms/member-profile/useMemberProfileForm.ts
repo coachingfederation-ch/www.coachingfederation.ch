@@ -210,6 +210,10 @@ export function useMemberProfileForm() {
         },
       });
       apply(next as Profile);
+      // Dependent panels (e.g. profile translations) read the saved profile
+      // server-side; bump a revision so they refetch instead of showing the
+      // state the page was first loaded with.
+      setSavedRevision((n) => n + 1);
       setStatus("saved");
     } catch (err) {
       setStatus("idle");
