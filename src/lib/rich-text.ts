@@ -123,6 +123,21 @@ export function richTextToHtml(markdown: string) {
     .join("");
 }
 
+/** True when an element carries bold styling, whether as a tag or inline CSS. */
+function isBoldElement(el: HTMLElement) {
+  if (el.tagName === "STRONG" || el.tagName === "B") return true;
+  const weight = el.style.fontWeight;
+  if (!weight) return false;
+  if (weight === "bold" || weight === "bolder") return true;
+  return Number(weight) >= 600;
+}
+
+function isItalicElement(el: HTMLElement) {
+  if (el.tagName === "EM" || el.tagName === "I") return true;
+  const style = el.style.fontStyle;
+  return style === "italic" || style === "oblique";
+}
+
 function serializeNode(node: Node, bold: boolean, italic: boolean): string {
   if (node.nodeType === 3) {
     const text = node.textContent ?? "";
@@ -139,11 +154,18 @@ function serializeNode(node: Node, bold: boolean, italic: boolean): string {
   const el = node as HTMLElement;
   const tag = el.tagName;
   if (tag === "BR") return "\n";
-  const nextBold = bold || tag === "STRONG" || tag === "B" || Number(el.style.fontWeight) >= 600;
-  const nextItalic = italic || tag === "EM" || tag === "I" || el.style.fontStyle === "italic";
+  const nextBold = bold || isBoldElement(el);
+  const nextItalic = italic || isItalicElement(el);
   return Array.from(el.childNodes)
     .map((child) => serializeNode(child, nextBold, nextItalic))
     .join("");
+}
+
+/** Block-level tags the serializer treats as their own line(s). */
+const BLOCK_TAGS = /^(P|DIV|UL|OL|H[1-6]|BLOCKQUOTE|SECTION|ARTICLE|MAIN|FIGURE)$/;
+
+function hasBlockChild(el: HTMLElement) {
+  return Array.from(el.children).some((child) => BLOCK_TAGS.test(child.tagName));
 }
 
 /** Converts the contenteditable DOM back into the Markdown subset. */
@@ -158,19 +180,28 @@ export function htmlToRichText(root: HTMLElement): string {
           const ordered = el.tagName === "OL";
           let index = 1;
           for (const li of Array.from(el.querySelectorAll(":scope > li"))) {
-            const text = serializeNode(li, false, false).trim();
+            const text = serializeNode(li, false, false).replace(/\n+/g, " ").trim();
             lines.push(ordered ? `${index++}. ${text}` : `- ${text}`);
           }
           lines.push("");
           continue;
         }
-        if (/^H[234]$/.test(el.tagName)) {
-          const hashes = "#".repeat(Number(el.tagName.slice(1)));
+        if (/^H[1-6]$/.test(el.tagName)) {
+          // Editor headings are h2–h4; anything outside that range is clamped in.
+          const level = Math.min(4, Math.max(2, Number(el.tagName.slice(1))));
+          const hashes = "#".repeat(level);
           const text = serializeNode(el, false, false).replace(/\n+/g, " ").trim();
           if (text) lines.push(`${hashes} ${text}`, "");
           continue;
         }
-        if (el.tagName === "DIV" || el.tagName === "P") {
+        if (BLOCK_TAGS.test(el.tagName)) {
+          // Browsers nest blocks freely (a list inside a paragraph, a div inside
+          // a div). Recurse so nested lists and headings keep their structure
+          // instead of collapsing into one run-on paragraph.
+          if (hasBlockChild(el)) {
+            walkBlocks(el);
+            continue;
+          }
           const text = serializeNode(el, false, false).replace(/\n+$/, "");
           lines.push(...text.split("\n"), "");
           continue;
