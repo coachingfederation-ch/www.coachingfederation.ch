@@ -2,9 +2,24 @@
  * Result list for the Coach Finder: loading/error/empty states, the coach
  * card grid and prev/next pagination controls.
  */
+import { useMemo } from "react";
 import { useI18n } from "@/i18n";
 import type { DirectoryEntry } from "@/lib/directory.functions";
 import { CoachCard, type LabelLookup } from "./CoachCard";
+
+/**
+ * Attributes carried by every coach on screen. They are true of the whole
+ * result set, so they cannot help a visitor tell two coaches apart and are
+ * rendered muted once filters are active.
+ */
+function sharedAttributeSlugs(results: DirectoryEntry[]): Set<string> {
+  if (results.length < 2) return new Set();
+  const sets = results.map(
+    (e) => new Set([...(e.specialisation_slugs ?? []), ...(e.format_slugs ?? [])]),
+  );
+  const [first, ...rest] = sets;
+  return new Set([...first!].filter((slug) => rest.every((s) => s.has(slug))));
+}
 
 export function CoachResultsGrid({
   isError,
@@ -17,6 +32,8 @@ export function CoachResultsGrid({
   hasMore,
   modeLabel,
   isSample = false,
+  selectedSlugs = [],
+  emphasiseDifferences = false,
 }: {
   isError: boolean;
   isPending: boolean;
@@ -29,8 +46,16 @@ export function CoachResultsGrid({
   modeLabel: string | null;
   /** Random showcase: a single set, never paginated. */
   isSample?: boolean;
+  /** Specialisation/format slugs the visitor filtered on. */
+  selectedSlugs?: string[];
+  /** Any filter active: only then does difference-first emphasis apply. */
+  emphasiseDifferences?: boolean;
 }) {
   const { t } = useI18n();
+  const sharedSlugs = useMemo(
+    () => (emphasiseDifferences ? sharedAttributeSlugs(results) : new Set<string>()),
+    [results, emphasiseDifferences],
+  );
 
   if (isError) {
     return (
@@ -51,10 +76,14 @@ export function CoachResultsGrid({
                 entry={entry}
                 specialisationLabel={specialisationLabel}
                 formatLabel={formatLabel}
+                selectedSlugs={selectedSlugs}
+                sharedSlugs={sharedSlugs}
+                emphasiseDifferences={emphasiseDifferences}
               />
             </li>
           ))}
         </ul>
+
         {!isSample && (page > 0 || hasMore) && (
           <div className="mt-8 flex items-center justify-center gap-3">
             <button
