@@ -193,7 +193,6 @@ export function CoachDirectory() {
               selectedSlugs={[...specializations, ...formats]}
               emphasiseDifferences={dirty}
             />
-
           </div>
         </div>
       </div>

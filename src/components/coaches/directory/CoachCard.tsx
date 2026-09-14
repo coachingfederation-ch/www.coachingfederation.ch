@@ -127,7 +127,9 @@ export function CoachCard({
     if (chip.outlined) {
       return (
         base +
-        (dimmed ? "border border-border/60 text-muted-foreground" : "border border-border text-foreground")
+        (dimmed
+          ? "border border-border/60 text-muted-foreground"
+          : "border border-border text-foreground")
       );
     }
     return base + (dimmed ? "bg-muted/60 text-muted-foreground" : "bg-muted text-foreground");
@@ -207,4 +209,3 @@ export function CoachCard({
     </article>
   );
 }
-
