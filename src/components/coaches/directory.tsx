@@ -190,7 +190,10 @@ export function CoachDirectory() {
               hasMore={hasMore}
               modeLabel={modeLabel}
               isSample={isSample}
+              selectedSlugs={[...specializations, ...formats]}
+              emphasiseDifferences={dirty}
             />
+
           </div>
         </div>
       </div>
