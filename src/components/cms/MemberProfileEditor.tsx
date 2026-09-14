@@ -50,6 +50,7 @@ export function MemberProfileEditor() {
     setImagePath,
     imageUrl,
     status,
+    savedRevision,
     error,
     fileRef,
     profile,
