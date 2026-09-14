@@ -51,7 +51,13 @@ const BADGE: Record<TranslationState, string> = {
 export function ProfileTranslationsPanel({
   /** Team fields are irrelevant — and hidden — for members outside the operational structure. */
   showTeamFields = false,
-}: { showTeamFields?: boolean } = {}) {
+  /**
+   * Bumped by the profile editor after every successful save. The panel reads
+   * the *saved* profile server-side, so without this it would keep judging
+   * "is there anything to translate?" against the state the page loaded with.
+   */
+  refreshKey = 0,
+}: { showTeamFields?: boolean; refreshKey?: number } = {}) {
   const { t } = useCms();
   const fields = showTeamFields
     ? TRANSLATABLE_FIELDS
