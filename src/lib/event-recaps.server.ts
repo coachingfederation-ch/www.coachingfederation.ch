@@ -166,8 +166,12 @@ export async function recapEntitlement(
     .eq("event_id", eventId)
     .eq("user_id", userId)
     .eq("status", "confirmed")
+    // A confirmed-but-unpaid registration is not an attendee yet: paid recap
+    // material stays closed until the payment actually settled.
+    .in("payment_status", ["paid", "not_required"])
     .maybeSingle();
   return Boolean(registration);
+
 }
 
 /**

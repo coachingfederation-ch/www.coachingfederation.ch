@@ -141,8 +141,12 @@ export async function loadTicket(token: string): Promise<TicketView | null> {
     .from("event_registrations")
     .select("id, event_id, full_name, locale, status, payment_status, tier_id, checked_in_at")
     .eq("check_in_token", token)
+    // A cancelled registration is past the ticket boundary: the holder keeps
+    // the link but must not keep reading attendee and event details through it.
+    .neq("status", "cancelled")
     .maybeSingle();
   if (!registration) return null;
+
 
   const { data: eventRow } = await supabaseAdmin
     .from("events")
