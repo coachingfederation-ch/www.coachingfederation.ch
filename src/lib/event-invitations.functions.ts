@@ -68,7 +68,8 @@ export const resendEventInvitation = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertManagesEvent(context, data.eventId);
     const { resendInvitation } = await import("./event-invitations.server");
-    return resendInvitation(data.invitationId);
+    return resendInvitation(data.invitationId, data.eventId);
+
   });
 
 /** Staff: take somebody off the guest list. Any registration they made stays. */
