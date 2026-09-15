@@ -167,10 +167,7 @@ export async function addInvitation(
 }
 
 /** Mints a fresh token — the previous link stops working — and mails it again. */
-export async function resendInvitation(
-  invitationId: string,
-  eventId: string,
-): Promise<AddResult> {
+export async function resendInvitation(invitationId: string, eventId: string): Promise<AddResult> {
   const token = randomBytes(32).toString("base64url");
   // Scoped to the event the caller proved they manage: an invitation id alone
   // must never be enough to mail out another event's guest links.

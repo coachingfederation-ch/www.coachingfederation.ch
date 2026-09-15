@@ -187,7 +187,6 @@ function cell(value: unknown): string {
   return /[",\n;]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 
-
 export async function buildChatInsightCsv(
   filters: ChatInsightFilters,
 ): Promise<{ filename: string; csv: string; rows: number }> {

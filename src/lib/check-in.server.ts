@@ -147,7 +147,6 @@ export async function loadTicket(token: string): Promise<TicketView | null> {
     .maybeSingle();
   if (!registration) return null;
 
-
   const { data: eventRow } = await supabaseAdmin
     .from("events")
     .select(

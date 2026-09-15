@@ -58,9 +58,7 @@ export async function loadPublicRecap(
 ): Promise<PublicRecap | null> {
   const { data: row } = await supabase
     .from("event_recaps")
-    .select(
-      "id, event_id, headline, body, language, status, published_at, downloads_audience",
-    )
+    .select("id, event_id, headline, body, language, status, published_at, downloads_audience")
     .eq("event_id", eventId)
     .eq("status", "published")
     .maybeSingle();
@@ -171,7 +169,6 @@ export async function recapEntitlement(
     .in("payment_status", ["paid", "not_required"])
     .maybeSingle();
   return Boolean(registration);
-
 }
 
 /**
