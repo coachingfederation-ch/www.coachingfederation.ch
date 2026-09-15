@@ -326,7 +326,11 @@ export async function generateThemes(articleId: string | null): Promise<Editoria
 export async function buildFeedbackCsv(filters: FeedbackFilters): Promise<string> {
   const rows = await fetchRows(null, filters);
   const header = ["created_at", "article_id", "locale", "depth", "usefulness", "topics", "comment"];
-  const escape = (value: string) => `"${value.replace(/"/g, '""')}"`;
+  // A leading =, +, - or @ makes a spreadsheet treat the cell as a formula, so
+  // reader-supplied comments and topics are neutralised before quoting.
+  const escape = (value: string) =>
+    `"${(/^[=+\-@\t\r]/.test(value) ? `'${value}` : value).replace(/"/g, '""')}"`;
+
   const lines = rows.map((row) =>
     [
       row.created_at,

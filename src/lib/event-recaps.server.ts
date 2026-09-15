@@ -58,9 +58,7 @@ export async function loadPublicRecap(
 ): Promise<PublicRecap | null> {
   const { data: row } = await supabase
     .from("event_recaps")
-    .select(
-      "id, event_id, headline, body, language, status, published_at, downloads_audience",
-    )
+    .select("id, event_id, headline, body, language, status, published_at, downloads_audience")
     .eq("event_id", eventId)
     .eq("status", "published")
     .maybeSingle();
@@ -166,6 +164,9 @@ export async function recapEntitlement(
     .eq("event_id", eventId)
     .eq("user_id", userId)
     .eq("status", "confirmed")
+    // A confirmed-but-unpaid registration is not an attendee yet: paid recap
+    // material stays closed until the payment actually settled.
+    .in("payment_status", ["paid", "not_required"])
     .maybeSingle();
   return Boolean(registration);
 }

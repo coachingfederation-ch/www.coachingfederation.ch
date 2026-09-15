@@ -180,7 +180,10 @@ export async function buildChatInsightReport(
 }
 
 function cell(value: unknown): string {
-  const text = value === null || value === undefined ? "" : String(value);
+  let text = value === null || value === undefined ? "" : String(value);
+  // A leading =, +, - or @ makes a spreadsheet treat the cell as a formula, so
+  // caller-supplied values (session ids, free text) are neutralised first.
+  if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`;
   return /[",\n;]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 

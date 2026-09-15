@@ -167,9 +167,11 @@ export async function addInvitation(
 }
 
 /** Mints a fresh token — the previous link stops working — and mails it again. */
-export async function resendInvitation(invitationId: string): Promise<AddResult> {
+export async function resendInvitation(invitationId: string, eventId: string): Promise<AddResult> {
   const token = randomBytes(32).toString("base64url");
-  const { error } = await supabaseAdmin
+  // Scoped to the event the caller proved they manage: an invitation id alone
+  // must never be enough to mail out another event's guest links.
+  const { data: updated, error } = await supabaseAdmin
     .from("event_invitations")
     .update({
       status: "invited",
@@ -177,8 +179,12 @@ export async function resendInvitation(invitationId: string): Promise<AddResult>
       invited_at: new Date().toISOString(),
       responded_at: null,
     })
-    .eq("id", invitationId);
-  if (error) return { ok: false, reason: "error" };
+    .eq("id", invitationId)
+    .eq("event_id", eventId)
+    .select("id")
+    .maybeSingle();
+  if (error || !updated) return { ok: false, reason: "error" };
+
   try {
     await sendInvitationEmail(invitationId, token);
   } catch (e) {
