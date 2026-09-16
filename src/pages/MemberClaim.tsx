@@ -1,12 +1,12 @@
 /**
- * Member account claim screens.
+ * Member account claim activation screen.
  *
- * Both screens are inert until the chapter opens the Member Area after the
- * LIVE cutover: `getMemberClaimStatus` reflects the same database gate the
- * server functions enforce, so the request form is never shown while claiming
- * is closed. Localised through the CMS dictionary (the same one `/auth` uses)
- * rather than the public `$locale` routes — these are account screens, not
- * indexable marketing pages.
+ * There is no self-service entry point: a member reaches this screen only
+ * through an invitation link issued by staff or by the claim campaign. The
+ * former `/claim` request form was removed deliberately — invitations are the
+ * single door into the Member Area. Localised through the CMS dictionary (the
+ * same one `/auth` uses) rather than the public `$locale` routes — this is an
+ * account screen, not an indexable marketing page.
  */
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -15,12 +15,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
 import { LOCALE_LABELS, LOCALE_ORDER } from "@/i18n/config";
-import {
-  checkMemberClaimToken,
-  completeMemberClaim,
-  getMemberClaimStatus,
-  requestMemberClaim,
-} from "@/lib/members.functions";
+import { checkMemberClaimToken, completeMemberClaim } from "@/lib/members.functions";
 
 function Shell({
   title,
