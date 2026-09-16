@@ -83,11 +83,14 @@ profile to another. Every ownership check
 
 ## The claim flow
 
-Claiming is how a member gets that binding. It is **fully built and
-deliberately closed** — it stays gated until the LIVE cutover, and the database
-enforces the gate: `tg_integration_config_guard` raises an exception if
-`account_claim_enabled` is set while the system is in TEST mode or has no
-recorded cutover.
+Claiming is how a member gets that binding. It is **invitation only**: there is
+no public request form, and the former `/claim` page was removed deliberately.
+A claim always starts from a token issued by staff (member detail page) or by
+the claim campaign, so the only public surface is `/claim/$token`.
+
+It stays gated until the LIVE cutover, and the database enforces the gate:
+`tg_integration_config_guard` raises an exception if `account_claim_enabled` is
+set while the system is in TEST mode or has no recorded cutover.
 
 Tokens are custom rather than Supabase magic links, because claiming must bind
 a _specific_ ICF member record, which the built-in flow has no concept of.
