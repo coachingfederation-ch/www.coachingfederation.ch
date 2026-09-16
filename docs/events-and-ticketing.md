@@ -19,6 +19,23 @@ Set per event (`events.registration_mode`), enforced both in
 An event is open when the mode is not `none` and either no registration window
 is set or "now" falls inside it (`events_public` view).
 
+## Visibility vs registration (`is_internal`)
+
+"Members only" (`events.is_internal`) is a **registration** restriction, not a
+visibility one. Every published event is readable by anyone: the single SELECT
+policy on `public.events` is `status = 'published'` for `anon` and
+`authenticated`, and the public subscribable ICS feed lists the same set. The
+badge on the card and detail page signals who may take a seat; membership and
+invitations are enforced in `submitRegistration` / `tickets.server.ts` and by
+`tg_event_registration_guard`.
+
+Consequences to keep in mind: a published members-only event's title, summary
+and description are public text, so nothing internal belongs there. The online
+joining link is still only shown to a registered attendee and sent by email. A
+security scan that flags `is_internal` as "not enforced" is reporting this
+deliberate design, not a defect. If a genuinely non-public event is ever needed,
+add an explicit unlisted status rather than reusing this flag.
+
 ## Membership and pricing
 
 `resolveMembership` (`src/lib/tickets.server.ts`) is the only authority:
