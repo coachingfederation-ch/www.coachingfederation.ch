@@ -1,15 +1,13 @@
 /**
- * Member account claim — architecture in place, deliberately switched off.
+ * Member account claim — invitation only.
  *
- * Self-service claiming cannot run while `account_claim_enabled` is false, and
- * the database refuses to set that flag unless the integration is in LIVE mode
- * with a recorded cutover. Even then, a TEST-shaped (`zz`-wrapped) address can
- * never become a claimable identity.
+ * There is no self-service request form: a claim always begins with a link
+ * issued by staff or by the claim campaign. Claiming cannot run while
+ * `account_claim_enabled` is false, and the database refuses to set that flag
+ * unless the integration is in LIVE mode with a recorded cutover. A TEST-shaped
+ * (`zz`-wrapped) address can never become a claimable identity.
  *
- * Binding rule (deliberate, do not relax): a verified email address only ever
- * *nominates* a candidate member record. The claim is refused whenever the
- * address is not unambiguous — more than one member row, or a row already
- * linked to an account. The durable boundary is the explicit
+ * Binding rule (deliberate, do not relax): the durable boundary is the explicit
  * `members.auth_user_id` link plus the granted `member` role, so an email that
  * also belongs to a staff account can never silently inherit someone else's
  * member profile.
