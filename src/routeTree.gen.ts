@@ -61,7 +61,6 @@ import { Route as ApiStaffAssistantRouteImport } from './routes/api/staff-assist
 import { Route as AttendTokenRouteImport } from './routes/attend.$token'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
-import { Route as ClaimIndexRouteImport } from './routes/claim.index'
 import { Route as ClaimTokenRouteImport } from './routes/claim.$token'
 import { Route as CoachProfileIdRouteImport } from './routes/coach.$profileId'
 import { Route as CommunitiesIndexRouteImport } from './routes/communities.index'
@@ -406,11 +405,6 @@ const AuthConfirmRoute = AuthConfirmRouteImport.update({
   id: '/confirm',
   path: '/confirm',
   getParentRoute: () => AuthRoute,
-} as any)
-const ClaimIndexRoute = ClaimIndexRouteImport.update({
-  id: '/claim/',
-  path: '/claim/',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const ClaimTokenRoute = ClaimTokenRouteImport.update({
   id: '/claim/$token',
@@ -912,7 +906,6 @@ export interface FileRoutesByFullPath {
   '/ticket/$token': typeof TicketTokenRoute
   '/volunteer-login/$token': typeof VolunteerLoginTokenRoute
   '/$locale/': typeof LocaleIndexRoute
-  '/claim/': typeof ClaimIndexRoute
   '/communities/': typeof CommunitiesIndexRoute
   '/events/': typeof EventsIndexRoute
   '/guides/': typeof GuidesIndexRoute
@@ -1044,7 +1037,6 @@ export interface FileRoutesByTo {
   '/ticket/$token': typeof TicketTokenRoute
   '/volunteer-login/$token': typeof VolunteerLoginTokenRoute
   '/$locale': typeof LocaleIndexRoute
-  '/claim': typeof ClaimIndexRoute
   '/communities': typeof CommunitiesIndexRoute
   '/events': typeof EventsIndexRoute
   '/guides': typeof GuidesIndexRoute
@@ -1183,7 +1175,6 @@ export interface FileRoutesById {
   '/ticket/$token': typeof TicketTokenRoute
   '/volunteer-login/$token': typeof VolunteerLoginTokenRoute
   '/$locale/': typeof LocaleIndexRoute
-  '/claim/': typeof ClaimIndexRoute
   '/communities/': typeof CommunitiesIndexRoute
   '/events/': typeof EventsIndexRoute
   '/guides/': typeof GuidesIndexRoute
@@ -1321,7 +1312,6 @@ export interface FileRouteTypes {
     | '/ticket/$token'
     | '/volunteer-login/$token'
     | '/$locale/'
-    | '/claim/'
     | '/communities/'
     | '/events/'
     | '/guides/'
@@ -1453,7 +1443,6 @@ export interface FileRouteTypes {
     | '/ticket/$token'
     | '/volunteer-login/$token'
     | '/$locale'
-    | '/claim'
     | '/communities'
     | '/events'
     | '/guides'
@@ -1591,7 +1580,6 @@ export interface FileRouteTypes {
     | '/ticket/$token'
     | '/volunteer-login/$token'
     | '/$locale/'
-    | '/claim/'
     | '/communities/'
     | '/events/'
     | '/guides/'
@@ -1706,7 +1694,6 @@ export interface RootRouteChildren {
   NewslettersSlugRoute: typeof NewslettersSlugRoute
   TicketTokenRoute: typeof TicketTokenRoute
   VolunteerLoginTokenRoute: typeof VolunteerLoginTokenRoute
-  ClaimIndexRoute: typeof ClaimIndexRoute
   CommunitiesIndexRoute: typeof CommunitiesIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
   GuidesIndexRoute: typeof GuidesIndexRoute
@@ -2109,13 +2096,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/confirm'
       preLoaderRoute: typeof AuthConfirmRouteImport
       parentRoute: typeof AuthRoute
-    }
-    '/claim/': {
-      id: '/claim/'
-      path: '/claim'
-      fullPath: '/claim/'
-      preLoaderRoute: typeof ClaimIndexRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/claim/$token': {
       id: '/claim/$token'
@@ -2942,7 +2922,6 @@ const rootRouteChildren: RootRouteChildren = {
   NewslettersSlugRoute: NewslettersSlugRoute,
   TicketTokenRoute: TicketTokenRoute,
   VolunteerLoginTokenRoute: VolunteerLoginTokenRoute,
-  ClaimIndexRoute: ClaimIndexRoute,
   CommunitiesIndexRoute: CommunitiesIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
   GuidesIndexRoute: GuidesIndexRoute,

@@ -41,7 +41,6 @@
     "googleError": "Échec de la connexion Google",
     "memberTitle": "Accès membre",
     "memberHelp": "Les membres sont importés dans le système. Les premiers utilisateurs doivent activer leur compte avant de se connecter.",
-    "claimAccount": "Activer votre compte",
     "internalSignIn": "Connexion administration interne",
     "staffTitle": "Connexion interne",
     "staffSub": "Pour le personnel et les administrateurs de The Switzerland Chapter of ICF.",
@@ -594,7 +593,6 @@
     "campaignReminderOn": "Envoyer des rappels",
     "campaignPilotOnly": "Groupe pilote uniquement",
     "campaignPilotOnlyHint": "Seuls les membres de la liste pilote sont invités, puis la campagne s'arrête.",
-
     "campaignStart": "Démarrer la campagne",
     "campaignPause": "Mettre en pause",
     "campaignRelease": "Envoyer la vague du jour",
@@ -920,28 +918,18 @@
   },
   "claim": {
     "title": "Accès membre",
-    "subtitle": "Saisissez l'adresse e-mail qu'ICF Global a dans votre dossier et nous vous enverrons un lien à usage unique pour définir votre mot de passe.",
-    "emailLabel": "Adresse e-mail",
-    "submit": "M'envoyer mon lien",
     "loading": "Chargement…",
-    "privacyNote": "Nous ne confirmons jamais si une adresse est enregistrée ou non.",
-    "sentTitle": "Vérifiez votre boîte de réception",
-    "sentBody": "Si cette adresse appartient à un membre actif de The Switzerland Chapter of ICF, un lien à usage unique est en route. Il expire dans sept jours.",
-    "closedTitle": "L'accès membre n'est pas encore ouvert",
-    "closedBody": "L'espace membres ouvrira dès que The Switzerland Chapter of ICF aura achevé la transition vers le système de membres en direct. Les membres en seront informés directement.",
     "toSignIn": "Vous avez déjà un compte ? Connectez-vous",
-    "restart": "Demander un nouveau lien",
     "setPasswordTitle": "Définir votre mot de passe",
     "setPasswordBody": "Vous configurez l'accès pour {email}.",
     "passwordLabel": "Nouveau mot de passe",
     "confirmLabel": "Répéter le mot de passe",
     "passwordHint": "Au moins 10 caractères.",
     "finish": "Créer mon compte",
-    "signUpPrompt": "Première visite ? Configurez votre accès membre",
     "state": {
       "expired": {
         "title": "Ce lien a expiré",
-        "body": "Les liens à usage unique sont valables sept jours. Demandez-en un nouveau et nous vous enverrons un lien frais."
+        "body": "Les liens à usage unique sont valables sept jours. Contactez le bureau du chapitre et nous vous enverrons un nouveau lien."
       },
       "consumed": {
         "title": "Ce lien a déjà été utilisé",
@@ -949,7 +937,7 @@
       },
       "unknown": {
         "title": "Ce lien n'est pas valide",
-        "body": "Il a peut-être été remplacé par un lien plus récent. Demandez-en un nouveau pour continuer."
+        "body": "Il a peut-être été remplacé par un lien plus récent. Contactez le bureau du chapitre pour continuer."
       },
       "already_claimed": {
         "title": "Ce dossier membre est déjà lié",
@@ -964,7 +952,8 @@
       "unknown": "Ce lien n'est pas valide.",
       "already_claimed": "Un compte existe déjà pour cette adhésion.",
       "account_exists": "Un compte existe déjà pour cette adresse e-mail. Veuillez vous connecter."
-    }
+    },
+    "needHelp": "Besoin d'un nouveau lien ? Écrivez à office@coachingfederation.ch."
   },
   "profileTranslations": {
     "title": "Langues du profil",

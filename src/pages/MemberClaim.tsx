@@ -1,12 +1,12 @@
 /**
- * Member account claim screens.
+ * Member account claim activation screen.
  *
- * Both screens are inert until the chapter opens the Member Area after the
- * LIVE cutover: `getMemberClaimStatus` reflects the same database gate the
- * server functions enforce, so the request form is never shown while claiming
- * is closed. Localised through the CMS dictionary (the same one `/auth` uses)
- * rather than the public `$locale` routes — these are account screens, not
- * indexable marketing pages.
+ * There is no self-service entry point: a member reaches this screen only
+ * through an invitation link issued by staff or by the claim campaign. The
+ * former `/claim` request form was removed deliberately — invitations are the
+ * single door into the Member Area. Localised through the CMS dictionary (the
+ * same one `/auth` uses) rather than the public `$locale` routes — this is an
+ * account screen, not an indexable marketing page.
  */
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -15,12 +15,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
 import { LOCALE_LABELS, LOCALE_ORDER } from "@/i18n/config";
-import {
-  checkMemberClaimToken,
-  completeMemberClaim,
-  getMemberClaimStatus,
-  requestMemberClaim,
-} from "@/lib/members.functions";
+import { checkMemberClaimToken, completeMemberClaim } from "@/lib/members.functions";
 
 function Shell({
   title,
@@ -69,86 +64,6 @@ const inputClass =
 const buttonClass =
   "w-full rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60";
 
-export function ClaimRequestPage() {
-  const { t } = useCms();
-  const status = useQuery({
-    queryKey: ["member-claim-status"],
-    queryFn: () => getMemberClaimStatus(),
-  });
-  const request = useServerFn(requestMemberClaim);
-  const [email, setEmail] = useState("");
-  const [done, setDone] = useState(false);
-
-  const submit = useMutation({
-    mutationFn: (value: string) => request({ data: { email: value } }),
-    onSettled: () => setDone(true),
-  });
-
-  if (status.isLoading) {
-    return (
-      <Shell title={t("claim.title")}>
-        <p className="text-center text-sm text-muted-foreground">{t("claim.loading")}</p>
-      </Shell>
-    );
-  }
-
-  if (!status.data?.enabled) {
-    return (
-      <Shell title={t("claim.closedTitle")} subtitle={t("claim.closedBody")}>
-        <a
-          href="/auth"
-          className="block text-center text-sm font-semibold text-primary hover:underline"
-        >
-          {t("claim.toSignIn")}
-        </a>
-      </Shell>
-    );
-  }
-
-  if (done) {
-    return (
-      <Shell title={t("claim.sentTitle")} subtitle={t("claim.sentBody")}>
-        <a
-          href="/auth"
-          className="block text-center text-sm font-semibold text-primary hover:underline"
-        >
-          {t("claim.toSignIn")}
-        </a>
-      </Shell>
-    );
-  }
-
-  return (
-    <Shell title={t("claim.title")} subtitle={t("claim.subtitle")}>
-      <form
-        className="space-y-3"
-        onSubmit={(e) => {
-          e.preventDefault();
-          submit.mutate(email.trim());
-        }}
-      >
-        <label className="block text-xs font-semibold text-muted-foreground" htmlFor="claim-email">
-          {t("claim.emailLabel")}
-        </label>
-        <input
-          id="claim-email"
-          type="email"
-          required
-          autoComplete="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder={t("auth.emailPlaceholder")}
-          className={inputClass}
-        />
-        <button type="submit" disabled={submit.isPending} className={buttonClass}>
-          {submit.isPending ? t("auth.wait") : t("claim.submit")}
-        </button>
-      </form>
-      <p className="mt-4 text-center text-xs text-muted-foreground">{t("claim.privacyNote")}</p>
-    </Shell>
-  );
-}
-
 export function ClaimTokenPage({ token }: { token: string }) {
   const { t } = useCms();
   const navigate = useNavigate();
@@ -190,11 +105,14 @@ export function ClaimTokenPage({ token }: { token: string }) {
   if (status !== "valid") {
     return (
       <Shell title={t(`claim.state.${status}.title`)} subtitle={t(`claim.state.${status}.body`)}>
+        {/* No self-service request form exists: a replacement link can only
+            be issued by the chapter office. */}
+        <p className="text-center text-sm text-muted-foreground">{t("claim.needHelp")}</p>
         <a
-          href="/claim"
-          className="block text-center text-sm font-semibold text-primary hover:underline"
+          href="/auth"
+          className="mt-4 block text-center text-sm font-semibold text-primary hover:underline"
         >
-          {t("claim.restart")}
+          {t("claim.toSignIn")}
         </a>
       </Shell>
     );

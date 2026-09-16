@@ -35,14 +35,9 @@ function AuthPage() {
     <AuthCard title={t("auth.memberTitle")} subtitle={t("auth.memberHelp")}>
       <SignInForm onSignedIn={goToArea} />
 
-      {/* Accounts are never self-registered: a first-time member claims the
-          imported record. `/claim` explains itself when claiming is still
-          closed, so the link is always shown rather than a dead end. */}
-      <p className="mt-4 text-center text-xs">
-        <Link to="/claim" className="font-semibold text-primary hover:underline">
-          {t("auth.claimAccount")}
-        </Link>
-      </p>
+      {/* Accounts are never self-registered and there is no self-service
+          request form: a first-time member arrives through an invitation link
+          issued by staff or by the claim campaign. */}
 
       <p className="mt-2 text-center text-xs text-muted-foreground">
         <Link to="/forgot-password" className="hover:underline">

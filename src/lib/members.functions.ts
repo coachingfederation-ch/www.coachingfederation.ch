@@ -189,44 +189,10 @@ export const updateMemberDirectory = createServerFn({ method: "POST" })
   });
 
 /**
- * Member account claim. Built now, inert until the chapter explicitly opens the
- * Member Area after the LIVE cutover — `account_claim_enabled` cannot be true
- * in TEST mode (database trigger).
+ * Member account claim. There is no public request form: a claim always starts
+ * from an invitation link issued by staff or by the claim campaign, so the only
+ * public surface is token verification and redemption below.
  */
-export const requestMemberClaim = createServerFn({ method: "POST" })
-  .inputValidator((input) => z.object({ email: z.string().email().max(320) }).parse(input))
-  .handler(async ({ data }) => {
-    const { getRequestUrl } = await import("@tanstack/react-start/server");
-    const { attemptMemberClaim } = await import("./member-claim.server");
-    const { checkRateLimit, clientIp } = await import("./rate-limit.server");
-
-    // Per-IP cap on top of the per-address cap in the state machine, so the
-    // form cannot be walked through a list of addresses from one host.
-    const { getRequest } = await import("@tanstack/react-start/server");
-    const request = getRequest();
-    const verdict = await checkRateLimit("member-claim", `ip:${clientIp(request)}`, [
-      { windowSeconds: 3_600, max: 10 },
-      { windowSeconds: 86_400, max: 30 },
-    ]);
-    // Throttled callers get the same neutral answer as everyone else.
-    if (!verdict.allowed) return { status: "sent" as const };
-
-    const result = await attemptMemberClaim(data.email, new URL(getRequestUrl()).origin);
-    // Outcome-neutral: only "the claim window is closed" and "if this address
-    // belongs to a member, an email is on its way" are observable publicly.
-    // The precise statuses stay internal to the staff-side support flow.
-    return { status: result.status === "disabled" ? ("disabled" as const) : ("sent" as const) };
-  });
-
-/** Read-only token state for the /claim/$token screen. Never returns the raw email. */
-export const getMemberClaimStatus = createServerFn({ method: "GET" }).handler(async () => {
-  const { loadIntegrationConfigAdmin } = await import("./integration-config.server");
-  const config = await loadIntegrationConfigAdmin();
-  return {
-    enabled: config.account_claim_enabled && config.mode === "live" && !config.cutover_in_progress,
-  };
-});
-
 export const checkMemberClaimToken = createServerFn({ method: "POST" })
   .inputValidator((input) => z.object({ token: z.string().min(20).max(200) }).parse(input))
   .handler(async ({ data }) => {

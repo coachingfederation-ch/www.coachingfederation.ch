@@ -18,7 +18,8 @@ Audiences and pages (paths are language-prefixed for de/fr/it, e.g. /de/find-a-c
 - /team — the chapter's operational structure and volunteer roles.
 - /europe-pulse — a weekly digest of activity across European ICF chapters.
 - /about, /imprint, /privacy — chapter information and legal pages.
-- /member — the Member Area (sign-in required); /claim to claim a member account.
+- /member — the Member Area (sign-in required). Member accounts are set up through an invitation
+  link the chapter sends; there is no self-service sign-up page.
 
 ICF Credentials: ACC, PCC and MCC are the three ICF Credential levels. People who hold one are
 "credentialed coaches". Never say "ICF-certified coach". Credentialing itself is run by ICF

@@ -457,7 +457,7 @@ that before Phase B.
 | New site broken during the window        | No public impact — Bubble is still the public face. Fix at leisure                                       |
 | New site broken after the switch         | Revert DNS to Bubble. The new site stays LIVE underneath, unreferenced                                   |
 | Email deliverability failing             | `emails_suppressed = true`, pause waves. Intents still logged. Cheap and reversible                      |
-| Claim flow misbehaving                   | `account_claim_enabled = false`. `/claim` shows its closed state; the directory is unaffected            |
+| Claim flow misbehaving                   | `account_claim_enabled = false`. Invitation links stop working; the directory is unaffected              |
 | Member data wrong after the LIVE import  | Fix in netFORUM and re-sync. The feed is authoritative                                                   |
 | Sync corrupting data                     | Disable the cron; data freezes at the last good sync. Read `member_sync_runs.error_message`              |
 | Directory must go dark without data loss | Set `cutover_in_progress = true`. Maintenance state, no data touched                                     |
