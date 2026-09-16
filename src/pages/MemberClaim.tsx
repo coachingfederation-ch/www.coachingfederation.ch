@@ -105,11 +105,14 @@ export function ClaimTokenPage({ token }: { token: string }) {
   if (status !== "valid") {
     return (
       <Shell title={t(`claim.state.${status}.title`)} subtitle={t(`claim.state.${status}.body`)}>
+        {/* No self-service request form exists: a replacement link can only
+            be issued by the chapter office. */}
+        <p className="text-center text-sm text-muted-foreground">{t("claim.needHelp")}</p>
         <a
-          href="/claim"
-          className="block text-center text-sm font-semibold text-primary hover:underline"
+          href="/auth"
+          className="mt-4 block text-center text-sm font-semibold text-primary hover:underline"
         >
-          {t("claim.restart")}
+          {t("claim.toSignIn")}
         </a>
       </Shell>
     );
