@@ -41,7 +41,6 @@
     "googleError": "Google-Anmeldung fehlgeschlagen",
     "memberTitle": "Mitgliederzugang",
     "memberHelp": "Mitglieder werden in das System importiert. Erstbenutzer müssen ihr Konto aktivieren, bevor sie sich anmelden können.",
-    "claimAccount": "Konto aktivieren",
     "internalSignIn": "Interne Admin-Anmeldung",
     "staffTitle": "Interne Anmeldung",
     "staffSub": "Für Mitarbeitende und Administratoren von The Switzerland Chapter of ICF.",
@@ -594,7 +593,6 @@
     "campaignReminderOn": "Erinnerungen senden",
     "campaignPilotOnly": "Nur Pilotgruppe",
     "campaignPilotOnlyHint": "Es werden ausschliesslich Mitglieder der Pilotliste eingeladen; danach endet die Kampagne.",
-
     "campaignStart": "Kampagne starten",
     "campaignPause": "Kampagne pausieren",
     "campaignRelease": "Heutige Welle senden",
@@ -866,7 +864,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
+          "items": [
+            "Projekte leiten",
+            "Von ICFS für die Leitung von Initiativen anerkannt werden"
+          ]
         },
         "status": {
           "title": "Status",
@@ -920,28 +921,18 @@
   },
   "claim": {
     "title": "Mitgliederzugang",
-    "subtitle": "Geben Sie die E-Mail-Adresse ein, die bei ICF Global für Sie hinterlegt ist, und wir senden Ihnen einen einmaligen Link zum Festlegen Ihres Passworts.",
-    "emailLabel": "E-Mail-Adresse",
-    "submit": "Meinen Link senden",
     "loading": "Wird geladen…",
-    "privacyNote": "Wir bestätigen aus Datenschutzgründen nie, ob eine Adresse registriert ist.",
-    "sentTitle": "Prüfen Sie Ihren Posteingang",
-    "sentBody": "Wenn diese Adresse zu einem aktiven Mitglied von The Switzerland Chapter of ICF gehört, ist ein einmaliger Link unterwegs. Er läuft in sieben Tagen ab.",
-    "closedTitle": "Der Mitgliederzugang ist noch nicht geöffnet",
-    "closedBody": "Der Mitgliederbereich wird geöffnet, sobald The Switzerland Chapter of ICF den Übergang zum Live-Mitgliedersystem abgeschlossen hat. Die Mitglieder werden direkt informiert.",
     "toSignIn": "Sie haben bereits ein Konto? Anmelden",
-    "restart": "Neuen Link anfordern",
     "setPasswordTitle": "Passwort festlegen",
     "setPasswordBody": "Sie richten den Zugang für {email} ein.",
     "passwordLabel": "Neues Passwort",
     "confirmLabel": "Passwort wiederholen",
     "passwordHint": "Mindestens 10 Zeichen.",
     "finish": "Mein Konto erstellen",
-    "signUpPrompt": "Zum ersten Mal hier? Richten Sie Ihren Mitgliederzugang ein",
     "state": {
       "expired": {
         "title": "Dieser Link ist abgelaufen",
-        "body": "Einmalige Links sind sieben Tage lang gültig. Fordern Sie einen neuen an, und wir senden Ihnen einen frischen Link."
+        "body": "Einmal-Links sind sieben Tage gültig. Wenden Sie sich an das Chapter-Büro, und wir senden Ihnen einen neuen Link."
       },
       "consumed": {
         "title": "Dieser Link wurde bereits verwendet",
@@ -949,7 +940,7 @@
       },
       "unknown": {
         "title": "Dieser Link ist nicht gültig",
-        "body": "Er wurde möglicherweise durch einen neueren Link ersetzt. Fordern Sie einen neuen an, um fortzufahren."
+        "body": "Möglicherweise wurde er durch einen neueren Link ersetzt. Wenden Sie sich an das Chapter-Büro, um fortzufahren."
       },
       "already_claimed": {
         "title": "Dieser Mitgliedsdatensatz ist bereits verknüpft",
@@ -964,7 +955,8 @@
       "unknown": "Dieser Link ist nicht gültig.",
       "already_claimed": "Für diese Mitgliedschaft existiert bereits ein Konto.",
       "account_exists": "Für diese E-Mail-Adresse existiert bereits ein Konto. Bitte melden Sie sich stattdessen an."
-    }
+    },
+    "needHelp": "Brauchen Sie einen neuen Link? Wenden Sie sich an office@coachingfederation.ch."
   },
   "profileTranslations": {
     "title": "Profilsprachen",

@@ -41,7 +41,6 @@
     "googleError": "Google sign-in failed",
     "memberTitle": "Member access",
     "memberHelp": "Use the same E-mail registered at ICF Global.  First-time users need to claim their account before signing in using the \"Claim your account\" link below.",
-    "claimAccount": "Claim your account",
     "internalSignIn": "Internal admin sign-in",
     "staffTitle": "Internal sign-in",
     "staffSub": "For The Switzerland Chapter of ICF staff and administrators.",
@@ -594,7 +593,6 @@
     "campaignReminderOn": "Send reminders",
     "campaignPilotOnly": "Pilot group only",
     "campaignPilotOnlyHint": "Only members on the pilot list are invited, and the campaign stops once they are done.",
-
     "campaignStart": "Start campaign",
     "campaignPause": "Pause campaign",
     "campaignRelease": "Release today's wave",
@@ -866,7 +864,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
+          "items": [
+            "Lead projects",
+            "Be recognized by ICFS for leading initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -920,28 +921,18 @@
   },
   "claim": {
     "title": "Member access",
-    "subtitle": "Enter the email address ICF Global has on file for you and we'll send you a one-time link to set your password.",
-    "emailLabel": "Email address",
-    "submit": "Send my link",
     "loading": "Loading…",
-    "privacyNote": "We never confirm whether an address is registered.",
-    "sentTitle": "Check your inbox",
-    "sentBody": "If that address belongs to an active The Switzerland Chapter of ICF member, a one-time link is on its way. It expires in seven days.",
-    "closedTitle": "Member access isn't open yet",
-    "closedBody": "The Member Area opens once The Switzerland Chapter of ICF completes the transition to the live membership system. Members will be notified directly.",
     "toSignIn": "Already have an account? Sign in",
-    "restart": "Request a new link",
     "setPasswordTitle": "Set your password",
     "setPasswordBody": "You're setting up access for {email}.",
     "passwordLabel": "New password",
     "confirmLabel": "Repeat password",
     "passwordHint": "At least 10 characters.",
     "finish": "Create my account",
-    "signUpPrompt": "First time here? Set up your member access",
     "state": {
       "expired": {
         "title": "This link has expired",
-        "body": "One-time links are valid for seven days. Request a new one and we'll send a fresh link."
+        "body": "One-time links are valid for seven days. Contact the chapter office and we'll send a fresh link."
       },
       "consumed": {
         "title": "This link has already been used",
@@ -949,7 +940,7 @@
       },
       "unknown": {
         "title": "This link isn't valid",
-        "body": "It may have been replaced by a newer link. Request a new one to continue."
+        "body": "It may have been replaced by a newer link. Contact the chapter office to continue."
       },
       "already_claimed": {
         "title": "This member record is already linked",
@@ -964,7 +955,8 @@
       "unknown": "This link isn't valid.",
       "already_claimed": "An account already exists for this membership.",
       "account_exists": "An account already exists for this email address. Please sign in instead."
-    }
+    },
+    "needHelp": "Need a new link? Contact the chapter office at office@coachingfederation.ch."
   },
   "profileTranslations": {
     "title": "Profile languages",
@@ -2622,7 +2614,13 @@
     },
     "depthTitle": "Depth (1 too light — 5 too deep)",
     "usefulnessTitle": "Usefulness (1 not for me — 5 I will use this)",
-    "depthScale": ["Too light", "A bit light", "About right", "A bit deep", "Too deep"],
+    "depthScale": [
+      "Too light",
+      "A bit light",
+      "About right",
+      "A bit deep",
+      "Too deep"
+    ],
     "usefulnessScale": [
       "Not for me",
       "Mildly interesting",
