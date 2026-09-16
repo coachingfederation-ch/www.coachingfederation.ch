@@ -24,7 +24,6 @@
 export { maskEmail, mintClaimToken, claimUrl } from "./member-claim/tokens.server";
 export type { ClaimEmailLocale } from "./member-claim/email.server";
 export {
-  attemptMemberClaim,
   verifyClaimToken,
   completeClaim,
   issueClaimLinkForMember,
