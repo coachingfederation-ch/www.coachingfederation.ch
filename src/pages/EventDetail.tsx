@@ -128,6 +128,19 @@ export default function EventDetailPage({
     retry: false,
   });
 
+  // The joining link is only ever rendered for an existing registration.
+  const showJoin = Boolean(
+    event.location_mode !== "in_person" && event.online_url && mine.data,
+  );
+  const joinHost = (() => {
+    if (!showJoin || !event.online_url) return null;
+    try {
+      return new URL(event.online_url).hostname.replace(/^www\./, "");
+    } catch {
+      return null;
+    }
+  })();
+
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <header className="bg-hero text-hero-foreground">
@@ -152,7 +165,21 @@ export default function EventDetailPage({
               icon: Clock,
               label: formatEventTimeRange(event.starts_at!, event.ends_at, locale, tz),
             },
-            { id: "place", icon: MapPin, label: eventPlace(event, t("events.tag.online")) },
+            {
+              id: "place",
+              icon: MapPin,
+              // For a registered participant the location line *is* the way in:
+              // the plain "Online" label becomes the accent join button.
+              label: showJoin ? (
+                <Button asChild variant="pill" size="pill" className="-my-1">
+                  <a href={event.online_url!} target="_blank" rel="noopener noreferrer">
+                    {t("events.detail.joinLink")} →
+                  </a>
+                </Button>
+              ) : (
+                eventPlace(event, t("events.tag.online"))
+              ),
+            },
             {
               id: "language",
               icon: Languages,
