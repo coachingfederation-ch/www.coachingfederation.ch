@@ -13,13 +13,6 @@ import { isTestShapedEmail } from "../integration";
 import { hashToken, hashesMatch, maskEmail, mintClaimToken, claimUrl } from "./tokens.server";
 import { deliverClaimInvitation } from "./email.server";
 
-export type ClaimResult =
-  | { status: "disabled" }
-  | { status: "not_eligible" }
-  | { status: "duplicate_email" }
-  | { status: "already_claimed" }
-  | { status: "sent" };
-
 export type ClaimTokenState =
   | { status: "valid"; maskedEmail: string }
   | { status: "expired" }
