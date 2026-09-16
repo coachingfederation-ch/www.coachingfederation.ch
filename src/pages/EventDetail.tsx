@@ -130,9 +130,7 @@ export default function EventDetailPage({
   });
 
   // The joining link is only ever rendered for an existing registration.
-  const showJoin = Boolean(
-    event.location_mode !== "in_person" && event.online_url && mine.data,
-  );
+  const showJoin = Boolean(event.location_mode !== "in_person" && event.online_url && mine.data);
   const joinHost = (() => {
     if (!showJoin || !event.online_url) return null;
     try {
