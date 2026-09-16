@@ -97,6 +97,8 @@
     "signIn": "Accedi",
     "seatsLeft": "{n} posti rimasti",
     "joinLink": "Partecipa alla sessione online",
+    "joinCardTitle": "Il tuo link di partecipazione",
+    "joinCardHint": "Apre {host} in una nuova scheda.",
     "privacy": "Utilizziamo i tuoi dati esclusivamente per gestire la partecipazione a questo evento.",
     "error": {
       "full": "Questo evento è appena andato esaurito.",

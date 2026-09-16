@@ -97,6 +97,8 @@
     "signIn": "Sign in",
     "seatsLeft": "{n} seats left",
     "joinLink": "Join the online session",
+    "joinCardTitle": "Your joining link",
+    "joinCardHint": "Opens {host} in a new tab.",
     "privacy": "We use your details only to manage this event's attendance.",
     "error": {
       "full": "This event just filled up.",
