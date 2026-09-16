@@ -8,7 +8,11 @@
  */
 import type { LucideIcon } from "lucide-react";
 
-export type EventHeroMetaItem = { id: string; icon: LucideIcon; label: string };
+/**
+ * `label` may be a node so a meta entry can render an action (e.g. the join
+ * button that replaces the plain "Online" label for registered participants).
+ */
+export type EventHeroMetaItem = { id: string; icon: LucideIcon; label: React.ReactNode };
 
 export function EventHeroSurface({
   title,

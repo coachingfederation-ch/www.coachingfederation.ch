@@ -236,12 +236,22 @@ export default function EventDetailPage({
             ) : (
               <p className="text-base text-muted-foreground">{event.summary}</p>
             )}
-            {event.location_mode !== "in_person" && event.online_url && mine.data ? (
-              <p className="mt-6 text-sm">
-                <a href={event.online_url} className="font-semibold text-primary hover:underline">
-                  {t("events.detail.joinLink")}
-                </a>
-              </p>
+            {showJoin ? (
+              <section className="not-prose mt-8 rounded-3xl border border-border/70 bg-card p-6">
+                <p className="eyebrow text-muted-foreground">{t("events.detail.joinCardTitle")}</p>
+                <div className="mt-4">
+                  <Button asChild variant="pill" size="pill">
+                    <a href={event.online_url!} target="_blank" rel="noopener noreferrer">
+                      {t("events.detail.joinLink")} →
+                    </a>
+                  </Button>
+                </div>
+                {joinHost ? (
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    {t("events.detail.joinCardHint").replace("{host}", joinHost)}
+                  </p>
+                ) : null}
+              </section>
             ) : null}
             {hosts.length > 0 ? (
               <section className="mt-10 not-prose">
