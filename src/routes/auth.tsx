@@ -39,7 +39,6 @@ function AuthPage() {
           request form: a first-time member arrives through an invitation link
           issued by staff or by the claim campaign. */}
 
-
       <p className="mt-2 text-center text-xs text-muted-foreground">
         <Link to="/forgot-password" className="hover:underline">
           {t("auth.forgotPassword")}

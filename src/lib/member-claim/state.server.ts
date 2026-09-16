@@ -31,8 +31,6 @@ export type CompleteClaimResult =
 
 const MAX_ATTEMPTS_PER_TOKEN = 10;
 
-
-
 type LinkRow = {
   id: string;
   member_id: string;
