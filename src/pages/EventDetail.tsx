@@ -7,6 +7,7 @@
  */
 import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, Clock, Languages, MapPin, Radio, Users } from "lucide-react";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { SiteFooter, SiteHeaderBar } from "@/components/site-chrome";
 import { Mark, type MarkName } from "@/components/marks";
 import { Markdown } from "@/components/markdown";
@@ -128,6 +129,17 @@ export default function EventDetailPage({
     retry: false,
   });
 
+  // The joining link is only ever rendered for an existing registration.
+  const showJoin = Boolean(event.location_mode !== "in_person" && event.online_url && mine.data);
+  const joinHost = (() => {
+    if (!showJoin || !event.online_url) return null;
+    try {
+      return new URL(event.online_url).hostname.replace(/^www\./, "");
+    } catch {
+      return null;
+    }
+  })();
+
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <header className="bg-hero text-hero-foreground">
@@ -152,7 +164,21 @@ export default function EventDetailPage({
               icon: Clock,
               label: formatEventTimeRange(event.starts_at!, event.ends_at, locale, tz),
             },
-            { id: "place", icon: MapPin, label: eventPlace(event, t("events.tag.online")) },
+            {
+              id: "place",
+              icon: MapPin,
+              // For a registered participant the location line *is* the way in:
+              // the plain "Online" label becomes the accent join button.
+              label: showJoin ? (
+                <Button asChild variant="pill" size="pill">
+                  <a href={event.online_url!} target="_blank" rel="noopener noreferrer">
+                    {t("events.detail.joinLink")} →
+                  </a>
+                </Button>
+              ) : (
+                eventPlace(event, t("events.tag.online"))
+              ),
+            },
             {
               id: "language",
               icon: Languages,
@@ -236,12 +262,22 @@ export default function EventDetailPage({
             ) : (
               <p className="text-base text-muted-foreground">{event.summary}</p>
             )}
-            {event.location_mode !== "in_person" && event.online_url && mine.data ? (
-              <p className="mt-6 text-sm">
-                <a href={event.online_url} className="font-semibold text-primary hover:underline">
-                  {t("events.detail.joinLink")}
-                </a>
-              </p>
+            {showJoin ? (
+              <section className="not-prose mt-8 rounded-3xl border border-border/70 bg-card p-6">
+                <p className="eyebrow text-muted-foreground">{t("events.detail.joinCardTitle")}</p>
+                <div className="mt-4">
+                  <Button asChild variant="pill" size="pill">
+                    <a href={event.online_url!} target="_blank" rel="noopener noreferrer">
+                      {t("events.detail.joinLink")} →
+                    </a>
+                  </Button>
+                </div>
+                {joinHost ? (
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    {t("events.detail.joinCardHint").replace("{host}", joinHost)}
+                  </p>
+                ) : null}
+              </section>
             ) : null}
             {hosts.length > 0 ? (
               <section className="mt-10 not-prose">

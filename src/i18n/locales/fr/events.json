@@ -97,6 +97,8 @@
     "signIn": "Se connecter",
     "seatsLeft": "{n} places restantes",
     "joinLink": "Rejoindre la session en ligne",
+    "joinCardTitle": "Votre lien de connexion",
+    "joinCardHint": "Ouvre {host} dans un nouvel onglet.",
     "privacy": "Nous utilisons vos coordonnées uniquement pour gérer la participation à cet événement.",
     "error": {
       "full": "Cet événement vient de afficher complet.",

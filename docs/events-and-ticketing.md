@@ -36,6 +36,13 @@ security scan that flags `is_internal` as "not enforced" is reporting this
 deliberate design, not a defect. If a genuinely non-public event is ever needed,
 add an explicit unlisted status rather than reusing this flag.
 
+On the public event page the joining link appears in two places once
+`getMyRegistration` returns a registration (and the event is not in person):
+the hero meta row renders an accent pill instead of the plain "Online" label,
+and the body renders a join card (`events.detail.joinCardTitle` /
+`joinCardHint`, the hint naming the link host). Both are gated on the same
+condition; visitors without a registration see the location label only.
+
 ## Membership and pricing
 
 `resolveMembership` (`src/lib/tickets.server.ts`) is the only authority:

@@ -97,6 +97,8 @@
     "signIn": "Anmelden",
     "seatsLeft": "Noch {n} Plätze frei",
     "joinLink": "An der Online-Session teilnehmen",
+    "joinCardTitle": "Ihr Teilnahmelink",
+    "joinCardHint": "Öffnet {host} in einem neuen Tab.",
     "privacy": "Wir verwenden Ihre Angaben ausschliesslich zur Verwaltung der Teilnehmenden dieser Veranstaltung.",
     "error": {
       "full": "Dieses Event ist soeben ausgebucht worden.",
