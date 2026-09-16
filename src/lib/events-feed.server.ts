@@ -153,8 +153,9 @@ export async function buildEventsFeedIcs(
 
   let query = supabaseAdmin
     .from("events_public")
+    // Members-only is a registration restriction, not a visibility one: the
+    // events are publicly listed, so the feed mirrors the website.
     .select(PUBLIC_EVENT_COLUMNS)
-    .neq("is_internal", true)
     .gte("starts_at", from.toISOString())
     .lte("starts_at", to.toISOString())
     .order("starts_at", { ascending: true })
