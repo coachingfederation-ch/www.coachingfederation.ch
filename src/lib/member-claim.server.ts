@@ -29,7 +29,6 @@ export {
   sendClaimInvitation,
 } from "./member-claim/state.server";
 export type {
-  ClaimResult,
   ClaimTokenState,
   CompleteClaimResult,
   ClaimInvitationStatus,
