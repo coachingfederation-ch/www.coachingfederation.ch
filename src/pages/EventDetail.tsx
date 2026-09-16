@@ -170,7 +170,7 @@ export default function EventDetailPage({
               // For a registered participant the location line *is* the way in:
               // the plain "Online" label becomes the accent join button.
               label: showJoin ? (
-                <Button asChild variant="pill" size="pill" className="-my-1">
+                <Button asChild variant="pill" size="pill">
                   <a href={event.online_url!} target="_blank" rel="noopener noreferrer">
                     {t("events.detail.joinLink")} →
                   </a>
