@@ -30,51 +30,8 @@ export type CompleteClaimResult =
   | { status: "weak_password" };
 
 const MAX_ATTEMPTS_PER_TOKEN = 10;
-const MAX_REQUESTS_PER_EMAIL_PER_HOUR = 3;
 
-export async function attemptMemberClaim(email: string, baseUrl: string): Promise<ClaimResult> {
-  const config = await loadIntegrationConfigAdmin();
-  if (!config.account_claim_enabled || config.mode !== "live" || config.cutover_in_progress) {
-    return { status: "disabled" };
-  }
 
-  const normalized = email.trim().toLowerCase();
-  if (isTestShapedEmail(normalized)) return { status: "not_eligible" };
-
-  // Throttle per address. Returns the neutral "sent" shape so the endpoint
-  // still cannot be used to probe which addresses exist.
-  const since = new Date(Date.now() - 3_600_000).toISOString();
-  const { count } = await supabaseAdmin
-    .from("member_profile_links")
-    .select("id", { count: "exact", head: true })
-    .eq("email", normalized)
-    .gte("requested_at", since);
-  if ((count ?? 0) >= MAX_REQUESTS_PER_EMAIL_PER_HOUR) return { status: "sent" };
-
-  const { data: matches, error } = await supabaseAdmin
-    .from("members")
-    .select("id, email, activity_state, auth_user_id, last_synced_at")
-    .eq("email", normalized);
-  if (error) throw error;
-
-  if (!matches || matches.length === 0) return { status: "not_eligible" };
-  // ~500 members: duplicates are an admin-resolved data issue, not a picker flow.
-  if (matches.length > 1) return { status: "duplicate_email" };
-
-  const member = matches[0];
-  if (member.auth_user_id) return { status: "already_claimed" };
-  if (member.activity_state !== "active" || !member.last_synced_at)
-    return { status: "not_eligible" };
-
-  await deliverClaimInvitation({
-    memberId: member.id,
-    email: normalized,
-    baseUrl,
-    isResend: false,
-  });
-
-  return { status: "sent" };
-}
 
 type LinkRow = {
   id: string;
