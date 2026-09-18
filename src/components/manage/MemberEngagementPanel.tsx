@@ -140,8 +140,14 @@ export function MemberEngagementPanel() {
   const act = async (action: "release" | "cancel" | "dispatch", ids: string[] = pendingIds) => {
     try {
       if (action === "release") {
-        const { released } = await releaseEngagementSends({ data: { ids } });
-        toast.success(`${released} email${released === 1 ? "" : "s"} released`);
+        const { released, sent, failed, skipped } = await releaseEngagementSends({ data: { ids } });
+        if (failed > 0) {
+          toast.error(`${released} approved — ${sent} sent, ${failed} failed`);
+        } else {
+          toast.success(
+            `${released} approved — ${sent} sent${skipped > 0 ? `, ${skipped} skipped` : ""}`,
+          );
+        }
       } else if (action === "cancel") {
         const { cancelled } = await cancelEngagementSends({ data: { ids } });
         toast.success(`${cancelled} email${cancelled === 1 ? "" : "s"} cancelled`);
