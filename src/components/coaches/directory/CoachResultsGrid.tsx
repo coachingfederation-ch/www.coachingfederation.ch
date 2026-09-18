@@ -84,7 +84,7 @@ export function CoachResultsGrid({
           ))}
         </ul>
 
-        {!isSample && (page > 0 || hasMore) && (
+        {(page > 0 || hasMore) && (
           <div className="mt-8 flex items-center justify-center gap-3">
             <button
               type="button"
