@@ -232,7 +232,12 @@ function RolesPage() {
    * granted to someone who holds none yet.
    */
   const hasExtraRole = (m: MemberRow) =>
-    m.isAdmin || m.isAdministrator || m.isEditor || m.isOrganizer || m.isPublisher || m.isMembership;
+    m.isAdmin ||
+    m.isAdministrator ||
+    m.isEditor ||
+    m.isOrganizer ||
+    m.isPublisher ||
+    m.isMembership;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -245,7 +250,6 @@ function RolesPage() {
         m.cstRecno.toLowerCase().includes(q),
     );
   }, [members, query]);
-
 
   const selected = useMemo<RoleSubject | null>(() => {
     const m = members.find((row) => row.memberId === selectedId);
@@ -298,7 +302,7 @@ function RolesPage() {
 
   return (
     <Shell>
-      <div className="mx-auto max-w-5xl px-10 py-10">
+      <div className="mx-auto max-w-5xl px-4 py-10 sm:px-10">
         <h1 className="text-2xl font-bold tracking-tight">{t("roles.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("roles.intro")}</p>
 
@@ -327,9 +331,10 @@ function RolesPage() {
           {query.trim() ? t("roles.searchHint") : t("roles.tableHint")}
         </p>
 
-
-        <div className="mt-4 overflow-hidden rounded-2xl border border-border bg-card">
-          <table className="w-full text-left text-sm">
+        {/* Tables scroll sideways below their natural width instead of
+            squeezing columns until names, emails and badges are clipped. */}
+        <div className="mt-4 overflow-x-auto rounded-2xl border border-border bg-card">
+          <table className="w-full min-w-3xl text-left text-sm">
             <thead className="bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="px-4 py-3 font-semibold">{t("roles.colName")}</th>
@@ -460,8 +465,8 @@ function RolesPage() {
             </div>
           </form>
         ) : null}
-        <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card">
-          <table className="w-full text-left text-sm">
+        <div className="mt-3 overflow-x-auto rounded-2xl border border-border bg-card">
+          <table className="w-full min-w-2xl text-left text-sm">
             <thead className="bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="px-4 py-3 font-semibold">{t("roles.colName")}</th>
@@ -486,7 +491,7 @@ function RolesPage() {
               ) : (
                 internal.map((a: InternalRow) => (
                   <tr key={a.authUserId} className="border-t border-border">
-                    <td className="px-4 py-3 font-medium">
+                    <td className="px-4 py-3 font-medium break-words">
                       {a.name ?? a.email ?? a.authUserId}
                       {a.pending ? (
                         <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-highlight px-2 py-0.5 text-xs font-semibold text-highlight-foreground">
@@ -495,18 +500,23 @@ function RolesPage() {
                         </span>
                       ) : null}
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">{a.email ?? "—"}</td>
-                    <td className="px-4 py-3">
-                      {a.roles.map((role: string) => (
-                        <span
-                          key={role}
-                          className="mr-1.5 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary"
-                        >
-                          <ShieldCheck className="h-3.5 w-3.5" />
-                          {role}
-                        </span>
-                      ))}
+                    <td className="px-4 py-3 break-words text-muted-foreground">
+                      {a.email ?? "—"}
                     </td>
+                    <td className="px-4 py-3">
+                      <div className="flex flex-wrap gap-1.5">
+                        {a.roles.map((role: string) => (
+                          <span
+                            key={role}
+                            className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary"
+                          >
+                            <ShieldCheck className="h-3.5 w-3.5" />
+                            {role}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+
                     {/* Every right — including Super Admin — is edited in the
                         detail panel, so the row keeps only account actions. */}
                     <td className="px-4 py-3">
