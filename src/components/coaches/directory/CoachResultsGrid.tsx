@@ -83,22 +83,24 @@ export function CoachResultsGrid({
 
         {(page > 0 || hasMore) && (
           <div className="mt-8 flex items-center justify-center gap-3">
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="pill"
               disabled={page === 0}
               onClick={() => setPage((p) => Math.max(0, p - 1))}
-              className="inline-flex h-10 items-center rounded-full border border-border bg-card px-5 text-sm font-semibold text-foreground disabled:opacity-40"
             >
               {t("directory.results.prev")}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant="outline"
+              size="pill"
               disabled={!hasMore}
               onClick={() => setPage((p) => p + 1)}
-              className="inline-flex h-10 items-center rounded-full border border-border bg-card px-5 text-sm font-semibold text-foreground disabled:opacity-40"
             >
               {t("directory.results.next")}
-            </button>
+            </Button>
           </div>
         )}
       </>
