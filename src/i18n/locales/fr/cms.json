@@ -1176,7 +1176,8 @@
       "image": "Image de couverture",
       "registration": "Inscription",
       "tickets": "Billets",
-      "discounts": "Codes de réduction"
+      "discounts": "Codes de réduction",
+      "speakers": "Intervenants"
     },
     "hosts": {
       "none": "Aucun hôte sélectionné pour le moment.",
@@ -1840,6 +1841,30 @@
       "applying": "Mise à jour…",
       "updated": "Dates mises à jour :",
       "skipped": "modifiées à la main et ignorées :"
+    },
+    "speakers": {
+      "sectionHint": "Ajoutez les personnes qui interviennent lors de cet événement.",
+      "none": "Aucun intervenant pour l'instant.",
+      "search": "Rechercher un intervenant…",
+      "select": "Choisir un intervenant",
+      "add": "Ajouter l'intervenant",
+      "new": "Nouvel intervenant",
+      "edit": "Modifier l'intervenant",
+      "remove": "Retirer l'intervenant",
+      "moveUp": "Monter",
+      "moveDown": "Descendre",
+      "fieldName": "Nom",
+      "fieldBio": "Courte biographie",
+      "fieldUrl": "Lien",
+      "fieldImage": "Photo",
+      "uploading": "Téléversement…",
+      "imageReady": "Photo prête",
+      "save": "Enregistrer l'intervenant",
+      "cancel": "Annuler",
+      "hint": "Les intervenants peuvent être réutilisés pour d'autres événements. Une modification s'applique partout.",
+      "loadError": "Impossible de charger les intervenants.",
+      "saveError": "Impossible d'enregistrer les intervenants.",
+      "uploadError": "Impossible de téléverser la photo."
     }
   },
   "eventTranslations": {

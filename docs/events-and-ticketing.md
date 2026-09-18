@@ -144,6 +144,25 @@ failed refund leaves the seat released and offers "Retry refund"
 The cancellation notice states a refund is on its way only when the refund
 actually succeeded; otherwise it says the chapter will be in touch.
 
+## Speakers
+
+Speakers are a chapter-wide library (`event_speakers`) linked to events through
+`event_speaker_links` (ordered, cascade-deleted with the event). A speaker has a
+name, optional short bio (max 400 characters), optional link and an optional
+photo stored in the `article-images` bucket under `speakers/`; photos are served
+through short-lived signed URLs.
+
+- Editing: the **Speakers** section of the event editor
+  (`components/cms/EventSpeakersPanel.tsx`) searches the library, attaches or
+  detaches speakers, reorders them and creates/edits speaker records inline.
+  Saving a speaker changes it on every event that uses it.
+- Public: `pages/EventDetail.tsx` renders a Speakers block under the hosts,
+  with the name linking to the speaker's URL when one is set.
+- Series: speaker links copy to child events alongside hosts, both when
+  occurrences are generated and when the parent pushes an update.
+- Reads go through `lib/event-speakers.server.ts`; RLS exposes speakers and
+  links of published events only. Speaker bios are not translated.
+
 ## Where things live
 
 | Module                                           | Responsibility                                     |

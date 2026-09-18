@@ -8,6 +8,7 @@ import { Link } from "@tanstack/react-router";
 import { ImagePlus, X } from "lucide-react";
 import { EventTranslationsPanel } from "@/components/cms/EventTranslationsPanel";
 import { EventHostsPanel } from "@/components/cms/EventHostsPanel";
+import { EventSpeakersPanel } from "@/components/cms/EventSpeakersPanel";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import {
   AlertDialog,
@@ -700,6 +701,23 @@ export function EventHostsSection({
   return (
     <Section title={title} hint={hint}>
       <EventHostsPanel eventId={eventId} />
+    </Section>
+  );
+}
+
+/** Speakers section: thin wrapper over EventSpeakersPanel. */
+export function EventSpeakersSection({
+  eventId,
+  hint,
+  title,
+}: {
+  eventId: string;
+  hint: string;
+  title: string;
+}) {
+  return (
+    <Section title={title} hint={hint}>
+      <EventSpeakersPanel eventId={eventId} />
     </Section>
   );
 }

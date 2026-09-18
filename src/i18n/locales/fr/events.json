@@ -207,7 +207,8 @@
       "apple": "Calendrier Apple (.ics)",
       "outlook": "Outlook.com",
       "office365": "Office 365"
-    }
+    },
+    "speakers": "Intervenants"
   },
   "filters": {
     "when": "Période",

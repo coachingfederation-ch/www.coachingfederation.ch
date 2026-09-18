@@ -11,6 +11,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertOrganizer } from "./authz";
 import { MAX_EVENT_HOSTS } from "./event-hosts";
+import { MAX_SPEAKER_BIO } from "./event-speakers";
 import { HERO_MARK_LIMIT } from "./hero-design";
 import { expandRecurrence, occurrenceSlug, RECURRENCE_FREQUENCIES } from "./recurrence";
 import {
@@ -590,6 +591,95 @@ export const setEventHosts = createServerFn({ method: "POST" })
   });
 
 /**
+ * Speaker management.
+ *
+ * Speakers are a chapter-wide library reused across events: the rows live in
+ * `event_speakers`, the per-event order in `event_speaker_links`. All writes
+ * run through the caller's client, so RLS decides who may maintain them.
+ */
+export const listEventSpeakers = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const { loadEventSpeakers } = await import("./event-speakers.server");
+    return loadEventSpeakers(data.eventId, context.supabase);
+  });
+
+/** Name search over the whole speaker library (empty term lists the first 20). */
+export const searchEventSpeakers = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ term: z.string().max(120) }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const { searchSpeakers } = await import("./event-speakers.server");
+    return searchSpeakers(data.term, context.supabase);
+  });
+
+/** Create or update one speaker of the shared library. */
+export const saveEventSpeaker = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        id: z.string().uuid().optional(),
+        name: z.string().trim().min(2).max(160),
+        bio: z.string().trim().max(MAX_SPEAKER_BIO).nullable().optional(),
+        url: z.string().trim().url().max(500).nullable().optional(),
+        imagePath: z.string().trim().max(400).nullable().optional(),
+      })
+      .parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const payload = {
+      name: data.name,
+      bio: data.bio?.trim() ? data.bio.trim() : null,
+      url: data.url?.trim() ? data.url.trim() : null,
+      image_path: data.imagePath?.trim() ? data.imagePath.trim() : null,
+    };
+    const query = data.id
+      ? context.supabase.from("event_speakers").update(payload).eq("id", data.id)
+      : context.supabase.from("event_speakers").insert(payload);
+    const { data: row, error } = await query.select("id").maybeSingle();
+    if (error) throw new Error(error.message);
+    return { id: (row?.id as string | undefined) ?? data.id! };
+  });
+
+/** Replaces the whole speaker set for one event — order preserved. */
+export const setEventSpeakers = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        eventId: z.string().uuid(),
+        speakerIds: z.array(z.string().uuid()).max(30),
+      })
+      .parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const unique = [...new Set(data.speakerIds)];
+    const { error: delError } = await context.supabase
+      .from("event_speaker_links")
+      .delete()
+      .eq("event_id", data.eventId);
+    if (delError) throw new Error(delError.message);
+    if (unique.length > 0) {
+      const { error } = await context.supabase.from("event_speaker_links").insert(
+        unique.map((speaker_id, index) => ({
+          event_id: data.eventId,
+          speaker_id,
+          sort_order: index,
+        })),
+      );
+      if (error) throw new Error(error.message);
+    }
+    const { loadEventSpeakers } = await import("./event-speakers.server");
+    return loadEventSpeakers(data.eventId, context.supabase);
+  });
+
+/**
  * Materialise a repeating series.
  *
  * The rule is re-expanded here — never trust a client-supplied date list — and
@@ -707,6 +797,25 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
         );
         const { error: hostError } = await context.supabase.from("event_hosts").insert(hostRows);
         if (hostError) throw new Error(hostError.message);
+      }
+
+      // Speakers travel with the series for the same reason as hosts.
+      const { data: speakers } = await context.supabase
+        .from("event_speaker_links")
+        .select("speaker_id, sort_order")
+        .eq("event_id", data.id);
+      if (speakers && speakers.length > 0) {
+        const speakerRows = created.flatMap((row) =>
+          speakers.map((s) => ({
+            event_id: row.id,
+            speaker_id: s.speaker_id as string,
+            sort_order: s.sort_order as number,
+          })),
+        );
+        const { error: speakerError } = await context.supabase
+          .from("event_speaker_links")
+          .insert(speakerRows);
+        if (speakerError) throw new Error(speakerError.message);
       }
     }
 
@@ -875,6 +984,31 @@ export const applySeriesUpdate = createServerFn({ method: "POST" })
         );
         const { error: hostError } = await context.supabase.from("event_hosts").insert(hostRows);
         if (hostError) throw new Error(hostError.message);
+      }
+
+      // Speakers follow the same replace-then-copy rule as hosts.
+      const { data: speakers, error: speakersError } = await context.supabase
+        .from("event_speaker_links")
+        .select("speaker_id, sort_order")
+        .eq("event_id", data.id);
+      if (speakersError) throw new Error(speakersError.message);
+      const { error: clearSpeakersError } = await context.supabase
+        .from("event_speaker_links")
+        .delete()
+        .in("event_id", updated);
+      if (clearSpeakersError) throw new Error(clearSpeakersError.message);
+      if (speakers && speakers.length > 0) {
+        const speakerRows = updated.flatMap((eventId) =>
+          speakers.map((s) => ({
+            event_id: eventId,
+            speaker_id: s.speaker_id as string,
+            sort_order: s.sort_order as number,
+          })),
+        );
+        const { error: speakerError } = await context.supabase
+          .from("event_speaker_links")
+          .insert(speakerRows);
+        if (speakerError) throw new Error(speakerError.message);
       }
     }
 

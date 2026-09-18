@@ -16,17 +16,17 @@ before adding a new file.
 
 ### Member data and the ICF pipeline
 
-| Module                                       | Responsibility                                                                                                                                                                                             |
-| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `member-sync.server.ts`                      | The import engine: pull the ICF feed, normalise, diff, create/update/deactivate, demote profiles that lost eligibility. The most operationally sensitive module in the project. See `docs/member-sync.md`. |
+| Module                                       | Responsibility                                                                                                                                                                                                                                     |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `member-sync.server.ts`                      | The import engine: pull the ICF feed, normalise, diff, create/update/deactivate, demote profiles that lost eligibility. The most operationally sensitive module in the project. See `docs/member-sync.md`.                                         |
 | `member-email-change.server.ts`              | Email drift between ICF Global and the sign-in account: parks a changed feed address as `pending_email`, blocks addresses another account already uses, clears the state once the change went through, and answers the staff sign-in-health panel. |
-| `icf-soap.server.ts`                         | SOAP/xWeb client for netFORUM. Credentials read inside handlers.                                                                                                                                           |
-| `integration-config.server.ts`               | Loads the single `integration_config` row (TEST vs LIVE, email suppression, claim gate).                                                                                                                   |
-| `member-profile.server.ts` / `.functions.ts` | Member self-service profile: validation, cleaning, the guarded publish path.                                                                                                                               |
-| `member-claim.server.ts`                     | Account claim token state machine — hashing, expiry, attempt limiting, single use.                                                                                                                         |
-| `member-email.server.ts`                     | Email dispatch. Currently logs every intended send and delivers nothing; see operations doc.                                                                                                               |
-| `member-translations.*`                      | Per-locale coach profile content: translatable field list, derived states, AI translation and the member RPC surface. See `docs/member-translations.md`.                                                   |
-| `member-engagement/dispatch.server.ts`       | Sends engagement campaigns using the registered email templates, in the member's `correspondence_locale`. Wording lives in `src/lib/email-templates/member-campaign-copy.ts`. See `docs/member-translations.md`.                                                   |
+| `icf-soap.server.ts`                         | SOAP/xWeb client for netFORUM. Credentials read inside handlers.                                                                                                                                                                                   |
+| `integration-config.server.ts`               | Loads the single `integration_config` row (TEST vs LIVE, email suppression, claim gate).                                                                                                                                                           |
+| `member-profile.server.ts` / `.functions.ts` | Member self-service profile: validation, cleaning, the guarded publish path.                                                                                                                                                                       |
+| `member-claim.server.ts`                     | Account claim token state machine — hashing, expiry, attempt limiting, single use.                                                                                                                                                                 |
+| `member-email.server.ts`                     | Email dispatch. Currently logs every intended send and delivers nothing; see operations doc.                                                                                                                                                       |
+| `member-translations.*`                      | Per-locale coach profile content: translatable field list, derived states, AI translation and the member RPC surface. See `docs/member-translations.md`.                                                                                           |
+| `member-engagement/dispatch.server.ts`       | Sends engagement campaigns using the registered email templates, in the member's `correspondence_locale`. Wording lives in `src/lib/email-templates/member-campaign-copy.ts`. See `docs/member-translations.md`.                                   |
 
 ### Insights CMS
 
@@ -55,6 +55,8 @@ before adding a new file.
 | `events.ts`                       | Shared event types, status/registration helpers and date formatting.                 |
 | `events.functions.ts`             | Public reads (`events_public`) and free RSVP registration.                           |
 | `events-admin.functions.ts`       | Staff event CRUD, publishing and registration lists. Gated on `organizer`/`editor`.  |
+| `event-speakers.ts`               | Shared speaker shape and the bio length limit.                                       |
+| `event-speakers.server.ts`        | Speaker reads: load an event's speakers, search the chapter-wide library.            |
 | `event-translations.functions.ts` | Per-locale event content and AI translation, mirroring the article translation flow. |
 
 ### Team, operational structure and communities

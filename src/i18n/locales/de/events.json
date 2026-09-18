@@ -207,7 +207,8 @@
       "apple": "Apple Kalender (.ics)",
       "outlook": "Outlook.com",
       "office365": "Office 365"
-    }
+    },
+    "speakers": "Speaker"
   },
   "filters": {
     "when": "Zeitraum",
