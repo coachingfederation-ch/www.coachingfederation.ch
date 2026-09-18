@@ -69,7 +69,11 @@ export async function loadEventHosts(
     .map((l) => {
       const profile = byId.get(l.profile_id);
       if (!profile) return null;
-      return { ...profile, linkUrl: l.link_url ?? null, blurb: l.blurb ?? null } satisfies EventHost;
+      return {
+        ...profile,
+        linkUrl: l.link_url ?? null,
+        blurb: l.blurb ?? null,
+      } satisfies EventHost;
     })
     .filter((h): h is EventHost => Boolean(h));
 }
