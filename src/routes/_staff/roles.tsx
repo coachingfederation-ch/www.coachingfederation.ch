@@ -232,7 +232,12 @@ function RolesPage() {
    * granted to someone who holds none yet.
    */
   const hasExtraRole = (m: MemberRow) =>
-    m.isAdmin || m.isAdministrator || m.isEditor || m.isOrganizer || m.isPublisher || m.isMembership;
+    m.isAdmin ||
+    m.isAdministrator ||
+    m.isEditor ||
+    m.isOrganizer ||
+    m.isPublisher ||
+    m.isMembership;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -245,7 +250,6 @@ function RolesPage() {
         m.cstRecno.toLowerCase().includes(q),
     );
   }, [members, query]);
-
 
   const selected = useMemo<RoleSubject | null>(() => {
     const m = members.find((row) => row.memberId === selectedId);
@@ -327,12 +331,10 @@ function RolesPage() {
           {query.trim() ? t("roles.searchHint") : t("roles.tableHint")}
         </p>
 
-
         {/* Tables scroll sideways below their natural width instead of
             squeezing columns until names, emails and badges are clipped. */}
         <div className="mt-4 overflow-x-auto rounded-2xl border border-border bg-card">
           <table className="w-full min-w-3xl text-left text-sm">
-
             <thead className="bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="px-4 py-3 font-semibold">{t("roles.colName")}</th>
@@ -465,7 +467,6 @@ function RolesPage() {
         ) : null}
         <div className="mt-3 overflow-x-auto rounded-2xl border border-border bg-card">
           <table className="w-full min-w-2xl text-left text-sm">
-
             <thead className="bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="px-4 py-3 font-semibold">{t("roles.colName")}</th>
