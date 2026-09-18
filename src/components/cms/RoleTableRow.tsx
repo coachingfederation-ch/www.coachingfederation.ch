@@ -75,7 +75,7 @@ export function RoleTableRow({
           ) : null}
         </div>
       </td>
-      <td className="px-4 py-3 text-right">
+      <td className="px-4 py-3 text-right whitespace-nowrap">
         <button
           onClick={() => onOpen(m)}
           className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
