@@ -144,6 +144,26 @@ failed refund leaves the seat released and offers "Retry refund"
 The cancellation notice states a refund is on its way only when the refund
 actually succeeded; otherwise it says the chapter will be in touch.
 
+## Hosts
+
+Hosts are published directory profiles linked through `event_hosts` (ordered,
+cascade-deleted with the event). There is no product limit on the number of
+hosts; `MAX_EVENT_HOSTS` (30, in `lib/event-hosts.ts`) is only a guard rail on
+the write path.
+
+Each link row carries two optional per-event fields, `link_url` and `blurb`.
+`link_url` replaces the `/coach/<profileId>` link on the public card (opened in
+a new tab); `blurb` is a short presentation (max 400 characters) rendered under
+the name. Both belong to the event, not to the coach profile, so the same coach
+can be presented differently on two events.
+
+- Editing: the **Hosts** section of the event editor
+  (`components/cms/EventHostsPanel.tsx`) searches the directory, attaches and
+  detaches hosts, reorders them, and edits link and presentation inline.
+  Saving is immediate and independent of the event form.
+- Series: host rows, including link and presentation, copy to child events when
+  occurrences are generated and when the parent pushes an update.
+
 ## Speakers
 
 Speakers are a chapter-wide library (`event_speakers`) linked to events through
