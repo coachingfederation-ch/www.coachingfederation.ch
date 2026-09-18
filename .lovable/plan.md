@@ -1,52 +1,72 @@
-# Unlimited hosts per event
+# Pagination for the unfiltered Coach Finder
 
-Today an event can have at most two hosts: the picker hides itself once two are
-selected, and the save call rejects more. This removes that cap so an event can
-list as many hosts as it needs, exactly like speakers.
+Today the first, unfiltered view of **Find a coach** shows a random showcase of
+8 coaches with no way to see the rest — the prev/next buttons only appear once a
+filter is applied. This adds simple forward/backward paging to that first view
+too.
 
-## What changes
+## What changes for visitors
 
-- The host picker stays visible no matter how many hosts are already added.
-- Saving accepts any number of hosts (a generous safety ceiling of 30 stays, the
-  same as speakers, so a bad request can't write thousands of rows).
-- Because a longer list needs an order, hosts get the same up/down arrows the
-  speakers list already has; the order is what visitors see on the event page.
-- The helper line under the picker changes from "Up to two hosts…" to
-  "Only members with a published directory profile can be selected." in German,
-  French, Italian and English.
-- The public "Hosted by" block already renders a list, so it simply shows more
-  entries; it keeps its current two-column layout on wider screens.
+- The unfiltered list keeps showing 8 coaches at a time, in the same shuffled
+  order, and now has **Previous / Next** buttons underneath whenever more
+  coaches exist.
+- The order stays stable while paging: a coach seen on page 1 never reappears on
+  page 2. Reloading the page reshuffles, as it does today.
+- The count line becomes a range, e.g. "Showing 1–8 of 9 coaches", so it stays
+  correct on later pages.
+- Filtered results are unchanged (full result set, alphabetical, existing
+  pagination at the configured page size).
 
 ## Technical notes
 
-- `src/lib/event-hosts.ts`: `MAX_EVENT_HOSTS` 2 → 30 (kept as a guard rail, not
-  a product limit).
-- `src/lib/events-admin.functions.ts`: `setEventHosts` validator keeps
-  `.max(MAX_EVENT_HOSTS)` — no other change; ordering already comes from the
-  array index written into `sort_order`.
-- `src/components/cms/EventHostsPanel.tsx`: drop the `full` flag that hides the
-  picker; add `move(index, delta)` with `ChevronUp`/`ChevronDown` buttons,
-  mirroring `EventSpeakersPanel.tsx`.
-- i18n: adjust `events.hosts.hint` and add `events.hosts.moveUp` /
-  `events.hosts.moveDown` in `src/i18n/locales/{en,de,fr,it}/cms.json`.
-- No schema change: `event_hosts` has no row-count constraint.
-- Docs: update the hosts note in `docs/events-and-ticketing.md`.
+**Server — `src/lib/directory.functions.ts`**
+- The `sample` branch currently only runs for `page === 0` and always returns
+  the first 8 of the shuffled id list. Change it to treat `sample` as the page
+  size for the unfiltered view: run for any page, slice
+  `ordered.slice(page * sample, page * sample + sample)`, and return
+  `{ page, pageSize: sample, total, sampled: true }`.
+- The shuffle is already seeded (`orderProfileIds(..., "random", seed)`) and the
+  seed is stable per visit, so slices across pages stay consistent and
+  non-overlapping.
+
+**Hook — `src/components/coaches/directory/useCoachDirectoryFilters.ts`**
+- `sampled` drops the `page === 0` condition: the unfiltered view is sampled on
+  every page.
+- `hasMore` includes the sampled case: `(page + 1) * pageSize < total`, still
+  suppressed while the free-text/availability narrowing is active.
+- Count label: when sampled, use a new range string with `{from}`, `{to}` and
+  `{total}` instead of the current "Showing 8 of N" wording.
+
+**UI — `src/components/coaches/directory/CoachResultsGrid.tsx`**
+- Drop the `isSample` suppression of the pagination controls; they render
+  whenever `page > 0 || hasMore`. `isSample` stays as a prop only if still used
+  elsewhere, otherwise it is removed together with its pass-through in
+  `directory.tsx`.
+
+**i18n**
+- Add `directory.results.sampleRange` (and the mode-specific
+  `sampleRangeMode`) to `en`, `de`, `fr`, `it` `directory.json`; remove the now
+  unused `sample` / `sampleMode` keys.
+
+**Docs**
+- Update the Coach Finder section of `docs/public-directory.md`: the unfiltered
+  view is a seeded random ordering paged 8 at a time, not a one-shot showcase.
 
 ## PR note
 
-- **Summary** — Removes the two-host cap on events and adds host ordering, so
-  events with a larger host line-up can be published correctly.
-- **Changes** — UI: host picker always available, up/down reorder controls.
-  Backend: validator ceiling raised to 30. i18n: revised hint, two new labels in
-  four locales. Docs: hosts section updated.
-- **Backend / schema changes** — None (no migration; the table never enforced
-  the limit).
-- **Testing & verification** — As editor and as organizer: add four or more
-  hosts, reorder them, save, reload, and confirm the public event page shows the
-  same list in the same order; check an event with no hosts and one with a
-  single host still render unchanged; check all four locales.
-- **Risks & rollback** — Low; reverting the code restores the cap, and events
-  that already have more than two hosts would then display them all while the
-  editor refuses to save further changes until two remain.
-- **Follow-ups / known debt** — No drag-and-drop ordering (arrows only); host
-  names are still not translated.
+- **Summary** — The unfiltered Coach Finder can now be paged forward and
+  backward through all published coaches, 8 per page, in a stable seeded random
+  order.
+- **Changes** — Backend read path: sample branch becomes a seeded paged slice.
+  UI: pagination no longer hidden for the unfiltered view; range count label.
+  i18n: new range keys in four locales. Docs: `public-directory.md`.
+- **Backend / schema changes** — None. No migration; same view, same policies.
+- **Testing & verification** — Load `/find-a-coach` unfiltered: 8 cards, Next
+  enabled, page 2 shows the remaining coaches with no duplicates, Previous
+  returns to the identical page 1; reload reshuffles; apply a filter and confirm
+  the existing paged behaviour and page size are unchanged; check the count line
+  and empty state in all four locales.
+- **Risks & rollback** — Low, confined to the public finder read path and its
+  UI. Revert the three files plus locale strings.
+- **Follow-ups** — None. Page size for the unfiltered view stays hard-coded at
+  8; making it a Coach Finder config value is a possible later step.
