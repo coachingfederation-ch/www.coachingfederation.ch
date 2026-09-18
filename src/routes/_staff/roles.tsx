@@ -490,7 +490,7 @@ function RolesPage() {
               ) : (
                 internal.map((a: InternalRow) => (
                   <tr key={a.authUserId} className="border-t border-border">
-                    <td className="px-4 py-3 font-medium">
+                    <td className="px-4 py-3 font-medium break-words">
                       {a.name ?? a.email ?? a.authUserId}
                       {a.pending ? (
                         <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-highlight px-2 py-0.5 text-xs font-semibold text-highlight-foreground">
@@ -499,18 +499,23 @@ function RolesPage() {
                         </span>
                       ) : null}
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">{a.email ?? "—"}</td>
-                    <td className="px-4 py-3">
-                      {a.roles.map((role: string) => (
-                        <span
-                          key={role}
-                          className="mr-1.5 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary"
-                        >
-                          <ShieldCheck className="h-3.5 w-3.5" />
-                          {role}
-                        </span>
-                      ))}
+                    <td className="px-4 py-3 break-words text-muted-foreground">
+                      {a.email ?? "—"}
                     </td>
+                    <td className="px-4 py-3">
+                      <div className="flex flex-wrap gap-1.5">
+                        {a.roles.map((role: string) => (
+                          <span
+                            key={role}
+                            className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary"
+                          >
+                            <ShieldCheck className="h-3.5 w-3.5" />
+                            {role}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+
                     {/* Every right — including Super Admin — is edited in the
                         detail panel, so the row keeps only account actions. */}
                     <td className="px-4 py-3">
