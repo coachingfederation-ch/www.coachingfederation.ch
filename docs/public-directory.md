@@ -67,6 +67,16 @@ apply. Filtering, faceting and pagination are pushed into Postgres; the
 directory must stay responsive as the member base grows, so do not fetch and
 filter in JavaScript.
 
+### Unfiltered view
+
+With no facet filter active the finder does not show the first alphabetical
+page. It orders **all** matching profiles by a per-visit seeded shuffle
+(`seed` + `orderProfileIds(..., "random", seed)`) and slices 8 per page, so
+every published coach gets exposure and prev/next paging stays stable and
+non-overlapping within a visit. Reloading reshuffles. As soon as a facet
+filter is used the normal, configured page size and sort apply.
+
+
 ## Profile images
 
 `member-profile-images` is a **private** bucket. Making it public would expose

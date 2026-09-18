@@ -15,13 +15,7 @@ import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
 import { resolveProfileLocale } from "./member-translations";
 import type { Locale } from "@/i18n/config";
-import {
-  applyFacets,
-  isIdListSort,
-  normaliseSort,
-  orderProfileIds,
-} from "./directory-sort";
-
+import { applyFacets, isIdListSort, normaliseSort, orderProfileIds } from "./directory-sort";
 
 const localeSchema = z.enum(["en", "de", "fr", "it"]);
 
@@ -44,8 +38,6 @@ const filterSchema = z.object({
   seed: z.number().optional(),
   locale: localeSchema.optional(),
 });
-
-
 
 export type DirectoryFilters = z.infer<typeof filterSchema>;
 
@@ -128,8 +120,8 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
       return entries;
     };
 
-    // Unfiltered first view: show a random showcase instead of the first
-    // alphabetical page, so every published coach gets exposure.
+    // Unfiltered view: a seeded random ordering of every published coach,
+    // paged `sample` at a time, so exposure is fair and paging stays stable.
     const facetsActive = Boolean(
       data.regions?.length ||
       data.languages?.length ||
@@ -137,7 +129,8 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
       data.formats?.length ||
       data.credentials?.length,
     );
-    if (data.sample && !facetsActive && page === 0) {
+    if (data.sample && !facetsActive) {
+      const samplePageSize = data.sample;
       let idQuery = supabasePublic
         .from("coach_directory_public")
         .select("profile_id, has_directory_credential", { count: "exact" });
@@ -145,20 +138,27 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
       const { data: idRows, error: idError, count: idCount } = await idQuery;
       if (idError) throw idError;
 
-      const picked = orderProfileIds(idRows ?? [], "random", seed, { eligibleFirst }).slice(
-        0,
-        data.sample,
+      const orderedIds = orderProfileIds(idRows ?? [], "random", seed, { eligibleFirst });
+      const picked = orderedIds.slice(
+        page * samplePageSize,
+        page * samplePageSize + samplePageSize,
       );
       if (!picked.length) {
-        return { entries: [], total: idCount ?? 0, page: 0, pageSize: data.sample, sampled: true };
+        return {
+          entries: [],
+          total: idCount ?? orderedIds.length,
+          page,
+          pageSize: samplePageSize,
+          sampled: true,
+        };
       }
 
       const sampled = await fetchInOrder(picked);
       return {
         entries: await withImages(sampled),
-        total: idCount ?? sampled.length,
-        page: 0,
-        pageSize: data.sample,
+        total: idCount ?? orderedIds.length,
+        page,
+        pageSize: samplePageSize,
         sampled: true,
       };
     }
@@ -217,7 +217,6 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
       sampled: false,
     };
   });
-
 
 /**
  * Public read-only coach detail. The view is queried first: if it returns no

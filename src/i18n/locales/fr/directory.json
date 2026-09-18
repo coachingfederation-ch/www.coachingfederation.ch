@@ -72,8 +72,8 @@
     "errorBody": "Veuillez réessayer dans quelques instants.",
     "prev": "Précédent",
     "next": "Suivant",
-    "sample": "{shown} coachs affichés sur {total}",
-    "sampleMode": "{shown} coachs sur {total} affichés en {mode}"
+    "sampleRange": "Coachs {from}–{to} sur {total} affichés",
+    "sampleRangeMode": "Coachs {from}–{to} sur {total} affichés en {mode}"
   },
   "card": {
     "featured": "En vedette",

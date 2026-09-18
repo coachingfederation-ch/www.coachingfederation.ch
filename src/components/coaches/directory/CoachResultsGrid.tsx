@@ -3,6 +3,7 @@
  * card grid and prev/next pagination controls.
  */
 import { useMemo } from "react";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { useI18n } from "@/i18n";
 import type { DirectoryEntry } from "@/lib/directory.functions";
 import { CoachCard, type LabelLookup } from "./CoachCard";
@@ -31,7 +32,6 @@ export function CoachResultsGrid({
   setPage,
   hasMore,
   modeLabel,
-  isSample = false,
   selectedSlugs = [],
   emphasiseDifferences = false,
 }: {
@@ -44,8 +44,6 @@ export function CoachResultsGrid({
   setPage: (updater: (p: number) => number) => void;
   hasMore: boolean;
   modeLabel: string | null;
-  /** Random showcase: a single set, never paginated. */
-  isSample?: boolean;
   /** Specialisation/format slugs the visitor filtered on. */
   selectedSlugs?: string[];
   /** Any filter active: only then does difference-first emphasis apply. */
@@ -84,24 +82,26 @@ export function CoachResultsGrid({
           ))}
         </ul>
 
-        {!isSample && (page > 0 || hasMore) && (
+        {(page > 0 || hasMore) && (
           <div className="mt-8 flex items-center justify-center gap-3">
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="pill"
               disabled={page === 0}
               onClick={() => setPage((p) => Math.max(0, p - 1))}
-              className="inline-flex h-10 items-center rounded-full border border-border bg-card px-5 text-sm font-semibold text-foreground disabled:opacity-40"
             >
               {t("directory.results.prev")}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant="outline"
+              size="pill"
               disabled={!hasMore}
               onClick={() => setPage((p) => p + 1)}
-              className="inline-flex h-10 items-center rounded-full border border-border bg-card px-5 text-sm font-semibold text-foreground disabled:opacity-40"
             >
               {t("directory.results.next")}
-            </button>
+            </Button>
           </div>
         )}
       </>

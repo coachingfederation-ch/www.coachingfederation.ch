@@ -123,10 +123,10 @@ export function useCoachDirectoryFilters() {
     formats.length > 0 ||
     acceptingOnly;
 
-  // Unfiltered first view: ask the server for a random showcase of 8. The seed
+  // Unfiltered view: a seeded random ordering paged 8 at a time. The seed
   // travels with every request so a randomly sorted directory keeps one order
   // for the whole visit, including while paging and filtering.
-  const sampled = !dirty && page === 0;
+  const sampled = !dirty;
   const queryInput = useMemo(
     () => ({ ...filters, seed: shuffleSeed, ...(sampled ? { sample: 8 } : {}) }),
     [filters, sampled, shuffleSeed],
@@ -205,18 +205,21 @@ export function useCoachDirectoryFilters() {
   // When a mode is resolved the count names it ("3 mentoring coaches"); the
   // generic strings remain the fallback when no mode is configured.
   const countKey = shownCount === 1 ? "one" : "many";
+  const rangeFrom = results.length ? page * pageSize + 1 : 0;
+  const rangeTo = page * pageSize + results.length;
   const countLabel = isSample
     ? (modeLabel
-        ? t("directory.results.sampleMode").replace("{mode}", modeLabel)
-        : t("directory.results.sample")
+        ? t("directory.results.sampleRangeMode").replace("{mode}", modeLabel)
+        : t("directory.results.sampleRange")
       )
-        .replace("{shown}", String(results.length))
+        .replace("{from}", String(rangeFrom))
+        .replace("{to}", String(rangeTo))
         .replace("{total}", String(total))
     : (modeLabel
         ? t(`directory.results.${countKey}Mode`).replace("{mode}", modeLabel)
         : t(`directory.results.${countKey}`)
       ).replace("{count}", String(shownCount));
-  const hasMore = !isSample && !narrowed && (page + 1) * pageSize < total;
+  const hasMore = !narrowed && (page + 1) * pageSize < total;
 
   return {
     t,

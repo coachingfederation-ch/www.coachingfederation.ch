@@ -72,8 +72,8 @@
     "errorBody": "Please try again in a moment.",
     "prev": "Previous",
     "next": "Next",
-    "sample": "Showing {shown} of {total} coaches",
-    "sampleMode": "Showing {shown} of {total} coaches in {mode}"
+    "sampleRange": "Showing {from}–{to} of {total} coaches",
+    "sampleRangeMode": "Showing {from}–{to} of {total} coaches in {mode}"
   },
   "card": {
     "featured": "Featured",
