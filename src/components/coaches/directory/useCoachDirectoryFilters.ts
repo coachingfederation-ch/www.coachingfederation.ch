@@ -132,7 +132,6 @@ export function useCoachDirectoryFilters() {
     [filters, sampled, shuffleSeed],
   );
 
-
   const { data, isPending, isError } = useQuery({
     queryKey: ["coach-directory", queryInput],
     queryFn: () => queryCoachDirectory({ data: queryInput }),
@@ -221,7 +220,6 @@ export function useCoachDirectoryFilters() {
         : t(`directory.results.${countKey}`)
       ).replace("{count}", String(shownCount));
   const hasMore = !narrowed && (page + 1) * pageSize < total;
-
 
   return {
     t,

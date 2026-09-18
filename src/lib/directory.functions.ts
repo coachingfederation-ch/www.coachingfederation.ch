@@ -15,13 +15,7 @@ import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
 import { resolveProfileLocale } from "./member-translations";
 import type { Locale } from "@/i18n/config";
-import {
-  applyFacets,
-  isIdListSort,
-  normaliseSort,
-  orderProfileIds,
-} from "./directory-sort";
-
+import { applyFacets, isIdListSort, normaliseSort, orderProfileIds } from "./directory-sort";
 
 const localeSchema = z.enum(["en", "de", "fr", "it"]);
 
@@ -44,8 +38,6 @@ const filterSchema = z.object({
   seed: z.number().optional(),
   locale: localeSchema.optional(),
 });
-
-
 
 export type DirectoryFilters = z.infer<typeof filterSchema>;
 
@@ -147,7 +139,10 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
       if (idError) throw idError;
 
       const orderedIds = orderProfileIds(idRows ?? [], "random", seed, { eligibleFirst });
-      const picked = orderedIds.slice(page * samplePageSize, page * samplePageSize + samplePageSize);
+      const picked = orderedIds.slice(
+        page * samplePageSize,
+        page * samplePageSize + samplePageSize,
+      );
       if (!picked.length) {
         return {
           entries: [],
@@ -167,7 +162,6 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
         sampled: true,
       };
     }
-
 
     // `random` and `credential` cannot be expressed as a PostgREST order
     // clause, so the matching ids are ordered here and the page sliced from
@@ -223,7 +217,6 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
       sampled: false,
     };
   });
-
 
 /**
  * Public read-only coach detail. The view is queried first: if it returns no
