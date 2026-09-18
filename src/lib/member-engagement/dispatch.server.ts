@@ -151,8 +151,8 @@ async function deliverSend(
 ): Promise<void> {
   const { sendMemberEmail } = await import("../member-email.server");
 
+  result.attempted += 1;
   {
-    result.attempted += 1;
     const { data: member } = await supabaseAdmin
       .from("members")
       .select("id, first_name, full_name, email, activity_state, correspondence_locale")
