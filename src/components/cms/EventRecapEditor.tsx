@@ -551,22 +551,34 @@ export function EventRecapEditor({
         <div className="mt-3 flex flex-wrap gap-2">
           {TRANSLATED_LOCALES.filter((locale) => locale !== language).map((locale) => {
             const existing = translations.find((tr) => tr.locale === locale);
+            const hasStory = Boolean(headline.trim() || body.trim());
             return (
               <button
                 key={locale}
                 type="button"
-                disabled={busy !== null}
+                disabled={busy !== null || !hasStory}
                 onClick={() =>
                   run(
                     `tr-${locale}`,
                     async () => {
+                      // Translate what is on screen: the story is persisted
+                      // first, because the server reads the saved recap row.
+                      await saveRecap({
+                        data: {
+                          eventId,
+                          language: language as "en" | "de" | "fr" | "it",
+                          headline: headline.trim() || null,
+                          body: body.trim() || null,
+                          downloadsAudience: audience,
+                        },
+                      });
                       await translateRecap({ data: { eventId, locale } });
                       await load();
                     },
                     t("recap.translated"),
                   )
                 }
-                className="rounded-full border border-border px-4 py-1.5 text-sm"
+                className="rounded-full border border-border px-4 py-1.5 text-sm disabled:opacity-50"
               >
                 {busy === `tr-${locale}` ? "…" : locale.toUpperCase()}
                 {existing ? " ✓" : ""}
