@@ -679,8 +679,6 @@ export const setEventSpeakers = createServerFn({ method: "POST" })
     return loadEventSpeakers(data.eventId, context.supabase);
   });
 
-
-
 /**
  * Materialise a repeating series.
  *
