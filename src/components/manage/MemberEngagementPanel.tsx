@@ -146,8 +146,14 @@ export function MemberEngagementPanel() {
         const { cancelled } = await cancelEngagementSends({ data: { ids } });
         toast.success(`${cancelled} email${cancelled === 1 ? "" : "s"} cancelled`);
       } else {
-        const { sent, failed } = await runEngagementDispatch();
-        toast.success(`${sent} sent, ${failed} failed`);
+        const { sent, failed, anyCampaignOn } = await runEngagementDispatch();
+        if (!anyCampaignOn) {
+          toast.error(
+            "No campaign is switched on, so nothing was sent. Set a sending mode and save first.",
+          );
+        } else {
+          toast.success(`${sent} sent, ${failed} failed`);
+        }
       }
       reloadSends();
     } catch (error) {
