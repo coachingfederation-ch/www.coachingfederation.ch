@@ -987,6 +987,31 @@ export const applySeriesUpdate = createServerFn({ method: "POST" })
         const { error: hostError } = await context.supabase.from("event_hosts").insert(hostRows);
         if (hostError) throw new Error(hostError.message);
       }
+
+      // Speakers follow the same replace-then-copy rule as hosts.
+      const { data: speakers, error: speakersError } = await context.supabase
+        .from("event_speaker_links")
+        .select("speaker_id, sort_order")
+        .eq("event_id", data.id);
+      if (speakersError) throw new Error(speakersError.message);
+      const { error: clearSpeakersError } = await context.supabase
+        .from("event_speaker_links")
+        .delete()
+        .in("event_id", updated);
+      if (clearSpeakersError) throw new Error(clearSpeakersError.message);
+      if (speakers && speakers.length > 0) {
+        const speakerRows = updated.flatMap((eventId) =>
+          speakers.map((s) => ({
+            event_id: eventId,
+            speaker_id: s.speaker_id as string,
+            sort_order: s.sort_order as number,
+          })),
+        );
+        const { error: speakerError } = await context.supabase
+          .from("event_speaker_links")
+          .insert(speakerRows);
+        if (speakerError) throw new Error(speakerError.message);
+      }
     }
 
     return { updated: updated.length, skipped };
