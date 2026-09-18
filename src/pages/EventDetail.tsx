@@ -289,12 +289,13 @@ export default function EventDetailPage({
               <section className="mt-10 not-prose">
                 <p className="eyebrow">{t("events.detail.hostedBy")}</p>
                 <ul className="mt-4 grid gap-4 sm:grid-cols-2">
-                  {hosts.map((host) => (
-                    <li key={host.profileId}>
-                      <LocaleLink
-                        to={`/coach/${host.profileId}`}
-                        className="flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-3 transition hover:border-primary/50"
-                      >
+                  {hosts.map((host) => {
+                    const cardClass =
+                      "flex gap-3 rounded-2xl border border-border/70 bg-card p-3 transition hover:border-primary/50";
+                    // A per-event link wins over the coach profile link, so a
+                    // host can point at a company page or a talk description.
+                    const body = (
+                      <>
                         {host.imageUrl ? (
                           <img
                             src={host.imageUrl}
@@ -308,18 +309,39 @@ export default function EventDetailPage({
                           />
                         )}
                         <span className="min-w-0">
-                          <span className="block truncate text-sm font-semibold">
-                            {host.fullName}
-                          </span>
+                          <span className="block text-sm font-semibold">{host.fullName}</span>
                           {host.tagline ? (
                             <span className="block truncate text-xs text-muted-foreground">
                               {host.tagline}
                             </span>
                           ) : null}
+                          {host.blurb ? (
+                            <span className="mt-1 block text-sm text-muted-foreground">
+                              {host.blurb}
+                            </span>
+                          ) : null}
                         </span>
-                      </LocaleLink>
-                    </li>
-                  ))}
+                      </>
+                    );
+                    return (
+                      <li key={host.profileId}>
+                        {host.linkUrl ? (
+                          <a
+                            href={host.linkUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={cardClass}
+                          >
+                            {body}
+                          </a>
+                        ) : (
+                          <LocaleLink to={`/coach/${host.profileId}`} className={cardClass}>
+                            {body}
+                          </LocaleLink>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </section>
             ) : null}
