@@ -226,6 +226,4 @@ async function deliverSend(
       result.failed += 1;
     }
   }
-
-  return result;
 }
