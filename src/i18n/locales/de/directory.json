@@ -72,8 +72,8 @@
     "errorBody": "Bitte versuchen Sie es in einem kurzen Moment erneut.",
     "prev": "Zurück",
     "next": "Weiter",
-    "sample": "{shown} von {total} Coaches angezeigt",
-    "sampleMode": "{shown} von {total} Coaches in {mode} angezeigt"
+    "sampleRange": "Coaches {from}–{to} von {total} angezeigt",
+    "sampleRangeMode": "Coaches {from}–{to} von {total} in {mode} angezeigt"
   },
   "card": {
     "featured": "Hervorgehoben",

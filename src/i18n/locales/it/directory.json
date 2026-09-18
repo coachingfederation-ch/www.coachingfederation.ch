@@ -72,8 +72,8 @@
     "errorBody": "Si prega di riprovare tra un momento.",
     "prev": "Precedente",
     "next": "Successivo",
-    "sample": "{shown} coach su {total} mostrati",
-    "sampleMode": "{shown} coach su {total} mostrati in {mode}"
+    "sampleRange": "Coach {from}–{to} su {total} mostrati",
+    "sampleRangeMode": "Coach {from}–{to} su {total} mostrati in {mode}"
   },
   "card": {
     "featured": "In evidenza",

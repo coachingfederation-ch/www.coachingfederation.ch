@@ -68,7 +68,6 @@ export function CoachDirectory() {
     formatLabel,
     countLabel,
     hasMore,
-    isSample,
   } = useCoachDirectoryFilters();
 
   // Finder closed in the CMS: no filters, no results, just the explanation.
