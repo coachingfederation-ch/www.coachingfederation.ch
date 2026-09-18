@@ -864,7 +864,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
+          "items": [
+            "Guidare progetti",
+            "Essere riconosciuti da ICFS per aver guidato iniziative"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1185,10 +1188,19 @@
       "select": "Seleziona un coach",
       "add": "Aggiungi relatore",
       "remove": "Rimuovi relatore",
-      "hint": "Fino a due relatori. Possono essere selezionati solo i membri con un profilo pubblicato nella directory.",
+      "hint": "Si possono selezionare solo i membri con un profilo pubblicato nell'elenco.",
       "sectionHint": "Collega questo evento ai coach che lo conducono.",
       "loadError": "Impossibile caricare i relatori.",
-      "saveError": "Impossibile salvare i relatori."
+      "saveError": "Impossibile salvare i relatori.",
+      "moveUp": "Sposta su",
+      "moveDown": "Sposta giù",
+      "editPresentation": "Modifica link e presentazione",
+      "linkLabel": "Link per questo evento",
+      "linkPlaceholder": "https://example.com",
+      "blurbLabel": "Presentazione per questo evento",
+      "blurbPlaceholder": "Breve presentazione mostrata sotto il nome (facoltativa).",
+      "savePresentation": "Salva",
+      "cancel": "Annulla"
     },
     "fieldCategory": "Categoria",
     "fieldCommunity": "Community",
@@ -2643,7 +2655,13 @@
       "Un po' tecnico",
       "Troppo tecnico"
     ],
-    "usefulnessScale": ["Non fa per me", "Poco interessante", "Interessante", "Utile", "Lo userò"],
+    "usefulnessScale": [
+      "Non fa per me",
+      "Poco interessante",
+      "Interessante",
+      "Utile",
+      "Lo userò"
+    ],
     "topicsTitle": "Temi richiesti",
     "noTopics": "Nessun tema richiesto finora.",
     "themesTitle": "Temi IA",

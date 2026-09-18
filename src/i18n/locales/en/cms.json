@@ -864,7 +864,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
+          "items": [
+            "Lead projects",
+            "Be recognized by ICFS for leading initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1185,10 +1188,19 @@
       "select": "Select a coach",
       "add": "Add host",
       "remove": "Remove host",
-      "hint": "Up to two hosts. Only members with a published directory profile can be selected.",
+      "hint": "Only members with a published directory profile can be selected.",
       "sectionHint": "Link this event to the coaches hosting it.",
       "loadError": "Could not load hosts.",
-      "saveError": "Could not save hosts."
+      "saveError": "Could not save hosts.",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "editPresentation": "Edit link and presentation",
+      "linkLabel": "Link for this event",
+      "linkPlaceholder": "https://example.com",
+      "blurbLabel": "Presentation for this event",
+      "blurbPlaceholder": "Short presentation shown under the name (optional).",
+      "savePresentation": "Save",
+      "cancel": "Cancel"
     },
     "fieldCategory": "Category",
     "fieldCommunity": "Community",
@@ -2636,7 +2648,13 @@
     },
     "depthTitle": "Depth (1 too light — 5 too deep)",
     "usefulnessTitle": "Usefulness (1 not for me — 5 I will use this)",
-    "depthScale": ["Too light", "A bit light", "About right", "A bit deep", "Too deep"],
+    "depthScale": [
+      "Too light",
+      "A bit light",
+      "About right",
+      "A bit deep",
+      "Too deep"
+    ],
     "usefulnessScale": [
       "Not for me",
       "Mildly interesting",
