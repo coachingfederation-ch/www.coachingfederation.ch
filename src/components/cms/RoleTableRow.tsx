@@ -21,14 +21,15 @@ export function RoleTableRow({
 }) {
   return (
     <tr className="border-t border-border">
-      <td className="px-4 py-3 font-medium">{m.name}</td>
-      <td className="px-4 py-3 text-muted-foreground">{m.email ?? "—"}</td>
+      <td className="px-4 py-3 font-medium break-words">{m.name}</td>
+      <td className="px-4 py-3 break-words text-muted-foreground">{m.email ?? "—"}</td>
       {/* Claim linkage, the thing QA actually needs to verify:
           which imported record, and which auth identity. */}
-      <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
+      <td className="px-4 py-3 font-mono text-xs whitespace-nowrap text-muted-foreground">
         <div>ICF {m.cstRecno}</div>
         <div title={m.authUserId}>{m.authUserId.slice(0, 8)}…</div>
       </td>
+
       <td className="px-4 py-3">
         <div className="flex flex-wrap gap-1.5">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 text-xs font-semibold">
