@@ -800,6 +800,25 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
         const { error: hostError } = await context.supabase.from("event_hosts").insert(hostRows);
         if (hostError) throw new Error(hostError.message);
       }
+
+      // Speakers travel with the series for the same reason as hosts.
+      const { data: speakers } = await context.supabase
+        .from("event_speaker_links")
+        .select("speaker_id, sort_order")
+        .eq("event_id", data.id);
+      if (speakers && speakers.length > 0) {
+        const speakerRows = created.flatMap((row) =>
+          speakers.map((s) => ({
+            event_id: row.id,
+            speaker_id: s.speaker_id as string,
+            sort_order: s.sort_order as number,
+          })),
+        );
+        const { error: speakerError } = await context.supabase
+          .from("event_speaker_links")
+          .insert(speakerRows);
+        if (speakerError) throw new Error(speakerError.message);
+      }
     }
 
     const { error: markError } = await context.supabase
