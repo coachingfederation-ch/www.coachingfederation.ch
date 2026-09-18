@@ -3,6 +3,7 @@
  * card grid and prev/next pagination controls.
  */
 import { useMemo } from "react";
+import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { useI18n } from "@/i18n";
 import type { DirectoryEntry } from "@/lib/directory.functions";
 import { CoachCard, type LabelLookup } from "./CoachCard";
