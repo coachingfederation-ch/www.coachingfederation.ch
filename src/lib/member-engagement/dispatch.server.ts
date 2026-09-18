@@ -87,6 +87,35 @@ export async function dispatchEngagementSends(): Promise<Record<string, Dispatch
   return summary;
 }
 
+type PendingRow = { id: string; member_id: string; trigger_details: unknown };
+
+/**
+ * Sends the rows a human explicitly approved, whatever the campaign's mode or
+ * daily cap says. Approving in the panel is an instruction to send, so it must
+ * not silently wait for a campaign switch or the next sync run.
+ */
+export async function dispatchSendIds(ids: string[]): Promise<DispatchSummary> {
+  const result: DispatchSummary = { attempted: 0, sent: 0, skipped: 0, failed: 0 };
+  if (!ids.length) return result;
+
+  const { data: rows, error } = await supabaseAdmin
+    .from("member_engagement_sends")
+    .select("id, member_id, trigger_details, campaign_key")
+    .in("id", ids)
+    .eq("status", "pending");
+  if (error) throw error;
+  if (!rows?.length) return result;
+
+  for (const row of rows) {
+    await deliverSend(
+      { key: row.campaign_key as EngagementCampaignKey } as EngagementCampaign,
+      row as unknown as PendingRow,
+      result,
+    );
+  }
+  return result;
+}
+
 /** Dispatches one campaign's pending sends, honouring its mode and daily cap. */
 export async function dispatchCampaign(campaign: EngagementCampaign): Promise<DispatchSummary> {
   const result: DispatchSummary = { attempted: 0, sent: 0, skipped: 0, failed: 0 };
@@ -107,9 +136,22 @@ export async function dispatchCampaign(campaign: EngagementCampaign): Promise<Di
   if (error) throw error;
   if (!pending?.length) return result;
 
+  for (const send of pending) {
+    await deliverSend(campaign, send as unknown as PendingRow, result);
+  }
+
+  return result;
+}
+
+/** Renders and sends one queued row, then records the outcome on it. */
+async function deliverSend(
+  campaign: EngagementCampaign,
+  send: PendingRow,
+  result: DispatchSummary,
+): Promise<void> {
   const { sendMemberEmail } = await import("../member-email.server");
 
-  for (const send of pending) {
+  {
     result.attempted += 1;
     const { data: member } = await supabaseAdmin
       .from("members")
