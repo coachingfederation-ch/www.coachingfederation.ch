@@ -1176,7 +1176,8 @@
       "image": "Immagine di copertina",
       "registration": "Iscrizione",
       "tickets": "Biglietti",
-      "discounts": "Codici sconto"
+      "discounts": "Codici sconto",
+      "speakers": "Relatori"
     },
     "hosts": {
       "none": "Nessun relatore selezionato.",
@@ -1840,6 +1841,30 @@
       "applying": "Aggiornamento…",
       "updated": "Date aggiornate:",
       "skipped": "modificate a mano e saltate:"
+    },
+    "speakers": {
+      "sectionHint": "Aggiungi le persone che intervengono a questo evento.",
+      "none": "Nessun relatore aggiunto.",
+      "search": "Cerca relatori…",
+      "select": "Seleziona un relatore",
+      "add": "Aggiungi relatore",
+      "new": "Nuovo relatore",
+      "edit": "Modifica relatore",
+      "remove": "Rimuovi relatore",
+      "moveUp": "Sposta su",
+      "moveDown": "Sposta giù",
+      "fieldName": "Nome",
+      "fieldBio": "Breve biografia",
+      "fieldUrl": "Link",
+      "fieldImage": "Foto",
+      "uploading": "Caricamento…",
+      "imageReady": "Foto pronta",
+      "save": "Salva relatore",
+      "cancel": "Annulla",
+      "hint": "I relatori possono essere riutilizzati in altri eventi. Le modifiche valgono ovunque.",
+      "loadError": "Impossibile caricare i relatori.",
+      "saveError": "Impossibile salvare i relatori.",
+      "uploadError": "Impossibile caricare la foto."
     }
   },
   "eventTranslations": {

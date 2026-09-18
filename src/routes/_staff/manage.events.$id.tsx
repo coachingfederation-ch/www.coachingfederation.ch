@@ -15,6 +15,7 @@ import {
   EventContentSection,
   EventLocationSection,
   EventHostsSection,
+  EventSpeakersSection,
   EventRepeatSection,
   EventSeriesUpdateSection,
   EventPublishingSection,
@@ -393,6 +394,12 @@ function EventEditor() {
           eventId={event.id}
           title={t("events.section.hosts")}
           hint={t("events.hosts.sectionHint")}
+        />
+
+        <EventSpeakersSection
+          eventId={event.id}
+          title={t("events.section.speakers")}
+          hint={t("events.speakers.sectionHint")}
         />
 
         <EventLocationSection event={event} patch={patch} t={t} />

@@ -1176,7 +1176,8 @@
       "image": "Cover image",
       "registration": "Registration",
       "tickets": "Tickets",
-      "discounts": "Discount codes"
+      "discounts": "Discount codes",
+      "speakers": "Speakers"
     },
     "hosts": {
       "none": "No hosts selected yet.",
@@ -1840,6 +1841,30 @@
       "applying": "Updating…",
       "updated": "Dates updated:",
       "skipped": "edited by hand and skipped:"
+    },
+    "speakers": {
+      "sectionHint": "Add the people speaking at this event.",
+      "none": "No speakers added yet.",
+      "search": "Search speakers…",
+      "select": "Select a speaker",
+      "add": "Add speaker",
+      "new": "New speaker",
+      "edit": "Edit speaker",
+      "remove": "Remove speaker",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "fieldName": "Name",
+      "fieldBio": "Short bio",
+      "fieldUrl": "Link",
+      "fieldImage": "Photo",
+      "uploading": "Uploading…",
+      "imageReady": "Photo ready",
+      "save": "Save speaker",
+      "cancel": "Cancel",
+      "hint": "Speakers can be reused on other events. Changes to a speaker apply everywhere.",
+      "loadError": "Could not load speakers.",
+      "saveError": "Could not save speakers.",
+      "uploadError": "Could not upload the photo."
     }
   },
   "eventTranslations": {

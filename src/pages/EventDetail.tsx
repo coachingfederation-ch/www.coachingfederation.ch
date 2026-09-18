@@ -29,6 +29,7 @@ import {
   type PublicEvent,
 } from "@/lib/events";
 import type { EventHost } from "@/lib/event-hosts";
+import type { EventSpeaker } from "@/lib/event-speakers";
 import { eventMap } from "@/lib/event-map";
 import { useTrackView } from "@/lib/plausible";
 import { getMyRegistration } from "@/lib/events.functions";
@@ -86,7 +87,11 @@ export function EventFallback({ titleKey, bodyKey }: { titleKey: string; bodyKey
 export default function EventDetailPage({
   event,
 }: {
-  event: PublicEvent & { hosts?: EventHost[]; recap?: PublicRecap | null };
+  event: PublicEvent & {
+    hosts?: EventHost[];
+    speakers?: EventSpeaker[];
+    recap?: PublicRecap | null;
+  };
 }) {
   const { t, locale } = useI18n();
   useTrackView("Event View", event.slug ?? event.id ?? "", {
@@ -97,6 +102,7 @@ export default function EventDetailPage({
   const now = useNowMinute();
   const live = now !== null && isLiveEvent(event.starts_at, event.ends_at, now);
   const hosts = event.hosts ?? [];
+  const speakers = event.speakers ?? [];
   const marks = heroMarks(event.slug ?? event.id ?? "");
   // A hand-placed hero arrangement replaces the automatic slug-seeded marks.
   const placedMarks = sanitizeHeroMarks("event", event.hero_marks);
@@ -312,6 +318,53 @@ export default function EventDetailPage({
                           ) : null}
                         </span>
                       </LocaleLink>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+            {speakers.length > 0 ? (
+              <section className="mt-10 not-prose">
+                <p className="eyebrow">{t("events.detail.speakers")}</p>
+                <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+                  {speakers.map((speaker) => (
+                    <li
+                      key={speaker.id}
+                      className="flex gap-3 rounded-2xl border border-border/70 bg-card p-4"
+                    >
+                      {speaker.imageUrl ? (
+                        <img
+                          src={speaker.imageUrl}
+                          alt=""
+                          className="h-14 w-14 shrink-0 rounded-full object-cover"
+                        />
+                      ) : (
+                        <span
+                          className="h-14 w-14 shrink-0 rounded-full bg-secondary"
+                          aria-hidden
+                        />
+                      )}
+                      <span className="min-w-0">
+                        <span className="block text-sm font-semibold">
+                          {speaker.url ? (
+                            <a
+                              href={speaker.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:text-primary"
+                            >
+                              {speaker.name}
+                            </a>
+                          ) : (
+                            speaker.name
+                          )}
+                        </span>
+                        {speaker.bio ? (
+                          <span className="mt-1 block text-sm text-muted-foreground">
+                            {speaker.bio}
+                          </span>
+                        ) : null}
+                      </span>
                     </li>
                   ))}
                 </ul>

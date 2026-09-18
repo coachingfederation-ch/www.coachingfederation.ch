@@ -1176,7 +1176,8 @@
       "image": "Titelbild",
       "registration": "Anmeldung",
       "tickets": "Tickets",
-      "discounts": "Rabattcodes"
+      "discounts": "Rabattcodes",
+      "speakers": "Speaker"
     },
     "hosts": {
       "none": "Noch keine Gastgeber ausgewählt.",
@@ -1840,6 +1841,30 @@
       "applying": "Wird aktualisiert…",
       "updated": "Aktualisierte Termine:",
       "skipped": "manuell bearbeitet und übersprungen:"
+    },
+    "speakers": {
+      "sectionHint": "Ergänze die Personen, die an diesem Event sprechen.",
+      "none": "Noch keine Speaker hinzugefügt.",
+      "search": "Speaker suchen…",
+      "select": "Speaker auswählen",
+      "add": "Speaker hinzufügen",
+      "new": "Neuer Speaker",
+      "edit": "Speaker bearbeiten",
+      "remove": "Speaker entfernen",
+      "moveUp": "Nach oben",
+      "moveDown": "Nach unten",
+      "fieldName": "Name",
+      "fieldBio": "Kurzbiografie",
+      "fieldUrl": "Link",
+      "fieldImage": "Foto",
+      "uploading": "Wird hochgeladen…",
+      "imageReady": "Foto bereit",
+      "save": "Speaker speichern",
+      "cancel": "Abbrechen",
+      "hint": "Speaker können für andere Events wiederverwendet werden. Änderungen wirken überall.",
+      "loadError": "Speaker konnten nicht geladen werden.",
+      "saveError": "Speaker konnten nicht gespeichert werden.",
+      "uploadError": "Das Foto konnte nicht hochgeladen werden."
     }
   },
   "eventTranslations": {

@@ -2889,6 +2889,82 @@ export type Database = {
           },
         ]
       }
+      event_speaker_links: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          sort_order: number
+          speaker_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          sort_order?: number
+          speaker_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          sort_order?: number
+          speaker_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_speaker_links_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_speaker_links_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_speaker_links_speaker_id_fkey"
+            columns: ["speaker_id"]
+            isOneToOne: false
+            referencedRelation: "event_speakers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_speakers: {
+        Row: {
+          bio: string | null
+          created_at: string
+          id: string
+          image_path: string | null
+          name: string
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          id?: string
+          image_path?: string | null
+          name: string
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          id?: string
+          image_path?: string | null
+          name?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
       event_ticket_tiers: {
         Row: {
           capacity: number | null
