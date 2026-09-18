@@ -463,8 +463,9 @@ function RolesPage() {
             </div>
           </form>
         ) : null}
-        <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card">
-          <table className="w-full text-left text-sm">
+        <div className="mt-3 overflow-x-auto rounded-2xl border border-border bg-card">
+          <table className="w-full min-w-2xl text-left text-sm">
+
             <thead className="bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="px-4 py-3 font-semibold">{t("roles.colName")}</th>
