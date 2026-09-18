@@ -189,7 +189,6 @@ export function CoachDirectory() {
               setPage={setPage}
               hasMore={hasMore}
               modeLabel={modeLabel}
-              isSample={isSample}
               selectedSlugs={[...specializations, ...formats]}
               emphasiseDifferences={dirty}
             />
