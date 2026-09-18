@@ -328,8 +328,11 @@ function RolesPage() {
         </p>
 
 
-        <div className="mt-4 overflow-hidden rounded-2xl border border-border bg-card">
-          <table className="w-full text-left text-sm">
+        {/* Tables scroll sideways below their natural width instead of
+            squeezing columns until names, emails and badges are clipped. */}
+        <div className="mt-4 overflow-x-auto rounded-2xl border border-border bg-card">
+          <table className="w-full min-w-3xl text-left text-sm">
+
             <thead className="bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="px-4 py-3 font-semibold">{t("roles.colName")}</th>
