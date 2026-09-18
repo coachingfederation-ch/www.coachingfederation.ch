@@ -36,6 +36,12 @@ experience:
   own client (`src/lib/authz.ts`). A user cannot grant themselves a role,
   because `user_roles` has no insert or update policy at all — role changes
   are service-role only.
+  A policy must never inline `EXISTS (SELECT 1 FROM user_roles ...)`. The
+  subquery is evaluated as the calling role, and `anon` has no grant on
+  `user_roles`, so the whole request fails with `42501` — including every
+  embedded read that joins the table. Always call a `private.*` helper, and
+  split the policy by role when only signed-in users need the role check
+  (see `public.categories`).
 - **Article and event access.** Editors and admins manage every article;
   organizers manage events only. Anonymous visitors see published rows only.
   This is why the CMS can safely operate through ordinary authenticated
