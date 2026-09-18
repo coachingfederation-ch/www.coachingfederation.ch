@@ -176,7 +176,7 @@ async function deliverSend(
     if (!member?.email || member.activity_state === "anonymized") {
       await finish("skipped", "No usable recipient address");
       result.skipped += 1;
-      continue;
+      return;
     }
 
     // Write to the member in the language they asked for, when they picked one.
