@@ -161,23 +161,43 @@ export const listEngagementSends = createServerFn({ method: "POST" })
 
 const idsSchema = z.object({ ids: z.array(z.string().uuid()).min(1).max(200) });
 
-/** Approves queued sends so the next dispatch may deliver them. */
+/**
+ * Approves queued sends and delivers them straight away. Approving is an
+ * explicit instruction to send, so it must not wait for a campaign switch or
+ * the next sync run — that made approval look like it did nothing.
+ */
 export const releaseEngagementSends = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => idsSchema.parse(input))
-  .handler(async ({ data, context }): Promise<{ released: number }> => {
-    const { assertMembership } = await import("./authz");
-    await assertMembership(context);
+  .handler(
+    async ({
+      data,
+      context,
+    }): Promise<{ released: number; sent: number; failed: number; skipped: number }> => {
+      const { assertMembership } = await import("./authz");
+      await assertMembership(context);
 
-    const { data: updated, error } = await context.supabase
-      .from("member_engagement_sends")
-      .update({ released_at: new Date().toISOString() })
-      .in("id", data.ids)
-      .eq("status", "pending")
-      .select("id");
-    if (error) throw new Error(error.message);
-    return { released: updated?.length ?? 0 };
-  });
+      const { data: updated, error } = await context.supabase
+        .from("member_engagement_sends")
+        .update({ released_at: new Date().toISOString() })
+        .in("id", data.ids)
+        .eq("status", "pending")
+        .select("id");
+      if (error) throw new Error(error.message);
+
+      const ids = (updated ?? []).map((row) => row.id as string);
+      if (!ids.length) return { released: 0, sent: 0, failed: 0, skipped: 0 };
+
+      const { dispatchSendIds } = await import("./member-engagement/dispatch.server");
+      const outcome = await dispatchSendIds(ids);
+      return {
+        released: ids.length,
+        sent: outcome.sent,
+        failed: outcome.failed,
+        skipped: outcome.skipped,
+      };
+    },
+  );
 
 /** Drops queued sends without emailing anyone; the dedupe key stays claimed. */
 export const cancelEngagementSends = createServerFn({ method: "POST" })
