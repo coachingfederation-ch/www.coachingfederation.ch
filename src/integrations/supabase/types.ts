@@ -2307,23 +2307,29 @@ export type Database = {
       }
       event_hosts: {
         Row: {
+          blurb: string | null
           created_at: string
           event_id: string
           id: string
+          link_url: string | null
           profile_id: string
           sort_order: number
         }
         Insert: {
+          blurb?: string | null
           created_at?: string
           event_id: string
           id?: string
+          link_url?: string | null
           profile_id: string
           sort_order?: number
         }
         Update: {
+          blurb?: string | null
           created_at?: string
           event_id?: string
           id?: string
+          link_url?: string | null
           profile_id?: string
           sort_order?: number
         }

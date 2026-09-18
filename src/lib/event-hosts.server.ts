@@ -24,11 +24,16 @@ export async function loadEventHosts(
 
   const { data: links, error } = await supabase
     .from("event_hosts")
-    .select("profile_id, sort_order")
+    .select("profile_id, sort_order, link_url, blurb")
     .eq("event_id", eventId)
     .order("sort_order", { ascending: true });
   if (error) throw new Error(error.message);
-  const ids = ((links ?? []) as { profile_id: string }[]).map((l) => l.profile_id);
+  const linkRows = (links ?? []) as {
+    profile_id: string;
+    link_url: string | null;
+    blurb: string | null;
+  }[];
+  const ids = linkRows.map((l) => l.profile_id);
   if (ids.length === 0) return [];
 
   const { data } = await supabase
@@ -54,12 +59,23 @@ export async function loadEventHosts(
         fullName: r.full_name ?? "",
         tagline: r.tagline ?? null,
         imageUrl: r.profile_image_path ? (signed.get(r.profile_image_path) ?? null) : null,
-      } satisfies EventHost,
+      },
     ]),
   );
 
   // Preserve the stored order, and drop links whose profile is no longer public.
-  return ids.map((id: string) => byId.get(id)).filter((h): h is EventHost => Boolean(h));
+  // The link and presentation text belong to the event, not to the profile.
+  return linkRows
+    .map((l) => {
+      const profile = byId.get(l.profile_id);
+      if (!profile) return null;
+      return {
+        ...profile,
+        linkUrl: l.link_url ?? null,
+        blurb: l.blurb ?? null,
+      } satisfies EventHost;
+    })
+    .filter((h): h is EventHost => Boolean(h));
 }
 
 /** Name search over published, eligible directory profiles, capped. */
@@ -80,5 +96,7 @@ export async function searchHostCandidates(term: string): Promise<EventHost[]> {
     fullName: (r.full_name as string | null) ?? "",
     tagline: (r.tagline as string | null) ?? null,
     imageUrl: null,
+    linkUrl: null,
+    blurb: null,
   }));
 }
