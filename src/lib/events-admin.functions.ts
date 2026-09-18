@@ -798,7 +798,7 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
       // Hosts travel with the series so each date shows the same coaches.
       const { data: hosts } = await context.supabase
         .from("event_hosts")
-        .select("profile_id, sort_order")
+        .select("profile_id, sort_order, link_url, blurb")
         .eq("event_id", data.id);
       if (hosts && hosts.length > 0) {
         const hostRows = created.flatMap((row) =>
@@ -806,6 +806,8 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
             event_id: row.id,
             profile_id: h.profile_id as string,
             sort_order: h.sort_order as number,
+            link_url: (h.link_url as string | null) ?? null,
+            blurb: (h.blurb as string | null) ?? null,
           })),
         );
         const { error: hostError } = await context.supabase.from("event_hosts").insert(hostRows);
@@ -979,7 +981,7 @@ export const applySeriesUpdate = createServerFn({ method: "POST" })
     if (updated.length > 0) {
       const { data: hosts, error: hostsError } = await context.supabase
         .from("event_hosts")
-        .select("profile_id, sort_order")
+        .select("profile_id, sort_order, link_url, blurb")
         .eq("event_id", data.id);
       if (hostsError) throw new Error(hostsError.message);
       const { error: clearError } = await context.supabase
@@ -993,6 +995,8 @@ export const applySeriesUpdate = createServerFn({ method: "POST" })
             event_id: eventId,
             profile_id: h.profile_id as string,
             sort_order: h.sort_order as number,
+            link_url: (h.link_url as string | null) ?? null,
+            blurb: (h.blurb as string | null) ?? null,
           })),
         );
         const { error: hostError } = await context.supabase.from("event_hosts").insert(hostRows);
