@@ -9,238 +9,145 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TeamRouteImport } from './routes/team'
-import { Route as StaffSignInRouteImport } from './routes/staff-sign-in'
-import { Route as StaffInviteRouteImport } from './routes/staff-invite'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as NoAccessRouteImport } from './routes/no-access'
-import { Route as McpRouteImport } from './routes/mcp'
-import { Route as InsightsRouteImport } from './routes/insights'
-import { Route as ImprintRouteImport } from './routes/imprint'
-import { Route as GovernanceRouteImport } from './routes/governance'
-import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
-import { Route as ForOrganisationsRouteImport } from './routes/for-organisations'
-import { Route as ForCoachesRouteImport } from './routes/for-coaches'
-import { Route as FindACoachRouteImport } from './routes/find-a-coach'
-import { Route as EuropePulseRouteImport } from './routes/europe-pulse'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as StaffRouteRouteImport } from './routes/_staff/route'
-import { Route as MemberRouteRouteImport } from './routes/_member/route'
-import { Route as LocaleRouteRouteImport } from './routes/$locale/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as VolunteerLoginIndexRouteImport } from './routes/volunteer-login.index'
-import { Route as NewslettersIndexRouteImport } from './routes/newsletters.index'
-import { Route as InsightsIndexRouteImport } from './routes/insights.index'
-import { Route as GuidesIndexRouteImport } from './routes/guides.index'
-import { Route as EventsIndexRouteImport } from './routes/events.index'
-import { Route as CommunitiesIndexRouteImport } from './routes/communities.index'
+import { Route as LocaleRouteRouteImport } from './routes/$locale/route'
+import { Route as MemberRouteRouteImport } from './routes/_member/route'
+import { Route as StaffRouteRouteImport } from './routes/_staff/route'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as EuropePulseRouteImport } from './routes/europe-pulse'
+import { Route as FindACoachRouteImport } from './routes/find-a-coach'
+import { Route as ForCoachesRouteImport } from './routes/for-coaches'
+import { Route as ForOrganisationsRouteImport } from './routes/for-organisations'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as GovernanceRouteImport } from './routes/governance'
+import { Route as ImprintRouteImport } from './routes/imprint'
+import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as McpRouteImport } from './routes/mcp'
+import { Route as NoAccessRouteImport } from './routes/no-access'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as StaffInviteRouteImport } from './routes/staff-invite'
+import { Route as StaffSignInRouteImport } from './routes/staff-sign-in'
+import { Route as TeamRouteImport } from './routes/team'
 import { Route as LocaleIndexRouteImport } from './routes/$locale/index'
-import { Route as VolunteerLoginTokenRouteImport } from './routes/volunteer-login.$token'
-import { Route as TicketTokenRouteImport } from './routes/ticket.$token'
-import { Route as NewslettersSlugRouteImport } from './routes/newsletters.$slug'
-import { Route as InsightsIdRouteImport } from './routes/insights.$id'
-import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
-import { Route as GuestPassTokenRouteImport } from './routes/guest-pass.$token'
-import { Route as FormTokenRouteImport } from './routes/form.$token'
-import { Route as EventsSlugRouteImport } from './routes/events.$slug'
-import { Route as CommunitiesSlugRouteImport } from './routes/communities.$slug'
-import { Route as CoachProfileIdRouteImport } from './routes/coach.$profileId'
-import { Route as ClaimTokenRouteImport } from './routes/claim.$token'
-import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
-import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
-import { Route as AttendTokenRouteImport } from './routes/attend.$token'
-import { Route as ApiStaffAssistantRouteImport } from './routes/api/staff-assistant'
-import { Route as ApiEventProposalAgentRouteImport } from './routes/api/event-proposal-agent'
-import { Route as ApiContactAgentRouteImport } from './routes/api/contact-agent'
-import { Route as ApiChatRouteImport } from './routes/api/chat'
-import { Route as StaffVocabulariesRouteImport } from './routes/_staff/vocabularies'
-import { Route as StaffRolesRouteImport } from './routes/_staff/roles'
-import { Route as StaffOperationalStructureRouteImport } from './routes/_staff/operational-structure'
-import { Route as StaffIntegrationRouteImport } from './routes/_staff/integration'
-import { Route as StaffCoachFinderRouteImport } from './routes/_staff/coach-finder'
-import { Route as StaffArticlesRouteImport } from './routes/_staff/articles'
-import { Route as MemberVolunteeringRouteImport } from './routes/_member/volunteering'
-import { Route as MemberVolunteerChatRouteImport } from './routes/_member/volunteer-chat'
-import { Route as MemberMyProfileRouteImport } from './routes/_member/my-profile'
-import { Route as MemberMemberRouteImport } from './routes/_member/member'
-import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
-import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
-import { Route as LocaleTeamRouteImport } from './routes/$locale/team'
-import { Route as LocalePrivacyRouteImport } from './routes/$locale/privacy'
-import { Route as LocaleInsightsRouteImport } from './routes/$locale/insights'
-import { Route as LocaleImprintRouteImport } from './routes/$locale/imprint'
-import { Route as LocaleGovernanceRouteImport } from './routes/$locale/governance'
-import { Route as LocaleForOrganisationsRouteImport } from './routes/$locale/for-organisations'
-import { Route as LocaleForCoachesRouteImport } from './routes/$locale/for-coaches'
-import { Route as LocaleFindACoachRouteImport } from './routes/$locale/find-a-coach'
-import { Route as LocaleEuropePulseRouteImport } from './routes/$locale/europe-pulse'
 import { Route as LocaleAboutRouteImport } from './routes/$locale/about'
-import { Route as StaffMembersIndexRouteImport } from './routes/_staff/members.index'
-import { Route as StaffManageIndexRouteImport } from './routes/_staff/manage.index'
-import { Route as StaffArticlesIndexRouteImport } from './routes/_staff/articles.index'
-import { Route as LocaleInsightsIndexRouteImport } from './routes/$locale/insights.index'
-import { Route as LocaleGuidesIndexRouteImport } from './routes/$locale/guides.index'
-import { Route as LocaleEventsIndexRouteImport } from './routes/$locale/events.index'
-import { Route as LocaleCommunitiesIndexRouteImport } from './routes/$locale/communities.index'
-import { Route as VerifyCertificateTokenRouteImport } from './routes/verify.certificate.$token'
-import { Route as ContactConfirmTokenRouteImport } from './routes/contact.confirm.$token'
-import { Route as ApiPublicRoleGrantsArchiveRouteImport } from './routes/api/public/role-grants-archive'
-import { Route as ApiPublicRoleDirectoryRouteImport } from './routes/api/public/role-directory'
-import { Route as ApiPublicOpStructureRouteImport } from './routes/api/public/op-structure'
-import { Route as ApiPublicNewsletterRefreshRouteImport } from './routes/api/public/newsletter-refresh'
-import { Route as ApiPublicMemberSyncRetryRouteImport } from './routes/api/public/member-sync-retry'
-import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
-import { Route as ApiPublicMemberLifecycleRouteImport } from './routes/api/public/member-lifecycle'
-import { Route as ApiPublicLiveChatPurgeRouteImport } from './routes/api/public/live-chat-purge'
-import { Route as ApiPublicLiveChatRouteImport } from './routes/api/public/live-chat'
-import { Route as ApiPublicGuestPassPurgeRouteImport } from './routes/api/public/guest-pass-purge'
-import { Route as ApiPublicEventsFeedDoticsRouteImport } from './routes/api/public/events-feed[.]ics'
-import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public/event-reminders'
-import { Route as ApiPublicEventFollowUpsRouteImport } from './routes/api/public/event-follow-ups'
-import { Route as ApiPublicEuropePulseScanRouteImport } from './routes/api/public/europe-pulse-scan'
-import { Route as ApiPublicContactEnquiryPurgeRouteImport } from './routes/api/public/contact-enquiry-purge'
-import { Route as ApiPublicClaimWavesRouteImport } from './routes/api/public/claim-waves'
-import { Route as ApiPublicChatSignalRouteImport } from './routes/api/public/chat-signal'
-import { Route as ApiPublicArticleFeedbackRouteImport } from './routes/api/public/article-feedback'
-import { Route as StaffMembersIdRouteImport } from './routes/_staff/members.$id'
-import { Route as StaffManageMemberEngagementRouteImport } from './routes/_staff/manage.member-engagement'
-import { Route as StaffManageLiveChatRouteImport } from './routes/_staff/manage.live-chat'
-import { Route as StaffManageKnowledgeRouteImport } from './routes/_staff/manage.knowledge'
-import { Route as StaffManageGuidesRouteImport } from './routes/_staff/manage.guides'
-import { Route as StaffManageGuestPassesRouteImport } from './routes/_staff/manage.guest-passes'
-import { Route as StaffManageGovernanceRouteImport } from './routes/_staff/manage.governance'
-import { Route as StaffManageEuropePulseRouteImport } from './routes/_staff/manage.europe-pulse'
-import { Route as StaffManageEditorialSignalsRouteImport } from './routes/_staff/manage.editorial-signals'
-import { Route as StaffManageChatInsightsRouteImport } from './routes/_staff/manage.chat-insights'
-import { Route as StaffArticlesNewRouteImport } from './routes/_staff/articles.new'
-import { Route as StaffArticlesCategoriesRouteImport } from './routes/_staff/articles.categories'
-import { Route as StaffArticlesIdRouteImport } from './routes/_staff/articles.$id'
-import { Route as MemberMemberCertificatesRouteImport } from './routes/_member/member.certificates'
-import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
-import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
-import { Route as LocaleInsightsIdRouteImport } from './routes/$locale/insights.$id'
-import { Route as LocaleGuidesSlugRouteImport } from './routes/$locale/guides.$slug'
-import { Route as LocaleEventsSlugRouteImport } from './routes/$locale/events.$slug'
-import { Route as LocaleCommunitiesSlugRouteImport } from './routes/$locale/communities.$slug'
+import { Route as LocaleEuropePulseRouteImport } from './routes/$locale/europe-pulse'
+import { Route as LocaleFindACoachRouteImport } from './routes/$locale/find-a-coach'
+import { Route as LocaleForCoachesRouteImport } from './routes/$locale/for-coaches'
+import { Route as LocaleForOrganisationsRouteImport } from './routes/$locale/for-organisations'
+import { Route as LocaleGovernanceRouteImport } from './routes/$locale/governance'
+import { Route as LocaleImprintRouteImport } from './routes/$locale/imprint'
+import { Route as LocaleInsightsRouteImport } from './routes/$locale/insights'
+import { Route as LocalePrivacyRouteImport } from './routes/$locale/privacy'
+import { Route as LocaleTeamRouteImport } from './routes/$locale/team'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as MemberMemberRouteImport } from './routes/_member/member'
+import { Route as MemberMyProfileRouteImport } from './routes/_member/my-profile'
+import { Route as MemberVolunteerChatRouteImport } from './routes/_member/volunteer-chat'
+import { Route as MemberVolunteeringRouteImport } from './routes/_member/volunteering'
+import { Route as StaffArticlesRouteImport } from './routes/_staff/articles'
+import { Route as StaffCoachFinderRouteImport } from './routes/_staff/coach-finder'
+import { Route as StaffIntegrationRouteImport } from './routes/_staff/integration'
+import { Route as StaffOperationalStructureRouteImport } from './routes/_staff/operational-structure'
+import { Route as StaffRolesRouteImport } from './routes/_staff/roles'
+import { Route as StaffVocabulariesRouteImport } from './routes/_staff/vocabularies'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as ApiContactAgentRouteImport } from './routes/api/contact-agent'
+import { Route as ApiEventProposalAgentRouteImport } from './routes/api/event-proposal-agent'
+import { Route as ApiStaffAssistantRouteImport } from './routes/api/staff-assistant'
+import { Route as AttendTokenRouteImport } from './routes/attend.$token'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
+import { Route as ClaimTokenRouteImport } from './routes/claim.$token'
+import { Route as CoachProfileIdRouteImport } from './routes/coach.$profileId'
+import { Route as CommunitiesIndexRouteImport } from './routes/communities.index'
+import { Route as CommunitiesSlugRouteImport } from './routes/communities.$slug'
+import { Route as EventsIndexRouteImport } from './routes/events.index'
+import { Route as EventsSlugRouteImport } from './routes/events.$slug'
+import { Route as FormTokenRouteImport } from './routes/form.$token'
+import { Route as GuestPassTokenRouteImport } from './routes/guest-pass.$token'
+import { Route as GuidesIndexRouteImport } from './routes/guides.index'
+import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
+import { Route as InsightsIndexRouteImport } from './routes/insights.index'
+import { Route as InsightsIdRouteImport } from './routes/insights.$id'
+import { Route as NewslettersIndexRouteImport } from './routes/newsletters.index'
+import { Route as NewslettersSlugRouteImport } from './routes/newsletters.$slug'
+import { Route as TicketTokenRouteImport } from './routes/ticket.$token'
+import { Route as VolunteerLoginIndexRouteImport } from './routes/volunteer-login.index'
+import { Route as VolunteerLoginTokenRouteImport } from './routes/volunteer-login.$token'
 import { Route as LocaleCoachProfileIdRouteImport } from './routes/$locale/coach.$profileId'
-import { Route as StaffManageNewslettersIndexRouteImport } from './routes/_staff/manage.newsletters.index'
+import { Route as LocaleCommunitiesIndexRouteImport } from './routes/$locale/communities.index'
+import { Route as LocaleCommunitiesSlugRouteImport } from './routes/$locale/communities.$slug'
+import { Route as LocaleEventsIndexRouteImport } from './routes/$locale/events.index'
+import { Route as LocaleEventsSlugRouteImport } from './routes/$locale/events.$slug'
+import { Route as LocaleGuidesIndexRouteImport } from './routes/$locale/guides.index'
+import { Route as LocaleGuidesSlugRouteImport } from './routes/$locale/guides.$slug'
+import { Route as LocaleInsightsIndexRouteImport } from './routes/$locale/insights.index'
+import { Route as LocaleInsightsIdRouteImport } from './routes/$locale/insights.$id'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as MemberMemberCertificatesRouteImport } from './routes/_member/member.certificates'
+import { Route as StaffArticlesIndexRouteImport } from './routes/_staff/articles.index'
+import { Route as StaffArticlesIdRouteImport } from './routes/_staff/articles.$id'
+import { Route as StaffArticlesCategoriesRouteImport } from './routes/_staff/articles.categories'
+import { Route as StaffArticlesNewRouteImport } from './routes/_staff/articles.new'
+import { Route as StaffManageIndexRouteImport } from './routes/_staff/manage.index'
+import { Route as StaffManageChatInsightsRouteImport } from './routes/_staff/manage.chat-insights'
+import { Route as StaffManageEditorialSignalsRouteImport } from './routes/_staff/manage.editorial-signals'
+import { Route as StaffManageEuropePulseRouteImport } from './routes/_staff/manage.europe-pulse'
+import { Route as StaffManageGovernanceRouteImport } from './routes/_staff/manage.governance'
+import { Route as StaffManageGuestPassesRouteImport } from './routes/_staff/manage.guest-passes'
+import { Route as StaffManageGuidesRouteImport } from './routes/_staff/manage.guides'
+import { Route as StaffManageKnowledgeRouteImport } from './routes/_staff/manage.knowledge'
+import { Route as StaffManageLiveChatRouteImport } from './routes/_staff/manage.live-chat'
+import { Route as StaffManageMemberEngagementRouteImport } from './routes/_staff/manage.member-engagement'
+import { Route as StaffMembersIndexRouteImport } from './routes/_staff/members.index'
+import { Route as StaffMembersIdRouteImport } from './routes/_staff/members.$id'
+import { Route as ApiPublicArticleFeedbackRouteImport } from './routes/api/public/article-feedback'
+import { Route as ApiPublicChatSignalRouteImport } from './routes/api/public/chat-signal'
+import { Route as ApiPublicClaimWavesRouteImport } from './routes/api/public/claim-waves'
+import { Route as ApiPublicContactEnquiryPurgeRouteImport } from './routes/api/public/contact-enquiry-purge'
+import { Route as ApiPublicEuropePulseScanRouteImport } from './routes/api/public/europe-pulse-scan'
+import { Route as ApiPublicEventFollowUpsRouteImport } from './routes/api/public/event-follow-ups'
+import { Route as ApiPublicEventRemindersRouteImport } from './routes/api/public/event-reminders'
+import { Route as ApiPublicEventsFeedDoticsRouteImport } from './routes/api/public/events-feed[.]ics'
+import { Route as ApiPublicGuestPassPurgeRouteImport } from './routes/api/public/guest-pass-purge'
+import { Route as ApiPublicLiveChatRouteImport } from './routes/api/public/live-chat'
+import { Route as ApiPublicLiveChatPurgeRouteImport } from './routes/api/public/live-chat-purge'
+import { Route as ApiPublicMemberLifecycleRouteImport } from './routes/api/public/member-lifecycle'
+import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
+import { Route as ApiPublicMemberSyncRetryRouteImport } from './routes/api/public/member-sync-retry'
+import { Route as ApiPublicNewsletterRefreshRouteImport } from './routes/api/public/newsletter-refresh'
+import { Route as ApiPublicOpStructureRouteImport } from './routes/api/public/op-structure'
+import { Route as ApiPublicRoleDirectoryRouteImport } from './routes/api/public/role-directory'
+import { Route as ApiPublicRoleGrantsArchiveRouteImport } from './routes/api/public/role-grants-archive'
+import { Route as ContactConfirmTokenRouteImport } from './routes/contact.confirm.$token'
+import { Route as VerifyCertificateTokenRouteImport } from './routes/verify.certificate.$token'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
-import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
-import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
-import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
-import { Route as ApiPublicTicketQrTokenRouteImport } from './routes/api/public/ticket-qr.$token'
-import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
-import { Route as ApiPublicEventCalendarFileRouteImport } from './routes/api/public/event-calendar.$file'
-import { Route as ApiPublicCertificateQrTokenRouteImport } from './routes/api/public/certificate-qr.$token'
-import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/calendar.$file'
-import { Route as StaffManageNewslettersIdRouteImport } from './routes/_staff/manage.newsletters.$id'
-import { Route as StaffManageGuestPassesIdRouteImport } from './routes/_staff/manage.guest-passes_.$id'
-import { Route as StaffManageEventsNewRouteImport } from './routes/_staff/manage.events.new'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
-import { Route as StaffManageEventsIdReportingRouteImport } from './routes/_staff/manage.events.$id_.reporting'
-import { Route as StaffManageEventsIdCheckInRouteImport } from './routes/_staff/manage.events.$id_.check-in'
+import { Route as StaffManageEventsNewRouteImport } from './routes/_staff/manage.events.new'
+import { Route as StaffManageGuestPassesIdRouteImport } from './routes/_staff/manage.guest-passes_.$id'
+import { Route as StaffManageNewslettersIndexRouteImport } from './routes/_staff/manage.newsletters.index'
+import { Route as StaffManageNewslettersIdRouteImport } from './routes/_staff/manage.newsletters.$id'
+import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/calendar.$file'
+import { Route as ApiPublicCertificateQrTokenRouteImport } from './routes/api/public/certificate-qr.$token'
+import { Route as ApiPublicEventCalendarFileRouteImport } from './routes/api/public/event-calendar.$file'
+import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicTicketQrTokenRouteImport } from './routes/api/public/ticket-qr.$token'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as StaffManageEventsIdCceRouteImport } from './routes/_staff/manage.events.$id_.cce'
+import { Route as StaffManageEventsIdCheckInRouteImport } from './routes/_staff/manage.events.$id_.check-in'
+import { Route as StaffManageEventsIdReportingRouteImport } from './routes/_staff/manage.events.$id_.reporting'
 import { Route as StaffManageEventsIdFormsFormIdRouteImport } from './routes/_staff/manage.events.$id_.forms.$formId'
 
-const TeamRoute = TeamRouteImport.update({
-  id: '/team',
-  path: '/team',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffSignInRoute = StaffSignInRouteImport.update({
-  id: '/staff-sign-in',
-  path: '/staff-sign-in',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffInviteRoute = StaffInviteRouteImport.update({
-  id: '/staff-invite',
-  path: '/staff-invite',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NoAccessRoute = NoAccessRouteImport.update({
-  id: '/no-access',
-  path: '/no-access',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const McpRoute = McpRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InsightsRoute = InsightsRouteImport.update({
-  id: '/insights',
-  path: '/insights',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ImprintRoute = ImprintRouteImport.update({
-  id: '/imprint',
-  path: '/imprint',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GovernanceRoute = GovernanceRouteImport.update({
-  id: '/governance',
-  path: '/governance',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ForOrganisationsRoute = ForOrganisationsRouteImport.update({
-  id: '/for-organisations',
-  path: '/for-organisations',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ForCoachesRoute = ForCoachesRouteImport.update({
-  id: '/for-coaches',
-  path: '/for-coaches',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FindACoachRoute = FindACoachRouteImport.update({
-  id: '/find-a-coach',
-  path: '/find-a-coach',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EuropePulseRoute = EuropePulseRouteImport.update({
-  id: '/europe-pulse',
-  path: '/europe-pulse',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffRouteRoute = StaffRouteRouteImport.update({
-  id: '/_staff',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MemberRouteRoute = MemberRouteRouteImport.update({
-  id: '/_member',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LocaleRouteRoute = LocaleRouteRouteImport.update({
@@ -248,39 +155,102 @@ const LocaleRouteRoute = LocaleRouteRouteImport.update({
   path: '/$locale',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const MemberRouteRoute = MemberRouteRouteImport.update({
+  id: '/_member',
   getParentRoute: () => rootRouteImport,
 } as any)
-const VolunteerLoginIndexRoute = VolunteerLoginIndexRouteImport.update({
-  id: '/volunteer-login/',
-  path: '/volunteer-login/',
+const StaffRouteRoute = StaffRouteRouteImport.update({
+  id: '/_staff',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NewslettersIndexRoute = NewslettersIndexRouteImport.update({
-  id: '/newsletters/',
-  path: '/newsletters/',
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InsightsIndexRoute = InsightsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => InsightsRoute,
-} as any)
-const GuidesIndexRoute = GuidesIndexRouteImport.update({
-  id: '/guides/',
-  path: '/guides/',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EventsIndexRoute = EventsIndexRouteImport.update({
-  id: '/events/',
-  path: '/events/',
+const EuropePulseRoute = EuropePulseRouteImport.update({
+  id: '/europe-pulse',
+  path: '/europe-pulse',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CommunitiesIndexRoute = CommunitiesIndexRouteImport.update({
-  id: '/communities/',
-  path: '/communities/',
+const FindACoachRoute = FindACoachRouteImport.update({
+  id: '/find-a-coach',
+  path: '/find-a-coach',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForCoachesRoute = ForCoachesRouteImport.update({
+  id: '/for-coaches',
+  path: '/for-coaches',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForOrganisationsRoute = ForOrganisationsRouteImport.update({
+  id: '/for-organisations',
+  path: '/for-organisations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GovernanceRoute = GovernanceRouteImport.update({
+  id: '/governance',
+  path: '/governance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImprintRoute = ImprintRouteImport.update({
+  id: '/imprint',
+  path: '/imprint',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsightsRoute = InsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoAccessRoute = NoAccessRouteImport.update({
+  id: '/no-access',
+  path: '/no-access',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffInviteRoute = StaffInviteRouteImport.update({
+  id: '/staff-invite',
+  path: '/staff-invite',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffSignInRoute = StaffSignInRouteImport.update({
+  id: '/staff-sign-in',
+  path: '/staff-sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeamRoute = TeamRouteImport.update({
+  id: '/team',
+  path: '/team',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LocaleIndexRoute = LocaleIndexRouteImport.update({
@@ -288,104 +258,101 @@ const LocaleIndexRoute = LocaleIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LocaleRouteRoute,
 } as any)
-const VolunteerLoginTokenRoute = VolunteerLoginTokenRouteImport.update({
-  id: '/volunteer-login/$token',
-  path: '/volunteer-login/$token',
-  getParentRoute: () => rootRouteImport,
+const LocaleAboutRoute = LocaleAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => LocaleRouteRoute,
 } as any)
-const TicketTokenRoute = TicketTokenRouteImport.update({
-  id: '/ticket/$token',
-  path: '/ticket/$token',
-  getParentRoute: () => rootRouteImport,
+const LocaleEuropePulseRoute = LocaleEuropePulseRouteImport.update({
+  id: '/europe-pulse',
+  path: '/europe-pulse',
+  getParentRoute: () => LocaleRouteRoute,
 } as any)
-const NewslettersSlugRoute = NewslettersSlugRouteImport.update({
-  id: '/newsletters/$slug',
-  path: '/newsletters/$slug',
-  getParentRoute: () => rootRouteImport,
+const LocaleFindACoachRoute = LocaleFindACoachRouteImport.update({
+  id: '/find-a-coach',
+  path: '/find-a-coach',
+  getParentRoute: () => LocaleRouteRoute,
 } as any)
-const InsightsIdRoute = InsightsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => InsightsRoute,
+const LocaleForCoachesRoute = LocaleForCoachesRouteImport.update({
+  id: '/for-coaches',
+  path: '/for-coaches',
+  getParentRoute: () => LocaleRouteRoute,
 } as any)
-const GuidesSlugRoute = GuidesSlugRouteImport.update({
-  id: '/guides/$slug',
-  path: '/guides/$slug',
-  getParentRoute: () => rootRouteImport,
+const LocaleForOrganisationsRoute = LocaleForOrganisationsRouteImport.update({
+  id: '/for-organisations',
+  path: '/for-organisations',
+  getParentRoute: () => LocaleRouteRoute,
 } as any)
-const GuestPassTokenRoute = GuestPassTokenRouteImport.update({
-  id: '/guest-pass/$token',
-  path: '/guest-pass/$token',
-  getParentRoute: () => rootRouteImport,
+const LocaleGovernanceRoute = LocaleGovernanceRouteImport.update({
+  id: '/governance',
+  path: '/governance',
+  getParentRoute: () => LocaleRouteRoute,
 } as any)
-const FormTokenRoute = FormTokenRouteImport.update({
-  id: '/form/$token',
-  path: '/form/$token',
-  getParentRoute: () => rootRouteImport,
+const LocaleImprintRoute = LocaleImprintRouteImport.update({
+  id: '/imprint',
+  path: '/imprint',
+  getParentRoute: () => LocaleRouteRoute,
 } as any)
-const EventsSlugRoute = EventsSlugRouteImport.update({
-  id: '/events/$slug',
-  path: '/events/$slug',
-  getParentRoute: () => rootRouteImport,
+const LocaleInsightsRoute = LocaleInsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => LocaleRouteRoute,
 } as any)
-const CommunitiesSlugRoute = CommunitiesSlugRouteImport.update({
-  id: '/communities/$slug',
-  path: '/communities/$slug',
-  getParentRoute: () => rootRouteImport,
+const LocalePrivacyRoute = LocalePrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => LocaleRouteRoute,
 } as any)
-const CoachProfileIdRoute = CoachProfileIdRouteImport.update({
-  id: '/coach/$profileId',
-  path: '/coach/$profileId',
-  getParentRoute: () => rootRouteImport,
+const LocaleTeamRoute = LocaleTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => LocaleRouteRoute,
 } as any)
-const ClaimTokenRoute = ClaimTokenRouteImport.update({
-  id: '/claim/$token',
-  path: '/claim/$token',
-  getParentRoute: () => rootRouteImport,
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MemberMemberRoute = MemberMemberRouteImport.update({
+  id: '/member',
+  path: '/member',
+  getParentRoute: () => MemberRouteRoute,
 } as any)
-const AuthConfirmRoute = AuthConfirmRouteImport.update({
-  id: '/confirm',
-  path: '/confirm',
-  getParentRoute: () => AuthRoute,
+const MemberMyProfileRoute = MemberMyProfileRouteImport.update({
+  id: '/my-profile',
+  path: '/my-profile',
+  getParentRoute: () => MemberRouteRoute,
 } as any)
-const AuthCallbackRoute = AuthCallbackRouteImport.update({
-  id: '/callback',
-  path: '/callback',
-  getParentRoute: () => AuthRoute,
+const MemberVolunteerChatRoute = MemberVolunteerChatRouteImport.update({
+  id: '/volunteer-chat',
+  path: '/volunteer-chat',
+  getParentRoute: () => MemberRouteRoute,
 } as any)
-const AttendTokenRoute = AttendTokenRouteImport.update({
-  id: '/attend/$token',
-  path: '/attend/$token',
-  getParentRoute: () => rootRouteImport,
+const MemberVolunteeringRoute = MemberVolunteeringRouteImport.update({
+  id: '/volunteering',
+  path: '/volunteering',
+  getParentRoute: () => MemberRouteRoute,
 } as any)
-const ApiStaffAssistantRoute = ApiStaffAssistantRouteImport.update({
-  id: '/api/staff-assistant',
-  path: '/api/staff-assistant',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiEventProposalAgentRoute = ApiEventProposalAgentRouteImport.update({
-  id: '/api/event-proposal-agent',
-  path: '/api/event-proposal-agent',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiContactAgentRoute = ApiContactAgentRouteImport.update({
-  id: '/api/contact-agent',
-  path: '/api/contact-agent',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiChatRoute = ApiChatRouteImport.update({
-  id: '/api/chat',
-  path: '/api/chat',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffVocabulariesRoute = StaffVocabulariesRouteImport.update({
-  id: '/vocabularies',
-  path: '/vocabularies',
+const StaffArticlesRoute = StaffArticlesRouteImport.update({
+  id: '/articles',
+  path: '/articles',
   getParentRoute: () => StaffRouteRoute,
 } as any)
-const StaffRolesRoute = StaffRolesRouteImport.update({
-  id: '/roles',
-  path: '/roles',
+const StaffCoachFinderRoute = StaffCoachFinderRouteImport.update({
+  id: '/coach-finder',
+  path: '/coach-finder',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
+const StaffIntegrationRoute = StaffIntegrationRouteImport.update({
+  id: '/integration',
+  path: '/integration',
   getParentRoute: () => StaffRouteRoute,
 } as any)
 const StaffOperationalStructureRoute =
@@ -394,131 +361,139 @@ const StaffOperationalStructureRoute =
     path: '/operational-structure',
     getParentRoute: () => StaffRouteRoute,
   } as any)
-const StaffIntegrationRoute = StaffIntegrationRouteImport.update({
-  id: '/integration',
-  path: '/integration',
+const StaffRolesRoute = StaffRolesRouteImport.update({
+  id: '/roles',
+  path: '/roles',
   getParentRoute: () => StaffRouteRoute,
 } as any)
-const StaffCoachFinderRoute = StaffCoachFinderRouteImport.update({
-  id: '/coach-finder',
-  path: '/coach-finder',
+const StaffVocabulariesRoute = StaffVocabulariesRouteImport.update({
+  id: '/vocabularies',
+  path: '/vocabularies',
   getParentRoute: () => StaffRouteRoute,
 } as any)
-const StaffArticlesRoute = StaffArticlesRouteImport.update({
-  id: '/articles',
-  path: '/articles',
-  getParentRoute: () => StaffRouteRoute,
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const MemberVolunteeringRoute = MemberVolunteeringRouteImport.update({
-  id: '/volunteering',
-  path: '/volunteering',
-  getParentRoute: () => MemberRouteRoute,
+const ApiContactAgentRoute = ApiContactAgentRouteImport.update({
+  id: '/api/contact-agent',
+  path: '/api/contact-agent',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const MemberVolunteerChatRoute = MemberVolunteerChatRouteImport.update({
-  id: '/volunteer-chat',
-  path: '/volunteer-chat',
-  getParentRoute: () => MemberRouteRoute,
+const ApiEventProposalAgentRoute = ApiEventProposalAgentRouteImport.update({
+  id: '/api/event-proposal-agent',
+  path: '/api/event-proposal-agent',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const MemberMyProfileRoute = MemberMyProfileRouteImport.update({
-  id: '/my-profile',
-  path: '/my-profile',
-  getParentRoute: () => MemberRouteRoute,
+const ApiStaffAssistantRoute = ApiStaffAssistantRouteImport.update({
+  id: '/api/staff-assistant',
+  path: '/api/staff-assistant',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const MemberMemberRoute = MemberMemberRouteImport.update({
-  id: '/member',
-  path: '/member',
-  getParentRoute: () => MemberRouteRoute,
+const AttendTokenRoute = AttendTokenRouteImport.update({
+  id: '/attend/$token',
+  path: '/attend/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const Char91DotwellKnownChar93OauthProtectedResourceRoute =
-  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
-    id: '/.well-known/oauth-protected-resource',
-    path: '/.well-known/oauth-protected-resource',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const Char91DotmcpChar93ListToolsRoute =
-  Char91DotmcpChar93ListToolsRouteImport.update({
-    id: '/.mcp/list-tools',
-    path: '/.mcp/list-tools',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const LocaleTeamRoute = LocaleTeamRouteImport.update({
-  id: '/team',
-  path: '/team',
-  getParentRoute: () => LocaleRouteRoute,
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => AuthRoute,
 } as any)
-const LocalePrivacyRoute = LocalePrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => LocaleRouteRoute,
+const AuthConfirmRoute = AuthConfirmRouteImport.update({
+  id: '/confirm',
+  path: '/confirm',
+  getParentRoute: () => AuthRoute,
 } as any)
-const LocaleInsightsRoute = LocaleInsightsRouteImport.update({
-  id: '/insights',
-  path: '/insights',
-  getParentRoute: () => LocaleRouteRoute,
+const ClaimTokenRoute = ClaimTokenRouteImport.update({
+  id: '/claim/$token',
+  path: '/claim/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const LocaleImprintRoute = LocaleImprintRouteImport.update({
-  id: '/imprint',
-  path: '/imprint',
-  getParentRoute: () => LocaleRouteRoute,
+const CoachProfileIdRoute = CoachProfileIdRouteImport.update({
+  id: '/coach/$profileId',
+  path: '/coach/$profileId',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const LocaleGovernanceRoute = LocaleGovernanceRouteImport.update({
-  id: '/governance',
-  path: '/governance',
-  getParentRoute: () => LocaleRouteRoute,
+const CommunitiesIndexRoute = CommunitiesIndexRouteImport.update({
+  id: '/communities/',
+  path: '/communities/',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const LocaleForOrganisationsRoute = LocaleForOrganisationsRouteImport.update({
-  id: '/for-organisations',
-  path: '/for-organisations',
-  getParentRoute: () => LocaleRouteRoute,
+const CommunitiesSlugRoute = CommunitiesSlugRouteImport.update({
+  id: '/communities/$slug',
+  path: '/communities/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const LocaleForCoachesRoute = LocaleForCoachesRouteImport.update({
-  id: '/for-coaches',
-  path: '/for-coaches',
-  getParentRoute: () => LocaleRouteRoute,
-} as any)
-const LocaleFindACoachRoute = LocaleFindACoachRouteImport.update({
-  id: '/find-a-coach',
-  path: '/find-a-coach',
-  getParentRoute: () => LocaleRouteRoute,
-} as any)
-const LocaleEuropePulseRoute = LocaleEuropePulseRouteImport.update({
-  id: '/europe-pulse',
-  path: '/europe-pulse',
-  getParentRoute: () => LocaleRouteRoute,
-} as any)
-const LocaleAboutRoute = LocaleAboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => LocaleRouteRoute,
-} as any)
-const StaffMembersIndexRoute = StaffMembersIndexRouteImport.update({
-  id: '/members/',
-  path: '/members/',
-  getParentRoute: () => StaffRouteRoute,
-} as any)
-const StaffManageIndexRoute = StaffManageIndexRouteImport.update({
-  id: '/manage/',
-  path: '/manage/',
-  getParentRoute: () => StaffRouteRoute,
-} as any)
-const StaffArticlesIndexRoute = StaffArticlesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => StaffArticlesRoute,
-} as any)
-const LocaleInsightsIndexRoute = LocaleInsightsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => LocaleInsightsRoute,
-} as any)
-const LocaleGuidesIndexRoute = LocaleGuidesIndexRouteImport.update({
-  id: '/guides/',
-  path: '/guides/',
-  getParentRoute: () => LocaleRouteRoute,
-} as any)
-const LocaleEventsIndexRoute = LocaleEventsIndexRouteImport.update({
+const EventsIndexRoute = EventsIndexRouteImport.update({
   id: '/events/',
   path: '/events/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsSlugRoute = EventsSlugRouteImport.update({
+  id: '/events/$slug',
+  path: '/events/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FormTokenRoute = FormTokenRouteImport.update({
+  id: '/form/$token',
+  path: '/form/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuestPassTokenRoute = GuestPassTokenRouteImport.update({
+  id: '/guest-pass/$token',
+  path: '/guest-pass/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesIndexRoute = GuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesSlugRoute = GuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsightsIndexRoute = InsightsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => InsightsRoute,
+} as any)
+const InsightsIdRoute = InsightsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => InsightsRoute,
+} as any)
+const NewslettersIndexRoute = NewslettersIndexRouteImport.update({
+  id: '/newsletters/',
+  path: '/newsletters/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewslettersSlugRoute = NewslettersSlugRouteImport.update({
+  id: '/newsletters/$slug',
+  path: '/newsletters/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TicketTokenRoute = TicketTokenRouteImport.update({
+  id: '/ticket/$token',
+  path: '/ticket/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VolunteerLoginIndexRoute = VolunteerLoginIndexRouteImport.update({
+  id: '/volunteer-login/',
+  path: '/volunteer-login/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VolunteerLoginTokenRoute = VolunteerLoginTokenRouteImport.update({
+  id: '/volunteer-login/$token',
+  path: '/volunteer-login/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocaleCoachProfileIdRoute = LocaleCoachProfileIdRouteImport.update({
+  id: '/coach/$profileId',
+  path: '/coach/$profileId',
   getParentRoute: () => LocaleRouteRoute,
 } as any)
 const LocaleCommunitiesIndexRoute = LocaleCommunitiesIndexRouteImport.update({
@@ -526,153 +501,86 @@ const LocaleCommunitiesIndexRoute = LocaleCommunitiesIndexRouteImport.update({
   path: '/communities/',
   getParentRoute: () => LocaleRouteRoute,
 } as any)
-const VerifyCertificateTokenRoute = VerifyCertificateTokenRouteImport.update({
-  id: '/verify/certificate/$token',
-  path: '/verify/certificate/$token',
+const LocaleCommunitiesSlugRoute = LocaleCommunitiesSlugRouteImport.update({
+  id: '/communities/$slug',
+  path: '/communities/$slug',
+  getParentRoute: () => LocaleRouteRoute,
+} as any)
+const LocaleEventsIndexRoute = LocaleEventsIndexRouteImport.update({
+  id: '/events/',
+  path: '/events/',
+  getParentRoute: () => LocaleRouteRoute,
+} as any)
+const LocaleEventsSlugRoute = LocaleEventsSlugRouteImport.update({
+  id: '/events/$slug',
+  path: '/events/$slug',
+  getParentRoute: () => LocaleRouteRoute,
+} as any)
+const LocaleGuidesIndexRoute = LocaleGuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => LocaleRouteRoute,
+} as any)
+const LocaleGuidesSlugRoute = LocaleGuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => LocaleRouteRoute,
+} as any)
+const LocaleInsightsIndexRoute = LocaleInsightsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LocaleInsightsRoute,
+} as any)
+const LocaleInsightsIdRoute = LocaleInsightsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => LocaleInsightsRoute,
+} as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ContactConfirmTokenRoute = ContactConfirmTokenRouteImport.update({
-  id: '/contact/confirm/$token',
-  path: '/contact/confirm/$token',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicRoleGrantsArchiveRoute =
-  ApiPublicRoleGrantsArchiveRouteImport.update({
-    id: '/api/public/role-grants-archive',
-    path: '/api/public/role-grants-archive',
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicRoleDirectoryRoute = ApiPublicRoleDirectoryRouteImport.update({
-  id: '/api/public/role-directory',
-  path: '/api/public/role-directory',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicOpStructureRoute = ApiPublicOpStructureRouteImport.update({
-  id: '/api/public/op-structure',
-  path: '/api/public/op-structure',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicNewsletterRefreshRoute =
-  ApiPublicNewsletterRefreshRouteImport.update({
-    id: '/api/public/newsletter-refresh',
-    path: '/api/public/newsletter-refresh',
-    getParentRoute: () => rootRouteImport,
+const MemberMemberCertificatesRoute =
+  MemberMemberCertificatesRouteImport.update({
+    id: '/certificates',
+    path: '/certificates',
+    getParentRoute: () => MemberMemberRoute,
   } as any)
-const ApiPublicMemberSyncRetryRoute =
-  ApiPublicMemberSyncRetryRouteImport.update({
-    id: '/api/public/member-sync-retry',
-    path: '/api/public/member-sync-retry',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicMemberSyncRoute = ApiPublicMemberSyncRouteImport.update({
-  id: '/api/public/member-sync',
-  path: '/api/public/member-sync',
-  getParentRoute: () => rootRouteImport,
+const StaffArticlesIndexRoute = StaffArticlesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StaffArticlesRoute,
 } as any)
-const ApiPublicMemberLifecycleRoute =
-  ApiPublicMemberLifecycleRouteImport.update({
-    id: '/api/public/member-lifecycle',
-    path: '/api/public/member-lifecycle',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicLiveChatPurgeRoute = ApiPublicLiveChatPurgeRouteImport.update({
-  id: '/api/public/live-chat-purge',
-  path: '/api/public/live-chat-purge',
-  getParentRoute: () => rootRouteImport,
+const StaffArticlesIdRoute = StaffArticlesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => StaffArticlesRoute,
 } as any)
-const ApiPublicLiveChatRoute = ApiPublicLiveChatRouteImport.update({
-  id: '/api/public/live-chat',
-  path: '/api/public/live-chat',
-  getParentRoute: () => rootRouteImport,
+const StaffArticlesCategoriesRoute = StaffArticlesCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => StaffArticlesRoute,
 } as any)
-const ApiPublicGuestPassPurgeRoute = ApiPublicGuestPassPurgeRouteImport.update({
-  id: '/api/public/guest-pass-purge',
-  path: '/api/public/guest-pass-purge',
-  getParentRoute: () => rootRouteImport,
+const StaffArticlesNewRoute = StaffArticlesNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => StaffArticlesRoute,
 } as any)
-const ApiPublicEventsFeedDoticsRoute =
-  ApiPublicEventsFeedDoticsRouteImport.update({
-    id: '/api/public/events-feed.ics',
-    path: '/api/public/events-feed.ics',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicEventRemindersRoute = ApiPublicEventRemindersRouteImport.update({
-  id: '/api/public/event-reminders',
-  path: '/api/public/event-reminders',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicEventFollowUpsRoute = ApiPublicEventFollowUpsRouteImport.update({
-  id: '/api/public/event-follow-ups',
-  path: '/api/public/event-follow-ups',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicEuropePulseScanRoute =
-  ApiPublicEuropePulseScanRouteImport.update({
-    id: '/api/public/europe-pulse-scan',
-    path: '/api/public/europe-pulse-scan',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicContactEnquiryPurgeRoute =
-  ApiPublicContactEnquiryPurgeRouteImport.update({
-    id: '/api/public/contact-enquiry-purge',
-    path: '/api/public/contact-enquiry-purge',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicClaimWavesRoute = ApiPublicClaimWavesRouteImport.update({
-  id: '/api/public/claim-waves',
-  path: '/api/public/claim-waves',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicChatSignalRoute = ApiPublicChatSignalRouteImport.update({
-  id: '/api/public/chat-signal',
-  path: '/api/public/chat-signal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicArticleFeedbackRoute =
-  ApiPublicArticleFeedbackRouteImport.update({
-    id: '/api/public/article-feedback',
-    path: '/api/public/article-feedback',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const StaffMembersIdRoute = StaffMembersIdRouteImport.update({
-  id: '/members/$id',
-  path: '/members/$id',
+const StaffManageIndexRoute = StaffManageIndexRouteImport.update({
+  id: '/manage/',
+  path: '/manage/',
   getParentRoute: () => StaffRouteRoute,
 } as any)
-const StaffManageMemberEngagementRoute =
-  StaffManageMemberEngagementRouteImport.update({
-    id: '/manage/member-engagement',
-    path: '/manage/member-engagement',
-    getParentRoute: () => StaffRouteRoute,
-  } as any)
-const StaffManageLiveChatRoute = StaffManageLiveChatRouteImport.update({
-  id: '/manage/live-chat',
-  path: '/manage/live-chat',
-  getParentRoute: () => StaffRouteRoute,
-} as any)
-const StaffManageKnowledgeRoute = StaffManageKnowledgeRouteImport.update({
-  id: '/manage/knowledge',
-  path: '/manage/knowledge',
-  getParentRoute: () => StaffRouteRoute,
-} as any)
-const StaffManageGuidesRoute = StaffManageGuidesRouteImport.update({
-  id: '/manage/guides',
-  path: '/manage/guides',
-  getParentRoute: () => StaffRouteRoute,
-} as any)
-const StaffManageGuestPassesRoute = StaffManageGuestPassesRouteImport.update({
-  id: '/manage/guest-passes',
-  path: '/manage/guest-passes',
-  getParentRoute: () => StaffRouteRoute,
-} as any)
-const StaffManageGovernanceRoute = StaffManageGovernanceRouteImport.update({
-  id: '/manage/governance',
-  path: '/manage/governance',
-  getParentRoute: () => StaffRouteRoute,
-} as any)
-const StaffManageEuropePulseRoute = StaffManageEuropePulseRouteImport.update({
-  id: '/manage/europe-pulse',
-  path: '/manage/europe-pulse',
+const StaffManageChatInsightsRoute = StaffManageChatInsightsRouteImport.update({
+  id: '/manage/chat-insights',
+  path: '/manage/chat-insights',
   getParentRoute: () => StaffRouteRoute,
 } as any)
 const StaffManageEditorialSignalsRoute =
@@ -681,104 +589,202 @@ const StaffManageEditorialSignalsRoute =
     path: '/manage/editorial-signals',
     getParentRoute: () => StaffRouteRoute,
   } as any)
-const StaffManageChatInsightsRoute = StaffManageChatInsightsRouteImport.update({
-  id: '/manage/chat-insights',
-  path: '/manage/chat-insights',
+const StaffManageEuropePulseRoute = StaffManageEuropePulseRouteImport.update({
+  id: '/manage/europe-pulse',
+  path: '/manage/europe-pulse',
   getParentRoute: () => StaffRouteRoute,
 } as any)
-const StaffArticlesNewRoute = StaffArticlesNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => StaffArticlesRoute,
+const StaffManageGovernanceRoute = StaffManageGovernanceRouteImport.update({
+  id: '/manage/governance',
+  path: '/manage/governance',
+  getParentRoute: () => StaffRouteRoute,
 } as any)
-const StaffArticlesCategoriesRoute = StaffArticlesCategoriesRouteImport.update({
-  id: '/categories',
-  path: '/categories',
-  getParentRoute: () => StaffArticlesRoute,
+const StaffManageGuestPassesRoute = StaffManageGuestPassesRouteImport.update({
+  id: '/manage/guest-passes',
+  path: '/manage/guest-passes',
+  getParentRoute: () => StaffRouteRoute,
 } as any)
-const StaffArticlesIdRoute = StaffArticlesIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => StaffArticlesRoute,
+const StaffManageGuidesRoute = StaffManageGuidesRouteImport.update({
+  id: '/manage/guides',
+  path: '/manage/guides',
+  getParentRoute: () => StaffRouteRoute,
 } as any)
-const MemberMemberCertificatesRoute =
-  MemberMemberCertificatesRouteImport.update({
-    id: '/certificates',
-    path: '/certificates',
-    getParentRoute: () => MemberMemberRoute,
+const StaffManageKnowledgeRoute = StaffManageKnowledgeRouteImport.update({
+  id: '/manage/knowledge',
+  path: '/manage/knowledge',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
+const StaffManageLiveChatRoute = StaffManageLiveChatRouteImport.update({
+  id: '/manage/live-chat',
+  path: '/manage/live-chat',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
+const StaffManageMemberEngagementRoute =
+  StaffManageMemberEngagementRouteImport.update({
+    id: '/manage/member-engagement',
+    path: '/manage/member-engagement',
+    getParentRoute: () => StaffRouteRoute,
   } as any)
-const Char91DotmcpChar93InvokeToolToolRoute =
-  Char91DotmcpChar93InvokeToolToolRouteImport.update({
-    id: '/.mcp/invoke-tool/$tool',
-    path: '/.mcp/invoke-tool/$tool',
+const StaffMembersIndexRoute = StaffMembersIndexRouteImport.update({
+  id: '/members/',
+  path: '/members/',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
+const StaffMembersIdRoute = StaffMembersIdRouteImport.update({
+  id: '/members/$id',
+  path: '/members/$id',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
+const ApiPublicArticleFeedbackRoute =
+  ApiPublicArticleFeedbackRouteImport.update({
+    id: '/api/public/article-feedback',
+    path: '/api/public/article-feedback',
     getParentRoute: () => rootRouteImport,
   } as any)
-const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
-  id: '/.lovable/oauth/consent',
-  path: '/.lovable/oauth/consent',
+const ApiPublicChatSignalRoute = ApiPublicChatSignalRouteImport.update({
+  id: '/api/public/chat-signal',
+  path: '/api/public/chat-signal',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LocaleInsightsIdRoute = LocaleInsightsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => LocaleInsightsRoute,
+const ApiPublicClaimWavesRoute = ApiPublicClaimWavesRouteImport.update({
+  id: '/api/public/claim-waves',
+  path: '/api/public/claim-waves',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const LocaleGuidesSlugRoute = LocaleGuidesSlugRouteImport.update({
-  id: '/guides/$slug',
-  path: '/guides/$slug',
-  getParentRoute: () => LocaleRouteRoute,
+const ApiPublicContactEnquiryPurgeRoute =
+  ApiPublicContactEnquiryPurgeRouteImport.update({
+    id: '/api/public/contact-enquiry-purge',
+    path: '/api/public/contact-enquiry-purge',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicEuropePulseScanRoute =
+  ApiPublicEuropePulseScanRouteImport.update({
+    id: '/api/public/europe-pulse-scan',
+    path: '/api/public/europe-pulse-scan',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicEventFollowUpsRoute = ApiPublicEventFollowUpsRouteImport.update({
+  id: '/api/public/event-follow-ups',
+  path: '/api/public/event-follow-ups',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const LocaleEventsSlugRoute = LocaleEventsSlugRouteImport.update({
-  id: '/events/$slug',
-  path: '/events/$slug',
-  getParentRoute: () => LocaleRouteRoute,
+const ApiPublicEventRemindersRoute = ApiPublicEventRemindersRouteImport.update({
+  id: '/api/public/event-reminders',
+  path: '/api/public/event-reminders',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const LocaleCommunitiesSlugRoute = LocaleCommunitiesSlugRouteImport.update({
-  id: '/communities/$slug',
-  path: '/communities/$slug',
-  getParentRoute: () => LocaleRouteRoute,
+const ApiPublicEventsFeedDoticsRoute =
+  ApiPublicEventsFeedDoticsRouteImport.update({
+    id: '/api/public/events-feed.ics',
+    path: '/api/public/events-feed.ics',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicGuestPassPurgeRoute = ApiPublicGuestPassPurgeRouteImport.update({
+  id: '/api/public/guest-pass-purge',
+  path: '/api/public/guest-pass-purge',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const LocaleCoachProfileIdRoute = LocaleCoachProfileIdRouteImport.update({
-  id: '/coach/$profileId',
-  path: '/coach/$profileId',
-  getParentRoute: () => LocaleRouteRoute,
+const ApiPublicLiveChatRoute = ApiPublicLiveChatRouteImport.update({
+  id: '/api/public/live-chat',
+  path: '/api/public/live-chat',
+  getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicLiveChatPurgeRoute = ApiPublicLiveChatPurgeRouteImport.update({
+  id: '/api/public/live-chat-purge',
+  path: '/api/public/live-chat-purge',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicMemberLifecycleRoute =
+  ApiPublicMemberLifecycleRouteImport.update({
+    id: '/api/public/member-lifecycle',
+    path: '/api/public/member-lifecycle',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicMemberSyncRoute = ApiPublicMemberSyncRouteImport.update({
+  id: '/api/public/member-sync',
+  path: '/api/public/member-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicMemberSyncRetryRoute =
+  ApiPublicMemberSyncRetryRouteImport.update({
+    id: '/api/public/member-sync-retry',
+    path: '/api/public/member-sync-retry',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicNewsletterRefreshRoute =
+  ApiPublicNewsletterRefreshRouteImport.update({
+    id: '/api/public/newsletter-refresh',
+    path: '/api/public/newsletter-refresh',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicOpStructureRoute = ApiPublicOpStructureRouteImport.update({
+  id: '/api/public/op-structure',
+  path: '/api/public/op-structure',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicRoleDirectoryRoute = ApiPublicRoleDirectoryRouteImport.update({
+  id: '/api/public/role-directory',
+  path: '/api/public/role-directory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicRoleGrantsArchiveRoute =
+  ApiPublicRoleGrantsArchiveRouteImport.update({
+    id: '/api/public/role-grants-archive',
+    path: '/api/public/role-grants-archive',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ContactConfirmTokenRoute = ContactConfirmTokenRouteImport.update({
+  id: '/contact/confirm/$token',
+  path: '/contact/confirm/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyCertificateTokenRoute = VerifyCertificateTokenRouteImport.update({
+  id: '/verify/certificate/$token',
+  path: '/verify/certificate/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffManageEventsIndexRoute = StaffManageEventsIndexRouteImport.update({
+  id: '/manage/events/',
+  path: '/manage/events/',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
+const StaffManageEventsIdRoute = StaffManageEventsIdRouteImport.update({
+  id: '/manage/events/$id',
+  path: '/manage/events/$id',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
+const StaffManageEventsNewRoute = StaffManageEventsNewRouteImport.update({
+  id: '/manage/events/new',
+  path: '/manage/events/new',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
+const StaffManageGuestPassesIdRoute =
+  StaffManageGuestPassesIdRouteImport.update({
+    id: '/manage/guest-passes_/$id',
+    path: '/manage/guest-passes/$id',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
 const StaffManageNewslettersIndexRoute =
   StaffManageNewslettersIndexRouteImport.update({
     id: '/manage/newsletters/',
     path: '/manage/newsletters/',
     getParentRoute: () => StaffRouteRoute,
   } as any)
-const StaffManageEventsIndexRoute = StaffManageEventsIndexRouteImport.update({
-  id: '/manage/events/',
-  path: '/manage/events/',
-  getParentRoute: () => StaffRouteRoute,
-} as any)
-const LovableEmailTransactionalPreviewRoute =
-  LovableEmailTransactionalPreviewRouteImport.update({
-    id: '/lovable/email/transactional/preview',
-    path: '/lovable/email/transactional/preview',
-    getParentRoute: () => rootRouteImport,
+const StaffManageNewslettersIdRoute =
+  StaffManageNewslettersIdRouteImport.update({
+    id: '/manage/newsletters/$id',
+    path: '/manage/newsletters/$id',
+    getParentRoute: () => StaffRouteRoute,
   } as any)
-const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
-  id: '/lovable/email/auth/webhook',
-  path: '/lovable/email/auth/webhook',
+const ApiPublicCalendarFileRoute = ApiPublicCalendarFileRouteImport.update({
+  id: '/api/public/calendar/$file',
+  path: '/api/public/calendar/$file',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
-  id: '/lovable/email/auth/preview',
-  path: '/lovable/email/auth/preview',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicTicketQrTokenRoute = ApiPublicTicketQrTokenRouteImport.update({
-  id: '/api/public/ticket-qr/$token',
-  path: '/api/public/ticket-qr/$token',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicPaymentsWebhookRoute =
-  ApiPublicPaymentsWebhookRouteImport.update({
-    id: '/api/public/payments/webhook',
-    path: '/api/public/payments/webhook',
+const ApiPublicCertificateQrTokenRoute =
+  ApiPublicCertificateQrTokenRouteImport.update({
+    id: '/api/public/certificate-qr/$token',
+    path: '/api/public/certificate-qr/$token',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicEventCalendarFileRoute =
@@ -787,56 +793,50 @@ const ApiPublicEventCalendarFileRoute =
     path: '/api/public/event-calendar/$file',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicCertificateQrTokenRoute =
-  ApiPublicCertificateQrTokenRouteImport.update({
-    id: '/api/public/certificate-qr/$token',
-    path: '/api/public/certificate-qr/$token',
+const ApiPublicPaymentsWebhookRoute =
+  ApiPublicPaymentsWebhookRouteImport.update({
+    id: '/api/public/payments/webhook',
+    path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicCalendarFileRoute = ApiPublicCalendarFileRouteImport.update({
-  id: '/api/public/calendar/$file',
-  path: '/api/public/calendar/$file',
+const ApiPublicTicketQrTokenRoute = ApiPublicTicketQrTokenRouteImport.update({
+  id: '/api/public/ticket-qr/$token',
+  path: '/api/public/ticket-qr/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StaffManageNewslettersIdRoute =
-  StaffManageNewslettersIdRouteImport.update({
-    id: '/manage/newsletters/$id',
-    path: '/manage/newsletters/$id',
-    getParentRoute: () => StaffRouteRoute,
-  } as any)
-const StaffManageGuestPassesIdRoute =
-  StaffManageGuestPassesIdRouteImport.update({
-    id: '/manage/guest-passes_/$id',
-    path: '/manage/guest-passes/$id',
-    getParentRoute: () => StaffRouteRoute,
-  } as any)
-const StaffManageEventsNewRoute = StaffManageEventsNewRouteImport.update({
-  id: '/manage/events/new',
-  path: '/manage/events/new',
-  getParentRoute: () => StaffRouteRoute,
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const StaffManageEventsIdRoute = StaffManageEventsIdRouteImport.update({
-  id: '/manage/events/$id',
-  path: '/manage/events/$id',
-  getParentRoute: () => StaffRouteRoute,
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const StaffManageEventsIdReportingRoute =
-  StaffManageEventsIdReportingRouteImport.update({
-    id: '/manage/events/$id_/reporting',
-    path: '/manage/events/$id/reporting',
-    getParentRoute: () => StaffRouteRoute,
-  } as any)
-const StaffManageEventsIdCheckInRoute =
-  StaffManageEventsIdCheckInRouteImport.update({
-    id: '/manage/events/$id_/check-in',
-    path: '/manage/events/$id/check-in',
-    getParentRoute: () => StaffRouteRoute,
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const StaffManageEventsIdCceRoute = StaffManageEventsIdCceRouteImport.update({
   id: '/manage/events/$id_/cce',
   path: '/manage/events/$id/cce',
   getParentRoute: () => StaffRouteRoute,
 } as any)
+const StaffManageEventsIdCheckInRoute =
+  StaffManageEventsIdCheckInRouteImport.update({
+    id: '/manage/events/$id_/check-in',
+    path: '/manage/events/$id/check-in',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
+const StaffManageEventsIdReportingRoute =
+  StaffManageEventsIdReportingRouteImport.update({
+    id: '/manage/events/$id_/reporting',
+    path: '/manage/events/$id/reporting',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
 const StaffManageEventsIdFormsFormIdRoute =
   StaffManageEventsIdFormsFormIdRouteImport.update({
     id: '/manage/events/$id_/forms/$formId',
@@ -1733,144 +1733,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/team': {
-      id: '/team'
-      path: '/team'
-      fullPath: '/team'
-      preLoaderRoute: typeof TeamRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/staff-sign-in': {
-      id: '/staff-sign-in'
-      path: '/staff-sign-in'
-      fullPath: '/staff-sign-in'
-      preLoaderRoute: typeof StaffSignInRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/staff-invite': {
-      id: '/staff-invite'
-      path: '/staff-invite'
-      fullPath: '/staff-invite'
-      preLoaderRoute: typeof StaffInviteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/no-access': {
-      id: '/no-access'
-      path: '/no-access'
-      fullPath: '/no-access'
-      preLoaderRoute: typeof NoAccessRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/insights': {
-      id: '/insights'
-      path: '/insights'
-      fullPath: '/insights'
-      preLoaderRoute: typeof InsightsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/imprint': {
-      id: '/imprint'
-      path: '/imprint'
-      fullPath: '/imprint'
-      preLoaderRoute: typeof ImprintRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/governance': {
-      id: '/governance'
-      path: '/governance'
-      fullPath: '/governance'
-      preLoaderRoute: typeof GovernanceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/forgot-password': {
-      id: '/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof ForgotPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/for-organisations': {
-      id: '/for-organisations'
-      path: '/for-organisations'
-      fullPath: '/for-organisations'
-      preLoaderRoute: typeof ForOrganisationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/for-coaches': {
-      id: '/for-coaches'
-      path: '/for-coaches'
-      fullPath: '/for-coaches'
-      preLoaderRoute: typeof ForCoachesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/find-a-coach': {
-      id: '/find-a-coach'
-      path: '/find-a-coach'
-      fullPath: '/find-a-coach'
-      preLoaderRoute: typeof FindACoachRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/europe-pulse': {
-      id: '/europe-pulse'
-      path: '/europe-pulse'
-      fullPath: '/europe-pulse'
-      preLoaderRoute: typeof EuropePulseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_staff': {
-      id: '/_staff'
-      path: ''
+    '/': {
+      id: '/'
+      path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof StaffRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_member': {
-      id: '/_member'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof MemberRouteRouteImport
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$locale': {
@@ -1880,53 +1747,144 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
+    '/_member': {
+      id: '/_member'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof MemberRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/volunteer-login/': {
-      id: '/volunteer-login/'
-      path: '/volunteer-login'
-      fullPath: '/volunteer-login/'
-      preLoaderRoute: typeof VolunteerLoginIndexRouteImport
+    '/_staff': {
+      id: '/_staff'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof StaffRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/newsletters/': {
-      id: '/newsletters/'
-      path: '/newsletters'
-      fullPath: '/newsletters/'
-      preLoaderRoute: typeof NewslettersIndexRouteImport
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/insights/': {
-      id: '/insights/'
-      path: '/'
-      fullPath: '/insights/'
-      preLoaderRoute: typeof InsightsIndexRouteImport
-      parentRoute: typeof InsightsRoute
-    }
-    '/guides/': {
-      id: '/guides/'
-      path: '/guides'
-      fullPath: '/guides/'
-      preLoaderRoute: typeof GuidesIndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/events/': {
-      id: '/events/'
-      path: '/events'
-      fullPath: '/events/'
-      preLoaderRoute: typeof EventsIndexRouteImport
+    '/europe-pulse': {
+      id: '/europe-pulse'
+      path: '/europe-pulse'
+      fullPath: '/europe-pulse'
+      preLoaderRoute: typeof EuropePulseRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/communities/': {
-      id: '/communities/'
-      path: '/communities'
-      fullPath: '/communities/'
-      preLoaderRoute: typeof CommunitiesIndexRouteImport
+    '/find-a-coach': {
+      id: '/find-a-coach'
+      path: '/find-a-coach'
+      fullPath: '/find-a-coach'
+      preLoaderRoute: typeof FindACoachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-coaches': {
+      id: '/for-coaches'
+      path: '/for-coaches'
+      fullPath: '/for-coaches'
+      preLoaderRoute: typeof ForCoachesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-organisations': {
+      id: '/for-organisations'
+      path: '/for-organisations'
+      fullPath: '/for-organisations'
+      preLoaderRoute: typeof ForOrganisationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/governance': {
+      id: '/governance'
+      path: '/governance'
+      fullPath: '/governance'
+      preLoaderRoute: typeof GovernanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/imprint': {
+      id: '/imprint'
+      path: '/imprint'
+      fullPath: '/imprint'
+      preLoaderRoute: typeof ImprintRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insights': {
+      id: '/insights'
+      path: '/insights'
+      fullPath: '/insights'
+      preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/no-access': {
+      id: '/no-access'
+      path: '/no-access'
+      fullPath: '/no-access'
+      preLoaderRoute: typeof NoAccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff-invite': {
+      id: '/staff-invite'
+      path: '/staff-invite'
+      fullPath: '/staff-invite'
+      preLoaderRoute: typeof StaffInviteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff-sign-in': {
+      id: '/staff-sign-in'
+      path: '/staff-sign-in'
+      fullPath: '/staff-sign-in'
+      preLoaderRoute: typeof StaffSignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/team': {
+      id: '/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof TeamRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$locale/': {
@@ -1936,270 +1894,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleIndexRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
-    '/volunteer-login/$token': {
-      id: '/volunteer-login/$token'
-      path: '/volunteer-login/$token'
-      fullPath: '/volunteer-login/$token'
-      preLoaderRoute: typeof VolunteerLoginTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ticket/$token': {
-      id: '/ticket/$token'
-      path: '/ticket/$token'
-      fullPath: '/ticket/$token'
-      preLoaderRoute: typeof TicketTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/newsletters/$slug': {
-      id: '/newsletters/$slug'
-      path: '/newsletters/$slug'
-      fullPath: '/newsletters/$slug'
-      preLoaderRoute: typeof NewslettersSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/insights/$id': {
-      id: '/insights/$id'
-      path: '/$id'
-      fullPath: '/insights/$id'
-      preLoaderRoute: typeof InsightsIdRouteImport
-      parentRoute: typeof InsightsRoute
-    }
-    '/guides/$slug': {
-      id: '/guides/$slug'
-      path: '/guides/$slug'
-      fullPath: '/guides/$slug'
-      preLoaderRoute: typeof GuidesSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/guest-pass/$token': {
-      id: '/guest-pass/$token'
-      path: '/guest-pass/$token'
-      fullPath: '/guest-pass/$token'
-      preLoaderRoute: typeof GuestPassTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/form/$token': {
-      id: '/form/$token'
-      path: '/form/$token'
-      fullPath: '/form/$token'
-      preLoaderRoute: typeof FormTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/events/$slug': {
-      id: '/events/$slug'
-      path: '/events/$slug'
-      fullPath: '/events/$slug'
-      preLoaderRoute: typeof EventsSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/communities/$slug': {
-      id: '/communities/$slug'
-      path: '/communities/$slug'
-      fullPath: '/communities/$slug'
-      preLoaderRoute: typeof CommunitiesSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/coach/$profileId': {
-      id: '/coach/$profileId'
-      path: '/coach/$profileId'
-      fullPath: '/coach/$profileId'
-      preLoaderRoute: typeof CoachProfileIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/claim/$token': {
-      id: '/claim/$token'
-      path: '/claim/$token'
-      fullPath: '/claim/$token'
-      preLoaderRoute: typeof ClaimTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/confirm': {
-      id: '/auth/confirm'
-      path: '/confirm'
-      fullPath: '/auth/confirm'
-      preLoaderRoute: typeof AuthConfirmRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/auth/callback': {
-      id: '/auth/callback'
-      path: '/callback'
-      fullPath: '/auth/callback'
-      preLoaderRoute: typeof AuthCallbackRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/attend/$token': {
-      id: '/attend/$token'
-      path: '/attend/$token'
-      fullPath: '/attend/$token'
-      preLoaderRoute: typeof AttendTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/staff-assistant': {
-      id: '/api/staff-assistant'
-      path: '/api/staff-assistant'
-      fullPath: '/api/staff-assistant'
-      preLoaderRoute: typeof ApiStaffAssistantRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/event-proposal-agent': {
-      id: '/api/event-proposal-agent'
-      path: '/api/event-proposal-agent'
-      fullPath: '/api/event-proposal-agent'
-      preLoaderRoute: typeof ApiEventProposalAgentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/contact-agent': {
-      id: '/api/contact-agent'
-      path: '/api/contact-agent'
-      fullPath: '/api/contact-agent'
-      preLoaderRoute: typeof ApiContactAgentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/chat': {
-      id: '/api/chat'
-      path: '/api/chat'
-      fullPath: '/api/chat'
-      preLoaderRoute: typeof ApiChatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_staff/vocabularies': {
-      id: '/_staff/vocabularies'
-      path: '/vocabularies'
-      fullPath: '/vocabularies'
-      preLoaderRoute: typeof StaffVocabulariesRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/roles': {
-      id: '/_staff/roles'
-      path: '/roles'
-      fullPath: '/roles'
-      preLoaderRoute: typeof StaffRolesRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/operational-structure': {
-      id: '/_staff/operational-structure'
-      path: '/operational-structure'
-      fullPath: '/operational-structure'
-      preLoaderRoute: typeof StaffOperationalStructureRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/integration': {
-      id: '/_staff/integration'
-      path: '/integration'
-      fullPath: '/integration'
-      preLoaderRoute: typeof StaffIntegrationRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/coach-finder': {
-      id: '/_staff/coach-finder'
-      path: '/coach-finder'
-      fullPath: '/coach-finder'
-      preLoaderRoute: typeof StaffCoachFinderRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/articles': {
-      id: '/_staff/articles'
-      path: '/articles'
-      fullPath: '/articles'
-      preLoaderRoute: typeof StaffArticlesRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_member/volunteering': {
-      id: '/_member/volunteering'
-      path: '/volunteering'
-      fullPath: '/volunteering'
-      preLoaderRoute: typeof MemberVolunteeringRouteImport
-      parentRoute: typeof MemberRouteRoute
-    }
-    '/_member/volunteer-chat': {
-      id: '/_member/volunteer-chat'
-      path: '/volunteer-chat'
-      fullPath: '/volunteer-chat'
-      preLoaderRoute: typeof MemberVolunteerChatRouteImport
-      parentRoute: typeof MemberRouteRoute
-    }
-    '/_member/my-profile': {
-      id: '/_member/my-profile'
-      path: '/my-profile'
-      fullPath: '/my-profile'
-      preLoaderRoute: typeof MemberMyProfileRouteImport
-      parentRoute: typeof MemberRouteRoute
-    }
-    '/_member/member': {
-      id: '/_member/member'
-      path: '/member'
-      fullPath: '/member'
-      preLoaderRoute: typeof MemberMemberRouteImport
-      parentRoute: typeof MemberRouteRoute
-    }
-    '/.well-known/oauth-protected-resource': {
-      id: '/.well-known/oauth-protected-resource'
-      path: '/.well-known/oauth-protected-resource'
-      fullPath: '/.well-known/oauth-protected-resource'
-      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/.mcp/list-tools': {
-      id: '/.mcp/list-tools'
-      path: '/.mcp/list-tools'
-      fullPath: '/.mcp/list-tools'
-      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/$locale/team': {
-      id: '/$locale/team'
-      path: '/team'
-      fullPath: '/$locale/team'
-      preLoaderRoute: typeof LocaleTeamRouteImport
-      parentRoute: typeof LocaleRouteRoute
-    }
-    '/$locale/privacy': {
-      id: '/$locale/privacy'
-      path: '/privacy'
-      fullPath: '/$locale/privacy'
-      preLoaderRoute: typeof LocalePrivacyRouteImport
-      parentRoute: typeof LocaleRouteRoute
-    }
-    '/$locale/insights': {
-      id: '/$locale/insights'
-      path: '/insights'
-      fullPath: '/$locale/insights'
-      preLoaderRoute: typeof LocaleInsightsRouteImport
-      parentRoute: typeof LocaleRouteRoute
-    }
-    '/$locale/imprint': {
-      id: '/$locale/imprint'
-      path: '/imprint'
-      fullPath: '/$locale/imprint'
-      preLoaderRoute: typeof LocaleImprintRouteImport
-      parentRoute: typeof LocaleRouteRoute
-    }
-    '/$locale/governance': {
-      id: '/$locale/governance'
-      path: '/governance'
-      fullPath: '/$locale/governance'
-      preLoaderRoute: typeof LocaleGovernanceRouteImport
-      parentRoute: typeof LocaleRouteRoute
-    }
-    '/$locale/for-organisations': {
-      id: '/$locale/for-organisations'
-      path: '/for-organisations'
-      fullPath: '/$locale/for-organisations'
-      preLoaderRoute: typeof LocaleForOrganisationsRouteImport
-      parentRoute: typeof LocaleRouteRoute
-    }
-    '/$locale/for-coaches': {
-      id: '/$locale/for-coaches'
-      path: '/for-coaches'
-      fullPath: '/$locale/for-coaches'
-      preLoaderRoute: typeof LocaleForCoachesRouteImport
-      parentRoute: typeof LocaleRouteRoute
-    }
-    '/$locale/find-a-coach': {
-      id: '/$locale/find-a-coach'
-      path: '/find-a-coach'
-      fullPath: '/$locale/find-a-coach'
-      preLoaderRoute: typeof LocaleFindACoachRouteImport
+    '/$locale/about': {
+      id: '/$locale/about'
+      path: '/about'
+      fullPath: '/$locale/about'
+      preLoaderRoute: typeof LocaleAboutRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
     '/$locale/europe-pulse': {
@@ -2209,53 +1908,319 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleEuropePulseRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
-    '/$locale/about': {
-      id: '/$locale/about'
-      path: '/about'
-      fullPath: '/$locale/about'
-      preLoaderRoute: typeof LocaleAboutRouteImport
+    '/$locale/find-a-coach': {
+      id: '/$locale/find-a-coach'
+      path: '/find-a-coach'
+      fullPath: '/$locale/find-a-coach'
+      preLoaderRoute: typeof LocaleFindACoachRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
-    '/_staff/members/': {
-      id: '/_staff/members/'
-      path: '/members'
-      fullPath: '/members/'
-      preLoaderRoute: typeof StaffMembersIndexRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/manage/': {
-      id: '/_staff/manage/'
-      path: '/manage'
-      fullPath: '/manage/'
-      preLoaderRoute: typeof StaffManageIndexRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/articles/': {
-      id: '/_staff/articles/'
-      path: '/'
-      fullPath: '/articles/'
-      preLoaderRoute: typeof StaffArticlesIndexRouteImport
-      parentRoute: typeof StaffArticlesRoute
-    }
-    '/$locale/insights/': {
-      id: '/$locale/insights/'
-      path: '/'
-      fullPath: '/$locale/insights/'
-      preLoaderRoute: typeof LocaleInsightsIndexRouteImport
-      parentRoute: typeof LocaleInsightsRoute
-    }
-    '/$locale/guides/': {
-      id: '/$locale/guides/'
-      path: '/guides'
-      fullPath: '/$locale/guides/'
-      preLoaderRoute: typeof LocaleGuidesIndexRouteImport
+    '/$locale/for-coaches': {
+      id: '/$locale/for-coaches'
+      path: '/for-coaches'
+      fullPath: '/$locale/for-coaches'
+      preLoaderRoute: typeof LocaleForCoachesRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
-    '/$locale/events/': {
-      id: '/$locale/events/'
+    '/$locale/for-organisations': {
+      id: '/$locale/for-organisations'
+      path: '/for-organisations'
+      fullPath: '/$locale/for-organisations'
+      preLoaderRoute: typeof LocaleForOrganisationsRouteImport
+      parentRoute: typeof LocaleRouteRoute
+    }
+    '/$locale/governance': {
+      id: '/$locale/governance'
+      path: '/governance'
+      fullPath: '/$locale/governance'
+      preLoaderRoute: typeof LocaleGovernanceRouteImport
+      parentRoute: typeof LocaleRouteRoute
+    }
+    '/$locale/imprint': {
+      id: '/$locale/imprint'
+      path: '/imprint'
+      fullPath: '/$locale/imprint'
+      preLoaderRoute: typeof LocaleImprintRouteImport
+      parentRoute: typeof LocaleRouteRoute
+    }
+    '/$locale/insights': {
+      id: '/$locale/insights'
+      path: '/insights'
+      fullPath: '/$locale/insights'
+      preLoaderRoute: typeof LocaleInsightsRouteImport
+      parentRoute: typeof LocaleRouteRoute
+    }
+    '/$locale/privacy': {
+      id: '/$locale/privacy'
+      path: '/privacy'
+      fullPath: '/$locale/privacy'
+      preLoaderRoute: typeof LocalePrivacyRouteImport
+      parentRoute: typeof LocaleRouteRoute
+    }
+    '/$locale/team': {
+      id: '/$locale/team'
+      path: '/team'
+      fullPath: '/$locale/team'
+      preLoaderRoute: typeof LocaleTeamRouteImport
+      parentRoute: typeof LocaleRouteRoute
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_member/member': {
+      id: '/_member/member'
+      path: '/member'
+      fullPath: '/member'
+      preLoaderRoute: typeof MemberMemberRouteImport
+      parentRoute: typeof MemberRouteRoute
+    }
+    '/_member/my-profile': {
+      id: '/_member/my-profile'
+      path: '/my-profile'
+      fullPath: '/my-profile'
+      preLoaderRoute: typeof MemberMyProfileRouteImport
+      parentRoute: typeof MemberRouteRoute
+    }
+    '/_member/volunteer-chat': {
+      id: '/_member/volunteer-chat'
+      path: '/volunteer-chat'
+      fullPath: '/volunteer-chat'
+      preLoaderRoute: typeof MemberVolunteerChatRouteImport
+      parentRoute: typeof MemberRouteRoute
+    }
+    '/_member/volunteering': {
+      id: '/_member/volunteering'
+      path: '/volunteering'
+      fullPath: '/volunteering'
+      preLoaderRoute: typeof MemberVolunteeringRouteImport
+      parentRoute: typeof MemberRouteRoute
+    }
+    '/_staff/articles': {
+      id: '/_staff/articles'
+      path: '/articles'
+      fullPath: '/articles'
+      preLoaderRoute: typeof StaffArticlesRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/coach-finder': {
+      id: '/_staff/coach-finder'
+      path: '/coach-finder'
+      fullPath: '/coach-finder'
+      preLoaderRoute: typeof StaffCoachFinderRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/integration': {
+      id: '/_staff/integration'
+      path: '/integration'
+      fullPath: '/integration'
+      preLoaderRoute: typeof StaffIntegrationRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/operational-structure': {
+      id: '/_staff/operational-structure'
+      path: '/operational-structure'
+      fullPath: '/operational-structure'
+      preLoaderRoute: typeof StaffOperationalStructureRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/roles': {
+      id: '/_staff/roles'
+      path: '/roles'
+      fullPath: '/roles'
+      preLoaderRoute: typeof StaffRolesRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/vocabularies': {
+      id: '/_staff/vocabularies'
+      path: '/vocabularies'
+      fullPath: '/vocabularies'
+      preLoaderRoute: typeof StaffVocabulariesRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/contact-agent': {
+      id: '/api/contact-agent'
+      path: '/api/contact-agent'
+      fullPath: '/api/contact-agent'
+      preLoaderRoute: typeof ApiContactAgentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/event-proposal-agent': {
+      id: '/api/event-proposal-agent'
+      path: '/api/event-proposal-agent'
+      fullPath: '/api/event-proposal-agent'
+      preLoaderRoute: typeof ApiEventProposalAgentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/staff-assistant': {
+      id: '/api/staff-assistant'
+      path: '/api/staff-assistant'
+      fullPath: '/api/staff-assistant'
+      preLoaderRoute: typeof ApiStaffAssistantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/attend/$token': {
+      id: '/attend/$token'
+      path: '/attend/$token'
+      fullPath: '/attend/$token'
+      preLoaderRoute: typeof AttendTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/confirm': {
+      id: '/auth/confirm'
+      path: '/confirm'
+      fullPath: '/auth/confirm'
+      preLoaderRoute: typeof AuthConfirmRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/claim/$token': {
+      id: '/claim/$token'
+      path: '/claim/$token'
+      fullPath: '/claim/$token'
+      preLoaderRoute: typeof ClaimTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coach/$profileId': {
+      id: '/coach/$profileId'
+      path: '/coach/$profileId'
+      fullPath: '/coach/$profileId'
+      preLoaderRoute: typeof CoachProfileIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/communities/': {
+      id: '/communities/'
+      path: '/communities'
+      fullPath: '/communities/'
+      preLoaderRoute: typeof CommunitiesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/communities/$slug': {
+      id: '/communities/$slug'
+      path: '/communities/$slug'
+      fullPath: '/communities/$slug'
+      preLoaderRoute: typeof CommunitiesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events/': {
+      id: '/events/'
       path: '/events'
-      fullPath: '/$locale/events/'
-      preLoaderRoute: typeof LocaleEventsIndexRouteImport
+      fullPath: '/events/'
+      preLoaderRoute: typeof EventsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events/$slug': {
+      id: '/events/$slug'
+      path: '/events/$slug'
+      fullPath: '/events/$slug'
+      preLoaderRoute: typeof EventsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/form/$token': {
+      id: '/form/$token'
+      path: '/form/$token'
+      fullPath: '/form/$token'
+      preLoaderRoute: typeof FormTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guest-pass/$token': {
+      id: '/guest-pass/$token'
+      path: '/guest-pass/$token'
+      fullPath: '/guest-pass/$token'
+      preLoaderRoute: typeof GuestPassTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/': {
+      id: '/guides/'
+      path: '/guides'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof GuidesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/$slug': {
+      id: '/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/guides/$slug'
+      preLoaderRoute: typeof GuidesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insights/': {
+      id: '/insights/'
+      path: '/'
+      fullPath: '/insights/'
+      preLoaderRoute: typeof InsightsIndexRouteImport
+      parentRoute: typeof InsightsRoute
+    }
+    '/insights/$id': {
+      id: '/insights/$id'
+      path: '/$id'
+      fullPath: '/insights/$id'
+      preLoaderRoute: typeof InsightsIdRouteImport
+      parentRoute: typeof InsightsRoute
+    }
+    '/newsletters/': {
+      id: '/newsletters/'
+      path: '/newsletters'
+      fullPath: '/newsletters/'
+      preLoaderRoute: typeof NewslettersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletters/$slug': {
+      id: '/newsletters/$slug'
+      path: '/newsletters/$slug'
+      fullPath: '/newsletters/$slug'
+      preLoaderRoute: typeof NewslettersSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ticket/$token': {
+      id: '/ticket/$token'
+      path: '/ticket/$token'
+      fullPath: '/ticket/$token'
+      preLoaderRoute: typeof TicketTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/volunteer-login/': {
+      id: '/volunteer-login/'
+      path: '/volunteer-login'
+      fullPath: '/volunteer-login/'
+      preLoaderRoute: typeof VolunteerLoginIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/volunteer-login/$token': {
+      id: '/volunteer-login/$token'
+      path: '/volunteer-login/$token'
+      fullPath: '/volunteer-login/$token'
+      preLoaderRoute: typeof VolunteerLoginTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$locale/coach/$profileId': {
+      id: '/$locale/coach/$profileId'
+      path: '/coach/$profileId'
+      fullPath: '/$locale/coach/$profileId'
+      preLoaderRoute: typeof LocaleCoachProfileIdRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
     '/$locale/communities/': {
@@ -2265,270 +2230,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleCommunitiesIndexRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
-    '/verify/certificate/$token': {
-      id: '/verify/certificate/$token'
-      path: '/verify/certificate/$token'
-      fullPath: '/verify/certificate/$token'
-      preLoaderRoute: typeof VerifyCertificateTokenRouteImport
-      parentRoute: typeof rootRouteImport
+    '/$locale/communities/$slug': {
+      id: '/$locale/communities/$slug'
+      path: '/communities/$slug'
+      fullPath: '/$locale/communities/$slug'
+      preLoaderRoute: typeof LocaleCommunitiesSlugRouteImport
+      parentRoute: typeof LocaleRouteRoute
     }
-    '/contact/confirm/$token': {
-      id: '/contact/confirm/$token'
-      path: '/contact/confirm/$token'
-      fullPath: '/contact/confirm/$token'
-      preLoaderRoute: typeof ContactConfirmTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/role-grants-archive': {
-      id: '/api/public/role-grants-archive'
-      path: '/api/public/role-grants-archive'
-      fullPath: '/api/public/role-grants-archive'
-      preLoaderRoute: typeof ApiPublicRoleGrantsArchiveRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/role-directory': {
-      id: '/api/public/role-directory'
-      path: '/api/public/role-directory'
-      fullPath: '/api/public/role-directory'
-      preLoaderRoute: typeof ApiPublicRoleDirectoryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/op-structure': {
-      id: '/api/public/op-structure'
-      path: '/api/public/op-structure'
-      fullPath: '/api/public/op-structure'
-      preLoaderRoute: typeof ApiPublicOpStructureRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/newsletter-refresh': {
-      id: '/api/public/newsletter-refresh'
-      path: '/api/public/newsletter-refresh'
-      fullPath: '/api/public/newsletter-refresh'
-      preLoaderRoute: typeof ApiPublicNewsletterRefreshRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/member-sync-retry': {
-      id: '/api/public/member-sync-retry'
-      path: '/api/public/member-sync-retry'
-      fullPath: '/api/public/member-sync-retry'
-      preLoaderRoute: typeof ApiPublicMemberSyncRetryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/member-sync': {
-      id: '/api/public/member-sync'
-      path: '/api/public/member-sync'
-      fullPath: '/api/public/member-sync'
-      preLoaderRoute: typeof ApiPublicMemberSyncRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/member-lifecycle': {
-      id: '/api/public/member-lifecycle'
-      path: '/api/public/member-lifecycle'
-      fullPath: '/api/public/member-lifecycle'
-      preLoaderRoute: typeof ApiPublicMemberLifecycleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/live-chat-purge': {
-      id: '/api/public/live-chat-purge'
-      path: '/api/public/live-chat-purge'
-      fullPath: '/api/public/live-chat-purge'
-      preLoaderRoute: typeof ApiPublicLiveChatPurgeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/live-chat': {
-      id: '/api/public/live-chat'
-      path: '/api/public/live-chat'
-      fullPath: '/api/public/live-chat'
-      preLoaderRoute: typeof ApiPublicLiveChatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/guest-pass-purge': {
-      id: '/api/public/guest-pass-purge'
-      path: '/api/public/guest-pass-purge'
-      fullPath: '/api/public/guest-pass-purge'
-      preLoaderRoute: typeof ApiPublicGuestPassPurgeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/events-feed.ics': {
-      id: '/api/public/events-feed.ics'
-      path: '/api/public/events-feed.ics'
-      fullPath: '/api/public/events-feed.ics'
-      preLoaderRoute: typeof ApiPublicEventsFeedDoticsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/event-reminders': {
-      id: '/api/public/event-reminders'
-      path: '/api/public/event-reminders'
-      fullPath: '/api/public/event-reminders'
-      preLoaderRoute: typeof ApiPublicEventRemindersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/event-follow-ups': {
-      id: '/api/public/event-follow-ups'
-      path: '/api/public/event-follow-ups'
-      fullPath: '/api/public/event-follow-ups'
-      preLoaderRoute: typeof ApiPublicEventFollowUpsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/europe-pulse-scan': {
-      id: '/api/public/europe-pulse-scan'
-      path: '/api/public/europe-pulse-scan'
-      fullPath: '/api/public/europe-pulse-scan'
-      preLoaderRoute: typeof ApiPublicEuropePulseScanRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/contact-enquiry-purge': {
-      id: '/api/public/contact-enquiry-purge'
-      path: '/api/public/contact-enquiry-purge'
-      fullPath: '/api/public/contact-enquiry-purge'
-      preLoaderRoute: typeof ApiPublicContactEnquiryPurgeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/claim-waves': {
-      id: '/api/public/claim-waves'
-      path: '/api/public/claim-waves'
-      fullPath: '/api/public/claim-waves'
-      preLoaderRoute: typeof ApiPublicClaimWavesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/chat-signal': {
-      id: '/api/public/chat-signal'
-      path: '/api/public/chat-signal'
-      fullPath: '/api/public/chat-signal'
-      preLoaderRoute: typeof ApiPublicChatSignalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/article-feedback': {
-      id: '/api/public/article-feedback'
-      path: '/api/public/article-feedback'
-      fullPath: '/api/public/article-feedback'
-      preLoaderRoute: typeof ApiPublicArticleFeedbackRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_staff/members/$id': {
-      id: '/_staff/members/$id'
-      path: '/members/$id'
-      fullPath: '/members/$id'
-      preLoaderRoute: typeof StaffMembersIdRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/manage/member-engagement': {
-      id: '/_staff/manage/member-engagement'
-      path: '/manage/member-engagement'
-      fullPath: '/manage/member-engagement'
-      preLoaderRoute: typeof StaffManageMemberEngagementRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/manage/live-chat': {
-      id: '/_staff/manage/live-chat'
-      path: '/manage/live-chat'
-      fullPath: '/manage/live-chat'
-      preLoaderRoute: typeof StaffManageLiveChatRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/manage/knowledge': {
-      id: '/_staff/manage/knowledge'
-      path: '/manage/knowledge'
-      fullPath: '/manage/knowledge'
-      preLoaderRoute: typeof StaffManageKnowledgeRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/manage/guides': {
-      id: '/_staff/manage/guides'
-      path: '/manage/guides'
-      fullPath: '/manage/guides'
-      preLoaderRoute: typeof StaffManageGuidesRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/manage/guest-passes': {
-      id: '/_staff/manage/guest-passes'
-      path: '/manage/guest-passes'
-      fullPath: '/manage/guest-passes'
-      preLoaderRoute: typeof StaffManageGuestPassesRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/manage/governance': {
-      id: '/_staff/manage/governance'
-      path: '/manage/governance'
-      fullPath: '/manage/governance'
-      preLoaderRoute: typeof StaffManageGovernanceRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/manage/europe-pulse': {
-      id: '/_staff/manage/europe-pulse'
-      path: '/manage/europe-pulse'
-      fullPath: '/manage/europe-pulse'
-      preLoaderRoute: typeof StaffManageEuropePulseRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/manage/editorial-signals': {
-      id: '/_staff/manage/editorial-signals'
-      path: '/manage/editorial-signals'
-      fullPath: '/manage/editorial-signals'
-      preLoaderRoute: typeof StaffManageEditorialSignalsRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/manage/chat-insights': {
-      id: '/_staff/manage/chat-insights'
-      path: '/manage/chat-insights'
-      fullPath: '/manage/chat-insights'
-      preLoaderRoute: typeof StaffManageChatInsightsRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/articles/new': {
-      id: '/_staff/articles/new'
-      path: '/new'
-      fullPath: '/articles/new'
-      preLoaderRoute: typeof StaffArticlesNewRouteImport
-      parentRoute: typeof StaffArticlesRoute
-    }
-    '/_staff/articles/categories': {
-      id: '/_staff/articles/categories'
-      path: '/categories'
-      fullPath: '/articles/categories'
-      preLoaderRoute: typeof StaffArticlesCategoriesRouteImport
-      parentRoute: typeof StaffArticlesRoute
-    }
-    '/_staff/articles/$id': {
-      id: '/_staff/articles/$id'
-      path: '/$id'
-      fullPath: '/articles/$id'
-      preLoaderRoute: typeof StaffArticlesIdRouteImport
-      parentRoute: typeof StaffArticlesRoute
-    }
-    '/_member/member/certificates': {
-      id: '/_member/member/certificates'
-      path: '/certificates'
-      fullPath: '/member/certificates'
-      preLoaderRoute: typeof MemberMemberCertificatesRouteImport
-      parentRoute: typeof MemberMemberRoute
-    }
-    '/.mcp/invoke-tool/$tool': {
-      id: '/.mcp/invoke-tool/$tool'
-      path: '/.mcp/invoke-tool/$tool'
-      fullPath: '/.mcp/invoke-tool/$tool'
-      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/.lovable/oauth/consent': {
-      id: '/.lovable/oauth/consent'
-      path: '/.lovable/oauth/consent'
-      fullPath: '/.lovable/oauth/consent'
-      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/$locale/insights/$id': {
-      id: '/$locale/insights/$id'
-      path: '/$id'
-      fullPath: '/$locale/insights/$id'
-      preLoaderRoute: typeof LocaleInsightsIdRouteImport
-      parentRoute: typeof LocaleInsightsRoute
-    }
-    '/$locale/guides/$slug': {
-      id: '/$locale/guides/$slug'
-      path: '/guides/$slug'
-      fullPath: '/$locale/guides/$slug'
-      preLoaderRoute: typeof LocaleGuidesSlugRouteImport
+    '/$locale/events/': {
+      id: '/$locale/events/'
+      path: '/events'
+      fullPath: '/$locale/events/'
+      preLoaderRoute: typeof LocaleEventsIndexRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
     '/$locale/events/$slug': {
@@ -2538,109 +2251,312 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleEventsSlugRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
-    '/$locale/communities/$slug': {
-      id: '/$locale/communities/$slug'
-      path: '/communities/$slug'
-      fullPath: '/$locale/communities/$slug'
-      preLoaderRoute: typeof LocaleCommunitiesSlugRouteImport
+    '/$locale/guides/': {
+      id: '/$locale/guides/'
+      path: '/guides'
+      fullPath: '/$locale/guides/'
+      preLoaderRoute: typeof LocaleGuidesIndexRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
-    '/$locale/coach/$profileId': {
-      id: '/$locale/coach/$profileId'
-      path: '/coach/$profileId'
-      fullPath: '/$locale/coach/$profileId'
-      preLoaderRoute: typeof LocaleCoachProfileIdRouteImport
+    '/$locale/guides/$slug': {
+      id: '/$locale/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/$locale/guides/$slug'
+      preLoaderRoute: typeof LocaleGuidesSlugRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
-    '/_staff/manage/newsletters/': {
-      id: '/_staff/manage/newsletters/'
-      path: '/manage/newsletters'
-      fullPath: '/manage/newsletters/'
-      preLoaderRoute: typeof StaffManageNewslettersIndexRouteImport
+    '/$locale/insights/': {
+      id: '/$locale/insights/'
+      path: '/'
+      fullPath: '/$locale/insights/'
+      preLoaderRoute: typeof LocaleInsightsIndexRouteImport
+      parentRoute: typeof LocaleInsightsRoute
+    }
+    '/$locale/insights/$id': {
+      id: '/$locale/insights/$id'
+      path: '/$id'
+      fullPath: '/$locale/insights/$id'
+      preLoaderRoute: typeof LocaleInsightsIdRouteImport
+      parentRoute: typeof LocaleInsightsRoute
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_member/member/certificates': {
+      id: '/_member/member/certificates'
+      path: '/certificates'
+      fullPath: '/member/certificates'
+      preLoaderRoute: typeof MemberMemberCertificatesRouteImport
+      parentRoute: typeof MemberMemberRoute
+    }
+    '/_staff/articles/': {
+      id: '/_staff/articles/'
+      path: '/'
+      fullPath: '/articles/'
+      preLoaderRoute: typeof StaffArticlesIndexRouteImport
+      parentRoute: typeof StaffArticlesRoute
+    }
+    '/_staff/articles/$id': {
+      id: '/_staff/articles/$id'
+      path: '/$id'
+      fullPath: '/articles/$id'
+      preLoaderRoute: typeof StaffArticlesIdRouteImport
+      parentRoute: typeof StaffArticlesRoute
+    }
+    '/_staff/articles/categories': {
+      id: '/_staff/articles/categories'
+      path: '/categories'
+      fullPath: '/articles/categories'
+      preLoaderRoute: typeof StaffArticlesCategoriesRouteImport
+      parentRoute: typeof StaffArticlesRoute
+    }
+    '/_staff/articles/new': {
+      id: '/_staff/articles/new'
+      path: '/new'
+      fullPath: '/articles/new'
+      preLoaderRoute: typeof StaffArticlesNewRouteImport
+      parentRoute: typeof StaffArticlesRoute
+    }
+    '/_staff/manage/': {
+      id: '/_staff/manage/'
+      path: '/manage'
+      fullPath: '/manage/'
+      preLoaderRoute: typeof StaffManageIndexRouteImport
       parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/chat-insights': {
+      id: '/_staff/manage/chat-insights'
+      path: '/manage/chat-insights'
+      fullPath: '/manage/chat-insights'
+      preLoaderRoute: typeof StaffManageChatInsightsRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/editorial-signals': {
+      id: '/_staff/manage/editorial-signals'
+      path: '/manage/editorial-signals'
+      fullPath: '/manage/editorial-signals'
+      preLoaderRoute: typeof StaffManageEditorialSignalsRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/europe-pulse': {
+      id: '/_staff/manage/europe-pulse'
+      path: '/manage/europe-pulse'
+      fullPath: '/manage/europe-pulse'
+      preLoaderRoute: typeof StaffManageEuropePulseRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/governance': {
+      id: '/_staff/manage/governance'
+      path: '/manage/governance'
+      fullPath: '/manage/governance'
+      preLoaderRoute: typeof StaffManageGovernanceRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/guest-passes': {
+      id: '/_staff/manage/guest-passes'
+      path: '/manage/guest-passes'
+      fullPath: '/manage/guest-passes'
+      preLoaderRoute: typeof StaffManageGuestPassesRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/guides': {
+      id: '/_staff/manage/guides'
+      path: '/manage/guides'
+      fullPath: '/manage/guides'
+      preLoaderRoute: typeof StaffManageGuidesRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/knowledge': {
+      id: '/_staff/manage/knowledge'
+      path: '/manage/knowledge'
+      fullPath: '/manage/knowledge'
+      preLoaderRoute: typeof StaffManageKnowledgeRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/live-chat': {
+      id: '/_staff/manage/live-chat'
+      path: '/manage/live-chat'
+      fullPath: '/manage/live-chat'
+      preLoaderRoute: typeof StaffManageLiveChatRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/member-engagement': {
+      id: '/_staff/manage/member-engagement'
+      path: '/manage/member-engagement'
+      fullPath: '/manage/member-engagement'
+      preLoaderRoute: typeof StaffManageMemberEngagementRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/members/': {
+      id: '/_staff/members/'
+      path: '/members'
+      fullPath: '/members/'
+      preLoaderRoute: typeof StaffMembersIndexRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/members/$id': {
+      id: '/_staff/members/$id'
+      path: '/members/$id'
+      fullPath: '/members/$id'
+      preLoaderRoute: typeof StaffMembersIdRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/api/public/article-feedback': {
+      id: '/api/public/article-feedback'
+      path: '/api/public/article-feedback'
+      fullPath: '/api/public/article-feedback'
+      preLoaderRoute: typeof ApiPublicArticleFeedbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/chat-signal': {
+      id: '/api/public/chat-signal'
+      path: '/api/public/chat-signal'
+      fullPath: '/api/public/chat-signal'
+      preLoaderRoute: typeof ApiPublicChatSignalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/claim-waves': {
+      id: '/api/public/claim-waves'
+      path: '/api/public/claim-waves'
+      fullPath: '/api/public/claim-waves'
+      preLoaderRoute: typeof ApiPublicClaimWavesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/contact-enquiry-purge': {
+      id: '/api/public/contact-enquiry-purge'
+      path: '/api/public/contact-enquiry-purge'
+      fullPath: '/api/public/contact-enquiry-purge'
+      preLoaderRoute: typeof ApiPublicContactEnquiryPurgeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/europe-pulse-scan': {
+      id: '/api/public/europe-pulse-scan'
+      path: '/api/public/europe-pulse-scan'
+      fullPath: '/api/public/europe-pulse-scan'
+      preLoaderRoute: typeof ApiPublicEuropePulseScanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/event-follow-ups': {
+      id: '/api/public/event-follow-ups'
+      path: '/api/public/event-follow-ups'
+      fullPath: '/api/public/event-follow-ups'
+      preLoaderRoute: typeof ApiPublicEventFollowUpsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/event-reminders': {
+      id: '/api/public/event-reminders'
+      path: '/api/public/event-reminders'
+      fullPath: '/api/public/event-reminders'
+      preLoaderRoute: typeof ApiPublicEventRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/events-feed.ics': {
+      id: '/api/public/events-feed.ics'
+      path: '/api/public/events-feed.ics'
+      fullPath: '/api/public/events-feed.ics'
+      preLoaderRoute: typeof ApiPublicEventsFeedDoticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/guest-pass-purge': {
+      id: '/api/public/guest-pass-purge'
+      path: '/api/public/guest-pass-purge'
+      fullPath: '/api/public/guest-pass-purge'
+      preLoaderRoute: typeof ApiPublicGuestPassPurgeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/live-chat': {
+      id: '/api/public/live-chat'
+      path: '/api/public/live-chat'
+      fullPath: '/api/public/live-chat'
+      preLoaderRoute: typeof ApiPublicLiveChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/live-chat-purge': {
+      id: '/api/public/live-chat-purge'
+      path: '/api/public/live-chat-purge'
+      fullPath: '/api/public/live-chat-purge'
+      preLoaderRoute: typeof ApiPublicLiveChatPurgeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/member-lifecycle': {
+      id: '/api/public/member-lifecycle'
+      path: '/api/public/member-lifecycle'
+      fullPath: '/api/public/member-lifecycle'
+      preLoaderRoute: typeof ApiPublicMemberLifecycleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/member-sync': {
+      id: '/api/public/member-sync'
+      path: '/api/public/member-sync'
+      fullPath: '/api/public/member-sync'
+      preLoaderRoute: typeof ApiPublicMemberSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/member-sync-retry': {
+      id: '/api/public/member-sync-retry'
+      path: '/api/public/member-sync-retry'
+      fullPath: '/api/public/member-sync-retry'
+      preLoaderRoute: typeof ApiPublicMemberSyncRetryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/newsletter-refresh': {
+      id: '/api/public/newsletter-refresh'
+      path: '/api/public/newsletter-refresh'
+      fullPath: '/api/public/newsletter-refresh'
+      preLoaderRoute: typeof ApiPublicNewsletterRefreshRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/op-structure': {
+      id: '/api/public/op-structure'
+      path: '/api/public/op-structure'
+      fullPath: '/api/public/op-structure'
+      preLoaderRoute: typeof ApiPublicOpStructureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/role-directory': {
+      id: '/api/public/role-directory'
+      path: '/api/public/role-directory'
+      fullPath: '/api/public/role-directory'
+      preLoaderRoute: typeof ApiPublicRoleDirectoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/role-grants-archive': {
+      id: '/api/public/role-grants-archive'
+      path: '/api/public/role-grants-archive'
+      fullPath: '/api/public/role-grants-archive'
+      preLoaderRoute: typeof ApiPublicRoleGrantsArchiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact/confirm/$token': {
+      id: '/contact/confirm/$token'
+      path: '/contact/confirm/$token'
+      fullPath: '/contact/confirm/$token'
+      preLoaderRoute: typeof ContactConfirmTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify/certificate/$token': {
+      id: '/verify/certificate/$token'
+      path: '/verify/certificate/$token'
+      fullPath: '/verify/certificate/$token'
+      preLoaderRoute: typeof VerifyCertificateTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_staff/manage/events/': {
       id: '/_staff/manage/events/'
       path: '/manage/events'
       fullPath: '/manage/events/'
       preLoaderRoute: typeof StaffManageEventsIndexRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/lovable/email/transactional/preview': {
-      id: '/lovable/email/transactional/preview'
-      path: '/lovable/email/transactional/preview'
-      fullPath: '/lovable/email/transactional/preview'
-      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/lovable/email/auth/webhook': {
-      id: '/lovable/email/auth/webhook'
-      path: '/lovable/email/auth/webhook'
-      fullPath: '/lovable/email/auth/webhook'
-      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/lovable/email/auth/preview': {
-      id: '/lovable/email/auth/preview'
-      path: '/lovable/email/auth/preview'
-      fullPath: '/lovable/email/auth/preview'
-      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/ticket-qr/$token': {
-      id: '/api/public/ticket-qr/$token'
-      path: '/api/public/ticket-qr/$token'
-      fullPath: '/api/public/ticket-qr/$token'
-      preLoaderRoute: typeof ApiPublicTicketQrTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/payments/webhook': {
-      id: '/api/public/payments/webhook'
-      path: '/api/public/payments/webhook'
-      fullPath: '/api/public/payments/webhook'
-      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/event-calendar/$file': {
-      id: '/api/public/event-calendar/$file'
-      path: '/api/public/event-calendar/$file'
-      fullPath: '/api/public/event-calendar/$file'
-      preLoaderRoute: typeof ApiPublicEventCalendarFileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/certificate-qr/$token': {
-      id: '/api/public/certificate-qr/$token'
-      path: '/api/public/certificate-qr/$token'
-      fullPath: '/api/public/certificate-qr/$token'
-      preLoaderRoute: typeof ApiPublicCertificateQrTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/calendar/$file': {
-      id: '/api/public/calendar/$file'
-      path: '/api/public/calendar/$file'
-      fullPath: '/api/public/calendar/$file'
-      preLoaderRoute: typeof ApiPublicCalendarFileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_staff/manage/newsletters/$id': {
-      id: '/_staff/manage/newsletters/$id'
-      path: '/manage/newsletters/$id'
-      fullPath: '/manage/newsletters/$id'
-      preLoaderRoute: typeof StaffManageNewslettersIdRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/manage/guest-passes_/$id': {
-      id: '/_staff/manage/guest-passes_/$id'
-      path: '/manage/guest-passes/$id'
-      fullPath: '/manage/guest-passes/$id'
-      preLoaderRoute: typeof StaffManageGuestPassesIdRouteImport
-      parentRoute: typeof StaffRouteRoute
-    }
-    '/_staff/manage/events/new': {
-      id: '/_staff/manage/events/new'
-      path: '/manage/events/new'
-      fullPath: '/manage/events/new'
-      preLoaderRoute: typeof StaffManageEventsNewRouteImport
       parentRoute: typeof StaffRouteRoute
     }
     '/_staff/manage/events/$id': {
@@ -2650,11 +2566,95 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageEventsIdRouteImport
       parentRoute: typeof StaffRouteRoute
     }
-    '/_staff/manage/events/$id_/reporting': {
-      id: '/_staff/manage/events/$id_/reporting'
-      path: '/manage/events/$id/reporting'
-      fullPath: '/manage/events/$id/reporting'
-      preLoaderRoute: typeof StaffManageEventsIdReportingRouteImport
+    '/_staff/manage/events/new': {
+      id: '/_staff/manage/events/new'
+      path: '/manage/events/new'
+      fullPath: '/manage/events/new'
+      preLoaderRoute: typeof StaffManageEventsNewRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/guest-passes_/$id': {
+      id: '/_staff/manage/guest-passes_/$id'
+      path: '/manage/guest-passes/$id'
+      fullPath: '/manage/guest-passes/$id'
+      preLoaderRoute: typeof StaffManageGuestPassesIdRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/newsletters/': {
+      id: '/_staff/manage/newsletters/'
+      path: '/manage/newsletters'
+      fullPath: '/manage/newsletters/'
+      preLoaderRoute: typeof StaffManageNewslettersIndexRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/newsletters/$id': {
+      id: '/_staff/manage/newsletters/$id'
+      path: '/manage/newsletters/$id'
+      fullPath: '/manage/newsletters/$id'
+      preLoaderRoute: typeof StaffManageNewslettersIdRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/api/public/calendar/$file': {
+      id: '/api/public/calendar/$file'
+      path: '/api/public/calendar/$file'
+      fullPath: '/api/public/calendar/$file'
+      preLoaderRoute: typeof ApiPublicCalendarFileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/certificate-qr/$token': {
+      id: '/api/public/certificate-qr/$token'
+      path: '/api/public/certificate-qr/$token'
+      fullPath: '/api/public/certificate-qr/$token'
+      preLoaderRoute: typeof ApiPublicCertificateQrTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/event-calendar/$file': {
+      id: '/api/public/event-calendar/$file'
+      path: '/api/public/event-calendar/$file'
+      fullPath: '/api/public/event-calendar/$file'
+      preLoaderRoute: typeof ApiPublicEventCalendarFileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/payments/webhook': {
+      id: '/api/public/payments/webhook'
+      path: '/api/public/payments/webhook'
+      fullPath: '/api/public/payments/webhook'
+      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/ticket-qr/$token': {
+      id: '/api/public/ticket-qr/$token'
+      path: '/api/public/ticket-qr/$token'
+      fullPath: '/api/public/ticket-qr/$token'
+      preLoaderRoute: typeof ApiPublicTicketQrTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_staff/manage/events/$id_/cce': {
+      id: '/_staff/manage/events/$id_/cce'
+      path: '/manage/events/$id/cce'
+      fullPath: '/manage/events/$id/cce'
+      preLoaderRoute: typeof StaffManageEventsIdCceRouteImport
       parentRoute: typeof StaffRouteRoute
     }
     '/_staff/manage/events/$id_/check-in': {
@@ -2664,11 +2664,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageEventsIdCheckInRouteImport
       parentRoute: typeof StaffRouteRoute
     }
-    '/_staff/manage/events/$id_/cce': {
-      id: '/_staff/manage/events/$id_/cce'
-      path: '/manage/events/$id/cce'
-      fullPath: '/manage/events/$id/cce'
-      preLoaderRoute: typeof StaffManageEventsIdCceRouteImport
+    '/_staff/manage/events/$id_/reporting': {
+      id: '/_staff/manage/events/$id_/reporting'
+      path: '/manage/events/$id/reporting'
+      fullPath: '/manage/events/$id/reporting'
+      preLoaderRoute: typeof StaffManageEventsIdReportingRouteImport
       parentRoute: typeof StaffRouteRoute
     }
     '/_staff/manage/events/$id_/forms/$formId': {
