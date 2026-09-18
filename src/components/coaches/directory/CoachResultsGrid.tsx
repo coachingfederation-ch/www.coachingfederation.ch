@@ -31,7 +31,6 @@ export function CoachResultsGrid({
   setPage,
   hasMore,
   modeLabel,
-  isSample = false,
   selectedSlugs = [],
   emphasiseDifferences = false,
 }: {
@@ -44,8 +43,6 @@ export function CoachResultsGrid({
   setPage: (updater: (p: number) => number) => void;
   hasMore: boolean;
   modeLabel: string | null;
-  /** Random showcase: a single set, never paginated. */
-  isSample?: boolean;
   /** Specialisation/format slugs the visitor filtered on. */
   selectedSlugs?: string[];
   /** Any filter active: only then does difference-first emphasis apply. */
