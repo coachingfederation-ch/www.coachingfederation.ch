@@ -24,11 +24,16 @@ export async function loadEventHosts(
 
   const { data: links, error } = await supabase
     .from("event_hosts")
-    .select("profile_id, sort_order")
+    .select("profile_id, sort_order, link_url, blurb")
     .eq("event_id", eventId)
     .order("sort_order", { ascending: true });
   if (error) throw new Error(error.message);
-  const ids = ((links ?? []) as { profile_id: string }[]).map((l) => l.profile_id);
+  const linkRows = (links ?? []) as {
+    profile_id: string;
+    link_url: string | null;
+    blurb: string | null;
+  }[];
+  const ids = linkRows.map((l) => l.profile_id);
   if (ids.length === 0) return [];
 
   const { data } = await supabase
