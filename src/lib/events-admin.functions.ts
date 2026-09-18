@@ -10,7 +10,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertOrganizer } from "./authz";
-import { MAX_EVENT_HOSTS } from "./event-hosts";
+import { MAX_EVENT_HOSTS, MAX_HOST_BLURB } from "./event-hosts";
 import { MAX_SPEAKER_BIO } from "./event-speakers";
 import { HERO_MARK_LIMIT } from "./hero-design";
 import { expandRecurrence, occurrenceSlug, RECURRENCE_FREQUENCIES } from "./recurrence";
@@ -556,20 +556,31 @@ export const listEventHosts = createServerFn({ method: "POST" })
     return loadEventHosts(data.eventId, context.supabase);
   });
 
-/** Replaces the whole host set for one event — at most two, order preserved. */
+/** Replaces the whole host set for one event — order preserved. */
 export const setEventHosts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
     z
       .object({
         eventId: z.string().uuid(),
-        profileIds: z.array(z.string().uuid()).max(MAX_EVENT_HOSTS),
+        hosts: z
+          .array(
+            z.object({
+              profileId: z.string().uuid(),
+              linkUrl: z.string().trim().url().max(500).nullable().optional(),
+              blurb: z.string().trim().max(MAX_HOST_BLURB).nullable().optional(),
+            }),
+          )
+          .max(MAX_EVENT_HOSTS),
       })
       .parse(input),
   )
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
-    const unique = [...new Set(data.profileIds)];
+    // First entry wins if the same coach is listed twice.
+    const unique = data.hosts.filter(
+      (h, index) => data.hosts.findIndex((x) => x.profileId === h.profileId) === index,
+    );
     const { error: delError } = await context.supabase
       .from("event_hosts")
       .delete()
@@ -577,10 +588,12 @@ export const setEventHosts = createServerFn({ method: "POST" })
     if (delError) throw new Error(delError.message);
     if (unique.length > 0) {
       const { error } = await context.supabase.from("event_hosts").insert(
-        unique.map((profile_id, index) => ({
+        unique.map((host, index) => ({
           event_id: data.eventId,
-          profile_id,
+          profile_id: host.profileId,
           sort_order: index,
+          link_url: host.linkUrl || null,
+          blurb: host.blurb || null,
         })),
       );
       if (error) throw new Error(error.message);
