@@ -200,14 +200,19 @@ export const cancelEngagementSends = createServerFn({ method: "POST" })
 /** Sends what is currently eligible, without waiting for the next sync run. */
 export const runEngagementDispatch = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<{ sent: number; failed: number }> => {
-    const { assertMembership } = await import("./authz");
-    await assertMembership(context);
+  .handler(
+    async ({ context }): Promise<{ sent: number; failed: number; anyCampaignOn: boolean }> => {
+      const { assertMembership } = await import("./authz");
+      await assertMembership(context);
 
-    const { dispatchEngagementSends } = await import("./member-engagement/dispatch.server");
-    const summary = await dispatchEngagementSends();
-    return Object.values(summary).reduce(
-      (total, row) => ({ sent: total.sent + row.sent, failed: total.failed + row.failed }),
-      { sent: 0, failed: 0 },
-    );
-  });
+      const { dispatchEngagementSends } = await import("./member-engagement/dispatch.server");
+      const summary = await dispatchEngagementSends();
+      // A campaign left "off" is skipped entirely, so an approved email simply
+      // stays put — say so instead of reporting a silent "0 sent".
+      const totals = Object.values(summary).reduce(
+        (total, row) => ({ sent: total.sent + row.sent, failed: total.failed + row.failed }),
+        { sent: 0, failed: 0 },
+      );
+      return { ...totals, anyCampaignOn: Object.keys(summary).length > 0 };
+    },
+  );
