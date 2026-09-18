@@ -298,7 +298,7 @@ function RolesPage() {
 
   return (
     <Shell>
-      <div className="mx-auto max-w-5xl px-10 py-10">
+      <div className="mx-auto max-w-5xl px-4 py-10 sm:px-10">
         <h1 className="text-2xl font-bold tracking-tight">{t("roles.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("roles.intro")}</p>
 
