@@ -183,6 +183,25 @@ through short-lived signed URLs.
 - Reads go through `lib/event-speakers.server.ts`; RLS exposes speakers and
   links of published events only. Speaker bios are not translated.
 
+## Duplicating an event
+
+The "Duplicate" panel at the bottom of the event editor copies one event into a
+new **draft** on a date staff choose, then opens the copy.
+
+- Copied: content, language, hero image and credit, location, online link, map,
+  practical notes, hero marks, capacity, registration mode and guest/ticket
+  settings, attendance threshold, certificate flag, category, community, region,
+  hosts (with per-event link and blurb), speakers, ticket tiers and translations.
+- Not copied: registrations, waitlist, invitations, discount codes, attendance,
+  certificates, CCE application, recap, series membership, "featured", and the
+  published status. The copy's owner is the staff member who made it.
+- Duration is preserved: `ends_at` is the new start plus the original length.
+- Slug: `<source-slug>-copy`, with `-2`, `-3`, … until free.
+- Like the repeat and series panels it reads the stored row, so it is blocked
+  while the editor has unsaved changes.
+- Server function: `duplicateEvent` in `lib/events-admin.functions.ts`
+  (organizer-guarded, writes through the caller's RLS-scoped client).
+
 ## Member credits dashboard
 
 `/member/certificates` is the member's own continuing-education record.
