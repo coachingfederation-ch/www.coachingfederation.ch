@@ -205,83 +205,108 @@ export function MemberHome() {
   const name = data?.firstName?.trim();
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-10 sm:px-10">
-      <header>
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-          {t("member.home.eyebrow")}
-        </p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">
-          {name
-            ? t("member.home.greetingNamed").replace("{name}", name)
-            : t("member.home.greeting")}
-        </h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("member.home.intro")}</p>
+    <div>
+      {/* Deep Blue band, the same opening move the public pages use. */}
+      <header className="bg-hero text-hero-foreground">
+        <div className="mx-auto max-w-6xl px-6 py-12 sm:px-10">
+          <p className="eyebrow eyebrow-accent">{t("member.home.eyebrow")}</p>
+          <h1 className="mt-3 font-heading text-4xl leading-tight sm:text-5xl">
+            {name
+              ? t("member.home.greetingNamed").replace("{name}", name)
+              : t("member.home.greeting")}
+          </h1>
+          <p className="mt-3 max-w-2xl text-sm text-hero-foreground/80">
+            {t("member.home.intro")}
+          </p>
+        </div>
       </header>
 
-      <div className="mt-8">
+      <div className="mx-auto max-w-6xl px-6 py-12 sm:px-10">
         <EmailChangeNotice />
-      </div>
 
-      <div className="mt-8 grid gap-5 sm:grid-cols-2">
-
-        <section className={CARD}>
-          <UserRound className="h-5 w-5 text-primary" aria-hidden />
-          <h2 className="mt-3 text-lg font-bold">{t("member.home.profile.title")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("member.home.profile.body")}</p>
-          <Link to="/my-profile" className={CTA}>
-            {t("member.home.profile.cta")}
-            <ArrowRight className="h-4 w-4" aria-hidden />
+        {/* Whole card is the link — the icon tile carries the hover state. */}
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <Link to="/my-profile" className={TOOL_CARD}>
+            <span className={TOOL_ICON}>
+              <UserRound className="h-5 w-5" aria-hidden />
+            </span>
+            <h2 className="mt-4 font-heading text-xl text-primary">
+              {t("member.home.profile.title")}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">{t("member.home.profile.body")}</p>
+            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+              {t("member.home.profile.cta")}
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden />
+            </span>
           </Link>
-        </section>
 
-        <section className={CARD}>
-          <ExternalLink className="h-5 w-5 text-primary" aria-hidden />
-          <h2 className="mt-3 text-lg font-bold">{t("member.home.engage.title")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("member.home.engage.body")}</p>
-          <a href={ENGAGE_URL} target="_blank" rel="noopener noreferrer" className={CTA}>
-            {t("member.home.engage.cta")}
-            <ExternalLink className="h-4 w-4" aria-hidden />
+          {/* Reprinting a certificate is a self-service task: members reach it
+              without writing to the office. */}
+          <Link to="/member/certificates" className={TOOL_CARD}>
+            <span className={TOOL_ICON}>
+              <Award className="h-5 w-5" aria-hidden />
+            </span>
+            <h2 className="mt-4 font-heading text-xl text-primary">
+              {t("member.certificates.title")}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">{t("member.certificates.help")}</p>
+            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+              {t("member.certificates.open")}
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden />
+            </span>
+          </Link>
+
+          <Link to="/volunteering" className={TOOL_CARD}>
+            <span className={TOOL_ICON}>
+              <HeartHandshake className="h-5 w-5" aria-hidden />
+            </span>
+            <h2 className="mt-4 font-heading text-xl text-primary">
+              {t("member.home.volunteer.title")}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">{t("member.home.volunteer.body")}</p>
+            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+              {t("member.home.volunteer.cta")}
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden />
+            </span>
+          </Link>
+
+          <a href={ENGAGE_URL} target="_blank" rel="noopener noreferrer" className={TOOL_CARD}>
+            <span className={TOOL_ICON}>
+              <ExternalLink className="h-5 w-5" aria-hidden />
+            </span>
+            <h2 className="mt-4 font-heading text-xl text-primary">
+              {t("member.home.engage.title")}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">{t("member.home.engage.body")}</p>
+            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+              {t("member.home.engage.cta")}
+              <ExternalLink className="h-4 w-4" aria-hidden />
+            </span>
           </a>
-        </section>
 
-        <section className={CARD}>
-          <HeartHandshake className="h-5 w-5 text-primary" aria-hidden />
-          <h2 className="mt-3 text-lg font-bold">{t("member.home.volunteer.title")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("member.home.volunteer.body")}</p>
-          <Link to="/volunteering" className={CTA}>
-            {t("member.home.volunteer.cta")}
-            <ArrowRight className="h-4 w-4" aria-hidden />
-          </Link>
-        </section>
+          {/* Announced, not yet actionable — it stays visibly inactive. */}
+          <section className={CARD}>
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-background text-muted-foreground">
+              <Megaphone className="h-5 w-5" aria-hidden />
+            </span>
+            <h2 className="mt-4 font-heading text-xl text-primary">{t("member.home.ads.title")}</h2>
+            <p className="mt-2 text-sm text-muted-foreground">{t("member.home.ads.body")}</p>
+            <button type="button" disabled className={CTA_MUTED}>
+              {t("member.home.soon")}
+            </button>
+          </section>
+        </div>
 
-        {/* Reprinting a certificate is a self-service task: members reach it
-            without writing to the office. */}
-        <section className={CARD}>
-          <Award className="h-5 w-5 text-primary" aria-hidden />
-          <h2 className="mt-3 text-lg font-bold">{t("member.certificates.title")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("member.certificates.help")}</p>
-          <Link to="/member/certificates" className={CTA}>
-            {t("member.certificates.open")}
-            <ArrowRight className="h-4 w-4" aria-hidden />
-          </Link>
-        </section>
+        <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
+          <div className="space-y-12">
+            <InternalEvents />
 
-        <section className={CARD}>
-          <Megaphone className="h-5 w-5 text-primary" aria-hidden />
-          <h2 className="mt-3 text-lg font-bold">{t("member.home.ads.title")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("member.home.ads.body")}</p>
-          <button type="button" disabled className={CTA_MUTED}>
-            {t("member.home.soon")}
-          </button>
-        </section>
-      </div>
+            <section>
+              <SectionHeading>{t("member.home.communities.title")}</SectionHeading>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {t("member.home.communities.body")}
+              </p>
 
-      <InternalEvents />
-      <GuestPassesCard />
-
-      <section className="mt-10">
-        <h2 className="text-lg font-bold">{t("member.home.communities.title")}</h2>
-        <p className="mt-1 text-sm text-muted-foreground">{t("member.home.communities.body")}</p>
 
         {isLoading ? (
           <p className="mt-4 text-sm text-muted-foreground">
