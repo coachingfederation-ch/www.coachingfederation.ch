@@ -21,6 +21,11 @@ import { ServicesSection } from "./member-profile/ServicesSection";
 import { TeamBioSection } from "./member-profile/TeamBioSection";
 import { TestimonialSection } from "./member-profile/TestimonialSection";
 import { VisibilitySection } from "./member-profile/VisibilitySection";
+import {
+  ProfileEditorHeader,
+  ProfileEditorNav,
+  ProfileGroup,
+} from "./member-profile/ProfileEditorChrome";
 import { useMemberProfileForm } from "./member-profile/useMemberProfileForm";
 
 export function MemberProfileEditor() {
