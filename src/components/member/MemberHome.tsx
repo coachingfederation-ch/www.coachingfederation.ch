@@ -166,7 +166,7 @@ function InternalEvents() {
                     aria-hidden
                     className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-2xl bg-primary text-primary-foreground"
                   >
-                    <span className="text-[11px] font-semibold uppercase tracking-wider">
+                    <span className="text-xs font-semibold uppercase tracking-wider">
                       {month}
                     </span>
                     <span className="font-heading text-2xl leading-none">{day}</span>

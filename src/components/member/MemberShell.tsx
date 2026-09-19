@@ -29,7 +29,7 @@ import { useMyRoles } from "@/lib/roles";
 import { hasExactRole } from "@/lib/role-model";
 
 const UTILITY_PILL =
-  "inline-flex h-10 items-center gap-1.5 rounded-full border border-white/25 px-3 text-[11px] font-semibold uppercase tracking-wider text-white transition hover:border-white/60 hover:bg-white/10";
+  "inline-flex h-10 items-center gap-1.5 rounded-full border border-hero-foreground/25 px-3 text-xs font-semibold uppercase tracking-wider text-hero-foreground transition hover:border-hero-foreground/60 hover:bg-hero-foreground/10";
 
 /** Interface language for the Member Area — no URL change, unlike the public switcher. */
 function MemberLanguageMenu() {
@@ -56,7 +56,7 @@ function MemberLanguageMenu() {
         <ul
           aria-label={t("nav.language")}
           className={
-            "absolute right-0 z-50 mt-2 min-w-[6rem] overflow-hidden rounded-xl border border-border/70 bg-card py-1 " +
+            "absolute right-0 z-50 mt-2 min-w-24 overflow-hidden rounded-xl border border-border/70 bg-card py-1 " +
             CARD_SHADOW
           }
         >
@@ -70,7 +70,7 @@ function MemberLanguageMenu() {
                   close();
                 }}
                 className={
-                  "block min-h-11 w-full px-4 py-3 text-left text-[11px] font-semibold uppercase leading-5 tracking-wider hover:bg-muted hover:text-foreground " +
+                  "block min-h-11 w-full px-4 py-3 text-left text-xs font-semibold uppercase leading-5 tracking-wider hover:bg-muted hover:text-foreground " +
                   (l === locale ? "bg-muted text-foreground" : "text-foreground/80")
                 }
               >
@@ -117,7 +117,7 @@ export function MemberShell({ children }: { children: ReactNode }) {
       onClick={() => void handleSignOut()}
       aria-label={t("nav.signOut")}
       title={t("nav.signOut")}
-      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/25 text-white transition hover:border-white/60 hover:bg-white/10"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-hero-foreground/25 text-hero-foreground transition hover:border-hero-foreground/60 hover:bg-hero-foreground/10"
     >
       <LogOut className="h-4 w-4" aria-hidden />
     </button>
@@ -156,7 +156,7 @@ export function MemberShell({ children }: { children: ReactNode }) {
             <Link
               to={staffLink.to}
               onClick={close}
-              className="rounded-full px-4 py-3 text-[13px] font-semibold text-white/85 transition hover:bg-white/10 hover:text-white"
+              className="rounded-full px-4 py-3 text-sm font-semibold text-hero-foreground/85 transition hover:bg-hero-foreground/10 hover:text-hero-foreground"
             >
               {t(staffLink.key)}
             </Link>

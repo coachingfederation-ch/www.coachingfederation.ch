@@ -45,7 +45,7 @@ export function GuestPassesCard() {
       ) : (
         <ul className="mt-4 space-y-3">
           {passes.map((pass) => (
-            <li key={pass.id} className="rounded-2xl bg-white/10 p-4">
+            <li key={pass.id} className="rounded-2xl bg-primary-foreground/10 p-4">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <p className="text-sm font-bold">{pass.eventTitle}</p>
                 <span className="eyebrow eyebrow-inverse">
