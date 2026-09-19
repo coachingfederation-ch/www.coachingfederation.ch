@@ -205,7 +205,6 @@ through short-lived signed URLs.
 
 ## Where things live
 
-
 | Module                                           | Responsibility                                     |
 | ------------------------------------------------ | -------------------------------------------------- |
 | `tickets.ts` / `tickets.functions.ts`            | Client-safe types, public read endpoints           |

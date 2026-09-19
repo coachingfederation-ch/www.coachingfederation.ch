@@ -86,10 +86,7 @@ export const getMyCredits = createServerFn({ method: "POST" })
         .from("member_credit_entries")
         .select("id, occurred_on, title, provider, cc_hours, rd_hours, note, link_url")
         .order("occurred_on", { ascending: false }),
-      context.supabase
-        .from("member_credit_settings")
-        .select("cycle_start_on")
-        .maybeSingle(),
+      context.supabase.from("member_credit_settings").select("cycle_start_on").maybeSingle(),
       context.supabase
         .from("members")
         .select("credential_expires_on")
@@ -193,7 +190,12 @@ export const setMyCycleStart = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
     z
-      .object({ cycleStartOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable() })
+      .object({
+        cycleStartOn: z
+          .string()
+          .regex(/^\d{4}-\d{2}-\d{2}$/)
+          .nullable(),
+      })
       .parse(input),
   )
   .handler(async ({ context, data }) => {
