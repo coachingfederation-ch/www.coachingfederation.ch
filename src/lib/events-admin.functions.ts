@@ -977,10 +977,23 @@ export const duplicateEvent = createServerFn({ method: "POST" })
       .eq("event_id", data.id);
     if (tiers && tiers.length > 0) {
       const { error } = await context.supabase.from("event_ticket_tiers").insert(
-        tiers.map((tier) => {
-          const { id: _id, event_id: _eventId, ...rest } = tier as Record<string, unknown>;
-          return { ...rest, event_id: newId };
-        }),
+        (tiers as ManagedTier[]).map((tier) => ({
+          event_id: newId,
+          name: tier.name,
+          name_de: tier.name_de,
+          name_fr: tier.name_fr,
+          name_it: tier.name_it,
+          description: tier.description,
+          description_de: tier.description_de,
+          description_fr: tier.description_fr,
+          description_it: tier.description_it,
+          price_cents: tier.price_cents,
+          currency: tier.currency,
+          capacity: tier.capacity,
+          segment: tier.segment,
+          is_active: tier.is_active,
+          sort_order: tier.sort_order,
+        })),
       );
       if (error) throw new Error(error.message);
     }
