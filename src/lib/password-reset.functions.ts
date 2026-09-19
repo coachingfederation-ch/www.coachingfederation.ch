@@ -50,8 +50,26 @@ export const requestPasswordReset = createServerFn({ method: "POST" })
     ]);
     if (!byEmail.allowed) return neutral;
 
+    // The member's own correspondence language wins over whatever the sign-in
+    // screen happened to be showing; the lookup runs for every allowed request
+    // so timing never differs between known and unknown addresses, and the
+    // result is only ever used to pick wording.
+    let locale: string = data.locale;
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: row } = await supabaseAdmin
+        .from("members")
+        .select("correspondence_locale")
+        .eq("email", email)
+        .maybeSingle();
+      const preferred = row?.correspondence_locale;
+      if (preferred && ["en", "de", "fr", "it"].includes(preferred)) locale = preferred;
+    } catch (err) {
+      console.error("correspondence locale lookup failed", err);
+    }
+
     const origin = data.redirectOrigin.replace(/\/$/, "");
-    const redirectTo = `${origin}/reset-password?lang=${data.locale}`;
+    const redirectTo = `${origin}/reset-password?lang=${locale}`;
 
     try {
       const { publicSupabaseClient } = await import("./supabase-public.server");

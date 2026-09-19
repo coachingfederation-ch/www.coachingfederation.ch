@@ -7,7 +7,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useCms } from "@/i18n/cms";
+import { setCmsLocale, useCms } from "@/i18n/cms";
+import { isLocale } from "@/i18n/config";
 import { landingPathForSession } from "@/lib/roles";
 import { Button, Input } from "@/design-system/icf-welcome-design-system-a835df";
 import { AuthCard } from "@/components/auth/auth-screen";
@@ -36,6 +37,13 @@ function ResetPasswordPage() {
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+
+  // The reset mail was written in the member's correspondence language and
+  // carries it in `?lang=`; show this page in the same language.
+  useEffect(() => {
+    const lang = new URLSearchParams(window.location.search).get("lang");
+    if (isLocale(lang)) setCmsLocale(lang);
+  }, []);
 
   // The recovery link puts the session in the URL; supabase-js consumes it
   // asynchronously, so wait briefly before declaring the link dead.
