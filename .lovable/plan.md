@@ -44,23 +44,17 @@ language the person registered in, which is correct and stays as is.
   (`localeFromAuthData`) to pick `RecoveryEmail`'s copy — no webhook change.
 - `src/routes/reset-password.tsx`: apply the `lang` query parameter to the CMS
   locale on mount so the reset page matches the email.
-- `src/lib/member-claim/email.server.ts` already accepts `locale`; the two call
-  sites omit it. `state.server.ts` selects the member row already — add
-  `correspondence_locale` to that select and pass it.
-  `waves.server.ts` — add `correspondence_locale` to the candidate query and
-  pass it into `deliverClaimInvitation`.
+- Claim invitation code is untouched.
 - No schema changes, no new tables or policies.
 
 ## PR note
 
-**Summary** — Automated member mail (password reset, claim invitation) now uses
-the member's saved correspondence language instead of the browser's interface
-language or an English default.
+**Summary** — The password reset email now uses the member's saved
+correspondence language instead of the browser's interface language.
 
 **Changes**
 - Password reset: server-side lookup of the member's correspondence language;
   reset page honours the `lang` parameter.
-- Claim invitation: language passed from the member record at both call sites.
 - Docs: language-selection rule recorded in `docs/member-translations.md`.
 
 **Backend / Schema Changes** — None.
@@ -68,8 +62,7 @@ language or an English default.
 **Testing & Verification** — Reset requested for a member with German set while
 the screen is in English (email and reset page must be German); a member with
 no preference (falls back to screen language, then English); an address with no
-account (same neutral confirmation, no timing difference); claim invitation and
-reminder for members set to DE/FR/IT/EN.
+account (same neutral confirmation, no timing difference).
 
 **Risks & Rollback** — Small: two send paths and one page. Reverting the two
 files restores current behaviour; no data is migrated.
