@@ -10,7 +10,6 @@ import { Ticket } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useCms } from "@/i18n/cms";
 import { listMyGuestPasses } from "@/lib/guest-passes.functions";
-import { Badge } from "@/design-system/icf-welcome-design-system-a835df";
 
 export function GuestPassesCard() {
   const { t, locale } = useCms();
