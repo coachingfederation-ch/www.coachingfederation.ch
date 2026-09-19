@@ -183,6 +183,26 @@ through short-lived signed URLs.
 - Reads go through `lib/event-speakers.server.ts`; RLS exposes speakers and
   links of published events only. Speaker bios are not translated.
 
+## Member credits dashboard
+
+`/member/certificates` is the member's own continuing-education record.
+
+- Sources: hours on certificates we issued (`event_certificates`, labelled
+  "Chapter event") and entries the member records themselves
+  (`member_credit_entries`, labelled "Added by me"). The two are always
+  labelled; a self-declared entry is never a chapter confirmation.
+- Cycle window: three years. Anchored on `members.credential_expires_on` when
+  ICF sends one, otherwise on `member_credit_settings.cycle_start_on`, which
+  the member sets on the page. With neither, every credit is listed and no
+  totals period is implied.
+- Older credits are bucketed into earlier three-year windows, collapsed.
+- All reads and writes run through `lib/member-credits.functions.ts` on the
+  caller's own session; both new tables are owner-scoped by RLS
+  (`user_id = auth.uid()`), with no anon grant.
+- The route file is `routes/_member/member.certificates.tsx`. The member home
+  lives in `member.index.tsx` — as `member.tsx` it was the parent of this page
+  without rendering an `<Outlet />`, so the page could never appear.
+
 ## Where things live
 
 | Module                                           | Responsibility                                     |

@@ -864,7 +864,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
+          "items": [
+            "Projekte leiten",
+            "Von ICFS für die Leitung von Initiativen anerkannt werden"
+          ]
         },
         "status": {
           "title": "Status",
@@ -910,6 +913,48 @@
       "blockedTitle": "Wir können Ihre Anmeldeadresse nicht ändern",
       "blockedBody": "ICF Global meldet eine Adresse, die hier bereits ein anderes Konto nutzt. Deshalb können wir Ihre Anmeldung nicht darauf umstellen.",
       "blockedHint": "Bitte wenden Sie sich an office@coachingfederation.ch, wir klären das."
+    },
+    "credits": {
+      "title": "Ihre Weiterbildungsstunden",
+      "intro": "Alles, was Sie für Ihre nächste Erneuerung des ICF Credentials gesammelt haben — von uns bestätigte Stunden und Weiterbildungen, die Sie selbst eintragen.",
+      "cycle": "Aktueller Zyklus",
+      "noCycle": "Noch kein Zyklus festgelegt",
+      "cc": "Kernkompetenzen",
+      "rd": "Ressourcenentwicklung",
+      "total": "Stunden gesamt",
+      "anchorCredential": "Der Zeitraum richtet sich nach dem Ablaufdatum, das uns ICF meldet.",
+      "anchorMember": "Der Zeitraum richtet sich nach dem Startdatum, das Sie unten setzen.",
+      "anchorNone": "Setzen Sie unten Ihr Startdatum, dann zählen wir den richtigen Zeitraum zusammen.",
+      "cycleStart": "Startdatum des Zyklus",
+      "saveCycle": "Zyklus speichern",
+      "add": "Extern erworbene Stunden eintragen",
+      "empty": "Noch nichts vorhanden. Stunden erscheinen hier, sobald Sie an einem Chapter-Event teilnehmen, das Stunden vergibt — oder sobald Sie eigene eintragen.",
+      "earlier": "Frühere Zyklen",
+      "earlierCycle": "vor {count} Zyklus/Zyklen",
+      "failed": "Ihre Stunden konnten nicht geladen werden. Bitte versuchen Sie es erneut.",
+      "edit": "Eintrag bearbeiten",
+      "delete": "Eintrag löschen",
+      "deleteConfirm": "Diesen Eintrag löschen?",
+      "provider": "Anbieter",
+      "link": "Link",
+      "note": "Notiz",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "dialogTitle": "Extern erworbene Stunden",
+      "dialogHelp": "Ihre eigene Aufzeichnung. Wir bestätigen diese Stunden nicht — bewahren Sie Ihre Nachweise auf.",
+      "source": {
+        "chapter": "Chapter-Event",
+        "self": "Selbst eingetragen"
+      },
+      "table": {
+        "title": "Stunden",
+        "date": "Datum",
+        "activity": "Aktivität",
+        "cc": "CC",
+        "rd": "RD",
+        "actions": "Aktionen",
+        "certificate": "Zertifikat"
+      }
     }
   },
   "noAccess": {

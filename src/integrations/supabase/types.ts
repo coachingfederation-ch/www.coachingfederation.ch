@@ -4482,6 +4482,69 @@ export type Database = {
           },
         ]
       }
+      member_credit_entries: {
+        Row: {
+          cc_hours: number
+          created_at: string
+          id: string
+          link_url: string | null
+          note: string | null
+          occurred_on: string
+          provider: string | null
+          rd_hours: number
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cc_hours?: number
+          created_at?: string
+          id?: string
+          link_url?: string | null
+          note?: string | null
+          occurred_on: string
+          provider?: string | null
+          rd_hours?: number
+          title: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          cc_hours?: number
+          created_at?: string
+          id?: string
+          link_url?: string | null
+          note?: string | null
+          occurred_on?: string
+          provider?: string | null
+          rd_hours?: number
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      member_credit_settings: {
+        Row: {
+          created_at: string
+          cycle_start_on: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          cycle_start_on?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          cycle_start_on?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       member_directory_profiles: {
         Row: {
           approach: string | null

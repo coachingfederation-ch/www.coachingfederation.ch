@@ -864,7 +864,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
+          "items": [
+            "Piloter des projets",
+            "Être reconnu par ICFS pour avoir mené des initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -910,6 +913,48 @@
       "blockedTitle": "Nous ne pouvons pas changer votre adresse de connexion",
       "blockedBody": "ICF Global signale une adresse qu'un autre compte utilise déjà ici, nous ne pouvons donc pas y déplacer votre connexion.",
       "blockedHint": "Écrivez à office@coachingfederation.ch et nous réglerons cela."
+    },
+    "credits": {
+      "title": "Vos heures de formation",
+      "intro": "Tout ce que vous avez acquis en vue du renouvellement de votre ICF Credential — les heures confirmées par notre chapitre et les formations que vous saisissez vous-même.",
+      "cycle": "Cycle en cours",
+      "noCycle": "Aucun cycle défini",
+      "cc": "Compétences clés",
+      "rd": "Développement des ressources",
+      "total": "Total des heures",
+      "anchorCredential": "La période suit la date d'expiration que l'ICF nous transmet.",
+      "anchorMember": "La période suit la date de début que vous définissez ci-dessous.",
+      "anchorNone": "Définissez votre date de début ci-dessous et nous additionnerons la bonne période.",
+      "cycleStart": "Date de début du cycle",
+      "saveCycle": "Enregistrer le cycle",
+      "add": "Ajouter des heures acquises ailleurs",
+      "empty": "Rien pour l'instant. Les heures apparaissent dès que vous participez à un événement du chapitre qui en accorde, ou dès que vous en ajoutez.",
+      "earlier": "Cycles précédents",
+      "earlierCycle": "il y a {count} cycle(s)",
+      "failed": "Nous n'avons pas pu charger vos heures. Veuillez réessayer.",
+      "edit": "Modifier l'entrée",
+      "delete": "Supprimer l'entrée",
+      "deleteConfirm": "Supprimer cette entrée ?",
+      "provider": "Organisme",
+      "link": "Lien",
+      "note": "Note",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "dialogTitle": "Heures acquises ailleurs",
+      "dialogHelp": "Votre propre relevé. Nous ne confirmons pas ces heures — conservez vos justificatifs.",
+      "source": {
+        "chapter": "Événement du chapitre",
+        "self": "Ajouté par moi"
+      },
+      "table": {
+        "title": "Heures",
+        "date": "Date",
+        "activity": "Activité",
+        "cc": "CC",
+        "rd": "RD",
+        "actions": "Actions",
+        "certificate": "Certificat"
+      }
     }
   },
   "noAccess": {
