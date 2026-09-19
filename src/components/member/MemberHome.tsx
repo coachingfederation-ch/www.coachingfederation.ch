@@ -10,7 +10,7 @@
  * regions overlap the member's own service area, with someone to contact.
  */
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowRight,
@@ -131,9 +131,9 @@ function InternalEvents() {
     .slice(0, 3);
 
   return (
-    <section className="mt-10">
-      <h2 className="text-lg font-bold">{t("member.home.internalEvents.title")}</h2>
-      <p className="mt-1 text-sm text-muted-foreground">{t("member.home.internalEvents.body")}</p>
+    <section>
+      <SectionHeading>{t("member.home.internalEvents.title")}</SectionHeading>
+      <p className="mt-2 text-sm text-muted-foreground">{t("member.home.internalEvents.body")}</p>
       {isLoading ? (
         <p className="mt-4 text-sm text-muted-foreground">
           {t("member.home.internalEvents.loading")}
@@ -146,27 +146,49 @@ function InternalEvents() {
           </Link>
         </p>
       ) : (
-        <ul className="mt-4 grid gap-4 sm:grid-cols-2">
-          {events.map((event) => (
-            <li key={event.id} className={CARD}>
-              <p className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
-                <CalendarDays className="h-3.5 w-3.5 text-primary" aria-hidden />
-                {formatEventDate(event.starts_at!, locale, event.timezone ?? "Europe/Zurich")}
-              </p>
-              <h3 className="mt-2 text-base font-bold">{event.title}</h3>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {eventPlace(event, t("member.home.internalEvents.online"))}
-              </p>
-              <Link
-                to="/events/$slug"
-                params={{ slug: event.slug! }}
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary underline"
-              >
-                {t("member.home.internalEvents.view")}
-                <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-              </Link>
-            </li>
-          ))}
+        <ul className="mt-5 space-y-3">
+          {events.map((event) => {
+            const zone = event.timezone ?? "Europe/Zurich";
+            const when = new Date(event.starts_at!);
+            const month = new Intl.DateTimeFormat(locale, { month: "short", timeZone: zone })
+              .format(when)
+              .replace(".", "");
+            const day = new Intl.DateTimeFormat(locale, { day: "numeric", timeZone: zone }).format(
+              when,
+            );
+            return (
+              <li key={event.id}>
+                <Link
+                  to="/events/$slug"
+                  params={{ slug: event.slug! }}
+                  className="group flex items-center gap-4 rounded-3xl border border-border bg-card p-4 transition hover:border-primary/30 sm:p-5"
+                >
+                  <span
+                    aria-hidden
+                    className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-2xl bg-primary text-primary-foreground"
+                  >
+                    <span className="text-[11px] font-semibold uppercase tracking-wider">
+                      {month}
+                    </span>
+                    <span className="font-heading text-2xl leading-none">{day}</span>
+                  </span>
+                  <span className="min-w-0 flex-grow">
+                    <span className="block truncate font-heading text-lg text-primary">
+                      {event.title}
+                    </span>
+                    <span className="mt-1 block text-xs text-muted-foreground">
+                      {formatEventDate(event.starts_at!, locale, zone)} ·{" "}
+                      {eventPlace(event, t("member.home.internalEvents.online"))}
+                    </span>
+                  </span>
+                  <ArrowRight
+                    className="hidden h-4 w-4 shrink-0 text-primary transition group-hover:translate-x-0.5 sm:block"
+                    aria-hidden
+                  />
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       )}
     </section>
