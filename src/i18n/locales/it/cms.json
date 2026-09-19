@@ -864,7 +864,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
+          "items": [
+            "Guidare progetti",
+            "Essere riconosciuti da ICFS per aver guidato iniziative"
+          ]
         },
         "status": {
           "title": "Status",
@@ -910,6 +913,48 @@
       "blockedTitle": "Non possiamo spostare il tuo indirizzo di accesso",
       "blockedBody": "ICF Global segnala un indirizzo già usato qui da un altro account, quindi non possiamo spostarci il tuo accesso.",
       "blockedHint": "Scrivi a office@coachingfederation.ch e sistemiamo la cosa."
+    },
+    "credits": {
+      "title": "Le tue ore di formazione",
+      "intro": "Tutto ciò che hai maturato per il rinnovo della tua ICF Credential — le ore confermate dal nostro chapter e le formazioni che registri tu stesso.",
+      "cycle": "Ciclo attuale",
+      "noCycle": "Nessun ciclo impostato",
+      "cc": "Competenze chiave",
+      "rd": "Sviluppo delle risorse",
+      "total": "Ore totali",
+      "anchorCredential": "Il periodo segue la data di scadenza che ICF ci comunica.",
+      "anchorMember": "Il periodo segue la data di inizio che imposti qui sotto.",
+      "anchorNone": "Imposta qui sotto la data di inizio e calcoleremo il periodo corretto.",
+      "cycleStart": "Data di inizio del ciclo",
+      "saveCycle": "Salva ciclo",
+      "add": "Aggiungi ore maturate altrove",
+      "empty": "Ancora nulla. Le ore compaiono appena partecipi a un evento del chapter che le assegna, oppure quando ne aggiungi di tue.",
+      "earlier": "Cicli precedenti",
+      "earlierCycle": "{count} ciclo/i fa",
+      "failed": "Non è stato possibile caricare le tue ore. Riprova.",
+      "edit": "Modifica voce",
+      "delete": "Elimina voce",
+      "deleteConfirm": "Eliminare questa voce?",
+      "provider": "Ente",
+      "link": "Link",
+      "note": "Nota",
+      "save": "Salva",
+      "cancel": "Annulla",
+      "dialogTitle": "Ore maturate altrove",
+      "dialogHelp": "Il tuo registro personale. Non confermiamo queste ore — conserva le tue attestazioni.",
+      "source": {
+        "chapter": "Evento del chapter",
+        "self": "Aggiunto da me"
+      },
+      "table": {
+        "title": "Ore",
+        "date": "Data",
+        "activity": "Attività",
+        "cc": "CC",
+        "rd": "RD",
+        "actions": "Azioni",
+        "certificate": "Certificato"
+      }
     }
   },
   "noAccess": {
@@ -2652,7 +2697,13 @@
       "Un po' tecnico",
       "Troppo tecnico"
     ],
-    "usefulnessScale": ["Non fa per me", "Poco interessante", "Interessante", "Utile", "Lo userò"],
+    "usefulnessScale": [
+      "Non fa per me",
+      "Poco interessante",
+      "Interessante",
+      "Utile",
+      "Lo userò"
+    ],
     "topicsTitle": "Temi richiesti",
     "noTopics": "Nessun tema richiesto finora.",
     "themesTitle": "Temi IA",
