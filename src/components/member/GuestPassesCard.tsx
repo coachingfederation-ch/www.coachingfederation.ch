@@ -10,7 +10,6 @@ import { Ticket } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useCms } from "@/i18n/cms";
 import { listMyGuestPasses } from "@/lib/guest-passes.functions";
-import { Badge } from "@/design-system/icf-welcome-design-system-a835df";
 
 export function GuestPassesCard() {
   const { t, locale } = useCms();
@@ -23,33 +22,37 @@ export function GuestPassesCard() {
   const passes = data ?? [];
 
   return (
-    <section className="mt-10">
-      <h2 className="inline-flex items-center gap-2 text-lg font-bold">
-        <Ticket className="h-5 w-5 text-primary" aria-hidden />
+    /* Sidebar card on Blue: the one coloured surface in the page body, so the
+       passes read as a standing record rather than another white card. */
+    <section className="rounded-3xl bg-primary p-6 text-primary-foreground">
+      <h2 className="inline-flex items-center gap-2 font-heading text-xl">
+        <Ticket className="h-5 w-5" aria-hidden />
         {t("member.home.guestPasses.title")}
       </h2>
-      <p className="mt-1 text-sm text-muted-foreground">{t("member.home.guestPasses.body")}</p>
+      <p className="mt-2 text-sm text-primary-foreground/80">{t("member.home.guestPasses.body")}</p>
 
       {isLoading ? (
-        <p className="mt-4 text-sm text-muted-foreground">{t("member.home.guestPasses.loading")}</p>
+        <p className="mt-4 text-sm text-primary-foreground/80">
+          {t("member.home.guestPasses.loading")}
+        </p>
       ) : passes.length === 0 ? (
-        <p className="mt-4 text-sm text-muted-foreground">
+        <p className="mt-4 text-sm text-primary-foreground/80">
           {t("member.home.guestPasses.empty")}{" "}
-          <Link to="/events" className="font-semibold text-primary underline">
+          <Link to="/events" className="font-semibold text-primary-foreground underline">
             {t("member.home.guestPasses.browse")}
           </Link>
         </p>
       ) : (
         <ul className="mt-4 space-y-3">
           {passes.map((pass) => (
-            <li key={pass.id} className="rounded-2xl border border-border bg-card p-5">
+            <li key={pass.id} className="rounded-2xl bg-primary-foreground/10 p-4">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <p className="text-sm font-bold">{pass.eventTitle}</p>
-                <Badge variant="secondary">
+                <span className="eyebrow eyebrow-inverse">
                   {t(`member.home.guestPasses.status.${pass.status}`)}
-                </Badge>
+                </span>
               </div>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-1 text-xs text-primary-foreground/70">
                 {pass.eventStartsAt
                   ? new Date(pass.eventStartsAt).toLocaleDateString(locale, {
                       dateStyle: "long",
@@ -57,13 +60,13 @@ export function GuestPassesCard() {
                   : null}
               </p>
               <p className="mt-2 text-sm">
-                <span className="text-muted-foreground">
+                <span className="text-primary-foreground/70">
                   {t("member.home.guestPasses.guest")}:{" "}
                 </span>
                 {pass.guestName}
               </p>
               {pass.decisionNote ? (
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                <p className="mt-2 text-xs leading-relaxed text-primary-foreground/70">
                   {pass.decisionNote}
                 </p>
               ) : null}

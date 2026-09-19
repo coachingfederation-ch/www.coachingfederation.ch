@@ -9,7 +9,12 @@ they are readable on a phone, translatable, and editable without a new release.
 - Staff editor: `/manage/guides`, listed in the CMS menu as **Guides**
   (`src/components/cms/Shell.tsx`, `allowedRoles: ["editor"]`).
 - The Member Area shell links to `/guides` from its top navigation
-  (`src/components/member/MemberShell.tsx`).
+  (`src/components/member/MemberShell.tsx`). That shell renders the design
+  system's `SiteHeader` — the same Deep Blue band as the public site — with
+  member nav items, a member-local language menu (it switches the CMS
+  interface locale, because the Member Area is not locale-prefixed), the staff
+  link for accounts that also hold a staff grant, sign out, and one yellow
+  accent pill to **Find a coach**.
 
 ## Structure
 

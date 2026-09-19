@@ -10,7 +10,7 @@
  * regions overlap the member's own service area, with someone to contact.
  */
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowRight,
@@ -33,15 +33,28 @@ import { eventPlace, formatEventDate } from "@/lib/events";
 import { GuestPassesCard } from "./GuestPassesCard";
 import { EmailChangeNotice } from "./EmailChangeNotice";
 
-
 const ENGAGE_URL =
   "https://engage.coachingfederation.org/communities/community-home?CommunityKey=230cb83a-26a7-4ffb-a2c4-fd9309091489";
 
-const CARD = "rounded-2xl border border-border bg-card p-6";
+const CARD = "rounded-3xl border border-border bg-card p-6 shadow-soft";
+/** Whole-card link: the icon tile picks up the hover state through `group`. */
+const TOOL_CARD =
+  "group flex h-full flex-col rounded-3xl border border-border bg-card p-6 shadow-soft transition hover:border-primary/30";
+const TOOL_ICON =
+  "flex h-12 w-12 items-center justify-center rounded-2xl bg-background text-primary transition group-hover:bg-accent group-hover:text-accent-foreground";
 const CTA =
   "mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90";
 const CTA_MUTED =
   "mt-4 inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground";
+/** Section heading with the hairline rule the chosen direction uses. */
+function SectionHeading({ children }: { children: ReactNode }) {
+  return (
+    <h2 className="flex items-center gap-3 font-heading text-2xl text-primary">
+      {children}
+      <span aria-hidden className="h-px flex-grow bg-border" />
+    </h2>
+  );
+}
 
 /**
  * "Join community" — one press tells the community's leads that this member
@@ -117,9 +130,9 @@ function InternalEvents() {
     .slice(0, 3);
 
   return (
-    <section className="mt-10">
-      <h2 className="text-lg font-bold">{t("member.home.internalEvents.title")}</h2>
-      <p className="mt-1 text-sm text-muted-foreground">{t("member.home.internalEvents.body")}</p>
+    <section>
+      <SectionHeading>{t("member.home.internalEvents.title")}</SectionHeading>
+      <p className="mt-2 text-sm text-muted-foreground">{t("member.home.internalEvents.body")}</p>
       {isLoading ? (
         <p className="mt-4 text-sm text-muted-foreground">
           {t("member.home.internalEvents.loading")}
@@ -132,27 +145,47 @@ function InternalEvents() {
           </Link>
         </p>
       ) : (
-        <ul className="mt-4 grid gap-4 sm:grid-cols-2">
-          {events.map((event) => (
-            <li key={event.id} className={CARD}>
-              <p className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
-                <CalendarDays className="h-3.5 w-3.5 text-primary" aria-hidden />
-                {formatEventDate(event.starts_at!, locale, event.timezone ?? "Europe/Zurich")}
-              </p>
-              <h3 className="mt-2 text-base font-bold">{event.title}</h3>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {eventPlace(event, t("member.home.internalEvents.online"))}
-              </p>
-              <Link
-                to="/events/$slug"
-                params={{ slug: event.slug! }}
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary underline"
-              >
-                {t("member.home.internalEvents.view")}
-                <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-              </Link>
-            </li>
-          ))}
+        <ul className="mt-5 space-y-3">
+          {events.map((event) => {
+            const zone = event.timezone ?? "Europe/Zurich";
+            const when = new Date(event.starts_at!);
+            const month = new Intl.DateTimeFormat(locale, { month: "short", timeZone: zone })
+              .format(when)
+              .replace(".", "");
+            const day = new Intl.DateTimeFormat(locale, { day: "numeric", timeZone: zone }).format(
+              when,
+            );
+            return (
+              <li key={event.id}>
+                <Link
+                  to="/events/$slug"
+                  params={{ slug: event.slug! }}
+                  className="group flex items-center gap-4 rounded-3xl border border-border bg-card p-4 transition hover:border-primary/30 sm:p-5"
+                >
+                  <span
+                    aria-hidden
+                    className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-2xl bg-primary text-primary-foreground"
+                  >
+                    <span className="text-xs font-semibold uppercase tracking-wider">{month}</span>
+                    <span className="font-heading text-2xl leading-none">{day}</span>
+                  </span>
+                  <span className="min-w-0 flex-grow">
+                    <span className="block truncate font-heading text-lg text-primary">
+                      {event.title}
+                    </span>
+                    <span className="mt-1 block text-xs text-muted-foreground">
+                      {formatEventDate(event.starts_at!, locale, zone)} ·{" "}
+                      {eventPlace(event, t("member.home.internalEvents.online"))}
+                    </span>
+                  </span>
+                  <ArrowRight
+                    className="hidden h-4 w-4 shrink-0 text-primary transition group-hover:translate-x-0.5 sm:block"
+                    aria-hidden
+                  />
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       )}
     </section>
@@ -169,161 +202,204 @@ export function MemberHome() {
   const name = data?.firstName?.trim();
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-10 sm:px-10">
-      <header>
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-          {t("member.home.eyebrow")}
-        </p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">
-          {name
-            ? t("member.home.greetingNamed").replace("{name}", name)
-            : t("member.home.greeting")}
-        </h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("member.home.intro")}</p>
+    <div>
+      {/* Deep Blue band, the same opening move the public pages use. */}
+      <header className="bg-hero text-hero-foreground">
+        <div className="mx-auto max-w-6xl px-6 py-12 sm:px-10">
+          <p className="eyebrow eyebrow-accent">{t("member.home.eyebrow")}</p>
+          <h1 className="mt-3 font-heading text-4xl leading-tight sm:text-5xl">
+            {name
+              ? t("member.home.greetingNamed").replace("{name}", name)
+              : t("member.home.greeting")}
+          </h1>
+          <p className="mt-3 max-w-2xl text-sm text-hero-foreground/80">{t("member.home.intro")}</p>
+        </div>
       </header>
 
-      <div className="mt-8">
+      <div className="mx-auto max-w-6xl px-6 py-12 sm:px-10">
         <EmailChangeNotice />
-      </div>
 
-      <div className="mt-8 grid gap-5 sm:grid-cols-2">
-
-        <section className={CARD}>
-          <UserRound className="h-5 w-5 text-primary" aria-hidden />
-          <h2 className="mt-3 text-lg font-bold">{t("member.home.profile.title")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("member.home.profile.body")}</p>
-          <Link to="/my-profile" className={CTA}>
-            {t("member.home.profile.cta")}
-            <ArrowRight className="h-4 w-4" aria-hidden />
+        {/* Whole card is the link — the icon tile carries the hover state. */}
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <Link to="/my-profile" className={TOOL_CARD}>
+            <span className={TOOL_ICON}>
+              <UserRound className="h-5 w-5" aria-hidden />
+            </span>
+            <h2 className="mt-4 font-heading text-xl text-primary">
+              {t("member.home.profile.title")}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">{t("member.home.profile.body")}</p>
+            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+              {t("member.home.profile.cta")}
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden />
+            </span>
           </Link>
-        </section>
 
-        <section className={CARD}>
-          <ExternalLink className="h-5 w-5 text-primary" aria-hidden />
-          <h2 className="mt-3 text-lg font-bold">{t("member.home.engage.title")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("member.home.engage.body")}</p>
-          <a href={ENGAGE_URL} target="_blank" rel="noopener noreferrer" className={CTA}>
-            {t("member.home.engage.cta")}
-            <ExternalLink className="h-4 w-4" aria-hidden />
+          {/* Reprinting a certificate is a self-service task: members reach it
+              without writing to the office. */}
+          <Link to="/member/certificates" className={TOOL_CARD}>
+            <span className={TOOL_ICON}>
+              <Award className="h-5 w-5" aria-hidden />
+            </span>
+            <h2 className="mt-4 font-heading text-xl text-primary">
+              {t("member.certificates.title")}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">{t("member.certificates.help")}</p>
+            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+              {t("member.certificates.open")}
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden />
+            </span>
+          </Link>
+
+          <Link to="/volunteering" className={TOOL_CARD}>
+            <span className={TOOL_ICON}>
+              <HeartHandshake className="h-5 w-5" aria-hidden />
+            </span>
+            <h2 className="mt-4 font-heading text-xl text-primary">
+              {t("member.home.volunteer.title")}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">{t("member.home.volunteer.body")}</p>
+            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+              {t("member.home.volunteer.cta")}
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden />
+            </span>
+          </Link>
+
+          <a href={ENGAGE_URL} target="_blank" rel="noopener noreferrer" className={TOOL_CARD}>
+            <span className={TOOL_ICON}>
+              <ExternalLink className="h-5 w-5" aria-hidden />
+            </span>
+            <h2 className="mt-4 font-heading text-xl text-primary">
+              {t("member.home.engage.title")}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">{t("member.home.engage.body")}</p>
+            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+              {t("member.home.engage.cta")}
+              <ExternalLink className="h-4 w-4" aria-hidden />
+            </span>
           </a>
-        </section>
 
-        <section className={CARD}>
-          <HeartHandshake className="h-5 w-5 text-primary" aria-hidden />
-          <h2 className="mt-3 text-lg font-bold">{t("member.home.volunteer.title")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("member.home.volunteer.body")}</p>
-          <Link to="/volunteering" className={CTA}>
-            {t("member.home.volunteer.cta")}
-            <ArrowRight className="h-4 w-4" aria-hidden />
-          </Link>
-        </section>
+          {/* Announced, not yet actionable — it stays visibly inactive. */}
+          <section className={CARD}>
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-background text-muted-foreground">
+              <Megaphone className="h-5 w-5" aria-hidden />
+            </span>
+            <h2 className="mt-4 font-heading text-xl text-primary">{t("member.home.ads.title")}</h2>
+            <p className="mt-2 text-sm text-muted-foreground">{t("member.home.ads.body")}</p>
+            <button type="button" disabled className={CTA_MUTED}>
+              {t("member.home.soon")}
+            </button>
+          </section>
+        </div>
 
-        {/* Reprinting a certificate is a self-service task: members reach it
-            without writing to the office. */}
-        <section className={CARD}>
-          <Award className="h-5 w-5 text-primary" aria-hidden />
-          <h2 className="mt-3 text-lg font-bold">{t("member.certificates.title")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("member.certificates.help")}</p>
-          <Link to="/member/certificates" className={CTA}>
-            {t("member.certificates.open")}
-            <ArrowRight className="h-4 w-4" aria-hidden />
-          </Link>
-        </section>
+        <div className="mt-12 grid gap-8 lg:grid-cols-3">
+          <div className="space-y-12 lg:col-span-2">
+            <InternalEvents />
 
-        <section className={CARD}>
-          <Megaphone className="h-5 w-5 text-primary" aria-hidden />
-          <h2 className="mt-3 text-lg font-bold">{t("member.home.ads.title")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("member.home.ads.body")}</p>
-          <button type="button" disabled className={CTA_MUTED}>
-            {t("member.home.soon")}
-          </button>
-        </section>
-      </div>
+            <section>
+              <SectionHeading>{t("member.home.communities.title")}</SectionHeading>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {t("member.home.communities.body")}
+              </p>
 
-      <InternalEvents />
-      <GuestPassesCard />
-
-      <section className="mt-10">
-        <h2 className="text-lg font-bold">{t("member.home.communities.title")}</h2>
-        <p className="mt-1 text-sm text-muted-foreground">{t("member.home.communities.body")}</p>
-
-        {isLoading ? (
-          <p className="mt-4 text-sm text-muted-foreground">
-            {t("member.home.communities.loading")}
-          </p>
-        ) : data?.noRegions ? (
-          <p className="mt-4 text-sm text-muted-foreground">
-            {t("member.home.communities.noRegions")}{" "}
-            <Link to="/my-profile" className="font-semibold text-primary underline">
-              {t("member.home.communities.setRegions")}
-            </Link>
-          </p>
-        ) : !data?.communities.length ? (
-          <p className="mt-4 text-sm text-muted-foreground">{t("member.home.communities.empty")}</p>
-        ) : (
-          <ul className="mt-4 grid gap-4 sm:grid-cols-2">
-            {data.communities.map((community) => (
-              <li key={community.slug} className={CARD}>
-                <div className="flex items-start gap-2">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
-                  <div>
-                    <h3 className="text-base font-bold">{community.name}</h3>
-                    {community.cadence ? (
-                      <p className="mt-1 text-xs text-muted-foreground">{community.cadence}</p>
-                    ) : null}
-                  </div>
-                </div>
-
-                {community.leads.length ? (
-                  <ul className="mt-3 space-y-1 text-sm">
-                    {community.leads.map((lead) => (
-                      <li key={lead.name} className="text-muted-foreground">
-                        <span className="font-semibold text-foreground">{lead.name}</span>
-                        {lead.role ? ` — ${lead.role}` : null}
-                        {lead.email ? (
-                          <>
-                            {" "}
-                            <a
-                              href={`mailto:${lead.email}`}
-                              target="_top"
-                              className="font-semibold text-primary underline"
-                            >
-                              {lead.email}
-                            </a>
-                          </>
-                        ) : null}
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-
-                <div className="mt-4 flex flex-wrap items-center gap-3 text-sm font-semibold">
-                  <Link
-                    to="/communities/$slug"
-                    params={{ slug: community.slug }}
-                    className="inline-flex items-center gap-1.5 text-primary underline"
-                  >
-                    {t("member.home.communities.view")}
-                    <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+              {isLoading ? (
+                <p className="mt-4 text-sm text-muted-foreground">
+                  {t("member.home.communities.loading")}
+                </p>
+              ) : data?.noRegions ? (
+                <p className="mt-4 text-sm text-muted-foreground">
+                  {t("member.home.communities.noRegions")}{" "}
+                  <Link to="/my-profile" className="font-semibold text-primary underline">
+                    {t("member.home.communities.setRegions")}
                   </Link>
-                  {community.contactEmail ? (
-                    <a
-                      href={`mailto:${community.contactEmail}`}
-                      target="_top"
-                      className="inline-flex items-center gap-1.5 text-primary underline"
+                </p>
+              ) : !data?.communities.length ? (
+                <p className="mt-4 text-sm text-muted-foreground">
+                  {t("member.home.communities.empty")}
+                </p>
+              ) : (
+                <ul className="mt-5 space-y-3">
+                  {data.communities.map((community) => (
+                    <li
+                      key={community.slug}
+                      className="rounded-3xl border border-border bg-card p-5 sm:flex sm:items-start sm:justify-between sm:gap-6"
                     >
-                      <Mail className="h-3.5 w-3.5" aria-hidden />
-                      {t("member.home.communities.contact")}
-                    </a>
-                  ) : null}
-                </div>
+                      <div className="min-w-0">
+                        <div className="flex items-start gap-2">
+                          <MapPin className="mt-1 h-4 w-4 shrink-0 text-primary" aria-hidden />
+                          <div className="min-w-0">
+                            <h3 className="font-heading text-lg text-primary">{community.name}</h3>
+                            {community.cadence ? (
+                              <p className="mt-1 text-xs text-muted-foreground">
+                                {community.cadence}
+                              </p>
+                            ) : null}
+                          </div>
+                        </div>
 
-                <JoinCommunityButton slug={community.slug} requested={community.requested} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+                        {community.leads.length ? (
+                          <ul className="mt-3 space-y-1 text-sm">
+                            {community.leads.map((lead) => (
+                              <li key={lead.name} className="text-muted-foreground">
+                                <span className="font-semibold text-foreground">{lead.name}</span>
+                                {lead.role ? ` — ${lead.role}` : null}
+                                {lead.email ? (
+                                  <>
+                                    {" "}
+                                    <a
+                                      href={`mailto:${lead.email}`}
+                                      target="_top"
+                                      className="font-semibold text-primary underline"
+                                    >
+                                      {lead.email}
+                                    </a>
+                                  </>
+                                ) : null}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
+
+                        <div className="mt-3 flex flex-wrap items-center gap-3 text-sm font-semibold">
+                          <Link
+                            to="/communities/$slug"
+                            params={{ slug: community.slug }}
+                            className="inline-flex items-center gap-1.5 text-primary underline"
+                          >
+                            {t("member.home.communities.view")}
+                            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                          </Link>
+                          {community.contactEmail ? (
+                            <a
+                              href={`mailto:${community.contactEmail}`}
+                              target="_top"
+                              className="inline-flex items-center gap-1.5 text-primary underline"
+                            >
+                              <Mail className="h-3.5 w-3.5" aria-hidden />
+                              {t("member.home.communities.contact")}
+                            </a>
+                          ) : null}
+                        </div>
+                      </div>
+
+                      <div className="shrink-0">
+                        <JoinCommunityButton
+                          slug={community.slug}
+                          requested={community.requested}
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          </div>
+
+          <aside className="space-y-6">
+            <GuestPassesCard />
+          </aside>
+        </div>
+      </div>
     </div>
   );
 }
