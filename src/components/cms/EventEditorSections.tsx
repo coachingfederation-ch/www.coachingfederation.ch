@@ -723,87 +723,19 @@ export function EventSpeakersSection({
 }
 
 /** Publishing section: registration settings, optional ticket tiers, save/status controls, attendees. */
-export function EventPublishingSection({
+/**
+ * Registration settings: whether the event takes sign-ups, who may sign up,
+ * how many seats, and the rules attendance and certificates depend on.
+ */
+export function EventRegistrationSettings({
   event,
   patch,
-  saving,
-  save,
-  changeStatus,
-  registrations,
-  confirmed,
-  setRegistrationStatusAndReload,
-  resendConfirmation,
-  cancelAttendee,
-  retryRefund,
-  ticketsSection,
-  tiers,
-  reloadRegistrations,
   t,
 }: {
   event: Managed;
   patch: Patch;
-  saving: boolean;
-  save: () => void | Promise<void>;
-  changeStatus: (status: "draft" | "published" | "cancelled") => void | Promise<void>;
-  registrations: Registration[];
-  confirmed: number;
-  setRegistrationStatusAndReload: (r: Registration) => void | Promise<void>;
-  resendConfirmation: (r: Registration) => void | Promise<void>;
-  cancelAttendee: (
-    r: Registration,
-    refund: boolean | undefined,
-    note: string | null,
-  ) => void | Promise<void>;
-  retryRefund: (r: Registration) => void | Promise<void>;
-  ticketsSection?: React.ReactNode;
-  tiers: { id: string; name: string }[];
-  reloadRegistrations: () => void | Promise<void>;
   t: (k: string) => string;
 }) {
-  // Attendee desk filters. Local UI state only — the underlying list is
-  // already loaded, so filtering client-side keeps the table responsive.
-  const [filters, setFilters] = React.useState<AttendeeFilters>(EMPTY_FILTERS);
-  // Derived, not stored: a started event is "passed" and its lifecycle actions
-  // (unpublish, cancel) are withdrawn.
-  const started = hasEventStarted(event.starts_at);
-  const [addOpen, setAddOpen] = React.useState(false);
-  const [exporting, setExporting] = React.useState(false);
-  // The attendee awaiting a cancellation confirmation, if any.
-  const [pendingCancel, setPendingCancel] = React.useState<Registration | null>(null);
-  // Rows expanded to their full detail panel. Expansion is the escape valve for
-  // the columns the table has to truncate (long emails, error strings).
-  const [expanded, setExpanded] = React.useState<Set<string>>(new Set());
-  const toggleRow = (id: string) =>
-    setExpanded((prev) => {
-      const next = new Set(prev);
-      if (!next.delete(id)) next.add(id);
-      return next;
-    });
-
-  const visibleRegistrations = registrations.filter((r) => matchesFilters(r, filters));
-
-  const checkedInCount = registrations.filter(
-    (r) => r.status === "confirmed" && r.checked_in_at,
-  ).length;
-
-  // The CSV is built server-side (authorisation and escaping live there); the
-  // browser only turns the returned text into a download.
-  const exportCsv = async () => {
-    setExporting(true);
-    try {
-      const file = await exportEventRegistrations({ data: { eventId: event.id } });
-      const blob = new Blob([`\uFEFF${file.csv}`], { type: "text/csv;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = file.filename;
-      link.click();
-      URL.revokeObjectURL(url);
-    } finally {
-      setExporting(false);
-    }
-  };
-
   return (
     <>
       <Section title={t("events.section.registration")}>
@@ -944,17 +876,26 @@ export function EventPublishingSection({
           <ApprovedGuestsPanel eventId={event.id} />
         </div>
       ) : null}
+    </>
+  );
+}
 
-      {ticketsSection}
-
-      <div className="mt-8 flex flex-wrap items-center gap-3">
-        <button
-          onClick={() => void save()}
-          disabled={saving}
-          className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
-        >
-          {saving ? t("events.saving") : t("events.save")}
-        </button>
+/** Publish, unpublish, cancel — and the status those actions produce. */
+export function EventLifecycleActions({
+  event,
+  changeStatus,
+  t,
+}: {
+  event: Managed;
+  changeStatus: (status: "draft" | "published" | "cancelled") => void | Promise<void>;
+  t: (k: string) => string;
+}) {
+  // Derived, not stored: a started event is "passed" and its lifecycle actions
+  // (unpublish, cancel) are withdrawn.
+  const started = hasEventStarted(event.starts_at);
+  return (
+    <Section title={t("events.section.publishing")}>
+      <div className="flex flex-wrap items-center gap-3">
         {/* A started event is history: unpublishing or cancelling it would
             rewrite something attendees already lived through. */}
         {started ? null : event.status === "published" ? (
@@ -984,8 +925,82 @@ export function EventPublishingSection({
           {t(`events.status.${displayEventStatus(event.status, event.starts_at)}`)}
         </span>
       </div>
+    </Section>
+  );
+}
 
-      <h2 className="mt-12 text-lg font-semibold tracking-tight">{t("events.attendees")}</h2>
+/** The attendee desk: who is coming, check-in, export, cancellations. */
+export function EventAttendeeDesk({
+  event,
+  registrations,
+  confirmed,
+  setRegistrationStatusAndReload,
+  resendConfirmation,
+  cancelAttendee,
+  retryRefund,
+  tiers,
+  reloadRegistrations,
+  t,
+}: {
+  event: Managed;
+  registrations: Registration[];
+  confirmed: number;
+  setRegistrationStatusAndReload: (r: Registration) => void | Promise<void>;
+  resendConfirmation: (r: Registration) => void | Promise<void>;
+  cancelAttendee: (
+    r: Registration,
+    refund: boolean | undefined,
+    note: string | null,
+  ) => void | Promise<void>;
+  retryRefund: (r: Registration) => void | Promise<void>;
+  tiers: { id: string; name: string }[];
+  reloadRegistrations: () => void | Promise<void>;
+  t: (k: string) => string;
+}) {
+  // Attendee desk filters. Local UI state only — the underlying list is
+  // already loaded, so filtering client-side keeps the table responsive.
+  const [filters, setFilters] = React.useState<AttendeeFilters>(EMPTY_FILTERS);
+  const [addOpen, setAddOpen] = React.useState(false);
+  const [exporting, setExporting] = React.useState(false);
+  // The attendee awaiting a cancellation confirmation, if any.
+  const [pendingCancel, setPendingCancel] = React.useState<Registration | null>(null);
+  // Rows expanded to their full detail panel. Expansion is the escape valve for
+  // the columns the table has to truncate (long emails, error strings).
+  const [expanded, setExpanded] = React.useState<Set<string>>(new Set());
+  const toggleRow = (id: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (!next.delete(id)) next.add(id);
+      return next;
+    });
+
+  const visibleRegistrations = registrations.filter((r) => matchesFilters(r, filters));
+
+  const checkedInCount = registrations.filter(
+    (r) => r.status === "confirmed" && r.checked_in_at,
+  ).length;
+
+  // The CSV is built server-side (authorisation and escaping live there); the
+  // browser only turns the returned text into a download.
+  const exportCsv = async () => {
+    setExporting(true);
+    try {
+      const file = await exportEventRegistrations({ data: { eventId: event.id } });
+      const blob = new Blob([`\uFEFF${file.csv}`], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = file.filename;
+      link.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  return (
+    <>
+      <h2 className="mt-6 text-lg font-semibold tracking-tight">{t("events.attendees")}</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         {confirmed}
         {event.capacity ? ` / ${event.capacity}` : ""} {t("events.confirmedSuffix")}

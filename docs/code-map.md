@@ -56,6 +56,7 @@ before adding a new file.
 | `events.ts`                       | Shared event types, status/registration helpers and date formatting.                             |
 | `events.functions.ts`             | Public reads (`events_public`) and free RSVP registration.                                       |
 | `events-admin.functions.ts`       | Staff event CRUD, publishing, duplication and registration lists. Gated on `organizer`/`editor`. |
+| `event-editor-stages.ts`          | Lifecycle stages of the staff event editor: stage list, opening stage, per-session memory.       |
 | `event-speakers.ts`               | Shared speaker shape and the bio length limit.                                                   |
 | `event-speakers.server.ts`        | Speaker reads: load an event's speakers, search the chapter-wide library.                        |
 | `event-translations.functions.ts` | Per-locale event content and AI translation, mirroring the article translation flow.             |

@@ -1231,7 +1231,8 @@
       "registration": "Anmeldung",
       "tickets": "Tickets",
       "discounts": "Rabattcodes",
-      "speakers": "Speaker"
+      "speakers": "Speaker",
+      "publishing": "Veröffentlichung"
     },
     "hosts": {
       "none": "Noch keine Gastgeber ausgewählt.",
@@ -1935,6 +1936,36 @@
       "newDate": "Datum und Uhrzeit der Kopie",
       "action": "Dieses Event duplizieren",
       "working": "Wird kopiert…"
+    },
+    "stage": {
+      "navLabel": "Event-Phasen",
+      "sections": "Abschnitte",
+      "setup": "Aufsetzen",
+      "registration": "Anmeldung",
+      "publish": "Veröffentlichen",
+      "run": "Durchführen",
+      "after": "Danach",
+      "hint": {
+        "setup": "Name, Inhalt, Personen und Ort des Events.",
+        "registration": "Wer sich anmelden kann, zu welchen Bedingungen und zu welchem Preis.",
+        "publish": "Event veröffentlichen, wiederholen oder kopieren.",
+        "run": "Alles für den Tag selbst: wer kommt und Check-in.",
+        "after": "Rückblick schreiben und das Event abschliessen."
+      },
+      "empty": {
+        "setup": "Hier gibt es nichts anzuzeigen.",
+        "registration": "Die Anmeldung ist für dieses Event ausgeschaltet. Schalten Sie sie in dieser Phase ein, um Tickets, Einladungen oder eine Warteliste hinzuzufügen.",
+        "publish": "Hier gibt es nichts anzuzeigen.",
+        "run": "Die Anmeldung ist ausgeschaltet, deshalb gibt es keine Teilnehmendenliste.",
+        "after": "Hier gibt es nichts anzuzeigen."
+      }
+    },
+    "editor": {
+      "saved": "Alle Änderungen gespeichert",
+      "unsaved": "Ungespeicherte Änderungen",
+      "discard": "Änderungen verwerfen",
+      "autoSavedNote": "Gastgebende, Speaker, Tickets, Übersetzungen und der Rückblick speichern sich selbst.",
+      "preview": "Seite ansehen"
     }
   },
   "eventTranslations": {

@@ -1231,7 +1231,8 @@
       "registration": "Registration",
       "tickets": "Tickets",
       "discounts": "Discount codes",
-      "speakers": "Speakers"
+      "speakers": "Speakers",
+      "publishing": "Publishing"
     },
     "hosts": {
       "none": "No hosts selected yet.",
@@ -1935,6 +1936,36 @@
       "newDate": "Date and time of the copy",
       "action": "Duplicate this event",
       "working": "Copying…"
+    },
+    "stage": {
+      "navLabel": "Event stages",
+      "sections": "Sections",
+      "setup": "Set up",
+      "registration": "Registration",
+      "publish": "Publish",
+      "run": "Run",
+      "after": "After",
+      "hint": {
+        "setup": "Give the event its name, story, people and place.",
+        "registration": "Decide who can sign up, on what terms, and at what price.",
+        "publish": "Make the event public, repeat it, or copy it.",
+        "run": "Everything you need on the day: who is coming and check-in.",
+        "after": "Write the recap and close the event out."
+      },
+      "empty": {
+        "setup": "Nothing to show here.",
+        "registration": "Registration is switched off for this event. Switch it on in this stage to add tickets, invitations or a waitlist.",
+        "publish": "Nothing to show here.",
+        "run": "Registration is switched off, so there is no attendee list for this event.",
+        "after": "Nothing to show here."
+      }
+    },
+    "editor": {
+      "saved": "All changes saved",
+      "unsaved": "Unsaved changes",
+      "discard": "Discard changes",
+      "autoSavedNote": "Hosts, speakers, tickets, translations and the recap save on their own.",
+      "preview": "Preview page"
     }
   },
   "eventTranslations": {

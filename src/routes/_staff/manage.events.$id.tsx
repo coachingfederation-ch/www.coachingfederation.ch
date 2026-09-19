@@ -7,6 +7,7 @@
  */
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { Shell } from "@/components/cms/Shell";
 import { UnsplashPicker, type UnsplashPick } from "@/components/cms/UnsplashPicker";
@@ -18,10 +19,26 @@ import {
   EventSpeakersSection,
   EventRepeatSection,
   EventSeriesUpdateSection,
-  EventPublishingSection,
+  EventRegistrationSettings,
+  EventLifecycleActions,
+  EventAttendeeDesk,
   type Managed,
   type Registration,
 } from "@/components/cms/EventEditorSections";
+import {
+  EventStageHeader,
+  EventStageNav,
+  EventSaveBar,
+  EventStageEmpty,
+  type EditorSection,
+} from "@/components/cms/EventEditorChrome";
+import {
+  defaultStageFor,
+  readStoredStage,
+  writeStoredStage,
+  type EventStage,
+} from "@/lib/event-editor-stages";
+import { displayEventStatus } from "@/lib/events";
 import { EventTicketsSection } from "@/components/cms/EventTicketsSection";
 import { EventCceSection } from "@/components/cms/EventCceSection";
 import { EventDiscountCodesSection } from "@/components/cms/EventDiscountCodesSection";
@@ -107,6 +124,13 @@ function EventEditor() {
   const [hasForms, setHasForms] = useState(false);
   // The dates of this event's series, with the parent (next upcoming) marked.
   const [seriesDates, setSeriesDates] = useState<SeriesDate[]>([]);
+  // Which lifecycle stage the editor shows. Null until the session's own
+  // choice is read; the event's state decides on a first visit.
+  const [stage, setStage] = useState<EventStage | null>(null);
+
+  useEffect(() => {
+    setStage(readStoredStage(id));
+  }, [id]);
 
   useEffect(() => {
     const handed = takeWizardExtras(id);
@@ -324,231 +348,345 @@ function EventEditor() {
 
   const showCce = extras.cce || Boolean(event.cce_enabled);
 
+  const activeStage: EventStage = stage ?? defaultStageFor(event);
+
+  const pickStage = (next: EventStage) => {
+    setStage(next);
+    writeStoredStage(event.id, next);
+    if (typeof window !== "undefined") window.scrollTo({ top: 0 });
+  };
+
+  /* The extras toggles keep their meaning: they reveal the optional halves of
+     the editor, and they now live in the section rail. */
+  const extrasControls = (
+    <div className="space-y-2 px-3 text-sm">
+      <label className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={showRepeat}
+          onChange={(e) => setExtras({ ...extras, repeat: e.target.checked })}
+          disabled={Boolean(storedRecurrence)}
+        />
+        <span>{t("events.wizard.extras.repeat")}</span>
+      </label>
+      <label className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={showCce}
+          onChange={(e) => setExtras({ ...extras, cce: e.target.checked })}
+          disabled={Boolean(event.cce_enabled)}
+        />
+        <span>{t("events.wizard.extras.cce")}</span>
+      </label>
+      <label className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={showForms}
+          onChange={(e) => setExtras({ ...extras, forms: e.target.checked })}
+          disabled={hasForms}
+        />
+        <span>{t("events.wizard.extras.forms")}</span>
+      </label>
+    </div>
+  );
+
+  /* One entry per panel rendered in the active stage, in render order, so the
+     rail always matches what is on screen. */
+  const sections: EditorSection[] = [];
+  const panels: React.ReactNode[] = [];
+  const addPanel = (id: string, label: string, node: React.ReactNode) => {
+    sections.push({ id, label });
+    panels.push(
+      <div key={id} id={id} className="scroll-mt-56">
+        {node}
+      </div>,
+    );
+  };
+
+  if (activeStage === "setup") {
+    addPanel(
+      "panel-details",
+      t("events.section.details"),
+      <EventDetailsSection
+        event={event}
+        patch={patch}
+        categories={categories}
+        regions={regions}
+        communities={communities}
+        t={t}
+      />,
+    );
+    addPanel(
+      "panel-content",
+      t("events.section.content"),
+      <EventContentSection
+        event={event}
+        patch={patch}
+        setPickerOpen={setPickerOpen}
+        categories={categories}
+        regions={regions}
+        t={t}
+      />,
+    );
+    addPanel(
+      "panel-hosts",
+      t("events.section.hosts"),
+      <EventHostsSection
+        eventId={event.id}
+        title={t("events.section.hosts")}
+        hint={t("events.hosts.sectionHint")}
+      />,
+    );
+    addPanel(
+      "panel-speakers",
+      t("events.section.speakers"),
+      <EventSpeakersSection
+        eventId={event.id}
+        title={t("events.section.speakers")}
+        hint={t("events.speakers.sectionHint")}
+      />,
+    );
+    addPanel(
+      "panel-location",
+      t("events.section.location"),
+      <EventLocationSection event={event} patch={patch} t={t} />,
+    );
+  }
+
+  if (activeStage === "registration") {
+    addPanel(
+      "panel-registration",
+      t("events.section.registration"),
+      <EventRegistrationSettings event={event} patch={patch} t={t} />,
+    );
+    if (event.tickets_enabled) {
+      addPanel(
+        "panel-tickets",
+        t("events.section.tickets"),
+        <EventTicketsSection eventId={event.id} t={t} />,
+      );
+      addPanel(
+        "panel-discounts",
+        t("events.section.discounts"),
+        <EventDiscountCodesSection
+          eventId={event.id}
+          eventTitle={event.title}
+          eventStartsAt={event.starts_at}
+          t={t}
+        />,
+      );
+    }
+    if (event.registration_mode === "rsvp_invited") {
+      addPanel(
+        "panel-invitations",
+        t("events.invitations.title"),
+        <EventInvitationsSection eventId={event.id} t={t} />,
+      );
+    }
+    // A waitlist makes no sense when the guest list is the gate.
+    if (event.registration_mode !== "none" && event.registration_mode !== "rsvp_invited") {
+      addPanel(
+        "panel-waitlist",
+        t("events.waitlist.title"),
+        <EventWaitlistSection eventId={event.id} t={t} />,
+      );
+    }
+    if (showForms) {
+      addPanel(
+        "panel-forms",
+        t("events.forms.title"),
+        <EventFormsSection eventId={event.id} t={t} />,
+      );
+    }
+  }
+
+  if (activeStage === "publish") {
+    addPanel(
+      "panel-publishing",
+      t("events.section.publishing"),
+      <EventLifecycleActions event={event} changeStatus={changeStatus} t={t} />,
+    );
+    // Repeat, series updates and copies all read the stored row, so they only
+    // unlock once nothing is left unsaved.
+    if (showRepeat) {
+      addPanel(
+        "panel-repeat",
+        t("events.repeat.section"),
+        <EventRepeatSection
+          event={event}
+          t={t}
+          canCreate={canCreateOccurrences}
+          blockedReason={repeatBlockedReason}
+          onGenerate={async (rule) => {
+            setMessage(null);
+            setError(null);
+            try {
+              const res = await generateEventOccurrences({ data: { id: event.id, rule } });
+              setMessage(
+                `${t("events.repeat.created")} ${res.created}${res.skipped ? ` · ${t("events.repeat.skipped")} ${res.skipped}` : ""}`,
+              );
+              await load();
+            } catch (e) {
+              setError(e instanceof Error ? e.message : t("events.saveError"));
+            }
+          }}
+        />,
+      );
+    }
+    addPanel(
+      "panel-series",
+      t("events.series.section"),
+      <EventSeriesUpdateSection
+        eventId={event.id}
+        dates={seriesDates}
+        t={t}
+        canApply={!dirty}
+        blockedReason={dirty ? t("events.repeat.needsSave") : null}
+        onApply={async () => {
+          setMessage(null);
+          setError(null);
+          try {
+            const res = await applySeriesUpdate({ data: { id: event.id } });
+            setMessage(
+              `${t("events.series.updated")} ${res.updated}${
+                res.skipped.length ? ` · ${t("events.series.skipped")} ${res.skipped.length}` : ""
+              }`,
+            );
+            await load();
+          } catch (e) {
+            setError(e instanceof Error ? e.message : t("events.saveError"));
+          }
+        }}
+      />,
+    );
+    addPanel(
+      "panel-duplicate",
+      t("events.duplicate.section"),
+      <EventDuplicateSection
+        startsAt={event.starts_at}
+        t={t}
+        canDuplicate={!dirty}
+        blockedReason={dirty ? t("events.repeat.needsSave") : null}
+        onDuplicate={async (startsAt) => {
+          setMessage(null);
+          setError(null);
+          try {
+            const res = await duplicateEvent({ data: { id: event.id, startsAt } });
+            await navigate({ to: "/manage/events/$id", params: { id: res.id } });
+          } catch (e) {
+            setError(e instanceof Error ? e.message : t("events.saveError"));
+          }
+        }}
+      />,
+    );
+  }
+
+  if (activeStage === "run") {
+    addPanel(
+      "panel-attendees",
+      t("events.attendees"),
+      <EventAttendeeDesk
+        event={event}
+        registrations={registrations}
+        confirmed={confirmed}
+        setRegistrationStatusAndReload={setRegistrationStatusAndReload}
+        resendConfirmation={resendConfirmation}
+        cancelAttendee={cancelAttendee}
+        retryRefund={retryRefund}
+        tiers={tiers}
+        reloadRegistrations={() => load().catch(() => setError(t("events.loadError")))}
+        t={t}
+      />,
+    );
+    if (showCce) {
+      addPanel(
+        "panel-cce",
+        t("events.wizard.extras.cce"),
+        <EventCceSection
+          eventId={event.id}
+          startsAt={event.starts_at}
+          endsAt={event.ends_at}
+          timezone={event.timezone ?? "Europe/Zurich"}
+          defaultContactName=""
+          defaultContactEmail=""
+          defaultFacilitator=""
+          enabled={Boolean(event.cce_enabled)}
+          onEnabledChange={(next) => patch({ cce_enabled: next })}
+          t={t}
+        />,
+      );
+    }
+  }
+
+  if (activeStage === "after") {
+    addPanel(
+      "panel-recap",
+      t("events.recap.title"),
+      <EventRecapEditor
+        eventId={event.id}
+        eventStartsAt={event.starts_at}
+        eventTitle={event.title}
+        t={(key) => t(`events.${key}`)}
+      />,
+    );
+  }
+
   return (
     <Shell>
-      <div className="mx-auto max-w-4xl px-10 py-10">
-        <button
-          onClick={() => void navigate({ to: "/manage/events" })}
-          className="btn-mono !text-muted-foreground hover:!text-foreground"
-        >
-          ← {t("events.backToList")}
-        </button>
-        <h1 className="mt-4 text-2xl font-bold tracking-tight">{event.title}</h1>
+      <EventStageHeader
+        title={event.title}
+        statusLabel={t(`events.status.${displayEventStatus(event.status, event.starts_at)}`)}
+        stage={activeStage}
+        onStage={pickStage}
+        onBack={() => void navigate({ to: "/manage/events" })}
+        backLabel={t("events.backToList")}
+        previewHref={event.status === "published" ? `/events/${event.slug}` : null}
+        previewLabel={t("events.editor.preview")}
+        t={t}
+      />
 
-        {/* Extras row: the optional halves of the editor stay out of the way
-            until this event actually needs them. */}
-        <div className="mt-4 flex flex-wrap gap-4 rounded-2xl border border-border bg-card px-5 py-3 text-sm">
-          <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            {t("events.wizard.step.extras")}
-          </span>
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={showRepeat}
-              onChange={(e) => setExtras({ ...extras, repeat: e.target.checked })}
-              disabled={Boolean(storedRecurrence)}
-            />
-            <span>{t("events.wizard.extras.repeat")}</span>
-          </label>
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={showCce}
-              onChange={(e) => setExtras({ ...extras, cce: e.target.checked })}
-              disabled={Boolean(event.cce_enabled)}
-            />
-            <span>{t("events.wizard.extras.cce")}</span>
-          </label>
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={showForms}
-              onChange={(e) => setExtras({ ...extras, forms: e.target.checked })}
-              disabled={hasForms}
-            />
+      <div className="mx-auto grid max-w-5xl gap-8 px-6 py-8 sm:px-10 lg:grid-cols-[14rem_minmax(0,1fr)]">
+        <EventStageNav
+          sections={sections}
+          extras={extrasControls}
+          title={t("events.stage.sections")}
+          extrasTitle={t("events.wizard.step.extras")}
+        />
 
-            <span>{t("events.wizard.extras.forms")}</span>
-          </label>
+        <div className="min-w-0">
+          <p className="text-sm text-muted-foreground">{t(`events.stage.hint.${activeStage}`)}</p>
+          {message ? <p className="mt-3 text-sm text-teal-foreground">{message}</p> : null}
+          {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
+
+          {panels.length === 0 ? (
+            <EventStageEmpty text={t(`events.stage.empty.${activeStage}`)} />
+          ) : (
+            panels
+          )}
         </div>
-
-        {message ? <p className="mt-3 text-sm text-teal-foreground">{message}</p> : null}
-        {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
-
-        <EventDetailsSection
-          event={event}
-          patch={patch}
-          categories={categories}
-          regions={regions}
-          communities={communities}
-          t={t}
-        />
-
-        <EventContentSection
-          event={event}
-          patch={patch}
-          setPickerOpen={setPickerOpen}
-          categories={categories}
-          regions={regions}
-          t={t}
-        />
-
-        <EventHostsSection
-          eventId={event.id}
-          title={t("events.section.hosts")}
-          hint={t("events.hosts.sectionHint")}
-        />
-
-        <EventSpeakersSection
-          eventId={event.id}
-          title={t("events.section.speakers")}
-          hint={t("events.speakers.sectionHint")}
-        />
-
-        <EventLocationSection event={event} patch={patch} t={t} />
-
-        {showCce ? (
-          <EventCceSection
-            eventId={event.id}
-            startsAt={event.starts_at}
-            endsAt={event.ends_at}
-            timezone={event.timezone ?? "Europe/Zurich"}
-            defaultContactName=""
-            defaultContactEmail=""
-            defaultFacilitator=""
-            enabled={Boolean(event.cce_enabled)}
-            onEnabledChange={(next) => patch({ cce_enabled: next })}
-            t={t}
-          />
-        ) : null}
-
-        <EventPublishingSection
-          event={event}
-          patch={patch}
-          saving={saving}
-          save={save}
-          changeStatus={changeStatus}
-          registrations={registrations}
-          confirmed={confirmed}
-          setRegistrationStatusAndReload={setRegistrationStatusAndReload}
-          resendConfirmation={resendConfirmation}
-          cancelAttendee={cancelAttendee}
-          retryRefund={retryRefund}
-          tiers={tiers}
-          reloadRegistrations={() => load().catch(() => setError(t("events.loadError")))}
-          ticketsSection={
-            <>
-              {event.tickets_enabled ? (
-                <>
-                  <EventTicketsSection eventId={event.id} t={t} />
-                  <EventDiscountCodesSection
-                    eventId={event.id}
-                    eventTitle={event.title}
-                    eventStartsAt={event.starts_at}
-                    t={t}
-                  />
-                </>
-              ) : null}
-              {event.registration_mode === "rsvp_invited" ? (
-                <EventInvitationsSection eventId={event.id} t={t} />
-              ) : null}
-              {/* A waitlist makes no sense when the guest list is the gate. */}
-              {event.registration_mode !== "none" && event.registration_mode !== "rsvp_invited" ? (
-                <EventWaitlistSection eventId={event.id} t={t} />
-              ) : null}
-              {showForms ? <EventFormsSection eventId={event.id} t={t} /> : null}
-              {/* Repeat lives right after Custom Forms: occurrences are copied
-                  from the stored row, so this only unlocks once the event is
-                  published and nothing is left unsaved. */}
-              {showRepeat ? (
-                <EventRepeatSection
-                  event={event}
-                  t={t}
-                  canCreate={canCreateOccurrences}
-                  blockedReason={repeatBlockedReason}
-                  onGenerate={async (rule) => {
-                    setMessage(null);
-                    setError(null);
-                    try {
-                      const res = await generateEventOccurrences({ data: { id: event.id, rule } });
-                      setMessage(
-                        `${t("events.repeat.created")} ${res.created}${res.skipped ? ` · ${t("events.repeat.skipped")} ${res.skipped}` : ""}`,
-                      );
-                      await load();
-                    } catch (e) {
-                      setError(e instanceof Error ? e.message : t("events.saveError"));
-                    }
-                  }}
-                />
-              ) : null}
-              {/* Pushing content forward reads the stored row, so it follows the
-                  same "nothing unsaved" rule as creating dates. */}
-              <EventSeriesUpdateSection
-                eventId={event.id}
-                dates={seriesDates}
-                t={t}
-                canApply={!dirty}
-                blockedReason={dirty ? t("events.repeat.needsSave") : null}
-                onApply={async () => {
-                  setMessage(null);
-                  setError(null);
-                  try {
-                    const res = await applySeriesUpdate({ data: { id: event.id } });
-                    setMessage(
-                      `${t("events.series.updated")} ${res.updated}${
-                        res.skipped.length
-                          ? ` · ${t("events.series.skipped")} ${res.skipped.length}`
-                          : ""
-                      }`,
-                    );
-                    await load();
-                  } catch (e) {
-                    setError(e instanceof Error ? e.message : t("events.saveError"));
-                  }
-                }}
-              />
-              {/* Copying also reads the stored row, so it waits for a save too. */}
-              <EventDuplicateSection
-                startsAt={event.starts_at}
-                t={t}
-                canDuplicate={!dirty}
-                blockedReason={dirty ? t("events.repeat.needsSave") : null}
-                onDuplicate={async (startsAt) => {
-                  setMessage(null);
-                  setError(null);
-                  try {
-                    const res = await duplicateEvent({ data: { id: event.id, startsAt } });
-                    await navigate({ to: "/manage/events/$id", params: { id: res.id } });
-                  } catch (e) {
-                    setError(e instanceof Error ? e.message : t("events.saveError"));
-                  }
-                }}
-              />
-
-              {/* The recap closes the loop: last panel, because it is written
-                  after the event has actually happened. */}
-              <EventRecapEditor
-                eventId={event.id}
-                eventStartsAt={event.starts_at}
-                eventTitle={event.title}
-                t={(key) => t(`events.${key}`)}
-              />
-            </>
-          }
-          t={t}
-        />
-
-        <UnsplashPicker
-          open={pickerOpen}
-          onOpenChange={setPickerOpen}
-          onPick={(pick: UnsplashPick) =>
-            patch({
-              image_url: pick.url,
-              image_credit_name: pick.creditName,
-              image_credit_url: pick.creditUrl,
-            })
-          }
-        />
       </div>
+
+      <EventSaveBar
+        dirty={dirty}
+        saving={saving}
+        onSave={() => void save()}
+        onDiscard={() => {
+          if (baseline) setEvent(JSON.parse(baseline) as Managed);
+        }}
+        t={t}
+      />
+
+      <UnsplashPicker
+        open={pickerOpen}
+        onOpenChange={setPickerOpen}
+        onPick={(pick: UnsplashPick) =>
+          patch({
+            image_url: pick.url,
+            image_credit_name: pick.creditName,
+            image_credit_url: pick.creditUrl,
+          })
+        }
+      />
     </Shell>
   );
 }

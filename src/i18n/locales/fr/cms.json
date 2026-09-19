@@ -1231,7 +1231,8 @@
       "registration": "Inscription",
       "tickets": "Billets",
       "discounts": "Codes de réduction",
-      "speakers": "Intervenants"
+      "speakers": "Intervenants",
+      "publishing": "Publication"
     },
     "hosts": {
       "none": "Aucun hôte sélectionné pour le moment.",
@@ -1935,6 +1936,36 @@
       "newDate": "Date et heure de la copie",
       "action": "Dupliquer cet événement",
       "working": "Copie en cours…"
+    },
+    "stage": {
+      "navLabel": "Étapes de l’événement",
+      "sections": "Sections",
+      "setup": "Préparer",
+      "registration": "Inscription",
+      "publish": "Publier",
+      "run": "Déroulement",
+      "after": "Après",
+      "hint": {
+        "setup": "Le nom, le contenu, les personnes et le lieu de l’événement.",
+        "registration": "Qui peut s’inscrire, à quelles conditions et à quel prix.",
+        "publish": "Publier l’événement, le répéter ou le copier.",
+        "run": "Tout pour le jour même : qui vient et l’accueil.",
+        "after": "Rédiger le compte rendu et clôturer l’événement."
+      },
+      "empty": {
+        "setup": "Rien à afficher ici.",
+        "registration": "L’inscription est désactivée pour cet événement. Activez-la dans cette étape pour ajouter des billets, des invitations ou une liste d’attente.",
+        "publish": "Rien à afficher ici.",
+        "run": "L’inscription est désactivée, il n’y a donc pas de liste de participants.",
+        "after": "Rien à afficher ici."
+      }
+    },
+    "editor": {
+      "saved": "Toutes les modifications sont enregistrées",
+      "unsaved": "Modifications non enregistrées",
+      "discard": "Annuler les modifications",
+      "autoSavedNote": "Les hôtes, les intervenants, les billets, les traductions et le compte rendu s’enregistrent tout seuls.",
+      "preview": "Voir la page"
     }
   },
   "eventTranslations": {

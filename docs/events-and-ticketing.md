@@ -222,6 +222,36 @@ new **draft** on a date staff choose, then opens the copy.
   lives in `member.index.tsx` — as `member.tsx` it was the parent of this page
   without rendering an `<Outlet />`, so the page could never appear.
 
+## Editor layout (lifecycle stages)
+
+`/manage/events/$id` is organised as five lifecycle stages instead of one long
+form. The Deep Blue header carries the title, the status, the preview link and
+a stepper; a rail lists the panels of the current stage plus the extras
+toggles; a sticky bar at the bottom holds the save state and the save button
+(Cmd/Ctrl+S still works).
+
+| Stage          | Panels                                                                                        |
+| -------------- | --------------------------------------------------------------------------------------------- |
+| 1 Set up       | Details (incl. date and time), Content + translations, Hosts, Speakers, Location              |
+| 2 Registration | Registration settings, Approved guests, Tickets, Discount codes, Invitations, Waitlist, Forms |
+| 3 Publish      | Publish/unpublish/cancel, Repeat dates, Push update to later dates, Duplicate                 |
+| 4 Run          | Attendee desk (filters, check-in, export, cancellations), CCE application                     |
+| 5 After        | Recap editor                                                                                  |
+
+A stage is a view, not a gate — nothing is locked. Conditional panels keep
+their old rules (tickets only when enabled, invitations only for invite-only
+events, waitlist only where seats exist, CCE and forms behind their toggles);
+a stage with no panels explains what switches them on.
+
+The opening stage comes from the event itself — draft before its date opens on
+Set up, a published future event on Publish, a started event on Run, a finished
+one on After — and the stage staff last used is remembered per event for the
+session (`src/lib/event-editor-stages.ts`, session storage key
+`cms.manage-event.stage`). The chrome lives in
+`src/components/cms/EventEditorChrome.tsx`; only the event's own fields are
+saved by the save bar — hosts, speakers, tickets, translations and the recap
+save themselves.
+
 ## Where things live
 
 | Module                                           | Responsibility                                     |
@@ -235,7 +265,9 @@ new **draft** on a date staff choose, then opens the copy.
 | `events-admin.functions.ts`                      | Staff: tiers, attendee list, cancel, retry refund  |
 | `components/events/EventRegistrationPanel.tsx`   | Public registration + member price unlock          |
 | `components/events/PaymentOverlay.tsx`           | Embedded Checkout modal, resume-payment state      |
-| `components/cms/EventEditorSections.tsx`         | Tier editor, attendee table, cancel dialog         |
+| `components/cms/EventEditorSections.tsx`         | Form panels, attendee desk, cancel dialog          |
+| `components/cms/EventEditorChrome.tsx`           | Stage header, section rail, sticky save bar        |
+| `lib/event-editor-stages.ts`                     | Stage list, opening stage, per-session memory      |
 
 ## Security notes
 
