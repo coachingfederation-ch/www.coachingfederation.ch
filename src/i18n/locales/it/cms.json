@@ -876,7 +876,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
+          "items": [
+            "Guidare progetti",
+            "Essere riconosciuti da ICFS per aver guidato iniziative"
+          ]
         },
         "status": {
           "title": "Status",
@@ -964,7 +967,16 @@
         "actions": "Azioni",
         "certificate": "Certificato"
       }
-    }
+    },
+    "groups": {
+      "navLabel": "Aree del profilo",
+      "identity": "Lei e il suo percorso",
+      "expertise": "La sua offerta",
+      "practice": "Come lavora",
+      "contact": "Contatti e link",
+      "visibility": "Lingue e pubblicazione"
+    },
+    "viewPublic": "Vedi il profilo pubblico"
   },
   "noAccess": {
     "title": "Nessun accesso ancora",
@@ -2744,7 +2756,13 @@
       "Un po' tecnico",
       "Troppo tecnico"
     ],
-    "usefulnessScale": ["Non fa per me", "Poco interessante", "Interessante", "Utile", "Lo userò"],
+    "usefulnessScale": [
+      "Non fa per me",
+      "Poco interessante",
+      "Interessante",
+      "Utile",
+      "Lo userò"
+    ],
     "topicsTitle": "Temi richiesti",
     "noTopics": "Nessun tema richiesto finora.",
     "themesTitle": "Temi IA",

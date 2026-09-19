@@ -876,7 +876,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
+          "items": [
+            "Piloter des projets",
+            "Être reconnu par ICFS pour avoir mené des initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -964,7 +967,16 @@
         "actions": "Actions",
         "certificate": "Certificat"
       }
-    }
+    },
+    "groups": {
+      "navLabel": "Domaines du profil",
+      "identity": "Vous et votre parcours",
+      "expertise": "Votre offre",
+      "practice": "Votre manière de travailler",
+      "contact": "Contact et liens",
+      "visibility": "Langues et publication"
+    },
+    "viewPublic": "Voir le profil public"
   },
   "noAccess": {
     "title": "Accès non encore accordé",
