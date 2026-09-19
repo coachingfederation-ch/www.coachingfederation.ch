@@ -307,84 +307,105 @@ export function MemberHome() {
                 {t("member.home.communities.body")}
               </p>
 
-
-        {isLoading ? (
-          <p className="mt-4 text-sm text-muted-foreground">
-            {t("member.home.communities.loading")}
-          </p>
-        ) : data?.noRegions ? (
-          <p className="mt-4 text-sm text-muted-foreground">
-            {t("member.home.communities.noRegions")}{" "}
-            <Link to="/my-profile" className="font-semibold text-primary underline">
-              {t("member.home.communities.setRegions")}
-            </Link>
-          </p>
-        ) : !data?.communities.length ? (
-          <p className="mt-4 text-sm text-muted-foreground">{t("member.home.communities.empty")}</p>
-        ) : (
-          <ul className="mt-4 grid gap-4 sm:grid-cols-2">
-            {data.communities.map((community) => (
-              <li key={community.slug} className={CARD}>
-                <div className="flex items-start gap-2">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
-                  <div>
-                    <h3 className="text-base font-bold">{community.name}</h3>
-                    {community.cadence ? (
-                      <p className="mt-1 text-xs text-muted-foreground">{community.cadence}</p>
-                    ) : null}
-                  </div>
-                </div>
-
-                {community.leads.length ? (
-                  <ul className="mt-3 space-y-1 text-sm">
-                    {community.leads.map((lead) => (
-                      <li key={lead.name} className="text-muted-foreground">
-                        <span className="font-semibold text-foreground">{lead.name}</span>
-                        {lead.role ? ` — ${lead.role}` : null}
-                        {lead.email ? (
-                          <>
-                            {" "}
-                            <a
-                              href={`mailto:${lead.email}`}
-                              target="_top"
-                              className="font-semibold text-primary underline"
-                            >
-                              {lead.email}
-                            </a>
-                          </>
-                        ) : null}
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-
-                <div className="mt-4 flex flex-wrap items-center gap-3 text-sm font-semibold">
-                  <Link
-                    to="/communities/$slug"
-                    params={{ slug: community.slug }}
-                    className="inline-flex items-center gap-1.5 text-primary underline"
-                  >
-                    {t("member.home.communities.view")}
-                    <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+              {isLoading ? (
+                <p className="mt-4 text-sm text-muted-foreground">
+                  {t("member.home.communities.loading")}
+                </p>
+              ) : data?.noRegions ? (
+                <p className="mt-4 text-sm text-muted-foreground">
+                  {t("member.home.communities.noRegions")}{" "}
+                  <Link to="/my-profile" className="font-semibold text-primary underline">
+                    {t("member.home.communities.setRegions")}
                   </Link>
-                  {community.contactEmail ? (
-                    <a
-                      href={`mailto:${community.contactEmail}`}
-                      target="_top"
-                      className="inline-flex items-center gap-1.5 text-primary underline"
+                </p>
+              ) : !data?.communities.length ? (
+                <p className="mt-4 text-sm text-muted-foreground">
+                  {t("member.home.communities.empty")}
+                </p>
+              ) : (
+                <ul className="mt-5 space-y-3">
+                  {data.communities.map((community) => (
+                    <li
+                      key={community.slug}
+                      className="rounded-3xl border border-border bg-card p-5 sm:flex sm:items-start sm:justify-between sm:gap-6"
                     >
-                      <Mail className="h-3.5 w-3.5" aria-hidden />
-                      {t("member.home.communities.contact")}
-                    </a>
-                  ) : null}
-                </div>
+                      <div className="min-w-0">
+                        <div className="flex items-start gap-2">
+                          <MapPin className="mt-1 h-4 w-4 shrink-0 text-primary" aria-hidden />
+                          <div className="min-w-0">
+                            <h3 className="font-heading text-lg text-primary">{community.name}</h3>
+                            {community.cadence ? (
+                              <p className="mt-1 text-xs text-muted-foreground">
+                                {community.cadence}
+                              </p>
+                            ) : null}
+                          </div>
+                        </div>
 
-                <JoinCommunityButton slug={community.slug} requested={community.requested} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+                        {community.leads.length ? (
+                          <ul className="mt-3 space-y-1 text-sm">
+                            {community.leads.map((lead) => (
+                              <li key={lead.name} className="text-muted-foreground">
+                                <span className="font-semibold text-foreground">{lead.name}</span>
+                                {lead.role ? ` — ${lead.role}` : null}
+                                {lead.email ? (
+                                  <>
+                                    {" "}
+                                    <a
+                                      href={`mailto:${lead.email}`}
+                                      target="_top"
+                                      className="font-semibold text-primary underline"
+                                    >
+                                      {lead.email}
+                                    </a>
+                                  </>
+                                ) : null}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
+
+                        <div className="mt-3 flex flex-wrap items-center gap-3 text-sm font-semibold">
+                          <Link
+                            to="/communities/$slug"
+                            params={{ slug: community.slug }}
+                            className="inline-flex items-center gap-1.5 text-primary underline"
+                          >
+                            {t("member.home.communities.view")}
+                            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                          </Link>
+                          {community.contactEmail ? (
+                            <a
+                              href={`mailto:${community.contactEmail}`}
+                              target="_top"
+                              className="inline-flex items-center gap-1.5 text-primary underline"
+                            >
+                              <Mail className="h-3.5 w-3.5" aria-hidden />
+                              {t("member.home.communities.contact")}
+                            </a>
+                          ) : null}
+                        </div>
+                      </div>
+
+                      <div className="shrink-0">
+                        <JoinCommunityButton
+                          slug={community.slug}
+                          requested={community.requested}
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          </div>
+
+          <aside className="space-y-6">
+            <GuestPassesCard />
+          </aside>
+        </div>
+      </div>
     </div>
   );
 }
+
