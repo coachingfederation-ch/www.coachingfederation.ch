@@ -33,7 +33,6 @@ import { eventPlace, formatEventDate } from "@/lib/events";
 import { GuestPassesCard } from "./GuestPassesCard";
 import { EmailChangeNotice } from "./EmailChangeNotice";
 
-
 const ENGAGE_URL =
   "https://engage.coachingfederation.org/communities/community-home?CommunityKey=230cb83a-26a7-4ffb-a2c4-fd9309091489";
 
@@ -215,9 +214,7 @@ export function MemberHome() {
               ? t("member.home.greetingNamed").replace("{name}", name)
               : t("member.home.greeting")}
           </h1>
-          <p className="mt-3 max-w-2xl text-sm text-hero-foreground/80">
-            {t("member.home.intro")}
-          </p>
+          <p className="mt-3 max-w-2xl text-sm text-hero-foreground/80">{t("member.home.intro")}</p>
         </div>
       </header>
 
@@ -408,4 +405,3 @@ export function MemberHome() {
     </div>
   );
 }
-
