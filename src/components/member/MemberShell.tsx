@@ -138,11 +138,15 @@ export function MemberShell({ children }: { children: ReactNode }) {
         utilitySlot={
           <>
             <MemberLanguageMenu />
+            {/* Narrow screens keep the band clear for the lockup — the same
+                link stays reachable through the mobile sheet below. */}
             {roles.isStaff ? (
-              <Link to={staffLink.to} className={`hidden sm:inline-flex ${UTILITY_PILL}`}>
-                <staffLink.Icon className="h-3.5 w-3.5" aria-hidden />
-                {t(staffLink.key)}
-              </Link>
+              <span className="hidden md:block">
+                <Link to={staffLink.to} className={UTILITY_PILL}>
+                  <staffLink.Icon className="h-3.5 w-3.5" aria-hidden />
+                  {t(staffLink.key)}
+                </Link>
+              </span>
             ) : null}
             {signOutButton}
           </>
