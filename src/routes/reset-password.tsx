@@ -7,7 +7,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useCms } from "@/i18n/cms";
+import { setCmsLocale, useCms } from "@/i18n/cms";
+import { isLocale } from "@/i18n/config";
 import { landingPathForSession } from "@/lib/roles";
 import { Button, Input } from "@/design-system/icf-welcome-design-system-a835df";
 import { AuthCard } from "@/components/auth/auth-screen";
