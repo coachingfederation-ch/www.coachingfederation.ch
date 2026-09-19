@@ -65,8 +65,9 @@ function sum(rows: CreditRow[], key: "ccHours" | "rdHours") {
   return rows.reduce((total, row) => total + row[key], 0);
 }
 
+/** Two decimals at most, trailing zeros trimmed: 2.5, 1.25, 0. */
 function hours(value: number) {
-  return value.toFixed(2).replace(/\.00$/, "");
+  return value.toFixed(2).replace(/\.?0+$/, "") || "0";
 }
 
 /** Steps the window back three years at a time until the date is covered. */
