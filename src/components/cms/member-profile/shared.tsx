@@ -3,8 +3,10 @@
  * sections: vocabulary Chips, the card-like Section wrapper, and the plain
  * Field/TextArea inputs. Consumed by MemberProfileEditor and its sections.
  */
+import * as React from "react";
 import { vocabLabel, type VocabRow } from "@/lib/vocabularies";
 import { RichTextEditor } from "@/components/cms/RichTextField";
+import { InProfileGroup } from "./ProfileEditorChrome";
 
 export function Chips({
   rows,
