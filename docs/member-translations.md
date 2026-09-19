@@ -88,6 +88,21 @@ that language (`src/lib/member-engagement/dispatch.server.ts`, copy in
 `src/lib/email-templates/member-campaign-copy.ts`). A null value means "no
 preference recorded" and falls back to English.
 
+The password reset mail follows the same rule: `password-reset.functions.ts`
+looks the address up in `members` server-side and puts the resulting language
+into the recovery link (`/reset-password?lang=xx`), which the auth webhook reads
+to pick the wording and `reset-password.tsx` reads to render the page in the
+same language. The screen's own language is only a fallback, and the lookup
+never changes the neutral response.
+
+Which language an automated email uses:
+
+- mail to a member we can identify → their `correspondence_locale`;
+- mail tied to a one-off action (event confirmation, reminder, cancellation,
+  certificate) → the language of that action, i.e. the registration's locale;
+- account claim invitations → English, because at that point no account and no
+  confirmed preference exist yet.
+
 The two settings answer different questions and must not be conflated: the
 profile's `primary_locale` is what the _public_ reads on the coach's directory
 page; `correspondence_locale` is what _we_ send them.
