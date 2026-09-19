@@ -36,9 +36,11 @@ import { takeWizardExtras } from "@/lib/event-wizard-extras";
 import { useSaveShortcut } from "@/hooks/use-save-shortcut";
 import { useCms } from "@/i18n/cms";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
+import { EventDuplicateSection } from "@/components/cms/EventDuplicateSection";
 import {
   applySeriesUpdate,
   cancelRegistration,
+  duplicateEvent,
   generateEventOccurrences,
   getManagedEvent,
   listCommunityOptions,
@@ -504,6 +506,24 @@ function EventEditor() {
                   }
                 }}
               />
+              {/* Copying also reads the stored row, so it waits for a save too. */}
+              <EventDuplicateSection
+                startsAt={event.starts_at}
+                t={t}
+                canDuplicate={!dirty}
+                blockedReason={dirty ? t("events.repeat.needsSave") : null}
+                onDuplicate={async (startsAt) => {
+                  setMessage(null);
+                  setError(null);
+                  try {
+                    const res = await duplicateEvent({ data: { id: event.id, startsAt } });
+                    await navigate({ to: "/manage/events/$id", params: { id: res.id } });
+                  } catch (e) {
+                    setError(e instanceof Error ? e.message : t("events.saveError"));
+                  }
+                }}
+              />
+
               {/* The recap closes the loop: last panel, because it is written
                   after the event has actually happened. */}
               <EventRecapEditor

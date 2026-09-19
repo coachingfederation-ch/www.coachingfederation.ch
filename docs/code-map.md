@@ -27,7 +27,7 @@ before adding a new file.
 | `member-email.server.ts`                     | Email dispatch. Currently logs every intended send and delivers nothing; see operations doc.                                                                                                                                                       |
 | `member-translations.*`                      | Per-locale coach profile content: translatable field list, derived states, AI translation and the member RPC surface. See `docs/member-translations.md`.                                                                                           |
 | `member-engagement/dispatch.server.ts`       | Sends engagement campaigns using the registered email templates, in the member's `correspondence_locale`. Wording lives in `src/lib/email-templates/member-campaign-copy.ts`. See `docs/member-translations.md`.                                   |
-| `member-credits.functions.ts`                | Member credits dashboard: certificate hours plus self-recorded entries, grouped into three-year renewal cycles. Owner-scoped through RLS. See `docs/events-and-ticketing.md`.                                                                     |
+| `member-credits.functions.ts`                | Member credits dashboard: certificate hours plus self-recorded entries, grouped into three-year renewal cycles. Owner-scoped through RLS. See `docs/events-and-ticketing.md`.                                                                      |
 
 ### Insights CMS
 
@@ -51,14 +51,14 @@ before adding a new file.
 
 ### Events
 
-| Module                            | Responsibility                                                                       |
-| --------------------------------- | ------------------------------------------------------------------------------------ |
-| `events.ts`                       | Shared event types, status/registration helpers and date formatting.                 |
-| `events.functions.ts`             | Public reads (`events_public`) and free RSVP registration.                           |
-| `events-admin.functions.ts`       | Staff event CRUD, publishing and registration lists. Gated on `organizer`/`editor`.  |
-| `event-speakers.ts`               | Shared speaker shape and the bio length limit.                                       |
-| `event-speakers.server.ts`        | Speaker reads: load an event's speakers, search the chapter-wide library.            |
-| `event-translations.functions.ts` | Per-locale event content and AI translation, mirroring the article translation flow. |
+| Module                            | Responsibility                                                                                   |
+| --------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `events.ts`                       | Shared event types, status/registration helpers and date formatting.                             |
+| `events.functions.ts`             | Public reads (`events_public`) and free RSVP registration.                                       |
+| `events-admin.functions.ts`       | Staff event CRUD, publishing, duplication and registration lists. Gated on `organizer`/`editor`. |
+| `event-speakers.ts`               | Shared speaker shape and the bio length limit.                                                   |
+| `event-speakers.server.ts`        | Speaker reads: load an event's speakers, search the chapter-wide library.                        |
+| `event-translations.functions.ts` | Per-locale event content and AI translation, mirroring the article translation flow.             |
 
 ### Team, operational structure and communities
 

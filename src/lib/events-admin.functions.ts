@@ -843,6 +843,182 @@ export const generateEventOccurrences = createServerFn({ method: "POST" })
     return { created: created.length, skipped: dates.length - rows.length };
   });
 
+/**
+ * Duplicates one event into a fresh draft on a chosen date.
+ *
+ * Everything reusable travels with the copy — content, location, registration
+ * settings, hosts, speakers, ticket tiers and translations. Everything tied to
+ * the original run does not: registrations, waitlist, invitations, discount
+ * codes, attendance, certificates, CCE application, recap and series
+ * membership. The copy is always a draft owned by whoever made it.
+ */
+export const duplicateEvent = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ id: z.string().uuid(), startsAt: z.string().min(1) }).parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+
+    const { data: source, error: loadError } = await context.supabase
+      .from("events")
+      .select(EDIT_COLUMNS)
+      .eq("id", data.id)
+      .maybeSingle();
+    if (loadError) throw new Error(loadError.message);
+    if (!source) throw new Error("Event not found.");
+
+    const startIso = new Date(data.startsAt).toISOString();
+    const durationMs = source.ends_at
+      ? new Date(source.ends_at as string).getTime() -
+        new Date(source.starts_at as string).getTime()
+      : null;
+
+    // A copy keeps the original's web address as its base, with a numbered
+    // suffix so repeated copies never collide.
+    const base = `${source.slug as string}-copy`.slice(0, 110);
+    const candidates = [base, ...Array.from({ length: 30 }, (_, i) => `${base}-${i + 2}`)];
+    const { data: taken, error: takenError } = await context.supabase
+      .from("events")
+      .select("slug")
+      .in("slug", candidates);
+    if (takenError) throw new Error(takenError.message);
+    const used = new Set((taken ?? []).map((r) => r.slug as string));
+    const slug = candidates.find((c) => !used.has(c));
+    if (!slug) throw new Error("Too many copies of this event already exist.");
+
+    const { data: inserted, error: insertError } = await context.supabase
+      .from("events")
+      .insert({
+        slug,
+        title: `${source.title as string} (copy)`.slice(0, 200),
+        summary: source.summary,
+        description: source.description,
+        language: source.language,
+        starts_at: startIso,
+        ends_at:
+          durationMs === null
+            ? null
+            : new Date(new Date(startIso).getTime() + durationMs).toISOString(),
+        timezone: source.timezone,
+        location_mode: source.location_mode,
+        venue_name: source.venue_name,
+        city: source.city,
+        online_url: source.online_url,
+        map_location: source.map_location,
+        image_url: source.image_url,
+        image_credit_name: source.image_credit_name,
+        image_credit_url: source.image_credit_url,
+        practical_notes: source.practical_notes,
+        hero_marks: source.hero_marks,
+        capacity: source.capacity,
+        registration_mode: source.registration_mode,
+        guest_registration_allowed: source.guest_registration_allowed,
+        tickets_enabled: source.tickets_enabled,
+        guest_passes_allowed: source.guest_passes_allowed,
+        attendance_min_percent: source.attendance_min_percent,
+        certificates_enabled: source.certificates_enabled,
+        category_id: source.category_id,
+        region_id: source.region_id,
+        community_id: source.community_id,
+        // A copy is a new event: never featured, never part of the source's
+        // series, and never inheriting a published state.
+        is_featured: false,
+        is_internal:
+          source.registration_mode === "rsvp_members" ||
+          source.registration_mode === "rsvp_invited",
+        status: "draft" as const,
+        organizer_id: context.userId,
+      })
+      .select("id")
+      .single();
+    if (insertError) {
+      if (insertError.code === "23505")
+        throw new Error("That web address (slug) is already taken.");
+      throw new Error(insertError.message);
+    }
+    const newId = inserted.id as string;
+
+    const { data: hosts } = await context.supabase
+      .from("event_hosts")
+      .select("profile_id, sort_order, link_url, blurb")
+      .eq("event_id", data.id);
+    if (hosts && hosts.length > 0) {
+      const { error } = await context.supabase.from("event_hosts").insert(
+        hosts.map((h) => ({
+          event_id: newId,
+          profile_id: h.profile_id as string,
+          sort_order: h.sort_order as number,
+          link_url: (h.link_url as string | null) ?? null,
+          blurb: (h.blurb as string | null) ?? null,
+        })),
+      );
+      if (error) throw new Error(error.message);
+    }
+
+    const { data: speakers } = await context.supabase
+      .from("event_speaker_links")
+      .select("speaker_id, sort_order")
+      .eq("event_id", data.id);
+    if (speakers && speakers.length > 0) {
+      const { error } = await context.supabase.from("event_speaker_links").insert(
+        speakers.map((s) => ({
+          event_id: newId,
+          speaker_id: s.speaker_id as string,
+          sort_order: s.sort_order as number,
+        })),
+      );
+      if (error) throw new Error(error.message);
+    }
+
+    const { data: tiers } = await context.supabase
+      .from("event_ticket_tiers")
+      .select(TIER_COLUMNS)
+      .eq("event_id", data.id);
+    if (tiers && tiers.length > 0) {
+      const { error } = await context.supabase.from("event_ticket_tiers").insert(
+        (tiers as ManagedTier[]).map((tier) => ({
+          event_id: newId,
+          name: tier.name,
+          name_de: tier.name_de,
+          name_fr: tier.name_fr,
+          name_it: tier.name_it,
+          description: tier.description,
+          description_de: tier.description_de,
+          description_fr: tier.description_fr,
+          description_it: tier.description_it,
+          price_cents: tier.price_cents,
+          currency: tier.currency,
+          capacity: tier.capacity,
+          segment: tier.segment,
+          is_active: tier.is_active,
+          sort_order: tier.sort_order,
+        })),
+      );
+      if (error) throw new Error(error.message);
+    }
+
+    const { data: translations } = await context.supabase
+      .from("event_translations")
+      .select("locale, title, summary, description, manually_edited")
+      .eq("event_id", data.id);
+    if (translations && translations.length > 0) {
+      const { error } = await context.supabase.from("event_translations").insert(
+        translations.map((row) => ({
+          event_id: newId,
+          locale: row.locale as string,
+          title: row.title as string,
+          summary: row.summary as string | null,
+          description: row.description as string | null,
+          manually_edited: (row.manually_edited as boolean | null) ?? false,
+        })),
+      );
+      if (error) throw new Error(error.message);
+    }
+
+    return { id: newId };
+  });
+
 export type SeriesDate = {
   id: string;
   slug: string;
