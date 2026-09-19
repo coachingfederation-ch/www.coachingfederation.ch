@@ -3,8 +3,10 @@
  * sections: vocabulary Chips, the card-like Section wrapper, and the plain
  * Field/TextArea inputs. Consumed by MemberProfileEditor and its sections.
  */
+import * as React from "react";
 import { vocabLabel, type VocabRow } from "@/lib/vocabularies";
 import { RichTextEditor } from "@/components/cms/RichTextField";
+import { InProfileGroup } from "./ProfileEditorChrome";
 
 export function Chips({
   rows,
@@ -41,6 +43,10 @@ export function Chips({
   );
 }
 
+/**
+ * A single labelled block. Standalone it is a card; inside a ProfileGroup the
+ * group owns the card, so the block renders flush with a plain sub-heading.
+ */
 export function Section({
   title,
   note,
@@ -50,9 +56,16 @@ export function Section({
   note?: string;
   children: React.ReactNode;
 }) {
+  const grouped = React.useContext(InProfileGroup);
   return (
-    <section className="mt-5 rounded-2xl border border-border bg-card p-5">
-      <h2 className="text-sm font-semibold">{title}</h2>
+    <section
+      className={
+        grouped
+          ? "mt-6 border-t border-border/60 pt-6 first:mt-0 first:border-t-0 first:pt-0"
+          : "mt-5 rounded-2xl border border-border bg-card p-5"
+      }
+    >
+      <h3 className="text-sm font-semibold">{title}</h3>
       {note ? <p className="mt-1 text-xs text-muted-foreground">{note}</p> : null}
       {children}
     </section>

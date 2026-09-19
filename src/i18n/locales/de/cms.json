@@ -876,7 +876,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
+          "items": [
+            "Projekte leiten",
+            "Von ICFS für die Leitung von Initiativen anerkannt werden"
+          ]
         },
         "status": {
           "title": "Status",
@@ -964,7 +967,16 @@
         "actions": "Aktionen",
         "certificate": "Zertifikat"
       }
-    }
+    },
+    "groups": {
+      "navLabel": "Profilbereiche",
+      "identity": "Sie und Ihre Geschichte",
+      "expertise": "Ihr Angebot",
+      "practice": "Ihre Arbeitsweise",
+      "contact": "Kontakt und Links",
+      "visibility": "Sprachen und Veröffentlichung"
+    },
+    "viewPublic": "Öffentliches Profil ansehen"
   },
   "noAccess": {
     "title": "Noch kein Zugriff",
