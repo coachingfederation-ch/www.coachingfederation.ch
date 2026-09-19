@@ -294,8 +294,8 @@ export function MemberHome() {
           </section>
         </div>
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
-          <div className="space-y-12">
+        <div className="mt-12 grid gap-8 lg:grid-cols-3">
+          <div className="space-y-12 lg:col-span-2">
             <InternalEvents />
 
             <section>
