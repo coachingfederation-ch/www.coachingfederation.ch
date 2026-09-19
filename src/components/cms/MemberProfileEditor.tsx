@@ -76,13 +76,36 @@ export function MemberProfileEditor() {
       </div>
     );
 
-  return (
-    <>
-      <h1 className="text-2xl font-bold tracking-tight">{t("member.title")}</h1>
-      <p className="mt-1 text-sm text-muted-foreground">{t("member.subtitle")}</p>
-      {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
+  const groups = [
+    { id: "profile-identity", label: t("member.groups.identity") },
+    { id: "profile-expertise", label: t("member.groups.expertise") },
+    { id: "profile-practice", label: t("member.groups.practice") },
+    { id: "profile-contact", label: t("member.groups.contact") },
+    { id: "profile-visibility", label: t("member.groups.visibility") },
+  ];
 
-      <IdentitySection
+  return (
+    <div className="space-y-8">
+      <ProfileEditorHeader
+        t={t}
+        title={t("member.title")}
+        subtitle={t("member.subtitle")}
+        visibility={profile.visibility}
+        publishBlocked={publishBlocked}
+        status={status}
+        profileId={profile.id}
+        onSave={(visibility) => void save(visibility)}
+      />
+      {error ? <p className="text-sm text-destructive">{error}</p> : null}
+
+      <div className="grid gap-8 lg:grid-cols-4">
+        <div className="lg:col-span-1">
+          <ProfileEditorNav groups={groups} label={t("member.groups.navLabel")} />
+        </div>
+
+        <div className="space-y-8 lg:col-span-3">
+          <ProfileGroup id="profile-identity" title={t("member.groups.identity")}>
+            <IdentitySection
         t={t}
         fullName={member?.full_name ?? null}
         credentialSlug={member?.credential_slug ?? null}
