@@ -933,7 +933,8 @@ export const duplicateEvent = createServerFn({ method: "POST" })
       .select("id")
       .single();
     if (insertError) {
-      if (insertError.code === "23505") throw new Error("That web address (slug) is already taken.");
+      if (insertError.code === "23505")
+        throw new Error("That web address (slug) is already taken.");
       throw new Error(insertError.message);
     }
     const newId = inserted.id as string;
@@ -1004,7 +1005,6 @@ export const duplicateEvent = createServerFn({ method: "POST" })
 
     return { id: newId };
   });
-
 
 export type SeriesDate = {
   id: string;

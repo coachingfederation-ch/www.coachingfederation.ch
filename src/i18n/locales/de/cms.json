@@ -1928,6 +1928,13 @@
       "loadError": "Speaker konnten nicht geladen werden.",
       "saveError": "Speaker konnten nicht gespeichert werden.",
       "uploadError": "Das Foto konnte nicht hochgeladen werden."
+    },
+    "duplicate": {
+      "section": "Duplizieren",
+      "hint": "Aus diesem Event einen neuen Entwurf erstellen. Inhalt, Ort, Anmeldeeinstellungen, Gastgeber, Speaker, Ticketpreise und Übersetzungen werden kopiert — Anmeldungen, Einladungen und der Rückblick nicht.",
+      "newDate": "Datum und Uhrzeit der Kopie",
+      "action": "Dieses Event duplizieren",
+      "working": "Wird kopiert…"
     }
   },
   "eventTranslations": {

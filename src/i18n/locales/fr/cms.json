@@ -1928,6 +1928,13 @@
       "loadError": "Impossible de charger les intervenants.",
       "saveError": "Impossible d'enregistrer les intervenants.",
       "uploadError": "Impossible de téléverser la photo."
+    },
+    "duplicate": {
+      "section": "Dupliquer",
+      "hint": "Créer un nouveau brouillon à partir de cet événement. Contenu, lieu, paramètres d'inscription, hôtes, intervenants, tarifs et traductions sont copiés — pas les inscriptions, les invitations ni le compte rendu.",
+      "newDate": "Date et heure de la copie",
+      "action": "Dupliquer cet événement",
+      "working": "Copie en cours…"
     }
   },
   "eventTranslations": {

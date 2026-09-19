@@ -1928,6 +1928,13 @@
       "loadError": "Could not load speakers.",
       "saveError": "Could not save speakers.",
       "uploadError": "Could not upload the photo."
+    },
+    "duplicate": {
+      "section": "Duplicate",
+      "hint": "Create a new draft event from this one. Content, location, registration settings, hosts, speakers, ticket prices and translations are copied — registrations, invitations and the recap are not.",
+      "newDate": "Date and time of the copy",
+      "action": "Duplicate this event",
+      "working": "Copying…"
     }
   },
   "eventTranslations": {

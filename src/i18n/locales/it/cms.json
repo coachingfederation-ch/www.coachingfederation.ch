@@ -1928,6 +1928,13 @@
       "loadError": "Impossibile caricare i relatori.",
       "saveError": "Impossibile salvare i relatori.",
       "uploadError": "Impossibile caricare la foto."
+    },
+    "duplicate": {
+      "section": "Duplica",
+      "hint": "Crea una nuova bozza a partire da questo evento. Contenuto, luogo, impostazioni di iscrizione, host, relatori, prezzi dei biglietti e traduzioni vengono copiati — non le iscrizioni, gli inviti o il resoconto.",
+      "newDate": "Data e ora della copia",
+      "action": "Duplica questo evento",
+      "working": "Copia in corso…"
     }
   },
   "eventTranslations": {
