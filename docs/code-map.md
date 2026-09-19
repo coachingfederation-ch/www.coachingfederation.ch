@@ -112,7 +112,7 @@ before adding a new file.
 | ----------------------------- | --------------------------------------------------------------------------------------------- |
 | `site-chrome.tsx`             | Public header, footer, responsive nav, language switcher.                                     |
 | `coaches/`                    | Directory list, filter panel, mode tabs, coach cards.                                         |
-| `cms/`                        | Staff shell, Markdown editor, translations panel, Unsplash picker, and `MemberProfileEditor`. |
+| `cms/`                        | Staff shell, Markdown editor, translations panel, Unsplash picker, and `MemberProfileEditor` (grouped into five areas by `member-profile/ProfileEditorChrome.tsx`: Deep Blue header with the publication state and save/publish actions, sticky area list, one card per area). |
 | `member/`                     | Member Area presentational pieces.                                                            |
 | `team/`                       | `TeamGrid` (hexagon honeycomb), `TeamPreview` and the shared `MemberModal`.                   |
 | `communities/`                | `CommunityRing` (member ring layout) and the About-page `CommunitiesPreview`.                 |
