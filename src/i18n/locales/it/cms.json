@@ -698,6 +698,18 @@
     "publish": "Pubblica profilo",
     "unpublish": "Rimuovi dalla pubblicazione",
     "areaTitle": "Area membri",
+    "nav": {
+      "home": "Area membri",
+      "profile": "Il mio profilo",
+      "credits": "Ore di formazione",
+      "volunteering": "Volontariato",
+      "findACoach": "Trova un coach",
+      "primaryLabel": "Navigazione area membri",
+      "homeAria": "The Switzerland Chapter of ICF — area membri",
+      "skipToContent": "Vai al contenuto",
+      "menuOpen": "Apri il menu",
+      "menuClose": "Chiudi il menu"
+    },
     "clientTypesTitle": "Tipi di cliente",
     "clientTypesNote": "Opzionale. Aiuta i clienti a capire se sei la persona giusta per loro.",
     "practiceTitle": "La tua attività",
