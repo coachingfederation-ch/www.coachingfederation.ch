@@ -37,6 +37,13 @@ function ResetPasswordPage() {
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
+  // The reset mail was written in the member's correspondence language and
+  // carries it in `?lang=`; show this page in the same language.
+  useEffect(() => {
+    const lang = new URLSearchParams(window.location.search).get("lang");
+    if (isLocale(lang)) setCmsLocale(lang);
+  }, []);
+
   // The recovery link puts the session in the URL; supabase-js consumes it
   // asynchronously, so wait briefly before declaring the link dead.
   useEffect(() => {
