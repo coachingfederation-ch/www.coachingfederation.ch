@@ -36,9 +36,11 @@ import { takeWizardExtras } from "@/lib/event-wizard-extras";
 import { useSaveShortcut } from "@/hooks/use-save-shortcut";
 import { useCms } from "@/i18n/cms";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
+import { EventDuplicateSection } from "@/components/cms/EventDuplicateSection";
 import {
   applySeriesUpdate,
   cancelRegistration,
+  duplicateEvent,
   generateEventOccurrences,
   getManagedEvent,
   listCommunityOptions,
