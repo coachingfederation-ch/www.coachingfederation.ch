@@ -37,11 +37,25 @@ import { EmailChangeNotice } from "./EmailChangeNotice";
 const ENGAGE_URL =
   "https://engage.coachingfederation.org/communities/community-home?CommunityKey=230cb83a-26a7-4ffb-a2c4-fd9309091489";
 
-const CARD = "rounded-2xl border border-border bg-card p-6";
+const CARD = "rounded-3xl border border-border bg-card p-6 shadow-soft";
+/** Whole-card link: the icon tile picks up the hover state through `group`. */
+const TOOL_CARD =
+  "group flex h-full flex-col rounded-3xl border border-border bg-card p-6 shadow-soft transition hover:border-primary/30";
+const TOOL_ICON =
+  "flex h-12 w-12 items-center justify-center rounded-2xl bg-background text-primary transition group-hover:bg-accent group-hover:text-accent-foreground";
 const CTA =
   "mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90";
 const CTA_MUTED =
   "mt-4 inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground";
+/** Section heading with the hairline rule the chosen direction uses. */
+function SectionHeading({ children }: { children: ReactNode }) {
+  return (
+    <h2 className="flex items-center gap-3 font-heading text-2xl text-primary">
+      {children}
+      <span aria-hidden className="h-px flex-grow bg-border" />
+    </h2>
+  );
+}
 
 /**
  * "Join community" — one press tells the community's leads that this member
