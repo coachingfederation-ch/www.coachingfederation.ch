@@ -119,8 +119,8 @@ export function ProfileEditorHeader({
 
 /**
  * In-page list of the profile's areas. Desktop keeps the sticky column; on
- * phones the same anchors become a sideways-scrolling chip row pinned under
- * the header, so a member can jump between areas of a very long form.
+ * phones the same anchors become a sideways-scrolling chip row under the
+ * header, so a member can jump between areas of a very long form.
  */
 export function ProfileEditorNav({ groups, label }: { groups: ProfileGroupDef[]; label: string }) {
   return (
@@ -138,7 +138,7 @@ export function ProfileEditorNav({ groups, label }: { groups: ProfileGroupDef[];
       </nav>
       <nav
         aria-label={label}
-        className="sticky top-0 z-20 -mx-6 overflow-x-auto border-b border-border bg-background/95 px-6 py-3 backdrop-blur lg:hidden"
+        className="-mx-6 overflow-x-auto border-b border-border px-6 pb-3 lg:hidden"
       >
         <ul className="flex w-max list-none gap-2 p-0">
           {groups.map((group) => (
