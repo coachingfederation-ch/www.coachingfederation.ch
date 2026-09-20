@@ -176,7 +176,7 @@ export function ProfileSaveBar({
 }) {
   const published = visibility === "published";
   return (
-    <div className="sticky bottom-0 z-20 -mx-6 mt-8 border-t border-border bg-hero px-6 py-3 text-hero-foreground lg:hidden">
+    <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-hero px-6 py-3 text-hero-foreground lg:hidden">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="min-w-0 text-xs text-hero-foreground/80">
           {status === "saving"
