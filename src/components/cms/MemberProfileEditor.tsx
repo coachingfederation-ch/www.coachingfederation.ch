@@ -91,7 +91,7 @@ export function MemberProfileEditor() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-24 lg:pb-0">
       <ProfileEditorHeader
         t={t}
         title={t("member.title")}
