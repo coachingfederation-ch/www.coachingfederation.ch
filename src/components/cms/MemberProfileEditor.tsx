@@ -91,7 +91,7 @@ export function MemberProfileEditor() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-24 lg:pb-0">
       <ProfileEditorHeader
         t={t}
         title={t("member.title")}
@@ -104,12 +104,14 @@ export function MemberProfileEditor() {
       />
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
+      {/* min-w-0 on both columns: the mobile chip row is wider than the screen
+          and would otherwise stretch the whole grid. */}
       <div className="grid gap-8 lg:grid-cols-4">
-        <div className="lg:col-span-1">
+        <div className="min-w-0 lg:col-span-1">
           <ProfileEditorNav groups={groups} label={t("member.groups.navLabel")} />
         </div>
 
-        <div className="space-y-8 lg:col-span-3">
+        <div className="min-w-0 space-y-8 lg:col-span-3">
           <ProfileGroup id="profile-identity" title={t("member.groups.identity")}>
             <IdentitySection
               t={t}

@@ -15,6 +15,13 @@ they are readable on a phone, translatable, and editable without a new release.
   interface locale, because the Member Area is not locale-prefixed), the staff
   link for accounts that also hold a staff grant, sign out, and one yellow
   accent pill to **Find a coach**.
+- Mobile chrome for the profile editor (`/my-profile`): the Deep Blue header
+  collapses to title plus publication state, the five area links become a
+  sideways-scrolling chip row, and save/publish move into a fixed bottom bar
+  (`ProfileSaveBar` in `src/components/cms/member-profile/ProfileEditorChrome.tsx`,
+  `lg:hidden`; the editor wrapper carries `pb-24 lg:pb-0` to clear it). Both
+  editor grid columns need `min-w-0` — the chip row is wider than the screen
+  and would otherwise stretch the grid and clip every card.
 
 ## Structure
 
