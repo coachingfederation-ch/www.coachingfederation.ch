@@ -131,13 +131,19 @@
     "js-yaml": "^5.2.3",
     "@hono/node-server": "^2.1.0",
     "hono": "^4.13.5",
-    "fast-uri": "^3.1.6"
+    "fast-uri": "^3.1.6",
+    "qs": "^6.16.0",
+    "browserslist": "^4.29.0",
+    "baseline-browser-mapping": "^2.11.25"
   },
   "resolutions": {
     "js-yaml": "^5.2.3",
     "@hono/node-server": "^2.1.0",
     "hono": "^4.13.5",
-    "fast-uri": "^3.1.6"
+    "fast-uri": "^3.1.6",
+    "qs": "^6.16.0",
+    "browserslist": "^4.29.0",
+    "baseline-browser-mapping": "^2.11.25"
   },
   "pnpm": {
     "overrides": {
