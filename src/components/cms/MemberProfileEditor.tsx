@@ -25,6 +25,7 @@ import {
   ProfileEditorHeader,
   ProfileEditorNav,
   ProfileGroup,
+  ProfileSaveBar,
 } from "./member-profile/ProfileEditorChrome";
 import { useMemberProfileForm } from "./member-profile/useMemberProfileForm";
 
