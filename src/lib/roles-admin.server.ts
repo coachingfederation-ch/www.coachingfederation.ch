@@ -204,23 +204,35 @@ export async function listRoleGrantAudit(
  * on.
  */
 async function authUserIdsMatching(search: string): Promise<string[]> {
+  // The term is caller text. Interpolating it into a PostgREST `or(...)` string
+  // would let commas, parentheses or quotes change the filter itself, so the
+  // search runs as one `.ilike()` per column instead — the value is then sent as
+  // a parameter and can never be read as filter syntax.
   const like = `%${search.replace(/[%_]/g, (c) => `\\${c}`)}%`;
   const ids = new Set<string>();
 
-  const { data: members } = await supabaseAdmin
-    .from("members")
-    .select("auth_user_id")
-    .not("auth_user_id", "is", null)
-    .or(
-      `full_name.ilike.${like},first_name.ilike.${like},last_name.ilike.${like},email.ilike.${like}`,
-    );
-  for (const row of members ?? []) ids.add(row.auth_user_id as string);
+  const memberColumns = ["full_name", "first_name", "last_name", "email"] as const;
+  const memberResults = await Promise.all(
+    memberColumns.map((column) =>
+      supabaseAdmin
+        .from("members")
+        .select("auth_user_id")
+        .not("auth_user_id", "is", null)
+        .ilike(column, like),
+    ),
+  );
+  for (const { data } of memberResults) {
+    for (const row of data ?? []) ids.add(row.auth_user_id as string);
+  }
 
-  const { data: profiles } = await supabaseAdmin
-    .from("profiles")
-    .select("id")
-    .or(`first_name.ilike.${like},last_name.ilike.${like}`);
-  for (const row of profiles ?? []) ids.add(row.id as string);
+  const profileResults = await Promise.all(
+    (["first_name", "last_name"] as const).map((column) =>
+      supabaseAdmin.from("profiles").select("id").ilike(column, like),
+    ),
+  );
+  for (const { data } of profileResults) {
+    for (const row of data ?? []) ids.add(row.id as string);
+  }
 
   // Internal accounts have neither a member row nor always a profile name, so
   // fall back to the auth email of the accounts that appear in the history.
