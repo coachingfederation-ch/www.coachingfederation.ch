@@ -63,29 +63,18 @@ async function resolveUserId(request: Request): Promise<string | undefined> {
   }
 }
 
-/**
- * The widget is browser-only and same-origin, so a request that does not come
- * from this site's own pages has no business spending gateway credits here.
- * Browsers always attach `Origin` to a cross-origin POST, and our own fetch
- * sends the matching one; anything else (missing or foreign) is refused.
- */
-function sameOrigin(request: Request): boolean {
-  const origin = request.headers.get("origin");
-  if (!origin) return false;
-  try {
-    return new URL(origin).origin === new URL(request.url).origin;
-  } catch {
-    return false;
-  }
-}
-
 export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const { sameOrigin, withinGatewayBudget, gatewayBusyResponse } =
+          await import("@/lib/assistant/gateway-guard.server");
         if (!sameOrigin(request)) {
           return new Response("Forbidden", { status: 403 });
         }
+        // Site-wide ceiling: per-caller limits alone cannot stop many hosts
+        // from draining the metered gateway budget together.
+        if (!(await withinGatewayBudget())) return gatewayBusyResponse();
 
         const { checkRateLimit, clientIp, rateLimitResponse } =
           await import("@/lib/rate-limit.server");

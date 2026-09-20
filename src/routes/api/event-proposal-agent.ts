@@ -48,6 +48,15 @@ export const Route = createFileRoute("/api/event-proposal-agent")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const { sameOrigin, withinGatewayBudget, gatewayBusyResponse } =
+          await import("@/lib/assistant/gateway-guard.server");
+        // The proposal widget only ever runs on our own pages, and every call
+        // spends metered gateway credits.
+        if (!sameOrigin(request)) {
+          return new Response("Forbidden", { status: 403 });
+        }
+        if (!(await withinGatewayBudget())) return gatewayBusyResponse();
+
         const { checkRateLimit, clientIp, rateLimitResponse } =
           await import("@/lib/rate-limit.server");
 
