@@ -292,8 +292,10 @@ export function MemberHome() {
           </section>
         </div>
 
+        {/* min-w-0: grid items default to min-width:auto, which lets a long
+            event title stretch the whole page sideways on a phone. */}
         <div className="mt-12 grid gap-8 lg:grid-cols-3">
-          <div className="space-y-12 lg:col-span-2">
+          <div className="min-w-0 space-y-12 lg:col-span-2">
             <InternalEvents />
 
             <section>
@@ -382,7 +384,7 @@ export function MemberHome() {
                         </div>
                       </div>
 
-                      <div className="shrink-0">
+                      <div className="min-w-0 sm:shrink-0">
                         <JoinCommunityButton
                           slug={community.slug}
                           requested={community.requested}
@@ -395,7 +397,7 @@ export function MemberHome() {
             </section>
           </div>
 
-          <aside className="space-y-6">
+          <aside className="min-w-0 space-y-6">
             <GuestPassesCard />
           </aside>
         </div>
