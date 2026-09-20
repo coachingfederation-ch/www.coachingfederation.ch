@@ -384,7 +384,7 @@ export function MemberHome() {
                         </div>
                       </div>
 
-                      <div className="shrink-0">
+                      <div className="min-w-0 sm:shrink-0">
                         <JoinCommunityButton
                           slug={community.slug}
                           requested={community.requested}
@@ -397,7 +397,7 @@ export function MemberHome() {
             </section>
           </div>
 
-          <aside className="space-y-6">
+          <aside className="min-w-0 space-y-6">
             <GuestPassesCard />
           </aside>
         </div>
