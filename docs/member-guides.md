@@ -23,7 +23,6 @@ they are readable on a phone, translatable, and editable without a new release.
   editor grid columns need `min-w-0` — the chip row is wider than the screen
   and would otherwise stretch the grid and clip every card.
 
-
 ## Structure
 
 A guide has a slug, title, summary, eyebrow, intro, version label, optional
