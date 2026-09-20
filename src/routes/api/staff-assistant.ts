@@ -6,7 +6,7 @@
  * the boundary. The agent explains and reads — it has no write tool at all.
  */
 import { createFileRoute } from "@tanstack/react-router";
-import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from "ai";
+import { convertToModelMessages, stepCountIs, streamText } from "ai";
 import { isLocale, type Locale } from "@/i18n/config";
 import { screenFor, staffScreenMap } from "@/lib/assistant/staff-help";
 

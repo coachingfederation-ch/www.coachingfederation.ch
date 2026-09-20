@@ -7,7 +7,7 @@
  * or prices anything; the office does that by email.
  */
 import { createFileRoute } from "@tanstack/react-router";
-import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from "ai";
+import { convertToModelMessages, stepCountIs, streamText } from "ai";
 import { isLocale, type Locale } from "@/i18n/config";
 import { CHAPTER_KNOWLEDGE } from "@/lib/assistant/knowledge";
 
