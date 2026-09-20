@@ -7,7 +7,7 @@
  * lookup for that user.
  */
 import { createFileRoute } from "@tanstack/react-router";
-import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from "ai";
+import { convertToModelMessages, stepCountIs, streamText } from "ai";
 import { isLocale, type Locale } from "@/i18n/config";
 import { CHAPTER_KNOWLEDGE } from "@/lib/assistant/knowledge";
 
@@ -124,8 +124,13 @@ export const Route = createFileRoute("/api/chat")({
         if (!Array.isArray(body.messages)) {
           return new Response("Messages are required", { status: 400 });
         }
+        // Roles are server-owned: only user/assistant text turns survive.
         // Keep the context bounded: the widget is a single rolling conversation.
-        const messages = (body.messages as UIMessage[]).slice(-24);
+        const { sanitizeUiMessages } = await import("@/lib/assistant/sanitize-messages");
+        const messages = sanitizeUiMessages(body.messages).slice(-24);
+        if (messages.length === 0) {
+          return new Response("Messages are required", { status: 400 });
+        }
         const locale: Locale = isLocale(body.locale) ? body.locale : "en";
 
         // Telemetry identifiers. Both are opaque, browser-generated values: the
