@@ -8,7 +8,7 @@
  * itself — the office does that.
  */
 import { createFileRoute } from "@tanstack/react-router";
-import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from "ai";
+import { convertToModelMessages, stepCountIs, streamText } from "ai";
 import { isLocale, type Locale } from "@/i18n/config";
 import { CHAPTER_KNOWLEDGE } from "@/lib/assistant/knowledge";
 
@@ -74,7 +74,12 @@ export const Route = createFileRoute("/api/contact-agent")({
           return new Response("Messages are required", { status: 400 });
         }
 
-        const messages = (body.messages as UIMessage[]).slice(-24);
+        // Roles are server-owned: only user/assistant text turns survive.
+        const { sanitizeUiMessages } = await import("@/lib/assistant/sanitize-messages");
+        const messages = sanitizeUiMessages(body.messages).slice(-24);
+        if (messages.length === 0) {
+          return new Response("Messages are required", { status: 400 });
+        }
         const locale: Locale = isLocale(body.locale) ? body.locale : "en";
 
         const apiKey = process.env.LOVABLE_API_KEY;

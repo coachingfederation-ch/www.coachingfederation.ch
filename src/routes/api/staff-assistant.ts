@@ -6,7 +6,7 @@
  * the boundary. The agent explains and reads — it has no write tool at all.
  */
 import { createFileRoute } from "@tanstack/react-router";
-import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from "ai";
+import { convertToModelMessages, stepCountIs, streamText } from "ai";
 import { isLocale, type Locale } from "@/i18n/config";
 import { screenFor, staffScreenMap } from "@/lib/assistant/staff-help";
 
@@ -115,7 +115,12 @@ export const Route = createFileRoute("/api/staff-assistant")({
           return new Response("Messages are required", { status: 400 });
         }
 
-        const messages = (body.messages as UIMessage[]).slice(-24);
+        // Roles are server-owned: only user/assistant text turns survive.
+        const { sanitizeUiMessages } = await import("@/lib/assistant/sanitize-messages");
+        const messages = sanitizeUiMessages(body.messages).slice(-24);
+        if (messages.length === 0) {
+          return new Response("Messages are required", { status: 400 });
+        }
         const locale: Locale = isLocale(body.locale) ? body.locale : "en";
         const context: ScreenContext = {
           path: typeof body.path === "string" ? body.path.slice(0, 200) : "/manage",
