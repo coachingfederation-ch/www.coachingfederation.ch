@@ -228,6 +228,14 @@ export function MemberProfileEditor() {
           </ProfileGroup>
         </div>
       </div>
+
+      <ProfileSaveBar
+        t={t}
+        visibility={profile.visibility}
+        publishBlocked={publishBlocked}
+        status={status}
+        onSave={(visibility) => void save(visibility)}
+      />
     </div>
   );
 }
