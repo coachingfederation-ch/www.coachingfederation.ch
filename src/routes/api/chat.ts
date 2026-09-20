@@ -67,9 +67,8 @@ export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const { sameOrigin, withinGatewayBudget, gatewayBusyResponse } = await import(
-          "@/lib/assistant/gateway-guard.server"
-        );
+        const { sameOrigin, withinGatewayBudget, gatewayBusyResponse } =
+          await import("@/lib/assistant/gateway-guard.server");
         if (!sameOrigin(request)) {
           return new Response("Forbidden", { status: 403 });
         }
