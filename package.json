@@ -75,10 +75,10 @@
     "d3-hierarchy": "^3.1.2",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
-    "fast-uri": "^3.1.5",
+    "fast-uri": "^3.1.6",
     "fast-xml-parser": "^5.10.1",
     "fflate": "^0.8.3",
-    "hono": "^4.13.1",
+    "hono": "^4.13.5",
     "html-to-image": "^1.11.13",
     "input-otp": "^1.4.2",
     "jsqr": "^1.4.0",
@@ -130,14 +130,14 @@
   "overrides": {
     "js-yaml": "^5.2.3",
     "@hono/node-server": "^2.1.0",
-    "hono": "^4.13.1",
-    "fast-uri": "^3.1.5"
+    "hono": "^4.13.5",
+    "fast-uri": "^3.1.6"
   },
   "resolutions": {
     "js-yaml": "^5.2.3",
     "@hono/node-server": "^2.1.0",
-    "hono": "^4.13.1",
-    "fast-uri": "^3.1.5"
+    "hono": "^4.13.5",
+    "fast-uri": "^3.1.6"
   },
   "pnpm": {
     "overrides": {
