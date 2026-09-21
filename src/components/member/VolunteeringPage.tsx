@@ -123,6 +123,9 @@ export function VolunteeringPage() {
                 <Icon className="h-5 w-5 text-primary" aria-hidden />
                 <h3 className="mt-3 text-base font-bold">{title}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+                <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {tList<string>(`member.volunteering.opportunities.${key}.valueTags`).join(" · ")}
+                </p>
                 <blockquote className="mt-4 border-l-4 border-primary pl-4">
                   <p className="text-sm italic text-foreground">&ldquo;{quote}&rdquo;</p>
                   <footer className="mt-1 text-xs text-muted-foreground">
