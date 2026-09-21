@@ -43,6 +43,17 @@ const OPPORTUNITIES = [
   { key: "liveChat", icon: MessageCircle },
 ] as const;
 
+/** The seven things members say they gain — the page's value proposition. */
+const VALUE = [
+  { key: "network", icon: Users },
+  { key: "credentialing", icon: BadgeCheck },
+  { key: "career", icon: TrendingUp },
+  { key: "leadership", icon: Compass },
+  { key: "learning", icon: GraduationCap },
+  { key: "community", icon: HeartHandshake },
+  { key: "brand", icon: Award },
+] as const;
+
 const BENEFITS = [
   { key: "freeStuff", icon: Gift },
   { key: "access", icon: KeyRound },
