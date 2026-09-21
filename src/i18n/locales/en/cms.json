@@ -870,40 +870,28 @@
           "description": "Build a local hub by hosting events, curating connections, and representing the chapter in your region.",
           "quote": "I joined to grow my network; I stayed because I could shape something that helps the whole profession.",
           "attribution": "Anna M., Community Lead Zürich",
-          "valueTags": [
-            "Build your network",
-            "Offer leadership development"
-          ]
+          "valueTags": ["Build your network", "Offer leadership development"]
         },
         "eventHost": {
           "title": "Event Host",
           "description": "Help run chapter events, from registration desks to speaker support.",
           "quote": "It's a few hours a year, and the energy in the room stays with me for months.",
           "attribution": "Beat M., Event Host",
-          "valueTags": [
-            "Build your network",
-            "Give back to the community"
-          ]
+          "valueTags": ["Build your network", "Give back to the community"]
         },
         "contentContributor": {
           "title": "Content Contributor",
           "description": "Share your perspective through Insights articles, interviews, or social content.",
           "quote": "Writing for the chapter helped me refine my own point of view.",
           "attribution": "Carla T., Content Contributor",
-          "valueTags": [
-            "Gain continuous learning",
-            "Be an extension of the ICF brand"
-          ]
+          "valueTags": ["Gain continuous learning", "Be an extension of the ICF brand"]
         },
         "liveChat": {
           "title": "Live Chat Volunteer",
           "description": "Be the first friendly face for website visitors with questions.",
           "quote": "The questions are often simple, but the conversations can be meaningful.",
           "attribution": "Daniel K., Live Chat Volunteer",
-          "valueTags": [
-            "Give back to the community",
-            "Be an extension of the ICF brand"
-          ]
+          "valueTags": ["Give back to the community", "Be an extension of the ICF brand"]
         }
       },
       "benefits": {
@@ -924,10 +912,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Lead projects",
-            "Be recognized by ICFS for leading initiatives"
-          ]
+          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
         },
         "status": {
           "title": "Status",
@@ -2798,13 +2783,7 @@
     },
     "depthTitle": "Depth (1 too light — 5 too deep)",
     "usefulnessTitle": "Usefulness (1 not for me — 5 I will use this)",
-    "depthScale": [
-      "Too light",
-      "A bit light",
-      "About right",
-      "A bit deep",
-      "Too deep"
-    ],
+    "depthScale": ["Too light", "A bit light", "About right", "A bit deep", "Too deep"],
     "usefulnessScale": [
       "Not for me",
       "Mildly interesting",

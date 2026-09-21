@@ -870,40 +870,28 @@
           "description": "Bauen Sie einen lokalen Hub auf, indem Sie Events organisieren, Kontakte knüpfen und das Chapter in Ihrer Region vertreten.",
           "quote": "Ich bin dazugekommen, um mein Netzwerk zu erweitern; ich blieb, weil ich etwas gestalten kann, das der ganzen Profession hilft.",
           "attribution": "Anna M., Community Lead Zürich",
-          "valueTags": [
-            "Netzwerk aufbauen",
-            "Führung entwickeln"
-          ]
+          "valueTags": ["Netzwerk aufbauen", "Führung entwickeln"]
         },
         "eventHost": {
           "title": "Event Host",
           "description": "Helfen Sie bei der Durchführung von Chapter-Events, vom Check-in bis zur Speaker-Betreuung.",
           "quote": "Es sind nur ein paar Stunden im Jahr, und die Energie im Raum bleibt monatelang bei mir.",
           "attribution": "Beat M., Event Host",
-          "valueTags": [
-            "Netzwerk aufbauen",
-            "Der Community etwas zurückgeben"
-          ]
+          "valueTags": ["Netzwerk aufbauen", "Der Community etwas zurückgeben"]
         },
         "contentContributor": {
           "title": "Content Contributor",
           "description": "Teilen Sie Ihre Perspektive durch Insights-Artikel, Interviews oder Social-Media-Beiträge.",
           "quote": "Für das Chapter zu schreiben half mir, meinen eigenen Standpunkt zu schärfen.",
           "attribution": "Carla T., Content Contributor",
-          "valueTags": [
-            "Kontinuierlich lernen",
-            "Die Marke ICF weitertragen"
-          ]
+          "valueTags": ["Kontinuierlich lernen", "Die Marke ICF weitertragen"]
         },
         "liveChat": {
           "title": "Live-Chat-Freiwillige",
           "description": "Seien Sie das erste freundliche Gesicht für Besuchende mit Fragen auf der Website.",
           "quote": "Die Fragen sind oft einfach, aber die Gespräche können bedeutungsvoll sein.",
           "attribution": "Daniel K., Live-Chat-Freiwilliger",
-          "valueTags": [
-            "Der Community etwas zurückgeben",
-            "Die Marke ICF weitertragen"
-          ]
+          "valueTags": ["Der Community etwas zurückgeben", "Die Marke ICF weitertragen"]
         }
       },
       "benefits": {
@@ -924,10 +912,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Projekte leiten",
-            "Von ICFS für die Leitung von Initiativen anerkannt werden"
-          ]
+          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
         },
         "status": {
           "title": "Status",

@@ -870,40 +870,28 @@
           "description": "Créez un hub local en organisant des événements, en tissant des liens et en représentant le chapitre dans votre région.",
           "quote": "Je suis venu pour développer mon réseau ; je suis resté parce que je pouvais façonner quelque chose qui aide toute la profession.",
           "attribution": "Anna M., Responsable communauté Zürich",
-          "valueTags": [
-            "Développer votre réseau",
-            "Développer votre leadership"
-          ]
+          "valueTags": ["Développer votre réseau", "Développer votre leadership"]
         },
         "eventHost": {
           "title": "Hôte d'événement",
           "description": "Contribuez à l'organisation des événements du chapitre, de l'accueil au soutien des intervenants.",
           "quote": "Ce n'est que quelques heures par an, et l'énergie dans la salle me reste des mois durant.",
           "attribution": "Beat M., Hôte d'événement",
-          "valueTags": [
-            "Développer votre réseau",
-            "Rendre à la communauté"
-          ]
+          "valueTags": ["Développer votre réseau", "Rendre à la communauté"]
         },
         "contentContributor": {
           "title": "Contributeur de contenu",
           "description": "Partagez votre perspective à travers des articles Insights, des interviews ou des contenus sociaux.",
           "quote": "Écrire pour le chapitre m'a aidé à affiner mon propre point de vue.",
           "attribution": "Carla T., Contributeur de contenu",
-          "valueTags": [
-            "Apprendre en continu",
-            "Porter la marque ICF"
-          ]
+          "valueTags": ["Apprendre en continu", "Porter la marque ICF"]
         },
         "liveChat": {
           "title": "Bénévole du chat en direct",
           "description": "Soyez le premier visage accueillant pour les visiteurs du site qui ont des questions.",
           "quote": "Les questions sont souvent simples, mais les conversations peuvent être significatives.",
           "attribution": "Daniel K., Bénévole du chat en direct",
-          "valueTags": [
-            "Rendre à la communauté",
-            "Porter la marque ICF"
-          ]
+          "valueTags": ["Rendre à la communauté", "Porter la marque ICF"]
         }
       },
       "benefits": {
@@ -924,10 +912,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Piloter des projets",
-            "Être reconnu par ICFS pour avoir mené des initiatives"
-          ]
+          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
         },
         "status": {
           "title": "Status",

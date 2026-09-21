@@ -870,40 +870,28 @@
           "description": "Costruisci un hub locale organizzando eventi, curando i contatti e rappresentando il chapter nella tua regione.",
           "quote": "Sono entrata per espandere la mia rete; sono rimasta perché potevo dare forma a qualcosa che aiuta l'intera professione.",
           "attribution": "Anna M., Community Lead Zürich",
-          "valueTags": [
-            "Costruire la propria rete",
-            "Sviluppare leadership"
-          ]
+          "valueTags": ["Costruire la propria rete", "Sviluppare leadership"]
         },
         "eventHost": {
           "title": "Host di evento",
           "description": "Aiuta a gestire gli eventi del chapter, dall'accoglienza al supporto ai relatori.",
           "quote": "Sono solo poche ore all'anno, e l'energia nella sala resta con me per mesi.",
           "attribution": "Beat M., Host di evento",
-          "valueTags": [
-            "Costruire la propria rete",
-            "Restituire alla comunità"
-          ]
+          "valueTags": ["Costruire la propria rete", "Restituire alla comunità"]
         },
         "contentContributor": {
           "title": "Content Contributor",
           "description": "Condividi la tua prospettiva attraverso articoli Insights, interviste o contenuti social.",
           "quote": "Scrivere per il chapter mi ha aiutato a affinare il mio punto di vista.",
           "attribution": "Carla T., Content Contributor",
-          "valueTags": [
-            "Imparare di continuo",
-            "Essere un'estensione del marchio ICF"
-          ]
+          "valueTags": ["Imparare di continuo", "Essere un'estensione del marchio ICF"]
         },
         "liveChat": {
           "title": "Volontario della chat dal vivo",
           "description": "Sii il primo volto amichevole per i visitatori del sito con domande.",
           "quote": "Le domande sono spesso semplici, ma le conversazioni possono essere significative.",
           "attribution": "Daniel K., Volontario della chat dal vivo",
-          "valueTags": [
-            "Restituire alla comunità",
-            "Essere un'estensione del marchio ICF"
-          ]
+          "valueTags": ["Restituire alla comunità", "Essere un'estensione del marchio ICF"]
         }
       },
       "benefits": {
@@ -924,10 +912,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Guidare progetti",
-            "Essere riconosciuti da ICFS per aver guidato iniziative"
-          ]
+          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
         },
         "status": {
           "title": "Status",
@@ -2805,13 +2790,7 @@
       "Un po' tecnico",
       "Troppo tecnico"
     ],
-    "usefulnessScale": [
-      "Non fa per me",
-      "Poco interessante",
-      "Interessante",
-      "Utile",
-      "Lo userò"
-    ],
+    "usefulnessScale": ["Non fa per me", "Poco interessante", "Interessante", "Utile", "Lo userò"],
     "topicsTitle": "Temi richiesti",
     "noTopics": "Nessun tema richiesto finora.",
     "themesTitle": "Temi IA",
