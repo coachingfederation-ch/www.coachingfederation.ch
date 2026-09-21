@@ -831,31 +831,79 @@
       "eyebrow": "Member Area",
       "intro": "The Switzerland Chapter of ICF is run by members who volunteer their time. Whether you have an hour a month or want to lead a project, there is a place for you.",
       "back": "Back to Member Area",
+      "value": {
+        "title": "Why members volunteer",
+        "lead": "Volunteering gives back more than it takes. These are the seven things members tell us they gain.",
+        "network": {
+          "title": "Build your network",
+          "body": "Work side by side with coaches across the language regions, not just at events."
+        },
+        "credentialing": {
+          "title": "Move through the credentialing process",
+          "body": "Stay close to peers and mentors while you work toward ACC, PCC, or MCC."
+        },
+        "career": {
+          "title": "Advance your career",
+          "body": "Visible contribution opens doors to clients, partners, and speaking opportunities."
+        },
+        "leadership": {
+          "title": "Offer leadership development",
+          "body": "Lead a project or a team and practice leadership in a safe, supportive setting."
+        },
+        "learning": {
+          "title": "Gain continuous learning",
+          "body": "Volunteer-only sessions, shared practice, and early insight into what moves the profession."
+        },
+        "community": {
+          "title": "Give back to the community",
+          "body": "Your time keeps the chapter running and makes coaching accessible across Switzerland."
+        },
+        "brand": {
+          "title": "Be an extension of the ICF brand",
+          "body": "Represent professional standards in your region and carry the brand promise into your work."
+        }
+      },
       "opportunities": {
         "title": "Open opportunities",
         "communityLead": {
           "title": "Community Lead",
           "description": "Build a local hub by hosting events, curating connections, and representing the chapter in your region.",
           "quote": "I joined to grow my network; I stayed because I could shape something that helps the whole profession.",
-          "attribution": "Anna M., Community Lead Zürich"
+          "attribution": "Anna M., Community Lead Zürich",
+          "valueTags": [
+            "Build your network",
+            "Offer leadership development"
+          ]
         },
         "eventHost": {
           "title": "Event Host",
           "description": "Help run chapter events, from registration desks to speaker support.",
           "quote": "It's a few hours a year, and the energy in the room stays with me for months.",
-          "attribution": "Beat M., Event Host"
+          "attribution": "Beat M., Event Host",
+          "valueTags": [
+            "Build your network",
+            "Give back to the community"
+          ]
         },
         "contentContributor": {
           "title": "Content Contributor",
           "description": "Share your perspective through Insights articles, interviews, or social content.",
           "quote": "Writing for the chapter helped me refine my own point of view.",
-          "attribution": "Carla T., Content Contributor"
+          "attribution": "Carla T., Content Contributor",
+          "valueTags": [
+            "Gain continuous learning",
+            "Be an extension of the ICF brand"
+          ]
         },
         "liveChat": {
           "title": "Live Chat Volunteer",
           "description": "Be the first friendly face for website visitors with questions.",
           "quote": "The questions are often simple, but the conversations can be meaningful.",
-          "attribution": "Daniel K., Live Chat Volunteer"
+          "attribution": "Daniel K., Live Chat Volunteer",
+          "valueTags": [
+            "Give back to the community",
+            "Be an extension of the ICF brand"
+          ]
         }
       },
       "benefits": {
@@ -887,7 +935,8 @@
             "Build your reputation as a contributing member",
             "Stand out as a leading voice in the ICF Switzerland Community"
           ]
-        }
+        },
+        "lead": "These four are the concrete form those promises take."
       },
       "onboarding": {
         "title": "Book an onboarding session",

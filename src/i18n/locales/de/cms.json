@@ -831,31 +831,79 @@
       "eyebrow": "Mitgliederbereich",
       "intro": "The Switzerland Chapter of ICF wird von Mitgliedern geführt, die ihre Zeit ehrenamtlich einbringen. Ob Sie eine Stunde im Monat haben oder ein Projekt leiten möchten – es gibt einen Platz für Sie.",
       "back": "Zurück zum Mitgliederbereich",
+      "value": {
+        "title": "Warum Mitglieder sich engagieren",
+        "lead": "Freiwilliges Engagement gibt mehr zurück, als es kostet. Das sind die sieben Dinge, die Mitglieder uns nennen.",
+        "network": {
+          "title": "Netzwerk aufbauen",
+          "body": "Arbeiten Sie Seite an Seite mit Coaches aus allen Sprachregionen, nicht nur an Events."
+        },
+        "credentialing": {
+          "title": "Im Credentialing vorankommen",
+          "body": "Bleiben Sie nah an Peers und Mentorinnen, während Sie auf ACC, PCC oder MCC hinarbeiten."
+        },
+        "career": {
+          "title": "Die eigene Laufbahn voranbringen",
+          "body": "Sichtbarer Beitrag öffnet Türen zu Klientinnen, Partnern und Auftritten."
+        },
+        "leadership": {
+          "title": "Führung entwickeln",
+          "body": "Leiten Sie ein Projekt oder ein Team und üben Sie Führung in einem sicheren Rahmen."
+        },
+        "learning": {
+          "title": "Kontinuierlich lernen",
+          "body": "Sessions nur für Freiwillige, gemeinsame Praxis und früher Einblick in das, was den Beruf bewegt."
+        },
+        "community": {
+          "title": "Der Community etwas zurückgeben",
+          "body": "Ihre Zeit hält das Chapter am Laufen und macht Coaching in der ganzen Schweiz zugänglich."
+        },
+        "brand": {
+          "title": "Die Marke ICF weitertragen",
+          "body": "Stehen Sie in Ihrer Region für professionelle Standards und tragen Sie das Markenversprechen in Ihre Arbeit."
+        }
+      },
       "opportunities": {
         "title": "Offene Möglichkeiten",
         "communityLead": {
           "title": "Community Lead",
           "description": "Bauen Sie einen lokalen Hub auf, indem Sie Events organisieren, Kontakte knüpfen und das Chapter in Ihrer Region vertreten.",
           "quote": "Ich bin dazugekommen, um mein Netzwerk zu erweitern; ich blieb, weil ich etwas gestalten kann, das der ganzen Profession hilft.",
-          "attribution": "Anna M., Community Lead Zürich"
+          "attribution": "Anna M., Community Lead Zürich",
+          "valueTags": [
+            "Netzwerk aufbauen",
+            "Führung entwickeln"
+          ]
         },
         "eventHost": {
           "title": "Event Host",
           "description": "Helfen Sie bei der Durchführung von Chapter-Events, vom Check-in bis zur Speaker-Betreuung.",
           "quote": "Es sind nur ein paar Stunden im Jahr, und die Energie im Raum bleibt monatelang bei mir.",
-          "attribution": "Beat M., Event Host"
+          "attribution": "Beat M., Event Host",
+          "valueTags": [
+            "Netzwerk aufbauen",
+            "Der Community etwas zurückgeben"
+          ]
         },
         "contentContributor": {
           "title": "Content Contributor",
           "description": "Teilen Sie Ihre Perspektive durch Insights-Artikel, Interviews oder Social-Media-Beiträge.",
           "quote": "Für das Chapter zu schreiben half mir, meinen eigenen Standpunkt zu schärfen.",
-          "attribution": "Carla T., Content Contributor"
+          "attribution": "Carla T., Content Contributor",
+          "valueTags": [
+            "Kontinuierlich lernen",
+            "Die Marke ICF weitertragen"
+          ]
         },
         "liveChat": {
           "title": "Live-Chat-Freiwillige",
           "description": "Seien Sie das erste freundliche Gesicht für Besuchende mit Fragen auf der Website.",
           "quote": "Die Fragen sind oft einfach, aber die Gespräche können bedeutungsvoll sein.",
-          "attribution": "Daniel K., Live-Chat-Freiwilliger"
+          "attribution": "Daniel K., Live-Chat-Freiwilliger",
+          "valueTags": [
+            "Der Community etwas zurückgeben",
+            "Die Marke ICF weitertragen"
+          ]
         }
       },
       "benefits": {
@@ -887,7 +935,8 @@
             "Sich als engagiertes Mitglied einen Namen machen",
             "Als führende Stimme in der ICF Switzerland Community hervorstechen"
           ]
-        }
+        },
+        "lead": "Diese vier sind die konkrete Form dieser Versprechen."
       },
       "onboarding": {
         "title": "Onboarding-Session buchen",
