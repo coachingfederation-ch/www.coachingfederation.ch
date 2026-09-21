@@ -155,6 +155,9 @@ export function VolunteeringPage() {
 
       <section className="mt-10">
         <h2 className="text-lg font-bold">{t("member.volunteering.benefits.title")}</h2>
+        <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+          {t("member.volunteering.benefits.lead")}
+        </p>
         <div className="mt-4 grid gap-5 sm:grid-cols-2">
           {BENEFITS.map(({ key, icon: Icon }) => {
             const title = t(`member.volunteering.benefits.${key}.title`);
