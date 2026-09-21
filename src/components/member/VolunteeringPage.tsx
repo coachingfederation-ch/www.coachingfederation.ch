@@ -89,6 +89,27 @@ export function VolunteeringPage() {
         </p>
       </header>
 
+      {/* Value band: states plainly what a member gains, before the roles. */}
+      <section className="mt-10 rounded-3xl bg-hero px-6 py-8 text-hero-foreground sm:px-8">
+        <h2 className="text-xl font-bold">{t("member.volunteering.value.title")}</h2>
+        <p className="mt-2 max-w-2xl text-sm text-hero-foreground/80">
+          {t("member.volunteering.value.lead")}
+        </p>
+        <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {VALUE.map(({ key, icon: Icon }) => (
+            <li key={key} className="flex gap-3">
+              <Icon className="mt-0.5 h-5 w-5 shrink-0 text-accent" aria-hidden />
+              <div>
+                <p className="text-sm font-bold">{t(`member.volunteering.value.${key}.title`)}</p>
+                <p className="mt-1 text-sm text-hero-foreground/80">
+                  {t(`member.volunteering.value.${key}.body`)}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section className="mt-10">
         <h2 className="text-lg font-bold">{t("member.volunteering.opportunities.title")}</h2>
         <div className="mt-4 grid gap-5 sm:grid-cols-2">
