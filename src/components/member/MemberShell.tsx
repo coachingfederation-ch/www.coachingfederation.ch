@@ -127,7 +127,7 @@ export function MemberShell({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader
         variant="compact"
-        homeTo="/member"
+        homeTo="/"
         items={items}
         cta={{ to: "/find-a-coach", label: t("member.nav.findACoach") }}
         navLabel={t("member.nav.primaryLabel")}
