@@ -127,57 +127,113 @@ export async function extractItems(
     .filter((i): i is ExtractedItem => i !== null);
 }
 
-/** Rank the pooled items down to `cap` and translate them into DE/FR/IT. */
+/** How many chosen items go into one translation call. */
+const TRANSLATE_CHUNK = 8;
+
+/**
+ * Rank the pooled items down to `cap`, then translate them into DE/FR/IT.
+ *
+ * Why two steps: a single rank-and-translate call over a 60+ item pool ran
+ * past the request time limit and killed the run in its curating phase. The
+ * ranking call now returns indexes only (small output), and translation runs
+ * in parallel chunks of TRANSLATE_CHUNK so each call stays short. A failed
+ * translation chunk falls back to English rather than failing the run.
+ */
 export async function curate(
   pool: PoolItem[],
   cap: number,
   maxPerChapter: number,
 ): Promise<CuratedItem[]> {
   if (!pool.length) return [];
-  const indexed = pool.map((item, index) => ({ index, ...item }));
+  const indexed = pool.map((item, index) => ({
+    index,
+    chapter: item.chapter,
+    country: item.country,
+    type: item.type,
+    title: item.title,
+    description: item.description,
+    event_date: item.event_date,
+  }));
   const parsed = (await askAi(
     "You curate a weekly digest of what ICF chapters across Europe are doing, for the Swiss " +
       "chapter's members. From the candidate list, pick the most relevant, concrete and " +
       `newsworthy items — at most ${cap} in total and at most ${maxPerChapter} per chapter — ` +
       "favouring upcoming events and genuine chapter news over generic pages, and spreading the " +
-      "selection across as many countries as possible. Then translate each chosen title and " +
-      "description into Swiss Standard German (never use ß), Swiss French and Swiss Italian; keep " +
-      "chapter names, place names and the credentials ACC/PCC/MCC untranslated. " +
-      'Reply as {"items":[{"index","type","title_en","description_en","title_de","description_de",' +
-      '"title_fr","description_fr","title_it","description_it"}]} ordered best first, where "index" ' +
-      "is the candidate's index. Keep descriptions under 220 characters. Reply with JSON only.",
+      "selection across as many countries as possible. " +
+      'Reply as {"items":[{"index","type"}]} ordered best first, where "index" is the ' +
+      "candidate's index. Reply with JSON only.",
     JSON.stringify(indexed),
   )) as { items?: unknown[] };
 
-  const chosen: CuratedItem[] = [];
+  const picked: PoolItem[] = [];
   const perChapter = new Map<string, number>();
   for (const raw of parsed.items ?? []) {
     const item = raw as Record<string, unknown>;
     const source = pool[Number(item.index)];
-    if (!source) continue;
-    // Belt and braces: the model can only pick from an already-filtered pool,
-    // but never let an undated or past item through to the feed.
+    if (!source || picked.includes(source)) continue;
+    // Belt and braces: never let an undated or past item through to the feed.
     if (!isStillRelevant(source.event_date)) continue;
     const used = perChapter.get(source.chapter) ?? 0;
     if (used >= maxPerChapter) continue;
-    if (chosen.length >= cap) break;
+    if (picked.length >= cap) break;
     perChapter.set(source.chapter, used + 1);
-    const text = (key: string, fallback: string | null) => {
-      const value = String(item[key] ?? "").trim();
-      return value ? value.slice(0, 300) : fallback;
-    };
-    chosen.push({
-      ...source,
-      type: asType(item.type ?? source.type),
-      title: text("title_en", source.title) ?? source.title,
-      description: text("description_en", source.description),
-      title_de: text("title_de", null),
-      title_fr: text("title_fr", null),
-      title_it: text("title_it", null),
-      description_de: text("description_de", null),
-      description_fr: text("description_fr", null),
-      description_it: text("description_it", null),
-    });
+    picked.push({ ...source, type: asType(item.type ?? source.type) });
   }
-  return chosen;
+
+  const chunks: PoolItem[][] = [];
+  for (let i = 0; i < picked.length; i += TRANSLATE_CHUNK) {
+    chunks.push(picked.slice(i, i + TRANSLATE_CHUNK));
+  }
+  const translated = await Promise.all(chunks.map((chunk) => translateChunk(chunk)));
+  return translated.flat();
+}
+
+async function translateChunk(chunk: PoolItem[]): Promise<CuratedItem[]> {
+  const english = (source: PoolItem): CuratedItem => ({
+    ...source,
+    title_de: null,
+    title_fr: null,
+    title_it: null,
+    description_de: null,
+    description_fr: null,
+    description_it: null,
+  });
+  let rows: unknown[] = [];
+  try {
+    const parsed = (await askAi(
+      "Translate each item's title and description into Swiss Standard German (never use ß), " +
+        "Swiss French and Swiss Italian; keep chapter names, place names and the credentials " +
+        "ACC/PCC/MCC untranslated. " +
+        'Reply as {"items":[{"index","title_de","description_de","title_fr","description_fr",' +
+        '"title_it","description_it"}]}. Keep descriptions under 220 characters. JSON only.',
+      JSON.stringify(
+        chunk.map((c, index) => ({ index, title: c.title, description: c.description })),
+      ),
+    )) as { items?: unknown[] };
+    rows = parsed.items ?? [];
+  } catch (err) {
+    console.error(`[europe-pulse] translation chunk failed: ${String(err)}`);
+  }
+  const byIndex = new Map<number, Record<string, unknown>>();
+  for (const raw of rows) {
+    const r = raw as Record<string, unknown>;
+    byIndex.set(Number(r.index), r);
+  }
+  return chunk.map((source, index) => {
+    const r = byIndex.get(index);
+    if (!r) return english(source);
+    const text = (key: string) => {
+      const value = String(r[key] ?? "").trim();
+      return value ? value.slice(0, 300) : null;
+    };
+    return {
+      ...source,
+      title_de: text("title_de"),
+      title_fr: text("title_fr"),
+      title_it: text("title_it"),
+      description_de: text("description_de"),
+      description_fr: text("description_fr"),
+      description_it: text("description_it"),
+    };
+  });
 }
