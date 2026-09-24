@@ -24,9 +24,12 @@ automatically or held for approval, depending on the chapter's publish mode.
    for the run.
 2. **Extract.** A cheap AI pass turns the page into candidate items (type,
    title, description, URL, date).
-3. **Curate.** A second pass ranks the whole week's pool for relevance to Swiss
-   coaches, drops duplicates, and writes DE/FR/IT/EN titles and descriptions in
-   one go — so the public page never makes a request-time AI call.
+3. **Curate.** A ranking pass picks the week's shortlist from the pool (it
+   returns indexes only, so its output stays small). The picked items are then
+   translated into DE/FR/IT in parallel chunks of eight, so no single AI call
+   runs long enough to hit the request time limit. A failed translation chunk
+   keeps those items in English instead of failing the run. The public page
+   never makes a request-time AI call.
 
 Only the most recent `week_of` is rendered as the feed; older rows stay as
 archive.
