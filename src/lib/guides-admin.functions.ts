@@ -1,7 +1,7 @@
 /**
- * Staff CRUD for member guides. Every handler is editor-gated: reading and
+ * Staff CRUD for member guides. Every handler is Administrator-gated (Super Admin or Administrator): reading and
  * writing an unpublished guide must never be possible for a signed-in member.
- * Writes go through `context.supabase`, so the editor RLS policy is the second
+ * Writes go through `context.supabase`, so the platform-admin RLS policy is the second
  * line of defence behind `assertPlatformAdmin`.
  */
 import { createServerFn } from "@tanstack/react-start";
