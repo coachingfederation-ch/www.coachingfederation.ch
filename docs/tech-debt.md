@@ -137,3 +137,10 @@ sanitizers.
 revisions. They are useful archaeology and actively misleading as
 specifications, because they describe intermediate states. `docs/` is the
 current description; prefer it, and do not update the plan files.
+
+## Publisher side menu omits Articles and Newsletters
+
+The `/articles` and `/manage/newsletters` route guards admit publishers, but
+`Shell.tsx` shows those menu links to editors only, so publishers reach them
+only by direct link. `/manage/guides` has no route guard (menu + RLS only).
+See the access matrix in `docs/auth-and-claim-flow.md`.

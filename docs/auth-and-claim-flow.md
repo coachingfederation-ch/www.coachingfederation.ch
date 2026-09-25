@@ -17,59 +17,104 @@ rather than being dropped into an empty shell.
 
 ### Two kinds of account
 
-Sign-in supports exactly two shapes, and the difference is deliberate:
+Rights can only be granted to one of two kinds of account:
 
-- **Internal administrator** — an ordinary auth account holding `admin`, with
-  **no** row in `members`. Chapter staff who administer the system are not
-  necessarily ICF members, so requiring an imported member record for them
-  would be wrong. `landingPath` sends them straight to the staff CMS.
+- **Internal staff account** — an auth account registered through the staff
+  invite screen (a row in `internal_accounts`), with **no** row in `members`.
+  Chapter staff are not necessarily ICF members, so no imported member record
+  is required.
 - **Claimed member** — an account bound to an imported member record through
-  `members.auth_user_id`, optionally carrying the additive `editor` grant.
+  `members.auth_user_id`.
 
-Every **non-admin** privileged role still requires that claim linkage: the
-`user_roles` insert policy grants `editor` only when the target account already
-holds `member`, so an internal account cannot be given CMS access without first
-being claimed. The admin Roles screen therefore lists internal accounts
-read-only, purely for visibility.
+The database refuses a grant on any other account. Both kinds are managed on
+the Roles screen (`/roles`, Super Admin only).
 
 Roles live in `public.user_roles` — one row per (user, role) — and never on a
-profile record. Storing a role on a user-editable row is a privilege-escalation
-bug waiting to happen, so `user_roles` has **no insert or update policy at
-all**: roles can only be changed with the service role.
+profile record. Role changes go through server functions guarded by
+`authz.ts`; browsers cannot write `user_roles` directly.
 
-| Role        | Can do                                                                       |
-| ----------- | ---------------------------------------------------------------------------- |
-| `admin`     | Everything, including roles, operational structure, integration and cutover. |
-| `editor`    | Full Insights CMS: publish, schedule, edit anyone's article. Manages events. |
-| `organizer` | Events only. Lands on `/manage/events`; has no access to `/articles`.        |
-| `member`    | Edit and publish their own directory profile.                                |
-| `user`      | Signed in with no privileges.                                                |
+### Roles
 
-Roles are additive: a member who is assigned to an operational project is
-granted `editor` automatically, and keeps the Member Area alongside the CMS.
-`src/lib/role-model.ts` is the single source for role names, staff membership
-and the post-login `landingPath`.
+| Role            | Label in the app        | Can do                                                                                                                                                                 |
+| --------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `admin`         | Super Admin             | Everything, including Members, Integration and Roles. The only role that may publish its own article.                                                                  |
+| `administrator` | Administrator           | Overview, Vocabularies, Coach Finder, Operational Structure, Europe Pulse, Governance, Chat insights, Assistant knowledge, Live chat, Guest passes, Member engagement. |
+| `editor`        | Editor                  | Articles, Newsletters, Categories, Editorial signals, Member guides. Writes and edits any article; cannot publish their own.                                           |
+| `publisher`     | Publisher               | Reviews and publishes articles (and Editorial signals). Cannot publish their own article.                                                                              |
+| `organizer`     | Organizer               | Events only — their own events, enforced by RLS.                                                                                                                       |
+| `membership`    | Membership & Engagement | Guest passes and Member engagement.                                                                                                                                    |
+| `member`        | Member                  | Member Area and their own directory profile.                                                                                                                           |
+| `user`          | (dormant)               | Nothing grants it; its policies remain but no UI surfaces it.                                                                                                          |
 
-RLS calls the security-definer helpers `has_role(uid, role)`, `is_editor(uid)`
-and `is_staff(uid)`. They are `security definer` so that policies can read
-`user_roles` without recursing into that table's own policies.
+Roles are **additive grants**: a member who is also an editor keeps the Member
+Area and gains the CMS on top. Joining an operational team no longer grants any
+access. `src/lib/role-model.ts` is the single source for role names and the
+post-login `landingPath`: members go to `/member`; an Administrator without
+editorial rights to `/vocabularies`; an organizer-only account to
+`/manage/events`; other staff to `/articles`; everyone else to `/no-access`.
 
-They live in the **`private` schema**, not `public`. `security definer` plus
-`EXECUTE` for `authenticated` is exactly what a policy needs, but in `public`
-it also publishes them as PostgREST RPC endpoints, letting any signed-in user
-ask whether an arbitrary account is an admin. Moving them out removes the
-endpoint while leaving policies untouched (`ALTER FUNCTION ... SET SCHEMA`
-preserves the OID that policies are bound to).
+### Insights CMS — functional assignment
 
-Consequence for application code: **do not call these over RPC.** Server
-functions gate themselves with `assertStaff` / `assertAdmin` / `assertEditor`
-from `src/lib/authz.ts`, which read `user_roles` through the caller's own
-RLS-scoped client.
+✓ = can open the screen. Super Admin (`admin`) passes every guard and is omitted
+from the columns. "Guard" is the route guard list in `src/lib/staff-guard.ts`;
+the server functions behind each screen repeat the check with `authz.ts`, and
+RLS is the final boundary.
 
-Role boundaries are enforced by policy, not by the UI. Hiding a button is a
-courtesy; the article, event and member policies are what actually refuse the
-write. The former `contributor` role has been removed entirely — from the enum,
-the policies and the TypeScript — so do not reintroduce it in new code.
+| Screen                                                      | Address                     | Guard                  | Administrator | Editor | Publisher | Organizer | M&E |
+| ----------------------------------------------------------- | --------------------------- | ---------------------- | :-----------: | :----: | :-------: | :-------: | :-: |
+| Overview                                                    | `/manage`                   | `PLATFORM_ADMIN_ROLES` |       ✓       |        |           |           |     |
+| Articles (list, new, editor)                                | `/articles`, `/articles/*`  | `ARTICLE_ROLES`        |               |   ✓    |    ✓¹     |           |     |
+| Newsletters                                                 | `/manage/newsletters`       | `ARTICLE_ROLES`        |               |   ✓    |    ✓¹     |           |     |
+| Categories                                                  | `/articles/categories`      | `CATEGORY_ROLES`       |               |   ✓    |           |           |     |
+| Editorial signals                                           | `/manage/editorial-signals` | `ARTICLE_ROLES`        |               |   ✓    |     ✓     |           |     |
+| Member guides                                               | `/manage/guides`            | none (menu + RLS)²     |               |   ✓    |           |           |     |
+| Events (list, new, editor, check-in, forms, reporting, CCE) | `/manage/events/*`          | `EVENT_ROLES`          |               |        |           |     ✓     |     |
+| Guest passes                                                | `/manage/guest-passes`      | `MEMBERSHIP_ROLES`     |       ✓       |        |           |           |  ✓  |
+| Member engagement                                           | `/manage/member-engagement` | `MEMBERSHIP_ROLES`     |       ✓       |        |           |           |  ✓  |
+| Vocabularies                                                | `/vocabularies`             | `PLATFORM_ADMIN_ROLES` |       ✓       |        |           |           |     |
+| Coach Finder                                                | `/coach-finder`             | `PLATFORM_ADMIN_ROLES` |       ✓       |        |           |           |     |
+| Operational Structure                                       | `/operational-structure`    | `PLATFORM_ADMIN_ROLES` |       ✓       |        |           |           |     |
+| Europe Pulse                                                | `/manage/europe-pulse`      | `PLATFORM_ADMIN_ROLES` |       ✓       |        |           |           |     |
+| Governance                                                  | `/manage/governance`        | `PLATFORM_ADMIN_ROLES` |       ✓       |        |           |           |     |
+| Chat insights                                               | `/manage/chat-insights`     | `PLATFORM_ADMIN_ROLES` |       ✓       |        |           |           |     |
+| Assistant knowledge                                         | `/manage/knowledge`         | `PLATFORM_ADMIN_ROLES` |       ✓       |        |           |           |     |
+| Live chat                                                   | `/manage/live-chat`         | `PLATFORM_ADMIN_ROLES` |       ✓       |        |           |           |     |
+| Members                                                     | `/members`, `/members/$id`  | `ADMIN_ONLY`           |               |        |           |           |     |
+| Integration                                                 | `/integration`              | `ADMIN_ONLY`           |               |        |           |           |     |
+| Roles                                                       | `/roles`                    | `ADMIN_ONLY`           |               |        |           |           |     |
+
+¹ The route admits publishers, but the side menu shows the link to editors only
+(see `docs/tech-debt.md`).
+² The route has no `requireStaffAccess` guard; the menu entry is editor-only and
+writes are editor-gated in RLS.
+
+**Article actions**
+
+- **Write / edit** — editors (any article) and Super Admin.
+- **Submit for review** — the author moves the article to `review`; eligible
+  publishers receive a review-request email.
+- **Publish / schedule** — publishers, editors with publishing rights, and
+  Super Admin; the "Released by" column records who did it.
+- **Publish your own article** — Super Admin only, enforced server-side
+  (see `docs/article-publishing.md`).
+
+### Database helpers
+
+RLS calls the security-definer helpers in the **`private` schema** —
+`has_role`, `is_editor`, `is_staff`, `is_platform_admin`,
+`is_membership_staff`, `is_article_publisher`, `is_internal_account`. They are
+`security definer` so policies can read `user_roles` without recursion, and
+they live outside `public` so they are not exposed as RPC endpoints. Never
+inline a `user_roles` subquery in a policy.
+
+Application code does **not** call these over RPC. Server functions gate
+themselves with the `authz.ts` guards — `assertAdmin` (Super Admin),
+`assertPlatformAdmin`, `assertEditor`, `assertOrganizer`, `assertMembership`,
+`assertStaff`, `assertRole`, `assertAnyRole` — which read `user_roles` through
+the caller's RLS-scoped client.
+
+Role boundaries are enforced by policy, not by the UI. The former
+`contributor` role has been removed entirely — do not reintroduce it.
 
 ## Members are bound by ID, never by email
 

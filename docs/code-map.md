@@ -80,14 +80,14 @@ before adding a new file.
 
 ### Shared infrastructure
 
-| Module                        | Responsibility                                                                                         |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `storage.ts`                  | Bucket names and signed-URL lifetimes. Client-safe constants; the one place these strings are written. |
-| `storage.server.ts`           | `signStoragePaths` / `signProfileImages` — batch signing via the admin client.                         |
-| `supabase-public.server.ts`   | Anonymous client factory, including the `sb_`-key `apikey` header workaround.                          |
-| `roles.ts` / `role-model.ts`  | Role constants, `STAFF_ROLES`, `landingPath` and the `useMyRoles` hook that drives UI gating.          |
-| `authz.ts` / `staff-guard.ts` | `assertStaff` / `assertAdmin` / `assertEditor` and the route-level staff gate.                         |
-| `mcp/`                        | The MCP server tools exposed at `/mcp` (see `docs/architecture.md`).                                   |
+| Module                        | Responsibility                                                                                                                         |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `storage.ts`                  | Bucket names and signed-URL lifetimes. Client-safe constants; the one place these strings are written.                                 |
+| `storage.server.ts`           | `signStoragePaths` / `signProfileImages` — batch signing via the admin client.                                                         |
+| `supabase-public.server.ts`   | Anonymous client factory, including the `sb_`-key `apikey` header workaround.                                                          |
+| `roles.ts` / `role-model.ts`  | Role constants, `STAFF_ROLES`, `landingPath` and the `useMyRoles` hook that drives UI gating. Access matrix: `auth-and-claim-flow.md`. |
+| `authz.ts` / `staff-guard.ts` | `assertStaff` / `assertAdmin` / `assertEditor` and the route-level staff gate.                                                         |
+| `mcp/`                        | The MCP server tools exposed at `/mcp` (see `docs/architecture.md`).                                                                   |
 
 ## Routes (`src/routes`)
 
@@ -108,18 +108,18 @@ before adding a new file.
 
 ## Components (`src/components`)
 
-| Group                         | Contents                                                                                      |
-| ----------------------------- | --------------------------------------------------------------------------------------------- |
-| `site-chrome.tsx`             | Public header, footer, responsive nav, language switcher.                                     |
-| `coaches/`                    | Directory list, filter panel, mode tabs, coach cards.                                         |
+| Group                         | Contents                                                                                                                                                                                                                                                                       |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `site-chrome.tsx`             | Public header, footer, responsive nav, language switcher.                                                                                                                                                                                                                      |
+| `coaches/`                    | Directory list, filter panel, mode tabs, coach cards.                                                                                                                                                                                                                          |
 | `cms/`                        | Staff shell, Markdown editor, translations panel, Unsplash picker, and `MemberProfileEditor` (grouped into five areas by `member-profile/ProfileEditorChrome.tsx`: Deep Blue header with the publication state and save/publish actions, sticky area list, one card per area). |
-| `member/`                     | Member Area presentational pieces.                                                            |
-| `team/`                       | `TeamGrid` (hexagon honeycomb), `TeamPreview` and the shared `MemberModal`.                   |
-| `communities/`                | `CommunityRing` (member ring layout) and the About-page `CommunitiesPreview`.                 |
-| `organisations/`              | The "For organisations" sections, survey and gated deck download.                             |
-| `markdown.tsx`, `callout.tsx` | Article rendering, including the three-shade callout system built on a remark AST plugin.     |
-| `marks.tsx`                   | Hand-drawn decorative SVG marks.                                                              |
-| `ui/`                         | shadcn/ui primitives. Prefer these over new bespoke controls.                                 |
+| `member/`                     | Member Area presentational pieces.                                                                                                                                                                                                                                             |
+| `team/`                       | `TeamGrid` (hexagon honeycomb), `TeamPreview` and the shared `MemberModal`.                                                                                                                                                                                                    |
+| `communities/`                | `CommunityRing` (member ring layout) and the About-page `CommunitiesPreview`.                                                                                                                                                                                                  |
+| `organisations/`              | The "For organisations" sections, survey and gated deck download.                                                                                                                                                                                                              |
+| `markdown.tsx`, `callout.tsx` | Article rendering, including the three-shade callout system built on a remark AST plugin.                                                                                                                                                                                      |
+| `marks.tsx`                   | Hand-drawn decorative SVG marks.                                                                                                                                                                                                                                               |
+| `ui/`                         | shadcn/ui primitives. Prefer these over new bespoke controls.                                                                                                                                                                                                                  |
 
 ## Database objects worth knowing
 
