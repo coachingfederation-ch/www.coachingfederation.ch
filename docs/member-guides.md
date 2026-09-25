@@ -7,7 +7,7 @@ they are readable on a phone, translatable, and editable without a new release.
 - Public index: `/guides` (plus the `$locale/` mirrors).
 - Public detail: `/guides/:slug`.
 - Staff editor: `/manage/guides`, listed in the CMS menu as **Guides**
-  (`src/components/cms/Shell.tsx`, `allowedRoles: ["editor"]`).
+  (`src/components/cms/Shell.tsx`, `allowedRoles: PLATFORM_ADMIN`; route guard `PLATFORM_ADMIN_ROLES`).
 - The Member Area shell links to `/guides` from its top navigation
   (`src/components/member/MemberShell.tsx`). That shell renders the design
   system's `SiteHeader` — the same Deep Blue band as the public site — with
@@ -72,12 +72,12 @@ callouts, FAQ items and all their translations with it.
 
 Grants and RLS are set per table in the two guide migrations:
 
-- `anon` and `authenticated` may `SELECT`; only editors may write.
+- `anon` and `authenticated` may `SELECT`; only Super Admins and Administrators may write.
 - Public read policies are scoped to published guides — a draft guide, and the
   sections, callouts, FAQ items and translations underneath it, are invisible
   to visitors. `/guides/:slug` therefore 404s for an unpublished slug.
-- Write policies are `private.is_editor(auth.uid())` for all eight tables, and
-  every admin server function calls `assertEditor(context)` before touching a
+- Write policies are `private.is_platform_admin(auth.uid())` for all eight tables, and
+  every admin server function calls `assertPlatformAdmin(context)` before touching a
   row (`src/lib/guides-admin.functions.ts`). Two layers, same rule.
 
 ## Translation
@@ -101,12 +101,12 @@ re-translation.
 
 ## Where things live
 
-| Concern                         | File                                                     |
-| ------------------------------- | -------------------------------------------------------- |
-| Shared types, tone/callout maps | `src/lib/guides.ts`                                      |
-| Public reads, locale merge      | `src/lib/guides.server.ts`, `guides.functions.ts`        |
-| Editor CRUD (editor-gated)      | `src/lib/guides-admin.functions.ts`                      |
-| Translation load/save/AI        | `src/lib/guide-translations.functions.ts`                |
-| Staff editor screen             | `src/routes/_staff/manage.guides.tsx`                    |
-| Public pages                    | `src/pages/GuidesIndex.tsx`, `src/pages/GuideDetail.tsx` |
-| Copy keys                       | `src/i18n/locales/<lang>/guides.json`, `cms.json`        |
+| Concern                          | File                                                     |
+| -------------------------------- | -------------------------------------------------------- |
+| Shared types, tone/callout maps  | `src/lib/guides.ts`                                      |
+| Public reads, locale merge       | `src/lib/guides.server.ts`, `guides.functions.ts`        |
+| Admin CRUD (Administrator-gated) | `src/lib/guides-admin.functions.ts`                      |
+| Translation load/save/AI         | `src/lib/guide-translations.functions.ts`                |
+| Staff editor screen              | `src/routes/_staff/manage.guides.tsx`                    |
+| Public pages                     | `src/pages/GuidesIndex.tsx`, `src/pages/GuideDetail.tsx` |
+| Copy keys                        | `src/i18n/locales/<lang>/guides.json`, `cms.json`        |
