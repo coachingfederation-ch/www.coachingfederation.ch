@@ -2,12 +2,12 @@
  * Staff CRUD for member guides. Every handler is editor-gated: reading and
  * writing an unpublished guide must never be possible for a signed-in member.
  * Writes go through `context.supabase`, so the editor RLS policy is the second
- * line of defence behind `assertEditor`.
+ * line of defence behind `assertPlatformAdmin`.
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertEditor } from "./authz";
+import { assertPlatformAdmin } from "./authz";
 import { GUIDE_CALLOUT_KINDS, GUIDE_SECTION_KINDS, GUIDE_TONES } from "./guides";
 
 export type AdminGuideRow = {
@@ -68,7 +68,7 @@ const FAQ_COLUMNS = "id, section_id, position, question, answer, quote";
 export const listAdminGuides = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<AdminGuideRow[]> => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { data, error } = await context.supabase
       .from("guides")
       .select(GUIDE_COLUMNS)
@@ -86,7 +86,7 @@ export const getAdminGuide = createServerFn({ method: "GET" })
       data,
       context,
     }): Promise<{ guide: AdminGuideRow; sections: AdminGuideSectionRow[] } | null> => {
-      await assertEditor(context);
+      await assertPlatformAdmin(context);
       const { data: guide, error } = await context.supabase
         .from("guides")
         .select(GUIDE_COLUMNS)
@@ -133,7 +133,7 @@ export const createGuide = createServerFn({ method: "POST" })
       .parse(data),
   )
   .handler(async ({ data, context }): Promise<{ id: string }> => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { data: row, error } = await context.supabase
       .from("guides")
       .insert({ title: data.title, slug: data.slug })
@@ -170,7 +170,7 @@ export const updateGuide = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => guidePatchSchema.parse(data))
   .handler(async ({ data, context }) => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     // `published_at` records the release moment; it is never taken from the client.
     const values = {
       ...data.values,
@@ -187,7 +187,7 @@ export const deleteGuide = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { error } = await context.supabase.from("guides").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -199,7 +199,7 @@ export const createGuideSection = createServerFn({ method: "POST" })
     z.object({ guideId: z.string().uuid(), position: z.number().int().min(0) }).parse(data),
   )
   .handler(async ({ data, context }): Promise<{ id: string }> => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { data: row, error } = await context.supabase
       .from("guide_sections")
       .insert({ guide_id: data.guideId, position: data.position })
@@ -230,7 +230,7 @@ export const updateGuideSection = createServerFn({ method: "POST" })
       .parse(data),
   )
   .handler(async ({ data, context }) => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { error } = await context.supabase
       .from("guide_sections")
       .update(data.values)
@@ -243,7 +243,7 @@ export const deleteGuideSection = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { error } = await context.supabase.from("guide_sections").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -259,7 +259,7 @@ export const createGuideCallout = createServerFn({ method: "POST" })
     z.object({ sectionId: z.string().uuid(), position: z.number().int().min(0) }).parse(data),
   )
   .handler(async ({ data, context }): Promise<{ id: string }> => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { data: row, error } = await context.supabase
       .from("guide_section_callouts")
       .insert({ section_id: data.sectionId, position: data.position })
@@ -287,7 +287,7 @@ export const updateGuideCallout = createServerFn({ method: "POST" })
       .parse(data),
   )
   .handler(async ({ data, context }) => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { error } = await context.supabase
       .from("guide_section_callouts")
       .update(data.values)
@@ -300,7 +300,7 @@ export const deleteGuideCallout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { error } = await context.supabase
       .from("guide_section_callouts")
       .delete()
@@ -319,7 +319,7 @@ export const createGuideFaqItem = createServerFn({ method: "POST" })
     z.object({ sectionId: z.string().uuid(), position: z.number().int().min(0) }).parse(data),
   )
   .handler(async ({ data, context }): Promise<{ id: string }> => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { data: row, error } = await context.supabase
       .from("guide_faq_items")
       .insert({ section_id: data.sectionId, position: data.position })
@@ -347,7 +347,7 @@ export const updateGuideFaqItem = createServerFn({ method: "POST" })
       .parse(data),
   )
   .handler(async ({ data, context }) => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { error } = await context.supabase
       .from("guide_faq_items")
       .update(data.values)
@@ -360,7 +360,7 @@ export const deleteGuideFaqItem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { error } = await context.supabase.from("guide_faq_items").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
