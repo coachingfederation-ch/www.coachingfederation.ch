@@ -1,6 +1,6 @@
 /**
  * Staff CMS for member guides (/manage/guides).
- * Exports: Route. Editors write the English source here; the translation panel
+ * Exports: Route. Administrators write the English source here; the translation panel
  * below the editor produces DE/FR/IT.
  *
  * Layout mirrors the operational-structure screen: a list on the left, the
@@ -15,6 +15,7 @@ import { RichTextField } from "@/components/cms/RichTextField";
 import { GenericTranslationsPanel } from "@/components/cms/translations/GenericTranslationsPanel";
 import type { TranslationFieldConfig } from "@/components/cms/translations/types";
 import { useCms } from "@/i18n/cms";
+import { PLATFORM_ADMIN_ROLES, requireStaffAccess } from "@/lib/staff-guard";
 import { GUIDE_CALLOUT_KINDS, GUIDE_SECTION_KINDS, GUIDE_TONES } from "@/lib/guides";
 import {
   createGuide,
@@ -45,6 +46,7 @@ import {
 } from "@/lib/guide-translations.functions";
 
 export const Route = createFileRoute("/_staff/manage/guides")({
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, PLATFORM_ADMIN_ROLES),
   component: GuidesCmsRoute,
 });
 

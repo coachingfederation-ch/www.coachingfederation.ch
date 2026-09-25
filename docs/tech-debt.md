@@ -142,5 +142,5 @@ current description; prefer it, and do not update the plan files.
 
 The `/articles` and `/manage/newsletters` route guards admit publishers, but
 `Shell.tsx` shows those menu links to editors only, so publishers reach them
-only by direct link. `/manage/guides` has no route guard (menu + RLS only).
+only by direct link.
 See the access matrix in `docs/auth-and-claim-flow.md`.

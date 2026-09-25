@@ -14,7 +14,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertEditor } from "./authz";
+import { assertPlatformAdmin } from "./authz";
 
 const LOCALE_NAMES: Record<string, string> = {
   de: "Swiss Standard German (no ß, use ss)",
@@ -94,7 +94,7 @@ export const loadGuideTranslations = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({ guideId: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }): Promise<GuideTranslationRow[]> => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { sections } = await loadSource(context.supabase, data.guideId);
 
     const { data: guideRows, error } = await context.supabase
@@ -177,7 +177,7 @@ export const saveGuideTranslation = createServerFn({ method: "POST" })
       .parse(data),
   )
   .handler(async ({ data, context }): Promise<{ error: string | null }> => {
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { guide, sections } = await loadSource(context.supabase, data.guideId);
     const sourceUpdatedAt = String(
       (guide as { content_updated_at: string }).content_updated_at ?? new Date().toISOString(),
@@ -262,7 +262,7 @@ export const translateGuide = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     // Paid AI call: gate before touching the gateway.
-    await assertEditor(context);
+    await assertPlatformAdmin(context);
     const { guide, sections } = await loadSource(context.supabase, data.guideId);
     const source = guide as Record<string, string>;
 

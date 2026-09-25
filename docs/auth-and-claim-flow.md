@@ -35,16 +35,16 @@ profile record. Role changes go through server functions guarded by
 
 ### Roles
 
-| Role            | Label in the app        | Can do                                                                                                                                                                 |
-| --------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `admin`         | Super Admin             | Everything, including Members, Integration and Roles. The only role that may publish its own article.                                                                  |
-| `administrator` | Administrator           | Overview, Vocabularies, Coach Finder, Operational Structure, Europe Pulse, Governance, Chat insights, Assistant knowledge, Live chat, Guest passes, Member engagement. |
-| `editor`        | Editor                  | Articles, Newsletters, Categories, Editorial signals, Member guides. Writes and edits any article; cannot publish their own.                                           |
-| `publisher`     | Publisher               | Reviews and publishes articles (and Editorial signals). Cannot publish their own article.                                                                              |
-| `organizer`     | Organizer               | Events only — their own events, enforced by RLS.                                                                                                                       |
-| `membership`    | Membership & Engagement | Guest passes and Member engagement.                                                                                                                                    |
-| `member`        | Member                  | Member Area and their own directory profile.                                                                                                                           |
-| `user`          | (dormant)               | Nothing grants it; its policies remain but no UI surfaces it.                                                                                                          |
+| Role            | Label in the app        | Can do                                                                                                                                                                                |
+| --------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `admin`         | Super Admin             | Everything, including Members, Integration and Roles. The only role that may publish its own article.                                                                                 |
+| `administrator` | Administrator           | Overview, Vocabularies, Coach Finder, Operational Structure, Europe Pulse, Governance, Chat insights, Assistant knowledge, Live chat, Member guides, Guest passes, Member engagement. |
+| `editor`        | Editor                  | Articles, Newsletters, Categories, Editorial signals. Writes and edits any article; cannot publish their own.                                                                         |
+| `publisher`     | Publisher               | Reviews and publishes articles (and Editorial signals). Cannot publish their own article.                                                                                             |
+| `organizer`     | Organizer               | Events only — their own events, enforced by RLS.                                                                                                                                      |
+| `membership`    | Membership & Engagement | Guest passes and Member engagement.                                                                                                                                                   |
+| `member`        | Member                  | Member Area and their own directory profile.                                                                                                                                          |
+| `user`          | (dormant)               | Nothing grants it; its policies remain but no UI surfaces it.                                                                                                                         |
 
 Roles are **additive grants**: a member who is also an editor keeps the Member
 Area and gains the CMS on top. Joining an operational team no longer grants any
@@ -67,7 +67,7 @@ RLS is the final boundary.
 | Newsletters                                                 | `/manage/newsletters`       | `ARTICLE_ROLES`        |               |   ✓    |    ✓¹     |           |     |
 | Categories                                                  | `/articles/categories`      | `CATEGORY_ROLES`       |               |   ✓    |           |           |     |
 | Editorial signals                                           | `/manage/editorial-signals` | `ARTICLE_ROLES`        |               |   ✓    |     ✓     |           |     |
-| Member guides                                               | `/manage/guides`            | none (menu + RLS)²     |               |   ✓    |           |           |     |
+| Member guides                                               | `/manage/guides`            | `PLATFORM_ADMIN_ROLES` |       ✓       |        |           |           |     |
 | Events (list, new, editor, check-in, forms, reporting, CCE) | `/manage/events/*`          | `EVENT_ROLES`          |               |        |           |     ✓     |     |
 | Guest passes                                                | `/manage/guest-passes`      | `MEMBERSHIP_ROLES`     |       ✓       |        |           |           |  ✓  |
 | Member engagement                                           | `/manage/member-engagement` | `MEMBERSHIP_ROLES`     |       ✓       |        |           |           |  ✓  |
@@ -85,8 +85,6 @@ RLS is the final boundary.
 
 ¹ The route admits publishers, but the side menu shows the link to editors only
 (see `docs/tech-debt.md`).
-² The route has no `requireStaffAccess` guard; the menu entry is editor-only and
-writes are editor-gated in RLS.
 
 **Article actions**
 
