@@ -22,3 +22,5 @@ records, use obvious placeholders (`Anna Muster`, `anna.muster@example.com`,
 public `office@coachingfederation.ch`.
 
 Live member data belongs in the database, behind RLS — not in version control.
+
+- Stripe runs on the chapter's own account via STRIPE_RESTRICTED_API_KEY (direct SDK, no gateway); publishable key lives in src/lib/stripe.ts. Why: the chapter chose its own Stripe account over built-in payments.
