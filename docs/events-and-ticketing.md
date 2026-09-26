@@ -278,3 +278,12 @@ save themselves.
   `stripe_session_id` and `stripe_refund_id` stay out of it.
 - The webhook route is public because Stripe sends no token — the signature
   check is the boundary.
+
+## Stripe account (own key)
+
+Payments run on the chapter's own Stripe account, not Lovable's built-in payments.
+
+- Server: `src/lib/stripe.server.ts` uses the `STRIPE_RESTRICTED_API_KEY` secret directly. The key's mode (`rk_live_`/`sk_live_` vs test) decides the environment; a page requesting the other mode gets a clear error.
+- Browser: `STRIPE_PUBLISHABLE_KEY` in `src/lib/stripe.ts` must be the same account and mode. While empty, paid registration is disabled on event pages.
+- Webhook: register `https://new.coachingfederation.ch/api/public/payments/webhook?env=live` (or `?env=sandbox` for a test key) in Stripe with events `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`. Its signing secret is stored as `STRIPE_WEBHOOK_SECRET`.
+- Restricted key permissions needed: Checkout Sessions (write), Customers (write), Products (write), Prices (write), Refunds (write), PaymentIntents (read), Charges (read).
