@@ -1,10 +1,9 @@
 /**
- * Stripe access, gateway-only.
+ * Stripe access with the chapter's own Stripe account.
  *
- * `STRIPE_SANDBOX_API_KEY` / `STRIPE_LIVE_API_KEY` are connector-gateway
- * identifiers, not Stripe secret keys: every call is rewritten from
- * api.stripe.com to the gateway, which attaches the real secret. Never
- * construct a Stripe client any other way.
+ * `STRIPE_RESTRICTED_API_KEY` is the chapter's own key (rk_/sk_, test or
+ * live). The mode of the key decides the environment; a caller asking for the
+ * other mode gets a clear error instead of a silent cross-mode charge.
  */
 import Stripe from "stripe";
 
@@ -16,34 +15,21 @@ const getEnv = (key: string): string => {
 
 export type StripeEnv = "sandbox" | "live";
 
-const GATEWAY_STRIPE_BASE = "https://connector-gateway.lovable.dev/stripe";
-
-export function getConnectionApiKey(env: StripeEnv): string {
-  return env === "sandbox" ? getEnv("STRIPE_SANDBOX_API_KEY") : getEnv("STRIPE_LIVE_API_KEY");
+function keyEnvironment(key: string): StripeEnv {
+  return /^(rk|sk)_live_/.test(key) ? "live" : "sandbox";
 }
 
 export function createStripeClient(env: StripeEnv): Stripe {
-  const connectionApiKey = getConnectionApiKey(env);
-  const lovableApiKey = getEnv("LOVABLE_API_KEY");
-
-  return new Stripe(connectionApiKey, {
+  const key = getEnv("STRIPE_RESTRICTED_API_KEY");
+  const keyEnv = keyEnvironment(key);
+  if (keyEnv !== env) {
+    throw new Error(
+      `Stripe key is in ${keyEnv === "live" ? "live" : "test"} mode but the page requested ${env === "live" ? "live" : "test"} mode.`,
+    );
+  }
+  return new Stripe(key, {
     apiVersion: "2026-03-25.dahlia",
-    httpClient: Stripe.createFetchHttpClient((input, init) => {
-      const stripeUrl = input instanceof Request ? input.url : input.toString();
-      const gatewayUrl = stripeUrl.replace("https://api.stripe.com", GATEWAY_STRIPE_BASE);
-      return fetch(gatewayUrl, {
-        ...init,
-        headers: {
-          ...Object.fromEntries(
-            new Headers(
-              init?.headers ?? (input instanceof Request ? input.headers : undefined),
-            ).entries(),
-          ),
-          "X-Connection-Api-Key": connectionApiKey,
-          "Lovable-API-Key": lovableApiKey,
-        },
-      });
-    }),
+    httpClient: Stripe.createFetchHttpClient(),
   });
 }
 
@@ -92,10 +78,10 @@ export async function verifyWebhook(
 ): Promise<{ type: string; data: { object: Record<string, unknown> } }> {
   const signature = req.headers.get("stripe-signature");
   const body = await req.text();
-  const secret =
-    env === "sandbox"
-      ? getEnv("PAYMENTS_SANDBOX_WEBHOOK_SECRET")
-      : getEnv("PAYMENTS_LIVE_WEBHOOK_SECRET");
+  // One endpoint per Stripe account mode; the signing secret comes from the
+  // endpoint the chapter registered in its own Stripe dashboard.
+  void env;
+  const secret = getEnv("STRIPE_WEBHOOK_SECRET");
 
   if (!signature || !body) throw new Error("Missing signature or body");
 
