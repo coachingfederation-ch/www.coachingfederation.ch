@@ -1,16 +1,18 @@
 /**
- * Browser-side Stripe.js loader.
+ * Browser-side Stripe.js loader for the chapter's own Stripe account.
  *
- * The environment is derived from the publishable token's prefix, never from
- * its mere presence: a missing token means the build shipped before Stripe
- * go-live finished, and silently routing that to live would fail deep inside
- * the payment call instead of on the page.
+ * The publishable key is public by design and must belong to the same Stripe
+ * account (and mode) as the server's STRIPE_RESTRICTED_API_KEY. Its prefix
+ * decides test vs live; an empty key disables paid registration on the page.
  */
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 
 export type StripeEnv = "sandbox" | "live";
 
-const clientToken = import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN as string | undefined;
+// Chapter Stripe account publishable key (pk_live_… or pk_test_…).
+const STRIPE_PUBLISHABLE_KEY = "";
+
+const clientToken: string | undefined = STRIPE_PUBLISHABLE_KEY || undefined;
 
 export function paymentsConfigured() {
   return Boolean(clientToken?.startsWith("pk_test_") || clientToken?.startsWith("pk_live_"));
