@@ -287,3 +287,11 @@ Payments run on the chapter's own Stripe account, not Lovable's built-in payment
 - Browser: `STRIPE_PUBLISHABLE_KEY` in `src/lib/stripe.ts` must be the same account and mode. While empty, paid registration is disabled on event pages.
 - Webhook: register `https://new.coachingfederation.ch/api/public/payments/webhook?env=live` (or `?env=sandbox` for a test key) in Stripe with events `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`. Its signing secret is stored as `STRIPE_WEBHOOK_SECRET`.
 - Restricted key permissions needed: Checkout Sessions (write), Customers (write), Products (write), Prices (write), Refunds (write), PaymentIntents (read), Charges (read).
+
+## Stripe checkout details (chapter account)
+
+- Checkout uses inline `price_data.product_data` — no Stripe Product is created per sale, and no Managed Payments / automatic tax (chapter account, no tax automation).
+- `return_url` uses the request Origin when it is one of our hosts (`*.lovable.app`, localhost, the canonical site), otherwise `SITE_URL`, so preview test purchases return to the preview.
+- Webhook events required on the chapter's endpoint: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`, `charge.refunded`.
+- `charge.refunded` (e.g. a refund issued in the Stripe dashboard) marks the registration refunded; the seat is kept.
+- Paid registration stays disabled until the publishable key is set in `src/lib/stripe.ts` and `STRIPE_WEBHOOK_SECRET` is stored.

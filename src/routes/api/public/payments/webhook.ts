@@ -27,6 +27,37 @@ async function handleWebhook(request: Request, env: StripeEnv) {
     case "checkout.session.expired":
       if (object.id) await releaseCheckoutSession(object.id);
       break;
+    case "charge.refunded": {
+      // Refunds issued in the Stripe dashboard are recorded on the
+      // registration; the seat is kept (staff cancel separately if needed).
+      const charge = event.data.object as {
+        payment_intent?: string;
+        amount_refunded?: number;
+        refunds?: { data?: { id: string }[] };
+      };
+      if (!charge.payment_intent) break;
+      const { createStripeClient } = await import("@/lib/stripe.server");
+      const stripe = createStripeClient(env);
+      const sessions = await stripe.checkout.sessions.list({
+        payment_intent: charge.payment_intent,
+        limit: 1,
+      });
+      const sessionId = sessions.data[0]?.id;
+      if (!sessionId) break;
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      await supabaseAdmin
+        .from("event_registrations")
+        .update({
+          refund_status: "refunded",
+          refund_amount_cents: charge.amount_refunded ?? undefined,
+          stripe_refund_id: charge.refunds?.data?.[0]?.id ?? null,
+          refunded_at: new Date().toISOString(),
+          refund_error: null,
+        })
+        .eq("stripe_session_id", sessionId)
+        .neq("refund_status", "refunded");
+      break;
+    }
     default:
       console.log("Unhandled Stripe event:", event.type);
   }

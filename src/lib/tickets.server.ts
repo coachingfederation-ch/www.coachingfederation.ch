@@ -455,17 +455,26 @@ export async function submitRegistration(
     const { createStripeClient } = await import("./stripe.server");
     const { SITE_URL, localizePath } = await import("@/i18n/config");
     const stripe = createStripeClient(input.environment);
-    const returnUrl = `${SITE_URL}${localizePath(`/events/${input.slug}`, input.locale)}?checkout=return&session_id={CHECKOUT_SESSION_ID}`;
-
-    // Managed payments only accept a product that carries an eligible tax code,
-    // and an inline product_data tax code is not honoured — so the product is
-    // created first. txcd_10000000 = "General – electronically supplied
-    // services", the closest code Managed Payments accepts for event tickets.
-    const product = await stripe.products.create({
-      name: tier.name,
-      tax_code: "txcd_10000000",
-      metadata: { tierId: tier.id, eventId: input.eventId },
-    });
+    // Return buyers to the site they paid on (preview or published), but only
+    // for our own hosts — never an arbitrary Origin header.
+    let base = SITE_URL;
+    try {
+      const { getRequest } = await import("@tanstack/react-start/server");
+      const origin = getRequest()?.headers.get("origin");
+      if (origin) {
+        const host = new URL(origin).hostname;
+        if (
+          host.endsWith(".lovable.app") ||
+          host === "localhost" ||
+          host === new URL(SITE_URL).hostname
+        ) {
+          base = origin;
+        }
+      }
+    } catch {
+      // Fall back to the canonical site.
+    }
+    const returnUrl = `${base}${localizePath(`/events/${input.slug}`, input.locale)}?checkout=return&session_id={CHECKOUT_SESSION_ID}`;
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -479,7 +488,7 @@ export async function submitRegistration(
           price_data: {
             currency: tier.currency.toLowerCase(),
             unit_amount: chargedCents,
-            product: product.id,
+            product_data: { name: tier.name, metadata: { tierId: tier.id, eventId: input.eventId } },
           },
         },
       ],
@@ -490,9 +499,7 @@ export async function submitRegistration(
         tierId: tier.id,
         ...(userId ? { userId } : {}),
       },
-      managed_payments: { enabled: true },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    });
 
     await supabaseAdmin
       .from("event_registrations")
