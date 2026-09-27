@@ -49,7 +49,7 @@ async function handleWebhook(request: Request, env: StripeEnv) {
         .from("event_registrations")
         .update({
           refund_status: "refunded",
-          refund_amount_cents: charge.amount_refunded ?? null,
+          refund_amount_cents: charge.amount_refunded ?? undefined,
           stripe_refund_id: charge.refunds?.data?.[0]?.id ?? null,
           refunded_at: new Date().toISOString(),
           refund_error: null,
