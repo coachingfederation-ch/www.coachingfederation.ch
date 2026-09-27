@@ -488,7 +488,7 @@ export async function submitRegistration(
           price_data: {
             currency: tier.currency.toLowerCase(),
             unit_amount: chargedCents,
-            product: product.id,
+            product_data: { name: tier.name, metadata: { tierId: tier.id, eventId: input.eventId } },
           },
         },
       ],
@@ -499,9 +499,7 @@ export async function submitRegistration(
         tierId: tier.id,
         ...(userId ? { userId } : {}),
       },
-      managed_payments: { enabled: true },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    });
 
     await supabaseAdmin
       .from("event_registrations")
