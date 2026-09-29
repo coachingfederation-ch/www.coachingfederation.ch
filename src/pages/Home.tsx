@@ -359,8 +359,7 @@ function Events() {
             return (
               <LocaleLink
                 key={e.id}
-                to="/events/$slug"
-                params={{ slug: e.slug! }}
+                to={`/events/${e.slug}`}
                 className={
                   "group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-0.5 " +
                   CARD_SHADOW
