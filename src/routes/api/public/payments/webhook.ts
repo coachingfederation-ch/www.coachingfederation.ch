@@ -10,18 +10,22 @@ import { type StripeEnv, verifyWebhook } from "@/lib/stripe.server";
 
 async function handleWebhook(request: Request, env: StripeEnv) {
   const event = await verifyWebhook(request, env);
-  const object = event.data.object as { id?: string; payment_status?: string };
+  const object = event.data.object as {
+    id?: string;
+    payment_status?: string;
+    amount_total?: number | null;
+  };
   const { finalizePaidRegistration, releaseCheckoutSession } = await import("@/lib/tickets.server");
 
   switch (event.type) {
     case "checkout.session.completed":
       // Delayed methods (SEPA and friends) stay "unpaid" until settlement.
       if (object.id && object.payment_status !== "unpaid") {
-        await finalizePaidRegistration(object.id);
+        await finalizePaidRegistration(object.id, object.amount_total);
       }
       break;
     case "checkout.session.async_payment_succeeded":
-      if (object.id) await finalizePaidRegistration(object.id);
+      if (object.id) await finalizePaidRegistration(object.id, object.amount_total);
       break;
     case "checkout.session.async_payment_failed":
     case "checkout.session.expired":
