@@ -218,10 +218,16 @@ export async function validateAnswers(
  * Marks a pending registration paid. Keyed on the Stripe session and only ever
  * `pending -> paid`, so a replayed webhook is a no-op.
  */
-export async function finalizePaidRegistration(sessionId: string) {
+export async function finalizePaidRegistration(sessionId: string, amountTotal?: number | null) {
+  // Stripe's charged total is the source of truth (discounts included); store
+  // it so emails, reports and refunds use what was really paid.
   const { data } = await supabaseAdmin
     .from("event_registrations")
-    .update({ payment_status: "paid", hold_expires_at: null })
+    .update({
+      payment_status: "paid",
+      hold_expires_at: null,
+      ...(typeof amountTotal === "number" ? { amount_cents: amountTotal } : {}),
+    })
     .eq("stripe_session_id", sessionId)
     .eq("payment_status", "pending")
     .select("id");

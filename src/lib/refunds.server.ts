@@ -78,10 +78,23 @@ export async function refundRegistration(registrationId: string): Promise<Refund
         : (session.payment_intent?.id ?? null);
     if (!intent) throw new Error("The payment for this registration cannot be located");
 
+    // Refund what Stripe actually charged: a discount code lowers the charge,
+    // and the stored amount may predate it. Never ask for more than was paid.
+    const charged = typeof session.amount_total === "number" ? session.amount_total : null;
+    const amount = charged !== null ? Math.min(row.amount_cents, charged) : row.amount_cents;
+    if (charged !== null && charged !== row.amount_cents) {
+      await supabaseAdmin
+        .from("event_registrations")
+        .update({ amount_cents: charged })
+        .eq("id", registrationId);
+    }
+
     try {
+      // Amount in the key: an earlier failed attempt with a wrong amount must
+      // not block the corrected request.
       const refund = await stripe.refunds.create(
-        { payment_intent: intent, amount: row.amount_cents },
-        { idempotencyKey: `refund-${registrationId}` },
+        { payment_intent: intent, amount },
+        { idempotencyKey: `refund-${registrationId}-${amount}` },
       );
       await supabaseAdmin
         .from("event_registrations")
