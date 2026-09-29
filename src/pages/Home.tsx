@@ -22,6 +22,9 @@ import { SiteHeaderBar, SiteFooter, CARD_SHADOW } from "@/components/site-chrome
 import { SponsorMarquee, type SponsorItem } from "@/components/home/SponsorMarquee";
 import { useI18n, LocaleLink } from "@/i18n";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { listPublicEvents } from "@/lib/events.functions";
+import { eventPlace, formatEventDate } from "@/lib/events";
 
 
 /** Demo sponsor imagery (AI generated), ordered to match `home.ads.items`. */
@@ -316,11 +319,22 @@ const EVENT_STYLES: { bg: string; fg: string; mark: MarkName }[] = [
   { bg: "bg-mark-yellow", fg: "text-mark-indigo", mark: "Arrow02" },
 ];
 
+/** How many live events the homepage teaser shows. */
+const HOME_EVENT_LIMIT = 3;
+
 function Events() {
-  const { t, tList } = useI18n();
-  const events = tList<{ date: string; city: string; title: string; tags: string[] }>(
-    "home.events.items",
-  ).map((item, i) => ({ ...item, ...EVENT_STYLES[i] }));
+  const { t, locale } = useI18n();
+  // Live feed: same public projection as /events, next three by start time.
+  const { data, isPending } = useQuery({
+    queryKey: ["home-events", locale],
+    queryFn: () => listPublicEvents({ data: { locale } }),
+  });
+  const events = data
+    ? [...(data.featured ? [data.featured] : []), ...data.upcoming]
+        .sort((a, b) => new Date(a.starts_at!).getTime() - new Date(b.starts_at!).getTime())
+        .slice(0, HOME_EVENT_LIMIT)
+        .map((e, i) => ({ ...e, ...EVENT_STYLES[i % EVENT_STYLES.length] }))
+    : [];
   return (
     <section className="bg-card py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
@@ -333,39 +347,62 @@ function Events() {
             {t("home.events.viewAll")}
           </LocaleLink>
         </div>
+        {!isPending && events.length === 0 ? (
+          <p className="mt-12 text-base text-muted-foreground">{t("events.upcoming.empty")}</p>
+        ) : null}
         <div className="mt-12 grid gap-4 md:grid-cols-3">
-          {events.map((e) => (
-            <LocaleLink
-              key={e.title}
-              to="/events"
-              className={
-                "group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-0.5 " +
-                CARD_SHADOW
-              }
-            >
-              <div className={"grid aspect-[16/10] w-full place-items-center " + e.bg + " " + e.fg}>
-                <Mark name={e.mark} className="h-3/5 w-3/5" />
-              </div>
-              <div className="flex flex-1 flex-col p-6">
-                <p className="btn-mono-muted">
-                  {e.date} · {e.city}
-                </p>
-                <h3 className="mt-3 text-lg font-semibold leading-snug tracking-tight text-foreground">
-                  {e.title}
-                </h3>
-                <div className="mt-5 flex flex-wrap items-center gap-2">
-                  {e.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center rounded-full border border-border bg-chip px-2.5 py-1 text-xs font-semibold text-chip-foreground"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+          {events.map((e) => {
+            const tz = e.timezone || "Europe/Zurich";
+            const tags = [e.language?.toUpperCase(), e.category_name].filter(
+              (x): x is string => Boolean(x),
+            );
+            return (
+              <LocaleLink
+                key={e.id}
+                to={`/events/${e.slug}`}
+                className={
+                  "group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-0.5 " +
+                  CARD_SHADOW
+                }
+              >
+                {e.image_url ? (
+                  <img
+                    src={e.image_url}
+                    alt=""
+                    loading="lazy"
+                    className="aspect-[16/10] w-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className={"grid aspect-[16/10] w-full place-items-center " + e.bg + " " + e.fg}
+                  >
+                    <Mark name={e.mark} className="h-3/5 w-3/5" />
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col p-6">
+                  <p className="btn-mono-muted">
+                    {formatEventDate(e.starts_at!, locale, tz)} ·{" "}
+                    {eventPlace(e, t("events.tag.online"))}
+                  </p>
+                  <h3 className="mt-3 text-lg font-semibold leading-snug tracking-tight text-foreground">
+                    {e.title}
+                  </h3>
+                  {tags.length > 0 ? (
+                    <div className="mt-5 flex flex-wrap items-center gap-2">
+                      {tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center rounded-full border border-border bg-chip px-2.5 py-1 text-xs font-semibold text-chip-foreground"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
-              </div>
-            </LocaleLink>
-          ))}
+              </LocaleLink>
+            );
+          })}
         </div>
       </div>
     </section>
