@@ -294,3 +294,9 @@ Payments run through the built-in payments connection (Test / Live toggle in the
 - `return_url` uses the request Origin when it is one of our hosts (`*.lovable.app`, localhost, the canonical site), otherwise `SITE_URL`, so preview test purchases return to the preview.
 - Webhook events required on the chapter's endpoint: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`, `charge.refunded`.
 - `charge.refunded` (e.g. a refund issued in the Stripe dashboard) marks the registration refunded; the seat is kept.
+
+## Quirk: ticket pricing follows `tickets_enabled`
+
+The registration guard trigger prices a row from its tier whenever the event has `tickets_enabled` (or uses the legacy `rsvp_tickets` mode). Before 2026-09-29 only the legacy mode was priced, so paid tickets on `tickets_enabled` events were stored with `amount_cents = 0`. That showed "CHF 0.00" in confirmation emails and skipped the automatic refund on staff cancellation. Affected rows were repaired from the tier price.
+
+Refunds: a staff cancellation of a paid registration refunds automatically through Stripe (default when the event is more than 48 hours away; staff can override). Failed refunds can be retried; dashboard refunds are recorded via `charge.refunded`.
