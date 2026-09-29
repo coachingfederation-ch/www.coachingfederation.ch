@@ -659,6 +659,66 @@ export const saveEventSpeaker = createServerFn({ method: "POST" })
     return { id: (row?.id as string | undefined) ?? data.id! };
   });
 
+/**
+ * Turn a published member profile into a speaker library entry.
+ * Reuses the existing entry for that member (one per profile), otherwise
+ * creates one seeded with the member's name and tagline.
+ */
+export const saveMemberSpeaker = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ profileId: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const { data: existing } = await context.supabase
+      .from("event_speakers")
+      .select("id")
+      .eq("profile_id", data.profileId)
+      .maybeSingle();
+    if (existing?.id) return { id: existing.id as string };
+
+    // Only published directory profiles may become member speakers.
+    const { publicSupabaseClient } = await import("./supabase-public.server");
+    const { data: profile } = await publicSupabaseClient()
+      .from("coach_directory_public")
+      .select("profile_id, full_name, tagline")
+      .eq("profile_id", data.profileId)
+      .maybeSingle();
+    if (!profile?.full_name) throw new Error("This member profile is not published.");
+
+    const { data: row, error } = await context.supabase
+      .from("event_speakers")
+      .insert({
+        name: profile.full_name as string,
+        bio: ((profile.tagline as string | null) ?? "").slice(0, MAX_SPEAKER_BIO) || null,
+        profile_id: data.profileId,
+      })
+      .select("id")
+      .single();
+    if (error) throw new Error(error.message);
+    return { id: row.id as string };
+  });
+
+/**
+ * Permanently delete a speaker from the library. Links cascade, so the speaker
+ * disappears from every event that used it — the UI confirms with the count.
+ */
+export const deleteEventSpeaker = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertOrganizer(context);
+    const { data: rows, error } = await context.supabase
+      .from("event_speakers")
+      .delete()
+      .eq("id", data.id)
+      .select("id");
+    if (error) throw new Error(error.message);
+    if (!rows || rows.length === 0) throw new Error("Speaker not found or not allowed.");
+    return { ok: true };
+  });
+
 /** Replaces the whole speaker set for one event — order preserved. */
 export const setEventSpeakers = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
