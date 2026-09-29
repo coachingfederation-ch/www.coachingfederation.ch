@@ -7,14 +7,18 @@
  * of the event form's save payload.
  */
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, ChevronUp, Pencil, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Pencil, Trash2, X } from "lucide-react";
 import { useCms } from "@/i18n/cms";
 import { supabase } from "@/integrations/supabase/client";
 import { ARTICLE_IMAGE_BUCKET } from "@/lib/storage";
 import { MAX_SPEAKER_BIO, type EventSpeaker } from "@/lib/event-speakers";
+import type { EventHost } from "@/lib/event-hosts";
 import {
+  deleteEventSpeaker,
   listEventSpeakers,
   saveEventSpeaker,
+  saveMemberSpeaker,
+  searchEventHostCandidates,
   searchEventSpeakers,
   setEventSpeakers,
 } from "@/lib/events-admin.functions";
@@ -30,7 +34,9 @@ export function EventSpeakersPanel({ eventId }: { eventId: string }) {
   const [speakers, setSpeakers] = useState<EventSpeaker[]>([]);
   const [candidates, setCandidates] = useState<EventSpeaker[]>([]);
   const [search, setSearch] = useState("");
-  const [picked, setPicked] = useState("");
+  const [memberSearch, setMemberSearch] = useState("");
+  const [members, setMembers] = useState<EventHost[]>([]);
+  const [confirmDelete, setConfirmDelete] = useState<EventSpeaker | null>(null);
   const [draft, setDraft] = useState<Draft | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -54,6 +60,21 @@ export function EventSpeakersPanel({ eventId }: { eventId: string }) {
     return () => clearTimeout(timer);
   }, [search]);
 
+  // Debounced search over published member profiles (same source as hosts).
+  useEffect(() => {
+    const term = memberSearch.trim();
+    if (term.length < 2) {
+      setMembers([]);
+      return;
+    }
+    const timer = setTimeout(() => {
+      void searchEventHostCandidates({ data: { term } })
+        .then((rows) => setMembers(rows as EventHost[]))
+        .catch(() => setMembers([]));
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [memberSearch]);
+
   const commit = async (next: EventSpeaker[]) => {
     setBusy(true);
     setError(null);
@@ -69,11 +90,43 @@ export function EventSpeakersPanel({ eventId }: { eventId: string }) {
     }
   };
 
-  const add = () => {
-    const found = candidates.find((c) => c.id === picked);
-    if (!found || speakers.some((s) => s.id === found.id)) return;
-    setPicked("");
-    void commit([...speakers, found]);
+  const refreshLibrary = async () => {
+    const rows = await searchEventSpeakers({ data: { term: search.trim() } });
+    setCandidates(rows as EventSpeaker[]);
+  };
+
+  /** Member speakers reuse one library entry per profile. */
+  const addMember = async (profileId: string) => {
+    setBusy(true);
+    setError(null);
+    try {
+      const { id } = await saveMemberSpeaker({ data: { profileId } });
+      const saved = await setEventSpeakers({
+        data: { eventId, speakerIds: [...speakers.map((s) => s.id), id] },
+      });
+      setSpeakers(saved as EventSpeaker[]);
+      await refreshLibrary();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t("events.speakers.saveError"));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  /** Permanent: the speaker leaves every event that used it. */
+  const removeFromLibrary = async (speaker: EventSpeaker) => {
+    setBusy(true);
+    setError(null);
+    try {
+      await deleteEventSpeaker({ data: { id: speaker.id } });
+      setSpeakers((prev) => prev.filter((s) => s.id !== speaker.id));
+      setConfirmDelete(null);
+      await refreshLibrary();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t("events.speakers.deleteError"));
+    } finally {
+      setBusy(false);
+    }
   };
 
   const move = (index: number, delta: number) => {
@@ -195,9 +248,10 @@ export function EventSpeakersPanel({ eventId }: { eventId: string }) {
               disabled={busy}
               onClick={() => void commit(speakers.filter((s) => s.id !== speaker.id))}
               aria-label={t("events.speakers.remove")}
-              className="rounded p-1 text-muted-foreground hover:text-destructive disabled:opacity-50"
+              title={t("events.speakers.remove")}
+              className="rounded p-1 text-muted-foreground hover:text-foreground disabled:opacity-50"
             >
-              <Trash2 className="h-3.5 w-3.5" />
+              <X className="h-3.5 w-3.5" />
             </button>
           </li>
         ))}
@@ -206,46 +260,137 @@ export function EventSpeakersPanel({ eventId }: { eventId: string }) {
         ) : null}
       </ul>
 
-      <div className="mt-3 flex flex-wrap items-center gap-2">
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder={t("events.speakers.search")}
-          aria-label={t("events.speakers.search")}
-          className={inputClass + " w-56"}
-        />
-        <select
-          aria-label={t("events.speakers.select")}
-          value={picked}
-          onChange={(e) => setPicked(e.target.value)}
-          className={inputClass + " w-56"}
-        >
-          <option value="">{t("events.speakers.select")}</option>
-          {candidates
-            .filter((c) => !speakers.some((s) => s.id === c.id))
-            .map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-        </select>
-        <button
-          type="button"
-          onClick={add}
-          disabled={!picked || busy}
-          className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
-        >
-          {t("events.speakers.add")}
-        </button>
-        <button
-          type="button"
-          onClick={() => setDraft({ ...emptyDraft })}
-          disabled={busy || draft !== null}
-          className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
-        >
-          {t("events.speakers.new")}
-        </button>
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        {/* Chapter members with a published coach profile */}
+        <div className="rounded-2xl border border-border p-3">
+          <p className="text-xs font-semibold text-muted-foreground">
+            {t("events.speakers.memberTitle")}
+          </p>
+          <input
+            value={memberSearch}
+            onChange={(e) => setMemberSearch(e.target.value)}
+            placeholder={t("events.speakers.memberSearch")}
+            aria-label={t("events.speakers.memberSearch")}
+            className={inputClass + " mt-2"}
+          />
+          <ul className="mt-2 divide-y divide-border">
+            {members.map((m) => {
+              const attached = speakers.some((s) => s.profileId === m.profileId);
+              return (
+                <li key={m.profileId} className="flex items-center gap-2 py-1.5">
+                  <span className="min-w-0 flex-1 truncate text-sm">{m.fullName}</span>
+                  <button
+                    type="button"
+                    disabled={busy || attached}
+                    onClick={() => void addMember(m.profileId)}
+                    className="rounded-full border border-border px-3 py-1 text-xs font-semibold hover:bg-secondary disabled:opacity-50"
+                  >
+                    {attached ? t("events.speakers.added") : t("events.speakers.add")}
+                  </button>
+                </li>
+              );
+            })}
+            {memberSearch.trim().length >= 2 && members.length === 0 ? (
+              <li className="py-1.5 text-xs text-muted-foreground">
+                {t("events.speakers.noMatches")}
+              </li>
+            ) : null}
+          </ul>
+          <p className="mt-2 text-xs text-muted-foreground">{t("events.speakers.memberHint")}</p>
+        </div>
+
+        {/* Saved speaker library (external speakers and members used before) */}
+        <div className="rounded-2xl border border-border p-3">
+          <p className="text-xs font-semibold text-muted-foreground">
+            {t("events.speakers.libraryTitle")}
+          </p>
+          <div className="mt-2 flex gap-2">
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t("events.speakers.search")}
+              aria-label={t("events.speakers.search")}
+              className={inputClass}
+            />
+            <button
+              type="button"
+              onClick={() => setDraft({ ...emptyDraft })}
+              disabled={busy || draft !== null}
+              className="shrink-0 rounded-full border border-border px-3 py-1 text-xs font-semibold hover:bg-secondary disabled:opacity-50"
+            >
+              {t("events.speakers.new")}
+            </button>
+          </div>
+          <ul className="mt-2 divide-y divide-border">
+            {candidates.map((c) => {
+              const attached = speakers.some((s) => s.id === c.id);
+              return (
+                <li key={c.id} className="flex items-center gap-2 py-1.5">
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm">{c.name}</span>
+                    <span className="block text-xs text-muted-foreground">
+                      {c.profileId
+                        ? t("events.speakers.kindMember")
+                        : t("events.speakers.kindExternal")}
+                      {" · "}
+                      {t("events.speakers.usedIn").replace("{count}", String(c.usageCount ?? 0))}
+                    </span>
+                  </span>
+                  <button
+                    type="button"
+                    disabled={busy || attached}
+                    onClick={() => void commit([...speakers, c])}
+                    className="rounded-full border border-border px-3 py-1 text-xs font-semibold hover:bg-secondary disabled:opacity-50"
+                  >
+                    {attached ? t("events.speakers.added") : t("events.speakers.add")}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => setConfirmDelete(c)}
+                    aria-label={t("events.speakers.deleteFromLibrary")}
+                    title={t("events.speakers.deleteFromLibrary")}
+                    className="rounded p-1 text-muted-foreground hover:text-destructive disabled:opacity-50"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
+
+      {confirmDelete ? (
+        <div
+          role="alertdialog"
+          aria-label={t("events.speakers.deleteFromLibrary")}
+          className="mt-4 rounded-2xl border border-destructive p-4"
+        >
+          <p className="text-sm">
+            {t("events.speakers.deleteConfirm")
+              .replace("{name}", confirmDelete.name)
+              .replace("{count}", String(confirmDelete.usageCount ?? 0))}
+          </p>
+          <div className="mt-3 flex gap-2">
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => void removeFromLibrary(confirmDelete)}
+              className="rounded-full bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground disabled:opacity-50"
+            >
+              {t("events.speakers.deleteAction")}
+            </button>
+            <button
+              type="button"
+              onClick={() => setConfirmDelete(null)}
+              className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
+            >
+              {t("events.speakers.cancel")}
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       {draft ? (
         <div className="mt-4 rounded-2xl border border-border bg-background p-4">

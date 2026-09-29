@@ -348,9 +348,7 @@ export default function EventDetailPage({
             {speakers.length > 0 ? (
               <section className="mt-10 not-prose">
                 <p className="eyebrow">{t("events.detail.speakers")}</p>
-                <ul
-                  className={`mt-4 grid gap-4 ${speakers.length > 1 ? "sm:grid-cols-2" : ""}`}
-                >
+                <ul className={`mt-4 grid gap-4 ${speakers.length > 1 ? "sm:grid-cols-2" : ""}`}>
                   {speakers.map((speaker) => (
                     <li
                       key={speaker.id}
@@ -370,7 +368,14 @@ export default function EventDetailPage({
                       )}
                       <span className="min-w-0">
                         <span className="block text-sm font-semibold">
-                          {speaker.url ? (
+                          {!speaker.url && speaker.profileId ? (
+                            <LocaleLink
+                              to={`/coach/${speaker.profileId}`}
+                              className="hover:text-primary"
+                            >
+                              {speaker.name}
+                            </LocaleLink>
+                          ) : speaker.url ? (
                             <a
                               href={speaker.url}
                               target="_blank"

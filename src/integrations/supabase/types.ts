@@ -2948,6 +2948,7 @@ export type Database = {
           id: string
           image_path: string | null
           name: string
+          profile_id: string | null
           updated_at: string
           url: string | null
         }
@@ -2957,6 +2958,7 @@ export type Database = {
           id?: string
           image_path?: string | null
           name: string
+          profile_id?: string | null
           updated_at?: string
           url?: string | null
         }
@@ -2966,10 +2968,26 @@ export type Database = {
           id?: string
           image_path?: string | null
           name?: string
+          profile_id?: string | null
           updated_at?: string
           url?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "event_speakers_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "coach_directory_public"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "event_speakers_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "member_directory_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       event_ticket_tiers: {
         Row: {

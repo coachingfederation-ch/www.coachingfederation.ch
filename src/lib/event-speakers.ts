@@ -11,6 +11,10 @@ export type EventSpeaker = {
   url: string | null;
   imagePath: string | null;
   imageUrl: string | null;
+  /** Set when the speaker is a chapter member with a published coach profile. */
+  profileId: string | null;
+  /** How many events use this speaker (library search only; 0 elsewhere). */
+  usageCount?: number;
 };
 
 /** Short bios keep the section scannable on the public page. */

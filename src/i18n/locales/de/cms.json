@@ -870,28 +870,40 @@
           "description": "Bauen Sie einen lokalen Hub auf, indem Sie Events organisieren, Kontakte knüpfen und das Chapter in Ihrer Region vertreten.",
           "quote": "Ich bin dazugekommen, um mein Netzwerk zu erweitern; ich blieb, weil ich etwas gestalten kann, das der ganzen Profession hilft.",
           "attribution": "Anna M., Community Lead Zürich",
-          "valueTags": ["Netzwerk aufbauen", "Führung entwickeln"]
+          "valueTags": [
+            "Netzwerk aufbauen",
+            "Führung entwickeln"
+          ]
         },
         "eventHost": {
           "title": "Event Host",
           "description": "Helfen Sie bei der Durchführung von Chapter-Events, vom Check-in bis zur Speaker-Betreuung.",
           "quote": "Es sind nur ein paar Stunden im Jahr, und die Energie im Raum bleibt monatelang bei mir.",
           "attribution": "Beat M., Event Host",
-          "valueTags": ["Netzwerk aufbauen", "Der Community etwas zurückgeben"]
+          "valueTags": [
+            "Netzwerk aufbauen",
+            "Der Community etwas zurückgeben"
+          ]
         },
         "contentContributor": {
           "title": "Content Contributor",
           "description": "Teilen Sie Ihre Perspektive durch Insights-Artikel, Interviews oder Social-Media-Beiträge.",
           "quote": "Für das Chapter zu schreiben half mir, meinen eigenen Standpunkt zu schärfen.",
           "attribution": "Carla T., Content Contributor",
-          "valueTags": ["Kontinuierlich lernen", "Die Marke ICF weitertragen"]
+          "valueTags": [
+            "Kontinuierlich lernen",
+            "Die Marke ICF weitertragen"
+          ]
         },
         "liveChat": {
           "title": "Live-Chat-Freiwillige",
           "description": "Seien Sie das erste freundliche Gesicht für Besuchende mit Fragen auf der Website.",
           "quote": "Die Fragen sind oft einfach, aber die Gespräche können bedeutungsvoll sein.",
           "attribution": "Daniel K., Live-Chat-Freiwilliger",
-          "valueTags": ["Der Community etwas zurückgeben", "Die Marke ICF weitertragen"]
+          "valueTags": [
+            "Der Community etwas zurückgeben",
+            "Die Marke ICF weitertragen"
+          ]
         }
       },
       "benefits": {
@@ -912,7 +924,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Projekte leiten", "Von ICFS für die Leitung von Initiativen anerkannt werden"]
+          "items": [
+            "Projekte leiten",
+            "Von ICFS für die Leitung von Initiativen anerkannt werden"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1960,7 +1975,7 @@
       "add": "Speaker hinzufügen",
       "new": "Neuer Speaker",
       "edit": "Speaker bearbeiten",
-      "remove": "Speaker entfernen",
+      "remove": "Von diesem Event entfernen",
       "moveUp": "Nach oben",
       "moveDown": "Nach unten",
       "fieldName": "Name",
@@ -1971,10 +1986,23 @@
       "imageReady": "Foto bereit",
       "save": "Speaker speichern",
       "cancel": "Abbrechen",
-      "hint": "Speaker können für andere Events wiederverwendet werden. Änderungen wirken überall.",
+      "hint": "Entfernen betrifft nur dieses Event. Änderungen an einem Speaker gelten für alle Events, die ihn verwenden.",
       "loadError": "Speaker konnten nicht geladen werden.",
       "saveError": "Speaker konnten nicht gespeichert werden.",
-      "uploadError": "Das Foto konnte nicht hochgeladen werden."
+      "uploadError": "Das Foto konnte nicht hochgeladen werden.",
+      "memberTitle": "Chapter-Mitglieder",
+      "memberSearch": "Mitglieder nach Namen suchen…",
+      "memberHint": "Mitglieder mit veröffentlichtem Coach-Profil. Der Name verlinkt auf das Profil, sofern kein anderer Link gesetzt ist.",
+      "libraryTitle": "Gespeicherte Speaker",
+      "added": "Hinzugefügt",
+      "noMatches": "Keine passenden Profile.",
+      "kindMember": "Mitglied",
+      "kindExternal": "Extern",
+      "usedIn": "In {count} Events verwendet",
+      "deleteFromLibrary": "Aus gespeicherten Speakern löschen",
+      "deleteConfirm": "{name} endgültig löschen? Der Speaker wird aus allen {count} Events entfernt, die ihn verwenden. Dies kann nicht rückgängig gemacht werden.",
+      "deleteAction": "Endgültig löschen",
+      "deleteError": "Speaker konnte nicht gelöscht werden."
     },
     "duplicate": {
       "section": "Duplizieren",
