@@ -279,19 +279,18 @@ save themselves.
 - The webhook route is public because Stripe sends no token — the signature
   check is the boundary.
 
-## Stripe account (own key)
+## Stripe account (built-in payments connection)
 
-Payments run on the chapter's own Stripe account, not Lovable's built-in payments.
+Payments run through the built-in payments connection (Test / Live toggle in the Payments tab).
 
-- Server: `src/lib/stripe.server.ts` uses the `STRIPE_RESTRICTED_API_KEY` secret directly. The key's mode (`rk_live_`/`sk_live_` vs test) decides the environment; a page requesting the other mode gets a clear error.
-- Browser: `STRIPE_PUBLISHABLE_KEY` in `src/lib/stripe.ts` must be the same account and mode. While empty, paid registration is disabled on event pages.
-- Webhook: register `https://new.coachingfederation.ch/api/public/payments/webhook?env=live` (or `?env=sandbox` for a test key) in Stripe with events `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`. Its signing secret is stored as `STRIPE_WEBHOOK_SECRET`.
-- Restricted key permissions needed: Checkout Sessions (write), Customers (write), Products (write), Prices (write), Refunds (write), PaymentIntents (read), Charges (read).
+- Server: `src/lib/stripe.server.ts` `createStripeClient(env)` routes via the connector gateway with `STRIPE_SANDBOX_API_KEY` / `STRIPE_LIVE_API_KEY` + `LOVABLE_API_KEY`. The environment comes from the browser (checkout) or the registration's `payment_environment` (refunds).
+- Browser: `VITE_PAYMENTS_CLIENT_TOKEN` (`pk_test_` in preview, `pk_live_` when published) decides the environment.
+- Webhooks are registered automatically at `/api/public/payments/webhook?env=sandbox|live`; signatures use `PAYMENTS_SANDBOX_WEBHOOK_SECRET` / `PAYMENTS_LIVE_WEBHOOK_SECRET`.
+- Test in preview with card `4242 4242 4242 4242` (any future date, any CVC); `4000 0000 0000 0002` declines. Live checkout needs the go-live steps completed.
 
-## Stripe checkout details (chapter account)
+## Stripe checkout details
 
 - Checkout uses inline `price_data.product_data` — no Stripe Product is created per sale, and no Managed Payments / automatic tax (chapter account, no tax automation).
 - `return_url` uses the request Origin when it is one of our hosts (`*.lovable.app`, localhost, the canonical site), otherwise `SITE_URL`, so preview test purchases return to the preview.
 - Webhook events required on the chapter's endpoint: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`, `charge.refunded`.
 - `charge.refunded` (e.g. a refund issued in the Stripe dashboard) marks the registration refunded; the seat is kept.
-- Paid registration stays disabled until the publishable key is set in `src/lib/stripe.ts` and `STRIPE_WEBHOOK_SECRET` is stored.

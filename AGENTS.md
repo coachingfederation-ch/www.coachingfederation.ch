@@ -23,4 +23,4 @@ public `office@coachingfederation.ch`.
 
 Live member data belongs in the database, behind RLS — not in version control.
 
-- Stripe runs on the chapter's own account via STRIPE_RESTRICTED_API_KEY (direct SDK, no gateway); publishable key lives in src/lib/stripe.ts. Why: the chapter chose its own Stripe account over built-in payments.
+- Stripe runs through the built-in payments connection (gateway, createStripeClient(env)); Test/Live picked by VITE_PAYMENTS_CLIENT_TOKEN and payment_environment. Why: the chapter switched to the console Payments setup with a Test/Live toggle.
