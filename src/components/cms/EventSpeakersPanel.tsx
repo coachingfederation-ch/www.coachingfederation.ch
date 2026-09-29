@@ -299,7 +299,7 @@ export function EventSpeakersPanel({ eventId }: { eventId: string }) {
           <p className="mt-2 text-xs text-muted-foreground">{t("events.speakers.memberHint")}</p>
         </div>
 
-        {/* Saved speaker library (external speakers and members used before) */}
+        {/* Saved external speakers: three most recently used, or search results */}
         <div className="rounded-2xl border border-border p-3">
           <p className="text-xs font-semibold text-muted-foreground">
             {t("events.speakers.libraryTitle")}

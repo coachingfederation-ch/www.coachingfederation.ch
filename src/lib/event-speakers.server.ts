@@ -106,12 +106,39 @@ export async function searchSpeakers(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   client: any,
 ): Promise<EventSpeaker[]> {
+  // Saved library lists external speakers only; members come from member search.
   const cleaned = term.replace(/[%_,()]/g, "").trim();
-  let query = client.from("event_speakers").select(COLUMNS);
-  if (cleaned.length >= 2) query = query.ilike("name", `%${cleaned}%`);
-  const { data, error } = await query.order("name", { ascending: true }).limit(20);
-  if (error) throw new Error(error.message);
-  const rows = (data ?? []) as Row[];
+  let rows: Row[];
+  if (cleaned.length >= 2) {
+    const { data, error } = await client
+      .from("event_speakers")
+      .select(COLUMNS)
+      .is("profile_id", null)
+      .ilike("name", `%${cleaned}%`)
+      .order("name", { ascending: true })
+      .limit(20);
+    if (error) throw new Error(error.message);
+    rows = (data ?? []) as Row[];
+  } else {
+    // No search term: the three most recently used external speakers.
+    const { data: recent, error: recentError } = await client
+      .from("event_speaker_links")
+      .select("speaker_id, created_at, event_speakers!inner(profile_id)")
+      .is("event_speakers.profile_id", null)
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (recentError) throw new Error(recentError.message);
+    const ids: string[] = [];
+    for (const l of (recent ?? []) as { speaker_id: string }[]) {
+      if (!ids.includes(l.speaker_id)) ids.push(l.speaker_id);
+      if (ids.length === 3) break;
+    }
+    if (ids.length === 0) return [];
+    const { data, error } = await client.from("event_speakers").select(COLUMNS).in("id", ids);
+    if (error) throw new Error(error.message);
+    const byId = new Map(((data ?? []) as Row[]).map((r) => [r.id, r]));
+    rows = ids.map((id) => byId.get(id)).filter((r): r is Row => Boolean(r));
+  }
   const speakers = await withImages(rows);
   if (rows.length === 0) return speakers;
 
