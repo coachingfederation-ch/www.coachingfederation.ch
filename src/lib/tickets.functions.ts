@@ -79,7 +79,7 @@ export const confirmCheckoutSession = createServerFn({ method: "POST" })
       const stripe = createStripeClient(data.environment);
       const session = await stripe.checkout.sessions.retrieve(data.sessionId);
       if (session.payment_status && session.payment_status !== "unpaid") {
-        await finalizePaidRegistration(session.id);
+        await finalizePaidRegistration(session.id, session.amount_total);
         return { status: "paid" };
       }
       if (session.status === "expired") {
