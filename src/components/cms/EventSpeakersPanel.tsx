@@ -248,9 +248,10 @@ export function EventSpeakersPanel({ eventId }: { eventId: string }) {
               disabled={busy}
               onClick={() => void commit(speakers.filter((s) => s.id !== speaker.id))}
               aria-label={t("events.speakers.remove")}
-              className="rounded p-1 text-muted-foreground hover:text-destructive disabled:opacity-50"
+              title={t("events.speakers.remove")}
+              className="rounded p-1 text-muted-foreground hover:text-foreground disabled:opacity-50"
             >
-              <Trash2 className="h-3.5 w-3.5" />
+              <X className="h-3.5 w-3.5" />
             </button>
           </li>
         ))}
@@ -328,7 +329,9 @@ export function EventSpeakersPanel({ eventId }: { eventId: string }) {
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm">{c.name}</span>
                     <span className="block text-xs text-muted-foreground">
-                      {c.profileId ? t("events.speakers.kindMember") : t("events.speakers.kindExternal")}
+                      {c.profileId
+                        ? t("events.speakers.kindMember")
+                        : t("events.speakers.kindExternal")}
                       {" · "}
                       {t("events.speakers.usedIn").replace("{count}", String(c.usageCount ?? 0))}
                     </span>

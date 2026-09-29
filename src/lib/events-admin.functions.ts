@@ -666,9 +666,7 @@ export const saveEventSpeaker = createServerFn({ method: "POST" })
  */
 export const saveMemberSpeaker = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) =>
-    z.object({ profileId: z.string().uuid() }).parse(input),
-  )
+  .inputValidator((input: unknown) => z.object({ profileId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
     await assertOrganizer(context);
     const { data: existing } = await context.supabase

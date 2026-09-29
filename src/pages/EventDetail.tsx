@@ -370,7 +370,15 @@ export default function EventDetailPage({
                       )}
                       <span className="min-w-0">
                         <span className="block text-sm font-semibold">
-                          {speaker.url ? (
+                          {!speaker.url && speaker.profileId ? (
+                            <Link
+                              to="/coach/$profileId"
+                              params={{ profileId: speaker.profileId }}
+                              className="hover:text-primary"
+                            >
+                              {speaker.name}
+                            </Link>
+                          ) : speaker.url ? (
                             <a
                               href={speaker.url}
                               target="_blank"
