@@ -1,18 +1,15 @@
 /**
- * Browser-side Stripe.js loader for the chapter's own Stripe account.
+ * Browser-side Stripe.js loader for the built-in payments connection.
  *
- * The publishable key is public by design and must belong to the same Stripe
- * account (and mode) as the server's STRIPE_RESTRICTED_API_KEY. Its prefix
- * decides test vs live; an empty key disables paid registration on the page.
+ * VITE_PAYMENTS_CLIENT_TOKEN is pk_test_… in the preview and pk_live_… on the
+ * published site; its prefix decides sandbox vs live. Missing = paid
+ * registration disabled on the page.
  */
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 
 export type StripeEnv = "sandbox" | "live";
 
-// Chapter Stripe account publishable key (pk_live_… or pk_test_…).
-const STRIPE_PUBLISHABLE_KEY = "";
-
-const clientToken: string | undefined = STRIPE_PUBLISHABLE_KEY || undefined;
+const clientToken: string | undefined = import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN || undefined;
 
 export function paymentsConfigured() {
   return Boolean(clientToken?.startsWith("pk_test_") || clientToken?.startsWith("pk_live_"));
