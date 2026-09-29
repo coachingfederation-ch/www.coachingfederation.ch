@@ -166,6 +166,19 @@ can be presented differently on two events.
 
 ## Speakers
 
+**Member vs external speakers.** `event_speakers.profile_id` (nullable, unique,
+`ON DELETE SET NULL`) links a speaker to a member's directory profile.
+`saveMemberSpeaker` reuses or creates that one entry, seeded from
+`coach_directory_public` (name, tagline). On read, the profile link and the
+profile photo (fallback when the speaker has no own photo) are only exposed while
+the profile is still published; the public page links the name to
+`/coach/<id>` unless a custom URL is set.
+
+**Remove vs delete.** The X on an attached speaker only unlinks it from the
+event. The trash icon in "Saved speakers" calls `deleteEventSpeaker`, which
+deletes the library row permanently; links cascade, so it disappears from every
+event. The UI confirms with the usage count from `searchSpeakers`.
+
 Speakers are a chapter-wide library (`event_speakers`) linked to events through
 `event_speaker_links` (ordered, cascade-deleted with the event). A speaker has a
 name, optional short bio (max 400 characters), optional link and an optional
