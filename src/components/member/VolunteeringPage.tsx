@@ -24,9 +24,21 @@ import {
   Rocket,
   TrendingUp,
   Trophy,
+  UserPlus,
   Users,
 } from "lucide-react";
 import { useCms } from "@/i18n/cms";
+import {
+  Button,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df";
 import { getVolunteeringInfo } from "@/lib/volunteering-info.functions";
 import { LiveChatVolunteerControls } from "./LiveChatVolunteerControls";
 
@@ -38,6 +50,7 @@ const CTA_MUTED =
 
 const OPPORTUNITIES = [
   { key: "communityLead", icon: Users },
+  { key: "communityTeamMember", icon: UserPlus },
   { key: "eventHost", icon: CalendarDays },
   { key: "contentContributor", icon: PenLine },
   { key: "liveChat", icon: MessageCircle },
@@ -132,6 +145,68 @@ export function VolunteeringPage() {
                     &mdash; {attribution}
                   </footer>
                 </blockquote>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm" className="mt-4">
+                      {t("member.volunteering.opportunities.details.cta")}
+                      <ArrowRight className="h-4 w-4" aria-hidden />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>{title}</DialogTitle>
+                      <DialogDescription>{description}</DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 text-sm">
+                      <p>
+                        <span className="font-bold">
+                          {t("member.volunteering.opportunities.details.commitment")}:
+                        </span>{" "}
+                        {t(`member.volunteering.opportunities.${key}.commitment`)}
+                      </p>
+                      <div>
+                        <p className="font-bold">
+                          {t("member.volunteering.opportunities.details.responsibilities")}
+                        </p>
+                        <ul className="mt-1 list-disc space-y-1 pl-5 text-muted-foreground">
+                          {tList<string>(
+                            `member.volunteering.opportunities.${key}.responsibilities`,
+                          ).map((item, idx) => (
+                            <li key={idx}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="font-bold">
+                          {t("member.volunteering.opportunities.details.profile")}
+                        </p>
+                        <ul className="mt-1 list-disc space-y-1 pl-5 text-muted-foreground">
+                          {tList<string>(`member.volunteering.opportunities.${key}.profile`).map(
+                            (item, idx) => (
+                              <li key={idx}>{item}</li>
+                            ),
+                          )}
+                        </ul>
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button variant="outline">
+                          {t("member.volunteering.opportunities.details.close")}
+                        </Button>
+                      </DialogClose>
+                      <Button asChild>
+                        <a
+                          href={`mailto:office@coachingfederation.ch?subject=${encodeURIComponent(title)}`}
+                          target="_top"
+                        >
+                          {t("member.volunteering.opportunities.details.interest")}
+                          <Mail className="h-4 w-4" aria-hidden />
+                        </a>
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
                 {/* The two cards that carry a real action: writing for the chapter
                     is an email away, and an activated live-chat volunteer gets
                     their console controls right where the role is described. */}
