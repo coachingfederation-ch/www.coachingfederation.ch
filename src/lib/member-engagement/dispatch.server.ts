@@ -19,6 +19,8 @@ import {
 } from "@/lib/email-templates/member-campaign-copy";
 import { CAMPAIGN_TEMPLATE_NAMES } from "@/lib/email-templates/member-campaigns";
 import {
+  GRACE_CAMPAIGNS,
+  isAutoRenewing,
   isDormant,
   type EngagementCampaign,
   type EngagementCampaignKey,
@@ -155,7 +157,7 @@ async function deliverSend(
   {
     const { data: member } = await supabaseAdmin
       .from("members")
-      .select("id, first_name, full_name, email, activity_state, correspondence_locale")
+      .select("id, first_name, full_name, email, activity_state, correspondence_locale, diagnostics")
       .eq("id", send.member_id as string)
       .maybeSingle();
 
@@ -175,6 +177,14 @@ async function deliverSend(
 
     if (!member?.email || member.activity_state === "anonymized") {
       await finish("skipped", "No usable recipient address");
+      result.skipped += 1;
+      return;
+    }
+
+    // Safety net for rows queued before the member's auto-renewal flag was
+    // known or switched on: a renewing membership never gets a lapse email.
+    if (GRACE_CAMPAIGNS.includes(campaign.key) && isAutoRenewing(member.diagnostics)) {
+      await finish("skipped", "Auto-renewal active");
       result.skipped += 1;
       return;
     }

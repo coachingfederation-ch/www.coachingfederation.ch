@@ -3,6 +3,7 @@
  * Shows the read-only synced fields and the directory eligibility flags.
  */
 import { Check, X } from "lucide-react";
+import { isAutoRenewing } from "@/lib/member-engagement";
 import type { getMemberDetail } from "@/lib/members.functions";
 import {
   directoryEligibilityReason,
@@ -67,7 +68,7 @@ export function MemberSyncStatusPanel({
   const autoRenewal =
     diag.auto_renewal == null
       ? null
-      : /^y/i.test(diag.auto_renewal)
+      : isAutoRenewing(diag)
         ? t("members.detail.yes")
         : t("members.detail.no");
   return (
