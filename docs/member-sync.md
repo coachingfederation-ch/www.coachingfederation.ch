@@ -194,6 +194,11 @@ Two things to be clear about:
   "Y", the sweep does not queue them and they are left out of the "past expiry"
   count. Rows already queued are marked skipped ("Auto-renewal active") at send
   time. A missing value counts as no.
+- **Every grace email is actionable.** All three carry the same numbered
+  renewal block (`renewSteps()` in `src/lib/email-templates/member-grace-copy.ts`):
+  sign in at coachingfederation.org, renew, switch on auto-renewal. German copy
+  uses the informal "Du". The steps use generic wording until the exact ICF
+  menu labels are confirmed.
   Because they are ordinary campaign rows, the Member engagement screen's mode,
   daily cap, queue and history apply, sends go through `sendMemberEmail`
   (suppression, test redirect, `member_email_log`), and copy is written in the
