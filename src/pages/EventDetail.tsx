@@ -300,7 +300,7 @@ export default function EventDetailPage({
                           <img
                             src={host.imageUrl}
                             alt=""
-                            className="h-12 w-12 shrink-0 rounded-full object-cover"
+                            className="h-12 w-12 shrink-0 rounded-full border border-border/70 bg-card object-contain p-1"
                           />
                         ) : (
                           <span
@@ -358,7 +358,7 @@ export default function EventDetailPage({
                         <img
                           src={speaker.imageUrl}
                           alt=""
-                          className="h-14 w-14 shrink-0 rounded-full object-cover"
+                          className="h-14 w-14 shrink-0 rounded-full border border-border/70 bg-card object-contain p-1"
                         />
                       ) : (
                         <span

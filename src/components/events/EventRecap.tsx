@@ -110,7 +110,7 @@ export function EventRecap({
                         src={photo.url}
                         alt={photo.alt ?? ""}
                         loading="lazy"
-                        className="aspect-4/3 w-full object-cover transition duration-300 group-hover:scale-105"
+                        className="aspect-4/3 w-full bg-muted object-contain transition duration-300 group-hover:scale-105"
                       />
                       {photo.is_ai ? <AiBadge className="absolute bottom-2 left-2" /> : null}
                     </button>
