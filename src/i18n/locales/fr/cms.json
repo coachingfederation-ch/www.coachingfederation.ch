@@ -873,6 +873,40 @@
           "valueTags": [
             "Développer votre réseau",
             "Développer votre leadership"
+          ],
+          "commitment": "4 à 6 heures par mois",
+          "responsibilities": [
+            "Planifier et animer des rencontres régionales",
+            "Coordonner une petite équipe de bénévoles",
+            "Représenter le chapitre lors d'événements locaux et auprès de partenaires",
+            "Partager les temps forts de la communauté avec le comité"
+          ],
+          "profile": [
+            "Membre ICF avec un solide réseau local",
+            "Aime rassembler les gens",
+            "À l'aise pour guider une petite équipe"
+          ]
+        },
+        "communityTeamMember": {
+          "title": "Membre de l'équipe communauté",
+          "description": "Soutenez votre responsable de communauté régionale, co-animez des rencontres locales et aidez les nouveaux membres à se sentir chez eux.",
+          "quote": "J'aide à une rencontre par trimestre et j'ai rencontré plus de coachs qu'en des années seule.",
+          "attribution": "Elena R., membre de l'équipe communauté",
+          "valueTags": [
+            "Développer votre réseau",
+            "Redonner à la communauté"
+          ],
+          "commitment": "2 à 4 heures par mois",
+          "responsibilities": [
+            "Aider à planifier et co-animer des rencontres locales",
+            "Accueillir les nouveaux membres et les présenter à leurs pairs",
+            "Soutenir la ou le responsable pour la logistique et les invitations",
+            "Recueillir idées et retours des membres de votre région"
+          ],
+          "profile": [
+            "Membre ICF, tout niveau de Credential",
+            "Bienveillant·e, fiable et curieux·se des autres",
+            "Aucune expérience de leadership requise"
           ]
         },
         "eventHost": {
@@ -883,6 +917,16 @@
           "valueTags": [
             "Développer votre réseau",
             "Rendre à la communauté"
+          ],
+          "commitment": "Quelques heures par événement",
+          "responsibilities": [
+            "Accueillir les participant·es et gérer l'enregistrement",
+            "Soutenir les intervenant·es avant et pendant la session",
+            "Veiller au timing et à l'installation de la salle"
+          ],
+          "profile": [
+            "Membre ICF qui aime les rencontres",
+            "Disponible pour au moins deux événements par an"
           ]
         },
         "contentContributor": {
@@ -893,6 +937,16 @@
           "valueTags": [
             "Apprendre en continu",
             "Porter la marque ICF"
+          ],
+          "commitment": "Flexible, par article",
+          "responsibilities": [
+            "Rédiger des articles Insights ou donner des interviews",
+            "Proposer des sujets qui comptent pour les coachs en Suisse",
+            "Relire les brouillons avec l'équipe éditoriale"
+          ],
+          "profile": [
+            "Membre ICF avec un point de vue à partager",
+            "À l'aise pour écrire en DE, FR, IT ou EN"
           ]
         },
         "liveChat": {
@@ -903,7 +957,25 @@
           "valueTags": [
             "Rendre à la communauté",
             "Porter la marque ICF"
+          ],
+          "commitment": "1 à 2 heures par semaine",
+          "responsibilities": [
+            "Répondre aux questions des visiteurs dans le chat du site",
+            "Orienter vers les coachs, les événements et l'adhésion",
+            "Transmettre les demandes complexes au secrétariat"
+          ],
+          "profile": [
+            "Membre ICF qui connaît bien le chapitre",
+            "Aimable et clair·e à l'écrit"
           ]
+        },
+        "details": {
+          "cta": "Voir la description du poste",
+          "commitment": "Engagement en temps",
+          "responsibilities": "Vos missions",
+          "profile": "Profil recherché",
+          "interest": "Manifester mon intérêt",
+          "close": "Fermer"
         }
       },
       "benefits": {
