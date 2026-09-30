@@ -22,6 +22,7 @@
  * GRACE_FINAL_NOTICE_DAYS, ICF_GRACE_MONTHS.
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { isAutoRenewing } from "./member-engagement";
 
 /** Months ICF Global keeps a lapsed membership in the feed after expiry. */
 export const ICF_GRACE_MONTHS = 2;
@@ -64,6 +65,7 @@ type LapsedMember = {
   email: string | null;
   activity_state: string | null;
   membership_expiration_date: string | null;
+  diagnostics: unknown;
 };
 
 /** Open queue rows — never resolved, so a returned member drops out at once. */
@@ -83,17 +85,23 @@ export function icfGraceEnd(expiryDate: string): string {
   return end.toISOString().slice(0, 10);
 }
 
-/** Members whose membership expiry has passed and who still have a record. */
+/**
+ * Members whose membership expiry has passed and who still have a record.
+ * Members on auto-renewal are left out: their membership renews by itself,
+ * so they get no grace-period emails and do not count as past expiry.
+ */
 async function lapsedMembers(): Promise<LapsedMember[]> {
   const today = new Date().toISOString().slice(0, 10);
   const { data, error } = await supabaseAdmin
     .from("members")
-    .select("id, email, activity_state, membership_expiration_date")
+    .select("id, email, activity_state, membership_expiration_date, diagnostics")
     .not("membership_expiration_date", "is", null)
     .lte("membership_expiration_date", today)
     .neq("activity_state", "anonymized");
   if (error) throw error;
-  return (data ?? []) as unknown as LapsedMember[];
+  return ((data ?? []) as unknown as LapsedMember[]).filter(
+    (member) => !isAutoRenewing(member.diagnostics),
+  );
 }
 
 type PendingSend = {
