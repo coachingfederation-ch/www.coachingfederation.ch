@@ -424,7 +424,7 @@ export function EventRecapEditor({
                 <img
                   src={photo.preview}
                   alt=""
-                  className="h-20 w-28 shrink-0 rounded-xl bg-muted object-contain"
+                  className="h-20 w-28 shrink-0 rounded-xl object-cover"
                 />
               ) : (
                 <span className="h-20 w-28 shrink-0 rounded-xl bg-secondary" aria-hidden />

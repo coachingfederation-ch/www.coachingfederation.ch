@@ -189,11 +189,6 @@ Two things to be clear about:
   and `grace_final_warning` 7 days before expiry + 2 months. Each row is
   dedupe-keyed `<campaign>:<member_id>:<expiry_date>`, so reruns are harmless and a
   member who renews gets a new expiry date and simply drops out of the sequence.
-- **Members on auto-renewal get none of these emails.** When the feed's
-  `Auto_Renewal` tag (stored as `members.diagnostics.auto_renewal`) starts with
-  "Y", the sweep does not queue them and they are left out of the "past expiry"
-  count. Rows already queued are marked skipped ("Auto-renewal active") at send
-  time. A missing value counts as no.
   Because they are ordinary campaign rows, the Member engagement screen's mode,
   daily cap, queue and history apply, sends go through `sendMemberEmail`
   (suppression, test redirect, `member_email_log`), and copy is written in the

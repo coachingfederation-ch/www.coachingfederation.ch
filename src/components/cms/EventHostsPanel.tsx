@@ -120,7 +120,7 @@ export function EventHostsPanel({ eventId }: { eventId: string }) {
           <li key={host.profileId} className="py-2">
             <div className="flex items-center gap-3">
               {host.imageUrl ? (
-                <img src={host.imageUrl} alt="" className="h-9 w-9 rounded-full border border-border bg-card object-contain p-0.5" />
+                <img src={host.imageUrl} alt="" className="h-9 w-9 rounded-full object-cover" />
               ) : (
                 <span className="h-9 w-9 rounded-full bg-secondary" aria-hidden />
               )}

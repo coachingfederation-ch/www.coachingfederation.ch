@@ -609,7 +609,7 @@ export function EventContentSection({
                 <img
                   src={event.image_url}
                   alt=""
-                  className="h-32 w-full max-w-xs rounded-xl border border-border bg-muted object-contain"
+                  className="h-32 w-full max-w-xs rounded-xl border border-border object-cover"
                 />
                 {event.image_credit_name ? (
                   <p className="mt-1 text-xs text-muted-foreground">

@@ -198,7 +198,7 @@ export function EventSpeakersPanel({ eventId }: { eventId: string }) {
         {speakers.map((speaker, index) => (
           <li key={speaker.id} className="flex items-center gap-3 py-2">
             {speaker.imageUrl ? (
-              <img src={speaker.imageUrl} alt="" className="h-9 w-9 rounded-full border border-border bg-card object-contain p-0.5" />
+              <img src={speaker.imageUrl} alt="" className="h-9 w-9 rounded-full object-cover" />
             ) : (
               <span className="h-9 w-9 rounded-full bg-secondary" aria-hidden />
             )}
