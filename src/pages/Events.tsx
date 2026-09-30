@@ -416,7 +416,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                     <img
                       src={featured.image_url}
                       alt=""
-                      className="absolute inset-0 h-full w-full object-cover"
+                      className="absolute inset-0 h-full w-full object-contain p-4"
                       loading="lazy"
                     />
                   ) : (
@@ -511,7 +511,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
                           <img
                             src={e.image_url}
                             alt=""
-                            className="absolute inset-0 h-full w-full object-cover"
+                            className="absolute inset-0 h-full w-full object-contain p-4"
                             loading="lazy"
                           />
                         ) : (
