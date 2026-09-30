@@ -873,6 +873,40 @@
           "valueTags": [
             "Netzwerk aufbauen",
             "Führung entwickeln"
+          ],
+          "commitment": "4 bis 6 Stunden pro Monat",
+          "responsibilities": [
+            "Regionale Community-Treffen planen und durchführen",
+            "Ein kleines Team von Freiwilligen koordinieren",
+            "Das Chapter bei lokalen Events und Partnern vertreten",
+            "Highlights der Community an den Vorstand weitergeben"
+          ],
+          "profile": [
+            "ICF-Mitglied mit starkem lokalem Netzwerk",
+            "Bringt gerne Menschen zusammen",
+            "Führt gerne ein kleines Team"
+          ]
+        },
+        "communityTeamMember": {
+          "title": "Community-Teammitglied",
+          "description": "Unterstützen Sie Ihren regionalen Community Lead, gestalten Sie lokale Treffen mit und helfen Sie neuen Mitgliedern, sich willkommen zu fühlen.",
+          "quote": "Ich helfe bei einem Treffen pro Quartal und habe mehr Coaches kennengelernt als in Jahren allein.",
+          "attribution": "Elena R., Community-Teammitglied",
+          "valueTags": [
+            "Netzwerk aufbauen",
+            "Der Community etwas zurückgeben"
+          ],
+          "commitment": "2 bis 4 Stunden pro Monat",
+          "responsibilities": [
+            "Lokale Community-Treffen mitplanen und mitgestalten",
+            "Neue Mitglieder begrüssen und vernetzen",
+            "Den Community Lead bei Organisation und Einladungen unterstützen",
+            "Ideen und Feedback aus Ihrer Region sammeln"
+          ],
+          "profile": [
+            "ICF-Mitglied, jede Credential-Stufe",
+            "Freundlich, zuverlässig und neugierig auf Menschen",
+            "Keine Führungserfahrung nötig"
           ]
         },
         "eventHost": {
@@ -883,6 +917,16 @@
           "valueTags": [
             "Netzwerk aufbauen",
             "Der Community etwas zurückgeben"
+          ],
+          "commitment": "Einige Stunden pro Event",
+          "responsibilities": [
+            "Teilnehmende begrüssen und den Check-in betreuen",
+            "Speaker vor und während der Session unterstützen",
+            "Für Zeitplan und Raumaufbau sorgen"
+          ],
+          "profile": [
+            "ICF-Mitglied, das gerne Menschen trifft",
+            "Verfügbar für mindestens zwei Events pro Jahr"
           ]
         },
         "contentContributor": {
@@ -893,6 +937,16 @@
           "valueTags": [
             "Kontinuierlich lernen",
             "Die Marke ICF weitertragen"
+          ],
+          "commitment": "Flexibel, pro Artikel",
+          "responsibilities": [
+            "Insights-Artikel schreiben oder Interviews geben",
+            "Themen vorschlagen, die Coaches in der Schweiz bewegen",
+            "Entwürfe mit dem Redaktionsteam überarbeiten"
+          ],
+          "profile": [
+            "ICF-Mitglied mit einer eigenen Perspektive",
+            "Schreibt gerne auf DE, FR, IT oder EN"
           ]
         },
         "liveChat": {
@@ -903,7 +957,25 @@
           "valueTags": [
             "Der Community etwas zurückgeben",
             "Die Marke ICF weitertragen"
+          ],
+          "commitment": "1 bis 2 Stunden pro Woche",
+          "responsibilities": [
+            "Fragen von Besuchenden im Website-Chat beantworten",
+            "Auf Coaches, Events und Mitgliedschaft hinweisen",
+            "Komplexe Anfragen an die Geschäftsstelle weitergeben"
+          ],
+          "profile": [
+            "ICF-Mitglied, das das Chapter gut kennt",
+            "Freundlich und klar im Schreiben"
           ]
+        },
+        "details": {
+          "cta": "Stellenbeschreibung ansehen",
+          "commitment": "Zeitaufwand",
+          "responsibilities": "Ihre Aufgaben",
+          "profile": "Wen wir suchen",
+          "interest": "Interesse bekunden",
+          "close": "Schliessen"
         }
       },
       "benefits": {

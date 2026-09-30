@@ -873,6 +873,40 @@
           "valueTags": [
             "Build your network",
             "Offer leadership development"
+          ],
+          "commitment": "4 to 6 hours a month",
+          "responsibilities": [
+            "Plan and host regional community gatherings",
+            "Coordinate a small team of community volunteers",
+            "Represent the chapter at local events and with partners",
+            "Share community highlights with the board"
+          ],
+          "profile": [
+            "ICF member with a strong local network",
+            "Enjoys bringing people together",
+            "Comfortable leading a small team"
+          ]
+        },
+        "communityTeamMember": {
+          "title": "Community Team Member",
+          "description": "Support your regional community lead, co-host local gatherings, and help new members feel at home.",
+          "quote": "I help with one gathering a quarter and have met more coaches than in years of working alone.",
+          "attribution": "Elena R., Community Team Member",
+          "valueTags": [
+            "Build your network",
+            "Give back to the community"
+          ],
+          "commitment": "2 to 4 hours a month",
+          "responsibilities": [
+            "Help plan and co-host local community gatherings",
+            "Welcome new members and introduce them to peers",
+            "Support the community lead with logistics and invitations",
+            "Collect ideas and feedback from members in your region"
+          ],
+          "profile": [
+            "ICF member, any credential level",
+            "Friendly, reliable, and curious about people",
+            "No leadership experience needed"
           ]
         },
         "eventHost": {
@@ -883,6 +917,16 @@
           "valueTags": [
             "Build your network",
             "Give back to the community"
+          ],
+          "commitment": "A few hours per event",
+          "responsibilities": [
+            "Welcome participants and manage check-in",
+            "Support speakers before and during the session",
+            "Keep the event on time and help with the room setup"
+          ],
+          "profile": [
+            "ICF member who enjoys meeting people",
+            "Available for at least two events a year"
           ]
         },
         "contentContributor": {
@@ -893,6 +937,16 @@
           "valueTags": [
             "Gain continuous learning",
             "Be an extension of the ICF brand"
+          ],
+          "commitment": "Flexible, per article",
+          "responsibilities": [
+            "Write Insights articles or give interviews",
+            "Suggest topics that matter to coaches in Switzerland",
+            "Review drafts with the editorial team"
+          ],
+          "profile": [
+            "ICF member with a point of view to share",
+            "Comfortable writing in DE, FR, IT, or EN"
           ]
         },
         "liveChat": {
@@ -903,7 +957,25 @@
           "valueTags": [
             "Give back to the community",
             "Be an extension of the ICF brand"
+          ],
+          "commitment": "1 to 2 hours a week",
+          "responsibilities": [
+            "Answer visitor questions in the website chat",
+            "Point visitors to coaches, events, and membership information",
+            "Pass complex requests to the chapter office"
+          ],
+          "profile": [
+            "ICF member who knows the chapter well",
+            "Friendly and clear in writing"
           ]
+        },
+        "details": {
+          "cta": "View job description",
+          "commitment": "Time commitment",
+          "responsibilities": "What you do",
+          "profile": "Who we're looking for",
+          "interest": "Express interest",
+          "close": "Close"
         }
       },
       "benefits": {
