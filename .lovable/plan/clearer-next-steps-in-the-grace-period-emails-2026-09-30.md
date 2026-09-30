@@ -20,7 +20,7 @@ Tone by email:
 ## Wording fixes that come with this
 
 - The warnings currently say your membership "no longer appears in the register". Under the new expiry-based schedule, members are still in the ICF feed when these go out, so the wording changes to "your membership expired on …".
-- German form of address: the warnings use "Du" but the re-engagement email uses "Sie". **We'll switch all three to "Sie" to match the other member emails, unless you tell us otherwise.**
+- German form of address: the warnings use "Du" but the re-engagement email uses "Sie". All three will use the informal "Du".
 - Members with auto-renewal switched on already get none of these emails. That doesn't change.
 
 ## Open point

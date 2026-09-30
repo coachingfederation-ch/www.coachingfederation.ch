@@ -11,7 +11,7 @@
  * (`member-engagement.tsx`) — so no markup can break a send.
  */
 import type { EngagementCampaignKey } from "@/lib/member-engagement";
-import { graceNoticeCopyWithDate } from "./member-grace-copy";
+import { graceNoticeCopyWithDate, renewSteps } from "./member-grace-copy";
 
 export type CampaignLocale = "en" | "de" | "fr" | "it";
 
@@ -45,7 +45,7 @@ const FALLBACK_NAME: Record<CampaignLocale, string> = {
 /** Used only if a warning is somehow queued without its date. */
 const FALLBACK_DATE: Record<CampaignLocale, string> = {
   en: "the date shown in your Member Area",
-  de: "dem in Ihrem Mitgliederbereich genannten Datum",
+  de: "dem in Deinem Mitgliederbereich genannten Datum",
   fr: "la date indiquée dans votre espace membre",
   it: "la data indicata nella tua area membri",
 };
@@ -194,42 +194,50 @@ ${SIGNOFF.it}`,
 
   grace_reengagement: {
     en: (v, l) => ({
-      subject: "We would like to stay in touch",
+      subject: "Renew your ICF membership in a few minutes",
       body: `Hi ${name(v, l)},
 
-Your ICF membership no longer appears in our chapter records, so your Member Area access will end on ${v.grace_end_date ?? "the date shown in your Member Area"}.
+Your ICF membership has expired. Your access to The Switzerland Chapter of ICF stays open until ${v.grace_end_date ?? FALLBACK_DATE.en}, so there is still time to renew.
 
-If that was not your intention, or if you would simply like to talk it through, one of our chapter leaders is happy to have a conversation with you: ${v.leader_link ?? ""}
+${renewSteps("en")}
+
+If you would like to talk it through first, one of our chapter leaders is happy to have a conversation with you: ${v.leader_link ?? ""}
 
 ${SIGNOFF.en}`,
     }),
     de: (v, l) => ({
-      subject: "Wir bleiben gerne in Kontakt",
+      subject: "Erneuere Deine ICF Mitgliedschaft in wenigen Minuten",
       body: `Hallo ${name(v, l)},
 
-Ihre ICF-Mitgliedschaft erscheint nicht mehr in unseren Chapter-Daten. Ihr Zugang zum Mitgliederbereich endet deshalb am ${v.grace_end_date ?? "dem in Ihrem Mitgliederbereich genannten Datum"}.
+Deine ICF Mitgliedschaft ist abgelaufen. Dein Zugang zum Switzerland Chapter of ICF bleibt bis am ${v.grace_end_date ?? "dem in Deinem Mitgliederbereich genannten Datum"} offen, Du hast also noch Zeit zu erneuern.
 
-Falls das nicht Ihre Absicht war oder Sie einfach darüber sprechen möchten: Eine unserer Chapter-Verantwortlichen nimmt sich gerne Zeit für ein Gespräch: ${v.leader_link ?? ""}
+${renewSteps("de")}
+
+Wenn Du vorher darüber sprechen möchtest, nimmt sich eine unserer Chapter-Verantwortlichen gerne Zeit für ein Gespräch: ${v.leader_link ?? ""}
 
 ${SIGNOFF.de}`,
     }),
     fr: (v, l) => ({
-      subject: "Nous aimerions rester en contact",
+      subject: "Renouvelez votre adhésion ICF en quelques minutes",
       body: `Bonjour ${name(v, l)},
 
-Votre adhésion ICF n'apparaît plus dans les données de notre chapitre. Votre accès à l'espace membre prendra donc fin le ${v.grace_end_date ?? "à la date indiquée dans votre espace membre"}.
+Votre adhésion ICF est arrivée à échéance. Votre accès à The Switzerland Chapter of ICF reste ouvert jusqu'au ${v.grace_end_date ?? FALLBACK_DATE.fr} : vous avez encore le temps de renouveler.
 
-Si ce n'était pas votre intention, ou si vous souhaitez simplement en parler, l'un de nos responsables se fera un plaisir d'échanger avec vous : ${v.leader_link ?? ""}
+${renewSteps("fr")}
+
+Si vous souhaitez d'abord en parler, l'un de nos responsables se fera un plaisir d'échanger avec vous : ${v.leader_link ?? ""}
 
 ${SIGNOFF.fr}`,
     }),
     it: (v, l) => ({
-      subject: "Ci piacerebbe restare in contatto",
+      subject: "Rinnova la tua iscrizione ICF in pochi minuti",
       body: `Ciao ${name(v, l)},
 
-La tua iscrizione a ICF non compare più nei dati del nostro chapter, quindi il tuo accesso all'area membri terminerà il ${v.grace_end_date ?? "nella data indicata nella tua area membri"}.
+La tua iscrizione a ICF è scaduta. Il tuo accesso a The Switzerland Chapter of ICF resta aperto fino al ${v.grace_end_date ?? FALLBACK_DATE.it}, quindi hai ancora tempo per rinnovare.
 
-Se non era questa la tua intenzione, o se semplicemente vuoi parlarne, una delle persone che guidano il chapter sarà lieta di ascoltarti: ${v.leader_link ?? ""}
+${renewSteps("it")}
+
+Se preferisci parlarne prima, una delle persone che guidano il chapter sarà lieta di ascoltarti: ${v.leader_link ?? ""}
 
 ${SIGNOFF.it}`,
     }),
