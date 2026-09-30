@@ -52,7 +52,7 @@ export function EventHeroSurface({
             src={imageUrl}
             alt=""
             aria-hidden
-            className="absolute inset-0 -z-20 h-full w-full object-cover"
+            className="absolute inset-0 -z-20 h-full w-full object-contain object-right"
           />
           <div
             className="absolute inset-0 -z-10 bg-hero/80 md:bg-gradient-to-r md:from-hero/90 md:via-hero/80 md:to-hero/40"
