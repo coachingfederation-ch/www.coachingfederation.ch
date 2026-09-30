@@ -59,3 +59,19 @@ export function credentialRank(slug: string | null | undefined): number {
   if (!slug) return -1;
   return (CREDENTIAL_LADDER as readonly string[]).indexOf(slug.toUpperCase());
 }
+
+/** Grace-period campaigns that must never reach a member on auto-renewal. */
+export const GRACE_CAMPAIGNS: readonly EngagementCampaignKey[] = [
+  "grace_reengagement",
+  "grace_first_warning",
+  "grace_final_warning",
+];
+
+/**
+ * True when the ICF feed's Auto_Renewal tag (kept verbatim in
+ * `members.diagnostics.auto_renewal`) says yes. A missing value counts as no.
+ */
+export function isAutoRenewing(diagnostics: unknown): boolean {
+  const value = (diagnostics as Record<string, unknown> | null)?.["auto_renewal"];
+  return typeof value === "string" && /^y/i.test(value.trim());
+}
