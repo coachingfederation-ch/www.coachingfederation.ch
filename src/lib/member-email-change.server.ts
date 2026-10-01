@@ -172,6 +172,38 @@ export async function loadPendingEmailChange(userId: string): Promise<PendingEma
   };
 }
 
+/**
+ * Asks the auth provider to send its email-change confirmation link, acting as
+ * the member through their own (already verified) access token.
+ *
+ * Why not `context.supabase.auth.updateUser`: the middleware's server client is
+ * stateless (no stored session), and supabase-js refuses `updateUser` without
+ * one ("Auth session missing") before any request is made. Calling the user
+ * endpoint directly with the bearer token is the same operation, as the member.
+ */
+export async function requestEmailChange(
+  accessToken: string,
+  email: string,
+  redirectTo: string,
+): Promise<{ ok: true } | { ok: false; status: number; code: string | null }> {
+  const base = process.env["SUPABASE_URL"]!;
+  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
+  const url = new URL("/auth/v1/user", base);
+  url.searchParams.set("redirect_to", redirectTo);
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+      apikey: key,
+    },
+    body: JSON.stringify({ email }),
+  });
+  if (res.ok) return { ok: true };
+  const body = (await res.json().catch(() => null)) as { error_code?: string } | null;
+  return { ok: false, status: res.status, code: body?.error_code ?? null };
+}
+
 /** Records that a confirmation link went out, so the UI stops nagging. */
 export async function markConfirmationSent(memberId: string): Promise<void> {
   const { error } = await supabaseAdmin

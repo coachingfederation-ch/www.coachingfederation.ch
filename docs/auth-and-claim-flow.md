@@ -215,8 +215,11 @@ proven to belong to the person holding the account. So the sync splits the two.
 3. The member sees a notice in the Member Area
    (`src/components/member/EmailChangeNotice.tsx`) and presses one button.
    `startEmailChangeConfirmation` (`src/lib/account-security.functions.ts`)
-   calls `auth.updateUser({ email })` **through the member's own session**, so
-   the provider sends its confirmation link to the new address. Nothing moves
+   calls the provider's user-update endpoint (`requestEmailChange`) **with the
+   member's own verified access token**, so the provider sends its confirmation
+   link to the new address. (Not `context.supabase.auth.updateUser`: the
+   stateless server client has no stored session and supabase-js rejects the
+   call with "Auth session missing" before any request.) Nothing moves
    until they click it. That mail is the `email_change` template, already
    branded and already rewritten onto our own domain by the webhook above.
 4. Once the account actually signs in with the new address, the pending state
