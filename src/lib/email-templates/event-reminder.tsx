@@ -71,7 +71,6 @@ const container = {
   overflow: "hidden",
 };
 const banner = { backgroundColor: INK, padding: "24px 32px", borderBottom: "4px solid #5778FA" };
-const bannerInner = { display: "flex", alignItems: "center", justifyContent: "space-between" };
 const logoStyle = { display: "block", outline: "none", border: "none", textDecoration: "none" };
 const bannerTag = {
   color: "#5778FA",
@@ -171,20 +170,34 @@ const Email = ({
       <Body style={main}>
         <Container style={container}>
           <Section style={banner}>
-            <div style={bannerInner}>
-              <Img
-                src={assetUrl(logoNegativeAsset.url, baseUrl)}
-                alt="The Switzerland Chapter of ICF"
-                width={210}
-                height={79}
-                style={logoStyle}
-              />
-              <span style={bannerTag}>{copy.detailsTitle}</span>
-            </div>
+            {/* Stacked, not flexbox: Gmail and Outlook ignore flex, and a
+                side-by-side label ran off narrow screens. */}
+            <Img
+              src={assetUrl(logoNegativeAsset.url, baseUrl)}
+              alt="The Switzerland Chapter of ICF"
+              width={210}
+              height={79}
+              style={{ ...logoStyle, maxWidth: "100%", height: "auto" }}
+            />
+            <Text style={{ ...bannerTag, margin: "12px 0 0" }}>{copy.detailsTitle}</Text>
           </Section>
 
           <Section style={content}>
             <Heading style={heading}>{day ? copy.headingDay : copy.headingWeek}</Heading>
+            {/* Plain coloured block: renders in every client, unlike SVG. */}
+            <div
+              style={{
+                width: "96px",
+                height: "6px",
+                lineHeight: "6px",
+                fontSize: "1px",
+                backgroundColor: "#5778FA",
+                borderRadius: "3px",
+                margin: "0 0 24px",
+              }}
+            >
+              &nbsp;
+            </div>
             <Text style={paragraph}>{fillReminder(copy.greeting, { name: attendeeName })},</Text>
             <Text style={paragraph}>{day ? copy.introDay : copy.introWeek}</Text>
 
