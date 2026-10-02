@@ -224,22 +224,16 @@ const Email = ({
       <Body style={main}>
         <Container style={container}>
           <Section style={banner}>
-            {/* Table layout, not flexbox: Gmail and Outlook ignore flex, which
-                pushed the tag under the logo or clipped it. */}
-            <EmailRow>
-              <Column style={{ verticalAlign: "middle" }}>
-                <Img
-                  src={logo}
-                  alt="The Switzerland Chapter of ICF"
-                  width={210}
-                  height={79}
-                  style={logoStyle}
-                />
-              </Column>
-              <Column align="right" style={{ verticalAlign: "middle" }}>
-                <span style={bannerTag}>{copy.detailsTitle}</span>
-              </Column>
-            </EmailRow>
+            {/* Logo and tag stacked, not side by side: on narrow phone screens
+                the side-by-side label ran off the edge of the email. */}
+            <Img
+              src={logo}
+              alt="The Switzerland Chapter of ICF"
+              width={210}
+              height={79}
+              style={{ ...logoStyle, maxWidth: "100%", height: "auto" }}
+            />
+            <Text style={{ ...bannerTag, margin: "12px 0 0" }}>{copy.detailsTitle}</Text>
           </Section>
 
           <Section style={content}>
