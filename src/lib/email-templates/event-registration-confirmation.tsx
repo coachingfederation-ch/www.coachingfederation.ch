@@ -9,6 +9,7 @@ import * as React from "react";
 import {
   Body,
   Button,
+  Column,
   Container,
   Head,
   Heading,
@@ -17,6 +18,7 @@ import {
   Img,
   Link,
   Preview,
+  Row as EmailRow,
   Section,
   Text,
 } from "@react-email/components";
@@ -63,18 +65,25 @@ function assetUrl(path: string, baseUrl?: string) {
   return `${root}${path}`;
 }
 
-/** Same hand-drawn accent the member claim invitation uses under its heading. */
+/**
+ * Accent bar under the heading. Inline SVG was used before, but Gmail and
+ * Outlook strip SVG entirely, so the accent vanished. A plain coloured block
+ * renders in every client.
+ */
 const BrushUnderline = () => (
-  <svg
-    width="100%"
-    height="12"
-    viewBox="0 0 400 12"
-    preserveAspectRatio="none"
-    xmlns="http://www.w3.org/2000/svg"
-    style={{ display: "block" }}
+  <div
+    style={{
+      width: "96px",
+      height: "6px",
+      lineHeight: "6px",
+      fontSize: "1px",
+      backgroundColor: "#5778FA",
+      borderRadius: "3px",
+      margin: "0 0 24px",
+    }}
   >
-    <path d="M0,8 Q100,2 200,8 T400,6 L400,12 L0,12 Z" fill="#5778FA" fillOpacity="0.35" />
-  </svg>
+    &nbsp;
+  </div>
 );
 
 const main = {
@@ -94,11 +103,6 @@ const banner = {
   backgroundColor: INK,
   padding: "24px 32px",
   borderBottom: "4px solid #5778FA",
-};
-const bannerInner = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
 };
 const logoStyle = {
   display: "block",
@@ -220,23 +224,27 @@ const Email = ({
       <Body style={main}>
         <Container style={container}>
           <Section style={banner}>
-            <div style={bannerInner}>
-              <Img
-                src={logo}
-                alt="The Switzerland Chapter of ICF"
-                width={210}
-                height={79}
-                style={logoStyle}
-              />
-              <span style={bannerTag}>{copy.detailsTitle}</span>
-            </div>
+            {/* Table layout, not flexbox: Gmail and Outlook ignore flex, which
+                pushed the tag under the logo or clipped it. */}
+            <EmailRow>
+              <Column style={{ verticalAlign: "middle" }}>
+                <Img
+                  src={logo}
+                  alt="The Switzerland Chapter of ICF"
+                  width={210}
+                  height={79}
+                  style={logoStyle}
+                />
+              </Column>
+              <Column align="right" style={{ verticalAlign: "middle" }}>
+                <span style={bannerTag}>{copy.detailsTitle}</span>
+              </Column>
+            </EmailRow>
           </Section>
 
           <Section style={content}>
             <Heading style={heading}>{paid ? copy.headingPaid : copy.headingFree}</Heading>
-            <div style={{ marginBottom: "24px" }}>
-              <BrushUnderline />
-            </div>
+            <BrushUnderline />
             <Text style={paragraph}>{fill(copy.greeting, { name: attendeeName })},</Text>
             <Text style={paragraph}>{paid ? copy.introPaid : copy.introFree}</Text>
 
