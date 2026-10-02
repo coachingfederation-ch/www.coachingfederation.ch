@@ -18,7 +18,7 @@ import {
   Img,
   Link,
   Preview,
-  Row,
+  Row as EmailRow,
   Section,
   Text,
 } from "@react-email/components";
@@ -226,7 +226,7 @@ const Email = ({
           <Section style={banner}>
             {/* Table layout, not flexbox: Gmail and Outlook ignore flex, which
                 pushed the tag under the logo or clipped it. */}
-            <Row>
+            <EmailRow>
               <Column style={{ verticalAlign: "middle" }}>
                 <Img
                   src={logo}
@@ -239,7 +239,7 @@ const Email = ({
               <Column align="right" style={{ verticalAlign: "middle" }}>
                 <span style={bannerTag}>{copy.detailsTitle}</span>
               </Column>
-            </Row>
+            </EmailRow>
           </Section>
 
           <Section style={content}>
