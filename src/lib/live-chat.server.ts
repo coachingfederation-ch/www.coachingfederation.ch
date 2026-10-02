@@ -39,9 +39,16 @@ function hashKey(key: string) {
 }
 
 export async function onlineVolunteerCount(): Promise<number> {
-  const { data, error } = await supabaseAdmin.rpc("live_chat_online_count");
-  if (error) return 0;
-  return typeof data === "number" ? data : 0;
+  // The status poll runs on every public page; a backend hiccup (or a missing
+  // server key) must read as "nobody online", never as a 500 for the visitor.
+  try {
+    const { data, error } = await supabaseAdmin.rpc("live_chat_online_count");
+    if (error) return 0;
+    return typeof data === "number" ? data : 0;
+  } catch (error) {
+    console.error("[live-chat] online count failed", error);
+    return 0;
+  }
 }
 
 async function conversationByKey(conversationId: string, visitorKey: string) {
