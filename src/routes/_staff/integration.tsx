@@ -7,6 +7,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { requireStaffAccess, ADMIN_ONLY } from "@/lib/staff-guard";
 import { Fragment, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df";
+import { HealthStrip, TodayQueue, type RelayHealth } from "@/components/cms/IntegrationOverview";
 import { AlertTriangle, CheckCircle2, ChevronRight, ClipboardCheck, RefreshCw } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
 import { ContentOwnershipPanel } from "@/components/cms/ContentOwnershipPanel";
@@ -32,6 +39,9 @@ import {
   getOutboundIpDiagnostics,
   getRelayHealth,
   reapAbandonedSyncRuns,
+  getClaimCampaign,
+  getLifecycleRetentionSummary,
+  releaseClaimWave,
 } from "@/lib/members.functions";
 
 export const Route = createFileRoute("/_staff/integration")({
@@ -46,6 +56,10 @@ export const Route = createFileRoute("/_staff/integration")({
 });
 
 const CARD = "rounded-2xl border border-border bg-card p-5";
+/** Group heading above a cluster of cards. */
+const GROUP = "eyebrow text-muted-foreground";
+const TRIGGER =
+  "group flex w-full items-center gap-2 rounded-lg text-left eyebrow text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 const BTN =
   "rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-95 disabled:opacity-50";
 /**
@@ -192,28 +206,19 @@ function StatusDot({ level }: { level: "ok" | "warn" | "fail" }) {
  * one admin-guarded server call; the card never changes state and never shows
  * a secret value.
  */
-function RelayHealthCard({ t }: { t: (key: string) => string }) {
-  type Health = Awaited<ReturnType<typeof getRelayHealth>>;
-  const [health, setHealth] = useState<Health | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [failure, setFailure] = useState<string | null>(null);
-
-  const load = async () => {
-    setLoading(true);
-    setFailure(null);
-    try {
-      setHealth(await getRelayHealth());
-    } catch (err) {
-      setFailure(err instanceof Error ? err.message : String(err));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    void load();
-  }, []);
-
+function RelayHealthCard({
+  t,
+  health,
+  loading,
+  failure,
+  onRefresh,
+}: {
+  t: (key: string) => string;
+  health: RelayHealth | null;
+  loading: boolean;
+  failure: string | null;
+  onRefresh: () => void;
+}) {
   const rows = health
     ? [
         {
@@ -296,7 +301,7 @@ function RelayHealthCard({ t }: { t: (key: string) => string }) {
           </p>
         </>
       ) : null}
-      <button className={BTN_SECONDARY + " mt-3"} disabled={loading} onClick={() => void load()}>
+      <button className={BTN_SECONDARY + " mt-3"} disabled={loading} onClick={onRefresh}>
         {loading ? t("integration.healthChecking") : t("integration.healthRefresh")}
       </button>
     </section>
@@ -530,6 +535,10 @@ function IntegrationPageBody() {
     { step: string; ok: boolean; detail: string }[] | null
   >(null);
   const [openRunId, setOpenRunId] = useState<string | null>(null);
+  // Bumped after every action so the claim and retention cards re-read.
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [diagOpen, setDiagOpen] = useState(false);
+  const [advOpen, setAdvOpen] = useState(false);
 
   const reload = async () => {
     try {
@@ -558,11 +567,42 @@ function IntegrationPageBody() {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
       setBusy(null);
+      setRefreshKey((k) => k + 1);
       await reload();
     }
   };
 
+  const healthQuery = useQuery({
+    queryKey: ["integration", "relay-health"],
+    queryFn: () => getRelayHealth(),
+  });
+  const claimQuery = useQuery({
+    queryKey: ["integration", "claim-campaign", refreshKey],
+    queryFn: () => getClaimCampaign(),
+  });
+  const retentionQuery = useQuery({
+    queryKey: ["integration", "retention", refreshKey],
+    queryFn: () => getLifecycleRetentionSummary(),
+  });
+  const health = healthQuery.data ?? null;
   const isTest = config?.mode === "test";
+
+  const runSync = () =>
+    void act("sync", async () => {
+      const r = await runSyncNow({ data: { ignoreDropGuard: false } });
+      void healthQuery.refetch();
+      return `${r.status}: ${r.feedCount} in feed, ${r.created} new, ${r.updated} updated, ${r.deactivated} deactivated.${r.message ? " " + r.message : ""}`;
+    });
+
+  const releaseWave = () => {
+    if (!window.confirm(t("integration.campaignReleaseConfirm"))) return;
+    void act("wave", async () => {
+      const result = await releaseClaimWave();
+      return result.ran
+        ? `${t("integration.campaignReleased")} ${result.invited + result.reminded}`
+        : `${t("integration.campaignSkipped")} ${result.skipped ?? ""}`;
+    });
+  };
 
   return (
     <Shell>
@@ -578,315 +618,392 @@ function IntegrationPageBody() {
         {!config ? (
           <p className="mt-6 text-sm text-muted-foreground">{t("integration.loading")}</p>
         ) : (
-          <div className="mt-4 space-y-4">
-            <section className={CARD}>
-              <div className="flex flex-wrap items-center gap-3">
-                <span
-                  className={
-                    "rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider " +
-                    (isTest ? "bg-destructive text-white" : "bg-teal text-white")
-                  }
-                >
-                  {isTest ? t("integration.modeTest") : t("integration.modeLive")}
-                </span>
-                {config.cutover_in_progress ? (
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-destructive">
-                    <AlertTriangle className="h-3.5 w-3.5" /> {t("integration.frozen")}
-                  </span>
-                ) : null}
-              </div>
-              <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-                <div>
-                  <dt className="text-xs text-muted-foreground">{t("integration.emails")}</dt>
-                  <dd className="font-semibold">
-                    {config.emails_suppressed
-                      ? config.email_redirect_to
-                        ? t("integration.emailsRedirected") + " " + config.email_redirect_to
-                        : t("integration.emailsSuppressed")
-                      : t("integration.emailsLive")}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs text-muted-foreground">{t("integration.claim")}</dt>
-                  <dd className="font-semibold">
-                    {config.account_claim_enabled
-                      ? t("integration.claimOpen")
-                      : t("integration.claimClosed")}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs text-muted-foreground">{t("integration.lastSuccess")}</dt>
-                  <dd className="font-semibold">{formatDate(config.last_successful_sync_at)}</dd>
-                </div>
-                <div>
-                  <dt className="text-xs text-muted-foreground">{t("integration.lastFailure")}</dt>
-                  <dd className="font-semibold">{formatDate(config.last_failed_sync_at)}</dd>
-                </div>
-                <div className="sm:col-span-2">
-                  <dt className="text-xs text-muted-foreground">{t("integration.cutoverDone")}</dt>
-                  <dd className="font-semibold">{formatDate(config.cutover_completed_at)}</dd>
-                </div>
-              </dl>
-              {config.last_sync_error ? (
-                <p className="mt-3 rounded-lg bg-secondary p-3 text-xs text-destructive">
-                  {config.last_sync_error}
-                </p>
-              ) : null}
+          <div className="mt-4 space-y-8">
+            <HealthStrip t={t} config={config} health={health} />
+            <TodayQueue
+              t={t}
+              config={config}
+              health={health}
+              claim={claimQuery.data ?? null}
+              retention={retentionQuery.data ?? null}
+              busy={busy !== null}
+              onRunSync={runSync}
+              onReleaseWave={releaseWave}
+            />
 
-              <label className="mt-4 block text-xs text-muted-foreground">
-                {t("integration.redirectInbox")}
-                <input
-                  type="email"
-                  defaultValue={config.email_redirect_to ?? ""}
-                  onBlur={(e) =>
-                    void act("redirect", async () => {
-                      await updateIntegrationConfig({ email_redirect_to: e.target.value || null });
-                      return t("integration.saved");
-                    })
-                  }
-                  className="mt-1 block w-full max-w-sm rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring/20"
-                />
-              </label>
-            </section>
-
-            <GatesCard config={config} busy={busy !== null} act={act} t={t} />
-            <ClaimCampaignCard t={t} />
-
-            <section className={CARD}>
-              <h2 className="text-sm font-bold">{t("integration.actions")}</h2>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <button
-                  className={BTN}
-                  disabled={busy !== null}
-                  onClick={() =>
-                    void act("sync", async () => {
-                      const r = await runSyncNow({ data: { ignoreDropGuard: false } });
-                      return `${r.status}: ${r.feedCount} in feed, ${r.created} new, ${r.updated} updated, ${r.deactivated} deactivated.${r.message ? " " + r.message : ""}`;
-                    })
-                  }
-                >
-                  <RefreshCw className="mr-2 inline h-3.5 w-3.5" />
-                  {t("integration.runSync")}
-                </button>
-                <button
-                  className={BTN_SECONDARY}
-                  disabled={busy !== null}
-                  onClick={() => {
-                    if (!window.confirm(t("integration.runSyncOverrideConfirm"))) return;
-                    void act("syncOverride", async () => {
-                      const r = await runSyncNow({ data: { ignoreDropGuard: true } });
-                      return `${r.status}: ${r.feedCount} in feed, ${r.created} new, ${r.updated} updated, ${r.deactivated} deactivated.${r.message ? " " + r.message : ""}`;
-                    });
-                  }}
-                >
-                  {t("integration.runSyncOverride")}
-                </button>
-                <button
-                  className={BTN_SECONDARY}
-                  disabled={busy !== null}
-                  onClick={() => {
-                    if (!window.confirm(t("integration.cleanupConfirm"))) return;
-                    void act("cleanup", async () => {
-                      const r = await cleanupExpiredMembers();
-                      return `${r.anonymized} ${t("integration.cleanupDone")}`;
-                    });
-                  }}
-                >
-                  {t("integration.cleanup")}
-                </button>
-              </div>
-            </section>
-
-            <RetentionCard />
-
-            <RelayHealthCard t={t} />
-            <CredentialCheckCard t={t} />
-            <OutboundIpCard t={t} />
-
-            <SyncLimitsCard />
-
-            <ContentOwnershipPanel />
-
-            <LinkedInPageSettings />
-
-            <section className={CARD + " border-destructive/40"}>
-              <h2 className="flex items-center gap-2 text-sm font-bold text-destructive">
-                <AlertTriangle className="h-4 w-4" /> {t("integration.cutoverTitle")}
-              </h2>
-              {config.cutover_completed_at ? (
-                <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                  <CheckCircle2 className="h-4 w-4 text-teal" />
-                  {t("integration.cutoverAlready")} {formatDate(config.cutover_completed_at)}
-                </p>
-              ) : (
-                <>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {t("integration.cutoverBody")}
+            <div id="section-sync" className="scroll-mt-6 space-y-4">
+              <h2 className={GROUP}>{t("integration.sectionSync")}</h2>
+              <section className={CARD}>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <p className="text-sm text-muted-foreground">
+                    {t("integration.lastSuccess")}:{" "}
+                    <strong className="text-foreground">
+                      {formatDate(config.last_successful_sync_at)}
+                    </strong>
                   </p>
-                  <ol className="mt-3 list-decimal space-y-1 pl-5 text-xs text-muted-foreground">
-                    {["1", "2", "3", "4", "5", "6", "7", "8"].map((n) => (
-                      <li key={n}>{t(`integration.cutoverStep${n}`)}</li>
-                    ))}
-                  </ol>
-                  <div className="mt-4 flex flex-wrap items-center gap-2">
+                  <button className={BTN} disabled={busy !== null} onClick={runSync}>
+                    <RefreshCw className="mr-2 inline h-3.5 w-3.5" />
+                    {t("integration.runSync")}
+                  </button>
+                </div>
+                {config.last_sync_error ? (
+                  <p className="mt-3 rounded-lg bg-secondary p-3 text-xs text-destructive">
+                    {config.last_sync_error}
+                  </p>
+                ) : null}
+              </section>
+              <section className={CARD}>
+                <h2 className="text-sm font-bold">{t("integration.history")}</h2>
+                <div className="mt-3 overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="text-muted-foreground">
+                      <tr>
+                        <th className="py-1 pr-3">{t("integration.colStarted")}</th>
+                        <th className="py-1 pr-3">{t("integration.colMode")}</th>
+                        <th className="py-1 pr-3">{t("integration.colStatus")}</th>
+                        <th className="py-1 pr-3">{t("integration.colFeed")}</th>
+                        <th className="py-1">{t("integration.colChanges")}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {runs.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="py-3 text-muted-foreground">
+                            {t("integration.noRuns")}
+                          </td>
+                        </tr>
+                      ) : (
+                        runs.map((r) => (
+                          <Fragment key={r.id}>
+                            <tr
+                              className="cursor-pointer border-t border-border hover:bg-secondary/60"
+                              onClick={() => setOpenRunId(openRunId === r.id ? null : r.id)}
+                            >
+                              <td className="py-1.5 pr-3">
+                                <button
+                                  type="button"
+                                  className="inline-flex items-center gap-1 text-left font-semibold"
+                                  aria-expanded={openRunId === r.id}
+                                >
+                                  <ChevronRight
+                                    className={
+                                      "h-3.5 w-3.5 transition-transform " +
+                                      (openRunId === r.id ? "rotate-90" : "")
+                                    }
+                                    aria-hidden
+                                  />
+                                  {formatDate(r.started_at)}
+                                </button>
+                              </td>
+                              <td className="py-1.5 pr-3 uppercase">{r.mode}</td>
+                              <td className="py-1.5 pr-3">{r.status}</td>
+                              <td className="py-1.5 pr-3">{r.feed_member_count ?? "—"}</td>
+                              <td className="py-1.5">
+                                +{r.created_count} / ~{r.updated_count} / −{r.deactivated_count}
+                              </td>
+                            </tr>
+                            {openRunId === r.id ? (
+                              <tr className="border-t border-border/40">
+                                <td colSpan={5} className="pb-4 pt-2">
+                                  <p className="mb-2 text-xs text-muted-foreground">
+                                    {t("integration.runTrigger")}: {r.trigger_source} ·{" "}
+                                    {t("integration.runDuration")}:{" "}
+                                    {r.finished_at
+                                      ? Math.max(
+                                          0,
+                                          Math.round(
+                                            (new Date(r.finished_at).getTime() -
+                                              new Date(r.started_at).getTime()) /
+                                              1000,
+                                          ),
+                                        ) + "s"
+                                      : "—"}
+                                  </p>
+                                  {r.error_message ? (
+                                    <p className="mb-2 rounded-lg bg-card p-2 text-xs text-destructive">
+                                      {r.error_message}
+                                    </p>
+                                  ) : null}
+                                  <SyncRunDetail runId={r.id} />
+                                </td>
+                              </tr>
+                            ) : null}
+                          </Fragment>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+
+            <div id="section-claim" className="scroll-mt-6 space-y-4">
+              <h2 className={GROUP}>{t("integration.sectionMembers")}</h2>
+              <ClaimCampaignCard key={`claim-${refreshKey}`} t={t} />
+              <RetentionCard key={`retention-${refreshKey}`} />
+            </div>
+
+            <Collapsible
+              open={diagOpen}
+              onOpenChange={setDiagOpen}
+              id="section-diagnostics"
+              className="scroll-mt-6 space-y-4"
+            >
+              <CollapsibleTrigger className={TRIGGER}>
+                <ChevronRight
+                  className={"h-4 w-4 transition-transform " + (diagOpen ? "rotate-90" : "")}
+                  aria-hidden
+                />
+                {t("integration.sectionDiagnostics")}
+              </CollapsibleTrigger>
+              <CollapsibleContent className="space-y-4">
+                <RelayHealthCard
+                  t={t}
+                  health={health}
+                  loading={healthQuery.isFetching}
+                  failure={
+                    healthQuery.error
+                      ? String((healthQuery.error as Error).message ?? healthQuery.error)
+                      : null
+                  }
+                  onRefresh={() => void healthQuery.refetch()}
+                />
+                <CredentialCheckCard t={t} />
+                <OutboundIpCard t={t} />
+              </CollapsibleContent>
+            </Collapsible>
+
+            <div className="space-y-4">
+              <h2 className={GROUP}>{t("integration.sectionSettings")}</h2>
+              <SyncLimitsCard />
+
+              <ContentOwnershipPanel />
+
+              <LinkedInPageSettings />
+            </div>
+
+            <Collapsible
+              open={advOpen}
+              onOpenChange={setAdvOpen}
+              id="section-advanced"
+              className="scroll-mt-6 space-y-4"
+            >
+              <CollapsibleTrigger className={TRIGGER}>
+                <ChevronRight
+                  className={"h-4 w-4 transition-transform " + (advOpen ? "rotate-90" : "")}
+                  aria-hidden
+                />
+                {t("integration.advancedTitle")}
+              </CollapsibleTrigger>
+              <p className="text-xs text-muted-foreground">{t("integration.advancedBody")}</p>
+              <CollapsibleContent className="space-y-4">
+                <section className={CARD}>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span
+                      className={
+                        "rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider " +
+                        (isTest ? "bg-destructive text-white" : "bg-teal text-white")
+                      }
+                    >
+                      {isTest ? t("integration.modeTest") : t("integration.modeLive")}
+                    </span>
+                    {config.cutover_in_progress ? (
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-destructive">
+                        <AlertTriangle className="h-3.5 w-3.5" /> {t("integration.frozen")}
+                      </span>
+                    ) : null}
+                  </div>
+                  <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                    <div>
+                      <dt className="text-xs text-muted-foreground">{t("integration.emails")}</dt>
+                      <dd className="font-semibold">
+                        {config.emails_suppressed
+                          ? config.email_redirect_to
+                            ? t("integration.emailsRedirected") + " " + config.email_redirect_to
+                            : t("integration.emailsSuppressed")
+                          : t("integration.emailsLive")}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-xs text-muted-foreground">{t("integration.claim")}</dt>
+                      <dd className="font-semibold">
+                        {config.account_claim_enabled
+                          ? t("integration.claimOpen")
+                          : t("integration.claimClosed")}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-xs text-muted-foreground">
+                        {t("integration.lastSuccess")}
+                      </dt>
+                      <dd className="font-semibold">
+                        {formatDate(config.last_successful_sync_at)}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-xs text-muted-foreground">
+                        {t("integration.lastFailure")}
+                      </dt>
+                      <dd className="font-semibold">{formatDate(config.last_failed_sync_at)}</dd>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <dt className="text-xs text-muted-foreground">
+                        {t("integration.cutoverDone")}
+                      </dt>
+                      <dd className="font-semibold">{formatDate(config.cutover_completed_at)}</dd>
+                    </div>
+                  </dl>
+                  {config.last_sync_error ? (
+                    <p className="mt-3 rounded-lg bg-secondary p-3 text-xs text-destructive">
+                      {config.last_sync_error}
+                    </p>
+                  ) : null}
+
+                  <label className="mt-4 block text-xs text-muted-foreground">
+                    {t("integration.redirectInbox")}
                     <input
-                      value={confirmText}
-                      onChange={(e) => setConfirmText(e.target.value)}
-                      placeholder="CUTOVER"
-                      aria-label={t("integration.cutoverConfirmLabel")}
-                      className="rounded-lg border border-border bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/20"
+                      type="email"
+                      defaultValue={config.email_redirect_to ?? ""}
+                      onBlur={(e) =>
+                        void act("redirect", async () => {
+                          await updateIntegrationConfig({
+                            email_redirect_to: e.target.value || null,
+                          });
+                          return t("integration.saved");
+                        })
+                      }
+                      className="mt-1 block w-full max-w-sm rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring/20"
                     />
+                  </label>
+                </section>
+                <GatesCard config={config} busy={busy !== null} act={act} t={t} />
+                <section className={CARD}>
+                  <h2 className="text-sm font-bold">{t("integration.actions")}</h2>
+                  <div className="mt-3 flex flex-wrap gap-2">
                     <button
-                      className="rounded-full bg-destructive px-4 py-2 text-sm font-semibold text-white disabled:opacity-40"
-                      disabled={confirmText !== "CUTOVER" || busy !== null}
+                      className={BTN_SECONDARY}
+                      disabled={busy !== null}
+                      onClick={() => {
+                        if (!window.confirm(t("integration.runSyncOverrideConfirm"))) return;
+                        void act("syncOverride", async () => {
+                          const r = await runSyncNow({ data: { ignoreDropGuard: true } });
+                          return `${r.status}: ${r.feedCount} in feed, ${r.created} new, ${r.updated} updated, ${r.deactivated} deactivated.${r.message ? " " + r.message : ""}`;
+                        });
+                      }}
+                    >
+                      {t("integration.runSyncOverride")}
+                    </button>
+                    <button
+                      className={BTN_SECONDARY}
+                      disabled={busy !== null}
+                      onClick={() => {
+                        if (!window.confirm(t("integration.cleanupConfirm"))) return;
+                        void act("cleanup", async () => {
+                          const r = await cleanupExpiredMembers();
+                          return `${r.anonymized} ${t("integration.cleanupDone")}`;
+                        });
+                      }}
+                    >
+                      {t("integration.cleanup")}
+                    </button>
+                  </div>
+                </section>
+                <section className={CARD + " border-destructive/40"}>
+                  <h2 className="flex items-center gap-2 text-sm font-bold text-destructive">
+                    <AlertTriangle className="h-4 w-4" /> {t("integration.cutoverTitle")}
+                  </h2>
+                  {config.cutover_completed_at ? (
+                    <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                      <CheckCircle2 className="h-4 w-4 text-teal" />
+                      {t("integration.cutoverAlready")} {formatDate(config.cutover_completed_at)}
+                    </p>
+                  ) : (
+                    <>
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        {t("integration.cutoverBody")}
+                      </p>
+                      <ol className="mt-3 list-decimal space-y-1 pl-5 text-xs text-muted-foreground">
+                        {["1", "2", "3", "4", "5", "6", "7", "8"].map((n) => (
+                          <li key={n}>{t(`integration.cutoverStep${n}`)}</li>
+                        ))}
+                      </ol>
+                      <div className="mt-4 flex flex-wrap items-center gap-2">
+                        <input
+                          value={confirmText}
+                          onChange={(e) => setConfirmText(e.target.value)}
+                          placeholder="CUTOVER"
+                          aria-label={t("integration.cutoverConfirmLabel")}
+                          className="rounded-lg border border-border bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/20"
+                        />
+                        <button
+                          className="rounded-full bg-destructive px-4 py-2 text-sm font-semibold text-white disabled:opacity-40"
+                          disabled={confirmText !== "CUTOVER" || busy !== null}
+                          onClick={() =>
+                            void act("cutover", async () => {
+                              const r = await executeCutover({ data: { confirm: "CUTOVER" } });
+                              setConfirmText("");
+                              return r.steps
+                                .map((s) => `${s.ok ? "✓" : "✗"} ${s.step}: ${s.detail}`)
+                                .join(" | ");
+                            })
+                          }
+                        >
+                          {t("integration.cutoverRun")}
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </section>
+                {!config.cutover_completed_at && (
+                  <section className={CARD}>
+                    <h2 className="flex items-center gap-2 text-sm font-bold">
+                      <ClipboardCheck className="h-4 w-4 text-teal" />{" "}
+                      {t("integration.rehearseTitle")}
+                    </h2>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {t("integration.rehearseBody")}
+                    </p>
+                    <button
+                      className={BTN + " mt-4"}
+                      disabled={busy !== null}
                       onClick={() =>
-                        void act("cutover", async () => {
-                          const r = await executeCutover({ data: { confirm: "CUTOVER" } });
-                          setConfirmText("");
-                          return r.steps
-                            .map((s) => `${s.ok ? "✓" : "✗"} ${s.step}: ${s.detail}`)
-                            .join(" | ");
+                        void act("rehearse", async () => {
+                          const r = await rehearseCutover({});
+                          setRehearsal(r.steps);
+                          return t("integration.rehearseDone");
                         })
                       }
                     >
-                      {t("integration.cutoverRun")}
+                      {busy === "rehearse"
+                        ? t("integration.rehearseRunning")
+                        : t("integration.rehearseRun")}
                     </button>
-                  </div>
-                </>
-              )}
-            </section>
-
-            {!config.cutover_completed_at && (
-              <section className={CARD}>
-                <h2 className="flex items-center gap-2 text-sm font-bold">
-                  <ClipboardCheck className="h-4 w-4 text-teal" /> {t("integration.rehearseTitle")}
-                </h2>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {t("integration.rehearseBody")}
-                </p>
-                <button
-                  className={BTN + " mt-4"}
-                  disabled={busy !== null}
-                  onClick={() =>
-                    void act("rehearse", async () => {
-                      const r = await rehearseCutover({});
-                      setRehearsal(r.steps);
-                      return t("integration.rehearseDone");
-                    })
-                  }
-                >
-                  {busy === "rehearse"
-                    ? t("integration.rehearseRunning")
-                    : t("integration.rehearseRun")}
-                </button>
-                {rehearsal && (
-                  <div className="mt-4 overflow-x-auto">
-                    <table className="w-full text-left text-xs">
-                      <thead className="text-muted-foreground">
-                        <tr>
-                          <th className="py-1 pr-3">{t("integration.rehearseColStep")}</th>
-                          <th className="py-1">{t("integration.rehearseColDetail")}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {rehearsal.map((s) => (
-                          <tr key={s.step} className="border-t border-border/60 align-top">
-                            <td className="py-1 pr-3 font-semibold">
-                              {s.ok ? "✓" : "✗"} {s.step}
-                            </td>
-                            <td className="py-1 text-muted-foreground">{s.detail}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </section>
-            )}
-
-            <section className={CARD}>
-              <h2 className="text-sm font-bold">{t("integration.history")}</h2>
-              <div className="mt-3 overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="text-muted-foreground">
-                    <tr>
-                      <th className="py-1 pr-3">{t("integration.colStarted")}</th>
-                      <th className="py-1 pr-3">{t("integration.colMode")}</th>
-                      <th className="py-1 pr-3">{t("integration.colStatus")}</th>
-                      <th className="py-1 pr-3">{t("integration.colFeed")}</th>
-                      <th className="py-1">{t("integration.colChanges")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {runs.length === 0 ? (
-                      <tr>
-                        <td colSpan={5} className="py-3 text-muted-foreground">
-                          {t("integration.noRuns")}
-                        </td>
-                      </tr>
-                    ) : (
-                      runs.map((r) => (
-                        <Fragment key={r.id}>
-                          <tr
-                            className="cursor-pointer border-t border-border hover:bg-secondary/60"
-                            onClick={() => setOpenRunId(openRunId === r.id ? null : r.id)}
-                          >
-                            <td className="py-1.5 pr-3">
-                              <button
-                                type="button"
-                                className="inline-flex items-center gap-1 text-left font-semibold"
-                                aria-expanded={openRunId === r.id}
-                              >
-                                <ChevronRight
-                                  className={
-                                    "h-3.5 w-3.5 transition-transform " +
-                                    (openRunId === r.id ? "rotate-90" : "")
-                                  }
-                                  aria-hidden
-                                />
-                                {formatDate(r.started_at)}
-                              </button>
-                            </td>
-                            <td className="py-1.5 pr-3 uppercase">{r.mode}</td>
-                            <td className="py-1.5 pr-3">{r.status}</td>
-                            <td className="py-1.5 pr-3">{r.feed_member_count ?? "—"}</td>
-                            <td className="py-1.5">
-                              +{r.created_count} / ~{r.updated_count} / −{r.deactivated_count}
-                            </td>
-                          </tr>
-                          {openRunId === r.id ? (
-                            <tr className="border-t border-border/40">
-                              <td colSpan={5} className="pb-4 pt-2">
-                                <p className="mb-2 text-xs text-muted-foreground">
-                                  {t("integration.runTrigger")}: {r.trigger_source} ·{" "}
-                                  {t("integration.runDuration")}:{" "}
-                                  {r.finished_at
-                                    ? Math.max(
-                                        0,
-                                        Math.round(
-                                          (new Date(r.finished_at).getTime() -
-                                            new Date(r.started_at).getTime()) /
-                                            1000,
-                                        ),
-                                      ) + "s"
-                                    : "—"}
-                                </p>
-                                {r.error_message ? (
-                                  <p className="mb-2 rounded-lg bg-card p-2 text-xs text-destructive">
-                                    {r.error_message}
-                                  </p>
-                                ) : null}
-                                <SyncRunDetail runId={r.id} />
-                              </td>
+                    {rehearsal && (
+                      <div className="mt-4 overflow-x-auto">
+                        <table className="w-full text-left text-xs">
+                          <thead className="text-muted-foreground">
+                            <tr>
+                              <th className="py-1 pr-3">{t("integration.rehearseColStep")}</th>
+                              <th className="py-1">{t("integration.rehearseColDetail")}</th>
                             </tr>
-                          ) : null}
-                        </Fragment>
-                      ))
+                          </thead>
+                          <tbody>
+                            {rehearsal.map((s) => (
+                              <tr key={s.step} className="border-t border-border/60 align-top">
+                                <td className="py-1 pr-3 font-semibold">
+                                  {s.ok ? "✓" : "✗"} {s.step}
+                                </td>
+                                <td className="py-1 text-muted-foreground">{s.detail}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     )}
-                  </tbody>
-                </table>
-              </div>
-            </section>
+                  </section>
+                )}
+              </CollapsibleContent>
+            </Collapsible>
           </div>
         )}
       </div>

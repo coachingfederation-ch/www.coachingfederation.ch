@@ -97,3 +97,17 @@ The relay itself is locked down:
 One hardening step is queued once the sync is stable: give the relay a proper
 DNS name (`relay.coachingfederation.ch`) and reissue the certificate for it. The
 ICF allowlist IP `34.121.79.30` does not change.
+
+## Integration screen layout (since October 2026)
+
+`/integration` puts daily operations first:
+
+1. **Health strip**: five tiles (last sync, relay, member email, account claim, ICF login), each with a status dot. Click a tile to jump to its detail.
+2. **Today**: lists only what needs action, such as a failed sync, an unreleased claim wave, a paused campaign, or records due for removal. Each item comes with its button or a jump link.
+3. **Member sync**: "Run sync now" and the run history.
+4. **Claim and lifecycle**: the claim campaign and retention cards.
+5. **Diagnostics** (collapsed): relay health, credentials check, outbound IP.
+6. **Settings**: sync limits, content ownership, LinkedIn page.
+7. **Advanced and setup** (collapsed): mode, redirect inbox, release gates, drop-guard override, cleanup, cutover record, rehearsal.
+
+The overview lives in `src/components/cms/IntegrationOverview.tsx` and reads the same data as the cards.
