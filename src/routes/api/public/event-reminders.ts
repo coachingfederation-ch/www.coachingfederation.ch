@@ -1,7 +1,9 @@
 /**
  * Scheduled attendee reminders (/api/public/event-reminders).
  *
- * Called by pg_cron via pg_net every five minutes (day-before, two-hour and
+ * Called by pg_cron via pg_net only when the in-database gatekeeper
+ * `public.event_reminders_due()` (checked every five minutes) finds a due
+ * reminder (day-before, two-hour and
  * 15-minute reminders). Auth is the same server-only
  * cron token the member sync uses — never the publishable key, which ships to
  * every browser and would let anyone trigger a mail run.
