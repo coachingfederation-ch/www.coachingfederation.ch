@@ -1,12 +1,13 @@
 /**
- * Attendee reminders: one week out and the day before.
+ * Attendee reminders: the day before, two hours before, 15 minutes before.
  *
- * Server-only, driven by a scheduled call. Each stage is claimed with a
- * conditional update on its own timestamp column, so a retried or overlapping
- * cron run can never send the same reminder twice. Only seats that actually
- * hold a place are reminded — cancelled, unpaid and refunded rows are skipped,
- * which is also what keeps the consent rules intact: this mail goes to people
- * who registered for this event, and to nobody else.
+ * Server-only, driven by a scheduled call every five minutes. Timing rules live
+ * in `event-reminder-timing.ts`. Each stage is claimed with a conditional
+ * update on its own timestamp column, so a retried or overlapping cron run can
+ * never send the same reminder twice. Only seats that actually hold a place are
+ * reminded — cancelled, unpaid and refunded rows are skipped — and a seat
+ * booked after a stage was due never gets that stage (late sign-ups only get
+ * the reminders still ahead of them).
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { SITE_URL, localizePath } from "@/i18n/config";
@@ -19,21 +20,23 @@ import {
   normaliseLocale,
   type EventRow,
 } from "./event-confirmation.server";
+import type { ReminderStage } from "./email-templates/event-reminder-copy";
+import { REMINDER_STAGES, reminderDeadline, reminderDueAt } from "./event-reminder-timing";
 
-export type ReminderStage = "week" | "day";
+export type { ReminderStage };
 
-const STAGE_COLUMN: Record<ReminderStage, "reminder_7d_sent_at" | "reminder_1d_sent_at"> = {
-  week: "reminder_7d_sent_at",
+type StageColumn = "reminder_1d_sent_at" | "reminder_2h_sent_at" | "reminder_15m_sent_at";
+
+const STAGE_COLUMN: Record<ReminderStage, StageColumn> = {
   day: "reminder_1d_sent_at",
+  hours2: "reminder_2h_sent_at",
+  minutes15: "reminder_15m_sent_at",
 };
 
-/** How close to the event each stage fires, in hours before the start. */
-const STAGE_WINDOW: Record<ReminderStage, { from: number; to: number }> = {
-  // Seven days out, with a day of slack so a missed run still catches up.
-  week: { from: 144, to: 192 },
-  // The day before, wide enough that one daily run always finds it.
-  day: { from: 6, to: 36 },
-};
+// The 2h/15m columns were added after the generated types; write through a
+// loosely typed handle until types regenerate.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const registrations = () => supabaseAdmin.from("event_registrations") as any;
 
 const EVENT_COLUMNS =
   "id, slug, title, summary, description, language, timezone, starts_at, ends_at, location_mode, venue_name, city, online_url, community_id, practical_notes, practical_notes_de, practical_notes_fr, practical_notes_it, status";
@@ -41,13 +44,8 @@ const EVENT_COLUMNS =
 /** Claims one attendee for one stage. Losing the race means "already sent". */
 async function claim(registrationId: string, stage: ReminderStage) {
   const column = STAGE_COLUMN[stage];
-  const { data } = await supabaseAdmin
-    .from("event_registrations")
-    .update(
-      stage === "week"
-        ? { reminder_7d_sent_at: new Date().toISOString() }
-        : { reminder_1d_sent_at: new Date().toISOString() },
-    )
+  const { data } = await registrations()
+    .update({ [column]: new Date().toISOString() })
     .eq("id", registrationId)
     .is(column, null)
     .select("id");
@@ -130,11 +128,14 @@ export async function sendReminder(
         location: formatLocation(event, locale),
         onlineUrl: event.location_mode === "in_person" ? null : event.online_url,
         tierName,
-        practicalNotes: localisedText(
-          eventRow as unknown as Record<string, string | null>,
-          "practical_notes",
-          locale,
-        ),
+        practicalNotes:
+          stage !== "day"
+            ? null
+            : localisedText(
+                eventRow as unknown as Record<string, string | null>,
+                "practical_notes",
+                locale,
+              ),
         eventUrl: `${SITE_URL}${localizePath(`/events/${event.slug}`, locale)}`,
         ticketUrl: token ? ticketUrl(token) : null,
         qrUrl: token ? ticketQrUrl(token) : null,
@@ -147,59 +148,57 @@ export async function sendReminder(
     const message = e instanceof Error ? e.message : String(e);
     console.error("[event-reminders] send failed", message);
     // Release the claim so the next run can retry this attendee.
-    await supabaseAdmin
-      .from("event_registrations")
-      .update(stage === "week" ? { reminder_7d_sent_at: null } : { reminder_1d_sent_at: null })
+    await registrations()
+      .update({ [STAGE_COLUMN[stage]]: null })
       .eq("id", registrationId);
     return { status: "failed", reason: message.slice(0, 200) };
   }
 }
 
 /**
- * One scheduled pass: finds every published event inside a stage's window and
- * reminds the attendees who have not had that stage yet.
+ * One scheduled pass: finds published events starting within 36 hours and, for
+ * each stage whose send window is open now, reminds the attendees who booked
+ * before that stage was due and have not had it yet.
  */
 export async function runEventReminders(): Promise<{
   stages: Record<ReminderStage, { events: number; sent: number; skipped: number; failed: number }>;
 }> {
-  const stages = {
-    week: { events: 0, sent: 0, skipped: 0, failed: 0 },
-    day: { events: 0, sent: 0, skipped: 0, failed: 0 },
-  };
+  const stages = Object.fromEntries(
+    REMINDER_STAGES.map((s) => [s, { events: 0, sent: 0, skipped: 0, failed: 0 }]),
+  ) as Record<ReminderStage, { events: number; sent: number; skipped: number; failed: number }>;
 
-  for (const stage of ["week", "day"] as ReminderStage[]) {
-    const window = STAGE_WINDOW[stage];
-    const from = new Date(Date.now() + window.from * 3600_000).toISOString();
-    const to = new Date(Date.now() + window.to * 3600_000).toISOString();
+  const now = new Date();
+  const { data: events } = await supabaseAdmin
+    .from("events")
+    .select("id, starts_at")
+    .eq("status", "published")
+    .neq("registration_mode", "none")
+    .gt("starts_at", now.toISOString())
+    .lte("starts_at", new Date(now.getTime() + 36 * 3600_000).toISOString());
 
-    const { data: events } = await supabaseAdmin
-      .from("events")
-      .select("id")
-      .eq("status", "published")
-      .neq("registration_mode", "none")
-      .gte("starts_at", from)
-      .lte("starts_at", to);
-    if (!events || events.length === 0) continue;
-    stages[stage].events = events.length;
+  for (const event of events ?? []) {
+    if (!event.starts_at) continue;
+    const startsAt = new Date(event.starts_at);
+    for (const stage of REMINDER_STAGES) {
+      const due = reminderDueAt(stage, startsAt);
+      if (now < due || now >= reminderDeadline(stage, startsAt)) continue;
+      stages[stage].events += 1;
 
-    const column = STAGE_COLUMN[stage];
-    const { data: rows } = await supabaseAdmin
-      .from("event_registrations")
-      .select("id")
-      .in(
-        "event_id",
-        events.map((e) => e.id),
-      )
-      .eq("status", "confirmed")
-      .in("payment_status", ["not_required", "paid"])
-      .is(column, null)
-      .limit(2000);
+      const { data: rows } = await registrations()
+        .select("id")
+        .eq("event_id", event.id)
+        .eq("status", "confirmed")
+        .in("payment_status", ["not_required", "paid"])
+        .lt("created_at", due.toISOString())
+        .is(STAGE_COLUMN[stage], null)
+        .limit(2000);
 
-    for (const row of rows ?? []) {
-      const result = await sendReminder(row.id, stage);
-      if (result.status === "sent") stages[stage].sent += 1;
-      else if (result.status === "failed") stages[stage].failed += 1;
-      else stages[stage].skipped += 1;
+      for (const row of (rows ?? []) as { id: string }[]) {
+        const result = await sendReminder(row.id, stage);
+        if (result.status === "sent") stages[stage].sent += 1;
+        else if (result.status === "failed") stages[stage].failed += 1;
+        else stages[stage].skipped += 1;
+      }
     }
   }
 

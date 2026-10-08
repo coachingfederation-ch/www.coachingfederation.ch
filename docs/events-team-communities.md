@@ -17,7 +17,7 @@ Staff manage events at `/manage/events`; the public sees `/events` and
   row, re-counts confirmed seats and refuses when the event is unpublished,
   closed, full, or requires an account. Capacity is therefore safe under
   concurrent registrations; do not re-implement the check in TypeScript.
-- Registration modes, ticket tiers, member pricing, Stripe checkout,
+- Registration modes, ticket tiers, member pricing, Stripe checkout, attendee reminders,
   confirmation emails and the staff cancellation/refund flow are documented in
   `events-and-ticketing.md`.
 - Event copy is translated per locale in `event_translations`, with the same

@@ -1,5 +1,6 @@
 /**
- * React Email template for attendee event reminders (one week and one day).
+ * React Email template for attendee event reminders: the day before (full
+ * details), two hours before and 15 minutes before (short and practical).
  * Exports: template. Registered in lib/email-templates/registry.ts.
  *
  * Deliberately shorter than the confirmation: the attendee already has the
@@ -25,14 +26,18 @@ import type { Locale } from "@/i18n/config";
 import { SITE_URL } from "@/i18n/config";
 import logoNegativeAsset from "@/assets/icf-horizontal-negative.png.asset.json";
 import logoWhiteAsset from "@/assets/icf-horizontal-white.png.asset.json";
-import { REMINDER_COPY, fillReminder } from "./event-reminder-copy";
+import {
+  REMINDER_COPY,
+  fillReminder,
+  normaliseStage,
+  type ReminderStage,
+} from "./event-reminder-copy";
 import type { EmailTemplateData, TemplateEntry } from "./registry";
 
 export interface EventReminderProps {
   locale?: Locale;
   baseUrl?: string;
-  /** "week" = seven days out, "day" = the day before. */
-  stage?: "week" | "day";
+  stage?: ReminderStage;
   attendeeName?: string;
   eventTitle?: string;
   when?: string;
@@ -146,7 +151,7 @@ function Row({ title, children }: { title: string; children: React.ReactNode }) 
 const Email = ({
   locale = "en",
   baseUrl,
-  stage = "week",
+  stage = "day",
   attendeeName = "",
   eventTitle = "",
   when = "",
@@ -161,12 +166,14 @@ const Email = ({
 }: EventReminderProps) => {
   const copy = REMINDER_COPY[locale] ?? REMINDER_COPY.en;
   const [signoffLine, signoffName] = copy.signoff.split("\n");
-  const day = stage === "day";
+  const day = normaliseStage(stage) === "day";
+  const stageCopy = copy.stages[normaliseStage(stage)];
+  const soon = normaliseStage(stage) === "minutes15";
 
   return (
     <Html lang={locale} dir="ltr">
       <Head />
-      <Preview>{day ? copy.previewDay : copy.previewWeek}</Preview>
+      <Preview>{stageCopy.preview}</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section style={banner}>
@@ -183,7 +190,7 @@ const Email = ({
           </Section>
 
           <Section style={content}>
-            <Heading style={heading}>{day ? copy.headingDay : copy.headingWeek}</Heading>
+            <Heading style={heading}>{stageCopy.heading}</Heading>
             {/* Plain coloured block: renders in every client, unlike SVG. */}
             <div
               style={{
@@ -199,7 +206,7 @@ const Email = ({
               &nbsp;
             </div>
             <Text style={paragraph}>{fillReminder(copy.greeting, { name: attendeeName })},</Text>
-            <Text style={paragraph}>{day ? copy.introDay : copy.introWeek}</Text>
+            <Text style={paragraph}>{stageCopy.intro}</Text>
 
             <Section style={panel}>
               <Text style={sectionTitle}>{copy.detailsTitle}</Text>
@@ -216,7 +223,15 @@ const Email = ({
               {tierName ? <Row title={copy.ticketLabel}>{tierName}</Row> : null}
             </Section>
 
-            {practicalNotes ? (
+            {soon && onlineUrl ? (
+              <Section style={{ margin: "24px 0 4px" }}>
+                <Button style={button} href={onlineUrl}>
+                  {copy.joinOnline} →
+                </Button>
+              </Section>
+            ) : null}
+
+            {day && practicalNotes ? (
               <>
                 <Hr style={rule} />
                 <Text style={sectionTitle}>{copy.notesTitle}</Text>
@@ -224,7 +239,7 @@ const Email = ({
               </>
             ) : null}
 
-            {ticketUrl ? (
+            {soon ? null : ticketUrl ? (
               <>
                 <Hr style={rule} />
                 <Text style={sectionTitle}>{copy.ticketTitle}</Text>
@@ -283,7 +298,7 @@ export const template: TemplateEntry = {
   subject: (data: EmailTemplateData) => {
     const locale = (data?.locale as Locale) ?? "en";
     const copy = REMINDER_COPY[locale] ?? REMINDER_COPY.en;
-    const raw = data?.stage === "day" ? copy.subjectDay : copy.subjectWeek;
+    const raw = copy.stages[normaliseStage(data?.stage)].subject;
     return fillReminder(raw, { title: String(data?.eventTitle ?? "") });
   },
   previewData: {
