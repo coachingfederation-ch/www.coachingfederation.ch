@@ -1,7 +1,8 @@
 /**
  * Scheduled attendee reminders (/api/public/event-reminders).
  *
- * Called by pg_cron via pg_net once an hour. Auth is the same server-only
+ * Called by pg_cron via pg_net every five minutes (day-before, two-hour and
+ * 15-minute reminders). Auth is the same server-only
  * cron token the member sync uses — never the publishable key, which ships to
  * every browser and would let anyone trigger a mail run.
  */
@@ -22,7 +23,7 @@ export const Route = createFileRoute("/api/public/event-reminders")({
         try {
           const result = await runEventReminders();
           console.log(
-            `[event-reminders] done week=${result.stages.week.sent} day=${result.stages.day.sent} ms=${Date.now() - startedAt}`,
+            `[event-reminders] done day=${result.stages.day.sent} 2h=${result.stages.hours2.sent} 15m=${result.stages.minutes15.sent} ms=${Date.now() - startedAt}`,
           );
           return Response.json(result);
         } catch (err) {
