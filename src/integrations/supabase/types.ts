@@ -2741,7 +2741,9 @@ export type Database = {
           refund_error: string | null
           refund_status: string
           refunded_at: string | null
+          reminder_15m_sent_at: string | null
           reminder_1d_sent_at: string | null
+          reminder_2h_sent_at: string | null
           reminder_7d_sent_at: string | null
           status: Database["public"]["Enums"]["event_registration_status"]
           stripe_refund_id: string | null
@@ -2791,7 +2793,9 @@ export type Database = {
           refund_error?: string | null
           refund_status?: string
           refunded_at?: string | null
+          reminder_15m_sent_at?: string | null
           reminder_1d_sent_at?: string | null
+          reminder_2h_sent_at?: string | null
           reminder_7d_sent_at?: string | null
           status?: Database["public"]["Enums"]["event_registration_status"]
           stripe_refund_id?: string | null
@@ -2841,7 +2845,9 @@ export type Database = {
           refund_error?: string | null
           refund_status?: string
           refunded_at?: string | null
+          reminder_15m_sent_at?: string | null
           reminder_1d_sent_at?: string | null
+          reminder_2h_sent_at?: string | null
           reminder_7d_sent_at?: string | null
           status?: Database["public"]["Enums"]["event_registration_status"]
           stripe_refund_id?: string | null
