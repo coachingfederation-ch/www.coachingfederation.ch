@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1791487169224,
+      "tag": "0000_event_reminders_gatekeeper",
+      "breakpoints": true
+    }
+  ]
+}

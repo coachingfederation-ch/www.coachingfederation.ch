@@ -6697,6 +6697,7 @@ export type Database = {
         Returns: Json
       }
       directory_allows_non_credentialed: { Args: never; Returns: boolean }
+      event_reminders_due: { Args: never; Returns: boolean }
       get_certificate_by_token: { Args: { _token: string }; Returns: Json }
       get_event_attendance_session: {
         Args: { _actor?: string; _event_id: string }
