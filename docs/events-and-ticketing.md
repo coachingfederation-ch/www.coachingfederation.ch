@@ -313,3 +313,20 @@ Payments run through the built-in payments connection (Test / Live toggle in the
 The registration guard trigger prices a row from its tier whenever the event has `tickets_enabled` (or uses the legacy `rsvp_tickets` mode). Before 2026-09-29 only the legacy mode was priced, so paid tickets on `tickets_enabled` events were stored with `amount_cents = 0`. That showed "CHF 0.00" in confirmation emails and skipped the automatic refund on staff cancellation. Affected rows were repaired from the tier price.
 
 Refunds: a staff cancellation of a paid registration refunds automatically through Stripe (default when the event is more than 48 hours away; staff can override). Failed refunds can be retried; dashboard refunds are recorded via `charge.refunded`.
+
+## Attendee reminders
+
+Confirmed attendees get three reminder emails. Cancelled, unpaid, and refunded seats are skipped, as are events that are unpublished or have no registration.
+
+| Stage | Due | Content |
+|---|---|---|
+| `day` | 24 h before the start. If that falls outside 08:00–21:00 Zurich time, it moves to 21:00 the evening before the start date | Full details, ticket and QR, practical notes |
+| `hours2` | 2 h before | When, where, online link, ticket link |
+| `minutes15` | 15 min before | Short notice with a "Join online" button (online/hybrid events) |
+
+- **Send window**: each stage can only go out between its own due time and the next stage's due time, so a missed reminder is replaced by the next one rather than doubled up.
+- **Late sign-ups**: a seat booked after a stage's due time never gets that stage.
+- **Duplicate protection**: each stage is claimed through its own column (`reminder_1d_sent_at`, `reminder_2h_sent_at`, `reminder_15m_sent_at`) plus the idempotency key `event-reminder-<stage>-<registrationId>`. The claim is released if the send fails.
+- **Code**: timing lives in `src/lib/event-reminder-timing.ts`, the run in `src/lib/event-reminders.server.ts`, and the copy in `src/lib/email-templates/event-reminder-copy.ts`.
+- **Schedule**: the `event-reminders-5min` cron job calls `/api/public/event-reminders` every 5 minutes, authenticated with the cron token.
+- **Retired**: the one-week reminder was removed in October 2026. Its column `reminder_7d_sent_at` is kept but no longer written.
