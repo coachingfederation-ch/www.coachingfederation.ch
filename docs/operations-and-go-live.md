@@ -22,10 +22,10 @@ not as something to work around.
 
 ## The nightly sync
 
-A cron job (`icf-member-sync-daily`, 03:15 UTC) calls
+A cron job (`icf-member-sync-daily`, 06:00 UTC, moved off ICF Global's overnight maintenance window) calls
 `/api/public/member-sync`, which runs `member-sync.server.ts`. A run gets a hard
 five-minute budget; if the night fails, three retry jobs
-(`icf-member-sync-retry-1/2/3`, 03:30 / 03:45 / 04:00 UTC) call
+(`icf-member-sync-retry-1/2/3`, 06:15 / 06:30 / 06:45 UTC) call
 `/api/public/member-sync-retry`, and a third failure alerts every Super Admin by
 email. Both are documented in `docs/member-sync.md`.
 
@@ -243,7 +243,7 @@ Record each number; they are the baseline every later count is checked against.
       token at cutover; the current value has been in test circulation. Update
       both cron URLs to the apex after Phase D.
 - [x] **`member_lifecycle_queue` is now read nightly.** The
-      `icf-member-lifecycle-daily` cron job (04:15 UTC) calls
+      `icf-member-lifecycle-daily` cron job (07:15 UTC) calls
       `/api/public/member-lifecycle`, which runs `runLifecycleSweep()`: it closes
       queue rows for members who came back, emails the member a warning 30 days
       and again 7 days before their scheduled deletion date, and sends the

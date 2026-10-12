@@ -267,9 +267,69 @@ export async function runMemberSync(options: {
 
     // Absent from the feed -> inactive, entering the grace window.
     const feedRecnos = new Set(feed.map((m) => m.cst_recno));
-    const missing = [...byRecno.values()].filter(
+    const absent = [...byRecno.values()].filter(
       (row) => !feedRecnos.has(String(row.cst_recno)) && row.activity_state === "active",
     );
+
+    // Flapping protection: ICF Global occasionally omits members whose
+    // membership is valid well into the future (seen with corporate CIO
+    // members). A member whose expiration date is still ahead is only moved to
+    // grace when they are absent from two successful syncs in a row. The first
+    // absence is recorded as a `member_feed_absent_deferred` event; the second
+    // absence finds that event newer than the member's `last_synced_at` (the
+    // last time the feed contained them) and proceeds. Reappearing in between
+    // bumps `last_synced_at`, which resets the strike.
+    const today = now.slice(0, 10);
+    const futureExpiry = absent.filter((row) => {
+      const exp = row.membership_expiration_date as string | null;
+      return !!exp && exp > today;
+    });
+    const strikeOne = new Set<string>();
+    if (futureExpiry.length) {
+      const { data: lastSeen } = await supabaseAdmin
+        .from("members")
+        .select("id, last_synced_at")
+        .in(
+          "id",
+          futureExpiry.map((r) => r.id as string),
+        );
+      const seenById = new Map(
+        ((lastSeen ?? []) as { id: string; last_synced_at: string | null }[]).map((r) => [
+          r.id,
+          r.last_synced_at,
+        ]),
+      );
+      const { data: priorStrikes } = await supabaseAdmin
+        .from("member_sync_events")
+        .select("member_id, created_at")
+        .eq("event_type", "member_feed_absent_deferred")
+        .in(
+          "member_id",
+          futureExpiry.map((r) => r.id as string),
+        );
+      for (const row of futureExpiry) {
+        const id = row.id as string;
+        const seenAt = seenById.get(id) ?? null;
+        const struck = ((priorStrikes ?? []) as { member_id: string; created_at: string }[]).some(
+          (s) => s.member_id === id && (!seenAt || s.created_at > seenAt),
+        );
+        if (!struck) strikeOne.add(id);
+      }
+    }
+    for (const row of absent) {
+      if (!strikeOne.has(row.id as string)) continue;
+      await logEvent(
+        runId,
+        "member_feed_absent_deferred",
+        "Absent from the ICF feed but membership is valid until later — waiting for a second absence before the grace window.",
+        {
+          severity: "info",
+          member_id: row.id as string,
+          cst_recno: String(row.cst_recno),
+        },
+      );
+    }
+    const missing = absent.filter((row) => !strikeOne.has(row.id as string));
     let deactivated = 0;
     for (const row of missing) {
       const deletionAt = new Date(Date.now() + config.grace_period_days * 86400000).toISOString();
