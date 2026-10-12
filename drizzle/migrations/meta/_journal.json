@@ -8,6 +8,13 @@
       "when": 1791487169224,
       "tag": "0000_event_reminders_gatekeeper",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791791082730,
+      "tag": "0001_directory_members_rls_non_credentialed",
+      "breakpoints": true
     }
   ]
 }

@@ -57,6 +57,11 @@ on every table the view touches, which is what keeps the two consistent. If you
 add a table to the view, give it **both** an `anon` and an `authenticated`
 published-row SELECT policy, or signed-in visitors will silently see no results.
 
+The `members` read policies must mirror the view's eligibility rule, including
+the `allow_non_credentialed` switch (`directory_allows_non_credentialed()`, a
+security-definer helper so every role reads the flag). If they drift, the view
+silently drops rows the switch should admit.
+
 This means adding a field to the public profile is a two-step change: add the
 column, then add it to the view. Forgetting the second step is the usual reason
 a new field renders blank.
