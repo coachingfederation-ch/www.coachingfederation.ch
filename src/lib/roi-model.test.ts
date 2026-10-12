@@ -27,6 +27,14 @@ describe("computeRoi", () => {
   });
 });
 
+describe("paybackCurve", () => {
+  it("has 36 months and first turns non-negative at the payback month", () => {
+    const r = computeRoi(DEFAULT_INPUTS);
+    expect(r.paybackCurve).toHaveLength(36);
+    expect(r.paybackCurve.findIndex((v) => v >= 0) + 1).toBe(r.payback);
+  });
+});
+
 describe("convertCurrency", () => {
   it("converts CHF salary to EUR at 0.95, rounded to the nearest thousand", () => {
     expect(convertCurrency(DEFAULT_INPUTS, "CHF", "EUR").salary).toBe(124000);

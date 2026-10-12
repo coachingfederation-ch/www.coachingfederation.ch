@@ -101,6 +101,8 @@ export interface RoiResult {
   cost: number;
   roi: number;
   payback: number | null;
+  /** Cumulative net position at the end of each month, HORIZON_MONTHS long. */
+  paybackCurve: number[];
 }
 
 export function computeRoi(s: RoiInputs): RoiResult {
@@ -170,8 +172,10 @@ export function computeRoi(s: RoiInputs): RoiResult {
   const mb = benefit / 12;
   let cum = 0;
   let payback: number | null = null;
+  const paybackCurve: number[] = [];
   for (let m = 1; m <= HORIZON_MONTHS; m++) {
     cum += mb * Math.min(1, Math.max(0, (m - 2) / rampFull)) - (m <= D ? cost / D : 0);
+    paybackCurve.push(cum);
     if (payback === null && cum >= 0) payback = m;
   }
 
@@ -189,6 +193,7 @@ export function computeRoi(s: RoiInputs): RoiResult {
     cost,
     roi,
     payback,
+    paybackCurve,
   };
 }
 
