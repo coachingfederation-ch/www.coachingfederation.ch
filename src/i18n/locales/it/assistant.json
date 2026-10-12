@@ -1,25 +1,25 @@
 {
-  "launcher": "Chiedi a noi",
-  "title": "Assistente del chapter",
-  "subtitle": "Coach, credentials, eventi e community",
-  "empty": "Chiedi come trovare un coach, degli ICF Credentials, dei prossimi eventi o delle nostre community locali.",
+  "launcher": "Chiedici",
+  "title": "Assistente del Chapter",
+  "subtitle": "Coach, credenziali, eventi e community",
+  "empty": "Chiedi come trovare un coach, informazioni sulle credenziali ICF, i prossimi eventi o le nostre community locali.",
   "placeholder": "Fai una domanda…",
   "thinking": "Sto pensando…",
-  "searching": "Sto cercando…",
+  "searching": "Ricerca in corso…",
   "reset": "Ricomincia",
-  "close": "Chiudi la chat",
-  "error": "Qualcosa è andato storto. Riprova oppure scrivi a office@coachingfederation.ch.",
-  "disclaimer": "Assistente IA. Può commettere errori: verifica le informazioni importanti.",
+  "close": "Chiudi chat",
+  "error": "Si è verificato un errore. Ti preghiamo di riprovare o di scrivere a office@coachingfederation.ch.",
+  "disclaimer": "Assistente IA. Può commettere errori — ti invitiamo a verificare le informazioni importanti.",
   "suggestions": {
-    "coach": "Trovare un coach vicino a me",
+    "coach": "Trova un coach vicino a me",
     "events": "Quali sono i prossimi eventi?",
-    "credentials": "Che cos'è un ICF Credential?"
+    "credentials": "Cos'è una credenziale ICF?"
   },
   "externalLink": {
     "title": "Aprire il link esterno?",
-    "body": "Questo link porta a un altro sito web.",
+    "body": "Questo link rimanda a un altro sito web.",
     "cancel": "Annulla",
-    "open": "Apri il link"
+    "open": "Apri link"
   },
   "feedback": {
     "question": "È stato utile?",
@@ -28,6 +28,6 @@
     "thanks": "Grazie per il riscontro."
   },
   "prompts": {
-    "organisations": "Siamo un'organizzazione interessata al coaching per i nostri leader e team — come può aiutarci The Switzerland Chapter of ICF?"
+    "organisations": "Siamo un'organizzazione interessata al coaching per i nostri leader e team — in che modo The Switzerland Chapter of ICF può aiutarci?"
   }
 }

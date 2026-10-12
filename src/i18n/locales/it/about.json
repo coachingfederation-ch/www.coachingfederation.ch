@@ -1,32 +1,32 @@
 {
   "meta": {
     "title": "Chi siamo — The Switzerland Chapter of ICF",
-    "description": "Scopri The Switzerland Chapter of ICF: perché il coaching, le nostre comunità regionali e le partnership di ricerca."
+    "description": "Chi siamo — The Switzerland Chapter of ICF: perché il coaching, le nostre comunità regionali e le partnership di ricerca."
   },
   "hero": {
     "eyebrow": "Chi siamo",
     "titlePrefix": "The Switzerland ",
     "titleAccent": "Chapter of ICF.",
-    "lede": "Siamo la sezione nazionale svizzera della International Coaching Federation: una casa professionale per coach certificati e le organizzazioni con cui collaborano."
+    "lede": "Benvenuti nella sezione nazionale svizzera della International Coaching Federation — una casa professionale per coach credenziali e le organizzazioni che servono."
   },
   "why": {
     "eyebrow": "Perché il coaching?",
     "title": "Conversazioni migliori creano un futuro migliore.",
-    "body": "Il coaching professionale aiuta le persone a pensare con maggiore chiarezza, guidare con più efficacia e affrontare i cambiamenti con sicurezza.",
+    "body": "Il coaching professionale consente alle persone di pensare in modo più chiaro, guidare in modo più efficace e affrontare il cambiamento con sicurezza.",
     "imageAlt": "Una vera conversazione di coaching"
   },
   "values": [
     {
-      "title": "Pensare diversamente",
-      "desc": "Il coaching crea lo spazio per mettere in discussione le convinzioni e individuare nuove prospettive."
+      "title": "Pensare in modo diverso",
+      "desc": "Il coaching crea lo spazio per mettere in discussione le proprie convinzioni e vedere nuove opzioni."
     },
     {
       "title": "Guidare meglio",
-      "desc": "I leader che beneficiano del coaching ascoltano più a fondo, prendono decisioni più rapidamente e valorizzano i propri collaboratori."
+      "desc": "I leader affiancati da un coach ascoltano più a fondo, decidono più rapidamente e fanno crescere le proprie persone."
     },
     {
       "title": "Sbloccare il potenziale",
-      "desc": "Singoli e team raggiungono i propri obiettivi più importanti, grazie a un supporto costante e al senso di responsabilità."
+      "desc": "Persone e team raggiungono ciò che conta di più, con supporto e responsabilità."
     }
   ],
   "communities": {
@@ -41,7 +41,7 @@
           "DE",
           "EN"
         ],
-        "lead": "Responsabile Chapter: team Zürich"
+        "lead": "Responsabile di capitolo: team Zürich"
       },
       {
         "city": "Lausanne & Genève",
@@ -51,7 +51,7 @@
           "FR",
           "EN"
         ],
-        "lead": "Responsabile Chapter: team Romandie"
+        "lead": "Responsabile di capitolo: team Romandie"
       },
       {
         "city": "Lugano",
@@ -61,12 +61,12 @@
           "IT",
           "EN"
         ],
-        "lead": "Responsabile Chapter: team Ticino"
+        "lead": "Responsabile di capitolo: team Ticino"
       },
       {
         "city": "Online",
         "region": "Eventi, mentoring e volontariato",
-        "cadence": "In corso",
+        "cadence": "Continuo",
         "langs": [
           "DE",
           "FR",
@@ -78,7 +78,7 @@
     ]
   },
   "research": {
-    "eyebrow": "Ricerca e partnership",
+    "eyebrow": "Ricerca & partnership",
     "title": "Connettere ricerca, pratica e leadership.",
     "partners": [
       "ETH Zürich",
@@ -101,93 +101,93 @@
   "mission": {
     "eyebrow": "La nostra missione",
     "title": "Promuovere il coaching professionale in Svizzera.",
-    "body": "Sosteniamo i più alti standard della professione di coach e ne promuoviamo il valore per individui, organizzazioni e società."
+    "body": "ICF Switzerland rafforza la qualità, la rilevanza e la visibilità del coaching professionale. Una casa professionale accogliente e inclusiva per i coach di tutte le regioni e lingue."
   },
   "deib": {
     "eyebrow": "Il nostro impegno DEIB",
-    "title": "Diversity, Equity, Inclusion and Belonging",
-    "intro": "Il DEIB è parte integrante di tutto ciò che facciamo — non un'iniziativa marginale, ma un valore fondamentale. Il nostro chapter abbraccia 4 lingue, diverse nazionalità e una ricca varietà di background nel coaching. Un team dedicato al DEIB guida la nostra strategia.",
+    "title": "Diversità, Equità, Inclusione e Appartenenza",
+    "intro": "DEIB è integrato in tutto ciò che facciamo — non un'iniziativa secondaria, ma un valore fondamentale. Il nostro capitolo abbraccia 4 lingue, diverse nazionalità e una ricca varietà di percorsi nel coaching. Un team DEIB dedicato guida la nostra strategia.",
     "approachTitle": "Il nostro approccio DEIB",
     "approachItems": [
-      "Eventi DEIB Open House trimestrali — peer learning con casi reali",
-      "Inclusive Coaching Inspiration Kit per tutti i membri",
-      "Event Accessibility Checklist (ibrido, sottotitoli, esigenze sensoriali, accessibilità economica)",
-      "Webinar e storie di membri su neurodiversità e inclusione",
-      "Domande DEIB integrate nell'indagine annuale dei membri",
+      "Eventi trimestrali DEIB Open House — apprendimento tra pari con casi reali",
+      "Kit d'ispirazione per un coaching inclusivo per tutti i membri",
+      "Checklist per l'accessibilità degli eventi (ibrido, sottotitoli, esigenze sensoriali, accessibilità economica)",
+      "Webinar su neurodiversità & inclusione e storie dei membri",
+      "Domande DEIB integrate nel sondaggio annuale tra i membri",
       "Allineamento con le iniziative DEIB di ICF Global"
     ]
   },
   "governance": {
     "eyebrow": "La nostra governance",
     "title": "Responsabilità e trasparenza",
-    "lede": "Documenti chiave che guidano il nostro modo di operare, decidere e servire i membri.",
-    "link": "Visualizza",
+    "lede": "Documenti chiave che guidano il nostro modo di operare, prendere decisioni e servire i nostri membri.",
+    "link": "Vedi",
     "documents": [
       {
-        "title": "Annual General Meeting (AGM)",
-        "desc": "La nostra assemblea generale annuale, modalità di voto e verbali."
+        "title": "Assemblea generale annuale (AGM)",
+        "desc": "La nostra assemblea annuale dei membri, le procedure di voto e i verbali."
       },
       {
-        "title": "Code of Ethics",
-        "desc": "ICF Code of Ethics e Standards of Conduct che tutti i membri si impegnano a rispettare."
+        "title": "Codice etico",
+        "desc": "Codice etico e standard di condotta ICF che tutti i membri si impegnano a rispettare."
       },
       {
-        "title": "DEIB Commitment Statement",
-        "desc": "Il nostro impegno per la diversità, l'equità, l'inclusione e l'appartenenza."
+        "title": "Dichiarazione d'impegno DEIB",
+        "desc": "L'impegno del nostro capitolo per la diversità, l'equità, l'inclusione e l'appartenenza."
       },
       {
-        "title": "ICF Global Charter Chapter status",
-        "desc": "Riconoscimento ufficiale come chapter charter ICF in Svizzera."
+        "title": "Stato di ICF Global Charter Chapter",
+        "desc": "Riconoscimento ufficiale come capitolo riconosciuto ICF in Svizzera."
       },
       {
-        "title": "Annual Report / Impact Review",
-        "desc": "Panoramica annuale delle attività, dell'impatto e delle finanze del chapter."
+        "title": "Rapporto annuale / Bilancio d'impatto",
+        "desc": "Panoramica annuale delle attività, dell'impatto e delle finanze del capitolo."
       }
     ]
   },
   "contact": {
-    "eyebrow": "Contatto",
-    "title": "Dicci di cosa hai bisogno",
-    "lede": "Parlane con il nostro assistente. Ti aiuta a mettere in parole la tua richiesta, poi rileggi il messaggio prima che venga inviato.",
-    "empty": "Ciao. Raccontaci cosa ti porta qui — trovare un coach, coaching per la tua organizzazione, l'iscrizione o altro.",
+    "eyebrow": "Mettiti in contatto",
+    "title": "Raccontaci di cosa hai bisogno",
+    "lede": "Parla con il nostro assistente. Ti aiuterà a formulare la tua richiesta, poi potrai rivedere il messaggio prima dell'invio.",
+    "empty": "Buongiorno. Raccontaci cosa ti porta qui — trovare un coach, il coaching per la tua organizzazione, la membership o qualsiasi altra cosa.",
     "placeholder": "Scrivi il tuo messaggio…",
-    "thinking": "Sto pensando…",
-    "review": "Rileggi e invia",
-    "preparing": "Preparazione…",
-    "disclaimer": "Un assistente IA ti aiuta a preparare il messaggio. Nulla viene inviato prima della tua rilettura e conferma.",
-    "reviewTitle": "Rileggi il messaggio",
-    "reviewLede": "Questo è ciò che riceverà il nostro ufficio. Modifica quello che vuoi — inviamo la tua versione.",
+    "thinking": "Riflessione in corso…",
+    "review": "Rivedi e invia",
+    "preparing": "Preparazione in corso…",
+    "disclaimer": "Un assistente IA ti aiuta a preparare il messaggio. Nulla viene inviato prima della tua revisione e conferma.",
+    "reviewTitle": "Rivedi il tuo messaggio",
+    "reviewLede": "Questo è ciò che riceverà il nostro ufficio. Modifica ciò che desideri — invieremo la tua versione.",
     "nameLabel": "Nome",
     "namePlaceholder": "Il tuo nome",
-    "emailLabel": "E-mail",
-    "emailPlaceholder": "tua@email.com",
+    "emailLabel": "Email",
+    "emailPlaceholder": "il-tuo@email.com",
     "subjectLabel": "Oggetto",
     "messageLabel": "Messaggio",
     "messagePlaceholder": "Come possiamo aiutarti?",
-    "send": "Invia il messaggio",
-    "sending": "Invio…",
+    "send": "Invia messaggio",
+    "sending": "Invio in corso…",
     "back": "Torna alla conversazione",
-    "doneTitle": "Controlla la tua posta",
-    "doneBody": "Abbiamo inviato un link di conferma a {email}. Aprilo e il messaggio arriva subito al nostro ufficio.",
-    "doneHint": "Così nessuno può scriverci a tuo nome. I messaggi non confermati vengono eliminati dopo sette giorni.",
+    "doneTitle": "Controlla la tua casella di posta",
+    "doneBody": "Abbiamo inviato un link di conferma a {email}. Apribile e il tuo messaggio arriverà direttamente al nostro ufficio.",
+    "doneHint": "Facciamo questo per evitare che qualcuno ci scriva a tuo nome. I messaggi non confermati vengono eliminati dopo sette giorni.",
     "privacy": "Trattiamo il tuo messaggio per risponderti. Leggi la nostra",
     "suggestions": {
       "coach": "Sto cercando un coach",
       "organisation": "Coaching per la nostra organizzazione",
-      "membership": "Una domanda sull'iscrizione"
+      "membership": "Una domanda sulla membership"
     },
     "errors": {
-      "chat": "Qualcosa è andato storto. Riprova.",
-      "draft": "Non siamo riusciti a preparare il messaggio. Riprova.",
-      "empty": "Raccontaci prima brevemente la tua richiesta.",
-      "required": "Compila nome, oggetto e messaggio.",
-      "email": "Inserisci un indirizzo e-mail valido.",
-      "send": "Non siamo riusciti a inviare il messaggio. Riprova o scrivi a office@coachingfederation.ch.",
-      "rateLimited": "Sono molti messaggi da questa connessione. Riprova più tardi."
+      "chat": "Si è verificato un errore. Riprova.",
+      "draft": "Non è stato possibile preparare il messaggio. Riprova.",
+      "empty": "Raccontaci prima qualcosa sulla tua richiesta.",
+      "required": "Compila il tuo nome, l'oggetto e il messaggio.",
+      "email": "Inserisci un indirizzo email valido.",
+      "send": "Non è stato possibile inviare il messaggio. Riprova o scrivi a office@coachingfederation.ch.",
+      "rateLimited": "Ci sono troppi messaggi inviati da questa connessione. Riprova più tardi."
     },
-    "openCta": "Inizia la conversazione",
+    "openCta": "Avvia una conversazione",
     "overlayTitle": "Come possiamo aiutarti?",
-    "overlayLede": "Raccontaci di cosa hai bisogno. Rispondiamo a quello che possiamo e inoltriamo il resto alla persona giusta."
+    "overlayLede": "Raccontaci di cosa hai bisogno. Risponderemo a ciò che possiamo e trasmetteremo il resto alla persona competente."
   },
   "cta": {
     "eyebrow": "Partecipa",
