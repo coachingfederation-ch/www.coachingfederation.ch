@@ -1,86 +1,86 @@
 {
   "meta": {
-    "title": "Simulatore ROI Coaching — The Switzerland Chapter of ICF",
-    "description": "Costruisci un business case per il coaching in quattro domande, con ogni formula e fonte nella pagina."
+    "title": "Simulatore del ROI del coaching — The Switzerland Chapter of ICF",
+    "description": "Costruisci un business case per il coaching in quattro domande, con tutte le formule e le fonti sulla pagina."
   },
   "hero": {
-    "eyebrow": "Simulatore ROI Coaching",
+    "eyebrow": "Simulatore del ROI del coaching",
     "title": "Costruisci il business case",
-    "lede": "Quattro domande. Poi un rendiconto che puoi presentare al tuo CFO."
+    "lede": "Quattro domande. Poi un prospetto finanziario da presentare al tuo direttore finanziario."
   },
   "controls": {
     "currency": "Valuta",
-    "preset": "Livello di assunzione",
+    "preset": "Livello delle ipotesi",
     "presets": {
-      "conservative": "Conservativo",
+      "conservative": "Prudente",
       "median": "Mediana delle evidenze",
       "ambitious": "Ambizioso"
     },
     "presetNotes": {
-      "conservative": "Estremità inferiore del range delle evidenze",
-      "median": "Punto medio degli studi pubblicati",
-      "ambitious": "Forte sponsorizzazione, buona misurazione"
+      "conservative": "Limite inferiore dell'intervallo delle evidenze",
+      "median": "Valore centrale degli studi pubblicati",
+      "ambitious": "Forte sostegno della direzione, buona misurazione"
     }
   },
   "steps": {
-    "progress": "Passo {n} di 4",
+    "progress": "Passaggio {n} di 4",
     "back": "Indietro",
     "next": "Avanti",
-    "seeCase": "Vedi il caso",
+    "seeCase": "Visualizza il business case",
     "startOver": "Ricomincia",
     "items": [
       {
         "title": "La tua organizzazione",
-        "note": "Dimensioni e quante persone se ne vanno."
+        "note": "Dimensioni e numero di persone che lasciano l'organizzazione."
       },
       {
         "title": "Il tuo programma",
-        "note": "Cosa compreresti effettivamente."
+        "note": "Ciò che acquisteresti concretamente."
       },
       {
-        "title": "Linea di base attuale",
-        "note": "Il coaching muove solo ciò che ha spazio per muoversi."
+        "title": "La situazione attuale",
+        "note": "Il coaching può migliorare solo ciò che ha margine di miglioramento."
       },
       {
-        "title": "Il caso",
-        "note": "A quanto ammonta il rendiconto."
+        "title": "Il business case",
+        "note": "Il risultato complessivo del prospetto finanziario."
       }
     ]
   },
   "fields": {
     "employees": {
       "label": "Collaboratori",
-      "hint": "Tutti i dipendenti inclusi nell'ambito"
+      "hint": "Tutto il personale salariato interessato"
     },
     "salary": {
-      "label": "Salario medio lordo",
-      "hint": "Salario più oneri sociali e benefit"
+      "label": "Salario medio comprensivo degli oneri",
+      "hint": "Salario più oneri sociali e prestazioni accessorie"
     },
     "turnover": {
-      "label": "Tasso di turnover annuale",
-      "hint": "Percentuale di persone che lasciano ogni anno"
+      "label": "Tasso di avvicendamento annuo",
+      "hint": "Quota di persone che lasciano l'organizzazione ogni anno"
     },
     "costPer": {
       "label": "Costo per partecipante",
-      "hint": "Costo del coaching esterno per persona"
+      "hint": "Onorari del coaching esterno per persona"
     },
     "duration": {
       "label": "Durata del programma",
-      "hint": "Mesi dall'inizio alla fine"
+      "hint": "Mesi dall'avvio alla conclusione"
     },
     "engagement": {
       "label": "Attualmente molto coinvolti",
-      "hint": "Dal tuo ultimo sondaggio sul coinvolgimento"
+      "hint": "Dall'ultima indagine sul coinvolgimento"
     },
     "absence": {
       "label": "Giorni di assenza per persona",
-      "hint": "All'anno, tutte le cause"
+      "hint": "All'anno, per tutte le cause"
     },
     "replacePct": {
       "label": "Costo di sostituzione",
-      "hint": "Percentuale del salario per sostituire un dipendente che lascia"
+      "hint": "Quota del salario necessaria per sostituire una persona in uscita"
     },
-    "internalTime": "Includi 15% di tempo interno (HR, sponsor, partecipanti)"
+    "internalTime": "Includi il 15% per il tempo interno (risorse umane, sponsor, partecipanti)"
   },
   "units": {
     "months": "{v} mesi",
@@ -89,93 +89,162 @@
   "programmes": {
     "label": "Tipo di programma",
     "exec": {
-      "label": "Executive 1:1",
-      "note": "Leader senior, lavoro approfondito"
+      "label": "Coaching dirigenziale 1:1",
+      "note": "Alti dirigenti, lavoro approfondito"
     },
     "team": {
-      "label": "Coaching di squadra",
+      "label": "Coaching di team",
       "note": "Intere unità sotto pressione"
     },
     "manager": {
-      "label": "Competenze dei manager",
-      "note": "Manager che fanno coaching ai loro collaboratori"
+      "label": "Competenze manageriali",
+      "note": "Manager che fanno coaching ai propri collaboratori"
     },
     "culture": {
       "label": "Cultura del coaching",
-      "note": "Programma a livello di organizzazione"
+      "note": "Programma per l'intera organizzazione"
     }
   },
   "sizing": {
     "title": "Come viene dimensionato {programme}",
-    "note": "Queste sono ipotesi di progettazione tipiche per questo tipo di programma, non valori misurati.",
+    "note": "Si tratta di ipotesi di progettazione tipiche per questo tipo di programma, non di valori misurati.",
     "direct": {
-      "label": "Coaching diretto",
+      "label": "Beneficiari diretti del coaching",
       "calc": "{employees} collaboratori × {reach}% iscritti"
     },
     "leaders": {
-      "label": "Di cui leader",
-      "calc": "{participants} × {share}% in ruoli di leadership, pagati {seniority}× la media"
+      "label": "Di cui dirigenti",
+      "calc": "{participants} × {share}% in ruoli dirigenziali, con salario pari a {seniority}× la media"
     },
     "indirect": {
-      "label": "Raggiunti indirettamente",
-      "calc": "{participants} × {radius} persone intorno a ciascuno, meno i coachee"
+      "label": "Persone raggiunte indirettamente",
+      "calc": "{participants} × {radius} persone attorno a ciascuno, meno i beneficiari diretti del coaching"
     },
     "weighted": {
       "label": "Portata ponderata",
-      "calc": "{participants} + {indirect} × {spill}% peso"
-    }
+      "calc": "{participants} + {indirect} × {spill}% di ponderazione"
+    },
+    "toggle": "Come dimensioniamo il programma"
   },
   "summary": {
-    "sentence": "Un programma {programme} per {participants} persone costa {cost} e, su queste ipotesi, genera un ritorno di {benefit} all'anno — {roi} dell'investimento, netto {net}.",
-    "payback": "Si ripaga nel mese {month}.",
-    "noPayback": "Non si ripaga entro 36 mesi su queste ipotesi.",
+    "sentence": "Un programma di {programme} per {participants} persone costa {cost} e, sulla base di queste ipotesi, genera {benefit} all'anno — {roi} l'investimento, con un netto di {net}.",
+    "payback": "L'investimento si recupera al mese {month}.",
+    "noPayback": "Sulla base di queste ipotesi, l'investimento non si recupera entro 36 mesi.",
     "talk": "Parla con il nostro team",
-    "prompt": "Abbiamo modellato un programma {programme} per {participants} persone con il simulatore ROI e vorremmo discutere i prossimi passi con The Switzerland Chapter of ICF."
+    "prompt": "Abbiamo simulato un programma di {programme} per {participants} persone con il simulatore del ROI e vorremmo discutere i prossimi passi con The Switzerland Chapter of ICF."
   },
   "ledger": {
-    "title": "Rendiconto in tempo reale",
-    "reach": "{eff} persone con portata ponderata",
+    "title": "Prospetto finanziario in tempo reale",
+    "reach": "{eff} persone come portata ponderata",
     "investment": "Investimento",
-    "investmentNote": "incluso 15% di tempo interno",
-    "investmentNoteOff": "solo costi del programma",
-    "return": "Ritorno annuale stimato",
-    "grossNote": "lordo, prima dello sconto di sovrapposizione del {pct}%",
-    "overlap": "Sconto di sovrapposizione",
+    "investmentNote": "incluso il 15% per il tempo interno",
+    "investmentNoteOff": "solo onorari del programma",
+    "return": "Ritorno annuo stimato",
+    "grossNote": "lordo, prima della deduzione del {pct}% per sovrapposizione",
+    "overlap": "Deduzione per sovrapposizione",
     "net": "Netto, primo anno",
-    "roiPayback": "Ritorno · ritorno sull'investimento",
+    "roiPayback": "Ritorno · recupero dell'investimento",
     "monthShort": "mese {m}",
     "none": "oltre 36 mesi",
     "share": "{pct}% del lordo",
-    "footnote": "Ogni riga sopra è un calcolo aritmetico sui tuoi input e sulle dimensioni degli effetti pubblicate — nessuna scatola nera. Fonti: ICF/PwC Global Coaching Client Study; ICF + HCI Building a Coaching Culture."
+    "footnote": "Ogni riga qui sopra è un calcolo basato sui tuoi dati e sulle dimensioni degli effetti pubblicate — nessuna scatola nera. Fonti: ICF/PwC Global Coaching Client Study; ICF + HCI Building a Coaching Culture."
   },
   "drivers": {
     "retention": {
-      "label": "Retention — costo di sostituzione evitato",
-      "formula": "{eff} effettivi × {turnover}% che lasciano × {fewer}% in meno × {replacePct}% di {salary}"
+      "label": "Fidelizzazione — costi di sostituzione evitati",
+      "formula": "{eff} persone effettive × {turnover}% in uscita × {fewer}% in meno × {replacePct}% di {salary}"
     },
     "productivity": {
       "label": "Aumento della produttività",
-      "formula": "{eff} effettivi × {salary} × {gain}% guadagno di output"
+      "formula": "{eff} persone effettive × {salary} × {gain}% di aumento della produttività"
     },
     "engagement": {
-      "label": "Coinvolgimento → sforzo discrezionale",
+      "label": "Coinvolgimento → impegno volontario aggiuntivo",
       "formula": "+{pp}pp di coinvolgimento (dal {from}%) × {eff} × 0.12% del salario per punto"
     },
     "absence": {
       "label": "Riduzione delle assenze",
-      "formula": "{days} giorni × {eff} effettivi × {fewer}% in meno × {dayRate}/giorno"
+      "formula": "{days} giorni × {eff} persone effettive × {fewer}% in meno × {dayRate}/giorno"
     },
     "derail": {
-      "label": "Deragliamento dei leader evitato",
-      "formula": "{leaders} leader × 6% deragliamento annuale × {avoided}% evitato × {cost}"
+      "label": "Insuccessi dirigenziali evitati",
+      "formula": "{leaders} dirigenti × 6% di insuccessi annui × {avoided}% evitati × {cost}"
     },
     "ramp": {
-      "label": "Tempo più rapido per la competenza",
-      "formula": "{newLeaders} nuovi leader/anno × {weeks} settimane risparmiate × 50% gap di output"
+      "label": "Acquisizione più rapida delle competenze",
+      "formula": "{newLeaders} nuovi dirigenti/anno × {weeks} settimane risparmiate × 50% di divario di produttività"
     },
     "recruiting": {
-      "label": "Minore carico di recruiting interno",
-      "formula": "{saved} partenze evitate × 10% del salario in tempo HR e manageriale"
+      "label": "Minore carico interno per il reclutamento",
+      "formula": "{saved} uscite evitate × 10% del salario in tempo delle risorse umane e dei manager"
     }
+  },
+  "guide": {
+    "label": "Passaggi della simulazione",
+    "organisation": "Organizzazione",
+    "programme": "Programma",
+    "baseline": "Situazione iniziale",
+    "results": "Risultati",
+    "position": "{group} · domanda {n} di {total}",
+    "skip": "Usa valori tipici e visualizza i risultati"
+  },
+  "questions": {
+    "employees": "Quante persone lavorano nella tua organizzazione?",
+    "salary": "Quanto costa mediamente un collaboratore all'anno?",
+    "turnover": "Quante persone lasciano l'organizzazione ogni anno?",
+    "programme": "Quale tipo di coaching stai valutando?",
+    "investment": "Quanto costerebbe il programma?",
+    "engagement": "Quanto sono coinvolti oggi i tuoi collaboratori?",
+    "absence": "Quanti giorni di assenza fa una persona all'anno?",
+    "replacePct": "Quanto costa sostituire una persona in uscita?"
+  },
+  "questionNotes": {
+    "employees": "Conta tutto il personale salariato che potrebbe essere interessato.",
+    "salary": "Usa il costo complessivo: salario più oneri sociali e prestazioni accessorie.",
+    "turnover": "Il tasso annuo di avvicendamento del personale, per tutti i motivi.",
+    "programme": "Scegli l'opzione più vicina alle tue esigenze. La usiamo per dimensionare portata e costi.",
+    "investment": "Onorari per partecipante e durata del programma.",
+    "engagement": "Quota di persone risultate molto coinvolte nell'ultima indagine.",
+    "absence": "Media annua dei giorni di malattia e di altre assenze per persona.",
+    "replacePct": "Reclutamento, inserimento e perdita di produttività, come quota del salario."
+  },
+  "hints": {
+    "label": "Cosa significa:",
+    "employees": "Circa {participants} persone parteciperebbero a un programma di {programme}.",
+    "salary": "Una giornata lavorativa ti costa circa {dayRate}.",
+    "turnover": "Circa {leavers} persone lasciano la tua organizzazione ogni anno.",
+    "programme": "{participants} persone ricevono coaching direttamente, {eff} rappresentano la portata ponderata includendo i colleghi attorno a loro.",
+    "investment": "L'investimento totale ammonta a {cost}.",
+    "engagement": "Punteggi più bassi lasciano più margine al coaching per fare la differenza. Le organizzazioni con una forte cultura del coaching riportano il 62% di persone molto coinvolte.",
+    "absence": "Sono circa {total} giorni di assenza all'anno nell'intera organizzazione.",
+    "replacePct": "Sostituire una persona in uscita ti costa circa {cost}."
+  },
+  "bar": {
+    "title": "Il tuo business case finora",
+    "return": "Ritorno",
+    "payback": "Recupero dell'investimento",
+    "net": "Netto, primo anno",
+    "note": "Si aggiorna ad ogni risposta. Il dettaglio completo è disponibile nella pagina dei risultati."
+  },
+  "results": {
+    "eyebrow": "Il tuo business case",
+    "multipleNote": "Si stima che ogni franco investito venga recuperato questo numero di volte entro il primo anno.",
+    "caseTitle": "In una frase",
+    "adjust": "Modifica le risposte",
+    "driversTitle": "Da dove deriva il valore"
+  },
+  "chart": {
+    "title": "Quando si recupera l'investimento",
+    "series": "Netto cumulato",
+    "monthTick": "M{m}",
+    "breakEven": "Punto di pareggio",
+    "caption": "Saldo netto cumulato mese per mese. Punto di pareggio al mese {m}.",
+    "captionNone": "Saldo netto cumulato mese per mese. Nessun punto di pareggio entro 36 mesi."
+  },
+  "groups": {
+    "people": "Persone",
+    "performance": "Prestazioni",
+    "leadership": "Leadership",
+    "showMaths": "Mostra i calcoli"
   }
 }

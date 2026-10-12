@@ -1,86 +1,86 @@
 {
   "meta": {
-    "title": "Coaching ROI Simulator — The Switzerland Chapter of ICF",
-    "description": "Erstellen Sie einen Business Case für Coaching in vier Fragen, mit jeder Formel und Quelle auf der Seite."
+    "title": "Coaching-ROI-Simulator — The Switzerland Chapter of ICF",
+    "description": "Erstellen Sie mit vier Fragen einen Business Case für Coaching, mit allen Formeln und Quellen auf der Seite."
   },
   "hero": {
-    "eyebrow": "Coaching ROI Simulator",
+    "eyebrow": "Coaching-ROI-Simulator",
     "title": "Erstellen Sie den Business Case",
-    "lede": "Vier Fragen. Dann ein Ledger, das Sie Ihrem CFO vorlegen können."
+    "lede": "Vier Fragen. Dann eine Rechnung, die Sie Ihrer Finanzleitung vorlegen können."
   },
   "controls": {
     "currency": "Währung",
-    "preset": "Annahme-Niveau",
+    "preset": "Annahmeniveau",
     "presets": {
       "conservative": "Konservativ",
-      "median": "Evidenz Median",
+      "median": "Studienmedian",
       "ambitious": "Ambitioniert"
     },
     "presetNotes": {
-      "conservative": "Untergrenze des Evidenzbereichs",
+      "conservative": "Unteres Ende der belegten Bandbreite",
       "median": "Mittelwert veröffentlichter Studien",
-      "ambitious": "Starke Unterstützung, gute Messung"
+      "ambitious": "Starker Rückhalt, gute Messung"
     }
   },
   "steps": {
     "progress": "Schritt {n} von 4",
     "back": "Zurück",
     "next": "Weiter",
-    "seeCase": "Case ansehen",
-    "startOver": "Neu beginnen",
+    "seeCase": "Business Case ansehen",
+    "startOver": "Neu starten",
     "items": [
       {
         "title": "Ihre Organisation",
-        "note": "Grösse und wie viele Personen ausscheiden."
+        "note": "Grösse und Anzahl der Austritte."
       },
       {
         "title": "Ihr Programm",
-        "note": "Was Sie tatsächlich kaufen würden."
+        "note": "Was Sie konkret einkaufen würden."
       },
       {
         "title": "Heutige Ausgangslage",
-        "note": "Coaching bewegt nur, was sich bewegen lässt."
+        "note": "Coaching wirkt nur dort, wo Entwicklungsspielraum besteht."
       },
       {
-        "title": "Der Case",
-        "note": "Was das Ledger summiert."
+        "title": "Der Business Case",
+        "note": "Was die Rechnung unter dem Strich ergibt."
       }
     ]
   },
   "fields": {
     "employees": {
       "label": "Mitarbeitende",
-      "hint": "Alle Mitarbeitenden auf der Gehaltsliste im Geltungsbereich"
+      "hint": "Alle Angestellten im betrachteten Bereich"
     },
     "salary": {
-      "label": "Durchschnittliches volles Gehalt",
-      "hint": "Gehalt plus Sozialabgaben und Leistungen"
+      "label": "Durchschnittliche Lohnvollkosten",
+      "hint": "Lohn zuzüglich Sozialabgaben und Zusatzleistungen"
     },
     "turnover": {
       "label": "Jährliche Fluktuation",
-      "hint": "Anteil der Personen, die jedes Jahr ausscheiden"
+      "hint": "Anteil der Mitarbeitenden, die jährlich austreten"
     },
     "costPer": {
-      "label": "Kosten pro Teilnehmenden",
-      "hint": "Externe Coaching-Gebühren pro Person"
+      "label": "Kosten pro teilnehmende Person",
+      "hint": "Externe Coaching-Honorare pro Person"
     },
     "duration": {
       "label": "Programmdauer",
       "hint": "Monate vom Start bis zum Abschluss"
     },
     "engagement": {
-      "label": "Heute hoch engagiert",
-      "hint": "Aus Ihrer letzten Mitarbeiterbefragung"
+      "label": "Heute stark engagiert",
+      "hint": "Gemäss Ihrer letzten Befragung zum Mitarbeitendenengagement"
     },
     "absence": {
-      "label": "Abwesenheitstage pro Person",
+      "label": "Absenztage pro Person",
       "hint": "Pro Jahr, alle Ursachen"
     },
     "replacePct": {
-      "label": "Wiederbeschaffungskosten",
-      "hint": "Anteil des Gehalts zur Wiederbesetzung einer ausscheidenden Person"
+      "label": "Wiederbesetzungskosten",
+      "hint": "Anteil des Lohns für die Wiederbesetzung einer frei gewordenen Stelle"
     },
-    "internalTime": "15 % interne Zeit (HR, Sponsoren, Teilnehmende) einbeziehen"
+    "internalTime": "15% internen Zeitaufwand einbeziehen (HR, Auftraggebende, Teilnehmende)"
   },
   "units": {
     "months": "{v} Monate",
@@ -89,16 +89,16 @@
   "programmes": {
     "label": "Programmtyp",
     "exec": {
-      "label": "Executive 1:1",
-      "note": "Führungskräfte, tiefgehende Arbeit"
+      "label": "Führungskräfte-Coaching 1:1",
+      "note": "Obere Führungsebene, vertiefte Arbeit"
     },
     "team": {
       "label": "Teamcoaching",
       "note": "Ganze Einheiten unter Druck"
     },
     "manager": {
-      "label": "Managerfähigkeiten",
-      "note": "Manager, die ihre Mitarbeitenden coachen"
+      "label": "Coaching-Kompetenzen für Führungskräfte",
+      "note": "Führungskräfte coachen ihre Mitarbeitenden"
     },
     "culture": {
       "label": "Coaching-Kultur",
@@ -106,76 +106,145 @@
     }
   },
   "sizing": {
-    "title": "Wie {programme} dimensioniert ist",
-    "note": "Dies sind typische Designannahmen für diesen Programmtyp, keine gemessenen Werte.",
+    "title": "So wird {programme} dimensioniert",
+    "note": "Dies sind typische Planungsannahmen für diesen Programmtyp, keine gemessenen Werte.",
     "direct": {
       "label": "Direkt gecoacht",
-      "calc": "{employees} Mitarbeitende × {reach}% angemeldet"
+      "calc": "{employees} Mitarbeitende × {reach}% Teilnahmequote"
     },
     "leaders": {
       "label": "Davon Führungskräfte",
-      "calc": "{participants} × {share}% in Führungspositionen, bezahlt {seniority}× überdurchschnittlich"
+      "calc": "{participants} × {share}% in Führungsrollen, mit {seniority}× Durchschnittslohn"
     },
     "indirect": {
       "label": "Indirekt erreicht",
-      "calc": "{participants} × {radius} Personen um jede, abzüglich der Gecoachten"
+      "calc": "{participants} × {radius} Personen im jeweiligen Umfeld, abzüglich der direkt Gecoachten"
     },
     "weighted": {
       "label": "Gewichtete Reichweite",
       "calc": "{participants} + {indirect} × {spill}% Gewichtung"
-    }
+    },
+    "toggle": "So berechnen wir den Umfang"
   },
   "summary": {
-    "sentence": "Ein {programme}-Programm für {participants} Personen kostet {cost} und bringt unter diesen Annahmen {benefit} pro Jahr ein — {roi} der Investition, netto {net}.",
-    "payback": "Es zahlt sich in Monat {month} aus.",
-    "noPayback": "Es zahlt sich unter diesen Annahmen nicht innerhalb von 36 Monaten aus.",
+    "sentence": "Ein Programm vom Typ {programme} für {participants} Personen kostet {cost} und bringt unter diesen Annahmen jährlich {benefit} — das {roi} der Investition, netto {net}.",
+    "payback": "Es amortisiert sich im Monat {month}.",
+    "noPayback": "Unter diesen Annahmen amortisiert es sich nicht innerhalb von 36 Monaten.",
     "talk": "Sprechen Sie mit unserem Team",
-    "prompt": "Wir haben ein {programme}-Programm für {participants} Personen mit dem ROI-Simulator modelliert und möchten die nächsten Schritte mit The Switzerland Chapter of ICF besprechen."
+    "prompt": "Wir haben mit dem ROI-Simulator ein Programm vom Typ {programme} für {participants} Personen modelliert und möchten die nächsten Schritte mit The Switzerland Chapter of ICF besprechen."
   },
   "ledger": {
-    "title": "Live-Ledger",
-    "reach": "{eff} Personen in gewichteter Reichweite",
+    "title": "Laufende Rechnung",
+    "reach": "{eff} Personen in der gewichteten Reichweite",
     "investment": "Investition",
-    "investmentNote": "inklusive 15 % interner Zeit",
+    "investmentNote": "inklusive 15% interner Zeitaufwand",
     "investmentNoteOff": "nur Programmgebühren",
-    "return": "Geschätzter jährlicher Ertrag",
-    "grossNote": "brutto, vor dem {pct}% Überlappungsrabatt",
-    "overlap": "Überlappungsrabatt",
-    "net": "Netto, Jahr eins",
-    "roiPayback": "Ertrag · Amortisation",
+    "return": "Geschätzter jährlicher Nutzen",
+    "grossNote": "brutto, vor dem Abzug von {pct}% für Überschneidungen",
+    "overlap": "Abzug für Überschneidungen",
+    "net": "Netto, erstes Jahr",
+    "roiPayback": "Rendite · Amortisation",
     "monthShort": "Monat {m}",
-    "none": "über 36 Monate hinaus",
-    "share": "{pct}% des Bruttos",
-    "footnote": "Jede obenstehende Zeile basiert auf Ihren Eingaben und veröffentlichten Effektgrössen — keine Black Box. Quellen: ICF/PwC Global Coaching Client Study; ICF + HCI Building a Coaching Culture."
+    "none": "nach mehr als 36 Monaten",
+    "share": "{pct}% des Bruttonutzens",
+    "footnote": "Jede Zeile oben ist eine Berechnung auf Basis Ihrer Eingaben und veröffentlichter Effektgrössen — keine Blackbox. Quellen: ICF/PwC Global Coaching Client Study; ICF + HCI Building a Coaching Culture."
   },
   "drivers": {
     "retention": {
-      "label": "Mitarbeiterbindung — vermiedene Wiederbeschaffungskosten",
-      "formula": "{eff} effektiv × {turnover}% ausscheidend × {fewer}% weniger × {replacePct}% von {salary}"
+      "label": "Mitarbeitendenbindung — vermiedene Wiederbesetzungskosten",
+      "formula": "{eff} effektiv erreichte Personen × {turnover}% Austritte × {fewer}% weniger × {replacePct}% von {salary}"
     },
     "productivity": {
       "label": "Produktivitätssteigerung",
-      "formula": "{eff} effektiv × {salary} × {gain}% Output-Steigerung"
+      "formula": "{eff} effektiv erreichte Personen × {salary} × {gain}% Leistungssteigerung"
     },
     "engagement": {
-      "label": "Engagement → ermessensbasierter Aufwand",
-      "formula": "+{pp}pp Engagement (von {from}%) × {eff} × 0.12% des Gehalts pro Punkt"
+      "label": "Engagement → freiwilliger Mehreinsatz",
+      "formula": "+{pp} Prozentpunkte Engagement (ausgehend von {from}%) × {eff} × 0.12% des Lohns pro Punkt"
     },
     "absence": {
-      "label": "Reduzierte Abwesenheit",
-      "formula": "{days} Tage × {eff} effektiv × {fewer}% weniger × {dayRate}/Tag"
+      "label": "Weniger Absenzen",
+      "formula": "{days} Tage × {eff} effektiv erreichte Personen × {fewer}% weniger × {dayRate}/Tag"
     },
     "derail": {
-      "label": "Vermiedene Entgleisung von Führungskräften",
-      "formula": "{leaders} Führungskräfte × 6% jährliche Entgleisung × {avoided}% vermieden × {cost}"
+      "label": "Vermiedenes Scheitern von Führungskräften",
+      "formula": "{leaders} Führungskräfte × 6% jährliche Ausfallquote durch Scheitern × {avoided}% vermieden × {cost}"
     },
     "ramp": {
-      "label": "Schnellere Einarbeitung",
-      "formula": "{newLeaders} neue Führungskräfte/Jahr × {weeks} Wochen gespart × 50% Output-Lücke"
+      "label": "Schneller zur vollen Kompetenz",
+      "formula": "{newLeaders} neue Führungskräfte/Jahr × {weeks} eingesparte Wochen × 50% Leistungslücke"
     },
     "recruiting": {
-      "label": "Geringere interne Rekrutierungsbelastung",
-      "formula": "{saved} vermiedene Abgänge × 10% des Gehalts an HR- und Managerzeit"
+      "label": "Geringerer interner Rekrutierungsaufwand",
+      "formula": "{saved} vermiedene Austritte × 10% des Lohns als Zeitaufwand für HR und Führungskräfte"
     }
+  },
+  "guide": {
+    "label": "Simulationsschritte",
+    "organisation": "Organisation",
+    "programme": "Programm",
+    "baseline": "Ausgangslage",
+    "results": "Ergebnisse",
+    "position": "{group} · Frage {n} von {total}",
+    "skip": "Typische Werte verwenden und Ergebnisse ansehen"
+  },
+  "questions": {
+    "employees": "Wie viele Personen arbeiten in Ihrer Organisation?",
+    "salary": "Was kostet eine durchschnittliche mitarbeitende Person pro Jahr?",
+    "turnover": "Wie viele Personen treten jährlich aus?",
+    "programme": "Welche Art von Coaching ziehen Sie in Betracht?",
+    "investment": "Was würde das Programm kosten?",
+    "engagement": "Wie engagiert sind Ihre Mitarbeitenden heute?",
+    "absence": "Wie viele Tage ist eine Person pro Jahr abwesend?",
+    "replacePct": "Was kostet die Wiederbesetzung einer frei gewordenen Stelle?"
+  },
+  "questionNotes": {
+    "employees": "Zählen Sie alle Angestellten, die in den betrachteten Bereich fallen könnten.",
+    "salary": "Verwenden Sie die Vollkosten: Lohn zuzüglich Sozialabgaben und Zusatzleistungen.",
+    "turnover": "Ihre jährliche Personalfluktuationsrate, unabhängig vom Grund.",
+    "programme": "Wählen Sie die passendste Option. Daraus berechnen wir Reichweite und Kosten.",
+    "investment": "Gebühren pro teilnehmende Person und Laufzeit des Programms.",
+    "engagement": "Anteil der Personen, die in Ihrer letzten Befragung als stark engagiert eingestuft wurden.",
+    "absence": "Durchschnittliche Krankheits- und Absenztage pro Person und Jahr.",
+    "replacePct": "Rekrutierung, Einarbeitung und entgangene Leistung als Anteil des Lohns."
+  },
+  "hints": {
+    "label": "Das bedeutet:",
+    "employees": "Etwa {participants} Personen würden an einem Programm vom Typ {programme} teilnehmen.",
+    "salary": "Ein Arbeitstag kostet Sie etwa {dayRate}.",
+    "turnover": "Etwa {leavers} Personen verlassen Ihre Organisation jährlich.",
+    "programme": "{participants} Personen werden direkt gecoacht, {eff} werden gewichtet erreicht, einschliesslich der Kolleginnen und Kollegen in ihrem Umfeld.",
+    "investment": "Die Gesamtinvestition beträgt {cost}.",
+    "engagement": "Tiefere Werte lassen mehr Spielraum für die Wirkung von Coaching. Organisationen mit einer starken Coaching-Kultur berichten von 62% stark engagierten Mitarbeitenden.",
+    "absence": "Das entspricht etwa {total} Absenztagen pro Jahr in Ihrer gesamten Organisation.",
+    "replacePct": "Die Wiederbesetzung einer frei gewordenen Stelle kostet Sie etwa {cost}."
+  },
+  "bar": {
+    "title": "Ihr bisheriger Business Case",
+    "return": "Nutzen",
+    "payback": "Amortisation",
+    "net": "Netto, erstes Jahr",
+    "note": "Wird mit jeder Antwort aktualisiert. Die vollständige Aufschlüsselung folgt auf der Ergebnisseite."
+  },
+  "results": {
+    "eyebrow": "Ihr Business Case",
+    "multipleNote": "Jeder investierte Franken fliesst innerhalb des ersten Jahres schätzungsweise so vielfach zurück.",
+    "caseTitle": "In einem Satz",
+    "adjust": "Antworten anpassen",
+    "driversTitle": "Wo der Nutzen entsteht"
+  },
+  "chart": {
+    "title": "Wann sich die Investition amortisiert",
+    "series": "Kumulierter Nettonutzen",
+    "monthTick": "M{m}",
+    "breakEven": "Gewinnschwelle",
+    "caption": "Kumulierter Nettostand Monat für Monat. Gewinnschwelle im Monat {m}.",
+    "captionNone": "Kumulierter Nettostand Monat für Monat. Keine Gewinnschwelle innerhalb von 36 Monaten."
+  },
+  "groups": {
+    "people": "Menschen",
+    "performance": "Leistung",
+    "leadership": "Führung",
+    "showMaths": "Berechnung anzeigen"
   }
 }
