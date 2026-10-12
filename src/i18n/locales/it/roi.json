@@ -1,0 +1,181 @@
+{
+  "meta": {
+    "title": "Simulatore ROI Coaching — The Switzerland Chapter of ICF",
+    "description": "Costruisci un business case per il coaching in quattro domande, con ogni formula e fonte nella pagina."
+  },
+  "hero": {
+    "eyebrow": "Simulatore ROI Coaching",
+    "title": "Costruisci il business case",
+    "lede": "Quattro domande. Poi un rendiconto che puoi presentare al tuo CFO."
+  },
+  "controls": {
+    "currency": "Valuta",
+    "preset": "Livello di assunzione",
+    "presets": {
+      "conservative": "Conservativo",
+      "median": "Mediana delle evidenze",
+      "ambitious": "Ambizioso"
+    },
+    "presetNotes": {
+      "conservative": "Estremità inferiore del range delle evidenze",
+      "median": "Punto medio degli studi pubblicati",
+      "ambitious": "Forte sponsorizzazione, buona misurazione"
+    }
+  },
+  "steps": {
+    "progress": "Passo {n} di 4",
+    "back": "Indietro",
+    "next": "Avanti",
+    "seeCase": "Vedi il caso",
+    "startOver": "Ricomincia",
+    "items": [
+      {
+        "title": "La tua organizzazione",
+        "note": "Dimensioni e quante persone se ne vanno."
+      },
+      {
+        "title": "Il tuo programma",
+        "note": "Cosa compreresti effettivamente."
+      },
+      {
+        "title": "Linea di base attuale",
+        "note": "Il coaching muove solo ciò che ha spazio per muoversi."
+      },
+      {
+        "title": "Il caso",
+        "note": "A quanto ammonta il rendiconto."
+      }
+    ]
+  },
+  "fields": {
+    "employees": {
+      "label": "Collaboratori",
+      "hint": "Tutti i dipendenti inclusi nell'ambito"
+    },
+    "salary": {
+      "label": "Salario medio lordo",
+      "hint": "Salario più oneri sociali e benefit"
+    },
+    "turnover": {
+      "label": "Tasso di turnover annuale",
+      "hint": "Percentuale di persone che lasciano ogni anno"
+    },
+    "costPer": {
+      "label": "Costo per partecipante",
+      "hint": "Costo del coaching esterno per persona"
+    },
+    "duration": {
+      "label": "Durata del programma",
+      "hint": "Mesi dall'inizio alla fine"
+    },
+    "engagement": {
+      "label": "Attualmente molto coinvolti",
+      "hint": "Dal tuo ultimo sondaggio sul coinvolgimento"
+    },
+    "absence": {
+      "label": "Giorni di assenza per persona",
+      "hint": "All'anno, tutte le cause"
+    },
+    "replacePct": {
+      "label": "Costo di sostituzione",
+      "hint": "Percentuale del salario per sostituire un dipendente che lascia"
+    },
+    "internalTime": "Includi 15% di tempo interno (HR, sponsor, partecipanti)"
+  },
+  "units": {
+    "months": "{v} mesi",
+    "days": "{v} giorni"
+  },
+  "programmes": {
+    "label": "Tipo di programma",
+    "exec": {
+      "label": "Executive 1:1",
+      "note": "Leader senior, lavoro approfondito"
+    },
+    "team": {
+      "label": "Coaching di squadra",
+      "note": "Intere unità sotto pressione"
+    },
+    "manager": {
+      "label": "Competenze dei manager",
+      "note": "Manager che fanno coaching ai loro collaboratori"
+    },
+    "culture": {
+      "label": "Cultura del coaching",
+      "note": "Programma a livello di organizzazione"
+    }
+  },
+  "sizing": {
+    "title": "Come viene dimensionato {programme}",
+    "note": "Queste sono ipotesi di progettazione tipiche per questo tipo di programma, non valori misurati.",
+    "direct": {
+      "label": "Coaching diretto",
+      "calc": "{employees} collaboratori × {reach}% iscritti"
+    },
+    "leaders": {
+      "label": "Di cui leader",
+      "calc": "{participants} × {share}% in ruoli di leadership, pagati {seniority}× la media"
+    },
+    "indirect": {
+      "label": "Raggiunti indirettamente",
+      "calc": "{participants} × {radius} persone intorno a ciascuno, meno i coachee"
+    },
+    "weighted": {
+      "label": "Portata ponderata",
+      "calc": "{participants} + {indirect} × {spill}% peso"
+    }
+  },
+  "summary": {
+    "sentence": "Un programma {programme} per {participants} persone costa {cost} e, su queste ipotesi, genera un ritorno di {benefit} all'anno — {roi} dell'investimento, netto {net}.",
+    "payback": "Si ripaga nel mese {month}.",
+    "noPayback": "Non si ripaga entro 36 mesi su queste ipotesi.",
+    "talk": "Parla con il nostro team",
+    "prompt": "Abbiamo modellato un programma {programme} per {participants} persone con il simulatore ROI e vorremmo discutere i prossimi passi con The Switzerland Chapter of ICF."
+  },
+  "ledger": {
+    "title": "Rendiconto in tempo reale",
+    "reach": "{eff} persone con portata ponderata",
+    "investment": "Investimento",
+    "investmentNote": "incluso 15% di tempo interno",
+    "investmentNoteOff": "solo costi del programma",
+    "return": "Ritorno annuale stimato",
+    "grossNote": "lordo, prima dello sconto di sovrapposizione del {pct}%",
+    "overlap": "Sconto di sovrapposizione",
+    "net": "Netto, primo anno",
+    "roiPayback": "Ritorno · ritorno sull'investimento",
+    "monthShort": "mese {m}",
+    "none": "oltre 36 mesi",
+    "share": "{pct}% del lordo",
+    "footnote": "Ogni riga sopra è un calcolo aritmetico sui tuoi input e sulle dimensioni degli effetti pubblicate — nessuna scatola nera. Fonti: ICF/PwC Global Coaching Client Study; ICF + HCI Building a Coaching Culture."
+  },
+  "drivers": {
+    "retention": {
+      "label": "Retention — costo di sostituzione evitato",
+      "formula": "{eff} effettivi × {turnover}% che lasciano × {fewer}% in meno × {replacePct}% di {salary}"
+    },
+    "productivity": {
+      "label": "Aumento della produttività",
+      "formula": "{eff} effettivi × {salary} × {gain}% guadagno di output"
+    },
+    "engagement": {
+      "label": "Coinvolgimento → sforzo discrezionale",
+      "formula": "+{pp}pp di coinvolgimento (dal {from}%) × {eff} × 0.12% del salario per punto"
+    },
+    "absence": {
+      "label": "Riduzione delle assenze",
+      "formula": "{days} giorni × {eff} effettivi × {fewer}% in meno × {dayRate}/giorno"
+    },
+    "derail": {
+      "label": "Deragliamento dei leader evitato",
+      "formula": "{leaders} leader × 6% deragliamento annuale × {avoided}% evitato × {cost}"
+    },
+    "ramp": {
+      "label": "Tempo più rapido per la competenza",
+      "formula": "{newLeaders} nuovi leader/anno × {weeks} settimane risparmiate × 50% gap di output"
+    },
+    "recruiting": {
+      "label": "Minore carico di recruiting interno",
+      "formula": "{saved} partenze evitate × 10% del salario in tempo HR e manageriale"
+    }
+  }
+}

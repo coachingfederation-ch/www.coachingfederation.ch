@@ -66,6 +66,7 @@ import { Route as CommunitiesIndexRouteImport } from './routes/communities.index
 import { Route as CommunitiesSlugRouteImport } from './routes/communities.$slug'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
+import { Route as ForOrganisationsRoiSimulatorRouteImport } from './routes/for-organisations_.roi-simulator'
 import { Route as FormTokenRouteImport } from './routes/form.$token'
 import { Route as GuestPassTokenRouteImport } from './routes/guest-pass.$token'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
@@ -82,6 +83,7 @@ import { Route as LocaleCommunitiesIndexRouteImport } from './routes/$locale/com
 import { Route as LocaleCommunitiesSlugRouteImport } from './routes/$locale/communities.$slug'
 import { Route as LocaleEventsIndexRouteImport } from './routes/$locale/events.index'
 import { Route as LocaleEventsSlugRouteImport } from './routes/$locale/events.$slug'
+import { Route as LocaleForOrganisationsRoiSimulatorRouteImport } from './routes/$locale/for-organisations_.roi-simulator'
 import { Route as LocaleGuidesIndexRouteImport } from './routes/$locale/guides.index'
 import { Route as LocaleGuidesSlugRouteImport } from './routes/$locale/guides.$slug'
 import { Route as LocaleInsightsIndexRouteImport } from './routes/$locale/insights.index'
@@ -431,6 +433,12 @@ const EventsSlugRoute = EventsSlugRouteImport.update({
   path: '/events/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForOrganisationsRoiSimulatorRoute =
+  ForOrganisationsRoiSimulatorRouteImport.update({
+    id: '/for-organisations_/roi-simulator',
+    path: '/for-organisations/roi-simulator',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const FormTokenRoute = FormTokenRouteImport.update({
   id: '/form/$token',
   path: '/form/$token',
@@ -511,6 +519,12 @@ const LocaleEventsSlugRoute = LocaleEventsSlugRouteImport.update({
   path: '/events/$slug',
   getParentRoute: () => LocaleRouteRoute,
 } as any)
+const LocaleForOrganisationsRoiSimulatorRoute =
+  LocaleForOrganisationsRoiSimulatorRouteImport.update({
+    id: '/for-organisations_/roi-simulator',
+    path: '/for-organisations/roi-simulator',
+    getParentRoute: () => LocaleRouteRoute,
+  } as any)
 const LocaleGuidesIndexRoute = LocaleGuidesIndexRouteImport.update({
   id: '/guides/',
   path: '/guides/',
@@ -897,6 +911,7 @@ export interface FileRoutesByFullPath {
   '/coach/$profileId': typeof CoachProfileIdRoute
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/for-organisations/roi-simulator': typeof ForOrganisationsRoiSimulatorRoute
   '/form/$token': typeof FormTokenRoute
   '/guest-pass/$token': typeof GuestPassTokenRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -914,6 +929,7 @@ export interface FileRoutesByFullPath {
   '/$locale/coach/$profileId': typeof LocaleCoachProfileIdRoute
   '/$locale/communities/$slug': typeof LocaleCommunitiesSlugRoute
   '/$locale/events/$slug': typeof LocaleEventsSlugRoute
+  '/$locale/for-organisations/roi-simulator': typeof LocaleForOrganisationsRoiSimulatorRoute
   '/$locale/guides/$slug': typeof LocaleGuidesSlugRoute
   '/$locale/insights/$id': typeof LocaleInsightsIdRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -1028,6 +1044,7 @@ export interface FileRoutesByTo {
   '/coach/$profileId': typeof CoachProfileIdRoute
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/for-organisations/roi-simulator': typeof ForOrganisationsRoiSimulatorRoute
   '/form/$token': typeof FormTokenRoute
   '/guest-pass/$token': typeof GuestPassTokenRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -1045,6 +1062,7 @@ export interface FileRoutesByTo {
   '/$locale/coach/$profileId': typeof LocaleCoachProfileIdRoute
   '/$locale/communities/$slug': typeof LocaleCommunitiesSlugRoute
   '/$locale/events/$slug': typeof LocaleEventsSlugRoute
+  '/$locale/for-organisations/roi-simulator': typeof LocaleForOrganisationsRoiSimulatorRoute
   '/$locale/guides/$slug': typeof LocaleGuidesSlugRoute
   '/$locale/insights/$id': typeof LocaleInsightsIdRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -1166,6 +1184,7 @@ export interface FileRoutesById {
   '/coach/$profileId': typeof CoachProfileIdRoute
   '/communities/$slug': typeof CommunitiesSlugRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/for-organisations_/roi-simulator': typeof ForOrganisationsRoiSimulatorRoute
   '/form/$token': typeof FormTokenRoute
   '/guest-pass/$token': typeof GuestPassTokenRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -1183,6 +1202,7 @@ export interface FileRoutesById {
   '/$locale/coach/$profileId': typeof LocaleCoachProfileIdRoute
   '/$locale/communities/$slug': typeof LocaleCommunitiesSlugRoute
   '/$locale/events/$slug': typeof LocaleEventsSlugRoute
+  '/$locale/for-organisations_/roi-simulator': typeof LocaleForOrganisationsRoiSimulatorRoute
   '/$locale/guides/$slug': typeof LocaleGuidesSlugRoute
   '/$locale/insights/$id': typeof LocaleInsightsIdRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -1303,6 +1323,7 @@ export interface FileRouteTypes {
     | '/coach/$profileId'
     | '/communities/$slug'
     | '/events/$slug'
+    | '/for-organisations/roi-simulator'
     | '/form/$token'
     | '/guest-pass/$token'
     | '/guides/$slug'
@@ -1320,6 +1341,7 @@ export interface FileRouteTypes {
     | '/$locale/coach/$profileId'
     | '/$locale/communities/$slug'
     | '/$locale/events/$slug'
+    | '/$locale/for-organisations/roi-simulator'
     | '/$locale/guides/$slug'
     | '/$locale/insights/$id'
     | '/.lovable/oauth/consent'
@@ -1434,6 +1456,7 @@ export interface FileRouteTypes {
     | '/coach/$profileId'
     | '/communities/$slug'
     | '/events/$slug'
+    | '/for-organisations/roi-simulator'
     | '/form/$token'
     | '/guest-pass/$token'
     | '/guides/$slug'
@@ -1451,6 +1474,7 @@ export interface FileRouteTypes {
     | '/$locale/coach/$profileId'
     | '/$locale/communities/$slug'
     | '/$locale/events/$slug'
+    | '/$locale/for-organisations/roi-simulator'
     | '/$locale/guides/$slug'
     | '/$locale/insights/$id'
     | '/.lovable/oauth/consent'
@@ -1571,6 +1595,7 @@ export interface FileRouteTypes {
     | '/coach/$profileId'
     | '/communities/$slug'
     | '/events/$slug'
+    | '/for-organisations_/roi-simulator'
     | '/form/$token'
     | '/guest-pass/$token'
     | '/guides/$slug'
@@ -1588,6 +1613,7 @@ export interface FileRouteTypes {
     | '/$locale/coach/$profileId'
     | '/$locale/communities/$slug'
     | '/$locale/events/$slug'
+    | '/$locale/for-organisations_/roi-simulator'
     | '/$locale/guides/$slug'
     | '/$locale/insights/$id'
     | '/.lovable/oauth/consent'
@@ -1688,6 +1714,7 @@ export interface RootRouteChildren {
   CoachProfileIdRoute: typeof CoachProfileIdRoute
   CommunitiesSlugRoute: typeof CommunitiesSlugRoute
   EventsSlugRoute: typeof EventsSlugRoute
+  ForOrganisationsRoiSimulatorRoute: typeof ForOrganisationsRoiSimulatorRoute
   FormTokenRoute: typeof FormTokenRoute
   GuestPassTokenRoute: typeof GuestPassTokenRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
@@ -2132,6 +2159,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/for-organisations_/roi-simulator': {
+      id: '/for-organisations_/roi-simulator'
+      path: '/for-organisations/roi-simulator'
+      fullPath: '/for-organisations/roi-simulator'
+      preLoaderRoute: typeof ForOrganisationsRoiSimulatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/form/$token': {
       id: '/form/$token'
       path: '/form/$token'
@@ -2242,6 +2276,13 @@ declare module '@tanstack/react-router' {
       path: '/events/$slug'
       fullPath: '/$locale/events/$slug'
       preLoaderRoute: typeof LocaleEventsSlugRouteImport
+      parentRoute: typeof LocaleRouteRoute
+    }
+    '/$locale/for-organisations_/roi-simulator': {
+      id: '/$locale/for-organisations_/roi-simulator'
+      path: '/for-organisations/roi-simulator'
+      fullPath: '/$locale/for-organisations/roi-simulator'
+      preLoaderRoute: typeof LocaleForOrganisationsRoiSimulatorRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
     '/$locale/guides/': {
@@ -2710,6 +2751,7 @@ interface LocaleRouteRouteChildren {
   LocaleCoachProfileIdRoute: typeof LocaleCoachProfileIdRoute
   LocaleCommunitiesSlugRoute: typeof LocaleCommunitiesSlugRoute
   LocaleEventsSlugRoute: typeof LocaleEventsSlugRoute
+  LocaleForOrganisationsRoiSimulatorRoute: typeof LocaleForOrganisationsRoiSimulatorRoute
   LocaleGuidesSlugRoute: typeof LocaleGuidesSlugRoute
   LocaleCommunitiesIndexRoute: typeof LocaleCommunitiesIndexRoute
   LocaleEventsIndexRoute: typeof LocaleEventsIndexRoute
@@ -2731,6 +2773,8 @@ const LocaleRouteRouteChildren: LocaleRouteRouteChildren = {
   LocaleCoachProfileIdRoute: LocaleCoachProfileIdRoute,
   LocaleCommunitiesSlugRoute: LocaleCommunitiesSlugRoute,
   LocaleEventsSlugRoute: LocaleEventsSlugRoute,
+  LocaleForOrganisationsRoiSimulatorRoute:
+    LocaleForOrganisationsRoiSimulatorRoute,
   LocaleGuidesSlugRoute: LocaleGuidesSlugRoute,
   LocaleCommunitiesIndexRoute: LocaleCommunitiesIndexRoute,
   LocaleEventsIndexRoute: LocaleEventsIndexRoute,
@@ -2906,6 +2950,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachProfileIdRoute: CoachProfileIdRoute,
   CommunitiesSlugRoute: CommunitiesSlugRoute,
   EventsSlugRoute: EventsSlugRoute,
+  ForOrganisationsRoiSimulatorRoute: ForOrganisationsRoiSimulatorRoute,
   FormTokenRoute: FormTokenRoute,
   GuestPassTokenRoute: GuestPassTokenRoute,
   GuidesSlugRoute: GuidesSlugRoute,
