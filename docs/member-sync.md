@@ -182,7 +182,7 @@ Two things to be clear about:
 - **The member hears from us three times, starting at their expiry date.** ICF
   Global keeps a lapsed membership in the feed for two more months, so waiting for
   the feed drop would reach the member eight weeks late. `icf-member-lifecycle-daily`
-  (04:15 UTC) posts to `/api/public/member-lifecycle`, which runs
+  (07:15 UTC) posts to `/api/public/member-lifecycle`, which runs
   `runLifecycleSweep()` in `src/lib/member-lifecycle.server.ts`. From
   `members.membership_expiration_date` it queues, into `member_engagement_sends`:
   `grace_reengagement` on the expiry date, `grace_first_warning` 30 days after it,
@@ -317,7 +317,7 @@ SOAP fetch needs chunking rather than a longer budget.
 
 ### Automatic retries
 
-Three cron jobs — `icf-member-sync-retry-1/2/3` at 03:30, 03:45 and 04:00 UTC —
+Three cron jobs — `icf-member-sync-retry-1/2/3` at 06:15, 06:30 and 06:45 UTC —
 post to `/api/public/member-sync-retry` with `{"attempt": n}`, using the same
 `x-cron-token` secret. The schedule only decides _when to ask_;
 `runSyncRetry()` in `src/lib/member-sync-retry.server.ts` decides whether a retry
@@ -376,3 +376,15 @@ run parks the new address on the member record (`pending_email`,
 `email_change_state`) and logs `email_change_pending`, `email_change_blocked` or
 `email_change_detected`; the member confirms it themselves from the Member Area.
 Full flow in `docs/auth-and-claim-flow.md`.
+
+## Flapping protection
+
+ICF Global sometimes omits members from the feed for a single night even though
+their membership is valid (observed with corporate CIO members). A member whose
+`membership_expiration_date` is still in the future is therefore only moved to
+grace after being absent from **two successful syncs in a row**. The first
+absence logs a `member_feed_absent_deferred` event (info) and leaves the member
+active; a later absence that finds such an event newer than the member's
+`last_synced_at` deactivates as usual. Reappearing in the feed updates
+`last_synced_at` and resets the strike. Members with a past or missing
+expiration date are deactivated on the first absence, as before.

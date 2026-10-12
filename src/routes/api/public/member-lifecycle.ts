@@ -6,7 +6,7 @@
  * members who returned, and notifies the office about records due for removal.
  * It never deletes anything — anonymisation stays a confirmed staff action.
  *
- * Scheduled as `icf-member-lifecycle-daily` at 04:15 UTC, created with run_sql
+ * Scheduled as `icf-member-lifecycle-daily` at 07:15 UTC, created with run_sql
  * (not a migration — the command carries environment-specific values). It has
  * the same shape as the other jobs: the token is read from
  * `private.app_config` inside the job command, never inlined.

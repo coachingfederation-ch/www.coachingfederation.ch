@@ -28,7 +28,7 @@ import { notifySyncFailed } from "./member-sync-alert.server";
 
 export const RETRY_ATTEMPTS = 3;
 
-/** Runs newer than this are "this night's" runs. Covers the 03:15–04:00 window. */
+/** Runs newer than this are "this night's" runs. Covers the 06:00–06:45 window. */
 const WINDOW_HOURS = 6;
 
 export type RetryOutcome = {
