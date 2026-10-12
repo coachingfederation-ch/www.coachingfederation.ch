@@ -105,7 +105,7 @@ export function ProgrammeSizing({
   const { t } = useI18n();
   const P = PROGRAMMES[programme];
   const n = (v: number) => formatNumber(v, currency);
-  const rows = [
+  const rows: { key: string; value: number; vars: Record<string, string | number> }[] = [
     { key: "direct", value: result.participants, vars: { employees: n(employees), reach: Math.round(P.reach * 100) } },
     {
       key: "leaders",
