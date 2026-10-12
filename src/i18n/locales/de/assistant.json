@@ -1,23 +1,23 @@
 {
   "launcher": "Fragen Sie uns",
   "title": "Chapter-Assistent",
-  "subtitle": "Coaches, Credentials, Events und Communities",
-  "empty": "Fragen Sie nach einem Coach, ICF Credentials, kommenden Events oder unseren lokalen Communities.",
-  "placeholder": "Stellen Sie eine Frage …",
-  "thinking": "Denkt nach …",
-  "searching": "Wird nachgeschlagen …",
-  "reset": "Neu beginnen",
+  "subtitle": "Coaches, Zertifizierungen, Events und Communities",
+  "empty": "Fragen Sie nach der Suche nach einem Coach, ICF-Zertifizierungen, kommenden Events oder unseren lokalen Communities.",
+  "placeholder": "Frage stellen…",
+  "thinking": "Überlege…",
+  "searching": "Wird gesucht…",
+  "reset": "Neu starten",
   "close": "Chat schliessen",
   "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder schreiben Sie an office@coachingfederation.ch.",
-  "disclaimer": "KI-Assistent. Er kann Fehler machen – bitte prüfen Sie Wichtiges nach.",
+  "disclaimer": "KI-Assistent. Kann Fehler machen — bitte überprüfen Sie wichtige Informationen.",
   "suggestions": {
-    "coach": "Einen Coach in meiner Nähe finden",
+    "coach": "Coach in meiner Nähe finden",
     "events": "Was steht als Nächstes an?",
-    "credentials": "Was ist ein ICF Credential?"
+    "credentials": "Was ist eine ICF-Zertifizierung?"
   },
   "externalLink": {
     "title": "Externen Link öffnen?",
-    "body": "Dieser Link führt auf eine andere Website.",
+    "body": "Dieser Link führt zu einer externen Website.",
     "cancel": "Abbrechen",
     "open": "Link öffnen"
   },
@@ -25,9 +25,9 @@
     "question": "War das hilfreich?",
     "yes": "Hilfreich",
     "no": "Nicht hilfreich",
-    "thanks": "Danke für Ihre Rückmeldung."
+    "thanks": "Vielen Dank für das Feedback."
   },
   "prompts": {
-    "organisations": "Wir sind eine Organisation und interessieren uns für Coaching für unsere Führungskräfte und Teams — wie kann uns The Switzerland Chapter of ICF unterstützen?"
+    "organisations": "Wir sind eine Organisation, die sich für Coaching für unsere Führungskräfte und Teams interessiert — wie kann The Switzerland Chapter of ICF helfen?"
   }
 }

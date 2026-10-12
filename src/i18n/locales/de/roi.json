@@ -1,0 +1,181 @@
+{
+  "meta": {
+    "title": "Coaching ROI Simulator — The Switzerland Chapter of ICF",
+    "description": "Erstellen Sie einen Business Case für Coaching in vier Fragen, mit jeder Formel und Quelle auf der Seite."
+  },
+  "hero": {
+    "eyebrow": "Coaching ROI Simulator",
+    "title": "Erstellen Sie den Business Case",
+    "lede": "Vier Fragen. Dann ein Ledger, das Sie Ihrem CFO vorlegen können."
+  },
+  "controls": {
+    "currency": "Währung",
+    "preset": "Annahme-Niveau",
+    "presets": {
+      "conservative": "Konservativ",
+      "median": "Evidenz Median",
+      "ambitious": "Ambitioniert"
+    },
+    "presetNotes": {
+      "conservative": "Untergrenze des Evidenzbereichs",
+      "median": "Mittelwert veröffentlichter Studien",
+      "ambitious": "Starke Unterstützung, gute Messung"
+    }
+  },
+  "steps": {
+    "progress": "Schritt {n} von 4",
+    "back": "Zurück",
+    "next": "Weiter",
+    "seeCase": "Case ansehen",
+    "startOver": "Neu beginnen",
+    "items": [
+      {
+        "title": "Ihre Organisation",
+        "note": "Grösse und wie viele Personen ausscheiden."
+      },
+      {
+        "title": "Ihr Programm",
+        "note": "Was Sie tatsächlich kaufen würden."
+      },
+      {
+        "title": "Heutige Ausgangslage",
+        "note": "Coaching bewegt nur, was sich bewegen lässt."
+      },
+      {
+        "title": "Der Case",
+        "note": "Was das Ledger summiert."
+      }
+    ]
+  },
+  "fields": {
+    "employees": {
+      "label": "Mitarbeitende",
+      "hint": "Alle Mitarbeitenden auf der Gehaltsliste im Geltungsbereich"
+    },
+    "salary": {
+      "label": "Durchschnittliches volles Gehalt",
+      "hint": "Gehalt plus Sozialabgaben und Leistungen"
+    },
+    "turnover": {
+      "label": "Jährliche Fluktuation",
+      "hint": "Anteil der Personen, die jedes Jahr ausscheiden"
+    },
+    "costPer": {
+      "label": "Kosten pro Teilnehmenden",
+      "hint": "Externe Coaching-Gebühren pro Person"
+    },
+    "duration": {
+      "label": "Programmdauer",
+      "hint": "Monate vom Start bis zum Abschluss"
+    },
+    "engagement": {
+      "label": "Heute hoch engagiert",
+      "hint": "Aus Ihrer letzten Mitarbeiterbefragung"
+    },
+    "absence": {
+      "label": "Abwesenheitstage pro Person",
+      "hint": "Pro Jahr, alle Ursachen"
+    },
+    "replacePct": {
+      "label": "Wiederbeschaffungskosten",
+      "hint": "Anteil des Gehalts zur Wiederbesetzung einer ausscheidenden Person"
+    },
+    "internalTime": "15 % interne Zeit (HR, Sponsoren, Teilnehmende) einbeziehen"
+  },
+  "units": {
+    "months": "{v} Monate",
+    "days": "{v} Tage"
+  },
+  "programmes": {
+    "label": "Programmtyp",
+    "exec": {
+      "label": "Executive 1:1",
+      "note": "Führungskräfte, tiefgehende Arbeit"
+    },
+    "team": {
+      "label": "Teamcoaching",
+      "note": "Ganze Einheiten unter Druck"
+    },
+    "manager": {
+      "label": "Managerfähigkeiten",
+      "note": "Manager, die ihre Mitarbeitenden coachen"
+    },
+    "culture": {
+      "label": "Coaching-Kultur",
+      "note": "Organisationsweites Programm"
+    }
+  },
+  "sizing": {
+    "title": "Wie {programme} dimensioniert ist",
+    "note": "Dies sind typische Designannahmen für diesen Programmtyp, keine gemessenen Werte.",
+    "direct": {
+      "label": "Direkt gecoacht",
+      "calc": "{employees} Mitarbeitende × {reach}% angemeldet"
+    },
+    "leaders": {
+      "label": "Davon Führungskräfte",
+      "calc": "{participants} × {share}% in Führungspositionen, bezahlt {seniority}× überdurchschnittlich"
+    },
+    "indirect": {
+      "label": "Indirekt erreicht",
+      "calc": "{participants} × {radius} Personen um jede, abzüglich der Gecoachten"
+    },
+    "weighted": {
+      "label": "Gewichtete Reichweite",
+      "calc": "{participants} + {indirect} × {spill}% Gewichtung"
+    }
+  },
+  "summary": {
+    "sentence": "Ein {programme}-Programm für {participants} Personen kostet {cost} und bringt unter diesen Annahmen {benefit} pro Jahr ein — {roi} der Investition, netto {net}.",
+    "payback": "Es zahlt sich in Monat {month} aus.",
+    "noPayback": "Es zahlt sich unter diesen Annahmen nicht innerhalb von 36 Monaten aus.",
+    "talk": "Sprechen Sie mit unserem Team",
+    "prompt": "Wir haben ein {programme}-Programm für {participants} Personen mit dem ROI-Simulator modelliert und möchten die nächsten Schritte mit The Switzerland Chapter of ICF besprechen."
+  },
+  "ledger": {
+    "title": "Live-Ledger",
+    "reach": "{eff} Personen in gewichteter Reichweite",
+    "investment": "Investition",
+    "investmentNote": "inklusive 15 % interner Zeit",
+    "investmentNoteOff": "nur Programmgebühren",
+    "return": "Geschätzter jährlicher Ertrag",
+    "grossNote": "brutto, vor dem {pct}% Überlappungsrabatt",
+    "overlap": "Überlappungsrabatt",
+    "net": "Netto, Jahr eins",
+    "roiPayback": "Ertrag · Amortisation",
+    "monthShort": "Monat {m}",
+    "none": "über 36 Monate hinaus",
+    "share": "{pct}% des Bruttos",
+    "footnote": "Jede obenstehende Zeile basiert auf Ihren Eingaben und veröffentlichten Effektgrössen — keine Black Box. Quellen: ICF/PwC Global Coaching Client Study; ICF + HCI Building a Coaching Culture."
+  },
+  "drivers": {
+    "retention": {
+      "label": "Mitarbeiterbindung — vermiedene Wiederbeschaffungskosten",
+      "formula": "{eff} effektiv × {turnover}% ausscheidend × {fewer}% weniger × {replacePct}% von {salary}"
+    },
+    "productivity": {
+      "label": "Produktivitätssteigerung",
+      "formula": "{eff} effektiv × {salary} × {gain}% Output-Steigerung"
+    },
+    "engagement": {
+      "label": "Engagement → ermessensbasierter Aufwand",
+      "formula": "+{pp}pp Engagement (von {from}%) × {eff} × 0.12% des Gehalts pro Punkt"
+    },
+    "absence": {
+      "label": "Reduzierte Abwesenheit",
+      "formula": "{days} Tage × {eff} effektiv × {fewer}% weniger × {dayRate}/Tag"
+    },
+    "derail": {
+      "label": "Vermiedene Entgleisung von Führungskräften",
+      "formula": "{leaders} Führungskräfte × 6% jährliche Entgleisung × {avoided}% vermieden × {cost}"
+    },
+    "ramp": {
+      "label": "Schnellere Einarbeitung",
+      "formula": "{newLeaders} neue Führungskräfte/Jahr × {weeks} Wochen gespart × 50% Output-Lücke"
+    },
+    "recruiting": {
+      "label": "Geringere interne Rekrutierungsbelastung",
+      "formula": "{saved} vermiedene Abgänge × 10% des Gehalts an HR- und Managerzeit"
+    }
+  }
+}

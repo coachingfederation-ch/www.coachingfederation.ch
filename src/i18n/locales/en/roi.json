@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "title": "Coaching ROI Simulator — The Switzerland Chapter of ICF",
+    "description": "Build a business case for coaching in four questions, with every formula and source on the page."
+  },
+  "hero": {
+    "eyebrow": "Coaching ROI simulator",
+    "title": "Build the business case",
+    "lede": "Four questions. Then a ledger you can put in front of your CFO."
+  },
+  "controls": {
+    "currency": "Currency",
+    "preset": "Assumption level",
+    "presets": {
+      "conservative": "Conservative",
+      "median": "Evidence median",
+      "ambitious": "Ambitious"
+    },
+    "presetNotes": {
+      "conservative": "Bottom of the evidence range",
+      "median": "Mid-point of published studies",
+      "ambitious": "Strong sponsorship, good measurement"
+    }
+  },
+  "steps": {
+    "progress": "Step {n} of 4",
+    "back": "Back",
+    "next": "Next",
+    "seeCase": "See the case",
+    "startOver": "Start over",
+    "items": [
+      { "title": "Your organisation", "note": "Size and how many people leave." },
+      { "title": "Your programme", "note": "What you would actually buy." },
+      { "title": "Today's baseline", "note": "Coaching only moves what has room to move." },
+      { "title": "The case", "note": "What the ledger adds up to." }
+    ]
+  },
+  "fields": {
+    "employees": { "label": "Employees", "hint": "Everyone on payroll in scope" },
+    "salary": { "label": "Average loaded salary", "hint": "Salary plus social charges and benefits" },
+    "turnover": { "label": "Annual turnover", "hint": "Share of people who leave each year" },
+    "costPer": { "label": "Cost per participant", "hint": "External coaching fees per person" },
+    "duration": { "label": "Programme length", "hint": "Months from kick-off to close" },
+    "engagement": { "label": "Highly engaged today", "hint": "From your last engagement survey" },
+    "absence": { "label": "Absence days per person", "hint": "Per year, all causes" },
+    "replacePct": { "label": "Replacement cost", "hint": "Share of salary to replace one leaver" },
+    "internalTime": "Include 15% internal time (HR, sponsors, participants)"
+  },
+  "units": { "months": "{v} months", "days": "{v} days" },
+  "programmes": {
+    "label": "Programme type",
+    "exec": { "label": "Executive 1:1", "note": "Senior leaders, deep work" },
+    "team": { "label": "Team coaching", "note": "Whole units under pressure" },
+    "manager": { "label": "Manager skills", "note": "Managers coaching their people" },
+    "culture": { "label": "Coaching culture", "note": "Organisation-wide programme" }
+  },
+  "sizing": {
+    "title": "How {programme} is sized",
+    "note": "These are typical design assumptions for this programme type, not measured values.",
+    "direct": { "label": "Coached directly", "calc": "{employees} employees × {reach}% enrolled" },
+    "leaders": { "label": "Of whom leaders", "calc": "{participants} × {share}% in leadership roles, paid {seniority}× average" },
+    "indirect": { "label": "Indirectly reached", "calc": "{participants} × {radius} people around each, minus the coached" },
+    "weighted": { "label": "Weighted reach", "calc": "{participants} + {indirect} × {spill}% weight" }
+  },
+  "summary": {
+    "sentence": "A {programme} programme for {participants} people costs {cost} and, on these assumptions, returns {benefit} a year — {roi} the investment, net {net}.",
+    "payback": "It pays back in month {month}.",
+    "noPayback": "It does not pay back within 36 months on these assumptions.",
+    "talk": "Talk to our team",
+    "prompt": "We've modelled a {programme} programme for {participants} people with the ROI simulator and would like to discuss next steps with The Switzerland Chapter of ICF."
+  },
+  "ledger": {
+    "title": "Live ledger",
+    "reach": "{eff} people in weighted reach",
+    "investment": "Investment",
+    "investmentNote": "including 15% internal time",
+    "investmentNoteOff": "programme fees only",
+    "return": "Estimated annual return",
+    "grossNote": "gross, before the {pct}% overlap discount",
+    "overlap": "Overlap discount",
+    "net": "Net, year one",
+    "roiPayback": "Return · payback",
+    "monthShort": "month {m}",
+    "none": "beyond 36 months",
+    "share": "{pct}% of gross",
+    "footnote": "Every line above is arithmetic on your inputs and published effect sizes — no black box. Sources: ICF/PwC Global Coaching Client Study; ICF + HCI Building a Coaching Culture."
+  },
+  "drivers": {
+    "retention": { "label": "Retention — avoided replacement cost", "formula": "{eff} effective × {turnover}% leaving × {fewer}% fewer × {replacePct}% of {salary}" },
+    "productivity": { "label": "Productivity uplift", "formula": "{eff} effective × {salary} × {gain}% output gain" },
+    "engagement": { "label": "Engagement → discretionary effort", "formula": "+{pp}pp engagement (from {from}%) × {eff} × 0.12% of salary per point" },
+    "absence": { "label": "Reduced absence", "formula": "{days} days × {eff} effective × {fewer}% fewer × {dayRate}/day" },
+    "derail": { "label": "Avoided leader derailment", "formula": "{leaders} leaders × 6% annual derailment × {avoided}% avoided × {cost}" },
+    "ramp": { "label": "Faster time to competence", "formula": "{newLeaders} new leaders/yr × {weeks} weeks saved × 50% output gap" },
+    "recruiting": { "label": "Lower internal recruiting load", "formula": "{saved} avoided departures × 10% of salary in HR and manager time" }
+  }
+}
