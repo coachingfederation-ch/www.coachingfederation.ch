@@ -6,7 +6,7 @@
   "hero": {
     "eyebrow": "Coaching ROI simulator",
     "title": "Build the business case",
-    "lede": "Four questions. Then a ledger you can put in front of your CFO."
+    "lede": "A few short questions. Then a business case you can put in front of your CFO."
   },
   "controls": {
     "currency": "Currency",
@@ -29,38 +29,102 @@
     "seeCase": "See the case",
     "startOver": "Start over",
     "items": [
-      { "title": "Your organisation", "note": "Size and how many people leave." },
-      { "title": "Your programme", "note": "What you would actually buy." },
-      { "title": "Today's baseline", "note": "Coaching only moves what has room to move." },
-      { "title": "The case", "note": "What the ledger adds up to." }
+      {
+        "title": "Your organisation",
+        "note": "Size and how many people leave."
+      },
+      {
+        "title": "Your programme",
+        "note": "What you would actually buy."
+      },
+      {
+        "title": "Today's baseline",
+        "note": "Coaching only moves what has room to move."
+      },
+      {
+        "title": "The case",
+        "note": "What the ledger adds up to."
+      }
     ]
   },
   "fields": {
-    "employees": { "label": "Employees", "hint": "Everyone on payroll in scope" },
-    "salary": { "label": "Average loaded salary", "hint": "Salary plus social charges and benefits" },
-    "turnover": { "label": "Annual turnover", "hint": "Share of people who leave each year" },
-    "costPer": { "label": "Cost per participant", "hint": "External coaching fees per person" },
-    "duration": { "label": "Programme length", "hint": "Months from kick-off to close" },
-    "engagement": { "label": "Highly engaged today", "hint": "From your last engagement survey" },
-    "absence": { "label": "Absence days per person", "hint": "Per year, all causes" },
-    "replacePct": { "label": "Replacement cost", "hint": "Share of salary to replace one leaver" },
+    "employees": {
+      "label": "Employees",
+      "hint": "Everyone on payroll in scope"
+    },
+    "salary": {
+      "label": "Average loaded salary",
+      "hint": "Salary plus social charges and benefits"
+    },
+    "turnover": {
+      "label": "Annual turnover",
+      "hint": "Share of people who leave each year"
+    },
+    "costPer": {
+      "label": "Cost per participant",
+      "hint": "External coaching fees per person"
+    },
+    "duration": {
+      "label": "Programme length",
+      "hint": "Months from kick-off to close"
+    },
+    "engagement": {
+      "label": "Highly engaged today",
+      "hint": "From your last engagement survey"
+    },
+    "absence": {
+      "label": "Absence days per person",
+      "hint": "Per year, all causes"
+    },
+    "replacePct": {
+      "label": "Replacement cost",
+      "hint": "Share of salary to replace one leaver"
+    },
     "internalTime": "Include 15% internal time (HR, sponsors, participants)"
   },
-  "units": { "months": "{v} months", "days": "{v} days" },
+  "units": {
+    "months": "{v} months",
+    "days": "{v} days"
+  },
   "programmes": {
     "label": "Programme type",
-    "exec": { "label": "Executive 1:1", "note": "Senior leaders, deep work" },
-    "team": { "label": "Team coaching", "note": "Whole units under pressure" },
-    "manager": { "label": "Manager skills", "note": "Managers coaching their people" },
-    "culture": { "label": "Coaching culture", "note": "Organisation-wide programme" }
+    "exec": {
+      "label": "Executive 1:1",
+      "note": "Senior leaders, deep work"
+    },
+    "team": {
+      "label": "Team coaching",
+      "note": "Whole units under pressure"
+    },
+    "manager": {
+      "label": "Manager skills",
+      "note": "Managers coaching their people"
+    },
+    "culture": {
+      "label": "Coaching culture",
+      "note": "Organisation-wide programme"
+    }
   },
   "sizing": {
     "title": "How {programme} is sized",
     "note": "These are typical design assumptions for this programme type, not measured values.",
-    "direct": { "label": "Coached directly", "calc": "{employees} employees × {reach}% enrolled" },
-    "leaders": { "label": "Of whom leaders", "calc": "{participants} × {share}% in leadership roles, paid {seniority}× average" },
-    "indirect": { "label": "Indirectly reached", "calc": "{participants} × {radius} people around each, minus the coached" },
-    "weighted": { "label": "Weighted reach", "calc": "{participants} + {indirect} × {spill}% weight" }
+    "direct": {
+      "label": "Coached directly",
+      "calc": "{employees} employees × {reach}% enrolled"
+    },
+    "leaders": {
+      "label": "Of whom leaders",
+      "calc": "{participants} × {share}% in leadership roles, paid {seniority}× average"
+    },
+    "indirect": {
+      "label": "Indirectly reached",
+      "calc": "{participants} × {radius} people around each, minus the coached"
+    },
+    "weighted": {
+      "label": "Weighted reach",
+      "calc": "{participants} + {indirect} × {spill}% weight"
+    },
+    "toggle": "How we size this"
   },
   "summary": {
     "sentence": "A {programme} programme for {participants} people costs {cost} and, on these assumptions, returns {benefit} a year — {roi} the investment, net {net}.",
@@ -86,12 +150,101 @@
     "footnote": "Every line above is arithmetic on your inputs and published effect sizes — no black box. Sources: ICF/PwC Global Coaching Client Study; ICF + HCI Building a Coaching Culture."
   },
   "drivers": {
-    "retention": { "label": "Retention — avoided replacement cost", "formula": "{eff} effective × {turnover}% leaving × {fewer}% fewer × {replacePct}% of {salary}" },
-    "productivity": { "label": "Productivity uplift", "formula": "{eff} effective × {salary} × {gain}% output gain" },
-    "engagement": { "label": "Engagement → discretionary effort", "formula": "+{pp}pp engagement (from {from}%) × {eff} × 0.12% of salary per point" },
-    "absence": { "label": "Reduced absence", "formula": "{days} days × {eff} effective × {fewer}% fewer × {dayRate}/day" },
-    "derail": { "label": "Avoided leader derailment", "formula": "{leaders} leaders × 6% annual derailment × {avoided}% avoided × {cost}" },
-    "ramp": { "label": "Faster time to competence", "formula": "{newLeaders} new leaders/yr × {weeks} weeks saved × 50% output gap" },
-    "recruiting": { "label": "Lower internal recruiting load", "formula": "{saved} avoided departures × 10% of salary in HR and manager time" }
+    "retention": {
+      "label": "Retention — avoided replacement cost",
+      "formula": "{eff} effective × {turnover}% leaving × {fewer}% fewer × {replacePct}% of {salary}"
+    },
+    "productivity": {
+      "label": "Productivity uplift",
+      "formula": "{eff} effective × {salary} × {gain}% output gain"
+    },
+    "engagement": {
+      "label": "Engagement → discretionary effort",
+      "formula": "+{pp}pp engagement (from {from}%) × {eff} × 0.12% of salary per point"
+    },
+    "absence": {
+      "label": "Reduced absence",
+      "formula": "{days} days × {eff} effective × {fewer}% fewer × {dayRate}/day"
+    },
+    "derail": {
+      "label": "Avoided leader derailment",
+      "formula": "{leaders} leaders × 6% annual derailment × {avoided}% avoided × {cost}"
+    },
+    "ramp": {
+      "label": "Faster time to competence",
+      "formula": "{newLeaders} new leaders/yr × {weeks} weeks saved × 50% output gap"
+    },
+    "recruiting": {
+      "label": "Lower internal recruiting load",
+      "formula": "{saved} avoided departures × 10% of salary in HR and manager time"
+    }
+  },
+  "guide": {
+    "label": "Simulation steps",
+    "organisation": "Organisation",
+    "programme": "Programme",
+    "baseline": "Baseline",
+    "results": "Results",
+    "position": "{group} · question {n} of {total}",
+    "skip": "Use typical values and see results"
+  },
+  "questions": {
+    "employees": "How many people work in your organisation?",
+    "salary": "What does an average employee cost per year?",
+    "turnover": "How many people leave each year?",
+    "programme": "What kind of coaching are you considering?",
+    "investment": "What would the programme cost?",
+    "engagement": "How engaged are your people today?",
+    "absence": "How many days is a person absent per year?",
+    "replacePct": "What does replacing one leaver cost?"
+  },
+  "questionNotes": {
+    "employees": "Count everyone on payroll who could be in scope.",
+    "salary": "Use the loaded cost: salary plus social charges and benefits.",
+    "turnover": "Your yearly staff turnover rate, all reasons.",
+    "programme": "Pick the closest match. We size reach and cost from it.",
+    "investment": "Fees per participant and how long the programme runs.",
+    "engagement": "Share of people rated highly engaged in your last survey.",
+    "absence": "Average sick and absence days per person, per year.",
+    "replacePct": "Recruiting, onboarding and lost output, as a share of salary."
+  },
+  "hints": {
+    "label": "What this means:",
+    "employees": "About {participants} people would take part in a {programme} programme.",
+    "salary": "One working day costs you about {dayRate}.",
+    "turnover": "About {leavers} people leave your organisation each year.",
+    "programme": "{participants} people are coached directly, {eff} in weighted reach including colleagues around them.",
+    "investment": "Total investment comes to {cost}.",
+    "engagement": "Lower scores leave more room for coaching to make a difference. Strong coaching cultures report 62% highly engaged.",
+    "absence": "That's about {total} absence days a year across your organisation.",
+    "replacePct": "Replacing one leaver costs you about {cost}."
+  },
+  "bar": {
+    "title": "Your case so far",
+    "return": "Return",
+    "payback": "Payback",
+    "net": "Net, year one",
+    "note": "Updates with every answer. The full breakdown follows on the results page."
+  },
+  "results": {
+    "eyebrow": "Your business case",
+    "multipleNote": "Every franc invested is estimated to come back this many times within the first year.",
+    "caseTitle": "In one sentence",
+    "adjust": "Adjust answers",
+    "driversTitle": "Where the value comes from"
+  },
+  "chart": {
+    "title": "When it pays back",
+    "series": "Cumulative net",
+    "monthTick": "M{m}",
+    "breakEven": "Break-even",
+    "caption": "Cumulative net position month by month. Break-even in month {m}.",
+    "captionNone": "Cumulative net position month by month. No break-even within 36 months."
+  },
+  "groups": {
+    "people": "People",
+    "performance": "Performance",
+    "leadership": "Leadership",
+    "showMaths": "Show the maths"
   }
 }

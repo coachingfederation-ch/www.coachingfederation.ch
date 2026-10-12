@@ -13,6 +13,16 @@ head carries `robots: noindex, nofollow`.
   (trailing `_` keeps it un-nested from the For Organisations page).
 - Copy: `src/i18n/locales/*/roi.json`.
 
+## Flow ("guided story")
+
+Eight one-question screens grouped into four named steps (Organisation,
+Programme, Baseline, Results) — order and slider ranges live in
+`components/organisations/roi/screens.ts`. A live result bar (side card on
+desktop, fixed bottom bar on phones) shows return, payback and net. "Use
+typical values" jumps to the results page: a Deep Blue headline band, a
+36-month payback chart (`paybackCurve` from the model) and the drivers grouped
+into People, Performance and Leadership, each expandable to its formulas.
+
 ## Model
 
 Seven value drivers (retention, productivity, engagement, absence, leader
