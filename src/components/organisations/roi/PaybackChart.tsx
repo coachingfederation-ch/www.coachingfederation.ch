@@ -30,7 +30,7 @@ export function PaybackChart({ result, currency }: { result: RoiResult; currency
           <YAxis
             tickLine={false}
             axisLine={false}
-            width={72}
+            width={90}
             tickFormatter={(v) => formatMoney(v, currency)}
           />
           <ReferenceLine y={0} stroke="var(--border)" />

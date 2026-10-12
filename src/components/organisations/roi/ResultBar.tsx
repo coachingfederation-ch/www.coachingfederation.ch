@@ -22,7 +22,7 @@ function Figures({ result, currency }: { result: RoiResult; currency: CurrencyKe
       {items.map((i) => (
         <div key={i.label}>
           <dt className="text-xs text-muted-foreground">{i.label}</dt>
-          <dd className="font-heading text-xl tabular-nums text-foreground transition-opacity motion-reduce:transition-none lg:text-3xl">
+          <dd className="whitespace-nowrap font-heading text-lg tabular-nums text-foreground lg:text-2xl">
             {i.value}
           </dd>
         </div>
