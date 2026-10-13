@@ -246,5 +246,23 @@
     "performance": "Performance",
     "leadership": "Leadership",
     "showMaths": "Show the maths"
+  },
+  "deck": {
+    "download": "Download pitch deck (.pptx)",
+    "error": "We couldn't build the deck. Please try again.",
+    "eyebrow": "Coaching business case",
+    "title": "Building leadership capacity: the business case for coaching",
+    "scopeKicker": "The proposed programme",
+    "scopeTitle": "{programme}: what we're modelling",
+    "participants": "Participants",
+    "months": "{n} months",
+    "driversTitle": "{benefit} a year, from three sources",
+    "overlapNote": "Figures after a {pct}% overlap discount. Every value is arithmetic on the inputs above and published effect sizes.",
+    "disclaimer": "These figures are an estimate built from your inputs and published research (ICF/PwC Global Coaching Client Study; ICF + HCI Building a Coaching Culture). They are not a guarantee of results.",
+    "contactKicker": "The Switzerland Chapter of ICF",
+    "contactTitle": "Let's talk about your next step",
+    "contactEmail": "Email",
+    "contactWeb": "For organisations",
+    "contactFind": "Find a credentialed coach"
   }
 }
