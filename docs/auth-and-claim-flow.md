@@ -236,3 +236,13 @@ password reset link. The link always goes to the address the **account** holds â
 never one typed in by staff â€” so the control can restore access but can never
 redirect it. It shares the public form's per-address rate-limit buckets and
 writes a `member_password_reset_sent_by_staff` audit event.
+
+## Claim campaign reminders
+
+The claim wave (`src/lib/member-claim/waves.server.ts`) sends up to three
+reminders after the first invitation (`MAX_REMINDERS`), each due
+`reminder_after_days` after the member's latest claim email, so it lines up
+with the seven-day token life. Every reminder mints a fresh token and
+invalidates the previous link. The campaign is marked `completed` only when no
+one is left to invite and no unclaimed member can still receive a reminder now
+or later; otherwise it stays `running` so the daily cron keeps sending.
