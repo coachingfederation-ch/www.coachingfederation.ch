@@ -108,7 +108,7 @@ export async function buildPitchDeck(opts: {
   const title = (s: Slide, text: string, dark: boolean, w = 9) => {
     s.addText(text, {
       x: 0.5, y: 0.8, w, h: 1.1, margin: 0, valign: "top",
-      fontFace: HEAD, fontSize: 30, color: dark ? C.white : C.deep,
+      fontFace: HEAD, fontSize: w < 9 ? 24 : 30, color: dark ? C.white : C.deep,
     });
   };
   const light = (n: number) => {
@@ -159,7 +159,7 @@ export async function buildPitchDeck(opts: {
     kicker(s, ev[0]?.kicker ?? "", false);
     title(s, ev[0]?.title ?? "", false, 5.4);
     s.addText(ev[0]?.body ?? "", {
-      x: 0.5, y: 2.2, w: 5.2, h: 2.2, margin: 0, valign: "top", fontFace: BODY, fontSize: 16, color: C.deep,
+      x: 0.5, y: 2.45, w: 5.2, h: 2.0, margin: 0, valign: "top", fontFace: BODY, fontSize: 16, color: C.deep,
     });
     s.addShape(pres.ShapeType.roundRect, { x: 6.2, y: 0.8, w: 3.3, h: 3.9, rectRadius: 0.2, fill: { color: C.blue } });
     s.addText(ev[1]?.stat ?? "", {
@@ -184,7 +184,7 @@ export async function buildPitchDeck(opts: {
     kicker(s, ev[3]?.kicker ?? "", false);
     title(s, ev[3]?.title ?? "", false, 5.4);
     s.addText(ev[3]?.body ?? "", {
-      x: 0.5, y: 2.2, w: 5.2, h: 2.4, margin: 0, valign: "top", fontFace: BODY, fontSize: 16, color: C.deep,
+      x: 0.5, y: 2.45, w: 5.2, h: 2.2, margin: 0, valign: "top", fontFace: BODY, fontSize: 16, color: C.deep,
     });
     card(s, 6.2, 0.8, 3.3, 3.9);
     s.addText(ev[4]?.stat ?? "", {
