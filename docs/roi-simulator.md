@@ -23,6 +23,18 @@ typical values" jumps to the results page: a Deep Blue headline band, a
 36-month payback chart (`paybackCurve` from the model) and the drivers grouped
 into People, Performance and Leadership, each expandable to its formulas.
 
+## Pitch deck download
+
+The results page has "Download pitch deck (.pptx)". `roi/pitch-deck.ts`
+lazy-loads `pptxgenjs` and builds a 12-slide deck in the browser (no figures
+leave the session): title, four evidence slides (copy from
+`organisations.deck.slides`), programme scope, headline return, payback chart,
+grouped value drivers, ICF standard, measurement, pilot + disclaimer, and a
+contact slide (office@coachingfederation.ch, For Organisations, Find a coach).
+Strings live under `roi.deck`. Slide colours are literal ICF hex because pptx
+cannot read CSS tokens; fonts are Quicksand / Plus Jakarta Sans and fall back
+on machines without them.
+
 ## Model
 
 Seven value drivers (retention, productivity, engagement, absence, leader
@@ -40,4 +52,4 @@ Remove the `robots` meta from both routes, add the path to `PATHS` in
 
 ## Not built yet
 
-"Email me this" and a downloadable one-pager (need CRM/branding decisions).
+"Email me this" and a PDF one-pager (need CRM/branding decisions).
