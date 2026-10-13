@@ -2,6 +2,7 @@
  * Server functions for member management, sync control, and account claim flows.
  * Exports: listMembers, runSyncNow, completeMemberClaim (createServerFn). Called by staff and claim routes.
  */
+import { SITE_URL } from "@/i18n/config";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
@@ -224,9 +225,8 @@ export const issueMemberClaimLink = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context, data }) => {
     const userId = await assertAdmin(context);
-    const { getRequestUrl } = await import("@tanstack/react-start/server");
     const { issueClaimLinkForMember } = await import("./member-claim.server");
-    return await issueClaimLinkForMember(userId, data.memberId, new URL(getRequestUrl()).origin);
+    return await issueClaimLinkForMember(userId, data.memberId, SITE_URL);
   });
 
 /** Read model behind the staff invitation panel (admin only). */
@@ -245,9 +245,8 @@ export const sendMemberClaimInvitation = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context, data }) => {
     const userId = await assertAdmin(context);
-    const { getRequestUrl } = await import("@tanstack/react-start/server");
     const { sendClaimInvitation } = await import("./member-claim.server");
-    return await sendClaimInvitation(userId, data.memberId, new URL(getRequestUrl()).origin);
+    return await sendClaimInvitation(userId, data.memberId, SITE_URL);
   });
 /**
  * Staff-support account binding (admin only). Separate from the future

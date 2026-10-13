@@ -9,6 +9,7 @@
  * so the database policies ("admins grant editor" / "admins revoke editor")
  * are the real boundary and the audit trigger records the acting admin.
  */
+import { SITE_URL } from "@/i18n/config";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
@@ -288,7 +289,6 @@ export const inviteInternalAccount = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => inviteSchema.parse(input))
   .handler(async ({ context, data }) => {
     await assertAdmin(context);
-    const { getRequestUrl } = await import("@tanstack/react-start/server");
     const { createOrAttachInternalAccount, deliverInternalInvitation } =
       await import("./internal-accounts.server");
 
@@ -311,7 +311,7 @@ export const inviteInternalAccount = createServerFn({ method: "POST" })
       email: data.email,
       displayName: data.displayName,
       roleLabel: data.role ? (ROLE_LABELS[data.role] ?? data.role) : "internal access",
-      baseUrl: new URL(getRequestUrl()).origin,
+      baseUrl: SITE_URL,
       isResend: false,
     });
 
@@ -324,7 +324,6 @@ export const resendInternalInvitation = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => accountSchema.parse(input))
   .handler(async ({ context, data }) => {
     await assertAdmin(context);
-    const { getRequestUrl } = await import("@tanstack/react-start/server");
     const { deliverInternalInvitation } = await import("./internal-accounts.server");
 
     const { data: row } = await context.supabase
@@ -340,7 +339,7 @@ export const resendInternalInvitation = createServerFn({ method: "POST" })
       email: row.email as string,
       displayName: (row.display_name as string) || (row.email as string),
       roleLabel: "internal access",
-      baseUrl: new URL(getRequestUrl()).origin,
+      baseUrl: SITE_URL,
       isResend: true,
     });
     return { ok: true };
