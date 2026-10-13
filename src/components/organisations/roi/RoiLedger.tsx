@@ -10,14 +10,15 @@ import {
   CollapsibleTrigger,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { useI18n } from "@/i18n";
-import { formatMoney, type CurrencyKey, type DriverKey, type RoiResult } from "@/lib/roi-model";
+import { formatMoney, type CurrencyKey, type RoiResult } from "@/lib/roi-model";
+import { DRIVER_GROUPS, type DriverGroupKey } from "./driver-groups";
 import { driverFormula, fill } from "./format";
 
-const DRIVER_GROUPS: { key: string; icon: typeof Users; drivers: DriverKey[] }[] = [
-  { key: "people", icon: Users, drivers: ["retention", "recruiting", "absence"] },
-  { key: "performance", icon: TrendingUp, drivers: ["productivity", "engagement"] },
-  { key: "leadership", icon: HeartHandshake, drivers: ["derail", "ramp"] },
-];
+const ICONS: Record<DriverGroupKey, typeof Users> = {
+  people: Users,
+  performance: TrendingUp,
+  leadership: HeartHandshake,
+};
 
 export function RoiLedger({ result, currency }: { result: RoiResult; currency: CurrencyKey }) {
   const { t } = useI18n();
@@ -30,7 +31,7 @@ export function RoiLedger({ result, currency }: { result: RoiResult; currency: C
       {DRIVER_GROUPS.map((g) => {
         const items = g.drivers.map((k) => byKey.get(k)!);
         const total = items.reduce((s, d) => s + d.value, 0);
-        const Icon = g.icon;
+        const Icon = ICONS[g.key];
         return (
           <Card key={g.key} className="p-6">
             <Collapsible>

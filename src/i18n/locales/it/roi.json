@@ -246,5 +246,23 @@
     "performance": "Prestazioni",
     "leadership": "Leadership",
     "showMaths": "Mostra i calcoli"
+  },
+  "deck": {
+    "download": "Scarica la presentazione (.pptx)",
+    "error": "Non è stato possibile creare la presentazione. Riprova.",
+    "eyebrow": "Business case del coaching",
+    "title": "Sviluppare la leadership: il business case del coaching",
+    "scopeKicker": "Il programma proposto",
+    "scopeTitle": "{programme}: cosa stiamo modellando",
+    "participants": "Partecipanti",
+    "months": "{n} mesi",
+    "driversTitle": "{benefit} all'anno, da tre fonti",
+    "overlapNote": "Valori dopo uno sconto di sovrapposizione del {pct}%. Ogni valore è calcolato dai dati inseriti e da effetti pubblicati.",
+    "disclaimer": "Queste cifre sono una stima basata sui tuoi dati e sulla ricerca pubblicata (ICF/PwC Global Coaching Client Study; ICF + HCI Building a Coaching Culture). Non costituiscono una garanzia di risultato.",
+    "contactKicker": "The Switzerland Chapter of ICF",
+    "contactTitle": "Parliamo del prossimo passo",
+    "contactEmail": "E-mail",
+    "contactWeb": "Per le organizzazioni",
+    "contactFind": "Trova un coach con credenziale"
   }
 }

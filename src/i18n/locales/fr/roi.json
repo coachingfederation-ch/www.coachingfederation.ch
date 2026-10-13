@@ -246,5 +246,23 @@
     "performance": "Performance",
     "leadership": "Leadership",
     "showMaths": "Afficher les calculs"
+  },
+  "deck": {
+    "download": "Télécharger la présentation (.pptx)",
+    "error": "Impossible de générer la présentation. Veuillez réessayer.",
+    "eyebrow": "Business case du coaching",
+    "title": "Développer les capacités de leadership : le business case du coaching",
+    "scopeKicker": "Le programme proposé",
+    "scopeTitle": "{programme} : ce que nous modélisons",
+    "participants": "Participants",
+    "months": "{n} mois",
+    "driversTitle": "{benefit} par an, issus de trois sources",
+    "overlapNote": "Montants après une déduction de chevauchement de {pct} %. Chaque valeur découle des données saisies et d'effets publiés.",
+    "disclaimer": "Ces chiffres sont une estimation fondée sur vos données et sur la recherche publiée (ICF/PwC Global Coaching Client Study ; ICF + HCI Building a Coaching Culture). Ils ne garantissent aucun résultat.",
+    "contactKicker": "The Switzerland Chapter of ICF",
+    "contactTitle": "Parlons de votre prochaine étape",
+    "contactEmail": "E-mail",
+    "contactWeb": "Pour les organisations",
+    "contactFind": "Trouver un coach accrédité"
   }
 }

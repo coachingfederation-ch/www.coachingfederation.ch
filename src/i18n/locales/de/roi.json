@@ -246,5 +246,23 @@
     "performance": "Leistung",
     "leadership": "Führung",
     "showMaths": "Berechnung anzeigen"
+  },
+  "deck": {
+    "download": "Pitch-Deck herunterladen (.pptx)",
+    "error": "Das Deck konnte nicht erstellt werden. Bitte versuche es erneut.",
+    "eyebrow": "Business Case für Coaching",
+    "title": "Führungskompetenz aufbauen: der Business Case für Coaching",
+    "scopeKicker": "Das vorgeschlagene Programm",
+    "scopeTitle": "{programme}: was wir modellieren",
+    "participants": "Teilnehmende",
+    "months": "{n} Monate",
+    "driversTitle": "{benefit} pro Jahr, aus drei Quellen",
+    "overlapNote": "Werte nach {pct}% Überschneidungsabzug. Jeder Wert ist Arithmetik auf Basis der Eingaben und veröffentlichter Effektgrössen.",
+    "disclaimer": "Diese Zahlen sind eine Schätzung auf Basis deiner Eingaben und veröffentlichter Forschung (ICF/PwC Global Coaching Client Study; ICF + HCI Building a Coaching Culture). Sie sind keine Ergebnisgarantie.",
+    "contactKicker": "The Switzerland Chapter of ICF",
+    "contactTitle": "Sprechen wir über den nächsten Schritt",
+    "contactEmail": "E-Mail",
+    "contactWeb": "Für Organisationen",
+    "contactFind": "Credentialed Coach finden"
   }
 }

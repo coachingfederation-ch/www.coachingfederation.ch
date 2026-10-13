@@ -1,5 +1,7 @@
 /** Final step: headline result band, payback chart, summary and grouped drivers. */
-import { Button, Card } from "@/design-system/icf-welcome-design-system-a835df";
+import { useState } from "react";
+import { Download } from "lucide-react";
+import { Button, Card, Spinner } from "@/design-system/icf-welcome-design-system-a835df";
 import { useI18n } from "@/i18n";
 import { askAssistant } from "@/lib/assistant-open";
 import { formatMoney, formatNumber, type CurrencyKey, type RoiInputs, type RoiResult } from "@/lib/roi-model";
@@ -20,7 +22,27 @@ export function ResultsView({
   onAdjust: () => void;
   onRestart: () => void;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const [deckState, setDeckState] = useState<"idle" | "busy" | "error">("idle");
+  async function downloadDeck() {
+    setDeckState("busy");
+    try {
+      const { buildPitchDeck } = await import("./pitch-deck");
+      const { blob, filename } = await buildPitchDeck({ locale, inputs, result, currency });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 30_000);
+      setDeckState("idle");
+    } catch (e) {
+      console.error("pitch deck failed", e);
+      setDeckState("error");
+    }
+  }
   const money = (v: number) => formatMoney(v, currency);
   const vars = {
     programme: t(`roi.programmes.${inputs.programme}.label`),
@@ -74,6 +96,10 @@ export function ResultsView({
             <Button variant="pill" size="pill" onClick={() => askAssistant(fill(t("roi.summary.prompt"), vars))}>
               {t("roi.summary.talk")}
             </Button>
+            <Button variant="outline" onClick={downloadDeck} disabled={deckState === "busy"}>
+              {deckState === "busy" ? <Spinner /> : <Download aria-hidden />}
+              {t("roi.deck.download")}
+            </Button>
             <Button variant="outline" onClick={onAdjust}>
               {t("roi.results.adjust")}
             </Button>
@@ -81,6 +107,11 @@ export function ResultsView({
               {t("roi.steps.startOver")}
             </Button>
           </div>
+          {deckState === "error" ? (
+            <p role="alert" className="text-sm text-destructive">
+              {t("roi.deck.error")}
+            </p>
+          ) : null}
         </Card>
       </div>
 
