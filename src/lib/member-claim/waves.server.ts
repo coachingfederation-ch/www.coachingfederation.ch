@@ -23,6 +23,12 @@ const LEASE_MINUTES = 10;
 const NO_MEMBER_ID = "00000000-0000-0000-0000-000000000000";
 /** Statuses in `member_email_log` that mean the provider accepted the message. */
 const SENT_STATUSES = ["sent", "sent_redirected"];
+/**
+ * Reminders after the first invitation. Each is due `reminder_after_days`
+ * after the previous send (matching the seven-day token life), so a member
+ * gets at most 1 + MAX_REMINDERS claim emails.
+ */
+export const MAX_REMINDERS = 3;
 
 export type CampaignStatus = "idle" | "running" | "paused" | "completed";
 
@@ -106,8 +112,8 @@ function todayIso(): string {
 }
 
 /** Member ids that already received at least one claim email, with the first send time. */
-async function loadSendHistory(): Promise<Map<string, { first: string; count: number }>> {
-  const history = new Map<string, { first: string; count: number }>();
+async function loadSendHistory(): Promise<Map<string, { first: string; last: string; count: number }>> {
+  const history = new Map<string, { first: string; last: string; count: number }>();
   const { data, error } = await supabaseAdmin
     .from("member_email_log")
     .select("member_id, created_at, status")
@@ -118,8 +124,13 @@ async function loadSendHistory(): Promise<Map<string, { first: string; count: nu
   for (const row of data ?? []) {
     if (!row.member_id) continue;
     const existing = history.get(row.member_id);
-    if (existing) existing.count += 1;
-    else history.set(row.member_id, { first: row.created_at as string, count: 1 });
+    if (existing) {
+      existing.count += 1;
+      existing.last = row.created_at as string;
+    } else {
+      const at = row.created_at as string;
+      history.set(row.member_id, { first: at, last: at, count: 1 });
+    }
   }
   return history;
 }
@@ -166,6 +177,8 @@ async function buildQueue(campaign: ClaimCampaign): Promise<{
   reminders: Candidate[];
   invites: Candidate[];
   invited: number;
+  /** Unclaimed members who will become due for a reminder on a later day. */
+  upcomingReminders: number;
 }> {
   const [allMembers, history, pilot] = await Promise.all([
     loadEligibleMembers(),
@@ -178,6 +191,7 @@ async function buildQueue(campaign: ClaimCampaign): Promise<{
   const reminders: Candidate[] = [];
   const invites: MemberRow[] = [];
   let invited = 0;
+  let upcomingReminders = 0;
 
   for (const member of members) {
     const seen = history.get(member.id);
@@ -186,11 +200,10 @@ async function buildQueue(campaign: ClaimCampaign): Promise<{
       continue;
     }
     invited += 1;
-    if (
-      campaign.reminder_enabled &&
-      seen.count === 1 &&
-      new Date(seen.first).getTime() < reminderCutoff
-    ) {
+    if (!campaign.reminder_enabled || seen.count > MAX_REMINDERS) continue;
+    if (new Date(seen.last).getTime() >= reminderCutoff) {
+      upcomingReminders += 1;
+    } else {
       reminders.push({
         id: member.id,
         email: member.email!.trim().toLowerCase(),
@@ -218,6 +231,7 @@ async function buildQueue(campaign: ClaimCampaign): Promise<{
       isReminder: false,
     })),
     invited,
+    upcomingReminders,
   };
 }
 
@@ -315,7 +329,10 @@ export async function runClaimWave(options: {
     const queue = await buildQueue(campaign);
     const batch = [...queue.reminders, ...queue.invites].slice(0, campaign.daily_cap);
     if (batch.length === 0) {
-      const done = queue.invites.length === 0 && queue.reminders.length === 0;
+      const done =
+        queue.invites.length === 0 &&
+        queue.reminders.length === 0 &&
+        queue.upcomingReminders === 0;
       await releaseLease(done ? { status: "completed" } : {});
       return { ...empty, skipped: "nothing_to_do" };
     }
@@ -363,7 +380,12 @@ export async function runClaimWave(options: {
     }
 
     const sentTotal = invited + reminded + suppressed;
-    const exhausted = !paused && queue.invites.length + queue.reminders.length <= batch.length;
+    // Complete only when nobody is left to invite or remind, now or later:
+    // reminders maturing on a later day keep the campaign running for cron.
+    const exhausted =
+      !paused &&
+      queue.invites.length + queue.reminders.length <= batch.length &&
+      queue.upcomingReminders === 0;
 
     await releaseLease({
       status: paused ? "paused" : exhausted ? "completed" : "running",
