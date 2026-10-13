@@ -34,6 +34,9 @@ const C = {
 const HEAD = "Quicksand";
 const BODY = "Plus Jakarta Sans";
 const W = 10;
+// Official lockup is 1920×723 px; keep that ratio so the logo is never distorted.
+const LOGO_W = 2.4;
+const LOGO_H = (LOGO_W * 723) / 1920;
 const H = 5.625;
 
 type EvidenceSlide = {
@@ -139,7 +142,7 @@ export async function buildPitchDeck(opts: {
   // 1 — Title
   {
     const s = dark(1);
-    if (logo) s.addImage({ data: logo, x: 0.5, y: 0.45, w: 2.6, h: 0.65, sizing: { type: "contain", w: 2.6, h: 0.65 } });
+    if (logo) s.addImage({ data: logo, x: 0.5, y: 0.3, w: LOGO_W, h: LOGO_H });
     s.addText(t("roi.deck.eyebrow").toUpperCase(), {
       x: 0.5, y: 1.75, w: 9, h: 0.3, margin: 0, charSpacing: 3,
       fontFace: BODY, fontSize: 12, bold: true, color: C.yellow,
@@ -330,7 +333,7 @@ export async function buildPitchDeck(opts: {
   // 12 — Contact
   {
     const s = dark(12);
-    if (logo) s.addImage({ data: logo, x: 0.5, y: 0.45, w: 2.6, h: 0.65, sizing: { type: "contain", w: 2.6, h: 0.65 } });
+    if (logo) s.addImage({ data: logo, x: 0.5, y: 0.3, w: LOGO_W, h: LOGO_H });
     s.addText(t("roi.deck.contactKicker").toUpperCase(), {
       x: 0.5, y: 1.55, w: 9, h: 0.3, margin: 0, charSpacing: 3, fontFace: BODY, fontSize: 12, bold: true, color: C.yellow,
     });
