@@ -14,6 +14,352 @@ export type Database = {
   }
   public: {
     Tables: {
+      ad_contracts: {
+        Row: {
+          advertiser_address: string | null
+          advertiser_name: string
+          created_at: string
+          currency: string
+          id: string
+          payment_terms: string
+          price: number
+          request_id: string
+          signed_at_advertiser: string | null
+          signed_at_icf: string | null
+          template_version: string
+          updated_at: string
+        }
+        Insert: {
+          advertiser_address?: string | null
+          advertiser_name?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          payment_terms?: string
+          price?: number
+          request_id: string
+          signed_at_advertiser?: string | null
+          signed_at_icf?: string | null
+          template_version?: string
+          updated_at?: string
+        }
+        Update: {
+          advertiser_address?: string | null
+          advertiser_name?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          payment_terms?: string
+          price?: number
+          request_id?: string
+          signed_at_advertiser?: string | null
+          signed_at_icf?: string | null
+          template_version?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_contracts_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: true
+            referencedRelation: "ad_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ad_placements: {
+        Row: {
+          advertiser_name: string
+          clicks_count: number
+          created_at: string
+          cta_url: string | null
+          description_de: string | null
+          description_en: string | null
+          description_fr: string | null
+          description_it: string | null
+          end_date: string
+          id: string
+          is_active: boolean
+          logo_path: string | null
+          placement_type: Database["public"]["Enums"]["ad_placement_type"]
+          request_id: string
+          start_date: string
+          updated_at: string
+        }
+        Insert: {
+          advertiser_name?: string
+          clicks_count?: number
+          created_at?: string
+          cta_url?: string | null
+          description_de?: string | null
+          description_en?: string | null
+          description_fr?: string | null
+          description_it?: string | null
+          end_date: string
+          id?: string
+          is_active?: boolean
+          logo_path?: string | null
+          placement_type: Database["public"]["Enums"]["ad_placement_type"]
+          request_id: string
+          start_date: string
+          updated_at?: string
+        }
+        Update: {
+          advertiser_name?: string
+          clicks_count?: number
+          created_at?: string
+          cta_url?: string | null
+          description_de?: string | null
+          description_en?: string | null
+          description_fr?: string | null
+          description_it?: string | null
+          end_date?: string
+          id?: string
+          is_active?: boolean
+          logo_path?: string | null
+          placement_type?: Database["public"]["Enums"]["ad_placement_type"]
+          request_id?: string
+          start_date?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_placements_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "ad_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ad_rate_cards: {
+        Row: {
+          created_at: string
+          currency: string
+          eannouncement_prices: Json
+          id: string
+          is_active: boolean
+          newsletter_mentions_guard: number
+          notes: string | null
+          packages: Json
+          school_prices: Json
+          updated_at: string
+          valid_from: string
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          eannouncement_prices?: Json
+          id?: string
+          is_active?: boolean
+          newsletter_mentions_guard?: number
+          notes?: string | null
+          packages?: Json
+          school_prices?: Json
+          updated_at?: string
+          valid_from?: string
+          version: number
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          eannouncement_prices?: Json
+          id?: string
+          is_active?: boolean
+          newsletter_mentions_guard?: number
+          notes?: string | null
+          packages?: Json
+          school_prices?: Json
+          updated_at?: string
+          valid_from?: string
+          version?: number
+        }
+        Relationships: []
+      }
+      ad_request_events: {
+        Row: {
+          actor_user_id: string | null
+          created_at: string
+          detail: Json
+          event: string
+          id: string
+          request_id: string
+        }
+        Insert: {
+          actor_user_id?: string | null
+          created_at?: string
+          detail?: Json
+          event: string
+          id?: string
+          request_id: string
+        }
+        Update: {
+          actor_user_id?: string | null
+          created_at?: string
+          detail?: Json
+          event?: string
+          id?: string
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_request_events_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "ad_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ad_requests: {
+        Row: {
+          active_from: string | null
+          active_until: string | null
+          advertiser_name: string | null
+          announcement_date: string | null
+          approved_at: string | null
+          computed_price: number
+          contact_email: string | null
+          contract_sent_at: string | null
+          created_at: string
+          created_by: string
+          cta_url: string | null
+          currency: string
+          decline_reason: string | null
+          description_de: string | null
+          description_en: string | null
+          description_fr: string | null
+          description_it: string | null
+          duration_months: number | null
+          eligibility_detail: Json
+          eligibility_source: string
+          eligibility_tier:
+            | Database["public"]["Enums"]["ad_eligibility_tier"]
+            | null
+          expiry_notified_at: string | null
+          id: string
+          logo_path: string | null
+          member_id: string | null
+          newsletter_mentions: number
+          offer_type: Database["public"]["Enums"]["ad_offer_type"]
+          package: string | null
+          placements: Database["public"]["Enums"]["ad_placement_type"][]
+          rate_card_id: string | null
+          requested_start: string | null
+          reviewed_at: string | null
+          school_attestation: Json | null
+          staff_notes: string | null
+          status: Database["public"]["Enums"]["ad_request_status"]
+          submitted_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          active_from?: string | null
+          active_until?: string | null
+          advertiser_name?: string | null
+          announcement_date?: string | null
+          approved_at?: string | null
+          computed_price?: number
+          contact_email?: string | null
+          contract_sent_at?: string | null
+          created_at?: string
+          created_by?: string
+          cta_url?: string | null
+          currency?: string
+          decline_reason?: string | null
+          description_de?: string | null
+          description_en?: string | null
+          description_fr?: string | null
+          description_it?: string | null
+          duration_months?: number | null
+          eligibility_detail?: Json
+          eligibility_source?: string
+          eligibility_tier?:
+            | Database["public"]["Enums"]["ad_eligibility_tier"]
+            | null
+          expiry_notified_at?: string | null
+          id?: string
+          logo_path?: string | null
+          member_id?: string | null
+          newsletter_mentions?: number
+          offer_type: Database["public"]["Enums"]["ad_offer_type"]
+          package?: string | null
+          placements?: Database["public"]["Enums"]["ad_placement_type"][]
+          rate_card_id?: string | null
+          requested_start?: string | null
+          reviewed_at?: string | null
+          school_attestation?: Json | null
+          staff_notes?: string | null
+          status?: Database["public"]["Enums"]["ad_request_status"]
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active_from?: string | null
+          active_until?: string | null
+          advertiser_name?: string | null
+          announcement_date?: string | null
+          approved_at?: string | null
+          computed_price?: number
+          contact_email?: string | null
+          contract_sent_at?: string | null
+          created_at?: string
+          created_by?: string
+          cta_url?: string | null
+          currency?: string
+          decline_reason?: string | null
+          description_de?: string | null
+          description_en?: string | null
+          description_fr?: string | null
+          description_it?: string | null
+          duration_months?: number | null
+          eligibility_detail?: Json
+          eligibility_source?: string
+          eligibility_tier?:
+            | Database["public"]["Enums"]["ad_eligibility_tier"]
+            | null
+          expiry_notified_at?: string | null
+          id?: string
+          logo_path?: string | null
+          member_id?: string | null
+          newsletter_mentions?: number
+          offer_type?: Database["public"]["Enums"]["ad_offer_type"]
+          package?: string | null
+          placements?: Database["public"]["Enums"]["ad_placement_type"][]
+          rate_card_id?: string | null
+          requested_start?: string | null
+          reviewed_at?: string | null
+          school_attestation?: Json | null
+          staff_notes?: string | null
+          status?: Database["public"]["Enums"]["ad_request_status"]
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_requests_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "coach_directory_public"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "ad_requests_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ad_requests_rate_card_id_fkey"
+            columns: ["rate_card_id"]
+            isOneToOne: false
+            referencedRelation: "ad_rate_cards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       api_rate_limits: {
         Row: {
           bucket: string
@@ -5598,6 +5944,7 @@ export type Database = {
       }
       newsletter_blocks: {
         Row: {
+          ad_placement_id: string | null
           block_type: string
           content: string
           created_at: string
@@ -5623,6 +5970,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ad_placement_id?: string | null
           block_type: string
           content?: string
           created_at?: string
@@ -5648,6 +5996,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ad_placement_id?: string | null
           block_type?: string
           content?: string
           created_at?: string
@@ -5673,6 +6022,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "newsletter_blocks_ad_placement_id_fkey"
+            columns: ["ad_placement_id"]
+            isOneToOne: false
+            referencedRelation: "ad_placements"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "newsletter_blocks_newsletter_id_fkey"
             columns: ["newsletter_id"]
@@ -6680,6 +7036,10 @@ export type Database = {
       }
     }
     Functions: {
+      ad_placement_click: {
+        Args: { _placement_id: string }
+        Returns: undefined
+      }
       apply_attendance_import: {
         Args: { _actor: string; _import_id: string }
         Returns: Json
@@ -6744,6 +7104,25 @@ export type Database = {
       }
     }
     Enums: {
+      ad_eligibility_tier: "icfs_member" | "icf_global"
+      ad_offer_type: "partner_package" | "eannouncement" | "school"
+      ad_placement_type:
+        | "homepage"
+        | "event_banner"
+        | "newsletter"
+        | "square_advert"
+        | "eannouncement"
+      ad_request_status:
+        | "draft"
+        | "submitted"
+        | "under_review"
+        | "approved"
+        | "declined"
+        | "contract_sent"
+        | "contract_signed"
+        | "active"
+        | "expired"
+        | "cancelled"
       app_role:
         | "admin"
         | "editor"
@@ -6946,6 +7325,27 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      ad_eligibility_tier: ["icfs_member", "icf_global"],
+      ad_offer_type: ["partner_package", "eannouncement", "school"],
+      ad_placement_type: [
+        "homepage",
+        "event_banner",
+        "newsletter",
+        "square_advert",
+        "eannouncement",
+      ],
+      ad_request_status: [
+        "draft",
+        "submitted",
+        "under_review",
+        "approved",
+        "declined",
+        "contract_sent",
+        "contract_signed",
+        "active",
+        "expired",
+        "cancelled",
+      ],
       app_role: [
         "admin",
         "editor",

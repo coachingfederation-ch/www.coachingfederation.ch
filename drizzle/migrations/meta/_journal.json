@@ -15,6 +15,13 @@
       "when": 1791791082730,
       "tag": "0001_directory_members_rls_non_credentialed",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791992817078,
+      "tag": "0002_advertise_with_us",
+      "breakpoints": true
     }
   ]
 }
