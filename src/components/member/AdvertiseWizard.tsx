@@ -22,12 +22,20 @@ import {
   CardContent,
   Input,
   Label,
+  RadioGroup,
+  RadioGroupItem,
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
   Textarea,
 } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  AD_DESIGN_VARIANTS,
+  DEFAULT_AD_DESIGN_VARIANT,
+  resolveAdDesignVariant,
+  type AdDesignVariant,
+} from "@/lib/ads";
 import {
   PACKAGE_DURATIONS,
   PARTNER_PACKAGES,
@@ -84,6 +92,7 @@ type WizardState = {
   headlineIt: string;
   headlineEn: string;
   imagePath: string | null;
+  designVariant: AdDesignVariant;
   contactName: string;
   contactPhone: string;
   billingStreet: string;
@@ -118,6 +127,7 @@ const EMPTY: WizardState = {
   headlineIt: "",
   headlineEn: "",
   imagePath: null,
+  designVariant: DEFAULT_AD_DESIGN_VARIANT,
   contactName: "",
   contactPhone: "",
   billingStreet: "",
@@ -303,6 +313,7 @@ export function AdvertiseWizard() {
           headlineIt: state.headlineIt || null,
           headlineEn: state.headlineEn || null,
           imagePath: state.imagePath,
+          designVariant: state.designVariant,
           contactName: state.contactName || null,
           contactPhone: state.contactPhone || null,
           billingStreet: state.billingStreet || null,
@@ -772,6 +783,38 @@ export function AdvertiseWizard() {
 
                 <div className="grid content-start gap-3">
                   <p className="font-heading text-xl">{t("advertise.content.previewTitle")}</p>
+                  <fieldset className="grid gap-2">
+                    <legend className="mb-2 text-sm font-semibold">
+                      {t("advertise.design.title")}
+                    </legend>
+                    <RadioGroup
+                      value={state.designVariant}
+                      onValueChange={(value) =>
+                        patch({ designVariant: resolveAdDesignVariant(value) })
+                      }
+                      className="grid gap-2 sm:grid-cols-3"
+                    >
+                      {AD_DESIGN_VARIANTS.map((v) => (
+                        <Label
+                          key={v}
+                          htmlFor={`design-${v}`}
+                          className={`flex min-h-11 cursor-pointer items-start gap-2 rounded-xl border p-3 ${
+                            state.designVariant === v ? "border-primary bg-card" : "border-border"
+                          }`}
+                        >
+                          <RadioGroupItem id={`design-${v}`} value={v} className="mt-1" />
+                          <span className="grid gap-1">
+                            <span className="text-sm font-semibold">
+                              {t(`advertise.design.${v}.name`)}
+                            </span>
+                            <span className="text-xs font-normal text-muted-foreground">
+                              {t(`advertise.design.${v}.hint`)}
+                            </span>
+                          </span>
+                        </Label>
+                      ))}
+                    </RadioGroup>
+                  </fieldset>
                   <Tabs defaultValue={previewFormats[0]}>
                     <TabsList>
                       {previewFormats.map((f) => (
@@ -782,7 +825,11 @@ export function AdvertiseWizard() {
                     </TabsList>
                     {previewFormats.map((f) => (
                       <TabsContent key={f} value={f}>
-                        <AdPreview format={f} content={previewContent} />
+                        <AdPreview
+                          format={f}
+                          content={previewContent}
+                          variant={state.designVariant}
+                        />
                       </TabsContent>
                     ))}
                   </Tabs>
@@ -875,11 +922,20 @@ export function AdvertiseWizard() {
                   editLabel={t("advertise.summary.edit")}
                   onEdit={() => setStep(3)}
                 >
+                  <Row
+                    label={t("advertise.design.title")}
+                    value={t(`advertise.design.${state.designVariant}.name`)}
+                  />
                   <div className="grid gap-3 sm:grid-cols-2">
                     {previewFormats.map((f) => (
                       <div key={f}>
                         <p className="mb-1 text-xs text-muted-foreground">{previewLabel(f)}</p>
-                        <AdPreview format={f} content={previewContent} compact />
+                        <AdPreview
+                          format={f}
+                          content={previewContent}
+                          variant={state.designVariant}
+                          compact
+                        />
                       </div>
                     ))}
                   </div>
