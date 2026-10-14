@@ -2,7 +2,7 @@
  * Member Area route for "Advertise with us" (/advertise).
  * Exports: Route. Renders the placement configurator inside the member shell.
  */
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, type ErrorComponentProps } from "@tanstack/react-router";
 import { MemberShell } from "@/components/member/MemberShell";
 import { AdvertiseWizard } from "@/components/member/AdvertiseWizard";
 
@@ -30,7 +30,7 @@ function AdvertisePage() {
  * that the data calls fail. Catch it here so the member area shows a message
  * instead of a blank screen.
  */
-function AdvertiseError({ error }: { error: Error }) {
+function AdvertiseError({ error }: ErrorComponentProps) {
   return (
     <MemberShell>
       <div className="rounded-3xl border border-border bg-card p-8">
