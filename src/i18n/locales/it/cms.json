@@ -3068,7 +3068,25 @@
       "announcementDate": "Data dell'annuncio o dell'evento",
       "requestedStart": "Data di inizio desiderata",
       "newsletterMentions": "Menzioni in newsletter previste",
-      "newsletterMentionsHint": "Solo informativo — i pacchetti partner includono tutte le newsletter."
+      "newsletterMentionsHint": "Solo informativo — i pacchetti partner includono tutte le newsletter.",
+      "headline": "Titolo",
+      "text": "Testo",
+      "writeIn": "Scrivi in",
+      "translate": "Traduci nelle altre lingue",
+      "translating": "Traduzione…",
+      "notTranslated": "Non ancora tradotto",
+      "image": "Immagine",
+      "imageHint": "L’immagine del tuo annuncio. PNG, JPG o WebP, fino a 2 MB.",
+      "logoDifferent": "Il logo viene mostrato separatamente dall’immagine: carica un file diverso.",
+      "sameFile": "È lo stesso file della tua immagine. Carica il logo separatamente.",
+      "previewTitle": "Anteprima dal vivo",
+      "previewBanner": "Banner",
+      "previewSquare": "Quadrato",
+      "previewNewsletter": "Newsletter",
+      "sponsored": "Partner",
+      "ctaLabel": "Scopri di più",
+      "newsletterInfo": "Le menzioni nella newsletter sono pianificate dal nostro team secondo il tuo pacchetto.",
+      "uploaded": "Caricato"
     },
     "review": {
       "title": "Verifica e invia",
@@ -3148,6 +3166,27 @@
     "paused": {
       "title": "Al momento non accettiamo prenotazioni",
       "body": "Le prenotazioni pubblicitarie sono sospese per il momento. Per domande, scrivici."
+    },
+    "contract": {
+      "title": "Inserzionista e contratto",
+      "prefilledMember": "Abbiamo ripreso questi dati dalla tua scheda socio. Puoi modificarli per questa prenotazione.",
+      "prefilledAdvertiser": "Abbiamo ripreso questi dati dal tuo profilo inserzionista. Puoi modificarli per questa prenotazione.",
+      "organisation": "Organizzazione",
+      "contactName": "Persona di contatto",
+      "email": "E-mail",
+      "phone": "Telefono (facoltativo)",
+      "phoneInvalid": "Inserisci un numero di telefono valido.",
+      "street": "Via e numero",
+      "postcode": "NPA",
+      "city": "Località",
+      "country": "Paese",
+      "vat": "Numero IVA (facoltativo)"
+    },
+    "summary": {
+      "offer": "Offerta e prezzo",
+      "content": "Contenuto",
+      "contract": "Dati del contratto",
+      "edit": "Modifica"
     }
   },
   "advertiser": {

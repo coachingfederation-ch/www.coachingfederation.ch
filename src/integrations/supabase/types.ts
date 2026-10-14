@@ -78,7 +78,12 @@ export type Database = {
           description_fr: string | null
           description_it: string | null
           end_date: string
+          headline_de: string | null
+          headline_en: string | null
+          headline_fr: string | null
+          headline_it: string | null
           id: string
+          image_path: string | null
           is_active: boolean
           logo_path: string | null
           placement_type: Database["public"]["Enums"]["ad_placement_type"]
@@ -96,7 +101,12 @@ export type Database = {
           description_fr?: string | null
           description_it?: string | null
           end_date: string
+          headline_de?: string | null
+          headline_en?: string | null
+          headline_fr?: string | null
+          headline_it?: string | null
           id?: string
+          image_path?: string | null
           is_active?: boolean
           logo_path?: string | null
           placement_type: Database["public"]["Enums"]["ad_placement_type"]
@@ -114,7 +124,12 @@ export type Database = {
           description_fr?: string | null
           description_it?: string | null
           end_date?: string
+          headline_de?: string | null
+          headline_en?: string | null
+          headline_fr?: string | null
+          headline_it?: string | null
           id?: string
+          image_path?: string | null
           is_active?: boolean
           logo_path?: string | null
           placement_type?: Database["public"]["Enums"]["ad_placement_type"]
@@ -222,8 +237,14 @@ export type Database = {
           advertiser_name: string | null
           announcement_date: string | null
           approved_at: string | null
+          billing_city: string | null
+          billing_country: string | null
+          billing_postcode: string | null
+          billing_street: string | null
           computed_price: number
           contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
           contract_sent_at: string | null
           created_at: string
           created_by: string
@@ -241,7 +262,12 @@ export type Database = {
             | Database["public"]["Enums"]["ad_eligibility_tier"]
             | null
           expiry_notified_at: string | null
+          headline_de: string | null
+          headline_en: string | null
+          headline_fr: string | null
+          headline_it: string | null
           id: string
+          image_path: string | null
           logo_path: string | null
           member_id: string | null
           newsletter_mentions: number
@@ -257,6 +283,7 @@ export type Database = {
           status: Database["public"]["Enums"]["ad_request_status"]
           submitted_at: string | null
           updated_at: string
+          vat_number: string | null
         }
         Insert: {
           active_from?: string | null
@@ -264,8 +291,14 @@ export type Database = {
           advertiser_name?: string | null
           announcement_date?: string | null
           approved_at?: string | null
+          billing_city?: string | null
+          billing_country?: string | null
+          billing_postcode?: string | null
+          billing_street?: string | null
           computed_price?: number
           contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
           contract_sent_at?: string | null
           created_at?: string
           created_by?: string
@@ -283,7 +316,12 @@ export type Database = {
             | Database["public"]["Enums"]["ad_eligibility_tier"]
             | null
           expiry_notified_at?: string | null
+          headline_de?: string | null
+          headline_en?: string | null
+          headline_fr?: string | null
+          headline_it?: string | null
           id?: string
+          image_path?: string | null
           logo_path?: string | null
           member_id?: string | null
           newsletter_mentions?: number
@@ -299,6 +337,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["ad_request_status"]
           submitted_at?: string | null
           updated_at?: string
+          vat_number?: string | null
         }
         Update: {
           active_from?: string | null
@@ -306,8 +345,14 @@ export type Database = {
           advertiser_name?: string | null
           announcement_date?: string | null
           approved_at?: string | null
+          billing_city?: string | null
+          billing_country?: string | null
+          billing_postcode?: string | null
+          billing_street?: string | null
           computed_price?: number
           contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
           contract_sent_at?: string | null
           created_at?: string
           created_by?: string
@@ -325,7 +370,12 @@ export type Database = {
             | Database["public"]["Enums"]["ad_eligibility_tier"]
             | null
           expiry_notified_at?: string | null
+          headline_de?: string | null
+          headline_en?: string | null
+          headline_fr?: string | null
+          headline_it?: string | null
           id?: string
+          image_path?: string | null
           logo_path?: string | null
           member_id?: string | null
           newsletter_mentions?: number
@@ -341,6 +391,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["ad_request_status"]
           submitted_at?: string | null
           updated_at?: string
+          vat_number?: string | null
         }
         Relationships: [
           {

@@ -122,3 +122,12 @@ Safeguards:
 ## Rate card price guard
 
 A published rate card stays in force for three months. Earlier changes are only accepted as an error correction with a reason (10+ characters); it is stored as a new version with note "Correction: …", so history is never overwritten. Publishing deactivates the current card before inserting the new one (single-active index). The history table on /manage/ad-rate-cards lists every version.
+
+## Booking wizard (five steps)
+
+1. Offer, 2. Configuration (package/placements, duration, start date).
+3. **Content** — link, image and logo (two separate uploads; uploading the same file twice is rejected client-side by SHA-256), headline + text per language (DE/FR/IT/EN) with an AI "translate to the other languages" action (`translateAdCopy`, rate-limited, authenticated). A live preview shows the banner, square and newsletter formats that apply to the booking. The newsletter-mentions question is gone; mentions are scheduled by staff per package.
+4. **Advertiser and contract** — organisation, contact name, email, phone, billing address, VAT. Prefilled by `getAdvertiserPrefill` from the caller's advertiser profile, else their linked member record (`auth_user_id`, never email). Editable per request.
+5. **Summary** — offer/price, content previews and contract details, each with an Edit link.
+
+`submitAdRequest` rejects drafts missing contract fields (`missingContractFields` in `src/lib/ads.ts`). New columns on `ad_requests`: `image_path`, `headline_*`, `contact_name`, `contact_phone`, `billing_*`, `vat_number`; activation copies `image_path` and `headline_*` to `ad_placements`. Public rendering of banner/square ads is still not built.

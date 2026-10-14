@@ -253,6 +253,27 @@ function AdRequestDetailPage() {
                   label={t("advertise.content.contactEmail")}
                   value={request.contact_email ?? "—"}
                 />
+                {request.contact_name ? (
+                  <Row label={t("advertise.contract.contactName")} value={request.contact_name} />
+                ) : null}
+                {request.contact_phone ? (
+                  <Row label={t("advertise.contract.phone")} value={request.contact_phone} />
+                ) : null}
+                {request.billing_street ? (
+                  <Row
+                    label={t("advertise.contract.street")}
+                    value={`${request.billing_street}, ${request.billing_postcode ?? ""} ${request.billing_city ?? ""}, ${request.billing_country ?? ""}`}
+                  />
+                ) : null}
+                {request.vat_number ? (
+                  <Row label={t("advertise.contract.vat")} value={request.vat_number} />
+                ) : null}
+                {request.headline_en || request.headline_de ? (
+                  <Row
+                    label={t("advertise.content.headline")}
+                    value={request.headline_en || request.headline_de || ""}
+                  />
+                ) : null}
                 <Row label={t("advertise.content.ctaUrl")} value={request.cta_url ?? "—"} />
                 {request.announcement_date ? (
                   <Row

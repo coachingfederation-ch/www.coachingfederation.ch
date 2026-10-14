@@ -3068,7 +3068,25 @@
       "announcementDate": "Announcement or event date",
       "requestedStart": "Preferred start date",
       "newsletterMentions": "Newsletter mentions you have in mind",
-      "newsletterMentionsHint": "Informational only — partner packages include all newsletters."
+      "newsletterMentionsHint": "Informational only — partner packages include all newsletters.",
+      "headline": "Headline",
+      "text": "Text",
+      "writeIn": "Write in",
+      "translate": "Translate to the other languages",
+      "translating": "Translating…",
+      "notTranslated": "Not translated yet",
+      "image": "Image",
+      "imageHint": "The visual for your ad. PNG, JPG or WebP, up to 2 MB.",
+      "logoDifferent": "Your logo is shown separately from the image — please upload a different file.",
+      "sameFile": "This is the same file as your image. Please upload your logo separately.",
+      "previewTitle": "Live preview",
+      "previewBanner": "Banner",
+      "previewSquare": "Square",
+      "previewNewsletter": "Newsletter",
+      "sponsored": "Partner",
+      "ctaLabel": "Learn more",
+      "newsletterInfo": "Newsletter mentions are scheduled by our team as included in your package.",
+      "uploaded": "Uploaded"
     },
     "review": {
       "title": "Review and submit",
@@ -3148,6 +3166,27 @@
     "paused": {
       "title": "We are not taking bookings right now",
       "body": "Advertising bookings are paused for the moment. For questions, please write to us."
+    },
+    "contract": {
+      "title": "Advertiser and contract details",
+      "prefilledMember": "We filled this in from your member record. You can change it for this booking.",
+      "prefilledAdvertiser": "We filled this in from your advertiser profile. You can change it for this booking.",
+      "organisation": "Organisation",
+      "contactName": "Contact name",
+      "email": "Email",
+      "phone": "Phone (optional)",
+      "phoneInvalid": "Please enter a valid phone number.",
+      "street": "Street and number",
+      "postcode": "Postcode",
+      "city": "City",
+      "country": "Country",
+      "vat": "VAT number (optional)"
+    },
+    "summary": {
+      "offer": "Offer and price",
+      "content": "Content",
+      "contract": "Contract details",
+      "edit": "Edit"
     }
   },
   "advertiser": {

@@ -42,6 +42,18 @@ const draftSchema = z.object({
   descriptionFr: z.string().max(600).nullable().optional(),
   descriptionIt: z.string().max(600).nullable().optional(),
   descriptionEn: z.string().max(600).nullable().optional(),
+  imagePath: z.string().max(400).nullable().optional(),
+  headlineDe: z.string().max(120).nullable().optional(),
+  headlineFr: z.string().max(120).nullable().optional(),
+  headlineIt: z.string().max(120).nullable().optional(),
+  headlineEn: z.string().max(120).nullable().optional(),
+  contactName: z.string().max(200).nullable().optional(),
+  contactPhone: z.string().max(40).nullable().optional(),
+  billingStreet: z.string().max(200).nullable().optional(),
+  billingPostcode: z.string().max(20).nullable().optional(),
+  billingCity: z.string().max(120).nullable().optional(),
+  billingCountry: z.string().max(120).nullable().optional(),
+  vatNumber: z.string().max(40).nullable().optional(),
   // Advertisers often type "example.ch"; add https:// before validating.
   ctaUrl: z.preprocess((value) => {
     if (typeof value !== "string") return value;
@@ -146,6 +158,18 @@ export const saveAdRequestDraft = createServerFn({ method: "POST" })
       description_it: data.descriptionIt ?? null,
       description_en: data.descriptionEn ?? null,
       cta_url: data.ctaUrl ?? null,
+      image_path: data.imagePath ?? null,
+      headline_de: data.headlineDe ?? null,
+      headline_fr: data.headlineFr ?? null,
+      headline_it: data.headlineIt ?? null,
+      headline_en: data.headlineEn ?? null,
+      contact_name: data.contactName ?? null,
+      contact_phone: data.contactPhone ?? null,
+      billing_street: data.billingStreet ?? null,
+      billing_postcode: data.billingPostcode ?? null,
+      billing_city: data.billingCity ?? null,
+      billing_country: data.billingCountry ?? null,
+      vat_number: data.vatNumber ?? null,
       announcement_date: data.announcementDate ?? null,
       requested_start: data.requestedStart ?? null,
     };
@@ -177,7 +201,16 @@ export const submitAdRequest = createServerFn({ method: "POST" })
       "admin",
       "administrator",
     ]);
-    const { submitRequest } = await import("./ads.server");
+    const { submitRequest, REQUEST_COLUMNS } = await import("./ads.server");
+    const { missingContractFields } = await import("./ads");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: draft } = await (context.supabase as any)
+      .from("ad_requests")
+      .select(REQUEST_COLUMNS)
+      .eq("id", data.id)
+      .maybeSingle();
+    if (draft && missingContractFields(draft as AdRequest).length > 0)
+      throw new Error("Please complete the advertiser and contract details first.");
     const { supabaseAdmin: adminClient } = await import("@/integrations/supabase/client.server");
     // The ad_* tables arrive with the staged migration, so they are absent from
     // the generated types until it is applied; this alias keeps the module typed
@@ -221,6 +254,7 @@ export const uploadAdLogo = createServerFn({ method: "POST" })
         fileName: z.string().max(200),
         contentType: z.enum(["image/png", "image/jpeg", "image/webp", "image/svg+xml"]),
         dataBase64: z.string().max(4_000_000),
+        kind: z.enum(["logo", "image"]).default("logo"),
       })
       .parse(input),
   )
@@ -239,9 +273,9 @@ export const uploadAdLogo = createServerFn({ method: "POST" })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const supabaseAdmin = adminClient as any;
     const bytes = Uint8Array.from(atob(data.dataBase64), (c) => c.charCodeAt(0));
-    if (bytes.byteLength > 2_000_000) throw new Error("The logo must be smaller than 2 MB.");
+    if (bytes.byteLength > 2_000_000) throw new Error("The file must be smaller than 2 MB.");
     const safeName = data.fileName.replace(/[^a-zA-Z0-9._-]/g, "-").slice(-80);
-    const path = `${context.userId}/${Date.now()}-${safeName}`;
+    const path = `${context.userId}/${data.kind}-${Date.now()}-${safeName}`;
     const { error } = await supabaseAdmin.storage
       .from(AD_MEDIA_BUCKET)
       .upload(path, bytes, { contentType: data.contentType, upsert: false });
@@ -297,3 +331,184 @@ export const listActivePlacements = createServerFn({ method: "POST" })
   });
 
 export type { AdPlacementType };
+
+export type AdvertiserPrefill = {
+  organisation: string;
+  contactName: string;
+  email: string;
+  phone: string;
+  street: string;
+  postcode: string;
+  city: string;
+  country: string;
+  vatNumber: string;
+  source: "member" | "advertiser" | "none";
+};
+
+/**
+ * Contract details to prefill the wizard: the caller's own advertiser profile,
+ * else their linked member record (auth_user_id link, never email matching).
+ * Reads run as the caller, so RLS decides what is visible.
+ */
+export const getAdvertiserPrefill = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<AdvertiserPrefill> => {
+    const ctx = context as AuthedContext;
+    await assertAnyRole(ctx, ["member", "advertiser", "admin", "administrator"]);
+    const email = ((context as { claims?: { email?: string } }).claims?.email ?? "") as string;
+    const empty: AdvertiserPrefill = {
+      organisation: "",
+      contactName: "",
+      email,
+      phone: "",
+      street: "",
+      postcode: "",
+      city: "",
+      country: "",
+      vatNumber: "",
+      source: "none",
+    };
+    const { data: profile } = await ctx.supabase
+      .from("advertiser_profiles")
+      .select("*")
+      .eq("user_id", ctx.userId)
+      .maybeSingle();
+    if (profile) {
+      return {
+        ...empty,
+        organisation: profile.organisation ?? "",
+        contactName: profile.contact_name ?? "",
+        phone: profile.phone ?? "",
+        street: profile.billing_street ?? "",
+        postcode: profile.billing_postcode ?? "",
+        city: profile.billing_city ?? "",
+        country: profile.billing_country ?? "",
+        vatNumber: profile.vat_number ?? "",
+        source: "advertiser",
+      };
+    }
+    const { data: member } = await ctx.supabase
+      .from("members")
+      .select("full_name, first_name, last_name, email, phone, organisation, city, country")
+      .eq("auth_user_id", ctx.userId)
+      .maybeSingle();
+    if (member) {
+      return {
+        ...empty,
+        organisation: member.organisation ?? "",
+        contactName:
+          member.full_name ?? [member.first_name, member.last_name].filter(Boolean).join(" "),
+        email: member.email ?? email,
+        phone: member.phone ?? "",
+        city: member.city ?? "",
+        country: member.country ?? "",
+        source: "member",
+      };
+    }
+    return empty;
+  });
+
+const AD_LOCALES = ["de", "fr", "it", "en"] as const;
+const AD_LOCALE_NAMES: Record<(typeof AD_LOCALES)[number], string> = {
+  de: "Swiss Standard German (no ß, use ss)",
+  fr: "Swiss French",
+  it: "Swiss Italian",
+  en: "English",
+};
+
+/** Translates ad headline + text from one language into the other three. */
+export const translateAdCopy = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        source: z.enum(AD_LOCALES),
+        headline: z.string().max(120).default(""),
+        text: z.string().max(600).default(""),
+      })
+      .parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    const ctx = context as AuthedContext;
+    await assertAnyRole(ctx, ["member", "advertiser", "admin", "administrator"]);
+    if (!data.headline.trim() && !data.text.trim())
+      throw new Error("Add a headline or text first.");
+    const { checkRateLimit } = await import("./rate-limit.server");
+    const verdict = await checkRateLimit("ad-translate", ctx.userId, [
+      { windowSeconds: 3600, max: 20 },
+      { windowSeconds: 86400, max: 60 },
+    ]);
+    if (!verdict.allowed) throw new Error("Too many translations — please try again later.");
+    const apiKey = process.env.LOVABLE_API_KEY;
+    if (!apiKey) throw new Error("AI service is not configured");
+    const targets = AD_LOCALES.filter((l) => l !== data.source);
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "openai/gpt-6-astra",
+        reasoning_effort: "low",
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "ad_translations",
+            strict: true,
+            schema: {
+              type: "object",
+              additionalProperties: false,
+              required: targets,
+              properties: Object.fromEntries(
+                targets.map((l) => [
+                  l,
+                  {
+                    type: "object",
+                    additionalProperties: false,
+                    required: ["headline", "text"],
+                    properties: { headline: { type: "string" }, text: { type: "string" } },
+                  },
+                ]),
+              ),
+            },
+          },
+        },
+        messages: [
+          {
+            role: "system",
+            content:
+              "You translate short advertising copy for The Switzerland Chapter of ICF. Keep meaning, tone and length; do not add claims. Reply with JSON only.",
+          },
+          {
+            role: "user",
+            content: `Translate from ${AD_LOCALE_NAMES[data.source]} into ${targets
+              .map((l) => `${l} (${AD_LOCALE_NAMES[l]})`)
+              .join(
+                ", ",
+              )}. Return json shaped {"<code>": {"headline": "...", "text": "..."}} for each target code.\n\nHEADLINE:\n${data.headline}\n\nTEXT:\n${data.text}`,
+          },
+        ],
+      }),
+    });
+    if (response.status === 429) throw new Error("Rate limit reached — please try again shortly.");
+    if (response.status === 402) throw new Error("Translation is unavailable right now.");
+    if (!response.ok) throw new Error(`Translation failed (${response.status})`);
+    const payload = (await response.json()) as { choices?: { message?: { content?: string } }[] };
+    const raw = (payload.choices?.[0]?.message?.content ?? "")
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/```$/, "")
+      .trim();
+    let parsed: Record<string, { headline?: string; text?: string }> = {};
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      throw new Error("Translation returned an unexpected result. Please try again.");
+    }
+    const result: Partial<Record<(typeof AD_LOCALES)[number], { headline: string; text: string }>> =
+      {};
+    for (const l of targets) {
+      result[l] = {
+        headline: String(parsed[l]?.headline ?? "").slice(0, 120),
+        text: String(parsed[l]?.text ?? "").slice(0, 600),
+      };
+    }
+    return result;
+  });
