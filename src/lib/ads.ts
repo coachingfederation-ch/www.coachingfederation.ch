@@ -112,6 +112,18 @@ export type AdRequest = {
   advertiser_name: string | null;
   contact_email: string | null;
   logo_path: string | null;
+  image_path?: string | null;
+  headline_de?: string | null;
+  headline_fr?: string | null;
+  headline_it?: string | null;
+  headline_en?: string | null;
+  contact_name?: string | null;
+  contact_phone?: string | null;
+  billing_street?: string | null;
+  billing_postcode?: string | null;
+  billing_city?: string | null;
+  billing_country?: string | null;
+  vat_number?: string | null;
   description_de: string | null;
   description_fr: string | null;
   description_it: string | null;
@@ -201,3 +213,30 @@ export type AdRateCardHistoryEntry = {
   notes: string | null;
   created_at: string;
 };
+
+/** Contract fields an ad request needs before it can be submitted. */
+export function missingContractFields(
+  row: Pick<
+    AdRequest,
+    | "advertiser_name"
+    | "contact_email"
+    | "contact_name"
+    | "billing_street"
+    | "billing_postcode"
+    | "billing_city"
+    | "billing_country"
+  >,
+): string[] {
+  const required = {
+    advertiser_name: row.advertiser_name,
+    contact_name: row.contact_name,
+    contact_email: row.contact_email,
+    billing_street: row.billing_street,
+    billing_postcode: row.billing_postcode,
+    billing_city: row.billing_city,
+    billing_country: row.billing_country,
+  };
+  return Object.entries(required)
+    .filter(([, value]) => !value || !String(value).trim())
+    .map(([key]) => key);
+}

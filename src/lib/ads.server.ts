@@ -71,7 +71,7 @@ const LEGAL_FROM: Record<AdTransition["action"], AdRequestStatus[]> = {
 };
 
 const REQUEST_COLUMNS =
-  "id, offer_type, package, placements, duration_months, newsletter_mentions, eligibility_tier, eligibility_source, eligibility_detail, school_attestation, advertiser_name, contact_email, logo_path, description_de, description_fr, description_it, description_en, cta_url, announcement_date, requested_start, computed_price, currency, status, staff_notes, decline_reason, submitted_at, approved_at, active_from, active_until, created_at, created_by, requester_kind";
+  "id, offer_type, package, placements, duration_months, newsletter_mentions, eligibility_tier, eligibility_source, eligibility_detail, school_attestation, advertiser_name, contact_email, logo_path, description_de, description_fr, description_it, description_en, cta_url, image_path, headline_de, headline_fr, headline_it, headline_en, contact_name, contact_phone, billing_street, billing_postcode, billing_city, billing_country, vat_number, announcement_date, requested_start, computed_price, currency, status, staff_notes, decline_reason, submitted_at, approved_at, active_from, active_until, created_at, created_by, requester_kind";
 
 export async function loadActiveRateCard(client: Client): Promise<AdRateCard> {
   const { data, error } = await client
@@ -315,6 +315,11 @@ export async function createPlacements(admin: Client, row: AdRequest) {
     description_en: row.description_en,
     cta_url: row.cta_url,
     logo_path: row.logo_path,
+    image_path: row.image_path ?? null,
+    headline_de: row.headline_de ?? null,
+    headline_fr: row.headline_fr ?? null,
+    headline_it: row.headline_it ?? null,
+    headline_en: row.headline_en ?? null,
     start_date: start,
     end_date: end,
     is_active: true,
