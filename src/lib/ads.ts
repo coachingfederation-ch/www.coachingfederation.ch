@@ -49,11 +49,7 @@ export const SCHOOL_DURATIONS: Record<AdPlacementType, number[]> = {
   eannouncement: [],
 };
 
-export const SCHOOL_PLACEMENTS: AdPlacementType[] = [
-  "square_advert",
-  "newsletter",
-  "event_banner",
-];
+export const SCHOOL_PLACEMENTS: AdPlacementType[] = ["square_advert", "newsletter", "event_banner"];
 
 /** How long an e-announcement stays visible after its announcement date. */
 export const EANNOUNCEMENT_TRAILING_DAYS = 14;
@@ -175,5 +171,33 @@ export const STATUS_ORDER: AdRequestStatus[] = [
 
 /** Formats an integer amount of francs the Swiss way: CHF 2'500. */
 export function formatChf(amount: number, currency = "CHF"): string {
-  return `${currency} ${Math.round(amount).toLocaleString("de-CH").replace(/\u2019|,/g, "'")}`;
+  return `${currency} ${Math.round(amount)
+    .toLocaleString("de-CH")
+    .replace(/\u2019|,/g, "'")}`;
 }
+
+/** Months a published rate card must stay in force before prices may change. */
+export const RATE_CARD_PRICE_GUARD_MONTHS = 3;
+
+/**
+ * First day a new rate card may replace one that took effect on `validFrom`
+ * (YYYY-MM-DD). Earlier changes are only allowed as documented corrections.
+ */
+export function rateCardChangeableFrom(validFrom: string): string {
+  const [y, m, d] = validFrom.slice(0, 10).split("-").map(Number) as [number, number, number];
+  const date = new Date(Date.UTC(y, m - 1 + RATE_CARD_PRICE_GUARD_MONTHS, d));
+  return date.toISOString().slice(0, 10);
+}
+
+export function isRateCardLocked(validFrom: string, today: string): boolean {
+  return today.slice(0, 10) < rateCardChangeableFrom(validFrom);
+}
+
+export type AdRateCardHistoryEntry = {
+  id: string;
+  version: number;
+  valid_from: string;
+  is_active: boolean;
+  notes: string | null;
+  created_at: string;
+};

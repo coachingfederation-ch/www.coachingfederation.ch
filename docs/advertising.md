@@ -118,3 +118,7 @@ Safeguards:
 - Enable Google, Microsoft, Apple and email sign-in after acceptance.
 - Confirm rate card v1 figures against approved chapter pricing.
 - Staff verification of external organisations and invoicing details.
+
+## Rate card price guard
+
+A published rate card stays in force for three months. Earlier changes are only accepted as an error correction with a reason (10+ characters); it is stored as a new version with note "Correction: …", so history is never overwritten. Publishing deactivates the current card before inserting the new one (single-active index). The history table on /manage/ad-rate-cards lists every version.

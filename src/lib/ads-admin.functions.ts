@@ -12,7 +12,14 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { AdvertiserProfile } from "./advertisers.functions";
 import { assertPlatformAdmin, type AuthedContext } from "./authz";
-import type { AdPlacement, AdRateCard, AdRequest, AdRequestEvent, AdRequestStatus } from "./ads";
+import type {
+  AdPlacement,
+  AdRateCard,
+  AdRateCardHistoryEntry,
+  AdRequest,
+  AdRequestEvent,
+  AdRequestStatus,
+} from "./ads";
 
 const idSchema = z.object({ id: z.string().uuid() });
 
@@ -314,29 +321,64 @@ export const saveAdRateCardFn = createServerFn({ method: "POST" })
         eannouncementPrices: z.record(z.string(), z.number().min(0)),
         schoolPrices: z.record(z.string(), z.record(z.string(), z.number().min(0))),
         newsletterMentionsGuard: z.number().int().min(0).max(60),
+        /** Required while the three-month price guard is running. */
+        correctionReason: z.string().trim().max(500).optional(),
       })
       .parse(input),
   )
   .handler(async ({ context, data }): Promise<AdRateCard> => {
     const actorId = await assertPlatformAdmin(context as AuthedContext);
     const { supabaseAdmin: adminClient } = await import("@/integrations/supabase/client.server");
-    // The ad_* tables arrive with the staged migration, so they are absent from
-    // the generated types until it is applied; this alias keeps the module typed
-    // loosely for those tables only.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const supabaseAdmin = adminClient as any;
-    const { loadActiveRateCard } = await import("./ads.server");
-    const current = await loadActiveRateCard(supabaseAdmin);
+    const { isRateCardLocked, rateCardChangeableFrom } = await import("./ads");
+
+    const { data: current, error: currentError } = await supabaseAdmin
+      .from("ad_rate_cards")
+      .select("id, version, currency, valid_from")
+      .eq("is_active", true)
+      .maybeSingle();
+    if (currentError) throw currentError;
+    const { data: latest } = await supabaseAdmin
+      .from("ad_rate_cards")
+      .select("version")
+      .order("version", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    // Price guard: a card stays in force for three months; before that only a
+    // documented error correction may replace it (kept as a new version so
+    // the audit trail never loses what a request was priced against).
+    const today = new Date().toISOString().slice(0, 10);
+    const reason = data.correctionReason?.trim() ?? "";
+    const locked = current ? isRateCardLocked(current.valid_from, today) : false;
+    if (locked && reason.length < 10) {
+      throw new Error(
+        `Prices are locked until ${rateCardChangeableFrom(current.valid_from)}. Only an error correction with a reason (at least 10 characters) can replace this version earlier.`,
+      );
+    }
+
+    // Deactivate first: the single-active unique index rejects a second
+    // active row, which is what broke "Publish new version" before.
+    if (current) {
+      const { error: offError } = await supabaseAdmin
+        .from("ad_rate_cards")
+        .update({ is_active: false })
+        .eq("id", current.id);
+      if (offError) throw offError;
+    }
 
     const { data: inserted, error } = await supabaseAdmin
       .from("ad_rate_cards")
       .insert({
-        version: current.version + 1,
-        currency: current.currency,
+        version: (latest?.version ?? current?.version ?? 0) + 1,
+        currency: current?.currency ?? "CHF",
         packages: data.packages,
         eannouncement_prices: data.eannouncementPrices,
         school_prices: data.schoolPrices,
         newsletter_mentions_guard: data.newsletterMentionsGuard,
+        valid_from: today,
+        notes: locked ? `Correction: ${reason}` : reason || null,
         is_active: true,
         created_by: actorId,
       })
@@ -344,14 +386,28 @@ export const saveAdRateCardFn = createServerFn({ method: "POST" })
         "id, version, currency, packages, eannouncement_prices, school_prices, newsletter_mentions_guard",
       )
       .single();
-    if (error) throw error;
-
-    await supabaseAdmin
-      .from("ad_rate_cards")
-      .update({ is_active: false })
-      .neq("id", (inserted as { id: string }).id);
-
+    if (error) {
+      if (current) {
+        await supabaseAdmin.from("ad_rate_cards").update({ is_active: true }).eq("id", current.id);
+      }
+      throw error;
+    }
     return inserted as AdRateCard;
+  });
+
+export const getAdRateCardHistoryFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<AdRateCardHistoryEntry[]> => {
+    await assertPlatformAdmin(context as AuthedContext);
+    const { supabaseAdmin: adminClient } = await import("@/integrations/supabase/client.server");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const supabaseAdmin = adminClient as any;
+    const { data, error } = await supabaseAdmin
+      .from("ad_rate_cards")
+      .select("id, version, valid_from, is_active, notes, created_at")
+      .order("version", { ascending: false });
+    if (error) throw error;
+    return (data ?? []) as AdRateCardHistoryEntry[];
   });
 
 /**
