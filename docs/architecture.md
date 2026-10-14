@@ -175,3 +175,11 @@ Tools: `search_coaches`, `get_coach_profile` (published directory) and
 - Indexes: `events(starts_at DESC)`, `event_hosts(profile_id)`, `op_assignments(role_id)` for unfiltered event lists and FK lookups.
 - Query cache: the shared QueryClient (`src/router.tsx`) defaults to `staleTime: 30s` and `refetchOnWindowFocus: false`; screens needing fresher data override per query or invalidate after mutations.
 - Cron: `europe-pulse-advance-5min` now runs every 15 min (stale-run reaper is 90 min, so still safe) and `event-follow-ups-10min` every 30 min. Job names were kept to avoid breaking references.
+
+## Feature toggles
+
+Admins switch whole features on or off on the Integration page (Settings → Features). The switches are columns on the `integration_config` singleton (`feature_europe_pulse_enabled`, `feature_advertising_enabled`, plus `features_updated_at/by`). Public code reads only the booleans through the SECURITY DEFINER `feature_flags()` function (`src/lib/feature-flags.ts`); server code uses `requireFeature()` from `src/lib/feature-flags.server.ts`. A missing or unreadable value counts as "on".
+
+- Europe Pulse off: public page returns not found, Insights teaser hidden, the scan endpoint skips with `{ skipped: "feature_disabled" }`.
+- Advertising off: `/advertise` and advertiser sign-in show a paused notice (platform admins still see the flow), the member home card is hidden, draft/submit server functions reject, `/goto/:placementId` redirects to `/`.
+- Staff screens stay reachable and show a notice.
