@@ -38,7 +38,7 @@ export const PARTNER_PACKAGES = ["gold", "silver", "bronze"] as const;
 export type PartnerPackage = (typeof PARTNER_PACKAGES)[number];
 
 /** Durations a partner package can be booked for, in months. */
-export const PACKAGE_DURATIONS = [12, 6] as const;
+export const PACKAGE_DURATIONS = [12, 9, 6, 3] as const;
 
 /** Durations per school placement, in months. */
 export const SCHOOL_DURATIONS: Record<AdPlacementType, number[]> = {
