@@ -212,7 +212,8 @@ export function AdPreview({
           <p className="font-heading text-lg leading-tight">{headline}</p>
           {body ? <p className="line-clamp-2 text-sm text-muted-foreground">{body}</p> : null}
           <p className="text-sm font-semibold text-primary">
-            {content.ctaLabel} → {host ? <span className="text-muted-foreground">· {host}</span> : null}
+            {content.ctaLabel} →{" "}
+            {host ? <span className="text-muted-foreground">· {host}</span> : null}
           </p>
         </div>
       </div>
@@ -247,7 +248,9 @@ export function AdPreview({
           <ImageSlot url={content.imageUrl} className="h-20 w-28 shrink-0 rounded-xl" />
           <div className="min-w-0">
             <p className="font-heading text-base leading-tight">{headline}</p>
-            {body ? <p className="mt-1 line-clamp-3 text-sm text-muted-foreground">{body}</p> : null}
+            {body ? (
+              <p className="mt-1 line-clamp-3 text-sm text-muted-foreground">{body}</p>
+            ) : null}
             <p className="mt-2 text-sm font-semibold text-primary">{content.ctaLabel} →</p>
           </div>
         </div>

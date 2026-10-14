@@ -275,6 +275,10 @@ function AdRequestDetailPage() {
                   />
                 ) : null}
                 <Row label={t("advertise.content.ctaUrl")} value={request.cta_url ?? "—"} />
+                <Row
+                  label={t("advertise.design.title")}
+                  value={t(`advertise.design.${resolveAdDesignVariant(request.design_variant)}.name`)}
+                />
                 {request.announcement_date ? (
                   <Row
                     label={t("advertise.content.announcementDate")}
