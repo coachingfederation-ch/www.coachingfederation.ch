@@ -296,7 +296,12 @@ function ManageEventsPage() {
                 const next = active
                   ? excludedStatuses.filter((s) => s !== status)
                   : [...excludedStatuses, status];
-                setFilter({ status: next.join(",") });
+                const isDefault =
+                  next.length === DEFAULT_EXCLUDED_STATUSES.length &&
+                  DEFAULT_EXCLUDED_STATUSES.every((s) => next.includes(s));
+                setFilter({
+                  status: isDefault ? "" : next.length === 0 ? STATUS_SHOW_ALL : next.join(","),
+                });
               }}
               options={["draft", "published", "passed", "cancelled"].map(
                 (s) => [s, t(`events.status.${s}`)] as [string, string],
