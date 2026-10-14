@@ -145,6 +145,7 @@ export async function saveBlock(
     image_aspect?: string | null;
     image_crop?: { xPct: number; yPct: number; zoom: number } | null;
     image_marks?: unknown;
+    ad_placement_id?: string | null;
   },
 ) {
   const { error } = await client

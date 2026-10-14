@@ -6,10 +6,12 @@
  * disabled entirely under `prefers-reduced-motion`, where the band degrades to
  * a plain horizontally scrollable row.
  *
- * Content is static demo data for now (see `home.ads` in the locale files);
- * imagery is AI generated and purely decorative, so the images carry an empty
- * alt and the partner name carries the meaning. The AI disclosure badge is
- * mandatory on every generated photograph, so it ships inside the image frame.
+ * Content is either live approved placements (see `listActivePlacements`) or,
+ * when none are live, the demo entries in `home.ads`. Imagery is decorative, so
+ * it carries an empty alt and the partner name carries the meaning. Only the
+ * demo photographs are AI generated, so the mandatory disclosure badge is bound
+ * to `item.ai` rather than to the presence of an image — a real advertiser logo
+ * must never be labelled as generated.
  */
 import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
 
@@ -17,8 +19,12 @@ export type SponsorItem = {
   name: string;
   category: string;
   claim: string;
-  /** Bundled demo image; decorative only. */
+  /** Bundled demo image or advertiser logo; decorative only. */
   image?: string;
+  /** True only for the AI-generated demo photography. */
+  ai?: boolean;
+  /** Advertiser link; the whole card becomes a link when present. */
+  href?: string;
 };
 
 function SponsorCard({
@@ -47,12 +53,22 @@ function SponsorCard({
         ) : null}
         {/* Fade the photo into the card instead of ending on a hard edge. */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-hero via-hero/10 to-transparent" />
-        {item.image ? <AiBadge label={aiLabel} className="absolute bottom-3 left-4" /> : null}
+        {item.ai ? <AiBadge label={aiLabel} className="absolute bottom-3 left-4" /> : null}
         <span className="absolute right-4 top-4 inline-flex items-center rounded-md bg-accent px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-accent-foreground">
           {adLabel}
         </span>
       </div>
 
+      {item.href ? (
+        <a
+          href={item.href}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          className="absolute inset-0 z-10 rounded-3xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <span className="sr-only">{`${cta} — ${item.name}`}</span>
+        </a>
+      ) : null}
       <div className="relative flex flex-1 flex-col p-7">
         <div className="flex items-center gap-2">
           <span aria-hidden="true" className="h-[2px] w-4 bg-accent" />

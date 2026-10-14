@@ -21,9 +21,13 @@ import {
   MessagesSquare,
   BookOpen,
   Headset,
+<<<<<<< src/components/cms/Shell.tsx
   Ticket,
   Mail,
   Gauge,
+=======
+  Megaphone,
+>>>>>>> /tmp/d
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
@@ -103,6 +107,18 @@ const nav = [
     to: "/manage/chat-insights",
     key: "nav.chatInsights",
     icon: MessagesSquare,
+    allowedRoles: PLATFORM_ADMIN,
+  },
+  {
+    to: "/manage/ad-requests",
+    key: "nav.adRequests",
+    icon: Megaphone,
+    allowedRoles: PLATFORM_ADMIN,
+  },
+  {
+    to: "/manage/ad-rate-cards",
+    key: "nav.adRateCards",
+    icon: Megaphone,
     allowedRoles: PLATFORM_ADMIN,
   },
   { to: "/manage/knowledge", key: "nav.knowledge", icon: BookOpen, allowedRoles: PLATFORM_ADMIN },

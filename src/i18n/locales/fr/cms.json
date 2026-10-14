@@ -22,11 +22,16 @@
     "knowledge": "Connaissances de l'assistant",
     "liveChat": "Chat en direct",
     "newsletters": "Newsletters",
+<<<<<<< src/i18n/locales/fr/cms.json
     "guestPasses": "Pass invités",
     "memberEngagement": "Engagement des membres",
     "overview": "Vue d’ensemble",
     "editorialSignals": "Signaux éditoriaux",
     "guides": "Guides"
+=======
+    "adRequests": "Publicité",
+    "adRateCards": "Tarifs publicitaires"
+>>>>>>> /tmp/d
   },
   "auth": {
     "signInSub": "Connectez-vous pour continuer",
@@ -783,7 +788,8 @@
       },
       "ads": {
         "title": "Annoncez avec nous",
-        "body": "Touchez des coachs dans toute la Suisse à travers notre newsletter, notre site web et nos événements. Des placements payants pour les membres y seront proposés."
+        "body": "Touchez des coachs dans toute la Suisse à travers notre newsletter, notre site web et nos événements. Configurez un emplacement ici; nous l'examinons et vous envoyons un contrat.",
+        "cta": "Configurer un emplacement"
       },
       "writeForUs": {
         "title": "Rédigez pour nous",
@@ -2613,6 +2619,7 @@
     "never": "Jamais",
     "recent": "À l'instant"
   },
+<<<<<<< src/i18n/locales/fr/cms.json
   "taxonomy": {
     "translate": "Traduire",
     "translating": "Traduction en cours…",
@@ -2988,5 +2995,146 @@
     "fieldQuestion": "Question",
     "fieldAnswer": "Réponse",
     "fieldQuote": "À dire ainsi"
+=======
+  "advertise": {
+    "title": "Annoncez avec nous",
+    "lede": "Touchez les coachs de toute la Suisse via notre site, notre newsletter et nos événements. Vous configurez ici un emplacement ; nous examinons le contenu et les conditions commerciales, vous envoyons un contrat et publions une fois signé. Aucun paiement en ligne.",
+    "start": "Configurer un emplacement",
+    "myRequests": "Mes demandes",
+    "noRequests": "Vous n'avez pas encore configuré d'emplacement.",
+    "step": "Étape {n} sur {total}",
+    "back": "Retour",
+    "next": "Continuer",
+    "saveDraft": "Enregistrer le brouillon",
+    "submit": "Soumettre pour examen",
+    "submitted": "Merci. Nous examinons votre demande et revenons vers vous avec un contrat.",
+    "offer": {
+      "title": "Que souhaitez-vous réserver ?",
+      "partner_package": "Paquet partenaire",
+      "partner_packageBody": "Une présence annuelle ou semestrielle sur notre site, notre newsletter et nos événements.",
+      "eannouncement": "E-annonce",
+      "eannouncementBody": "Une annonce à notre communauté pour un événement ou une offre unique.",
+      "school": "École ou programme de coaching",
+      "schoolBody": "Emplacements pour un programme Level 1, Level 2, Level 3 ou CCEU.",
+      "package": "Paquet",
+      "duration": "Durée",
+      "months": "{n} mois",
+      "oneMonth": "1 mois",
+      "placements": "Emplacements",
+      "includes": "Comprend"
+    },
+    "placement": {
+      "homepage": "Page d'accueil",
+      "event_banner": "Bannière d'événement",
+      "newsletter": "Newsletter",
+      "square_advert": "Annonce carrée",
+      "eannouncement": "E-annonce"
+    },
+    "eligibility": {
+      "title": "Votre prix",
+      "icfs_member": "Membre du chapitre avec un ICF Credential",
+      "icf_global": "Membre ICF Global",
+      "explain": "Nous lisons votre adhésion et votre credential dans votre dossier de membre, le prix est donc défini pour vous. Si quelque chose semble incorrect, notre équipe l'ajuste lors de l'examen.",
+      "fallback": "Nous n'avons pas pu confirmer automatiquement votre credential, le prix ICF Global s'applique donc pour l'instant. Notre équipe le vérifie."
+    },
+    "school": {
+      "title": "Éligibilité du programme",
+      "body": "Les prix écoles s'appliquent aux programmes Level 1, Level 2, Level 3 et CCEU. Merci de confirmer votre programme — notre équipe le vérifie avant approbation.",
+      "organisation": "École ou organisation",
+      "programType": "Type de programme",
+      "accreditation": "Référence d'accréditation ICF",
+      "attest": "Je confirme représenter ce programme et l'exactitude des informations ci-dessus."
+    },
+    "content": {
+      "title": "Votre contenu",
+      "advertiserName": "Nom de l'annonceur",
+      "contactEmail": "E-mail de contact",
+      "logo": "Logo",
+      "logoHint": "PNG, JPG, WebP ou SVG, jusqu'à 2 Mo.",
+      "upload": "Téléverser le logo",
+      "ctaUrl": "Lien",
+      "description": "Texte court",
+      "descriptionHint": "Une phrase claire par langue. Allemand, français, italien et anglais.",
+      "announcementDate": "Date de l'annonce ou de l'événement",
+      "requestedStart": "Date de début souhaitée",
+      "newsletterMentions": "Mentions newsletter envisagées",
+      "newsletterMentionsHint": "À titre informatif — les paquets partenaires incluent toutes les newsletters."
+    },
+    "review": {
+      "title": "Vérifier et soumettre",
+      "price": "Prix",
+      "period": "Période",
+      "preview": "Aperçu",
+      "confirm": "Tout ce qui précède est correct."
+    },
+    "status": {
+      "draft": "Brouillon",
+      "submitted": "Soumise",
+      "under_review": "En examen",
+      "approved": "Approuvée",
+      "declined": "Refusée",
+      "contract_sent": "Contrat envoyé",
+      "contract_signed": "Contrat signé",
+      "active": "En ligne",
+      "expired": "Terminée",
+      "cancelled": "Annulée"
+    },
+    "staff": {
+      "title": "Demandes publicitaires",
+      "lede": "Examinez le contenu et les conditions commerciales. Rien ne passe en ligne avant qu'un contrat soit marqué signé.",
+      "empty": "Aucune demande à examiner.",
+      "queue": "File d'attente",
+      "advertiser": "Annonceur",
+      "offer": "Offre",
+      "price": "Prix",
+      "eligibility": "Éligibilité déclarée",
+      "submittedAt": "Soumise",
+      "open": "Ouvrir",
+      "startReview": "Commencer l'examen",
+      "approve": "Approuver",
+      "decline": "Refuser",
+      "declineReason": "Motif communiqué à l'annonceur",
+      "sendContract": "Générer et envoyer le contrat",
+      "markSigned": "Marquer le contrat signé",
+      "activate": "Activer l'emplacement",
+      "expire": "Terminer l'emplacement",
+      "cancel": "Annuler la demande",
+      "notes": "Notes internes",
+      "saveNotes": "Enregistrer les notes",
+      "contract": "Contrat",
+      "printContract": "Imprimer le contrat",
+      "address": "Adresse de l'annonceur",
+      "paymentTerms": "Conditions de paiement",
+      "adjustPrice": "Ajuster le prix",
+      "adjustTier": "Ajuster le palier tarifaire",
+      "startDate": "Actif depuis",
+      "endDate": "Actif jusqu'au",
+      "history": "Historique",
+      "placements": "Emplacements",
+      "rateCard": "Grille tarifaire",
+      "schoolAttestation": "Attestation d'école",
+      "verifyFirst": "Vérifiez cette déclaration avant d'approuver.",
+      "confirmAction": "Confirmez-vous ?",
+      "noContract": "Aucun contrat n'a encore été généré pour cette demande."
+    },
+    "rateCard": {
+      "title": "Tarifs publicitaires",
+      "lede": "Le comité fixe ces prix. L'enregistrement publie une nouvelle version; les demandes déjà tarifées conservent leur version.",
+      "version": "Version active",
+      "packages": "Forfaits partenaires (CHF)",
+      "eannouncement": "E-annonce (CHF)",
+      "schools": "Écoles et programmes de coaching (CHF)",
+      "mentionsGuard": "Limite de mentions dans la newsletter",
+      "mentionsHint": "Un plafond opérationnel par édition. Il ne change jamais un prix.",
+      "publish": "Publier une nouvelle version",
+      "saved": "Nouvelle version publiée.",
+      "example": "Exemple"
+    },
+    "newsletter": {
+      "adPlacement": "Emplacement publicitaire lié",
+      "adPlacementNone": "Aucun emplacement lié",
+      "adPlacementHint": "Choisissez un emplacement newsletter approuvé; l'édition affiche son logo, son texte et son lien."
+    }
+>>>>>>> /tmp/d
   }
 }

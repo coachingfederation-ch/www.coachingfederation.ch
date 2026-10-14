@@ -21,7 +21,17 @@ import { NewsletterSendPanel } from "@/components/cms/NewsletterSendPanel";
 import { NewsletterTranslationsPanel } from "@/components/cms/NewsletterTranslationsPanel";
 
 import { ARTICLE_ROLES, requireStaffAccess } from "@/lib/staff-guard";
-import { Button, Input, Label, Switch } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  Button,
+  Input,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Switch,
+} from "@/design-system/icf-welcome-design-system-a835df";
 import {
   addNewsletterBlockFn,
   deleteNewsletterBlockFn,
@@ -36,6 +46,7 @@ import {
   transitionNewsletterFn,
 } from "@/lib/newsletters.functions";
 import { blockKind, formatIssueDate, type NewsletterBlockRow } from "@/lib/newsletters";
+import { listActivePlacements } from "@/lib/ads.functions";
 
 export const Route = createFileRoute("/_staff/manage/newsletters/$id")({
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, ARTICLE_ROLES),
@@ -171,6 +182,10 @@ function BlockCard({
             onChange={(event) => setTitle(event.target.value)}
           />
         </div>
+
+        {block.block_type === "advertisement" ? (
+          <AdPlacementPicker block={block} onSave={onSave} />
+        ) : null}
 
         <BlockImageField
           block={block}
@@ -498,5 +513,52 @@ function NewsletterEditor() {
         <NewsletterPreviewDialog id={id} open={previewOpen} onOpenChange={setPreviewOpen} />
       </div>
     </Shell>
+  );
+}
+
+/**
+ * Attach an approved newsletter placement to an advertisement block.
+ *
+ * The list only contains placements that are live today, because those are the
+ * only ones an edition may carry; the block keeps the id, and the published
+ * edition renders the advertiser's own logo, text and link from it.
+ */
+function AdPlacementPicker({
+  block,
+  onSave,
+}: {
+  block: NewsletterBlockRow;
+  onSave: (patch: Partial<NewsletterBlockRow>) => void;
+}) {
+  const { data } = useQuery({
+    queryKey: ["ad-placements", "newsletter"],
+    queryFn: () => listActivePlacements({ data: { placementType: "newsletter" } }),
+    staleTime: 5 * 60 * 1000,
+  });
+  const placements = data ?? [];
+
+  return (
+    <div className="space-y-1">
+      <Label htmlFor={`placement-${block.id}`}>Attached advertising placement</Label>
+      <Select
+        value={block.ad_placement_id ?? "none"}
+        onValueChange={(value) => onSave({ ad_placement_id: value === "none" ? null : value })}
+      >
+        <SelectTrigger id={`placement-${block.id}`}>
+          <SelectValue placeholder="No placement attached" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="none">No placement attached</SelectItem>
+          {placements.map((placement) => (
+            <SelectItem key={placement.id} value={placement.id}>
+              {placement.advertiser_name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <p className="text-xs text-muted-foreground">
+        Pick an approved newsletter placement; the edition renders its logo, text and link.
+      </p>
+    </div>
   );
 }

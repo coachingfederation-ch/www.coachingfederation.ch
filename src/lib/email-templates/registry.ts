@@ -34,6 +34,7 @@ import { template as eventRecapThanks } from "./event-recap-thanks";
 import { template as internalInvitation } from "./internal-invitation";
 import { template as newsletterRefresh } from "./newsletter-refresh";
 import { template as newsletterEdition } from "./newsletter-edition";
+<<<<<<< src/lib/email-templates/registry.ts
 import { template as guestPassRequest } from "./guest-pass-request";
 import { template as guestPassInvite } from "./guest-pass-invite";
 import { template as guestPassMemberInvited } from "./guest-pass-member-invited";
@@ -58,6 +59,13 @@ import {
   specialisationTemplate as memberSpecialisation,
   graceReengagementTemplate as memberGraceReengagement,
 } from "./member-campaigns";
+=======
+import { template as adRequestSubmitted } from "./ad-request-submitted";
+import { template as adRequestDecision } from "./ad-request-decision";
+import { template as adContractReady } from "./ad-contract-ready";
+import { template as adPlacementLive } from "./ad-placement-live";
+import { template as adPlacementExpiring } from "./ad-placement-expiring";
+>>>>>>> /tmp/d
 
 /**
  * Template registry — maps template names to their React Email components.
@@ -80,6 +88,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "internal-invitation": internalInvitation,
   "newsletter-refresh": newsletterRefresh,
   "newsletter-edition": newsletterEdition,
+<<<<<<< src/lib/email-templates/registry.ts
   "guest-pass-request": guestPassRequest,
   "guest-pass-invite": guestPassInvite,
   "guest-pass-member-invited": guestPassMemberInvited,
@@ -99,4 +108,11 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "member-credential-change": memberCredentialChange,
   "member-specialisation": memberSpecialisation,
   "member-grace-reengagement": memberGraceReengagement,
+=======
+  "ad-request-submitted": adRequestSubmitted,
+  "ad-request-decision": adRequestDecision,
+  "ad-contract-ready": adContractReady,
+  "ad-placement-live": adPlacementLive,
+  "ad-placement-expiring": adPlacementExpiring,
+>>>>>>> /tmp/d
 };

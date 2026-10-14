@@ -110,6 +110,8 @@ export interface NewsletterBlockRow {
   image_aspect: string | null;
   image_crop: { xPct: number; yPct: number; zoom: number } | null;
   image_marks: PlacedMark[] | null;
+  /** Approved advertising placement rendered by an `advertisement` block. */
+  ad_placement_id: string | null;
 
   generated_at: string | null;
   created_by: string | null;

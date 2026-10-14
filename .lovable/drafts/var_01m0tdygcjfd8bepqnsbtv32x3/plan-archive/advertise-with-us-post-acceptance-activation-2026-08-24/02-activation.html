@@ -1,0 +1,45 @@
+<svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Activation sequence from accepting the draft to the nightly job running">
+  <style>
+    text { font-family: var(--font-sans); fill: hsl(var(--foreground)); }
+    .lbl { font-size: 14px; font-weight: 480; }
+    .note { font-size: 12px; fill: hsl(var(--muted-foreground)); }
+    .box { fill: none; stroke: hsl(var(--muted-foreground)); stroke-width: 1; }
+    .wire { stroke: hsl(var(--muted-foreground)); stroke-width: 1; fill: none; }
+    .zone { fill: none; stroke: hsl(var(--border)); stroke-width: 1; stroke-dasharray: 4 3; }
+  </style>
+  <defs>
+    <marker id="ch" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L8 4 L0 8" fill="none" stroke="hsl(var(--muted-foreground))" stroke-width="1"/>
+    </marker>
+  </defs>
+
+  <rect class="box" x="16" y="40" width="140" height="60" rx="8"/>
+  <text class="lbl" x="86" y="66" text-anchor="middle">Accept draft</text>
+  <text class="note" x="86" y="86" text-anchor="middle">tables + rate card v1</text>
+
+  <rect class="box" x="188" y="40" width="140" height="60" rx="8"/>
+  <text class="lbl" x="258" y="66" text-anchor="middle">Check prices</text>
+  <text class="note" x="258" y="86" text-anchor="middle">rate card editor</text>
+
+  <rect class="box" x="360" y="40" width="140" height="60" rx="8"/>
+  <text class="lbl" x="430" y="66" text-anchor="middle">Schedule job</text>
+  <text class="note" x="430" y="86" text-anchor="middle">nightly, 03:15</text>
+
+  <rect class="box" x="532" y="40" width="92" height="60" rx="8"/>
+  <text class="lbl" x="578" y="66" text-anchor="middle">Live</text>
+  <text class="note" x="578" y="86" text-anchor="middle">quotes work</text>
+
+  <line class="wire" x1="158" y1="70" x2="184" y2="70" marker-end="url(#ch)"/>
+  <line class="wire" x1="330" y1="70" x2="356" y2="70" marker-end="url(#ch)"/>
+  <line class="wire" x1="502" y1="70" x2="528" y2="70" marker-end="url(#ch)"/>
+
+  <rect class="zone" x="16" y="140" width="608" height="90" rx="8"/>
+  <text class="note" x="30" y="160">nightly run</text>
+  <rect class="box" x="40" y="170" width="170" height="44" rx="8"/>
+  <text class="lbl" x="125" y="197" text-anchor="middle">Retire ended placements</text>
+  <rect class="box" x="240" y="170" width="170" height="44" rx="8"/>
+  <text class="lbl" x="325" y="197" text-anchor="middle">Send 30-day warning</text>
+  <rect class="box" x="440" y="170" width="160" height="44" rx="8"/>
+  <text class="lbl" x="520" y="192" text-anchor="middle">Log result</text>
+  <text class="note" x="520" y="207" text-anchor="middle">expired / reminded</text>
+</svg>

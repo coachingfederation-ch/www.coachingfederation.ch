@@ -22,11 +22,16 @@
     "knowledge": "Assistant knowledge",
     "liveChat": "Live chat",
     "newsletters": "Newsletters",
+<<<<<<< src/i18n/locales/en/cms.json
     "guestPasses": "Guest passes",
     "memberEngagement": "Member engagement",
     "overview": "Overview",
     "editorialSignals": "Editorial signals",
     "guides": "Member guides"
+=======
+    "adRequests": "Advertising",
+    "adRateCards": "Ad rate card"
+>>>>>>> /tmp/d
   },
   "auth": {
     "signInSub": "Sign in to continue",
@@ -783,7 +788,8 @@
       },
       "ads": {
         "title": "Advertise with us",
-        "body": "Reach coaches across Switzerland through our newsletter, website and events. Paid placements for members will be offered here."
+        "body": "Reach coaches across Switzerland through our newsletter, website and events. Configure a placement here; we review it and send you a contract.",
+        "cta": "Configure a placement"
       },
       "writeForUs": {
         "title": "Write for us",
@@ -2613,6 +2619,7 @@
     "never": "Never",
     "recent": "Recent"
   },
+<<<<<<< src/i18n/locales/en/cms.json
   "taxonomy": {
     "translate": "Translate",
     "translating": "Translating…",
@@ -2988,5 +2995,146 @@
     "fieldQuestion": "Question",
     "fieldAnswer": "Answer",
     "fieldQuote": "Say it like this"
+=======
+  "advertise": {
+    "title": "Advertise with us",
+    "lede": "Reach coaches across Switzerland through our website, newsletter and events. You configure a placement here; we review the content and the commercial terms, send you a contract, and publish once it is signed. There is no online payment.",
+    "start": "Configure a placement",
+    "myRequests": "My requests",
+    "noRequests": "You have not configured a placement yet.",
+    "step": "Step {n} of {total}",
+    "back": "Back",
+    "next": "Continue",
+    "saveDraft": "Save draft",
+    "submit": "Submit for review",
+    "submitted": "Thank you. We review your request and come back to you with a contract.",
+    "offer": {
+      "title": "What would you like to book?",
+      "partner_package": "Partner package",
+      "partner_packageBody": "A yearly or half-yearly presence across our website, newsletter and events.",
+      "eannouncement": "E-announcement",
+      "eannouncementBody": "One announcement to our community about a single event or offer.",
+      "school": "Coaching school or program",
+      "schoolBody": "Placements for a Level 1, Level 2, Level 3 or CCEU program.",
+      "package": "Package",
+      "duration": "Duration",
+      "months": "{n} months",
+      "oneMonth": "1 month",
+      "placements": "Placements",
+      "includes": "Includes"
+    },
+    "placement": {
+      "homepage": "Homepage",
+      "event_banner": "Event banner",
+      "newsletter": "Newsletter",
+      "square_advert": "Square advert",
+      "eannouncement": "E-announcement"
+    },
+    "eligibility": {
+      "title": "Your price",
+      "icfs_member": "Chapter member with an ICF Credential",
+      "icf_global": "ICF Global member",
+      "explain": "We read your membership and credential from your member record, so the price is set for you. If something looks wrong, our team adjusts it during review.",
+      "fallback": "We could not confirm your chapter credential automatically, so the ICF Global price applies for now. Our team checks this at review."
+    },
+    "school": {
+      "title": "Program eligibility",
+      "body": "Schools pricing applies to Level 1, Level 2, Level 3 and CCEU programs. Please confirm your program below — our team verifies it before approving.",
+      "organisation": "School or organisation",
+      "programType": "Program type",
+      "accreditation": "ICF accreditation reference",
+      "attest": "I confirm that I represent this program and that the details above are accurate."
+    },
+    "content": {
+      "title": "Your content",
+      "advertiserName": "Advertiser name",
+      "contactEmail": "Contact email",
+      "logo": "Logo",
+      "logoHint": "PNG, JPG, WebP or SVG, up to 2 MB.",
+      "upload": "Upload logo",
+      "ctaUrl": "Link",
+      "description": "Short text",
+      "descriptionHint": "One clear sentence per language. German, French, Italian and English.",
+      "announcementDate": "Announcement or event date",
+      "requestedStart": "Preferred start date",
+      "newsletterMentions": "Newsletter mentions you have in mind",
+      "newsletterMentionsHint": "Informational only — partner packages include all newsletters."
+    },
+    "review": {
+      "title": "Review and submit",
+      "price": "Price",
+      "period": "Period",
+      "preview": "How it will look",
+      "confirm": "Everything above is correct."
+    },
+    "status": {
+      "draft": "Draft",
+      "submitted": "Submitted",
+      "under_review": "In review",
+      "approved": "Approved",
+      "declined": "Declined",
+      "contract_sent": "Contract sent",
+      "contract_signed": "Contract signed",
+      "active": "Live",
+      "expired": "Ended",
+      "cancelled": "Cancelled"
+    },
+    "staff": {
+      "title": "Advertising requests",
+      "lede": "Review content and commercial terms. Nothing goes live until a contract is marked signed.",
+      "empty": "No requests to review.",
+      "queue": "Queue",
+      "advertiser": "Advertiser",
+      "offer": "Offer",
+      "price": "Price",
+      "eligibility": "Claimed eligibility",
+      "submittedAt": "Submitted",
+      "open": "Open",
+      "startReview": "Start review",
+      "approve": "Approve",
+      "decline": "Decline",
+      "declineReason": "Reason for the advertiser",
+      "sendContract": "Generate and send contract",
+      "markSigned": "Mark contract signed",
+      "activate": "Activate placement",
+      "expire": "End placement",
+      "cancel": "Cancel request",
+      "notes": "Internal notes",
+      "saveNotes": "Save notes",
+      "contract": "Contract",
+      "printContract": "Print contract",
+      "address": "Advertiser address",
+      "paymentTerms": "Payment terms",
+      "adjustPrice": "Adjust price",
+      "adjustTier": "Adjust price tier",
+      "startDate": "Active from",
+      "endDate": "Active until",
+      "history": "History",
+      "placements": "Placements",
+      "rateCard": "Rate card",
+      "schoolAttestation": "School attestation",
+      "verifyFirst": "Verify this claim before approving.",
+      "confirmAction": "Are you sure?",
+      "noContract": "No contract has been generated for this request yet."
+    },
+    "rateCard": {
+      "title": "Advertising rate card",
+      "lede": "The board owns these prices. Saving publishes a new version; requests already priced keep the version they were priced on.",
+      "version": "Active version",
+      "packages": "Partner packages (CHF)",
+      "eannouncement": "E-announcement (CHF)",
+      "schools": "Coaching schools and programs (CHF)",
+      "mentionsGuard": "Newsletter mentions guard",
+      "mentionsHint": "An operational cap on mentions per edition. It never changes a price.",
+      "publish": "Publish new version",
+      "saved": "New version published.",
+      "example": "Example"
+    },
+    "newsletter": {
+      "adPlacement": "Attached advertising placement",
+      "adPlacementNone": "No placement attached",
+      "adPlacementHint": "Pick an approved newsletter placement; the edition renders its logo, text and link."
+    }
+>>>>>>> /tmp/d
   }
 }

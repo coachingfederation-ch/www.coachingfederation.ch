@@ -22,11 +22,16 @@
     "knowledge": "Conoscenze dell'assistente",
     "liveChat": "Chat dal vivo",
     "newsletters": "Newsletter",
+<<<<<<< src/i18n/locales/it/cms.json
     "guestPasses": "Pass ospiti",
     "memberEngagement": "Coinvolgimento dei membri",
     "overview": "Panoramica",
     "editorialSignals": "Segnali editoriali",
     "guides": "Guide"
+=======
+    "adRequests": "Pubblicità",
+    "adRateCards": "Listino pubblicitario"
+>>>>>>> /tmp/d
   },
   "auth": {
     "signInSub": "Accedi per continuare",
@@ -783,7 +788,8 @@
       },
       "ads": {
         "title": "Fai pubblicità con noi",
-        "body": "Raggiungi i coach di tutta la Svizzera tramite la nostra newsletter, il sito web e gli eventi. Le inserzioni a pagamento per i membri saranno offerte qui."
+        "body": "Raggiungi i coach di tutta la Svizzera tramite la nostra newsletter, il sito web e gli eventi. Configura qui uno spazio; lo esaminiamo e ti inviamo un contratto.",
+        "cta": "Configura uno spazio"
       },
       "writeForUs": {
         "title": "Scrivi per noi",
@@ -2613,6 +2619,7 @@
     "never": "Mai",
     "recent": "Poco fa"
   },
+<<<<<<< src/i18n/locales/it/cms.json
   "taxonomy": {
     "translate": "Traduci",
     "translating": "Traduzione in corso…",
@@ -2988,5 +2995,146 @@
     "fieldQuestion": "Domanda",
     "fieldAnswer": "Risposta",
     "fieldQuote": "Dillo così"
+=======
+  "advertise": {
+    "title": "Fai pubblicità con noi",
+    "lede": "Raggiungi i coach in tutta la Svizzera attraverso il nostro sito, la newsletter e gli eventi. Qui configuri una collocazione; noi esaminiamo contenuto e condizioni commerciali, ti inviamo un contratto e pubblichiamo dopo la firma. Nessun pagamento online.",
+    "start": "Configura una collocazione",
+    "myRequests": "Le mie richieste",
+    "noRequests": "Non hai ancora configurato una collocazione.",
+    "step": "Passo {n} di {total}",
+    "back": "Indietro",
+    "next": "Continua",
+    "saveDraft": "Salva bozza",
+    "submit": "Invia per revisione",
+    "submitted": "Grazie. Esaminiamo la tua richiesta e ti rispondiamo con un contratto.",
+    "offer": {
+      "title": "Che cosa desideri prenotare?",
+      "partner_package": "Pacchetto partner",
+      "partner_packageBody": "Una presenza annuale o semestrale su sito, newsletter ed eventi.",
+      "eannouncement": "E-announcement",
+      "eannouncementBody": "Un annuncio alla nostra community per un singolo evento o un'offerta.",
+      "school": "Scuola o programma di coaching",
+      "schoolBody": "Collocazioni per un programma Level 1, Level 2, Level 3 o CCEU.",
+      "package": "Pacchetto",
+      "duration": "Durata",
+      "months": "{n} mesi",
+      "oneMonth": "1 mese",
+      "placements": "Collocazioni",
+      "includes": "Include"
+    },
+    "placement": {
+      "homepage": "Home page",
+      "event_banner": "Banner evento",
+      "newsletter": "Newsletter",
+      "square_advert": "Annuncio quadrato",
+      "eannouncement": "E-announcement"
+    },
+    "eligibility": {
+      "title": "Il tuo prezzo",
+      "icfs_member": "Socio del chapter con ICF Credential",
+      "icf_global": "Socio ICF Global",
+      "explain": "Leggiamo iscrizione e credential dal tuo profilo socio, quindi il prezzo è già definito. Se qualcosa non torna, il nostro team lo corregge in fase di revisione.",
+      "fallback": "Non abbiamo potuto confermare automaticamente il tuo credential, quindi per ora vale il prezzo ICF Global. Il nostro team lo verifica."
+    },
+    "school": {
+      "title": "Idoneità del programma",
+      "body": "I prezzi per le scuole valgono per programmi Level 1, Level 2, Level 3 e CCEU. Conferma il tuo programma — il nostro team lo verifica prima di approvare.",
+      "organisation": "Scuola o organizzazione",
+      "programType": "Tipo di programma",
+      "accreditation": "Riferimento di accreditamento ICF",
+      "attest": "Confermo di rappresentare questo programma e che i dati sopra sono corretti."
+    },
+    "content": {
+      "title": "I tuoi contenuti",
+      "advertiserName": "Nome dell'inserzionista",
+      "contactEmail": "E-mail di contatto",
+      "logo": "Logo",
+      "logoHint": "PNG, JPG, WebP o SVG, fino a 2 MB.",
+      "upload": "Carica il logo",
+      "ctaUrl": "Link",
+      "description": "Testo breve",
+      "descriptionHint": "Una frase chiara per lingua. Tedesco, francese, italiano e inglese.",
+      "announcementDate": "Data dell'annuncio o dell'evento",
+      "requestedStart": "Data di inizio desiderata",
+      "newsletterMentions": "Menzioni in newsletter previste",
+      "newsletterMentionsHint": "Solo informativo — i pacchetti partner includono tutte le newsletter."
+    },
+    "review": {
+      "title": "Verifica e invia",
+      "price": "Prezzo",
+      "period": "Periodo",
+      "preview": "Anteprima",
+      "confirm": "Tutto quanto sopra è corretto."
+    },
+    "status": {
+      "draft": "Bozza",
+      "submitted": "Inviata",
+      "under_review": "In revisione",
+      "approved": "Approvata",
+      "declined": "Rifiutata",
+      "contract_sent": "Contratto inviato",
+      "contract_signed": "Contratto firmato",
+      "active": "Online",
+      "expired": "Conclusa",
+      "cancelled": "Annullata"
+    },
+    "staff": {
+      "title": "Richieste pubblicitarie",
+      "lede": "Esamina contenuto e condizioni commerciali. Nulla va online prima che un contratto sia segnato come firmato.",
+      "empty": "Nessuna richiesta da esaminare.",
+      "queue": "Coda",
+      "advertiser": "Inserzionista",
+      "offer": "Offerta",
+      "price": "Prezzo",
+      "eligibility": "Idoneità dichiarata",
+      "submittedAt": "Inviata",
+      "open": "Apri",
+      "startReview": "Avvia revisione",
+      "approve": "Approva",
+      "decline": "Rifiuta",
+      "declineReason": "Motivo per l'inserzionista",
+      "sendContract": "Genera e invia il contratto",
+      "markSigned": "Segna contratto firmato",
+      "activate": "Attiva la collocazione",
+      "expire": "Concludi la collocazione",
+      "cancel": "Annulla richiesta",
+      "notes": "Note interne",
+      "saveNotes": "Salva note",
+      "contract": "Contratto",
+      "printContract": "Stampa contratto",
+      "address": "Indirizzo dell'inserzionista",
+      "paymentTerms": "Condizioni di pagamento",
+      "adjustPrice": "Modifica prezzo",
+      "adjustTier": "Modifica fascia di prezzo",
+      "startDate": "Attivo dal",
+      "endDate": "Attivo fino al",
+      "history": "Cronologia",
+      "placements": "Collocazioni",
+      "rateCard": "Listino",
+      "schoolAttestation": "Attestazione della scuola",
+      "verifyFirst": "Verifica questa dichiarazione prima di approvare.",
+      "confirmAction": "Confermi?",
+      "noContract": "Per questa richiesta non è ancora stato generato un contratto."
+    },
+    "rateCard": {
+      "title": "Listino pubblicitario",
+      "lede": "Il comitato definisce questi prezzi. Il salvataggio pubblica una nuova versione; le richieste già quotate mantengono la loro versione.",
+      "version": "Versione attiva",
+      "packages": "Pacchetti partner (CHF)",
+      "eannouncement": "E-annuncio (CHF)",
+      "schools": "Scuole e programmi di coaching (CHF)",
+      "mentionsGuard": "Limite di menzioni nella newsletter",
+      "mentionsHint": "Un tetto operativo per edizione. Non modifica mai un prezzo.",
+      "publish": "Pubblica nuova versione",
+      "saved": "Nuova versione pubblicata.",
+      "example": "Esempio"
+    },
+    "newsletter": {
+      "adPlacement": "Posizionamento pubblicitario collegato",
+      "adPlacementNone": "Nessun posizionamento collegato",
+      "adPlacementHint": "Scegli un posizionamento newsletter approvato; l'edizione mostra logo, testo e link."
+    }
+>>>>>>> /tmp/d
   }
 }

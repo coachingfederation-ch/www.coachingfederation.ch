@@ -22,11 +22,16 @@
     "knowledge": "Assistenten-Wissen",
     "liveChat": "Live-Chat",
     "newsletters": "Newsletter",
+<<<<<<< src/i18n/locales/de/cms.json
     "guestPasses": "Gästepässe",
     "memberEngagement": "Mitglieder-Engagement",
     "overview": "Übersicht",
     "editorialSignals": "Redaktionelle Signale",
     "guides": "Mitglieder-Leitfäden"
+=======
+    "adRequests": "Werbung",
+    "adRateCards": "Preisliste Werbung"
+>>>>>>> /tmp/d
   },
   "auth": {
     "signInSub": "Anmelden, um fortzufahren",
@@ -783,7 +788,12 @@
       },
       "ads": {
         "title": "Werben Sie bei uns",
+<<<<<<< src/i18n/locales/de/cms.json
         "body": "Erreichen Sie Coaches in der ganzen Schweiz über unseren Newsletter, die Website und Events. Kostenpflichtige Platzierungen für Mitglieder demnächst hier."
+=======
+        "body": "Erreichen Sie Coaches in der ganzen Schweiz über unseren Newsletter, die Website und Events. Konfigurieren Sie hier eine Platzierung; wir prüfen sie und senden Ihnen einen Vertrag.",
+        "cta": "Platzierung konfigurieren"
+>>>>>>> /tmp/d
       },
       "writeForUs": {
         "title": "Autor/in werden",
@@ -2611,6 +2621,7 @@
     "confirmRemove": "Volontär-Freigabe entziehen?",
     "noVolunteers": "Noch keine Volontäre freigeschaltet.",
     "never": "Nie",
+<<<<<<< src/i18n/locales/de/cms.json
     "recent": "Kürzlich"
   },
   "taxonomy": {
@@ -2988,5 +2999,148 @@
     "fieldQuestion": "Frage",
     "fieldAnswer": "Antwort",
     "fieldQuote": "Formulierungsbeispiel"
+=======
+    "recent": "Gerade eben"
+  },
+  "advertise": {
+    "title": "Werben Sie mit uns",
+    "lede": "Erreichen Sie Coaches in der ganzen Schweiz über unsere Website, unseren Newsletter und unsere Events. Sie konfigurieren hier eine Platzierung; wir prüfen Inhalt und Konditionen, senden Ihnen einen Vertrag und veröffentlichen nach Unterzeichnung. Es gibt keine Online-Zahlung.",
+    "start": "Platzierung konfigurieren",
+    "myRequests": "Meine Anfragen",
+    "noRequests": "Sie haben noch keine Platzierung konfiguriert.",
+    "step": "Schritt {n} von {total}",
+    "back": "Zurück",
+    "next": "Weiter",
+    "saveDraft": "Entwurf speichern",
+    "submit": "Zur Prüfung einreichen",
+    "submitted": "Vielen Dank. Wir prüfen Ihre Anfrage und melden uns mit einem Vertrag.",
+    "offer": {
+      "title": "Was möchten Sie buchen?",
+      "partner_package": "Partnerpaket",
+      "partner_packageBody": "Eine jährliche oder halbjährliche Präsenz auf Website, Newsletter und an Events.",
+      "eannouncement": "E-Announcement",
+      "eannouncementBody": "Eine Ankündigung an unsere Community zu einem einzelnen Event oder Angebot.",
+      "school": "Coaching-Schule oder Programm",
+      "schoolBody": "Platzierungen für ein Level 1-, Level 2-, Level 3- oder CCEU-Programm.",
+      "package": "Paket",
+      "duration": "Laufzeit",
+      "months": "{n} Monate",
+      "oneMonth": "1 Monat",
+      "placements": "Platzierungen",
+      "includes": "Enthält"
+    },
+    "placement": {
+      "homepage": "Startseite",
+      "event_banner": "Event-Banner",
+      "newsletter": "Newsletter",
+      "square_advert": "Quadratisches Inserat",
+      "eannouncement": "E-Announcement"
+    },
+    "eligibility": {
+      "title": "Ihr Preis",
+      "icfs_member": "Chapter-Mitglied mit ICF Credential",
+      "icf_global": "ICF Global Mitglied",
+      "explain": "Wir lesen Mitgliedschaft und Credential aus Ihrem Mitgliederprofil, der Preis steht damit für Sie fest. Stimmt etwas nicht, passt unser Team es bei der Prüfung an.",
+      "fallback": "Wir konnten Ihr Chapter-Credential nicht automatisch bestätigen, deshalb gilt vorerst der ICF-Global-Preis. Unser Team prüft das."
+    },
+    "school": {
+      "title": "Programm-Berechtigung",
+      "body": "Die Schulpreise gelten für Level 1-, Level 2-, Level 3- und CCEU-Programme. Bitte bestätigen Sie Ihr Programm — unser Team prüft es vor der Freigabe.",
+      "organisation": "Schule oder Organisation",
+      "programType": "Programmtyp",
+      "accreditation": "ICF-Akkreditierungsnummer",
+      "attest": "Ich bestätige, dass ich dieses Programm vertrete und die Angaben korrekt sind."
+    },
+    "content": {
+      "title": "Ihr Inhalt",
+      "advertiserName": "Name der Werbetreibenden",
+      "contactEmail": "Kontakt-E-Mail",
+      "logo": "Logo",
+      "logoHint": "PNG, JPG, WebP oder SVG, bis 2 MB.",
+      "upload": "Logo hochladen",
+      "ctaUrl": "Link",
+      "description": "Kurztext",
+      "descriptionHint": "Ein klarer Satz pro Sprache. Deutsch, Französisch, Italienisch und Englisch.",
+      "announcementDate": "Datum der Ankündigung oder des Events",
+      "requestedStart": "Gewünschter Start",
+      "newsletterMentions": "Gewünschte Newsletter-Erwähnungen",
+      "newsletterMentionsHint": "Nur informativ — Partnerpakete enthalten alle Newsletter."
+    },
+    "review": {
+      "title": "Prüfen und einreichen",
+      "price": "Preis",
+      "period": "Zeitraum",
+      "preview": "So wird es aussehen",
+      "confirm": "Alle Angaben sind korrekt."
+    },
+    "status": {
+      "draft": "Entwurf",
+      "submitted": "Eingereicht",
+      "under_review": "In Prüfung",
+      "approved": "Freigegeben",
+      "declined": "Abgelehnt",
+      "contract_sent": "Vertrag gesendet",
+      "contract_signed": "Vertrag unterzeichnet",
+      "active": "Live",
+      "expired": "Beendet",
+      "cancelled": "Storniert"
+    },
+    "staff": {
+      "title": "Werbeanfragen",
+      "lede": "Inhalt und Konditionen prüfen. Nichts geht live, bevor ein Vertrag als unterzeichnet markiert ist.",
+      "empty": "Keine Anfragen zur Prüfung.",
+      "queue": "Warteschlange",
+      "advertiser": "Werbetreibende",
+      "offer": "Angebot",
+      "price": "Preis",
+      "eligibility": "Angegebene Berechtigung",
+      "submittedAt": "Eingereicht",
+      "open": "Öffnen",
+      "startReview": "Prüfung starten",
+      "approve": "Freigeben",
+      "decline": "Ablehnen",
+      "declineReason": "Begründung für die Werbetreibenden",
+      "sendContract": "Vertrag erstellen und senden",
+      "markSigned": "Vertrag als unterzeichnet markieren",
+      "activate": "Platzierung aktivieren",
+      "expire": "Platzierung beenden",
+      "cancel": "Anfrage stornieren",
+      "notes": "Interne Notizen",
+      "saveNotes": "Notizen speichern",
+      "contract": "Vertrag",
+      "printContract": "Vertrag drucken",
+      "address": "Adresse der Werbetreibenden",
+      "paymentTerms": "Zahlungsbedingungen",
+      "adjustPrice": "Preis anpassen",
+      "adjustTier": "Preisstufe anpassen",
+      "startDate": "Aktiv ab",
+      "endDate": "Aktiv bis",
+      "history": "Verlauf",
+      "placements": "Platzierungen",
+      "rateCard": "Preisliste",
+      "schoolAttestation": "Schulbestätigung",
+      "verifyFirst": "Bitte vor der Freigabe prüfen.",
+      "confirmAction": "Sind Sie sicher?",
+      "noContract": "Für diese Anfrage wurde noch kein Vertrag erstellt."
+    },
+    "rateCard": {
+      "title": "Preisliste Werbung",
+      "lede": "Der Vorstand bestimmt diese Preise. Beim Speichern entsteht eine neue Version; bereits kalkulierte Anfragen behalten ihre Version.",
+      "version": "Aktive Version",
+      "packages": "Partnerpakete (CHF)",
+      "eannouncement": "E-Ankündigung (CHF)",
+      "schools": "Coaching-Schulen und Programme (CHF)",
+      "mentionsGuard": "Limite Newsletter-Erwähnungen",
+      "mentionsHint": "Eine betriebliche Obergrenze pro Ausgabe. Sie verändert nie einen Preis.",
+      "publish": "Neue Version veröffentlichen",
+      "saved": "Neue Version veröffentlicht.",
+      "example": "Beispiel"
+    },
+    "newsletter": {
+      "adPlacement": "Verknüpfte Werbeplatzierung",
+      "adPlacementNone": "Keine Platzierung verknüpft",
+      "adPlacementHint": "Wählen Sie eine freigegebene Newsletter-Platzierung; die Ausgabe zeigt Logo, Text und Link."
+    }
+>>>>>>> /tmp/d
   }
 }

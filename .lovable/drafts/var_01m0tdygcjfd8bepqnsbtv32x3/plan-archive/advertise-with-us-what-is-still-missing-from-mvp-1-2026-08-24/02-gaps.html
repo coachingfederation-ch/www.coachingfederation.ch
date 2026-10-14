@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" width="640" height="300">
+  <style>
+    text { font-family: var(--font-sans); fill: hsl(var(--foreground)); }
+    .lbl { font-size: 14px; font-weight: 480; }
+    .note { font-size: 12px; fill: hsl(var(--muted-foreground)); }
+    .box { fill: none; stroke: hsl(var(--muted-foreground)); stroke-width: 1; }
+    .todo { fill: none; stroke: hsl(var(--muted-foreground)); stroke-width: 1; stroke-dasharray: 4 3; }
+    .tag { font-size: 12px; fill: hsl(var(--muted-foreground)); }
+  </style>
+
+  <text x="0" y="14" class="tag">built</text>
+  <rect x="0" y="24" width="140" height="44" rx="8" class="box"/>
+  <text x="70" y="44" class="lbl" text-anchor="middle">Member wizard</text>
+  <text x="70" y="60" class="note" text-anchor="middle">drafts, my requests</text>
+
+  <rect x="165" y="24" width="140" height="44" rx="8" class="box"/>
+  <text x="235" y="44" class="lbl" text-anchor="middle">Pricing + eligibility</text>
+  <text x="235" y="60" class="note" text-anchor="middle">server-side</text>
+
+  <rect x="330" y="24" width="140" height="44" rx="8" class="box"/>
+  <text x="400" y="44" class="lbl" text-anchor="middle">Staff queue</text>
+  <text x="400" y="60" class="note" text-anchor="middle">review, transitions</text>
+
+  <rect x="495" y="24" width="140" height="44" rx="8" class="box"/>
+  <text x="565" y="44" class="lbl" text-anchor="middle">Sponsor band</text>
+  <text x="565" y="60" class="note" text-anchor="middle">live placements</text>
+
+  <text x="0" y="112" class="tag">missing</text>
+  <rect x="0" y="122" width="140" height="44" rx="8" class="todo"/>
+  <text x="70" y="142" class="lbl" text-anchor="middle">Rate card editor</text>
+  <text x="70" y="158" class="note" text-anchor="middle">versioned, activation</text>
+
+  <rect x="165" y="122" width="140" height="44" rx="8" class="todo"/>
+  <text x="235" y="142" class="lbl" text-anchor="middle">Printable contract</text>
+  <text x="235" y="158" class="note" text-anchor="middle">legal clauses</text>
+
+  <rect x="330" y="122" width="140" height="44" rx="8" class="todo"/>
+  <text x="400" y="142" class="lbl" text-anchor="middle">Click redirect</text>
+  <text x="400" y="158" class="note" text-anchor="middle">/goto/$placementId</text>
+
+  <rect x="495" y="122" width="140" height="44" rx="8" class="todo"/>
+  <text x="565" y="142" class="lbl" text-anchor="middle">Newsletter block</text>
+  <text x="565" y="158" class="note" text-anchor="middle">placement picker</text>
+
+  <rect x="0" y="182" width="305" height="44" rx="8" class="todo"/>
+  <text x="152" y="202" class="lbl" text-anchor="middle">Contract / live / expiry emails</text>
+  <text x="152" y="218" class="note" text-anchor="middle">plus automatic expiry of placements</text>
+
+  <rect x="330" y="182" width="305" height="44" rx="8" class="todo"/>
+  <text x="482" y="202" class="lbl" text-anchor="middle">Database changes still pending</text>
+  <text x="482" y="218" class="note" text-anchor="middle">apply on accepting the draft</text>
+
+  <circle cx="10" cy="262" r="9" fill="hsl(var(--accent))"/>
+  <text x="10" y="266" text-anchor="middle" style="font-size:11px; fill: hsl(var(--accent-foreground));">1</text>
+  <text x="28" y="266" class="note">Nothing above can be exercised until the pending database changes are applied.</text>
+</svg>

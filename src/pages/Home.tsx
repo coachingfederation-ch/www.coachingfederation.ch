@@ -21,11 +21,16 @@ import type { MarkName } from "@/design-system/icf-welcome-design-system-a835df"
 import { SiteHeaderBar, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { SponsorMarquee, type SponsorItem } from "@/components/home/SponsorMarquee";
 import { useI18n, LocaleLink } from "@/i18n";
+<<<<<<< src/pages/Home.tsx
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { listPublicEvents } from "@/lib/events.functions";
 import { eventPlace, formatEventDate } from "@/lib/events";
 
+=======
+import { useQuery } from "@tanstack/react-query";
+import { listActivePlacements } from "@/lib/ads.functions";
+>>>>>>> /tmp/d
 
 /** Demo sponsor imagery (AI generated), ordered to match `home.ads.items`. */
 const AD_IMAGES = [adSupervision, adPress, adAssessment, adPractice, adRetreats, adMentoring];
@@ -284,12 +289,32 @@ function ForOrganisations() {
 const SHOW_SPONSORS = false;
 
 function Sponsors() {
-  const { t, tList } = useI18n();
-  // Demo imagery is bundled positionally: locale item order matches AD_IMAGES.
-  const items = tList<SponsorItem>("home.ads.items").map((item, i) => ({
+  const { t, tList, locale } = useI18n();
+  // Live placements win; the AI-generated demo band only fills an empty slot so
+  // the section never renders as a hole before the first advertiser goes live.
+  const { data: placements } = useQuery({
+    queryKey: ["ad-placements", "homepage"],
+    queryFn: () => listActivePlacements({ data: { placementType: "homepage" } }),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const demo = tList<SponsorItem>("home.ads.items").map((item, i) => ({
     ...item,
     image: AD_IMAGES[i],
+    ai: true,
   }));
+
+  const live: SponsorItem[] = (placements ?? []).map((placement) => ({
+    name: placement.advertiser_name,
+    category: t("home.ads.adLabel"),
+    claim:
+      (placement[`description_${locale}` as "description_en"] ?? placement.description_en) ?? "",
+    ...(placement.logoUrl ? { image: placement.logoUrl } : {}),
+    // Advertiser links go through the counter route, never straight out.
+    ...(placement.cta_url ? { href: `/goto/${placement.id}` } : {}),
+  }));
+
+  const items = live.length > 0 ? live : demo;
   return (
     <section aria-label={t("home.ads.eyebrow")} className="border-t border-border bg-card py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">

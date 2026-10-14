@@ -138,6 +138,7 @@ export const saveNewsletterBlockFn = createServerFn({ method: "POST" })
           .max(3)
           .nullable()
           .optional(),
+        ad_placement_id: z.string().uuid().nullable().optional(),
       })
       .parse(data),
   )
