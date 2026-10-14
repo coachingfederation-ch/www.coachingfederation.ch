@@ -22,16 +22,13 @@
     "knowledge": "Assistant knowledge",
     "liveChat": "Live chat",
     "newsletters": "Newsletters",
-<<<<<<< src/i18n/locales/en/cms.json
     "guestPasses": "Guest passes",
     "memberEngagement": "Member engagement",
     "overview": "Overview",
     "editorialSignals": "Editorial signals",
-    "guides": "Member guides"
-=======
+    "guides": "Member guides",
     "adRequests": "Advertising",
     "adRateCards": "Ad rate card"
->>>>>>> /tmp/d
   },
   "auth": {
     "signInSub": "Sign in to continue",
@@ -2619,7 +2616,6 @@
     "never": "Never",
     "recent": "Recent"
   },
-<<<<<<< src/i18n/locales/en/cms.json
   "taxonomy": {
     "translate": "Translate",
     "translating": "Translating…",
@@ -2995,7 +2991,7 @@
     "fieldQuestion": "Question",
     "fieldAnswer": "Answer",
     "fieldQuote": "Say it like this"
-=======
+  },
   "advertise": {
     "title": "Advertise with us",
     "lede": "Reach coaches across Switzerland through our website, newsletter and events. You configure a placement here; we review the content and the commercial terms, send you a contract, and publish once it is signed. There is no online payment.",
@@ -3135,6 +3131,5 @@
       "adPlacementNone": "No placement attached",
       "adPlacementHint": "Pick an approved newsletter placement; the edition renders its logo, text and link."
     }
->>>>>>> /tmp/d
   }
 }

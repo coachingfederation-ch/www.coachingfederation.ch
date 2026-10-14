@@ -44,8 +44,6 @@ const TOOL_ICON =
   "flex h-12 w-12 items-center justify-center rounded-2xl bg-background text-primary transition group-hover:bg-accent group-hover:text-accent-foreground";
 const CTA =
   "mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90";
-const CTA_MUTED =
-  "mt-4 inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground";
 /** Section heading with the hairline rule the chosen direction uses. */
 function SectionHeading({ children }: { children: ReactNode }) {
   return (

@@ -22,16 +22,13 @@
     "knowledge": "Assistenten-Wissen",
     "liveChat": "Live-Chat",
     "newsletters": "Newsletter",
-<<<<<<< src/i18n/locales/de/cms.json
     "guestPasses": "Gästepässe",
     "memberEngagement": "Mitglieder-Engagement",
     "overview": "Übersicht",
     "editorialSignals": "Redaktionelle Signale",
-    "guides": "Mitglieder-Leitfäden"
-=======
+    "guides": "Mitglieder-Leitfäden",
     "adRequests": "Werbung",
     "adRateCards": "Preisliste Werbung"
->>>>>>> /tmp/d
   },
   "auth": {
     "signInSub": "Anmelden, um fortzufahren",
@@ -788,12 +785,8 @@
       },
       "ads": {
         "title": "Werben Sie bei uns",
-<<<<<<< src/i18n/locales/de/cms.json
-        "body": "Erreichen Sie Coaches in der ganzen Schweiz über unseren Newsletter, die Website und Events. Kostenpflichtige Platzierungen für Mitglieder demnächst hier."
-=======
-        "body": "Erreichen Sie Coaches in der ganzen Schweiz über unseren Newsletter, die Website und Events. Konfigurieren Sie hier eine Platzierung; wir prüfen sie und senden Ihnen einen Vertrag.",
+        "body": "Erreichen Sie Coaches in der ganzen Schweiz über unseren Newsletter, die Website und Events. Kostenpflichtige Platzierungen für Mitglieder demnächst hier.",
         "cta": "Platzierung konfigurieren"
->>>>>>> /tmp/d
       },
       "writeForUs": {
         "title": "Autor/in werden",
@@ -2621,7 +2614,6 @@
     "confirmRemove": "Volontär-Freigabe entziehen?",
     "noVolunteers": "Noch keine Volontäre freigeschaltet.",
     "never": "Nie",
-<<<<<<< src/i18n/locales/de/cms.json
     "recent": "Kürzlich"
   },
   "taxonomy": {
@@ -2999,8 +2991,6 @@
     "fieldQuestion": "Frage",
     "fieldAnswer": "Antwort",
     "fieldQuote": "Formulierungsbeispiel"
-=======
-    "recent": "Gerade eben"
   },
   "advertise": {
     "title": "Werben Sie mit uns",
@@ -3141,6 +3131,5 @@
       "adPlacementNone": "Keine Platzierung verknüpft",
       "adPlacementHint": "Wählen Sie eine freigegebene Newsletter-Platzierung; die Ausgabe zeigt Logo, Text und Link."
     }
->>>>>>> /tmp/d
   }
 }

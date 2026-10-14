@@ -22,16 +22,13 @@
     "knowledge": "Connaissances de l'assistant",
     "liveChat": "Chat en direct",
     "newsletters": "Newsletters",
-<<<<<<< src/i18n/locales/fr/cms.json
     "guestPasses": "Pass invités",
     "memberEngagement": "Engagement des membres",
     "overview": "Vue d’ensemble",
     "editorialSignals": "Signaux éditoriaux",
-    "guides": "Guides"
-=======
+    "guides": "Guides",
     "adRequests": "Publicité",
     "adRateCards": "Tarifs publicitaires"
->>>>>>> /tmp/d
   },
   "auth": {
     "signInSub": "Connectez-vous pour continuer",
@@ -2619,7 +2616,6 @@
     "never": "Jamais",
     "recent": "À l'instant"
   },
-<<<<<<< src/i18n/locales/fr/cms.json
   "taxonomy": {
     "translate": "Traduire",
     "translating": "Traduction en cours…",
@@ -2995,7 +2991,7 @@
     "fieldQuestion": "Question",
     "fieldAnswer": "Réponse",
     "fieldQuote": "À dire ainsi"
-=======
+  },
   "advertise": {
     "title": "Annoncez avec nous",
     "lede": "Touchez les coachs de toute la Suisse via notre site, notre newsletter et nos événements. Vous configurez ici un emplacement ; nous examinons le contenu et les conditions commerciales, vous envoyons un contrat et publions une fois signé. Aucun paiement en ligne.",
@@ -3135,6 +3131,5 @@
       "adPlacementNone": "Aucun emplacement lié",
       "adPlacementHint": "Choisissez un emplacement newsletter approuvé; l'édition affiche son logo, son texte et son lien."
     }
->>>>>>> /tmp/d
   }
 }

@@ -22,16 +22,13 @@
     "knowledge": "Conoscenze dell'assistente",
     "liveChat": "Chat dal vivo",
     "newsletters": "Newsletter",
-<<<<<<< src/i18n/locales/it/cms.json
     "guestPasses": "Pass ospiti",
     "memberEngagement": "Coinvolgimento dei membri",
     "overview": "Panoramica",
     "editorialSignals": "Segnali editoriali",
-    "guides": "Guide"
-=======
+    "guides": "Guide",
     "adRequests": "Pubblicità",
     "adRateCards": "Listino pubblicitario"
->>>>>>> /tmp/d
   },
   "auth": {
     "signInSub": "Accedi per continuare",
@@ -2619,7 +2616,6 @@
     "never": "Mai",
     "recent": "Poco fa"
   },
-<<<<<<< src/i18n/locales/it/cms.json
   "taxonomy": {
     "translate": "Traduci",
     "translating": "Traduzione in corso…",
@@ -2995,7 +2991,7 @@
     "fieldQuestion": "Domanda",
     "fieldAnswer": "Risposta",
     "fieldQuote": "Dillo così"
-=======
+  },
   "advertise": {
     "title": "Fai pubblicità con noi",
     "lede": "Raggiungi i coach in tutta la Svizzera attraverso il nostro sito, la newsletter e gli eventi. Qui configuri una collocazione; noi esaminiamo contenuto e condizioni commerciali, ti inviamo un contratto e pubblichiamo dopo la firma. Nessun pagamento online.",
@@ -3135,6 +3131,5 @@
       "adPlacementNone": "Nessun posizionamento collegato",
       "adPlacementHint": "Scegli un posizionamento newsletter approvato; l'edizione mostra logo, testo e link."
     }
->>>>>>> /tmp/d
   }
 }
