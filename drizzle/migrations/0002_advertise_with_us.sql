@@ -1,13 +1,3 @@
--- Advertise with us (MVP-1)
---
--- Members configure an advertising package, staff price it from a versioned
--- rate card, review it, approve it, generate a contract and only after marking
--- that contract signed do placements go live. There is no online payment and
--- no self-service publishing: the transition guard below is the boundary that
--- makes that true even for a direct API call.
-
--- ---------------------------------------------------------------- vocabulary
-
 DO $$ BEGIN
   CREATE TYPE public.ad_offer_type AS ENUM ('partner_package', 'eannouncement', 'school');
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
@@ -25,13 +15,9 @@ DO $$ BEGIN
   );
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
--- The e-announcement price is derived from the member's own record, never
--- chosen by the member.
 DO $$ BEGIN
   CREATE TYPE public.ad_eligibility_tier AS ENUM ('icfs_member', 'icf_global');
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
-
--- --------------------------------------------------------------- rate cards
 
 CREATE TABLE IF NOT EXISTS public.ad_rate_cards (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -39,14 +25,9 @@ CREATE TABLE IF NOT EXISTS public.ad_rate_cards (
   valid_from date NOT NULL DEFAULT current_date,
   is_active boolean NOT NULL DEFAULT false,
   currency text NOT NULL DEFAULT 'CHF',
-  -- Gold/Silver/Bronze × 12/6 months, with the placements each includes.
   packages jsonb NOT NULL DEFAULT '{}'::jsonb,
-  -- { "icfs_member": 150, "icf_global": 300 }
   eannouncement_prices jsonb NOT NULL DEFAULT '{}'::jsonb,
-  -- { "square_advert": { "12": 1500, ... }, ... }
   school_prices jsonb NOT NULL DEFAULT '{}'::jsonb,
-  -- Staff-configurable sanity guard on the wizard input only. Never priced:
-  -- partner packages include all newsletters.
   newsletter_mentions_guard integer NOT NULL DEFAULT 12,
   notes text,
   created_at timestamptz NOT NULL DEFAULT now(),
@@ -70,8 +51,6 @@ CREATE POLICY "administrators manage rate cards"
   USING (private.has_role(auth.uid(), 'admin') OR private.has_role(auth.uid(), 'administrator'))
   WITH CHECK (private.has_role(auth.uid(), 'admin') OR private.has_role(auth.uid(), 'administrator'));
 
--- ----------------------------------------------------------------- requests
-
 CREATE TABLE IF NOT EXISTS public.ad_requests (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   member_id uuid REFERENCES public.members(id) ON DELETE SET NULL,
@@ -80,13 +59,10 @@ CREATE TABLE IF NOT EXISTS public.ad_requests (
   package text,
   placements public.ad_placement_type[] NOT NULL DEFAULT '{}',
   duration_months integer,
-  -- Informational only: it never enters pricing.
   newsletter_mentions integer NOT NULL DEFAULT 0,
-  -- Server-derived from the member's membership + credential record.
   eligibility_tier public.ad_eligibility_tier,
   eligibility_source text NOT NULL DEFAULT 'derived',
   eligibility_detail jsonb NOT NULL DEFAULT '{}'::jsonb,
-  -- { organisation, program_type, accreditation_reference, attested_at }
   school_attestation jsonb,
   advertiser_name text,
   contact_email text,
@@ -129,7 +105,6 @@ CREATE POLICY "members create own ad requests"
   ON public.ad_requests FOR INSERT TO authenticated
   WITH CHECK (created_by = auth.uid());
 
--- Only while still a draft: everything after submission is staff territory.
 CREATE POLICY "members edit own draft ad requests"
   ON public.ad_requests FOR UPDATE TO authenticated
   USING (created_by = auth.uid() AND status = 'draft')
@@ -139,8 +114,6 @@ CREATE POLICY "administrators manage ad requests"
   ON public.ad_requests FOR ALL TO authenticated
   USING (private.has_role(auth.uid(), 'admin') OR private.has_role(auth.uid(), 'administrator'))
   WITH CHECK (private.has_role(auth.uid(), 'admin') OR private.has_role(auth.uid(), 'administrator'));
-
--- ---------------------------------------------------------------- contracts
 
 CREATE TABLE IF NOT EXISTS public.ad_contracts (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -174,8 +147,6 @@ CREATE POLICY "administrators manage contracts"
   USING (private.has_role(auth.uid(), 'admin') OR private.has_role(auth.uid(), 'administrator'))
   WITH CHECK (private.has_role(auth.uid(), 'admin') OR private.has_role(auth.uid(), 'administrator'));
 
--- --------------------------------------------------------------- placements
-
 CREATE TABLE IF NOT EXISTS public.ad_placements (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   request_id uuid NOT NULL REFERENCES public.ad_requests(id) ON DELETE CASCADE,
@@ -198,7 +169,6 @@ CREATE TABLE IF NOT EXISTS public.ad_placements (
 CREATE INDEX IF NOT EXISTS ad_placements_live_idx
   ON public.ad_placements (placement_type, start_date, end_date) WHERE is_active;
 
--- Public surfaces read only the fields a visitor sees on the card.
 GRANT SELECT (
   id, placement_type, advertiser_name,
   description_de, description_fr, description_it, description_en,
@@ -215,8 +185,6 @@ CREATE POLICY "administrators manage placements"
   ON public.ad_placements FOR ALL TO authenticated
   USING (private.has_role(auth.uid(), 'admin') OR private.has_role(auth.uid(), 'administrator'))
   WITH CHECK (private.has_role(auth.uid(), 'admin') OR private.has_role(auth.uid(), 'administrator'));
-
--- -------------------------------------------------------------- audit trail
 
 CREATE TABLE IF NOT EXISTS public.ad_request_events (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -245,11 +213,6 @@ CREATE POLICY "administrators read request history"
   ON public.ad_request_events FOR SELECT TO authenticated
   USING (private.has_role(auth.uid(), 'admin') OR private.has_role(auth.uid(), 'administrator'));
 
--- --------------------------------------------------------- transition guard
-
--- The same state machine the server layer enforces, repeated here so a direct
--- API call cannot skip review, price its own request, or go live without a
--- signed contract.
 CREATE OR REPLACE FUNCTION public.tg_ads_transition_guard()
 RETURNS trigger
 LANGUAGE plpgsql
@@ -266,7 +229,6 @@ BEGIN
 
   IF TG_OP = 'INSERT' THEN
     IF NOT trusted AND NOT staff THEN
-      -- A member may only ever create a draft, and never price it.
       NEW.status = 'draft';
       NEW.computed_price = 0;
       NEW.staff_notes = NULL;
@@ -317,7 +279,6 @@ BEGIN
     IF NOT (OLD.status::text = ANY (legal)) THEN
       RAISE EXCEPTION 'an ad request cannot move from % to %', OLD.status, NEW.status;
     END IF;
-    -- Going live requires a contract signed by both parties.
     IF NEW.status = 'contract_signed' AND NOT EXISTS (
       SELECT 1 FROM public.ad_contracts c
       WHERE c.request_id = NEW.id
@@ -349,8 +310,6 @@ DROP TRIGGER IF EXISTS ad_placements_touch ON public.ad_placements;
 CREATE TRIGGER ad_placements_touch BEFORE UPDATE ON public.ad_placements
   FOR EACH ROW EXECUTE FUNCTION public.tg_touch_updated_at();
 
--- ---------------------------------------------------------------- rate card v1
-
 INSERT INTO public.ad_rate_cards (version, is_active, packages, eannouncement_prices, school_prices, notes)
 SELECT
   1,
@@ -369,10 +328,6 @@ SELECT
   'Seeded rate card v1. All amounts in CHF; partner packages include all newsletters.'
 WHERE NOT EXISTS (SELECT 1 FROM public.ad_rate_cards);
 
--- ------------------------------------------------------------ click tracking
-
--- Counted through a definer function so the public grant stays read-only on
--- the table itself: a visitor may increment the counter, never edit a row.
 CREATE OR REPLACE FUNCTION public.ad_placement_click(_placement_id uuid)
 RETURNS void
 LANGUAGE sql
@@ -389,15 +344,9 @@ $$;
 
 GRANT EXECUTE ON FUNCTION public.ad_placement_click(uuid) TO anon, authenticated, service_role;
 
--- ------------------------------------------- newsletter advertisement blocks
-
--- An advertisement block may point at an approved placement; the editor picks
--- it and the edition renders the advertiser's logo, text and link.
 ALTER TABLE public.newsletter_blocks
   ADD COLUMN IF NOT EXISTS ad_placement_id uuid
   REFERENCES public.ad_placements(id) ON DELETE SET NULL;
 
--- Set once the 30-day expiry reminder has gone out, so the nightly upkeep job
--- never mails the same advertiser twice.
 ALTER TABLE public.ad_requests
   ADD COLUMN IF NOT EXISTS expiry_notified_at timestamptz;

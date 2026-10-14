@@ -1,7 +1,3 @@
--- External advertisers: non-members who book "Advertise with us" placements.
--- Additive only. Synced `members` rows are never touched; an external
--- advertiser is an auth account + `advertiser` role + advertiser_profiles row.
-
 ALTER TYPE public.app_role ADD VALUE IF NOT EXISTS 'advertiser';
 
 CREATE TABLE IF NOT EXISTS public.advertiser_profiles (
@@ -47,9 +43,6 @@ CREATE TRIGGER advertiser_profiles_touch
   BEFORE UPDATE ON public.advertiser_profiles
   FOR EACH ROW EXECUTE FUNCTION public.tg_touch_updated_at();
 
--- Onboarding: the only path that grants `advertiser`. Users never write
--- user_roles themselves. plpgsql so the new enum value is resolved at call
--- time, not while this migration's transaction still holds it uncommitted.
 CREATE OR REPLACE FUNCTION public.complete_advertiser_onboarding(
   _organisation text,
   _contact_name text,
@@ -102,14 +95,10 @@ $$;
 REVOKE ALL ON FUNCTION public.complete_advertiser_onboarding(text, text, text, text, text, text, text, text) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.complete_advertiser_onboarding(text, text, text, text, text, text, text, text) TO authenticated;
 
--- Who placed the request, set server-side on insert.
 ALTER TABLE public.ad_requests
   ADD COLUMN IF NOT EXISTS requester_kind text NOT NULL DEFAULT 'member'
   CHECK (requester_kind IN ('member', 'external'));
 
--- Only members or advertisers may create requests (restrictive: combines
--- with the existing own-row policy). Compared as text so the new enum value
--- is not cast inside this transaction.
 CREATE POLICY "only members or advertisers create ad requests"
   ON public.ad_requests AS RESTRICTIVE FOR INSERT TO authenticated
   WITH CHECK (
