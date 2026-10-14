@@ -95,6 +95,7 @@ function AdRequestDetailPage() {
 
   const request = detail.data?.request ?? null;
   const contract = detail.data?.contract ?? null;
+  const advertiserProfile = detail.data?.advertiserProfile ?? null;
 
   useEffect(() => {
     if (request) {
