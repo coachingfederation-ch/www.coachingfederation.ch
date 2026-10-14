@@ -42,7 +42,13 @@ const draftSchema = z.object({
   descriptionFr: z.string().max(600).nullable().optional(),
   descriptionIt: z.string().max(600).nullable().optional(),
   descriptionEn: z.string().max(600).nullable().optional(),
-  ctaUrl: z.string().url().max(400).nullable().optional(),
+  // Advertisers often type "example.ch"; add https:// before validating.
+  ctaUrl: z.preprocess((value) => {
+    if (typeof value !== "string") return value;
+    const trimmed = value.trim();
+    if (!trimmed) return null;
+    return /^[a-z][a-z\d+.-]*:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  }, z.string().url().max(400).nullable().optional()),
   announcementDate: z.string().date().nullable().optional(),
   requestedStart: z.string().date().nullable().optional(),
 });
