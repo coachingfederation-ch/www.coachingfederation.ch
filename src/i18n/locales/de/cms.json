@@ -3068,7 +3068,25 @@
       "announcementDate": "Datum der Ankündigung oder des Events",
       "requestedStart": "Gewünschter Start",
       "newsletterMentions": "Gewünschte Newsletter-Erwähnungen",
-      "newsletterMentionsHint": "Nur informativ — Partnerpakete enthalten alle Newsletter."
+      "newsletterMentionsHint": "Nur informativ — Partnerpakete enthalten alle Newsletter.",
+      "headline": "Titel",
+      "text": "Text",
+      "writeIn": "Schreiben auf",
+      "translate": "In die anderen Sprachen übersetzen",
+      "translating": "Wird übersetzt…",
+      "notTranslated": "Noch nicht übersetzt",
+      "image": "Bild",
+      "imageHint": "Das Bild für deine Anzeige. PNG, JPG oder WebP, bis 2 MB.",
+      "logoDifferent": "Dein Logo wird getrennt vom Bild angezeigt – bitte lade eine andere Datei hoch.",
+      "sameFile": "Das ist dieselbe Datei wie dein Bild. Bitte lade dein Logo separat hoch.",
+      "previewTitle": "Live-Vorschau",
+      "previewBanner": "Banner",
+      "previewSquare": "Quadrat",
+      "previewNewsletter": "Newsletter",
+      "sponsored": "Partner",
+      "ctaLabel": "Mehr erfahren",
+      "newsletterInfo": "Newsletter-Erwähnungen plant unser Team gemäss deinem Paket.",
+      "uploaded": "Hochgeladen"
     },
     "review": {
       "title": "Prüfen und einreichen",
@@ -3148,6 +3166,27 @@
     "paused": {
       "title": "Zurzeit keine Buchungen",
       "body": "Werbebuchungen sind im Moment pausiert. Bei Fragen schreib uns gerne."
+    },
+    "contract": {
+      "title": "Angaben zu Inserent und Vertrag",
+      "prefilledMember": "Wir haben dies aus deinem Mitgliedsdatensatz übernommen. Du kannst es für diese Buchung ändern.",
+      "prefilledAdvertiser": "Wir haben dies aus deinem Inserentenprofil übernommen. Du kannst es für diese Buchung ändern.",
+      "organisation": "Organisation",
+      "contactName": "Kontaktperson",
+      "email": "E-Mail",
+      "phone": "Telefon (optional)",
+      "phoneInvalid": "Bitte gib eine gültige Telefonnummer ein.",
+      "street": "Strasse und Nummer",
+      "postcode": "PLZ",
+      "city": "Ort",
+      "country": "Land",
+      "vat": "MWST-Nummer (optional)"
+    },
+    "summary": {
+      "offer": "Angebot und Preis",
+      "content": "Inhalt",
+      "contract": "Vertragsangaben",
+      "edit": "Bearbeiten"
     }
   },
   "advertiser": {
