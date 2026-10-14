@@ -30,6 +30,8 @@ export type AppRole =
   | "publisher"
   | "membership"
   | "member"
+  /** External (non-member) advertiser — Advertise with us only. */
+  | "advertiser"
   | "user";
 
 /** Roles that may reach the staff CMS. */
@@ -76,6 +78,8 @@ export type RoleSet = {
   isMembership: boolean;
   isStaff: boolean;
   isMember: boolean;
+  /** External advertiser: reaches /advertise only, never the Member Area. */
+  isAdvertiser: boolean;
 };
 
 export const EMPTY_ROLES: RoleSet = {
@@ -88,6 +92,7 @@ export const EMPTY_ROLES: RoleSet = {
   isMembership: false,
   isStaff: false,
   isMember: false,
+  isAdvertiser: false,
 };
 
 export function toRoleSet(roles: AppRole[]): RoleSet {
@@ -107,6 +112,7 @@ export function toRoleSet(roles: AppRole[]): RoleSet {
     isMembership: has("admin") || has("administrator") || has("membership"),
     isStaff: STAFF_ROLES.some(has),
     isMember: has("member"),
+    isAdvertiser: has("advertiser"),
   };
 }
 
@@ -127,7 +133,7 @@ export function hasExactRole(roles: AppRole[], role: AppRole): boolean {
  */
 export function landingPath(
   roles: RoleSet,
-): "/articles" | "/manage/events" | "/vocabularies" | "/member" | "/no-access" {
+): "/articles" | "/manage/events" | "/vocabularies" | "/member" | "/advertise" | "/no-access" {
   if (roles.isMember) return "/member";
   // An Administrator without editorial rights starts in their own first area.
   if (
@@ -148,5 +154,6 @@ export function landingPath(
   )
     return "/manage/events";
   if (roles.isStaff) return "/articles";
+  if (roles.isAdvertiser) return "/advertise";
   return "/no-access";
 }

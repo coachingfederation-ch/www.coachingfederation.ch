@@ -3131,5 +3131,56 @@
       "adPlacementNone": "No placement attached",
       "adPlacementHint": "Pick an approved newsletter placement; the edition renders its logo, text and link."
     }
+  },
+  "advertiser": {
+    "kind": {
+      "member": "Member",
+      "external": "External advertiser"
+    },
+    "nav": {
+      "portal": "Advertise"
+    },
+    "profile": {
+      "organisation": "Organisation",
+      "contactName": "Contact name",
+      "phone": "Phone",
+      "billingStreet": "Street and number",
+      "billingPostcode": "Postcode",
+      "billingCity": "City",
+      "billingCountry": "Country",
+      "vatNumber": "VAT number",
+      "billingAddress": "Billing address"
+    },
+    "onboarding": {
+      "title": "Tell Us About Your Organisation",
+      "intro": "We need these details once so we can prepare your contract and invoice.",
+      "optional": "optional",
+      "submit": "Save and continue"
+    },
+    "landing": {
+      "eyebrow": "Advertise with us",
+      "title": "Reach Coaches and Organisations Across Switzerland",
+      "intro": "Book a partner package, an e-announcement, or a school placement on our website and in our newsletter.",
+      "cta": "Book a placement",
+      "offersTitle": "What You Can Book",
+      "offer": {
+        "partner_package": "Gold, Silver, or Bronze visibility across our website, events, and newsletter.",
+        "eannouncement": "A dedicated announcement sent to our community on a date you choose.",
+        "school": "Placements for Level 1, 2, 3, and CCEU coach training programs."
+      },
+      "memberNote": "Are you an ICF member?",
+      "memberLink": "Sign in as a member"
+    },
+    "signIn": {
+      "title": "Advertiser Access",
+      "subtitle": "Sign in or create an account to book a placement.",
+      "continueWith": "Continue with",
+      "or": "or use your email",
+      "createAccount": "Create account",
+      "toSignUp": "New here? Create an account",
+      "toSignIn": "Already have an account? Sign in",
+      "checkEmail": "Check your email and confirm your address to continue.",
+      "memberNote": "ICF member?"
+    }
   }
 }

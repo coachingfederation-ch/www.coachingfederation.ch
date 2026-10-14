@@ -106,6 +106,11 @@ function AdRequestsPage() {
                           {t(`advertise.status.${request.status}`)}
                         </Badge>
                       </span>
+                      <span className="ml-2">
+                        <Badge variant="outline">
+                          {t(`advertiser.kind.${request.requester_kind ?? "member"}`)}
+                        </Badge>
+                      </span>
                     </td>
                     <td className="px-4 py-3">
                       {t(`advertise.offer.${request.offer_type}`)}

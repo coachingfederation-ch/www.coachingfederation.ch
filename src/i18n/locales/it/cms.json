@@ -3131,5 +3131,56 @@
       "adPlacementNone": "Nessun posizionamento collegato",
       "adPlacementHint": "Scegli un posizionamento newsletter approvato; l'edizione mostra logo, testo e link."
     }
+  },
+  "advertiser": {
+    "kind": {
+      "member": "Membro",
+      "external": "Inserzionista esterno"
+    },
+    "nav": {
+      "portal": "Pubblicità"
+    },
+    "profile": {
+      "organisation": "Organizzazione",
+      "contactName": "Persona di contatto",
+      "phone": "Telefono",
+      "billingStreet": "Via e numero",
+      "billingPostcode": "NPA",
+      "billingCity": "Località",
+      "billingCountry": "Paese",
+      "vatNumber": "Numero IVA",
+      "billingAddress": "Indirizzo di fatturazione"
+    },
+    "onboarding": {
+      "title": "Raccontateci della vostra organizzazione",
+      "intro": "Ci servono questi dati una sola volta per contratto e fattura.",
+      "optional": "facoltativo",
+      "submit": "Salva e continua"
+    },
+    "landing": {
+      "eyebrow": "Pubblicità con noi",
+      "title": "Raggiungete coach e organizzazioni in tutta la Svizzera",
+      "intro": "Prenotate un pacchetto partner, un e-annuncio o un posizionamento per formazioni sul sito e nella newsletter.",
+      "cta": "Prenota un posizionamento",
+      "offersTitle": "Cosa potete prenotare",
+      "offer": {
+        "partner_package": "Visibilità Gold, Silver o Bronze su sito, eventi e newsletter.",
+        "eannouncement": "Un annuncio dedicato alla nostra comunità nella data che scegliete.",
+        "school": "Posizionamenti per formazioni Level 1, 2, 3 e CCEU."
+      },
+      "memberNote": "Siete membri ICF?",
+      "memberLink": "Accedi come membro"
+    },
+    "signIn": {
+      "title": "Accesso inserzionisti",
+      "subtitle": "Accedete o create un account per prenotare.",
+      "continueWith": "Continua con",
+      "or": "oppure con e-mail",
+      "createAccount": "Crea account",
+      "toSignUp": "Nuovi? Create un account",
+      "toSignIn": "Avete già un account? Accedi",
+      "checkEmail": "Confermate il vostro indirizzo e-mail per continuare.",
+      "memberNote": "Membri ICF?"
+    }
   }
 }

@@ -100,6 +100,10 @@ export type AdSelection = {
 
 export type AdRequest = {
   id: string;
+  /** Account that placed the request. */
+  created_by?: string;
+  /** "member" (ICF member) or "external" (advertiser account). */
+  requester_kind?: "member" | "external";
   offer_type: AdOfferType;
   package: string | null;
   placements: AdPlacementType[];

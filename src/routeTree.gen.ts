@@ -14,6 +14,7 @@ import { Route as LocaleRouteRouteImport } from './routes/$locale/route'
 import { Route as MemberRouteRouteImport } from './routes/_member/route'
 import { Route as StaffRouteRouteImport } from './routes/_staff/route'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdvertiseRouteImport } from './routes/advertise'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as EuropePulseRouteImport } from './routes/europe-pulse'
 import { Route as FindACoachRouteImport } from './routes/find-a-coach'
@@ -44,7 +45,6 @@ import { Route as LocalePrivacyRouteImport } from './routes/$locale/privacy'
 import { Route as LocaleTeamRouteImport } from './routes/$locale/team'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
-import { Route as MemberAdvertiseRouteImport } from './routes/_member/advertise'
 import { Route as MemberMyProfileRouteImport } from './routes/_member/my-profile'
 import { Route as MemberVolunteerChatRouteImport } from './routes/_member/volunteer-chat'
 import { Route as MemberVolunteeringRouteImport } from './routes/_member/volunteering'
@@ -54,6 +54,7 @@ import { Route as StaffIntegrationRouteImport } from './routes/_staff/integratio
 import { Route as StaffOperationalStructureRouteImport } from './routes/_staff/operational-structure'
 import { Route as StaffRolesRouteImport } from './routes/_staff/roles'
 import { Route as StaffVocabulariesRouteImport } from './routes/_staff/vocabularies'
+import { Route as AdvertiseSignInRouteImport } from './routes/advertise_.sign-in'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiContactAgentRouteImport } from './routes/api/contact-agent'
 import { Route as ApiEventProposalAgentRouteImport } from './routes/api/event-proposal-agent'
@@ -175,6 +176,11 @@ const StaffRouteRoute = StaffRouteRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdvertiseRoute = AdvertiseRouteImport.update({
+  id: '/advertise',
+  path: '/advertise',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -329,11 +335,6 @@ const Char91DotwellKnownChar93OauthProtectedResourceRoute =
     path: '/.well-known/oauth-protected-resource',
     getParentRoute: () => rootRouteImport,
   } as any)
-const MemberAdvertiseRoute = MemberAdvertiseRouteImport.update({
-  id: '/advertise',
-  path: '/advertise',
-  getParentRoute: () => MemberRouteRoute,
-} as any)
 const MemberMyProfileRoute = MemberMyProfileRouteImport.update({
   id: '/my-profile',
   path: '/my-profile',
@@ -379,6 +380,11 @@ const StaffVocabulariesRoute = StaffVocabulariesRouteImport.update({
   id: '/vocabularies',
   path: '/vocabularies',
   getParentRoute: () => StaffRouteRoute,
+} as any)
+const AdvertiseSignInRoute = AdvertiseSignInRouteImport.update({
+  id: '/advertise_/sign-in',
+  path: '/advertise/sign-in',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
@@ -906,6 +912,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$locale': typeof LocaleRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/advertise': typeof AdvertiseRoute
   '/auth': typeof AuthRouteWithChildren
   '/europe-pulse': typeof EuropePulseRoute
   '/find-a-coach': typeof FindACoachRoute
@@ -935,7 +942,6 @@ export interface FileRoutesByFullPath {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/advertise': typeof MemberAdvertiseRoute
   '/my-profile': typeof MemberMyProfileRoute
   '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/volunteering': typeof MemberVolunteeringRoute
@@ -945,6 +951,7 @@ export interface FileRoutesByFullPath {
   '/operational-structure': typeof StaffOperationalStructureRoute
   '/roles': typeof StaffRolesRoute
   '/vocabularies': typeof StaffVocabulariesRoute
+  '/advertise/sign-in': typeof AdvertiseSignInRoute
   '/api/chat': typeof ApiChatRoute
   '/api/contact-agent': typeof ApiContactAgentRoute
   '/api/event-proposal-agent': typeof ApiEventProposalAgentRoute
@@ -1049,6 +1056,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/advertise': typeof AdvertiseRoute
   '/auth': typeof AuthRouteWithChildren
   '/europe-pulse': typeof EuropePulseRoute
   '/find-a-coach': typeof FindACoachRoute
@@ -1076,7 +1084,6 @@ export interface FileRoutesByTo {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/advertise': typeof MemberAdvertiseRoute
   '/my-profile': typeof MemberMyProfileRoute
   '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/volunteering': typeof MemberVolunteeringRoute
@@ -1085,6 +1092,7 @@ export interface FileRoutesByTo {
   '/operational-structure': typeof StaffOperationalStructureRoute
   '/roles': typeof StaffRolesRoute
   '/vocabularies': typeof StaffVocabulariesRoute
+  '/advertise/sign-in': typeof AdvertiseSignInRoute
   '/api/chat': typeof ApiChatRoute
   '/api/contact-agent': typeof ApiContactAgentRoute
   '/api/event-proposal-agent': typeof ApiEventProposalAgentRoute
@@ -1193,6 +1201,7 @@ export interface FileRoutesById {
   '/_member': typeof MemberRouteRouteWithChildren
   '/_staff': typeof StaffRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/advertise': typeof AdvertiseRoute
   '/auth': typeof AuthRouteWithChildren
   '/europe-pulse': typeof EuropePulseRoute
   '/find-a-coach': typeof FindACoachRoute
@@ -1222,7 +1231,6 @@ export interface FileRoutesById {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/_member/advertise': typeof MemberAdvertiseRoute
   '/_member/my-profile': typeof MemberMyProfileRoute
   '/_member/volunteer-chat': typeof MemberVolunteerChatRoute
   '/_member/volunteering': typeof MemberVolunteeringRoute
@@ -1232,6 +1240,7 @@ export interface FileRoutesById {
   '/_staff/operational-structure': typeof StaffOperationalStructureRoute
   '/_staff/roles': typeof StaffRolesRoute
   '/_staff/vocabularies': typeof StaffVocabulariesRoute
+  '/advertise_/sign-in': typeof AdvertiseSignInRoute
   '/api/chat': typeof ApiChatRoute
   '/api/contact-agent': typeof ApiContactAgentRoute
   '/api/event-proposal-agent': typeof ApiEventProposalAgentRoute
@@ -1339,6 +1348,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$locale'
     | '/about'
+    | '/advertise'
     | '/auth'
     | '/europe-pulse'
     | '/find-a-coach'
@@ -1368,7 +1378,6 @@ export interface FileRouteTypes {
     | '/$locale/team'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
-    | '/advertise'
     | '/my-profile'
     | '/volunteer-chat'
     | '/volunteering'
@@ -1378,6 +1387,7 @@ export interface FileRouteTypes {
     | '/operational-structure'
     | '/roles'
     | '/vocabularies'
+    | '/advertise/sign-in'
     | '/api/chat'
     | '/api/contact-agent'
     | '/api/event-proposal-agent'
@@ -1482,6 +1492,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/advertise'
     | '/auth'
     | '/europe-pulse'
     | '/find-a-coach'
@@ -1509,7 +1520,6 @@ export interface FileRouteTypes {
     | '/$locale/team'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
-    | '/advertise'
     | '/my-profile'
     | '/volunteer-chat'
     | '/volunteering'
@@ -1518,6 +1528,7 @@ export interface FileRouteTypes {
     | '/operational-structure'
     | '/roles'
     | '/vocabularies'
+    | '/advertise/sign-in'
     | '/api/chat'
     | '/api/contact-agent'
     | '/api/event-proposal-agent'
@@ -1625,6 +1636,7 @@ export interface FileRouteTypes {
     | '/_member'
     | '/_staff'
     | '/about'
+    | '/advertise'
     | '/auth'
     | '/europe-pulse'
     | '/find-a-coach'
@@ -1654,7 +1666,6 @@ export interface FileRouteTypes {
     | '/$locale/team'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
-    | '/_member/advertise'
     | '/_member/my-profile'
     | '/_member/volunteer-chat'
     | '/_member/volunteering'
@@ -1664,6 +1675,7 @@ export interface FileRouteTypes {
     | '/_staff/operational-structure'
     | '/_staff/roles'
     | '/_staff/vocabularies'
+    | '/advertise_/sign-in'
     | '/api/chat'
     | '/api/contact-agent'
     | '/api/event-proposal-agent'
@@ -1772,6 +1784,7 @@ export interface RootRouteChildren {
   MemberRouteRoute: typeof MemberRouteRouteWithChildren
   StaffRouteRoute: typeof StaffRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AdvertiseRoute: typeof AdvertiseRoute
   AuthRoute: typeof AuthRouteWithChildren
   EuropePulseRoute: typeof EuropePulseRoute
   FindACoachRoute: typeof FindACoachRoute
@@ -1791,6 +1804,7 @@ export interface RootRouteChildren {
   TeamRoute: typeof TeamRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  AdvertiseSignInRoute: typeof AdvertiseSignInRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiContactAgentRoute: typeof ApiContactAgentRoute
   ApiEventProposalAgentRoute: typeof ApiEventProposalAgentRoute
@@ -1881,6 +1895,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/advertise': {
+      id: '/advertise'
+      path: '/advertise'
+      fullPath: '/advertise'
+      preLoaderRoute: typeof AdvertiseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -2093,13 +2114,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_member/advertise': {
-      id: '/_member/advertise'
-      path: '/advertise'
-      fullPath: '/advertise'
-      preLoaderRoute: typeof MemberAdvertiseRouteImport
-      parentRoute: typeof MemberRouteRoute
-    }
     '/_member/my-profile': {
       id: '/_member/my-profile'
       path: '/my-profile'
@@ -2162,6 +2176,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/vocabularies'
       preLoaderRoute: typeof StaffVocabulariesRouteImport
       parentRoute: typeof StaffRouteRoute
+    }
+    '/advertise_/sign-in': {
+      id: '/advertise_/sign-in'
+      path: '/advertise/sign-in'
+      fullPath: '/advertise/sign-in'
+      preLoaderRoute: typeof AdvertiseSignInRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/chat': {
       id: '/api/chat'
@@ -2923,7 +2944,6 @@ const LocaleRouteRouteWithChildren = LocaleRouteRoute._addFileChildren(
 )
 
 interface MemberRouteRouteChildren {
-  MemberAdvertiseRoute: typeof MemberAdvertiseRoute
   MemberMyProfileRoute: typeof MemberMyProfileRoute
   MemberVolunteerChatRoute: typeof MemberVolunteerChatRoute
   MemberVolunteeringRoute: typeof MemberVolunteeringRoute
@@ -2932,7 +2952,6 @@ interface MemberRouteRouteChildren {
 }
 
 const MemberRouteRouteChildren: MemberRouteRouteChildren = {
-  MemberAdvertiseRoute: MemberAdvertiseRoute,
   MemberMyProfileRoute: MemberMyProfileRoute,
   MemberVolunteerChatRoute: MemberVolunteerChatRoute,
   MemberVolunteeringRoute: MemberVolunteeringRoute,
@@ -3068,6 +3087,7 @@ const rootRouteChildren: RootRouteChildren = {
   MemberRouteRoute: MemberRouteRouteWithChildren,
   StaffRouteRoute: StaffRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AdvertiseRoute: AdvertiseRoute,
   AuthRoute: AuthRouteWithChildren,
   EuropePulseRoute: EuropePulseRoute,
   FindACoachRoute: FindACoachRoute,
@@ -3088,6 +3108,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  AdvertiseSignInRoute: AdvertiseSignInRoute,
   ApiChatRoute: ApiChatRoute,
   ApiContactAgentRoute: ApiContactAgentRoute,
   ApiEventProposalAgentRoute: ApiEventProposalAgentRoute,
