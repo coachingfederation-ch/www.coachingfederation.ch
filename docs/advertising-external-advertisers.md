@@ -1,5 +1,7 @@
 # Advertise with us — external advertisers
 
+Part of [Advertise with us](./advertising.md).
+
 `/advertise` is one public URL. Signed out: landing page. Signed in, the view
 depends on roles: `member` → Member Area frame; `advertiser`/platform admin →
 advertiser frame; no role → organisation profile step.
