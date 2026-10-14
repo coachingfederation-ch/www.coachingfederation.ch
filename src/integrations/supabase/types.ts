@@ -135,6 +135,7 @@ export type Database = {
       ad_rate_cards: {
         Row: {
           created_at: string
+          created_by: string | null
           currency: string
           eannouncement_prices: Json
           id: string
@@ -149,6 +150,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          created_by?: string | null
           currency?: string
           eannouncement_prices?: Json
           id?: string
@@ -163,6 +165,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          created_by?: string | null
           currency?: string
           eannouncement_prices?: Json
           id?: string
