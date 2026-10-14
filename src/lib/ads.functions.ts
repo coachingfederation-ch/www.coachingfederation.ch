@@ -445,8 +445,31 @@ export const translateAdCopy = createServerFn({ method: "POST" })
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "google/gemini-3.6-flash",
-        response_format: { type: "json_object" },
+        model: "openai/gpt-6-astra",
+        reasoning_effort: "low",
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "ad_translations",
+            strict: true,
+            schema: {
+              type: "object",
+              additionalProperties: false,
+              required: targets,
+              properties: Object.fromEntries(
+                targets.map((l) => [
+                  l,
+                  {
+                    type: "object",
+                    additionalProperties: false,
+                    required: ["headline", "text"],
+                    properties: { headline: { type: "string" }, text: { type: "string" } },
+                  },
+                ]),
+              ),
+            },
+          },
+        },
         messages: [
           {
             role: "system",
