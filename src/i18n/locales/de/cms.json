@@ -3131,5 +3131,56 @@
       "adPlacementNone": "Keine Platzierung verknüpft",
       "adPlacementHint": "Wählen Sie eine freigegebene Newsletter-Platzierung; die Ausgabe zeigt Logo, Text und Link."
     }
+  },
+  "advertiser": {
+    "kind": {
+      "member": "Mitglied",
+      "external": "Externer Inserent"
+    },
+    "nav": {
+      "portal": "Werben"
+    },
+    "profile": {
+      "organisation": "Organisation",
+      "contactName": "Kontaktperson",
+      "phone": "Telefon",
+      "billingStreet": "Strasse und Nummer",
+      "billingPostcode": "PLZ",
+      "billingCity": "Ort",
+      "billingCountry": "Land",
+      "vatNumber": "MWST-Nummer",
+      "billingAddress": "Rechnungsadresse"
+    },
+    "onboarding": {
+      "title": "Erzählen Sie uns von Ihrer Organisation",
+      "intro": "Wir brauchen diese Angaben einmalig für Vertrag und Rechnung.",
+      "optional": "optional",
+      "submit": "Speichern und weiter"
+    },
+    "landing": {
+      "eyebrow": "Werben Sie bei uns",
+      "title": "Erreichen Sie Coaches und Organisationen in der ganzen Schweiz",
+      "intro": "Buchen Sie ein Partnerpaket, ein E-Announcement oder eine Platzierung für Ausbildungen auf unserer Website und im Newsletter.",
+      "cta": "Platzierung buchen",
+      "offersTitle": "Was Sie buchen können",
+      "offer": {
+        "partner_package": "Gold-, Silber- oder Bronze-Sichtbarkeit auf Website, Events und Newsletter.",
+        "eannouncement": "Eine eigene Ankündigung an unsere Community an einem Datum Ihrer Wahl.",
+        "school": "Platzierungen für Level-1-, 2-, 3- und CCEU-Ausbildungen."
+      },
+      "memberNote": "Sind Sie ICF-Mitglied?",
+      "memberLink": "Als Mitglied anmelden"
+    },
+    "signIn": {
+      "title": "Zugang für Inserenten",
+      "subtitle": "Melden Sie sich an oder erstellen Sie ein Konto, um zu buchen.",
+      "continueWith": "Weiter mit",
+      "or": "oder mit E-Mail",
+      "createAccount": "Konto erstellen",
+      "toSignUp": "Neu hier? Konto erstellen",
+      "toSignIn": "Schon ein Konto? Anmelden",
+      "checkEmail": "Bitte bestätigen Sie Ihre E-Mail-Adresse, um fortzufahren.",
+      "memberNote": "ICF-Mitglied?"
+    }
   }
 }

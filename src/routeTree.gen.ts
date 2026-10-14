@@ -14,6 +14,7 @@ import { Route as LocaleRouteRouteImport } from './routes/$locale/route'
 import { Route as MemberRouteRouteImport } from './routes/_member/route'
 import { Route as StaffRouteRouteImport } from './routes/_staff/route'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdvertiseRouteImport } from './routes/advertise'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as EuropePulseRouteImport } from './routes/europe-pulse'
 import { Route as FindACoachRouteImport } from './routes/find-a-coach'
@@ -53,6 +54,7 @@ import { Route as StaffIntegrationRouteImport } from './routes/_staff/integratio
 import { Route as StaffOperationalStructureRouteImport } from './routes/_staff/operational-structure'
 import { Route as StaffRolesRouteImport } from './routes/_staff/roles'
 import { Route as StaffVocabulariesRouteImport } from './routes/_staff/vocabularies'
+import { Route as AdvertiseSignInRouteImport } from './routes/advertise_.sign-in'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiContactAgentRouteImport } from './routes/api/contact-agent'
 import { Route as ApiEventProposalAgentRouteImport } from './routes/api/event-proposal-agent'
@@ -174,6 +176,11 @@ const StaffRouteRoute = StaffRouteRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdvertiseRoute = AdvertiseRouteImport.update({
+  id: '/advertise',
+  path: '/advertise',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -373,6 +380,11 @@ const StaffVocabulariesRoute = StaffVocabulariesRouteImport.update({
   id: '/vocabularies',
   path: '/vocabularies',
   getParentRoute: () => StaffRouteRoute,
+} as any)
+const AdvertiseSignInRoute = AdvertiseSignInRouteImport.update({
+  id: '/advertise_/sign-in',
+  path: '/advertise/sign-in',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
@@ -900,6 +912,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$locale': typeof LocaleRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/advertise': typeof AdvertiseRoute
   '/auth': typeof AuthRouteWithChildren
   '/europe-pulse': typeof EuropePulseRoute
   '/find-a-coach': typeof FindACoachRoute
@@ -938,6 +951,7 @@ export interface FileRoutesByFullPath {
   '/operational-structure': typeof StaffOperationalStructureRoute
   '/roles': typeof StaffRolesRoute
   '/vocabularies': typeof StaffVocabulariesRoute
+  '/advertise/sign-in': typeof AdvertiseSignInRoute
   '/api/chat': typeof ApiChatRoute
   '/api/contact-agent': typeof ApiContactAgentRoute
   '/api/event-proposal-agent': typeof ApiEventProposalAgentRoute
@@ -1042,6 +1056,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/advertise': typeof AdvertiseRoute
   '/auth': typeof AuthRouteWithChildren
   '/europe-pulse': typeof EuropePulseRoute
   '/find-a-coach': typeof FindACoachRoute
@@ -1077,6 +1092,7 @@ export interface FileRoutesByTo {
   '/operational-structure': typeof StaffOperationalStructureRoute
   '/roles': typeof StaffRolesRoute
   '/vocabularies': typeof StaffVocabulariesRoute
+  '/advertise/sign-in': typeof AdvertiseSignInRoute
   '/api/chat': typeof ApiChatRoute
   '/api/contact-agent': typeof ApiContactAgentRoute
   '/api/event-proposal-agent': typeof ApiEventProposalAgentRoute
@@ -1185,6 +1201,7 @@ export interface FileRoutesById {
   '/_member': typeof MemberRouteRouteWithChildren
   '/_staff': typeof StaffRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/advertise': typeof AdvertiseRoute
   '/auth': typeof AuthRouteWithChildren
   '/europe-pulse': typeof EuropePulseRoute
   '/find-a-coach': typeof FindACoachRoute
@@ -1223,6 +1240,7 @@ export interface FileRoutesById {
   '/_staff/operational-structure': typeof StaffOperationalStructureRoute
   '/_staff/roles': typeof StaffRolesRoute
   '/_staff/vocabularies': typeof StaffVocabulariesRoute
+  '/advertise_/sign-in': typeof AdvertiseSignInRoute
   '/api/chat': typeof ApiChatRoute
   '/api/contact-agent': typeof ApiContactAgentRoute
   '/api/event-proposal-agent': typeof ApiEventProposalAgentRoute
@@ -1330,6 +1348,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$locale'
     | '/about'
+    | '/advertise'
     | '/auth'
     | '/europe-pulse'
     | '/find-a-coach'
@@ -1368,6 +1387,7 @@ export interface FileRouteTypes {
     | '/operational-structure'
     | '/roles'
     | '/vocabularies'
+    | '/advertise/sign-in'
     | '/api/chat'
     | '/api/contact-agent'
     | '/api/event-proposal-agent'
@@ -1472,6 +1492,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/advertise'
     | '/auth'
     | '/europe-pulse'
     | '/find-a-coach'
@@ -1507,6 +1528,7 @@ export interface FileRouteTypes {
     | '/operational-structure'
     | '/roles'
     | '/vocabularies'
+    | '/advertise/sign-in'
     | '/api/chat'
     | '/api/contact-agent'
     | '/api/event-proposal-agent'
@@ -1614,6 +1636,7 @@ export interface FileRouteTypes {
     | '/_member'
     | '/_staff'
     | '/about'
+    | '/advertise'
     | '/auth'
     | '/europe-pulse'
     | '/find-a-coach'
@@ -1652,6 +1675,7 @@ export interface FileRouteTypes {
     | '/_staff/operational-structure'
     | '/_staff/roles'
     | '/_staff/vocabularies'
+    | '/advertise_/sign-in'
     | '/api/chat'
     | '/api/contact-agent'
     | '/api/event-proposal-agent'
@@ -1760,6 +1784,7 @@ export interface RootRouteChildren {
   MemberRouteRoute: typeof MemberRouteRouteWithChildren
   StaffRouteRoute: typeof StaffRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AdvertiseRoute: typeof AdvertiseRoute
   AuthRoute: typeof AuthRouteWithChildren
   EuropePulseRoute: typeof EuropePulseRoute
   FindACoachRoute: typeof FindACoachRoute
@@ -1779,6 +1804,7 @@ export interface RootRouteChildren {
   TeamRoute: typeof TeamRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  AdvertiseSignInRoute: typeof AdvertiseSignInRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiContactAgentRoute: typeof ApiContactAgentRoute
   ApiEventProposalAgentRoute: typeof ApiEventProposalAgentRoute
@@ -1869,6 +1895,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/advertise': {
+      id: '/advertise'
+      path: '/advertise'
+      fullPath: '/advertise'
+      preLoaderRoute: typeof AdvertiseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -2143,6 +2176,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/vocabularies'
       preLoaderRoute: typeof StaffVocabulariesRouteImport
       parentRoute: typeof StaffRouteRoute
+    }
+    '/advertise_/sign-in': {
+      id: '/advertise_/sign-in'
+      path: '/advertise/sign-in'
+      fullPath: '/advertise/sign-in'
+      preLoaderRoute: typeof AdvertiseSignInRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/chat': {
       id: '/api/chat'
@@ -3047,6 +3087,7 @@ const rootRouteChildren: RootRouteChildren = {
   MemberRouteRoute: MemberRouteRouteWithChildren,
   StaffRouteRoute: StaffRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AdvertiseRoute: AdvertiseRoute,
   AuthRoute: AuthRouteWithChildren,
   EuropePulseRoute: EuropePulseRoute,
   FindACoachRoute: FindACoachRoute,
@@ -3067,6 +3108,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  AdvertiseSignInRoute: AdvertiseSignInRoute,
   ApiChatRoute: ApiChatRoute,
   ApiContactAgentRoute: ApiContactAgentRoute,
   ApiEventProposalAgentRoute: ApiEventProposalAgentRoute,

@@ -3131,5 +3131,56 @@
       "adPlacementNone": "Aucun emplacement lié",
       "adPlacementHint": "Choisissez un emplacement newsletter approuvé; l'édition affiche son logo, son texte et son lien."
     }
+  },
+  "advertiser": {
+    "kind": {
+      "member": "Membre",
+      "external": "Annonceur externe"
+    },
+    "nav": {
+      "portal": "Publicité"
+    },
+    "profile": {
+      "organisation": "Organisation",
+      "contactName": "Personne de contact",
+      "phone": "Téléphone",
+      "billingStreet": "Rue et numéro",
+      "billingPostcode": "NPA",
+      "billingCity": "Localité",
+      "billingCountry": "Pays",
+      "vatNumber": "Numéro TVA",
+      "billingAddress": "Adresse de facturation"
+    },
+    "onboarding": {
+      "title": "Parlez-nous de votre organisation",
+      "intro": "Nous avons besoin de ces informations une seule fois pour le contrat et la facture.",
+      "optional": "facultatif",
+      "submit": "Enregistrer et continuer"
+    },
+    "landing": {
+      "eyebrow": "Faire de la publicité",
+      "title": "Touchez coachs et organisations dans toute la Suisse",
+      "intro": "Réservez un package partenaire, une e-annonce ou un placement pour formations sur notre site et dans notre newsletter.",
+      "cta": "Réserver un placement",
+      "offersTitle": "Ce que vous pouvez réserver",
+      "offer": {
+        "partner_package": "Visibilité Or, Argent ou Bronze sur le site, les événements et la newsletter.",
+        "eannouncement": "Une annonce dédiée envoyée à notre communauté à la date de votre choix.",
+        "school": "Placements pour les formations Level 1, 2, 3 et CCEU."
+      },
+      "memberNote": "Vous êtes membre ICF ?",
+      "memberLink": "Se connecter comme membre"
+    },
+    "signIn": {
+      "title": "Accès annonceurs",
+      "subtitle": "Connectez-vous ou créez un compte pour réserver.",
+      "continueWith": "Continuer avec",
+      "or": "ou avec votre e-mail",
+      "createAccount": "Créer un compte",
+      "toSignUp": "Nouveau ? Créer un compte",
+      "toSignIn": "Déjà un compte ? Se connecter",
+      "checkEmail": "Confirmez votre adresse e-mail pour continuer.",
+      "memberNote": "Membre ICF ?"
+    }
   }
 }
