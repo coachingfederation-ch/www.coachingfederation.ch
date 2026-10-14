@@ -247,6 +247,7 @@ export type Database = {
           placements: Database["public"]["Enums"]["ad_placement_type"][]
           rate_card_id: string | null
           requested_start: string | null
+          requester_kind: string
           reviewed_at: string | null
           school_attestation: Json | null
           staff_notes: string | null
@@ -288,6 +289,7 @@ export type Database = {
           placements?: Database["public"]["Enums"]["ad_placement_type"][]
           rate_card_id?: string | null
           requested_start?: string | null
+          requester_kind?: string
           reviewed_at?: string | null
           school_attestation?: Json | null
           staff_notes?: string | null
@@ -329,6 +331,7 @@ export type Database = {
           placements?: Database["public"]["Enums"]["ad_placement_type"][]
           rate_card_id?: string | null
           requested_start?: string | null
+          requester_kind?: string
           reviewed_at?: string | null
           school_attestation?: Json | null
           staff_notes?: string | null
@@ -359,6 +362,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      advertiser_profiles: {
+        Row: {
+          billing_city: string
+          billing_country: string
+          billing_postcode: string
+          billing_street: string
+          contact_name: string
+          created_at: string
+          organisation: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+          vat_number: string | null
+        }
+        Insert: {
+          billing_city: string
+          billing_country: string
+          billing_postcode: string
+          billing_street: string
+          contact_name: string
+          created_at?: string
+          organisation: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+          vat_number?: string | null
+        }
+        Update: {
+          billing_city?: string
+          billing_country?: string
+          billing_postcode?: string
+          billing_street?: string
+          contact_name?: string
+          created_at?: string
+          organisation?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+          vat_number?: string | null
+        }
+        Relationships: []
       }
       api_rate_limits: {
         Row: {
@@ -7056,6 +7101,19 @@ export type Database = {
         Args: { _actor?: string; _event_id: string }
         Returns: Json
       }
+      complete_advertiser_onboarding: {
+        Args: {
+          _billing_city: string
+          _billing_country: string
+          _billing_postcode: string
+          _billing_street: string
+          _contact_name: string
+          _organisation: string
+          _phone: string
+          _vat_number: string
+        }
+        Returns: undefined
+      }
       directory_allows_non_credentialed: { Args: never; Returns: boolean }
       event_reminders_due: { Args: never; Returns: boolean }
       get_certificate_by_token: { Args: { _token: string }; Returns: Json }
@@ -7133,6 +7191,7 @@ export type Database = {
         | "publisher"
         | "administrator"
         | "membership"
+        | "advertiser"
       article_lang: "en" | "fr" | "de" | "it"
       article_status:
         | "draft"
@@ -7356,6 +7415,7 @@ export const Constants = {
         "publisher",
         "administrator",
         "membership",
+        "advertiser",
       ],
       article_lang: ["en", "fr", "de", "it"],
       article_status: [
