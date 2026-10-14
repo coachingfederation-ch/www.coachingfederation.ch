@@ -43,6 +43,13 @@
       "when": 1791996407492,
       "tag": "0005_feature_toggles",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792004478320,
+      "tag": "0006_ad_request_content_contract",
+      "breakpoints": true
     }
   ]
 }
