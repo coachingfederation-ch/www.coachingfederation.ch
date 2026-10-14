@@ -1,3 +1,4 @@
+import { resolveAdDesignVariant } from "@/lib/ads";
 /**
  * Advertising request review (/manage/ad-requests/:id).
  * Exports: Route.
