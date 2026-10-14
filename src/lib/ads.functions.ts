@@ -9,6 +9,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { assertAnyRole, type AuthedContext } from "./authz";
 import type { AdEligibility, AdPlacement, AdPlacementType, AdRateCard, AdRequest } from "./ads";
 
 const placementEnum = z.enum([
@@ -46,6 +47,15 @@ const draftSchema = z.object({
   requestedStart: z.string().date().nullable().optional(),
 });
 
+async function isMemberCaller(context: AuthedContext): Promise<boolean> {
+  const { data } = await context.supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", context.userId)
+    .eq("role", "member");
+  return (data ?? []).length > 0;
+}
+
 export type AdvertiseCatalogue = {
   rateCard: AdRateCard;
   eligibility: AdEligibility;
@@ -55,6 +65,7 @@ export type AdvertiseCatalogue = {
 export const getAdvertiseCatalogue = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<AdvertiseCatalogue | null> => {
+    await assertAnyRole(context as AuthedContext, ["member", "advertiser", "admin", "administrator"]);
     const { isMissingAdSchemaError, loadActiveRateCard } = await import("./ads.server");
     const { resolveEligibility } = await import("./ads-eligibility.server");
     let rateCard: AdRateCard;
@@ -74,6 +85,7 @@ export const getAdvertiseCatalogue = createServerFn({ method: "POST" })
 export const listMyAdRequests = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<AdRequest[]> => {
+    await assertAnyRole(context as AuthedContext, ["member", "advertiser", "admin", "administrator"]);
     const { isMissingAdSchemaError, REQUEST_COLUMNS } = await import("./ads.server");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const db = context.supabase as any;
@@ -93,6 +105,7 @@ export const saveAdRequestDraft = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => draftSchema.parse(input))
   .handler(async ({ context, data }): Promise<AdRequest> => {
+    await assertAnyRole(context as AuthedContext, ["member", "advertiser", "admin", "administrator"]);
     const { REQUEST_COLUMNS } = await import("./ads.server");
     const payload = {
       offer_type: data.offerType,
@@ -119,7 +132,12 @@ export const saveAdRequestDraft = createServerFn({ method: "POST" })
     const db = context.supabase as any;
     const query = data.id
       ? db.from("ad_requests").update(payload).eq("id", data.id)
-      : db.from("ad_requests").insert({ ...payload, created_by: context.userId });
+      : db.from("ad_requests").insert({
+          ...payload,
+          created_by: context.userId,
+          // Server-set: who placed it decides how staff verify the requester.
+          requester_kind: (await isMemberCaller(context as AuthedContext)) ? "member" : "external",
+        });
 
     const { data: row, error } = await query.select(REQUEST_COLUMNS).single();
     if (error) throw error;
@@ -130,6 +148,7 @@ export const submitAdRequest = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }): Promise<AdRequest> => {
+    await assertAnyRole(context as AuthedContext, ["member", "advertiser", "admin", "administrator"]);
     const { submitRequest } = await import("./ads.server");
     const { supabaseAdmin: adminClient } = await import("@/integrations/supabase/client.server");
     // The ad_* tables arrive with the staged migration, so they are absent from
@@ -178,6 +197,7 @@ export const uploadAdLogo = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ context, data }): Promise<{ path: string }> => {
+    await assertAnyRole(context as AuthedContext, ["member", "advertiser", "admin", "administrator"]);
     const { AD_MEDIA_BUCKET } = await import("./storage");
     const { supabaseAdmin: adminClient } = await import("@/integrations/supabase/client.server");
     // The ad_* tables arrive with the staged migration, so they are absent from

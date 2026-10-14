@@ -53,7 +53,10 @@ export const completeAdvertiserOnboarding = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => profileSchema.parse(input))
   .handler(async ({ context, data }): Promise<{ ok: true }> => {
     const { checkRateLimit } = await import("./rate-limit.server");
-    await checkRateLimit(`advertiser-onboarding:${context.userId}`, 10, 3600);
+    const verdict = await checkRateLimit("advertiser-onboarding", `user:${context.userId}`, [
+      { windowSeconds: 3600, max: 10 },
+    ]);
+    if (!verdict.allowed) throw new Error("Too many attempts. Please try again later.");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const db = context.supabase as any;
     const { error } = await db.rpc("complete_advertiser_onboarding", {
