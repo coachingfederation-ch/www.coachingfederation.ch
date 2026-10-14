@@ -654,7 +654,21 @@
     "sectionDiagnostics": "Diagnostica",
     "sectionSettings": "Impostazioni",
     "advancedTitle": "Avanzate e configurazione",
-    "advancedBody": "Modalità, blocchi e-mail, forzatura della protezione, pulizia e passaggio completato. Usare con cautela."
+    "advancedBody": "Modalità, blocchi e-mail, forzatura della protezione, pulizia e passaggio completato. Usare con cautela.",
+    "featuresTitle": "Funzionalità",
+    "featuresBody": "Attiva o disattiva intere funzionalità per visitatori e membri. Nulla viene eliminato.",
+    "featureEuropePulseTitle": "Europe Pulse",
+    "featureEuropePulseBody": "Pagina pubblica, anteprima Insights e scansione settimanale",
+    "featureAdvertisingTitle": "Pubblicità",
+    "featureAdvertisingBody": "Pagina pubblicità, prenotazione dei membri e link pubblicitari",
+    "featureOn": "Attivo",
+    "featureOff": "Disattivo",
+    "featuresLastChanged": "Ultima modifica",
+    "featureConfirmTitle": "Disattiva:",
+    "featureConfirmBody": "Visitatori e membri non vedranno più questa funzionalità e le attività automatiche si fermano. Puoi riattivarla in qualsiasi momento.",
+    "featureConfirmCancel": "Annulla",
+    "featureConfirmOff": "Disattiva",
+    "featureOffStaffNotice": "Questa funzionalità è disattivata nella pagina Integrazione. Visitatori e membri non la vedono."
   },
   "member": {
     "title": "Il mio profilo coach",
@@ -3130,6 +3144,10 @@
       "adPlacement": "Posizionamento pubblicitario collegato",
       "adPlacementNone": "Nessun posizionamento collegato",
       "adPlacementHint": "Scegli un posizionamento newsletter approvato; l'edizione mostra logo, testo e link."
+    },
+    "paused": {
+      "title": "Al momento non accettiamo prenotazioni",
+      "body": "Le prenotazioni pubblicitarie sono sospese per il momento. Per domande, scrivici."
     }
   },
   "advertiser": {

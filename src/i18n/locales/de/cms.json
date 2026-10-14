@@ -654,7 +654,21 @@
     "sectionDiagnostics": "Diagnose",
     "sectionSettings": "Einstellungen",
     "advancedTitle": "Erweitert & Setup",
-    "advancedBody": "Modus, E-Mail-Schalter, Override, Bereinigung und Cutover. Mit Vorsicht verwenden."
+    "advancedBody": "Modus, E-Mail-Schalter, Override, Bereinigung und Cutover. Mit Vorsicht verwenden.",
+    "featuresTitle": "Funktionen",
+    "featuresBody": "Ganze Funktionen für Besucher und Mitglieder ein- oder ausschalten. Es wird nichts gelöscht.",
+    "featureEuropePulseTitle": "Europe Pulse",
+    "featureEuropePulseBody": "Öffentliche Seite, Insights-Hinweis und wöchentlicher Scan",
+    "featureAdvertisingTitle": "Werbung",
+    "featureAdvertisingBody": "Werbeseite, Buchung durch Mitglieder und Werbelinks",
+    "featureOn": "Ein",
+    "featureOff": "Aus",
+    "featuresLastChanged": "Zuletzt geändert",
+    "featureConfirmTitle": "Ausschalten:",
+    "featureConfirmBody": "Besucher und Mitglieder sehen diese Funktion nicht mehr, automatische Abläufe stoppen. Du kannst sie jederzeit wieder einschalten.",
+    "featureConfirmCancel": "Abbrechen",
+    "featureConfirmOff": "Ausschalten",
+    "featureOffStaffNotice": "Diese Funktion ist auf der Integrationsseite ausgeschaltet. Besucher und Mitglieder sehen sie nicht."
   },
   "member": {
     "title": "Mein Coach-Profil",
@@ -3130,6 +3144,10 @@
       "adPlacement": "Verknüpfte Werbeplatzierung",
       "adPlacementNone": "Keine Platzierung verknüpft",
       "adPlacementHint": "Wählen Sie eine freigegebene Newsletter-Platzierung; die Ausgabe zeigt Logo, Text und Link."
+    },
+    "paused": {
+      "title": "Zurzeit keine Buchungen",
+      "body": "Werbebuchungen sind im Moment pausiert. Bei Fragen schreib uns gerne."
     }
   },
   "advertiser": {

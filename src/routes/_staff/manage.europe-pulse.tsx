@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Loader2, RefreshCw, Eye, EyeOff, AlertTriangle } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
+import { FeatureOffNotice } from "@/components/cms/FeatureOffNotice";
 import { PulseItemCard } from "@/components/cms/PulseItemCard";
 import { PulseRunControls } from "@/components/cms/PulseRunControls";
 import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
@@ -251,6 +252,7 @@ function EuropePulseAdmin() {
   return (
     <Shell>
       <div className="mx-auto max-w-5xl px-8 py-10">
+        <FeatureOffNotice feature="europe_pulse" />
         <PulseRunControls
           activeChapterCount={chapters.filter((c) => c.is_active).length}
           busy={busy}

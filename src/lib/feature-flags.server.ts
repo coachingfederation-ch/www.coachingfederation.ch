@@ -2,7 +2,12 @@
  * Server-side feature switch checks. Reads the switches with the admin client
  * so cron and server functions see the stored value regardless of caller.
  */
-import { FEATURE_DEFAULTS, parseFeatureFlags, type FeatureFlags, type FeatureName } from "./feature-flags";
+import {
+  FEATURE_DEFAULTS,
+  parseFeatureFlags,
+  type FeatureFlags,
+  type FeatureName,
+} from "./feature-flags";
 
 export async function loadFeatureFlagsServer(): Promise<FeatureFlags> {
   try {

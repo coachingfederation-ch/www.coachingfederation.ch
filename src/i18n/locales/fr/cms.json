@@ -654,7 +654,21 @@
     "sectionDiagnostics": "Diagnostic",
     "sectionSettings": "Paramètres",
     "advancedTitle": "Avancé et configuration",
-    "advancedBody": "Mode, verrous e-mail, contournement du garde-fou, nettoyage et bascule terminée. À utiliser avec prudence."
+    "advancedBody": "Mode, verrous e-mail, contournement du garde-fou, nettoyage et bascule terminée. À utiliser avec prudence.",
+    "featuresTitle": "Fonctionnalités",
+    "featuresBody": "Activez ou désactivez des fonctionnalités entières pour les visiteurs et les membres. Rien n’est supprimé.",
+    "featureEuropePulseTitle": "Europe Pulse",
+    "featureEuropePulseBody": "Page publique, aperçu Insights et analyse hebdomadaire",
+    "featureAdvertisingTitle": "Publicité",
+    "featureAdvertisingBody": "Page publicité, réservation par les membres et liens publicitaires",
+    "featureOn": "Activé",
+    "featureOff": "Désactivé",
+    "featuresLastChanged": "Dernière modification",
+    "featureConfirmTitle": "Désactiver :",
+    "featureConfirmBody": "Les visiteurs et les membres ne verront plus cette fonctionnalité et ses tâches automatiques s’arrêtent. Vous pouvez la réactiver à tout moment.",
+    "featureConfirmCancel": "Annuler",
+    "featureConfirmOff": "Désactiver",
+    "featureOffStaffNotice": "Cette fonctionnalité est désactivée sur la page Intégration. Les visiteurs et les membres ne la voient pas."
   },
   "member": {
     "title": "Mon profil de coach",
@@ -3130,6 +3144,10 @@
       "adPlacement": "Emplacement publicitaire lié",
       "adPlacementNone": "Aucun emplacement lié",
       "adPlacementHint": "Choisissez un emplacement newsletter approuvé; l'édition affiche son logo, son texte et son lien."
+    },
+    "paused": {
+      "title": "Pas de réservations pour le moment",
+      "body": "Les réservations publicitaires sont suspendues pour le moment. Pour toute question, écrivez-nous."
     }
   },
   "advertiser": {

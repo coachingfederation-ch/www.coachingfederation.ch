@@ -8,6 +8,9 @@
  */
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { featureFlagsQueryOptions } from "@/lib/feature-flags";
+import { AdvertisingPausedNotice } from "@/components/cms/FeatureOffNotice";
 import { Button, Input } from "@/design-system/icf-welcome-design-system-a835df";
 import { lovable } from "@/integrations/lovable";
 import { supabase } from "@/integrations/supabase/client";
@@ -32,6 +35,7 @@ export const Route = createFileRoute("/advertise_/sign-in")({
       { name: "robots", content: "noindex" },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(featureFlagsQueryOptions),
   component: AdvertiserSignIn,
 });
 
@@ -50,6 +54,7 @@ function AdvertiserSignIn() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [checkEmail, setCheckEmail] = useState(false);
+  const adsOn = useSuspenseQuery(featureFlagsQueryOptions).data.advertising;
 
   const oauth = async (provider: (typeof PROVIDERS)[number]["id"]) => {
     setError(null);
@@ -92,6 +97,7 @@ function AdvertiserSignIn() {
     }
   };
 
+  if (!adsOn) return <AdvertisingPausedNotice />;
   return (
     <AuthCard title={t("advertiser.signIn.title")} subtitle={t("advertiser.signIn.subtitle")}>
       {checkEmail ? (
@@ -150,7 +156,9 @@ function AdvertiserSignIn() {
               size="sm"
               onClick={() => setMode((m) => (m === "signIn" ? "signUp" : "signIn"))}
             >
-              {mode === "signIn" ? t("advertiser.signIn.toSignUp") : t("advertiser.signIn.toSignIn")}
+              {mode === "signIn"
+                ? t("advertiser.signIn.toSignUp")
+                : t("advertiser.signIn.toSignIn")}
             </Button>
           </p>
         </>
