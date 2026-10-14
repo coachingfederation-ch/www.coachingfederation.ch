@@ -21,13 +21,10 @@ import {
   MessagesSquare,
   BookOpen,
   Headset,
-<<<<<<< src/components/cms/Shell.tsx
   Ticket,
   Mail,
   Gauge,
-=======
   Megaphone,
->>>>>>> /tmp/d
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";

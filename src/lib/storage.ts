@@ -81,7 +81,6 @@ export const EVENT_RECAP_PHOTO_TTL_SECONDS = 60 * 60 * 24;
 export const EVENT_RECAP_DOWNLOAD_TTL_SECONDS = 10 * 60;
 
 /**
-<<<<<<< src/lib/storage.ts
  * Uploaded Zoom / Google Meet attendance CSVs. Private bucket, keyed by event:
  * `<event_id>/<import_id>/<filename>`. The files carry attendee email
  * addresses, so only the staff who manage that event may read them.
@@ -90,7 +89,8 @@ export const EVENT_ATTENDANCE_IMPORT_BUCKET = "event-attendance-imports";
 
 /** Re-download link for an uploaded attendance file: 10 minutes. */
 export const EVENT_ATTENDANCE_IMPORT_TTL_SECONDS = 10 * 60;
-=======
+
+/**
  * Advertiser logos. Private bucket: members upload through a server function
  * (never straight into storage), and every public read is a signed URL minted
  * for a placement that is already live.
@@ -102,4 +102,3 @@ export const AD_MEDIA_BUCKET = "ad-media";
  * so a day-long window keeps links from outliving a placement's end date.
  */
 export const AD_MEDIA_TTL_SECONDS = 60 * 60 * 24;
->>>>>>> /tmp/d
