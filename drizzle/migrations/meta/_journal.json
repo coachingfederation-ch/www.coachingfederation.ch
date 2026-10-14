@@ -36,6 +36,13 @@
       "when": 1791993503800,
       "tag": "0004_ad_rate_cards_created_by",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791996407492,
+      "tag": "0005_feature_toggles",
+      "breakpoints": true
     }
   ]
 }

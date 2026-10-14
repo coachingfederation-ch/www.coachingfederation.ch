@@ -7,7 +7,9 @@
  * frame. Access to data is enforced server-side (role guard + RLS), not here.
  */
 import { createFileRoute, useHydrated, type ErrorComponentProps } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { featureFlagsQueryOptions } from "@/lib/feature-flags";
+import { AdvertisingPausedNotice } from "@/components/cms/FeatureOffNotice";
 import { Spinner } from "@/design-system/icf-welcome-design-system-a835df";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyRoles } from "@/lib/roles";
@@ -36,6 +38,7 @@ export const Route = createFileRoute("/advertise")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(featureFlagsQueryOptions),
   component: AdvertisePage,
   errorComponent: AdvertiseError,
 });
@@ -49,6 +52,12 @@ function AdvertisePage() {
     staleTime: 60_000,
   });
   const { roles, loading } = useMyRoles();
+  const flags = useSuspenseQuery(featureFlagsQueryOptions).data;
+
+  // Paused for everyone but platform admins, who keep a preview of the flow.
+  if (!flags.advertising && !(hydrated && !loading && roles.isPlatformAdmin)) {
+    return <AdvertisingPausedNotice />;
+  }
 
   if (!hydrated || session.data === false) return <AdvertiseLanding />;
   if (session.isLoading || loading) {

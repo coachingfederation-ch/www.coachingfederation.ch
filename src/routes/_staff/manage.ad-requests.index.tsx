@@ -11,6 +11,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Shell } from "@/components/cms/Shell";
+import { FeatureOffNotice } from "@/components/cms/FeatureOffNotice";
 import { useCms } from "@/i18n/cms";
 import { PLATFORM_ADMIN_ROLES, requireStaffAccess } from "@/lib/staff-guard";
 import { Badge, Button } from "@/design-system/icf-welcome-design-system-a835df";
@@ -54,6 +55,7 @@ function AdRequestsPage() {
   return (
     <Shell>
       <div className="mx-auto max-w-6xl px-6 py-8">
+        <FeatureOffNotice feature="advertising" />
         <h1 className="font-heading text-3xl">{t("advertise.staff.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("advertise.staff.lede")}</p>
 

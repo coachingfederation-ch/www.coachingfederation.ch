@@ -12,6 +12,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { featureFlagsQueryOptions } from "@/lib/feature-flags";
 import {
   ArrowRight,
   Award,
@@ -192,6 +193,7 @@ function InternalEvents() {
 
 export function MemberHome() {
   const { t, locale } = useCms();
+  const adsOn = useQuery(featureFlagsQueryOptions).data?.advertising !== false;
   const { data, isLoading } = useQuery({
     queryKey: ["member-home", locale],
     queryFn: () => getMemberHome({ data: { locale } }),
@@ -277,17 +279,21 @@ export function MemberHome() {
             </span>
           </a>
 
-          <Link to="/advertise" className={CARD}>
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-background text-primary">
-              <Megaphone className="h-5 w-5" aria-hidden />
-            </span>
-            <h2 className="mt-4 font-heading text-xl text-primary">{t("member.home.ads.title")}</h2>
-            <p className="mt-2 text-sm text-muted-foreground">{t("member.home.ads.body")}</p>
-            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-              {t("member.home.ads.cta")}
-              <ArrowRight className="h-4 w-4" aria-hidden />
-            </span>
-          </Link>
+          {adsOn && (
+            <Link to="/advertise" className={CARD}>
+              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-background text-primary">
+                <Megaphone className="h-5 w-5" aria-hidden />
+              </span>
+              <h2 className="mt-4 font-heading text-xl text-primary">
+                {t("member.home.ads.title")}
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground">{t("member.home.ads.body")}</p>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+                {t("member.home.ads.cta")}
+                <ArrowRight className="h-4 w-4" aria-hidden />
+              </span>
+            </Link>
+          )}
         </div>
 
         {/* min-w-0: grid items default to min-width:auto, which lets a long

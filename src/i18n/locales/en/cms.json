@@ -654,7 +654,21 @@
     "sectionDiagnostics": "Diagnostics",
     "sectionSettings": "Settings",
     "advancedTitle": "Advanced and setup",
-    "advancedBody": "Mode, email gates, the drop-guard override, cleanup and the completed cutover. Use with care."
+    "advancedBody": "Mode, email gates, the drop-guard override, cleanup and the completed cutover. Use with care.",
+    "featuresTitle": "Features",
+    "featuresBody": "Switch whole features on or off for visitors and members. Nothing is deleted.",
+    "featureEuropePulseTitle": "Europe Pulse",
+    "featureEuropePulseBody": "Public page, Insights teaser, and weekly scan",
+    "featureAdvertisingTitle": "Advertising",
+    "featureAdvertisingBody": "Advertise page, member booking, and ad links",
+    "featureOn": "On",
+    "featureOff": "Off",
+    "featuresLastChanged": "Last changed",
+    "featureConfirmTitle": "Switch off",
+    "featureConfirmBody": "Visitors and members will no longer see this feature, and its automatic work stops. You can switch it back on at any time.",
+    "featureConfirmCancel": "Cancel",
+    "featureConfirmOff": "Switch off",
+    "featureOffStaffNotice": "This feature is switched off on the Integration page. Visitors and members cannot see it."
   },
   "member": {
     "title": "My coach profile",
@@ -3130,6 +3144,10 @@
       "adPlacement": "Attached advertising placement",
       "adPlacementNone": "No placement attached",
       "adPlacementHint": "Pick an approved newsletter placement; the edition renders its logo, text and link."
+    },
+    "paused": {
+      "title": "We are not taking bookings right now",
+      "body": "Advertising bookings are paused for the moment. For questions, please write to us."
     }
   },
   "advertiser": {

@@ -17,6 +17,7 @@ import {
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { SlidersHorizontal } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { featureFlagsQueryOptions } from "@/lib/feature-flags";
 import { useState } from "react";
 import { Mark } from "@/components/marks";
 import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
@@ -148,6 +149,7 @@ function EmptyState({
 
 export default function InsightsPage() {
   const { t, locale } = useI18n();
+  const pulseOn = useQuery(featureFlagsQueryOptions).data?.europe_pulse !== false;
   const [topic, setTopic] = useState<string>("all");
   const [topicsOpen, setTopicsOpen] = useState(false);
   const { data, isPending, isError } = useQuery({
@@ -329,32 +331,34 @@ export default function InsightsPage() {
         )}
 
         {/* Cross-link to the sibling weekly feed of other European chapters. */}
-        <section className="bg-background py-24">
-          <div className="mx-auto max-w-7xl px-8">
-            <div
-              className={
-                "flex flex-col gap-4 rounded-2xl border border-border/70 bg-card p-8 sm:flex-row sm:items-center sm:justify-between " +
-                CARD_SHADOW
-              }
-            >
-              <div>
-                <p className="eyebrow">{t("europe-pulse.preview.eyebrow")}</p>
-                <h2 className="mt-2 text-xl font-bold tracking-tight">
-                  {t("europe-pulse.preview.title")}
-                </h2>
-                <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                  {t("europe-pulse.preview.body")}
-                </p>
-              </div>
-              <LocaleLink
-                to="/europe-pulse"
-                className="inline-flex h-10 shrink-0 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+        {pulseOn && (
+          <section className="bg-background py-24">
+            <div className="mx-auto max-w-7xl px-8">
+              <div
+                className={
+                  "flex flex-col gap-4 rounded-2xl border border-border/70 bg-card p-8 sm:flex-row sm:items-center sm:justify-between " +
+                  CARD_SHADOW
+                }
               >
-                {t("europe-pulse.preview.cta")} →
-              </LocaleLink>
+                <div>
+                  <p className="eyebrow">{t("europe-pulse.preview.eyebrow")}</p>
+                  <h2 className="mt-2 text-xl font-bold tracking-tight">
+                    {t("europe-pulse.preview.title")}
+                  </h2>
+                  <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                    {t("europe-pulse.preview.body")}
+                  </p>
+                </div>
+                <LocaleLink
+                  to="/europe-pulse"
+                  className="inline-flex h-10 shrink-0 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+                >
+                  {t("europe-pulse.preview.cta")} →
+                </LocaleLink>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         <section className="bg-hero text-hero-foreground">
           <div className="mx-auto max-w-7xl px-8 py-20 text-center">

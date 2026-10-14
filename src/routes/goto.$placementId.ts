@@ -28,8 +28,9 @@ export const Route = createFileRoute("/goto/$placementId")({
             .eq("id", id)
             .maybeSingle();
           const url = (data as { cta_url: string | null } | null)?.cta_url ?? null;
-          if (url && /^https?:\/\//i.test(url)) {
-            destination = url;
+          const { fetchFeatureFlags, adClickDestination } = await import("@/lib/feature-flags");
+          destination = adClickDestination(await fetchFeatureFlags(), url);
+          if (destination !== "/") {
             await db.rpc("ad_placement_click", { _placement_id: id });
           }
         } catch {
