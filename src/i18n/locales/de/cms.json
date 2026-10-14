@@ -3187,6 +3187,21 @@
       "content": "Inhalt",
       "contract": "Vertragsangaben",
       "edit": "Bearbeiten"
+    },
+    "design": {
+      "title": "Anzeigenstil",
+      "editorial": {
+        "name": "Redaktionell",
+        "hint": "Ruhige weisse Karte neben Artikeln."
+      },
+      "spotlight": {
+        "name": "Spotlight",
+        "hint": "Kräftiges dunkelblaues Band mit klarem Button."
+      },
+      "warm": {
+        "name": "Warm",
+        "hint": "Sanfte, warme Fläche mit rundem Bild."
+      }
     }
   },
   "advertiser": {

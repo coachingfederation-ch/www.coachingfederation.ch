@@ -77,6 +77,7 @@ export type Database = {
           description_en: string | null
           description_fr: string | null
           description_it: string | null
+          design_variant: string
           end_date: string
           headline_de: string | null
           headline_en: string | null
@@ -100,6 +101,7 @@ export type Database = {
           description_en?: string | null
           description_fr?: string | null
           description_it?: string | null
+          design_variant?: string
           end_date: string
           headline_de?: string | null
           headline_en?: string | null
@@ -123,6 +125,7 @@ export type Database = {
           description_en?: string | null
           description_fr?: string | null
           description_it?: string | null
+          design_variant?: string
           end_date?: string
           headline_de?: string | null
           headline_en?: string | null
@@ -255,6 +258,7 @@ export type Database = {
           description_en: string | null
           description_fr: string | null
           description_it: string | null
+          design_variant: string
           duration_months: number | null
           eligibility_detail: Json
           eligibility_source: string
@@ -309,6 +313,7 @@ export type Database = {
           description_en?: string | null
           description_fr?: string | null
           description_it?: string | null
+          design_variant?: string
           duration_months?: number | null
           eligibility_detail?: Json
           eligibility_source?: string
@@ -363,6 +368,7 @@ export type Database = {
           description_en?: string | null
           description_fr?: string | null
           description_it?: string | null
+          design_variant?: string
           duration_months?: number | null
           eligibility_detail?: Json
           eligibility_source?: string

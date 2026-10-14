@@ -113,6 +113,7 @@ export type AdRequest = {
   contact_email: string | null;
   logo_path: string | null;
   image_path?: string | null;
+  design_variant?: string | null;
   headline_de?: string | null;
   headline_fr?: string | null;
   headline_it?: string | null;
@@ -239,4 +240,16 @@ export function missingContractFields(
   return Object.entries(required)
     .filter(([, value]) => !value || !String(value).trim())
     .map(([key]) => key);
+}
+
+/** Visual styles an advertiser can pick for banner, square and newsletter ads. */
+export const AD_DESIGN_VARIANTS = ["editorial", "spotlight", "warm"] as const;
+export type AdDesignVariant = (typeof AD_DESIGN_VARIANTS)[number];
+export const DEFAULT_AD_DESIGN_VARIANT: AdDesignVariant = "editorial";
+
+/** Normalise a stored/submitted value; anything unknown falls back to Editorial. */
+export function resolveAdDesignVariant(value: unknown): AdDesignVariant {
+  return (AD_DESIGN_VARIANTS as readonly unknown[]).includes(value)
+    ? (value as AdDesignVariant)
+    : DEFAULT_AD_DESIGN_VARIANT;
 }

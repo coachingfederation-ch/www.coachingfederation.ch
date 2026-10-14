@@ -3187,6 +3187,21 @@
       "content": "Contenu",
       "contract": "Données du contrat",
       "edit": "Modifier"
+    },
+    "design": {
+      "title": "Style d’annonce",
+      "editorial": {
+        "name": "Éditorial",
+        "hint": "Carte blanche sobre à côté des articles."
+      },
+      "spotlight": {
+        "name": "Spotlight",
+        "hint": "Bandeau bleu profond avec un bouton clair."
+      },
+      "warm": {
+        "name": "Chaleureux",
+        "hint": "Surface douce avec une image arrondie."
+      }
     }
   },
   "advertiser": {

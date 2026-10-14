@@ -50,6 +50,13 @@
       "when": 1792004478320,
       "tag": "0006_ad_request_content_contract",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792005372158,
+      "tag": "0007_ad_design_variant",
+      "breakpoints": true
     }
   ]
 }

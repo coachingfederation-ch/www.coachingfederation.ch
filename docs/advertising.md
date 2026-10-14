@@ -131,3 +131,7 @@ A published rate card stays in force for three months. Earlier changes are only 
 5. **Summary** — offer/price, content previews and contract details, each with an Edit link.
 
 `submitAdRequest` rejects drafts missing contract fields (`missingContractFields` in `src/lib/ads.ts`). New columns on `ad_requests`: `image_path`, `headline_*`, `contact_name`, `contact_phone`, `billing_*`, `vat_number`; activation copies `image_path` and `headline_*` to `ad_placements`. Public rendering of banner/square ads is still not built.
+
+## Ad styles
+
+Advertisers pick one of three styles in the Content step: **Editorial** (default, white card), **Spotlight** (Deep Blue band, on-dark button, Yellow "Sponsored" label) and **Warm split** (bone surface, rounded image, brush underline, outlined pill). The choice is stored as `ad_requests.design_variant` (`editorial` | `spotlight` | `warm`, check-constrained) and copied to `ad_placements.design_variant` on activation, so public renderers can draw the same style. `AdPreview` renders all nine format × style combinations; unknown values fall back to Editorial (`resolveAdDesignVariant`).
