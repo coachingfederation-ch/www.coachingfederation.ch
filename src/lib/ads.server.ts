@@ -71,7 +71,7 @@ const LEGAL_FROM: Record<AdTransition["action"], AdRequestStatus[]> = {
 };
 
 const REQUEST_COLUMNS =
-  "id, offer_type, package, placements, duration_months, newsletter_mentions, eligibility_tier, eligibility_source, eligibility_detail, school_attestation, advertiser_name, contact_email, logo_path, description_de, description_fr, description_it, description_en, cta_url, announcement_date, requested_start, computed_price, currency, status, staff_notes, decline_reason, submitted_at, approved_at, active_from, active_until, created_at";
+  "id, offer_type, package, placements, duration_months, newsletter_mentions, eligibility_tier, eligibility_source, eligibility_detail, school_attestation, advertiser_name, contact_email, logo_path, description_de, description_fr, description_it, description_en, cta_url, announcement_date, requested_start, computed_price, currency, status, staff_notes, decline_reason, submitted_at, approved_at, active_from, active_until, created_at, created_by, requester_kind";
 
 export async function loadActiveRateCard(client: Client): Promise<AdRateCard> {
   const { data, error } = await client

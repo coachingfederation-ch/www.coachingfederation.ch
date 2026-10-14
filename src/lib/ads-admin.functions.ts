@@ -10,6 +10,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { AdvertiserProfile } from "./advertisers.functions";
 import { assertPlatformAdmin, type AuthedContext } from "./authz";
 import type { AdPlacement, AdRateCard, AdRequest, AdRequestEvent, AdRequestStatus } from "./ads";
 
@@ -65,6 +66,8 @@ export type AdRequestDetail = {
   placements: AdPlacement[];
   events: AdRequestEvent[];
   logoUrl: string | null;
+  /** Organisation profile for external advertisers; null for members. */
+  advertiserProfile: AdvertiserProfile | null;
 };
 
 export const getAdRequestFn = createServerFn({ method: "POST" })
@@ -90,7 +93,8 @@ export const getAdRequestFn = createServerFn({ method: "POST" })
     if (error) throw error;
     if (!request) throw new Error("Request not found.");
 
-    const [contract, placements, events] = await Promise.all([
+    const reqRow = request as AdRequest;
+    const [contract, placements, events, profile] = await Promise.all([
       supabaseAdmin
         .from("ad_contracts")
         .select(CONTRACT_COLUMNS)
@@ -107,6 +111,15 @@ export const getAdRequestFn = createServerFn({ method: "POST" })
         .select("id, event, detail, created_at")
         .eq("request_id", data.id)
         .order("created_at", { ascending: false }),
+      reqRow.requester_kind === "external" && reqRow.created_by
+        ? supabaseAdmin
+            .from("advertiser_profiles")
+            .select(
+              "organisation, contact_name, phone, billing_country, billing_postcode, billing_city, billing_street, vat_number",
+            )
+            .eq("user_id", reqRow.created_by)
+            .maybeSingle()
+        : Promise.resolve({ data: null }),
     ]);
 
     const row = request as AdRequest;
@@ -120,6 +133,7 @@ export const getAdRequestFn = createServerFn({ method: "POST" })
       placements: (placements.data ?? []) as AdPlacement[],
       events: (events.data ?? []) as AdRequestEvent[],
       logoUrl: row.logo_path ? (signed?.get(row.logo_path) ?? null) : null,
+      advertiserProfile: (profile.data ?? null) as AdvertiserProfile | null,
     };
   });
 
