@@ -279,31 +279,18 @@ export function MemberHome() {
             </span>
           </a>
 
-<<<<<<< src/components/member/MemberHome.tsx
-          {/* Announced, not yet actionable — it stays visibly inactive. */}
-          <section className={CARD}>
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-background text-muted-foreground">
+          <Link to="/advertise" className={CARD}>
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-background text-primary">
               <Megaphone className="h-5 w-5" aria-hidden />
             </span>
             <h2 className="mt-4 font-heading text-xl text-primary">{t("member.home.ads.title")}</h2>
             <p className="mt-2 text-sm text-muted-foreground">{t("member.home.ads.body")}</p>
-            <button type="button" disabled className={CTA_MUTED}>
-              {t("member.home.soon")}
-            </button>
-          </section>
-        </div>
-=======
-        <section className={CARD}>
-          <Megaphone className="h-5 w-5 text-primary" aria-hidden />
-          <h2 className="mt-3 text-lg font-bold">{t("member.home.ads.title")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("member.home.ads.body")}</p>
-          <Link to="/advertise" className={CTA}>
-            {t("member.home.ads.cta")}
-            <ArrowRight className="h-4 w-4" aria-hidden />
+            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+              {t("member.home.ads.cta")}
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </span>
           </Link>
-
-        </section>
->>>>>>> /tmp/d
+        </div>
 
         {/* min-w-0: grid items default to min-width:auto, which lets a long
             event title stretch the whole page sideways on a phone. */}
