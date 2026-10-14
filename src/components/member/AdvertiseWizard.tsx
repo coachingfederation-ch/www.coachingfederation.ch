@@ -1,8 +1,8 @@
 /**
  * Member-facing "Advertise with us" configurator.
  *
- * Four steps: what you want to book, how it is configured, your content, and a
- * review. The price shown here is computed from the same rate card the server
+ * Five steps: what you want to book, how it is configured, the ad content
+ * (with live previews), advertiser and contract details, and a summary. The price shown here is computed from the same rate card the server
  * prices with, and eligibility comes from the member's own record — the member
  * chooses a configuration, never a price or a price tier.
  *
@@ -10,9 +10,10 @@
  * watch its status: the draft-only RLS policy and the transition trigger make
  * that true regardless of what this component does.
  */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, ArrowRight, Check, Loader2, Upload } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Languages, Loader2, Upload } from "lucide-react";
+import { AdPreview, type AdPreviewContent, type AdPreviewFormat } from "./AdPreview";
 import { useCms } from "@/i18n/cms";
 import {
   Badge,
@@ -21,6 +22,10 @@ import {
   CardContent,
   Input,
   Label,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
   Textarea,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import {
@@ -37,13 +42,25 @@ import {
 import { activeWindow, computePrice } from "@/lib/ads-pricing";
 import {
   getAdvertiseCatalogue,
+  getAdvertiserPrefill,
+  translateAdCopy,
   listMyAdRequests,
   saveAdRequestDraft,
   submitAdRequest,
   uploadAdLogo,
 } from "@/lib/ads.functions";
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
+
+const LOCALES = ["de", "fr", "it", "en"] as const;
+type Loc = (typeof LOCALES)[number];
+const CAP: Record<Loc, "De" | "Fr" | "It" | "En"> = { de: "De", fr: "Fr", it: "It", en: "En" };
+const PHONE_RE = /^\+?[\d\s().-]{6,20}$/;
+
+async function fileHash(file: File): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", await file.arrayBuffer());
+  return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("");
+}
 
 type WizardState = {
   offerType: AdOfferType;
@@ -62,6 +79,18 @@ type WizardState = {
   descriptionFr: string;
   descriptionIt: string;
   descriptionEn: string;
+  headlineDe: string;
+  headlineFr: string;
+  headlineIt: string;
+  headlineEn: string;
+  imagePath: string | null;
+  contactName: string;
+  contactPhone: string;
+  billingStreet: string;
+  billingPostcode: string;
+  billingCity: string;
+  billingCountry: string;
+  vatNumber: string;
   ctaUrl: string;
   announcementDate: string;
   requestedStart: string;
@@ -84,6 +113,18 @@ const EMPTY: WizardState = {
   descriptionFr: "",
   descriptionIt: "",
   descriptionEn: "",
+  headlineDe: "",
+  headlineFr: "",
+  headlineIt: "",
+  headlineEn: "",
+  imagePath: null,
+  contactName: "",
+  contactPhone: "",
+  billingStreet: "",
+  billingPostcode: "",
+  billingCity: "",
+  billingCountry: "",
+  vatNumber: "",
   ctaUrl: "",
   announcementDate: "",
   requestedStart: "",
@@ -149,18 +190,87 @@ export function AdvertiseWizard() {
 
   const patch = (next: Partial<WizardState>) => setState((prev) => ({ ...prev, ...next }));
 
-  const uploadLogo = useMutation({
-    mutationFn: async (file: File) => {
+  const [sourceLocale, setSourceLocale] = useState<Loc>("en");
+  const [previews, setPreviews] = useState<{ image: string | null; logo: string | null }>({
+    image: null,
+    logo: null,
+  });
+  const [hashes, setHashes] = useState<{ image: string | null; logo: string | null }>({
+    image: null,
+    logo: null,
+  });
+  const [uploadWarning, setUploadWarning] = useState<string | null>(null);
+  const [prefillSource, setPrefillSource] = useState<"member" | "advertiser" | "none">("none");
+
+  const prefill = useQuery({
+    queryKey: ["advertiser-prefill"],
+    queryFn: () => getAdvertiserPrefill(),
+    enabled: open,
+    staleTime: 5 * 60_000,
+  });
+  useEffect(() => {
+    const p = prefill.data;
+    if (!p) return;
+    setPrefillSource(p.source);
+    // Fill only empty fields so edits made in this booking are never overwritten.
+    setState((prev) => ({
+      ...prev,
+      advertiserName: prev.advertiserName || p.organisation || p.contactName,
+      contactName: prev.contactName || p.contactName,
+      contactEmail: prev.contactEmail || p.email,
+      contactPhone: prev.contactPhone || p.phone,
+      billingStreet: prev.billingStreet || p.street,
+      billingPostcode: prev.billingPostcode || p.postcode,
+      billingCity: prev.billingCity || p.city,
+      billingCountry: prev.billingCountry || p.country,
+      vatNumber: prev.vatNumber || p.vatNumber,
+    }));
+  }, [prefill.data]);
+
+  const upload = useMutation({
+    mutationFn: async ({ file, kind }: { file: File; kind: "logo" | "image" }) => {
+      const hash = await fileHash(file);
+      const other = kind === "logo" ? hashes.image : hashes.logo;
+      if (other && other === hash) throw new Error(t("advertise.content.sameFile"));
       const dataBase64 = await readFileAsBase64(file);
-      return uploadAdLogo({
+      const result = await uploadAdLogo({
         data: {
           fileName: file.name,
           contentType: file.type as "image/png",
           dataBase64,
+          kind,
         },
       });
+      return { ...result, kind, hash, url: URL.createObjectURL(file) };
     },
-    onSuccess: (result) => patch({ logoPath: result.path }),
+    onMutate: () => setUploadWarning(null),
+    onSuccess: (result) => {
+      setHashes((h) => ({ ...h, [result.kind]: result.hash }));
+      setPreviews((p) => ({ ...p, [result.kind]: result.url }));
+      patch(result.kind === "logo" ? { logoPath: result.path } : { imagePath: result.path });
+    },
+    onError: (err: Error) => setUploadWarning(err.message),
+  });
+
+  const translate = useMutation({
+    mutationFn: () =>
+      translateAdCopy({
+        data: {
+          source: sourceLocale,
+          headline: state[`headline${CAP[sourceLocale]}`],
+          text: state[`description${CAP[sourceLocale]}`],
+        },
+      }),
+    onSuccess: (result) => {
+      const next: Partial<WizardState> = {};
+      for (const l of LOCALES) {
+        const r = result[l];
+        if (!r) continue;
+        next[`headline${CAP[l]}`] = r.headline;
+        next[`description${CAP[l]}`] = r.text;
+      }
+      patch(next);
+    },
     onError: (err: Error) => setError(err.message),
   });
 
@@ -188,6 +298,18 @@ export function AdvertiseWizard() {
           descriptionFr: state.descriptionFr || null,
           descriptionIt: state.descriptionIt || null,
           descriptionEn: state.descriptionEn || null,
+          headlineDe: state.headlineDe || null,
+          headlineFr: state.headlineFr || null,
+          headlineIt: state.headlineIt || null,
+          headlineEn: state.headlineEn || null,
+          imagePath: state.imagePath,
+          contactName: state.contactName || null,
+          contactPhone: state.contactPhone || null,
+          billingStreet: state.billingStreet || null,
+          billingPostcode: state.billingPostcode || null,
+          billingCity: state.billingCity || null,
+          billingCountry: state.billingCountry || null,
+          vatNumber: state.vatNumber || null,
           ctaUrl: state.ctaUrl || null,
           announcementDate: state.announcementDate || null,
           requestedStart: state.requestedStart || null,
@@ -227,7 +349,22 @@ export function AdvertiseWizard() {
         );
       return Boolean(state.announcementDate);
     }
-    if (step === 3) return state.advertiserName.trim().length > 1 && Boolean(state.contactEmail);
+    if (step === 3)
+      return (
+        Boolean(state.ctaUrl.trim()) &&
+        LOCALES.some((l) => state[`headline${CAP[l]}`].trim().length > 0)
+      );
+    if (step === 4)
+      return (
+        state.advertiserName.trim().length > 1 &&
+        state.contactName.trim().length > 1 &&
+        /.+@.+\..+/.test(state.contactEmail) &&
+        Boolean(state.billingStreet.trim()) &&
+        Boolean(state.billingPostcode.trim()) &&
+        Boolean(state.billingCity.trim()) &&
+        Boolean(state.billingCountry.trim()) &&
+        (!state.contactPhone.trim() || PHONE_RE.test(state.contactPhone.trim()))
+      );
     return true;
   };
 
@@ -237,6 +374,27 @@ export function AdvertiseWizard() {
           ...new Set(state.placements.flatMap((placement) => SCHOOL_DURATIONS[placement] ?? [])),
         ].sort((a, b) => b - a)
       : [...PACKAGE_DURATIONS];
+
+  const previewFormats: AdPreviewFormat[] = (() => {
+    if (state.offerType !== "school") return ["banner", "square", "newsletter"];
+    const f: AdPreviewFormat[] = [];
+    if (state.placements.includes("event_banner")) f.push("banner");
+    if (state.placements.includes("square_advert")) f.push("square");
+    if (state.placements.includes("newsletter")) f.push("newsletter");
+    return f.length ? f : ["banner", "square", "newsletter"];
+  })();
+  const previewContent: AdPreviewContent = {
+    advertiserName: state.advertiserName,
+    headline: state[`headline${CAP[sourceLocale]}`],
+    text: state[`description${CAP[sourceLocale]}`],
+    ctaLabel: t("advertise.content.ctaLabel"),
+    ctaUrl: state.ctaUrl,
+    imageUrl: previews.image,
+    logoUrl: previews.logo,
+    sponsoredLabel: t("advertise.content.sponsored"),
+  };
+  const previewLabel = (f: AdPreviewFormat) =>
+    t(`advertise.content.preview${f[0].toUpperCase()}${f.slice(1)}`);
 
   if (catalogue.isPending || requests.isPending) {
     return (
@@ -265,7 +423,7 @@ export function AdvertiseWizard() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-10">
+    <div className="mx-auto max-w-5xl px-6 py-10">
       <h1 className="font-heading text-3xl">{t("advertise.title")}</h1>
       <p className="mt-3 max-w-2xl text-muted-foreground">{t("advertise.lede")}</p>
 
@@ -484,114 +642,215 @@ export function AdvertiseWizard() {
             ) : null}
 
             {step === 3 ? (
-              <div className="mt-4 grid gap-4">
-                <p className="font-heading text-xl">{t("advertise.content.title")}</p>
-                <div className="grid gap-4 sm:grid-cols-2">
+              <div className="mt-4 grid gap-6 lg:grid-cols-2">
+                <div className="grid content-start gap-4">
+                  <p className="font-heading text-xl">{t("advertise.content.title")}</p>
                   <div>
-                    <Label htmlFor="advertiser-name">{t("advertise.content.advertiserName")}</Label>
+                    <Label htmlFor="cta-url">{t("advertise.content.ctaUrl")}</Label>
                     <Input
-                      id="advertiser-name"
-                      value={state.advertiserName}
-                      onChange={(event) => patch({ advertiserName: event.target.value })}
+                      id="cta-url"
+                      inputMode="url"
+                      placeholder="example.ch"
+                      value={state.ctaUrl}
+                      onChange={(event) => patch({ ctaUrl: event.target.value })}
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="contact-email">{t("advertise.content.contactEmail")}</Label>
-                    <Input
-                      id="contact-email"
-                      type="email"
-                      value={state.contactEmail}
-                      onChange={(event) => patch({ contactEmail: event.target.value })}
-                    />
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {(
+                      [
+                        ["image", "image/png,image/jpeg,image/webp", state.imagePath],
+                        ["logo", "image/png,image/jpeg,image/webp,image/svg+xml", state.logoPath],
+                      ] as const
+                    ).map(([kind, accept, path]) => (
+                      <div key={kind}>
+                        <Label htmlFor={`ad-${kind}`}>{t(`advertise.content.${kind}`)}</Label>
+                        <Input
+                          id={`ad-${kind}`}
+                          type="file"
+                          accept={accept}
+                          onChange={(event) => {
+                            const file = event.target.files?.[0];
+                            if (file) upload.mutate({ file, kind });
+                            event.target.value = "";
+                          }}
+                        />
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {kind === "image"
+                            ? t("advertise.content.imageHint")
+                            : t("advertise.content.logoDifferent")}
+                        </p>
+                        {path ? (
+                          <Badge variant="secondary" className="mt-1">
+                            <Upload className="mr-1 h-3 w-3" aria-hidden />
+                            {t("advertise.content.uploaded")}
+                          </Badge>
+                        ) : null}
+                      </div>
+                    ))}
                   </div>
-                </div>
-                <div>
-                  <Label htmlFor="cta-url">{t("advertise.content.ctaUrl")}</Label>
-                  <Input
-                    id="cta-url"
-                    type="url"
-                    placeholder="https://"
-                    value={state.ctaUrl}
-                    onChange={(event) => patch({ ctaUrl: event.target.value })}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="ad-logo">{t("advertise.content.logo")}</Label>
-                  <div className="flex items-center gap-3">
-                    <Input
-                      id="ad-logo"
-                      type="file"
-                      accept="image/png,image/jpeg,image/webp,image/svg+xml"
-                      onChange={(event) => {
-                        const file = event.target.files?.[0];
-                        if (file) uploadLogo.mutate(file);
-                      }}
-                    />
-                    {uploadLogo.isPending ? (
-                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-                    ) : null}
-                    {state.logoPath ? (
-                      <Badge variant="secondary">
-                        <Upload className="mr-1 h-3 w-3" aria-hidden />
-                        {t("advertise.content.logo")}
-                      </Badge>
-                    ) : null}
-                  </div>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {t("advertise.content.logoHint")}
-                  </p>
-                </div>
-                <div className="grid gap-3">
-                  <Label>{t("advertise.content.description")}</Label>
-                  <p className="text-xs text-muted-foreground">
-                    {t("advertise.content.descriptionHint")}
-                  </p>
-                  {(
-                    [
-                      ["de", "descriptionDe"],
-                      ["fr", "descriptionFr"],
-                      ["it", "descriptionIt"],
-                      ["en", "descriptionEn"],
-                    ] as const
-                  ).map(([code, key]) => (
-                    <div key={code}>
-                      <Label htmlFor={`desc-${code}`} className="text-xs uppercase">
-                        {code}
-                      </Label>
-                      <Textarea
-                        id={`desc-${code}`}
-                        rows={2}
-                        value={state[key]}
-                        onChange={(event) =>
-                          patch({ [key]: event.target.value } as Partial<WizardState>)
+                  {upload.isPending ? (
+                    <Loader2 className="h-4 w-4 animate-spin" aria-label="Uploading" />
+                  ) : null}
+                  {uploadWarning ? (
+                    <p className="text-sm text-destructive" role="alert">
+                      {uploadWarning}
+                    </p>
+                  ) : null}
+
+                  <Tabs value={sourceLocale} onValueChange={(v) => setSourceLocale(v as Loc)}>
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <TabsList>
+                        {LOCALES.map((l) => (
+                          <TabsTrigger key={l} value={l}>
+                            {l.toUpperCase()}
+                          </TabsTrigger>
+                        ))}
+                      </TabsList>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={
+                          translate.isPending || !state[`headline${CAP[sourceLocale]}`].trim()
                         }
-                      />
+                        onClick={() => translate.mutate()}
+                      >
+                        {translate.isPending ? (
+                          <Loader2 className="mr-1 h-4 w-4 animate-spin" aria-hidden />
+                        ) : (
+                          <Languages className="mr-1 h-4 w-4" aria-hidden />
+                        )}
+                        {translate.isPending
+                          ? t("advertise.content.translating")
+                          : t("advertise.content.translate")}
+                      </Button>
                     </div>
-                  ))}
-                </div>
-                <div>
-                  <Label htmlFor="mentions">{t("advertise.content.newsletterMentions")}</Label>
-                  <Input
-                    id="mentions"
-                    type="number"
-                    min={0}
-                    max={rateCard.newsletter_mentions_guard}
-                    value={state.newsletterMentions}
-                    onChange={(event) =>
-                      patch({ newsletterMentions: Number(event.target.value) || 0 })
-                    }
-                  />
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {t("advertise.content.newsletterMentionsHint")}
+                    {LOCALES.map((l) => (
+                      <TabsContent key={l} value={l} className="grid gap-3">
+                        {!state[`headline${CAP[l]}`].trim() ? (
+                          <p className="text-xs text-muted-foreground">
+                            {t("advertise.content.notTranslated")}
+                          </p>
+                        ) : null}
+                        <div>
+                          <Label htmlFor={`headline-${l}`}>
+                            {t("advertise.content.headline")} ({l.toUpperCase()})
+                          </Label>
+                          <Input
+                            id={`headline-${l}`}
+                            maxLength={120}
+                            value={state[`headline${CAP[l]}`]}
+                            onChange={(event) =>
+                              patch({
+                                [`headline${CAP[l]}`]: event.target.value,
+                              } as Partial<WizardState>)
+                            }
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor={`desc-${l}`}>
+                            {t("advertise.content.text")} ({l.toUpperCase()})
+                          </Label>
+                          <Textarea
+                            id={`desc-${l}`}
+                            rows={3}
+                            maxLength={600}
+                            value={state[`description${CAP[l]}`]}
+                            onChange={(event) =>
+                              patch({
+                                [`description${CAP[l]}`]: event.target.value,
+                              } as Partial<WizardState>)
+                            }
+                          />
+                        </div>
+                      </TabsContent>
+                    ))}
+                  </Tabs>
+                  <p className="text-sm text-muted-foreground">
+                    {t("advertise.content.newsletterInfo")}
                   </p>
+                </div>
+
+                <div className="grid content-start gap-3">
+                  <p className="font-heading text-xl">{t("advertise.content.previewTitle")}</p>
+                  <Tabs defaultValue={previewFormats[0]}>
+                    <TabsList>
+                      {previewFormats.map((f) => (
+                        <TabsTrigger key={f} value={f}>
+                          {previewLabel(f)}
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                    {previewFormats.map((f) => (
+                      <TabsContent key={f} value={f}>
+                        <AdPreview format={f} content={previewContent} />
+                      </TabsContent>
+                    ))}
+                  </Tabs>
                 </div>
               </div>
             ) : null}
 
             {step === 4 ? (
-              <div className="mt-4 grid gap-3">
+              <div className="mt-4 grid gap-4">
+                <p className="font-heading text-xl">{t("advertise.contract.title")}</p>
+                {prefillSource !== "none" ? (
+                  <p className="text-sm text-muted-foreground">
+                    {prefillSource === "member"
+                      ? t("advertise.contract.prefilledMember")
+                      : t("advertise.contract.prefilledAdvertiser")}
+                  </p>
+                ) : null}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {(
+                    [
+                      ["advertiserName", "organisation", "organization"],
+                      ["contactName", "contactName", "name"],
+                      ["contactEmail", "email", "email"],
+                      ["contactPhone", "phone", "tel"],
+                      ["billingStreet", "street", "street-address"],
+                      ["billingPostcode", "postcode", "postal-code"],
+                      ["billingCity", "city", "address-level2"],
+                      ["billingCountry", "country", "country-name"],
+                      ["vatNumber", "vat", "off"],
+                    ] as const
+                  ).map(([key, label, auto]) => (
+                    <div
+                      key={key}
+                      className={key === "billingStreet" ? "sm:col-span-2" : undefined}
+                    >
+                      <Label htmlFor={`contract-${key}`}>{t(`advertise.contract.${label}`)}</Label>
+                      <Input
+                        id={`contract-${key}`}
+                        type={
+                          key === "contactEmail" ? "email" : key === "contactPhone" ? "tel" : "text"
+                        }
+                        autoComplete={auto}
+                        value={state[key]}
+                        onChange={(event) =>
+                          patch({ [key]: event.target.value } as Partial<WizardState>)
+                        }
+                      />
+                      {key === "contactPhone" &&
+                      state.contactPhone.trim() &&
+                      !PHONE_RE.test(state.contactPhone.trim()) ? (
+                        <p className="mt-1 text-xs text-destructive">
+                          {t("advertise.contract.phoneInvalid")}
+                        </p>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {step === 5 ? (
+              <div className="mt-4 grid gap-6">
                 <p className="font-heading text-xl">{t("advertise.review.title")}</p>
-                <dl className="grid gap-2 text-sm">
+                <SummaryBlock
+                  title={t("advertise.summary.offer")}
+                  editLabel={t("advertise.summary.edit")}
+                  onEdit={() => setStep(2)}
+                >
                   <Row
                     label={t("advertise.offer.title")}
                     value={t(`advertise.offer.${state.offerType}`)}
@@ -610,8 +869,40 @@ export function AdvertiseWizard() {
                     label={t("advertise.review.period")}
                     value={`${period.from} – ${period.until}`}
                   />
-                  <Row label={t("advertise.content.advertiserName")} value={state.advertiserName} />
-                </dl>
+                </SummaryBlock>
+                <SummaryBlock
+                  title={t("advertise.summary.content")}
+                  editLabel={t("advertise.summary.edit")}
+                  onEdit={() => setStep(3)}
+                >
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {previewFormats.map((f) => (
+                      <div key={f}>
+                        <p className="mb-1 text-xs text-muted-foreground">{previewLabel(f)}</p>
+                        <AdPreview format={f} content={previewContent} compact />
+                      </div>
+                    ))}
+                  </div>
+                </SummaryBlock>
+                <SummaryBlock
+                  title={t("advertise.summary.contract")}
+                  editLabel={t("advertise.summary.edit")}
+                  onEdit={() => setStep(4)}
+                >
+                  <Row label={t("advertise.contract.organisation")} value={state.advertiserName} />
+                  <Row label={t("advertise.contract.contactName")} value={state.contactName} />
+                  <Row label={t("advertise.contract.email")} value={state.contactEmail} />
+                  {state.contactPhone ? (
+                    <Row label={t("advertise.contract.phone")} value={state.contactPhone} />
+                  ) : null}
+                  <Row
+                    label={t("advertise.contract.street")}
+                    value={`${state.billingStreet}, ${state.billingPostcode} ${state.billingCity}, ${state.billingCountry}`}
+                  />
+                  {state.vatNumber ? (
+                    <Row label={t("advertise.contract.vat")} value={state.vatNumber} />
+                  ) : null}
+                </SummaryBlock>
                 <p className="text-sm text-muted-foreground">
                   {t("advertise.eligibility.explain")}
                 </p>
@@ -690,6 +981,30 @@ export function AdvertiseWizard() {
         )}
       </section>
     </div>
+  );
+}
+
+function SummaryBlock({
+  title,
+  editLabel,
+  onEdit,
+  children,
+}: {
+  title: string;
+  editLabel: string;
+  onEdit: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="rounded-2xl border border-border p-4">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <h3 className="font-semibold">{title}</h3>
+        <Button variant="ghost" size="sm" onClick={onEdit}>
+          {editLabel}
+        </Button>
+      </div>
+      <dl className="grid gap-2 text-sm">{children}</dl>
+    </section>
   );
 }
 

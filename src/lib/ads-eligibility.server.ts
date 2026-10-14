@@ -57,7 +57,8 @@ export async function resolveEligibility(
   const credential = (row.credential_slug ?? "").toUpperCase();
   const credentialValid =
     DIRECTORY_CREDENTIALS.includes(credential) &&
-    (!row.credential_expires_on || row.credential_expires_on >= new Date().toISOString().slice(0, 10));
+    (!row.credential_expires_on ||
+      row.credential_expires_on >= new Date().toISOString().slice(0, 10));
   const chapterActive = row.activity_state === "active";
 
   return {
@@ -67,7 +68,8 @@ export async function resolveEligibility(
       membershipState: row.activity_state,
       credential: row.credential_slug,
       credentialExpiresOn: row.credential_expires_on,
-      resolved: chapterActive && credentialValid ? "chapter_member_credentialed" : "fallback_global",
+      resolved:
+        chapterActive && credentialValid ? "chapter_member_credentialed" : "fallback_global",
     },
     memberId: row.id,
   };

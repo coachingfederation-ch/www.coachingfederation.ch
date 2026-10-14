@@ -431,7 +431,8 @@ export const translateAdCopy = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     const ctx = context as AuthedContext;
     await assertAnyRole(ctx, ["member", "advertiser", "admin", "administrator"]);
-    if (!data.headline.trim() && !data.text.trim()) throw new Error("Add a headline or text first.");
+    if (!data.headline.trim() && !data.text.trim())
+      throw new Error("Add a headline or text first.");
     const { checkRateLimit } = await import("./rate-limit.server");
     const verdict = await checkRateLimit("ad-translate", ctx.userId, [
       { windowSeconds: 3600, max: 20 },
@@ -480,7 +481,9 @@ export const translateAdCopy = createServerFn({ method: "POST" })
             role: "user",
             content: `Translate from ${AD_LOCALE_NAMES[data.source]} into ${targets
               .map((l) => `${l} (${AD_LOCALE_NAMES[l]})`)
-              .join(", ")}. Return json shaped {"<code>": {"headline": "...", "text": "..."}} for each target code.\n\nHEADLINE:\n${data.headline}\n\nTEXT:\n${data.text}`,
+              .join(
+                ", ",
+              )}. Return json shaped {"<code>": {"headline": "...", "text": "..."}} for each target code.\n\nHEADLINE:\n${data.headline}\n\nTEXT:\n${data.text}`,
           },
         ],
       }),
