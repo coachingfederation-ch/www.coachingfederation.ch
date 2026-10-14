@@ -13,11 +13,20 @@ import { Shell } from "@/components/cms/Shell";
 import { useCms } from "@/i18n/cms";
 import { PLATFORM_ADMIN_ROLES, requireStaffAccess } from "@/lib/staff-guard";
 import {
+  Badge,
   Button,
   Card,
   CardContent,
+  Checkbox,
   Input,
   Label,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  Textarea,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import {
   PACKAGE_DURATIONS,
@@ -25,10 +34,16 @@ import {
   SCHOOL_DURATIONS,
   SCHOOL_PLACEMENTS,
   formatChf,
+  isRateCardLocked,
+  rateCardChangeableFrom,
   type AdPlacementType,
   type AdRateCard,
 } from "@/lib/ads";
-import { getAdRateCardFn, saveAdRateCardFn } from "@/lib/ads-admin.functions";
+import {
+  getAdRateCardFn,
+  getAdRateCardHistoryFn,
+  saveAdRateCardFn,
+} from "@/lib/ads-admin.functions";
 
 export const Route = createFileRoute("/_staff/manage/ad-rate-cards")({
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, PLATFORM_ADMIN_ROLES),
@@ -95,6 +110,18 @@ function RateCardPage() {
   const [saved, setSaved] = useState(false);
 
   const card = useQuery({ queryKey: ["ad-rate-card"], queryFn: () => getAdRateCardFn() });
+  const history = useQuery({
+    queryKey: ["ad-rate-card-history"],
+    queryFn: () => getAdRateCardHistoryFn(),
+  });
+  const [isCorrection, setIsCorrection] = useState(false);
+  const [reason, setReason] = useState("");
+  const activeEntry = history.data?.find((entry) => entry.is_active);
+  const today = new Date().toISOString().slice(0, 10);
+  const lockedUntil =
+    activeEntry && isRateCardLocked(activeEntry.valid_from, today)
+      ? rateCardChangeableFrom(activeEntry.valid_from)
+      : null;
 
   useEffect(() => {
     if (card.data) setDraft(toDraft(card.data));
@@ -122,13 +149,17 @@ function RateCardPage() {
           eannouncementPrices: numbersOf(draft.eannouncement),
           schoolPrices,
           newsletterMentionsGuard: Number(draft.guard) || 0,
+          correctionReason: isCorrection ? reason : undefined,
         },
       });
     },
     onSuccess: () => {
       setError(null);
       setSaved(true);
+      setIsCorrection(false);
+      setReason("");
       void queryClient.invalidateQueries({ queryKey: ["ad-rate-card"] });
+      void queryClient.invalidateQueries({ queryKey: ["ad-rate-card-history"] });
     },
     onError: (err: Error) => {
       setSaved(false);
@@ -285,19 +316,82 @@ function RateCardPage() {
               </CardContent>
             </Card>
 
+            {lockedUntil ? (
+              <Card>
+                <CardContent className="grid gap-3 py-6">
+                  <p className="text-sm">
+                    Prices are locked until <strong>{lockedUntil}</strong> (three-month price
+                    guard). Publish earlier only to correct an error.
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id="is-correction"
+                      checked={isCorrection}
+                      onCheckedChange={(value) => setIsCorrection(value === true)}
+                    />
+                    <Label htmlFor="is-correction">This is an error correction</Label>
+                  </div>
+                  {isCorrection ? (
+                    <div className="grid gap-2">
+                      <Label htmlFor="correction-reason">What was wrong?</Label>
+                      <Textarea
+                        id="correction-reason"
+                        value={reason}
+                        onChange={(event) => setReason(event.target.value)}
+                      />
+                    </div>
+                  ) : null}
+                </CardContent>
+              </Card>
+            ) : null}
+
             {error ? <p className="text-sm text-destructive">{error}</p> : null}
             {saved ? (
               <p className="text-sm text-muted-foreground">{t("advertise.rateCard.saved")}</p>
             ) : null}
 
             <div className="flex items-center gap-3">
-              <Button onClick={() => save.mutate()} disabled={save.isPending}>
-                {t("advertise.rateCard.publish")}
+              <Button
+                onClick={() => save.mutate()}
+                disabled={
+                  save.isPending ||
+                  (!!lockedUntil && (!isCorrection || reason.trim().length < 10))
+                }
+              >
+                {lockedUntil ? "Publish correction" : t("advertise.rateCard.publish")}
               </Button>
               <p className="text-xs text-muted-foreground">
                 {t("advertise.rateCard.example")}: {formatChf(2500, card.data?.currency ?? "CHF")}
               </p>
             </div>
+
+            <Card>
+              <CardContent className="grid gap-4 py-6">
+                <p className="font-semibold">Version history</p>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Version</TableHead>
+                      <TableHead>Valid from</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Note</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {(history.data ?? []).map((entry) => (
+                      <TableRow key={entry.id}>
+                        <TableCell>v{entry.version}</TableCell>
+                        <TableCell>{entry.valid_from}</TableCell>
+                        <TableCell>
+                          {entry.is_active ? <Badge>Active</Badge> : <Badge variant="outline">Retired</Badge>}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">{entry.notes ?? "—"}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </div>
         )}
       </div>
