@@ -354,8 +354,7 @@ function RateCardPage() {
               <Button
                 onClick={() => save.mutate()}
                 disabled={
-                  save.isPending ||
-                  (!!lockedUntil && (!isCorrection || reason.trim().length < 10))
+                  save.isPending || (!!lockedUntil && (!isCorrection || reason.trim().length < 10))
                 }
               >
                 {lockedUntil ? "Publish correction" : t("advertise.rateCard.publish")}
@@ -383,9 +382,15 @@ function RateCardPage() {
                         <TableCell>v{entry.version}</TableCell>
                         <TableCell>{entry.valid_from}</TableCell>
                         <TableCell>
-                          {entry.is_active ? <Badge>Active</Badge> : <Badge variant="outline">Retired</Badge>}
+                          {entry.is_active ? (
+                            <Badge>Active</Badge>
+                          ) : (
+                            <Badge variant="outline">Retired</Badge>
+                          )}
                         </TableCell>
-                        <TableCell className="text-muted-foreground">{entry.notes ?? "—"}</TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {entry.notes ?? "—"}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

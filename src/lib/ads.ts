@@ -49,11 +49,7 @@ export const SCHOOL_DURATIONS: Record<AdPlacementType, number[]> = {
   eannouncement: [],
 };
 
-export const SCHOOL_PLACEMENTS: AdPlacementType[] = [
-  "square_advert",
-  "newsletter",
-  "event_banner",
-];
+export const SCHOOL_PLACEMENTS: AdPlacementType[] = ["square_advert", "newsletter", "event_banner"];
 
 /** How long an e-announcement stays visible after its announcement date. */
 export const EANNOUNCEMENT_TRAILING_DAYS = 14;
@@ -175,7 +171,9 @@ export const STATUS_ORDER: AdRequestStatus[] = [
 
 /** Formats an integer amount of francs the Swiss way: CHF 2'500. */
 export function formatChf(amount: number, currency = "CHF"): string {
-  return `${currency} ${Math.round(amount).toLocaleString("de-CH").replace(/\u2019|,/g, "'")}`;
+  return `${currency} ${Math.round(amount)
+    .toLocaleString("de-CH")
+    .replace(/\u2019|,/g, "'")}`;
 }
 
 /** Months a published rate card must stay in force before prices may change. */
