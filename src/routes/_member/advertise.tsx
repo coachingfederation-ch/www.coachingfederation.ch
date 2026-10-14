@@ -38,7 +38,7 @@ function AdvertiseError({ error }: ErrorComponentProps) {
         <p className="mt-3 text-muted-foreground">
           This section becomes available once the advertising setup is live. Please try again later.
         </p>
-        <p className="mt-4 text-xs text-muted-foreground">{error.message}</p>
+        <p className="mt-4 text-xs text-muted-foreground">{error instanceof Error ? error.message : null}</p>
       </div>
     </MemberShell>
   );
