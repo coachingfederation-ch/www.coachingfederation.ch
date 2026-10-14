@@ -44,7 +44,6 @@ import { Route as LocalePrivacyRouteImport } from './routes/$locale/privacy'
 import { Route as LocaleTeamRouteImport } from './routes/$locale/team'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
-import { Route as MemberAdvertiseRouteImport } from './routes/_member/advertise'
 import { Route as MemberMyProfileRouteImport } from './routes/_member/my-profile'
 import { Route as MemberVolunteerChatRouteImport } from './routes/_member/volunteer-chat'
 import { Route as MemberVolunteeringRouteImport } from './routes/_member/volunteering'
@@ -329,11 +328,6 @@ const Char91DotwellKnownChar93OauthProtectedResourceRoute =
     path: '/.well-known/oauth-protected-resource',
     getParentRoute: () => rootRouteImport,
   } as any)
-const MemberAdvertiseRoute = MemberAdvertiseRouteImport.update({
-  id: '/advertise',
-  path: '/advertise',
-  getParentRoute: () => MemberRouteRoute,
-} as any)
 const MemberMyProfileRoute = MemberMyProfileRouteImport.update({
   id: '/my-profile',
   path: '/my-profile',
@@ -935,7 +929,6 @@ export interface FileRoutesByFullPath {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/advertise': typeof MemberAdvertiseRoute
   '/my-profile': typeof MemberMyProfileRoute
   '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/volunteering': typeof MemberVolunteeringRoute
@@ -1076,7 +1069,6 @@ export interface FileRoutesByTo {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/advertise': typeof MemberAdvertiseRoute
   '/my-profile': typeof MemberMyProfileRoute
   '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/volunteering': typeof MemberVolunteeringRoute
@@ -1222,7 +1214,6 @@ export interface FileRoutesById {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/_member/advertise': typeof MemberAdvertiseRoute
   '/_member/my-profile': typeof MemberMyProfileRoute
   '/_member/volunteer-chat': typeof MemberVolunteerChatRoute
   '/_member/volunteering': typeof MemberVolunteeringRoute
@@ -1368,7 +1359,6 @@ export interface FileRouteTypes {
     | '/$locale/team'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
-    | '/advertise'
     | '/my-profile'
     | '/volunteer-chat'
     | '/volunteering'
@@ -1509,7 +1499,6 @@ export interface FileRouteTypes {
     | '/$locale/team'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
-    | '/advertise'
     | '/my-profile'
     | '/volunteer-chat'
     | '/volunteering'
@@ -1654,7 +1643,6 @@ export interface FileRouteTypes {
     | '/$locale/team'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
-    | '/_member/advertise'
     | '/_member/my-profile'
     | '/_member/volunteer-chat'
     | '/_member/volunteering'
@@ -2092,13 +2080,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/.well-known/oauth-protected-resource'
       preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_member/advertise': {
-      id: '/_member/advertise'
-      path: '/advertise'
-      fullPath: '/advertise'
-      preLoaderRoute: typeof MemberAdvertiseRouteImport
-      parentRoute: typeof MemberRouteRoute
     }
     '/_member/my-profile': {
       id: '/_member/my-profile'
@@ -2923,7 +2904,6 @@ const LocaleRouteRouteWithChildren = LocaleRouteRoute._addFileChildren(
 )
 
 interface MemberRouteRouteChildren {
-  MemberAdvertiseRoute: typeof MemberAdvertiseRoute
   MemberMyProfileRoute: typeof MemberMyProfileRoute
   MemberVolunteerChatRoute: typeof MemberVolunteerChatRoute
   MemberVolunteeringRoute: typeof MemberVolunteeringRoute
@@ -2932,7 +2912,6 @@ interface MemberRouteRouteChildren {
 }
 
 const MemberRouteRouteChildren: MemberRouteRouteChildren = {
-  MemberAdvertiseRoute: MemberAdvertiseRoute,
   MemberMyProfileRoute: MemberMyProfileRoute,
   MemberVolunteerChatRoute: MemberVolunteerChatRoute,
   MemberVolunteeringRoute: MemberVolunteeringRoute,
