@@ -4397,6 +4397,10 @@ export type Database = {
           cutover_in_progress: boolean
           email_redirect_to: string | null
           emails_suppressed: boolean
+          feature_advertising_enabled: boolean
+          feature_europe_pulse_enabled: boolean
+          features_updated_at: string | null
+          features_updated_by: string | null
           feed_drop_threshold_pct: number
           grace_period_days: number
           id: boolean
@@ -4416,6 +4420,10 @@ export type Database = {
           cutover_in_progress?: boolean
           email_redirect_to?: string | null
           emails_suppressed?: boolean
+          feature_advertising_enabled?: boolean
+          feature_europe_pulse_enabled?: boolean
+          features_updated_at?: string | null
+          features_updated_by?: string | null
           feed_drop_threshold_pct?: number
           grace_period_days?: number
           id?: boolean
@@ -4435,6 +4443,10 @@ export type Database = {
           cutover_in_progress?: boolean
           email_redirect_to?: string | null
           emails_suppressed?: boolean
+          feature_advertising_enabled?: boolean
+          feature_europe_pulse_enabled?: boolean
+          features_updated_at?: string | null
+          features_updated_by?: string | null
           feed_drop_threshold_pct?: number
           grace_period_days?: number
           id?: boolean
@@ -7119,6 +7131,7 @@ export type Database = {
       }
       directory_allows_non_credentialed: { Args: never; Returns: boolean }
       event_reminders_due: { Args: never; Returns: boolean }
+      feature_flags: { Args: never; Returns: Json }
       get_certificate_by_token: { Args: { _token: string }; Returns: Json }
       get_event_attendance_session: {
         Args: { _actor?: string; _event_id: string }
