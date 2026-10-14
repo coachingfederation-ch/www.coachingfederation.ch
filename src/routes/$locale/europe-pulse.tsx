@@ -3,7 +3,8 @@
  * Exports: Route. Renders the Europe Pulse news aggregator with search validation.
  */
 
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
+import { featureFlagsQueryOptions } from "@/lib/feature-flags";
 import { zodValidator } from "@tanstack/zod-adapter";
 import EuropePulsePage from "@/pages/EuropePulse";
 import { europePulseSearchSchema } from "@/lib/europe-pulse";
@@ -12,6 +13,10 @@ import type { Locale } from "@/i18n/config";
 
 export const Route = createFileRoute("/$locale/europe-pulse")({
   validateSearch: zodValidator(europePulseSearchSchema),
+  loader: async ({ context }) => {
+    const flags = await context.queryClient.ensureQueryData(featureFlagsQueryOptions);
+    if (!flags.europe_pulse) throw notFound();
+  },
   head: ({ params }) => {
     const locale = params.locale as Locale;
     return {

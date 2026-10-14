@@ -111,6 +111,7 @@ export const saveAdRequestDraft = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => draftSchema.parse(input))
   .handler(async ({ context, data }): Promise<AdRequest> => {
+    await (await import("./feature-flags.server")).requireFeature("advertising");
     await assertAnyRole(context as AuthedContext, ["member", "advertiser", "admin", "administrator"]);
     const { REQUEST_COLUMNS } = await import("./ads.server");
     const payload = {
@@ -154,6 +155,7 @@ export const submitAdRequest = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }): Promise<AdRequest> => {
+    await (await import("./feature-flags.server")).requireFeature("advertising");
     await assertAnyRole(context as AuthedContext, ["member", "advertiser", "admin", "administrator"]);
     const { submitRequest } = await import("./ads.server");
     const { supabaseAdmin: adminClient } = await import("@/integrations/supabase/client.server");

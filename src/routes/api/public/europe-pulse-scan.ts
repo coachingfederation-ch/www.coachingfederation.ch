@@ -34,6 +34,12 @@ export const Route = createFileRoute("/api/public/europe-pulse-scan")({
           return new Response("Unauthorized", { status: 401 });
         }
 
+        const { loadFeatureFlagsServer } = await import("@/lib/feature-flags.server");
+        if (!(await loadFeatureFlagsServer()).europe_pulse) {
+          console.log("[europe-pulse] skipped: feature switched off");
+          return Response.json({ skipped: "feature_disabled" }, { status: 200 });
+        }
+
         const body = (await request.json().catch(() => ({}))) as { advance?: boolean };
         const startedAt = Date.now();
         const { startEuropePulseRun, advanceEuropePulseRun, kickNextSlice } =

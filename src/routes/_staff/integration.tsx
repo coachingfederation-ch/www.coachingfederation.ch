@@ -21,6 +21,7 @@ import { LinkedInPageSettings } from "@/components/cms/LinkedInPageSettings";
 import { SyncRunDetail } from "@/components/cms/SyncRunDetail";
 import { ClaimCampaignCard } from "@/components/cms/ClaimCampaignCard";
 import { SyncLimitsCard } from "@/components/cms/SyncLimitsCard";
+import { FeatureTogglesCard } from "@/components/cms/FeatureTogglesCard";
 import { RetentionCard } from "@/components/cms/RetentionCard";
 import { useCms } from "@/i18n/cms";
 import {
@@ -775,6 +776,9 @@ function IntegrationPageBody() {
 
             <div className="space-y-4">
               <h2 className={GROUP}>{t("integration.sectionSettings")}</h2>
+              {config ? (
+                <FeatureTogglesCard config={config} onChanged={() => void reload()} />
+              ) : null}
               <SyncLimitsCard />
 
               <ContentOwnershipPanel />

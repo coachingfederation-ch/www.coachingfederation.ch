@@ -27,10 +27,13 @@ export type IntegrationConfig = {
   last_sync_run_id: string | null;
   feed_drop_threshold_pct: number;
   grace_period_days: number;
+  feature_europe_pulse_enabled: boolean;
+  feature_advertising_enabled: boolean;
+  features_updated_at: string | null;
 };
 
 export const INTEGRATION_COLUMNS =
-  "id, mode, soap_endpoint_key, emails_suppressed, email_redirect_to, account_claim_enabled, cutover_in_progress, cutover_completed_at, cutover_completed_by, last_successful_sync_at, last_failed_sync_at, last_sync_error, last_sync_run_id, feed_drop_threshold_pct, grace_period_days";
+  "id, mode, soap_endpoint_key, emails_suppressed, email_redirect_to, account_claim_enabled, cutover_in_progress, cutover_completed_at, cutover_completed_by, last_successful_sync_at, last_failed_sync_at, last_sync_error, last_sync_run_id, feed_drop_threshold_pct, grace_period_days, feature_europe_pulse_enabled, feature_advertising_enabled, features_updated_at";
 
 export type SyncRun = {
   id: string;
