@@ -3187,6 +3187,21 @@
       "content": "Content",
       "contract": "Contract details",
       "edit": "Edit"
+    },
+    "design": {
+      "title": "Ad style",
+      "editorial": {
+        "name": "Editorial",
+        "hint": "Calm white card that sits next to articles."
+      },
+      "spotlight": {
+        "name": "Spotlight",
+        "hint": "Bold Deep Blue band with a clear button."
+      },
+      "warm": {
+        "name": "Warm split",
+        "hint": "Soft bone surface with a rounded image."
+      }
     }
   },
   "advertiser": {

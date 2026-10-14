@@ -3187,6 +3187,21 @@
       "content": "Contenuto",
       "contract": "Dati del contratto",
       "edit": "Modifica"
+    },
+    "design": {
+      "title": "Stile dell’annuncio",
+      "editorial": {
+        "name": "Editoriale",
+        "hint": "Scheda bianca sobria accanto agli articoli."
+      },
+      "spotlight": {
+        "name": "Spotlight",
+        "hint": "Fascia blu intenso con un pulsante chiaro."
+      },
+      "warm": {
+        "name": "Caldo",
+        "hint": "Superficie morbida con un’immagine arrotondata."
+      }
     }
   },
   "advertiser": {
