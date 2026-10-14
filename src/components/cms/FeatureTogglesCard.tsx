@@ -56,7 +56,6 @@ export function FeatureTogglesCard({
         features_updated_at: new Date().toISOString(),
         features_updated_by: auth.user?.id ?? null,
       } as never)
-      })
       .eq("id", true);
     setBusy(false);
     if (err) {
