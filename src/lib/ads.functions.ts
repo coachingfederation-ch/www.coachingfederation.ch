@@ -355,7 +355,7 @@ export const getAdvertiserPrefill = createServerFn({ method: "POST" })
   .handler(async ({ context }): Promise<AdvertiserPrefill> => {
     const ctx = context as AuthedContext;
     await assertAnyRole(ctx, ["member", "advertiser", "admin", "administrator"]);
-    const email = (ctx.claims as { email?: string } | undefined)?.email ?? "";
+    const email = ((context as { claims?: { email?: string } }).claims?.email ?? "") as string;
     const empty: AdvertiserPrefill = {
       organisation: "",
       contactName: "",
