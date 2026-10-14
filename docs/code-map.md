@@ -155,3 +155,7 @@ before adding a new file.
 
 - **Buckets** `member-profile-images` and `article-images` — both private;
   access is always via signed URLs.
+
+### Advertise with us
+
+See `docs/advertising.md` for the full flow and diagram. Booking: `ads.functions.ts`, `ads.server.ts`, `ads-pricing.ts`, `ads-eligibility.server.ts`; staff: `ads-admin.functions.ts`; external advertisers: `advertisers.functions.ts`; nightly expiry: `ads-upkeep.server.ts`.
