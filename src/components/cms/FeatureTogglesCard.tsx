@@ -55,6 +55,7 @@ export function FeatureTogglesCard({
         [FEATURE_COLUMNS[name]]: enabled,
         features_updated_at: new Date().toISOString(),
         features_updated_by: auth.user?.id ?? null,
+      } as never)
       })
       .eq("id", true);
     setBusy(false);
