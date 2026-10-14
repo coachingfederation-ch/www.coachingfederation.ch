@@ -44,6 +44,7 @@ import { Route as LocalePrivacyRouteImport } from './routes/$locale/privacy'
 import { Route as LocaleTeamRouteImport } from './routes/$locale/team'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as MemberAdvertiseRouteImport } from './routes/_member/advertise'
 import { Route as MemberMyProfileRouteImport } from './routes/_member/my-profile'
 import { Route as MemberVolunteerChatRouteImport } from './routes/_member/volunteer-chat'
 import { Route as MemberVolunteeringRouteImport } from './routes/_member/volunteering'
@@ -68,6 +69,7 @@ import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as ForOrganisationsRoiSimulatorRouteImport } from './routes/for-organisations_.roi-simulator'
 import { Route as FormTokenRouteImport } from './routes/form.$token'
+import { Route as GotoPlacementIdRouteImport } from './routes/goto.$placementId'
 import { Route as GuestPassTokenRouteImport } from './routes/guest-pass.$token'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
@@ -97,6 +99,7 @@ import { Route as StaffArticlesIdRouteImport } from './routes/_staff/articles.$i
 import { Route as StaffArticlesCategoriesRouteImport } from './routes/_staff/articles.categories'
 import { Route as StaffArticlesNewRouteImport } from './routes/_staff/articles.new'
 import { Route as StaffManageIndexRouteImport } from './routes/_staff/manage.index'
+import { Route as StaffManageAdRateCardsRouteImport } from './routes/_staff/manage.ad-rate-cards'
 import { Route as StaffManageChatInsightsRouteImport } from './routes/_staff/manage.chat-insights'
 import { Route as StaffManageEditorialSignalsRouteImport } from './routes/_staff/manage.editorial-signals'
 import { Route as StaffManageEuropePulseRouteImport } from './routes/_staff/manage.europe-pulse'
@@ -108,6 +111,7 @@ import { Route as StaffManageLiveChatRouteImport } from './routes/_staff/manage.
 import { Route as StaffManageMemberEngagementRouteImport } from './routes/_staff/manage.member-engagement'
 import { Route as StaffMembersIndexRouteImport } from './routes/_staff/members.index'
 import { Route as StaffMembersIdRouteImport } from './routes/_staff/members.$id'
+import { Route as ApiPublicAdUpkeepRouteImport } from './routes/api/public/ad-upkeep'
 import { Route as ApiPublicArticleFeedbackRouteImport } from './routes/api/public/article-feedback'
 import { Route as ApiPublicChatSignalRouteImport } from './routes/api/public/chat-signal'
 import { Route as ApiPublicClaimWavesRouteImport } from './routes/api/public/claim-waves'
@@ -128,6 +132,8 @@ import { Route as ApiPublicRoleDirectoryRouteImport } from './routes/api/public/
 import { Route as ApiPublicRoleGrantsArchiveRouteImport } from './routes/api/public/role-grants-archive'
 import { Route as ContactConfirmTokenRouteImport } from './routes/contact.confirm.$token'
 import { Route as VerifyCertificateTokenRouteImport } from './routes/verify.certificate.$token'
+import { Route as StaffManageAdRequestsIndexRouteImport } from './routes/_staff/manage.ad-requests.index'
+import { Route as StaffManageAdRequestsIdRouteImport } from './routes/_staff/manage.ad-requests.$id'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
 import { Route as StaffManageEventsNewRouteImport } from './routes/_staff/manage.events.new'
@@ -142,6 +148,7 @@ import { Route as ApiPublicTicketQrTokenRouteImport } from './routes/api/public/
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
+import { Route as StaffManageAdRequestsIdContractRouteImport } from './routes/_staff/manage.ad-requests.$id_.contract'
 import { Route as StaffManageEventsIdCceRouteImport } from './routes/_staff/manage.events.$id_.cce'
 import { Route as StaffManageEventsIdCheckInRouteImport } from './routes/_staff/manage.events.$id_.check-in'
 import { Route as StaffManageEventsIdReportingRouteImport } from './routes/_staff/manage.events.$id_.reporting'
@@ -322,6 +329,11 @@ const Char91DotwellKnownChar93OauthProtectedResourceRoute =
     path: '/.well-known/oauth-protected-resource',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MemberAdvertiseRoute = MemberAdvertiseRouteImport.update({
+  id: '/advertise',
+  path: '/advertise',
+  getParentRoute: () => MemberRouteRoute,
+} as any)
 const MemberMyProfileRoute = MemberMyProfileRouteImport.update({
   id: '/my-profile',
   path: '/my-profile',
@@ -442,6 +454,11 @@ const ForOrganisationsRoiSimulatorRoute =
 const FormTokenRoute = FormTokenRouteImport.update({
   id: '/form/$token',
   path: '/form/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GotoPlacementIdRoute = GotoPlacementIdRouteImport.update({
+  id: '/goto/$placementId',
+  path: '/goto/$placementId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GuestPassTokenRoute = GuestPassTokenRouteImport.update({
@@ -592,6 +609,11 @@ const StaffManageIndexRoute = StaffManageIndexRouteImport.update({
   path: '/manage/',
   getParentRoute: () => StaffRouteRoute,
 } as any)
+const StaffManageAdRateCardsRoute = StaffManageAdRateCardsRouteImport.update({
+  id: '/manage/ad-rate-cards',
+  path: '/manage/ad-rate-cards',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
 const StaffManageChatInsightsRoute = StaffManageChatInsightsRouteImport.update({
   id: '/manage/chat-insights',
   path: '/manage/chat-insights',
@@ -648,6 +670,11 @@ const StaffMembersIdRoute = StaffMembersIdRouteImport.update({
   id: '/members/$id',
   path: '/members/$id',
   getParentRoute: () => StaffRouteRoute,
+} as any)
+const ApiPublicAdUpkeepRoute = ApiPublicAdUpkeepRouteImport.update({
+  id: '/api/public/ad-upkeep',
+  path: '/api/public/ad-upkeep',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicArticleFeedbackRoute =
   ApiPublicArticleFeedbackRouteImport.update({
@@ -757,6 +784,17 @@ const VerifyCertificateTokenRoute = VerifyCertificateTokenRouteImport.update({
   path: '/verify/certificate/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StaffManageAdRequestsIndexRoute =
+  StaffManageAdRequestsIndexRouteImport.update({
+    id: '/manage/ad-requests/',
+    path: '/manage/ad-requests/',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
+const StaffManageAdRequestsIdRoute = StaffManageAdRequestsIdRouteImport.update({
+  id: '/manage/ad-requests/$id',
+  path: '/manage/ad-requests/$id',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
 const StaffManageEventsIndexRoute = StaffManageEventsIndexRouteImport.update({
   id: '/manage/events/',
   path: '/manage/events/',
@@ -834,6 +872,12 @@ const LovableEmailTransactionalPreviewRoute =
     path: '/lovable/email/transactional/preview',
     getParentRoute: () => rootRouteImport,
   } as any)
+const StaffManageAdRequestsIdContractRoute =
+  StaffManageAdRequestsIdContractRouteImport.update({
+    id: '/manage/ad-requests/$id_/contract',
+    path: '/manage/ad-requests/$id/contract',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
 const StaffManageEventsIdCceRoute = StaffManageEventsIdCceRouteImport.update({
   id: '/manage/events/$id_/cce',
   path: '/manage/events/$id/cce',
@@ -891,6 +935,7 @@ export interface FileRoutesByFullPath {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/advertise': typeof MemberAdvertiseRoute
   '/my-profile': typeof MemberMyProfileRoute
   '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/volunteering': typeof MemberVolunteeringRoute
@@ -913,6 +958,7 @@ export interface FileRoutesByFullPath {
   '/events/$slug': typeof EventsSlugRoute
   '/for-organisations/roi-simulator': typeof ForOrganisationsRoiSimulatorRoute
   '/form/$token': typeof FormTokenRoute
+  '/goto/$placementId': typeof GotoPlacementIdRoute
   '/guest-pass/$token': typeof GuestPassTokenRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/insights/$id': typeof InsightsIdRoute
@@ -938,6 +984,7 @@ export interface FileRoutesByFullPath {
   '/articles/$id': typeof StaffArticlesIdRoute
   '/articles/categories': typeof StaffArticlesCategoriesRoute
   '/articles/new': typeof StaffArticlesNewRoute
+  '/manage/ad-rate-cards': typeof StaffManageAdRateCardsRoute
   '/manage/chat-insights': typeof StaffManageChatInsightsRoute
   '/manage/editorial-signals': typeof StaffManageEditorialSignalsRoute
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
@@ -948,6 +995,7 @@ export interface FileRoutesByFullPath {
   '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/manage/member-engagement': typeof StaffManageMemberEngagementRoute
   '/members/$id': typeof StaffMembersIdRoute
+  '/api/public/ad-upkeep': typeof ApiPublicAdUpkeepRoute
   '/api/public/article-feedback': typeof ApiPublicArticleFeedbackRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
@@ -976,6 +1024,7 @@ export interface FileRoutesByFullPath {
   '/articles/': typeof StaffArticlesIndexRoute
   '/manage/': typeof StaffManageIndexRoute
   '/members/': typeof StaffMembersIndexRoute
+  '/manage/ad-requests/$id': typeof StaffManageAdRequestsIdRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/manage/events/new': typeof StaffManageEventsNewRoute
   '/manage/guest-passes/$id': typeof StaffManageGuestPassesIdRoute
@@ -988,8 +1037,10 @@ export interface FileRoutesByFullPath {
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/manage/ad-requests/': typeof StaffManageAdRequestsIndexRoute
   '/manage/events/': typeof StaffManageEventsIndexRoute
   '/manage/newsletters/': typeof StaffManageNewslettersIndexRoute
+  '/manage/ad-requests/$id/contract': typeof StaffManageAdRequestsIdContractRoute
   '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
@@ -1025,6 +1076,7 @@ export interface FileRoutesByTo {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/advertise': typeof MemberAdvertiseRoute
   '/my-profile': typeof MemberMyProfileRoute
   '/volunteer-chat': typeof MemberVolunteerChatRoute
   '/volunteering': typeof MemberVolunteeringRoute
@@ -1046,6 +1098,7 @@ export interface FileRoutesByTo {
   '/events/$slug': typeof EventsSlugRoute
   '/for-organisations/roi-simulator': typeof ForOrganisationsRoiSimulatorRoute
   '/form/$token': typeof FormTokenRoute
+  '/goto/$placementId': typeof GotoPlacementIdRoute
   '/guest-pass/$token': typeof GuestPassTokenRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/insights/$id': typeof InsightsIdRoute
@@ -1071,6 +1124,7 @@ export interface FileRoutesByTo {
   '/articles/$id': typeof StaffArticlesIdRoute
   '/articles/categories': typeof StaffArticlesCategoriesRoute
   '/articles/new': typeof StaffArticlesNewRoute
+  '/manage/ad-rate-cards': typeof StaffManageAdRateCardsRoute
   '/manage/chat-insights': typeof StaffManageChatInsightsRoute
   '/manage/editorial-signals': typeof StaffManageEditorialSignalsRoute
   '/manage/europe-pulse': typeof StaffManageEuropePulseRoute
@@ -1081,6 +1135,7 @@ export interface FileRoutesByTo {
   '/manage/live-chat': typeof StaffManageLiveChatRoute
   '/manage/member-engagement': typeof StaffManageMemberEngagementRoute
   '/members/$id': typeof StaffMembersIdRoute
+  '/api/public/ad-upkeep': typeof ApiPublicAdUpkeepRoute
   '/api/public/article-feedback': typeof ApiPublicArticleFeedbackRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
@@ -1109,6 +1164,7 @@ export interface FileRoutesByTo {
   '/articles': typeof StaffArticlesIndexRoute
   '/manage': typeof StaffManageIndexRoute
   '/members': typeof StaffMembersIndexRoute
+  '/manage/ad-requests/$id': typeof StaffManageAdRequestsIdRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/manage/events/new': typeof StaffManageEventsNewRoute
   '/manage/guest-passes/$id': typeof StaffManageGuestPassesIdRoute
@@ -1121,8 +1177,10 @@ export interface FileRoutesByTo {
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/manage/ad-requests': typeof StaffManageAdRequestsIndexRoute
   '/manage/events': typeof StaffManageEventsIndexRoute
   '/manage/newsletters': typeof StaffManageNewslettersIndexRoute
+  '/manage/ad-requests/$id/contract': typeof StaffManageAdRequestsIdContractRoute
   '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
@@ -1164,6 +1222,7 @@ export interface FileRoutesById {
   '/$locale/team': typeof LocaleTeamRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/_member/advertise': typeof MemberAdvertiseRoute
   '/_member/my-profile': typeof MemberMyProfileRoute
   '/_member/volunteer-chat': typeof MemberVolunteerChatRoute
   '/_member/volunteering': typeof MemberVolunteeringRoute
@@ -1186,6 +1245,7 @@ export interface FileRoutesById {
   '/events/$slug': typeof EventsSlugRoute
   '/for-organisations_/roi-simulator': typeof ForOrganisationsRoiSimulatorRoute
   '/form/$token': typeof FormTokenRoute
+  '/goto/$placementId': typeof GotoPlacementIdRoute
   '/guest-pass/$token': typeof GuestPassTokenRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/insights/$id': typeof InsightsIdRoute
@@ -1211,6 +1271,7 @@ export interface FileRoutesById {
   '/_staff/articles/$id': typeof StaffArticlesIdRoute
   '/_staff/articles/categories': typeof StaffArticlesCategoriesRoute
   '/_staff/articles/new': typeof StaffArticlesNewRoute
+  '/_staff/manage/ad-rate-cards': typeof StaffManageAdRateCardsRoute
   '/_staff/manage/chat-insights': typeof StaffManageChatInsightsRoute
   '/_staff/manage/editorial-signals': typeof StaffManageEditorialSignalsRoute
   '/_staff/manage/europe-pulse': typeof StaffManageEuropePulseRoute
@@ -1221,6 +1282,7 @@ export interface FileRoutesById {
   '/_staff/manage/live-chat': typeof StaffManageLiveChatRoute
   '/_staff/manage/member-engagement': typeof StaffManageMemberEngagementRoute
   '/_staff/members/$id': typeof StaffMembersIdRoute
+  '/api/public/ad-upkeep': typeof ApiPublicAdUpkeepRoute
   '/api/public/article-feedback': typeof ApiPublicArticleFeedbackRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
@@ -1249,6 +1311,7 @@ export interface FileRoutesById {
   '/_staff/articles/': typeof StaffArticlesIndexRoute
   '/_staff/manage/': typeof StaffManageIndexRoute
   '/_staff/members/': typeof StaffMembersIndexRoute
+  '/_staff/manage/ad-requests/$id': typeof StaffManageAdRequestsIdRoute
   '/_staff/manage/events/$id': typeof StaffManageEventsIdRoute
   '/_staff/manage/events/new': typeof StaffManageEventsNewRoute
   '/_staff/manage/guest-passes_/$id': typeof StaffManageGuestPassesIdRoute
@@ -1261,8 +1324,10 @@ export interface FileRoutesById {
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/_staff/manage/ad-requests/': typeof StaffManageAdRequestsIndexRoute
   '/_staff/manage/events/': typeof StaffManageEventsIndexRoute
   '/_staff/manage/newsletters/': typeof StaffManageNewslettersIndexRoute
+  '/_staff/manage/ad-requests/$id_/contract': typeof StaffManageAdRequestsIdContractRoute
   '/_staff/manage/events/$id_/cce': typeof StaffManageEventsIdCceRoute
   '/_staff/manage/events/$id_/check-in': typeof StaffManageEventsIdCheckInRoute
   '/_staff/manage/events/$id_/reporting': typeof StaffManageEventsIdReportingRoute
@@ -1303,6 +1368,7 @@ export interface FileRouteTypes {
     | '/$locale/team'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/advertise'
     | '/my-profile'
     | '/volunteer-chat'
     | '/volunteering'
@@ -1325,6 +1391,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/for-organisations/roi-simulator'
     | '/form/$token'
+    | '/goto/$placementId'
     | '/guest-pass/$token'
     | '/guides/$slug'
     | '/insights/$id'
@@ -1350,6 +1417,7 @@ export interface FileRouteTypes {
     | '/articles/$id'
     | '/articles/categories'
     | '/articles/new'
+    | '/manage/ad-rate-cards'
     | '/manage/chat-insights'
     | '/manage/editorial-signals'
     | '/manage/europe-pulse'
@@ -1360,6 +1428,7 @@ export interface FileRouteTypes {
     | '/manage/live-chat'
     | '/manage/member-engagement'
     | '/members/$id'
+    | '/api/public/ad-upkeep'
     | '/api/public/article-feedback'
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
@@ -1388,6 +1457,7 @@ export interface FileRouteTypes {
     | '/articles/'
     | '/manage/'
     | '/members/'
+    | '/manage/ad-requests/$id'
     | '/manage/events/$id'
     | '/manage/events/new'
     | '/manage/guest-passes/$id'
@@ -1400,8 +1470,10 @@ export interface FileRouteTypes {
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
+    | '/manage/ad-requests/'
     | '/manage/events/'
     | '/manage/newsletters/'
+    | '/manage/ad-requests/$id/contract'
     | '/manage/events/$id/cce'
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
@@ -1437,6 +1509,7 @@ export interface FileRouteTypes {
     | '/$locale/team'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/advertise'
     | '/my-profile'
     | '/volunteer-chat'
     | '/volunteering'
@@ -1458,6 +1531,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/for-organisations/roi-simulator'
     | '/form/$token'
+    | '/goto/$placementId'
     | '/guest-pass/$token'
     | '/guides/$slug'
     | '/insights/$id'
@@ -1483,6 +1557,7 @@ export interface FileRouteTypes {
     | '/articles/$id'
     | '/articles/categories'
     | '/articles/new'
+    | '/manage/ad-rate-cards'
     | '/manage/chat-insights'
     | '/manage/editorial-signals'
     | '/manage/europe-pulse'
@@ -1493,6 +1568,7 @@ export interface FileRouteTypes {
     | '/manage/live-chat'
     | '/manage/member-engagement'
     | '/members/$id'
+    | '/api/public/ad-upkeep'
     | '/api/public/article-feedback'
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
@@ -1521,6 +1597,7 @@ export interface FileRouteTypes {
     | '/articles'
     | '/manage'
     | '/members'
+    | '/manage/ad-requests/$id'
     | '/manage/events/$id'
     | '/manage/events/new'
     | '/manage/guest-passes/$id'
@@ -1533,8 +1610,10 @@ export interface FileRouteTypes {
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
+    | '/manage/ad-requests'
     | '/manage/events'
     | '/manage/newsletters'
+    | '/manage/ad-requests/$id/contract'
     | '/manage/events/$id/cce'
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
@@ -1575,6 +1654,7 @@ export interface FileRouteTypes {
     | '/$locale/team'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/_member/advertise'
     | '/_member/my-profile'
     | '/_member/volunteer-chat'
     | '/_member/volunteering'
@@ -1597,6 +1677,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/for-organisations_/roi-simulator'
     | '/form/$token'
+    | '/goto/$placementId'
     | '/guest-pass/$token'
     | '/guides/$slug'
     | '/insights/$id'
@@ -1622,6 +1703,7 @@ export interface FileRouteTypes {
     | '/_staff/articles/$id'
     | '/_staff/articles/categories'
     | '/_staff/articles/new'
+    | '/_staff/manage/ad-rate-cards'
     | '/_staff/manage/chat-insights'
     | '/_staff/manage/editorial-signals'
     | '/_staff/manage/europe-pulse'
@@ -1632,6 +1714,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/live-chat'
     | '/_staff/manage/member-engagement'
     | '/_staff/members/$id'
+    | '/api/public/ad-upkeep'
     | '/api/public/article-feedback'
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
@@ -1660,6 +1743,7 @@ export interface FileRouteTypes {
     | '/_staff/articles/'
     | '/_staff/manage/'
     | '/_staff/members/'
+    | '/_staff/manage/ad-requests/$id'
     | '/_staff/manage/events/$id'
     | '/_staff/manage/events/new'
     | '/_staff/manage/guest-passes_/$id'
@@ -1672,8 +1756,10 @@ export interface FileRouteTypes {
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
+    | '/_staff/manage/ad-requests/'
     | '/_staff/manage/events/'
     | '/_staff/manage/newsletters/'
+    | '/_staff/manage/ad-requests/$id_/contract'
     | '/_staff/manage/events/$id_/cce'
     | '/_staff/manage/events/$id_/check-in'
     | '/_staff/manage/events/$id_/reporting'
@@ -1716,6 +1802,7 @@ export interface RootRouteChildren {
   EventsSlugRoute: typeof EventsSlugRoute
   ForOrganisationsRoiSimulatorRoute: typeof ForOrganisationsRoiSimulatorRoute
   FormTokenRoute: typeof FormTokenRoute
+  GotoPlacementIdRoute: typeof GotoPlacementIdRoute
   GuestPassTokenRoute: typeof GuestPassTokenRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
   NewslettersSlugRoute: typeof NewslettersSlugRoute
@@ -1728,6 +1815,7 @@ export interface RootRouteChildren {
   VolunteerLoginIndexRoute: typeof VolunteerLoginIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  ApiPublicAdUpkeepRoute: typeof ApiPublicAdUpkeepRoute
   ApiPublicArticleFeedbackRoute: typeof ApiPublicArticleFeedbackRoute
   ApiPublicChatSignalRoute: typeof ApiPublicChatSignalRoute
   ApiPublicClaimWavesRoute: typeof ApiPublicClaimWavesRoute
@@ -2005,6 +2093,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_member/advertise': {
+      id: '/_member/advertise'
+      path: '/advertise'
+      fullPath: '/advertise'
+      preLoaderRoute: typeof MemberAdvertiseRouteImport
+      parentRoute: typeof MemberRouteRoute
+    }
     '/_member/my-profile': {
       id: '/_member/my-profile'
       path: '/my-profile'
@@ -2171,6 +2266,13 @@ declare module '@tanstack/react-router' {
       path: '/form/$token'
       fullPath: '/form/$token'
       preLoaderRoute: typeof FormTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/goto/$placementId': {
+      id: '/goto/$placementId'
+      path: '/goto/$placementId'
+      fullPath: '/goto/$placementId'
+      preLoaderRoute: typeof GotoPlacementIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/guest-pass/$token': {
@@ -2376,6 +2478,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageIndexRouteImport
       parentRoute: typeof StaffRouteRoute
     }
+    '/_staff/manage/ad-rate-cards': {
+      id: '/_staff/manage/ad-rate-cards'
+      path: '/manage/ad-rate-cards'
+      fullPath: '/manage/ad-rate-cards'
+      preLoaderRoute: typeof StaffManageAdRateCardsRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/_staff/manage/chat-insights': {
       id: '/_staff/manage/chat-insights'
       path: '/manage/chat-insights'
@@ -2452,6 +2561,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/members/$id'
       preLoaderRoute: typeof StaffMembersIdRouteImport
       parentRoute: typeof StaffRouteRoute
+    }
+    '/api/public/ad-upkeep': {
+      id: '/api/public/ad-upkeep'
+      path: '/api/public/ad-upkeep'
+      fullPath: '/api/public/ad-upkeep'
+      preLoaderRoute: typeof ApiPublicAdUpkeepRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/article-feedback': {
       id: '/api/public/article-feedback'
@@ -2593,6 +2709,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerifyCertificateTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_staff/manage/ad-requests/': {
+      id: '/_staff/manage/ad-requests/'
+      path: '/manage/ad-requests'
+      fullPath: '/manage/ad-requests/'
+      preLoaderRoute: typeof StaffManageAdRequestsIndexRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/ad-requests/$id': {
+      id: '/_staff/manage/ad-requests/$id'
+      path: '/manage/ad-requests/$id'
+      fullPath: '/manage/ad-requests/$id'
+      preLoaderRoute: typeof StaffManageAdRequestsIdRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/_staff/manage/events/': {
       id: '/_staff/manage/events/'
       path: '/manage/events'
@@ -2691,6 +2821,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_staff/manage/ad-requests/$id_/contract': {
+      id: '/_staff/manage/ad-requests/$id_/contract'
+      path: '/manage/ad-requests/$id/contract'
+      fullPath: '/manage/ad-requests/$id/contract'
+      preLoaderRoute: typeof StaffManageAdRequestsIdContractRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/_staff/manage/events/$id_/cce': {
       id: '/_staff/manage/events/$id_/cce'
       path: '/manage/events/$id/cce'
@@ -2786,6 +2923,7 @@ const LocaleRouteRouteWithChildren = LocaleRouteRoute._addFileChildren(
 )
 
 interface MemberRouteRouteChildren {
+  MemberAdvertiseRoute: typeof MemberAdvertiseRoute
   MemberMyProfileRoute: typeof MemberMyProfileRoute
   MemberVolunteerChatRoute: typeof MemberVolunteerChatRoute
   MemberVolunteeringRoute: typeof MemberVolunteeringRoute
@@ -2794,6 +2932,7 @@ interface MemberRouteRouteChildren {
 }
 
 const MemberRouteRouteChildren: MemberRouteRouteChildren = {
+  MemberAdvertiseRoute: MemberAdvertiseRoute,
   MemberMyProfileRoute: MemberMyProfileRoute,
   MemberVolunteerChatRoute: MemberVolunteerChatRoute,
   MemberVolunteeringRoute: MemberVolunteeringRoute,
@@ -2830,6 +2969,7 @@ interface StaffRouteRouteChildren {
   StaffOperationalStructureRoute: typeof StaffOperationalStructureRoute
   StaffRolesRoute: typeof StaffRolesRoute
   StaffVocabulariesRoute: typeof StaffVocabulariesRoute
+  StaffManageAdRateCardsRoute: typeof StaffManageAdRateCardsRoute
   StaffManageChatInsightsRoute: typeof StaffManageChatInsightsRoute
   StaffManageEditorialSignalsRoute: typeof StaffManageEditorialSignalsRoute
   StaffManageEuropePulseRoute: typeof StaffManageEuropePulseRoute
@@ -2842,12 +2982,15 @@ interface StaffRouteRouteChildren {
   StaffMembersIdRoute: typeof StaffMembersIdRoute
   StaffManageIndexRoute: typeof StaffManageIndexRoute
   StaffMembersIndexRoute: typeof StaffMembersIndexRoute
+  StaffManageAdRequestsIdRoute: typeof StaffManageAdRequestsIdRoute
   StaffManageEventsIdRoute: typeof StaffManageEventsIdRoute
   StaffManageEventsNewRoute: typeof StaffManageEventsNewRoute
   StaffManageGuestPassesIdRoute: typeof StaffManageGuestPassesIdRoute
   StaffManageNewslettersIdRoute: typeof StaffManageNewslettersIdRoute
+  StaffManageAdRequestsIndexRoute: typeof StaffManageAdRequestsIndexRoute
   StaffManageEventsIndexRoute: typeof StaffManageEventsIndexRoute
   StaffManageNewslettersIndexRoute: typeof StaffManageNewslettersIndexRoute
+  StaffManageAdRequestsIdContractRoute: typeof StaffManageAdRequestsIdContractRoute
   StaffManageEventsIdCceRoute: typeof StaffManageEventsIdCceRoute
   StaffManageEventsIdCheckInRoute: typeof StaffManageEventsIdCheckInRoute
   StaffManageEventsIdReportingRoute: typeof StaffManageEventsIdReportingRoute
@@ -2861,6 +3004,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffOperationalStructureRoute: StaffOperationalStructureRoute,
   StaffRolesRoute: StaffRolesRoute,
   StaffVocabulariesRoute: StaffVocabulariesRoute,
+  StaffManageAdRateCardsRoute: StaffManageAdRateCardsRoute,
   StaffManageChatInsightsRoute: StaffManageChatInsightsRoute,
   StaffManageEditorialSignalsRoute: StaffManageEditorialSignalsRoute,
   StaffManageEuropePulseRoute: StaffManageEuropePulseRoute,
@@ -2873,12 +3017,15 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffMembersIdRoute: StaffMembersIdRoute,
   StaffManageIndexRoute: StaffManageIndexRoute,
   StaffMembersIndexRoute: StaffMembersIndexRoute,
+  StaffManageAdRequestsIdRoute: StaffManageAdRequestsIdRoute,
   StaffManageEventsIdRoute: StaffManageEventsIdRoute,
   StaffManageEventsNewRoute: StaffManageEventsNewRoute,
   StaffManageGuestPassesIdRoute: StaffManageGuestPassesIdRoute,
   StaffManageNewslettersIdRoute: StaffManageNewslettersIdRoute,
+  StaffManageAdRequestsIndexRoute: StaffManageAdRequestsIndexRoute,
   StaffManageEventsIndexRoute: StaffManageEventsIndexRoute,
   StaffManageNewslettersIndexRoute: StaffManageNewslettersIndexRoute,
+  StaffManageAdRequestsIdContractRoute: StaffManageAdRequestsIdContractRoute,
   StaffManageEventsIdCceRoute: StaffManageEventsIdCceRoute,
   StaffManageEventsIdCheckInRoute: StaffManageEventsIdCheckInRoute,
   StaffManageEventsIdReportingRoute: StaffManageEventsIdReportingRoute,
@@ -2952,6 +3099,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsSlugRoute: EventsSlugRoute,
   ForOrganisationsRoiSimulatorRoute: ForOrganisationsRoiSimulatorRoute,
   FormTokenRoute: FormTokenRoute,
+  GotoPlacementIdRoute: GotoPlacementIdRoute,
   GuestPassTokenRoute: GuestPassTokenRoute,
   GuidesSlugRoute: GuidesSlugRoute,
   NewslettersSlugRoute: NewslettersSlugRoute,
@@ -2964,6 +3112,7 @@ const rootRouteChildren: RootRouteChildren = {
   VolunteerLoginIndexRoute: VolunteerLoginIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  ApiPublicAdUpkeepRoute: ApiPublicAdUpkeepRoute,
   ApiPublicArticleFeedbackRoute: ApiPublicArticleFeedbackRoute,
   ApiPublicChatSignalRoute: ApiPublicChatSignalRoute,
   ApiPublicClaimWavesRoute: ApiPublicClaimWavesRoute,
