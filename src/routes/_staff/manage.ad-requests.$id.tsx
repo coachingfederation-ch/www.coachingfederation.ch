@@ -191,6 +191,9 @@ function AdRequestDetailPage() {
         <header className="mt-4 flex flex-wrap items-center gap-3">
           <h1 className="font-heading text-3xl">{request.advertiser_name || "—"}</h1>
           <Badge variant="secondary">{t(`advertise.status.${request.status}`)}</Badge>
+          <Badge variant="outline">
+            {t(`advertiser.kind.${request.requester_kind ?? "member"}`)}
+          </Badge>
         </header>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[2fr_1fr]">
@@ -221,6 +224,30 @@ function AdRequestDetailPage() {
                     request.active_from ? `${request.active_from} – ${request.active_until}` : "—"
                   }
                 />
+                {advertiserProfile ? (
+                  <>
+                    <Row
+                      label={t("advertiser.profile.organisation")}
+                      value={advertiserProfile.organisation}
+                    />
+                    <Row
+                      label={t("advertiser.profile.contactName")}
+                      value={advertiserProfile.contact_name}
+                    />
+                    <Row
+                      label={t("advertiser.profile.phone")}
+                      value={advertiserProfile.phone ?? "—"}
+                    />
+                    <Row
+                      label={t("advertiser.profile.billingAddress")}
+                      value={`${advertiserProfile.billing_street}, ${advertiserProfile.billing_postcode} ${advertiserProfile.billing_city}, ${advertiserProfile.billing_country}`}
+                    />
+                    <Row
+                      label={t("advertiser.profile.vatNumber")}
+                      value={advertiserProfile.vat_number ?? "—"}
+                    />
+                  </>
+                ) : null}
                 <Row
                   label={t("advertise.content.contactEmail")}
                   value={request.contact_email ?? "—"}
