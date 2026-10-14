@@ -29,6 +29,8 @@ const searchSchema = z.object({
 });
 
 const PAGE_SIZE = 25;
+const DEFAULT_EXCLUDED_STATUSES = ["passed", "cancelled"];
+const STATUS_SHOW_ALL = "all";
 const ONLINE_CITY = "__online__";
 
 export const Route = createFileRoute("/_staff/manage/events/")({
@@ -157,9 +159,14 @@ function ManageEventsPage() {
   }, [rows]);
 
   // Status is an *exclusion* filter: the `status` search param holds a
-  // comma-separated list of statuses to hide. Empty means show everything —
-  // every status is active by default, so the list never starts filtered.
-  const excludedStatuses: string[] = search.status ? search.status.split(",").filter(Boolean) : [];
+  // comma-separated list of statuses to hide. Empty means the default view,
+  // which hides passed and cancelled events; "all" means hide nothing.
+  const excludedStatuses: string[] =
+    search.status === ""
+      ? DEFAULT_EXCLUDED_STATUSES
+      : search.status === STATUS_SHOW_ALL
+        ? []
+        : search.status.split(",").filter(Boolean);
 
   const filtered = useMemo(() => {
     const term = search.q.trim().toLowerCase();
@@ -289,7 +296,12 @@ function ManageEventsPage() {
                 const next = active
                   ? excludedStatuses.filter((s) => s !== status)
                   : [...excludedStatuses, status];
-                setFilter({ status: next.join(",") });
+                const isDefault =
+                  next.length === DEFAULT_EXCLUDED_STATUSES.length &&
+                  DEFAULT_EXCLUDED_STATUSES.every((s) => next.includes(s));
+                setFilter({
+                  status: isDefault ? "" : next.length === 0 ? STATUS_SHOW_ALL : next.join(","),
+                });
               }}
               options={["draft", "published", "passed", "cancelled"].map(
                 (s) => [s, t(`events.status.${s}`)] as [string, string],
