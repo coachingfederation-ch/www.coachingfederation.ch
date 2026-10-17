@@ -6354,6 +6354,51 @@ export type Database = {
         }
         Relationships: []
       }
+      op_assignment_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          actor_name: string | null
+          assignment_id: string
+          created_at: string
+          id: string
+          member_id: string
+          member_name: string | null
+          project_id: string
+          project_name: string | null
+          role_id: string
+          role_name: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          actor_name?: string | null
+          assignment_id: string
+          created_at?: string
+          id?: string
+          member_id: string
+          member_name?: string | null
+          project_id: string
+          project_name?: string | null
+          role_id: string
+          role_name?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          actor_name?: string | null
+          assignment_id?: string
+          created_at?: string
+          id?: string
+          member_id?: string
+          member_name?: string | null
+          project_id?: string
+          project_name?: string | null
+          role_id?: string
+          role_name?: string | null
+        }
+        Relationships: []
+      }
       op_assignments: {
         Row: {
           created_at: string

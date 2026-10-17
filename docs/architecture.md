@@ -60,14 +60,13 @@ experience:
   exception rather than quietly emailing 500 members.
 - **Who may hold an access right.** The `user_roles` grant policy requires the
   target account to be either a claim-linked member (`private.has_role(user_id,
-  'member')`) or a live `internal_accounts` row. Staff accounts created outside
+'member')`) or a live `internal_accounts` row. Staff accounts created outside
   the Roles screen's invite flow therefore need an `internal_accounts` marker,
   otherwise every role toggle fails with "Could not grant access." A migration
   (2026-09-18) backfilled the legacy accounts that predated the invite flow.
 
 If you need to relax one of these, change the policy or trigger. Do not add a
 bypass in TypeScript.
-
 
 ## Server boundaries
 
@@ -177,6 +176,18 @@ Tools: `search_coaches`, `get_coach_profile` (published directory) and
 - Cron: `europe-pulse-advance-5min` now runs every 15 min (stale-run reaper is 90 min, so still safe) and `event-follow-ups-10min` every 30 min. Job names were kept to avoid breaking references.
 
 ## Feature toggles
+
+## Operational assignment audit
+
+Volunteer assignment inserts/removals are captured inside their database transaction
+by `private.tg_op_assignment_audit`, including authenticated actor and name snapshots.
+`op_assignment_audit_log` has no public access or authenticated write grants; SELECT
+is restricted to platform admins. The protected `listOpsAssignmentHistory` function
+reads with the caller's client, not a privileged client. Sorting and metadata edits
+do not produce entries; identity updates produce removal/assignment pairs. History
+is forward-only, with no inferred backfill. See `events-team-communities.md`.
+
+## Feature toggle behavior
 
 Admins switch whole features on or off on the Integration page (Settings → Features). The switches are columns on the `integration_config` singleton (`feature_europe_pulse_enabled`, `feature_advertising_enabled`, plus `features_updated_at/by`). Public code reads only the booleans through the SECURITY DEFINER `feature_flags()` function (`src/lib/feature-flags.ts`); server code uses `requireFeature()` from `src/lib/feature-flags.server.ts`. A missing or unreadable value counts as "on".
 

@@ -1,0 +1,3 @@
+REVOKE ALL ON public.op_assignment_audit_log FROM PUBLIC, anon, authenticated, service_role;
+GRANT SELECT ON public.op_assignment_audit_log TO authenticated, service_role;
+COMMENT ON TABLE public.op_assignment_audit_log IS 'Private append-only volunteer assignment history. Explicit read-only grants override environment default privileges. Only platform admins may read through RLS. No email or member number snapshots; history starts at installation.';

@@ -57,6 +57,20 @@
       "when": 1792005372158,
       "tag": "0007_ad_design_variant",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792240017613,
+      "tag": "0008_operational_assignment_change_log",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792240337313,
+      "tag": "0009_assignment_audit_explicit_read_only_grants",
+      "breakpoints": true
     }
   ]
 }
