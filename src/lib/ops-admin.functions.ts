@@ -27,14 +27,20 @@ export const listOpsAssignmentHistory = createServerFn({ method: "POST" })
     await assertPlatformAdmin(context);
     let query = context.supabase
       .from("op_assignment_audit_log")
-      .select("id, created_at, action, member_name, project_name, role_name, actor_id, actor_name, project_id", { count: "exact" })
+      .select(
+        "id, created_at, action, member_name, project_name, role_name, actor_id, actor_name, project_id",
+        { count: "exact" },
+      )
       .order("created_at", { ascending: false })
       .order("id", { ascending: false });
     if (data.projectId) query = query.eq("project_id", data.projectId);
     if (data.action) query = query.eq("action", data.action);
     // Remove PostgREST expression/wildcard characters, never interpolate raw input.
     const term = data.search?.replace(/[^\p{L}\p{N}\s'-]/gu, "").trim();
-    if (term) query = query.or(`member_name.ilike.%${term}%,role_name.ilike.%${term}%,project_name.ilike.%${term}%,actor_name.ilike.%${term}%`);
+    if (term)
+      query = query.or(
+        `member_name.ilike.%${term}%,role_name.ilike.%${term}%,project_name.ilike.%${term}%,actor_name.ilike.%${term}%`,
+      );
     const { data: entries, count, error } = await query.range(data.offset, data.offset + 9);
     if (error) throw new Error("Could not load assignment history");
     return { entries: entries ?? [], total: count ?? 0 };

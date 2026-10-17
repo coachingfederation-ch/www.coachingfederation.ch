@@ -15,7 +15,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
-import { Button, Tabs, TabsContent, TabsList, TabsTrigger } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  Button,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df";
 import { AssignmentChangeLog } from "@/components/cms/ops/AssignmentChangeLog";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
@@ -41,9 +47,19 @@ export const Route = createFileRoute("/_staff/operational-structure")({
   head: () => ({
     meta: [
       { title: "Operational structure — The Switzerland Chapter of ICF CMS" },
-      { name: "description", content: "Manage volunteer assignments and review their change history for The Switzerland Chapter of ICF." },
-      { property: "og:title", content: "Operational structure — The Switzerland Chapter of ICF CMS" },
-      { property: "og:description", content: "Private volunteer structure and assignment change history." },
+      {
+        name: "description",
+        content:
+          "Manage volunteer assignments and review their change history for The Switzerland Chapter of ICF.",
+      },
+      {
+        property: "og:title",
+        content: "Operational structure — The Switzerland Chapter of ICF CMS",
+      },
+      {
+        property: "og:description",
+        content: "Private volunteer structure and assignment change history.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
@@ -310,97 +326,109 @@ function OperationalStructurePage() {
         <p className="mt-1 text-sm text-muted-foreground">{t("ops.subtitle")}</p>
         {error ? <p className="mt-3 text-xs text-destructive">{error}</p> : null}
 
-        <Tabs value={tab} onValueChange={(value) => {
-          if (communityDirty.current && !window.confirm(t("ops.community.leaveDirty"))) return;
-          communityDirty.current = false;
-          setTab(value);
-        }}>
-          <div className="mt-6"><TabsList aria-label={t("ops.title")}>
-            <TabsTrigger value="structure">{t("ops.audit.structure")}</TabsTrigger>
-            <TabsTrigger value="history">{t("ops.audit.title")}</TabsTrigger>
-          </TabsList></div>
-          <TabsContent value="history"><AssignmentChangeLog projects={projects} /></TabsContent>
+        <Tabs
+          value={tab}
+          onValueChange={(value) => {
+            if (communityDirty.current && !window.confirm(t("ops.community.leaveDirty"))) return;
+            communityDirty.current = false;
+            setTab(value);
+          }}
+        >
+          <div className="mt-6">
+            <TabsList aria-label={t("ops.title")}>
+              <TabsTrigger value="structure">{t("ops.audit.structure")}</TabsTrigger>
+              <TabsTrigger value="history">{t("ops.audit.title")}</TabsTrigger>
+            </TabsList>
+          </div>
+          <TabsContent value="history">
+            <AssignmentChangeLog projects={projects} />
+          </TabsContent>
           <TabsContent value="structure">
-        <div className="mt-6 flex gap-2">
-          <input
-            value={newProject}
-            onChange={(e) => setNewProject(e.target.value)}
-            placeholder={t("ops.projectPlaceholder")}
-            className={INPUT + " w-72"}
-          />
-          <button
-            onClick={() => void addProject()}
-            className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-          >
-            <Plus className="h-4 w-4" />
-            {t("ops.addProject")}
-          </button>
-        </div>
-
-        <div className="mt-4">
-          <Button type="button" variant="outline" size="pill" onClick={() => setShowMap((v) => !v)}>
-            {showMap ? t("ops.map.hide") : t("ops.map.show")}
-          </Button>
-        </div>
-        {showMap ? <StructureMapPanel t={t} projects={projects} /> : null}
-
-        <div className="mt-6 grid gap-6 lg:grid-cols-[260px_1fr]">
-          <ProjectGroupList
-            t={t}
-            projects={projects}
-            selected={selected}
-            setSelected={selectProject}
-            reordering={reordering}
-            setReordering={setReordering}
-            move={move}
-          />
-
-          {project ? (
-            <div className="space-y-6">
-              <ProjectForm
-                t={t}
-                project={project}
-                setProjects={setProjects}
-                patch={patch}
-                removeRow={removeRow}
-                loadProjects={loadProjects}
-                translateLabels={translateLabels}
-                translating={translating}
-                onCommunityDirtyChange={(dirty) => {
-                  communityDirty.current = dirty;
-                }}
+            <div className="mt-6 flex gap-2">
+              <input
+                value={newProject}
+                onChange={(e) => setNewProject(e.target.value)}
+                placeholder={t("ops.projectPlaceholder")}
+                className={INPUT + " w-72"}
               />
-
-              <RoleAssignmentEditor
-                t={t}
-                roles={roles}
-                setRoles={setRoles}
-                patch={patch}
-                move={move}
-                removeRow={removeRow}
-                newRole={newRole}
-                setNewRole={setNewRole}
-                addRole={addRole}
-                translateLabels={translateLabels}
-                translating={translating}
-                assignments={assignments}
-                moveAssignmentUp={moveAssignmentUp}
-                unassign={unassign}
-                search={search}
-                setSearch={setSearch}
-                members={members}
-                pickedMember={pickedMember}
-                setPickedMember={setPickedMember}
-                pickedRole={pickedRole}
-                setPickedRole={setPickedRole}
-                assign={assign}
-                notice={notice}
-              />
+              <button
+                onClick={() => void addProject()}
+                className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+              >
+                <Plus className="h-4 w-4" />
+                {t("ops.addProject")}
+              </button>
             </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">{t("ops.selectProject")}</p>
-          )}
-        </div>
+
+            <div className="mt-4">
+              <Button
+                type="button"
+                variant="outline"
+                size="pill"
+                onClick={() => setShowMap((v) => !v)}
+              >
+                {showMap ? t("ops.map.hide") : t("ops.map.show")}
+              </Button>
+            </div>
+            {showMap ? <StructureMapPanel t={t} projects={projects} /> : null}
+
+            <div className="mt-6 grid gap-6 lg:grid-cols-[260px_1fr]">
+              <ProjectGroupList
+                t={t}
+                projects={projects}
+                selected={selected}
+                setSelected={selectProject}
+                reordering={reordering}
+                setReordering={setReordering}
+                move={move}
+              />
+
+              {project ? (
+                <div className="space-y-6">
+                  <ProjectForm
+                    t={t}
+                    project={project}
+                    setProjects={setProjects}
+                    patch={patch}
+                    removeRow={removeRow}
+                    loadProjects={loadProjects}
+                    translateLabels={translateLabels}
+                    translating={translating}
+                    onCommunityDirtyChange={(dirty) => {
+                      communityDirty.current = dirty;
+                    }}
+                  />
+
+                  <RoleAssignmentEditor
+                    t={t}
+                    roles={roles}
+                    setRoles={setRoles}
+                    patch={patch}
+                    move={move}
+                    removeRow={removeRow}
+                    newRole={newRole}
+                    setNewRole={setNewRole}
+                    addRole={addRole}
+                    translateLabels={translateLabels}
+                    translating={translating}
+                    assignments={assignments}
+                    moveAssignmentUp={moveAssignmentUp}
+                    unassign={unassign}
+                    search={search}
+                    setSearch={setSearch}
+                    members={members}
+                    pickedMember={pickedMember}
+                    setPickedMember={setPickedMember}
+                    pickedRole={pickedRole}
+                    setPickedRole={setPickedRole}
+                    assign={assign}
+                    notice={notice}
+                  />
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">{t("ops.selectProject")}</p>
+              )}
+            </div>
           </TabsContent>
         </Tabs>
       </div>

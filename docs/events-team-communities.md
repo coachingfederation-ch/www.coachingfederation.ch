@@ -23,7 +23,7 @@ Staff manage events at `/manage/events`; the public sees `/events` and
 - Event copy is translated per locale in `event_translations`, with the same
   `manually_edited` protection as articles.
 - **Repeating series.** Occurrences generated from one event share a
-  `series_id`. The *parent* of a series is the earliest date that has not
+  `series_id`. The _parent_ of a series is the earliest date that has not
   started yet — passed dates are history and never push changes forward. On the
   parent, "Update later dates" copies content and setup (title, summary,
   description, language, image, location, category/region/community,

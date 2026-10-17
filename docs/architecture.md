@@ -60,14 +60,13 @@ experience:
   exception rather than quietly emailing 500 members.
 - **Who may hold an access right.** The `user_roles` grant policy requires the
   target account to be either a claim-linked member (`private.has_role(user_id,
-  'member')`) or a live `internal_accounts` row. Staff accounts created outside
+'member')`) or a live `internal_accounts` row. Staff accounts created outside
   the Roles screen's invite flow therefore need an `internal_accounts` marker,
   otherwise every role toggle fails with "Could not grant access." A migration
   (2026-09-18) backfilled the legacy accounts that predated the invite flow.
 
 If you need to relax one of these, change the policy or trigger. Do not add a
 bypass in TypeScript.
-
 
 ## Server boundaries
 
