@@ -15,7 +15,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
-import { Button } from "@/design-system/icf-welcome-design-system-a835df";
+import { Button, Tabs, TabsContent, TabsList, TabsTrigger } from "@/design-system/icf-welcome-design-system-a835df";
+import { AssignmentChangeLog } from "@/components/cms/ops/AssignmentChangeLog";
 import { supabase } from "@/integrations/supabase/client";
 import { useCms } from "@/i18n/cms";
 import { requireStaffAccess, PLATFORM_ADMIN_ROLES } from "@/lib/staff-guard";
@@ -40,6 +41,11 @@ export const Route = createFileRoute("/_staff/operational-structure")({
   head: () => ({
     meta: [
       { title: "Operational structure — The Switzerland Chapter of ICF CMS" },
+      { name: "description", content: "Manage volunteer assignments and review their change history for The Switzerland Chapter of ICF." },
+      { property: "og:title", content: "Operational structure — The Switzerland Chapter of ICF CMS" },
+      { property: "og:description", content: "Private volunteer structure and assignment change history." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -73,6 +79,7 @@ function OperationalStructurePage() {
   const [reordering, setReordering] = useState(false);
   // Read-only preview of the public nested-circle map.
   const [showMap, setShowMap] = useState(false);
+  const [tab, setTab] = useState("structure");
 
   const loadProjects = async () => {
     // `contact_email` is not granted to the browser roles (it is the private
@@ -282,7 +289,7 @@ function OperationalStructurePage() {
       supabase.from("op_assignments").update({ sort_order: b.sort_order }).eq("id", row.id),
       supabase.from("op_assignments").update({ sort_order: row.sort_order }).eq("id", b.id),
     ]);
-    await loadDetail(selected!);
+    if (selected) await loadDetail(selected);
   };
 
   const project = projects.find((p) => p.id === selected) ?? null;
@@ -303,6 +310,17 @@ function OperationalStructurePage() {
         <p className="mt-1 text-sm text-muted-foreground">{t("ops.subtitle")}</p>
         {error ? <p className="mt-3 text-xs text-destructive">{error}</p> : null}
 
+        <Tabs value={tab} onValueChange={(value) => {
+          if (communityDirty.current && !window.confirm(t("ops.community.leaveDirty"))) return;
+          communityDirty.current = false;
+          setTab(value);
+        }}>
+          <div className="mt-6"><TabsList aria-label={t("ops.title")}>
+            <TabsTrigger value="structure">{t("ops.audit.structure")}</TabsTrigger>
+            <TabsTrigger value="history">{t("ops.audit.title")}</TabsTrigger>
+          </TabsList></div>
+          <TabsContent value="history"><AssignmentChangeLog projects={projects} /></TabsContent>
+          <TabsContent value="structure">
         <div className="mt-6 flex gap-2">
           <input
             value={newProject}
@@ -383,6 +401,8 @@ function OperationalStructurePage() {
             <p className="text-sm text-muted-foreground">{t("ops.selectProject")}</p>
           )}
         </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </Shell>
   );

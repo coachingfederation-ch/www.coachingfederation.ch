@@ -65,7 +65,8 @@ before adding a new file.
 
 | Module                                             | Responsibility                                                                                    |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `ops-admin.server.ts` / `.functions.ts`            | Admin CRUD for projects, project roles and member assignments, plus the automatic `editor` grant. |
+| `ops-admin.server.ts` / `.functions.ts`            | Protected operational reads and RLS-bound assignment change history; volunteer assignments never grant staff access. |
+| `components/cms/ops/AssignmentChangeLog.tsx`       | Private change-log tab: member/project/role/actor search, filters, and ten-row paging. |
 | `team.ts` / `team.server.ts` / `team.functions.ts` | Public team page data: localized names, roles and project filters.                                |
 | `communities.*`                                    | Local communities: overview, detail, language labels and the featured community teaser.           |
 | `community-translations.functions.ts`              | AI translation of community description and cadence copy.                                         |

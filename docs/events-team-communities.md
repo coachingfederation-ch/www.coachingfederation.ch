@@ -43,9 +43,21 @@ Staff manage events at `/manage/events`; the public sees `/events` and
 `op_assignments` (member ↔ project ↔ role) are edited by admins at
 `/operational-structure`.
 
-- Assigning a member grants them the `editor` role automatically; removing the
-  last assignment prompts to revoke it. Roles are still only written with the
-  service role.
+- Assignments are structural only and never grant or revoke staff permissions.
+  Staff access is managed separately in the Roles screen.
+- The **Change log** tab records member assignments and removals from installation
+  onward, including actor, Zurich timestamp, member, project, and role. Super Admins
+  and Administrators can search, filter by project/action, and page through ten rows
+  at a time. It does not audit role/project label edits or sorting, and does not
+  reconstruct earlier history.
+- `op_assignment_audit_log` stores private name snapshots, not emails/member numbers.
+  The `private.tg_op_assignment_audit` trigger captures inserts/deletes and represents
+  identity-changing updates as a removal plus assignment. Cascading removals are
+  captured; missing parent names fall back to the latest stored snapshot. Changes
+  without `auth.uid()` show as system changes. Authenticated users have SELECT only,
+  restricted by platform-admin RLS; normal clients cannot edit or delete the log.
+  Audit writes share the assignment transaction, so failed logging rolls back the
+  assignment instead of silently losing history.
 - The public team page `/team` renders a hexagonal honeycomb from
   `team_directory_public`, filtered by localized project pills, with a detail
   modal. Members appear because they hold an assignment — **not** because their
