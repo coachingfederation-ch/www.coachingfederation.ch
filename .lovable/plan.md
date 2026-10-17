@@ -11,7 +11,7 @@ Add a Change Log tab to Operational structure, limited to member assignments and
 ## PR note
 **Summary:** Make volunteer assignment changes traceable without changing staff permissions.
 **Changes:** UI: localized tab, filters, paging, loading/error/empty states. Backend/schema: private audit table, indexes, trigger, and protected read. Documentation: operational structure, architecture, and code map.
-**Backend / Schema Changes:** One additive migration; authenticated read only for platform admins. No new role or assignment write permissions.
-**Testing & Verification:** Verify assignment/removal capture, actor attribution, sorting exclusion, filtering, paging, and access boundaries; check authenticated UI. Pending until implementation.
+**Backend / Schema Changes:** Two additive migrations: audit table/trigger and explicit read-only grants overriding environment defaults. No new role or assignment write permissions.
+**Testing & Verification:** Three database boundary tests pass (RLS, read-only grants, trigger events); lint and preview compilation pass. Signed-in browser verification completed: six placeholder assignments/removals, 12 attributed records, search, action filtering, refresh, empty states, and previous/next paging. Fixture data removed afterward. Sorting exclusion is implemented in the trigger but was not behavior-tested because the limited SQL test account cannot update/delete or switch roles; no privileges were widened. No separate non-admin browser session was exercised.
 **Risks & Rollback:** Trigger participates in the assignment transaction; logging failure prevents an unaudited change. Reverting the UI leaves stored history intact; disable the trigger only through a deliberate migration if necessary.
 **Follow-ups / Known Debt:** No history before installation; no role/project metadata audit, exports, or retention automation in this scope.
