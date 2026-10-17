@@ -16,7 +16,8 @@ const schema = z.object({
   email: z.string().trim().email().max(255),
   /** Chapter language, carried into the reset link so the email matches it. */
   locale: z.enum(["en", "de", "fr", "it"]).default("en"),
-  redirectOrigin: z.string().url().max(255),
+  /** Ignored server-side; kept for client compatibility. */
+  redirectOrigin: z.string().url().max(255).optional(),
   // Honeypot: must stay empty.
   website: z.string().max(0).optional().or(z.literal("")),
 });
@@ -68,7 +69,10 @@ export const requestPasswordReset = createServerFn({ method: "POST" })
       console.error("correspondence locale lookup failed", err);
     }
 
-    const origin = data.redirectOrigin.replace(/\/$/, "");
+    // Never trust the caller's origin for an emailed link: only the configured
+    // site origin is used, whatever redirectOrigin says.
+    const { SITE_URL } = await import("@/i18n/config");
+    const origin = SITE_URL.replace(/\/$/, "");
     const redirectTo = `${origin}/reset-password?lang=${locale}`;
 
     try {

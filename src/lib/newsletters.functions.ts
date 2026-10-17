@@ -254,13 +254,14 @@ export const regenerateNewsletterFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => idSchema.extend({ force: z.boolean().default(true) }).parse(data))
   .handler(async ({ data, context }) => {
-    await assertStaff(context as AuthedContext);
+    const client = await assertStaff(context as AuthedContext);
     const [{ supabaseAdmin }, { refreshNewsletterBlocks }] = await Promise.all([
       import("@/integrations/supabase/client.server"),
       import("./newsletter-generation.server"),
     ]);
     const updated = await refreshNewsletterBlocks(supabaseAdmin as never, data.id, {
       force: data.force,
+      writer: client as never,
     });
     return { updated: updated.length };
   });

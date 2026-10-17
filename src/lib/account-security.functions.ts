@@ -33,7 +33,9 @@ export const startEmailChangeConfirmation = createServerFn({ method: "POST" })
     const request = getRequest();
     const token = (request?.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "");
     if (!token) return { ok: false, reason: "unauthorized" };
-    const origin = request ? new URL(request.url).origin : "https://new.coachingfederation.ch";
+    // Configured origin only: the request host is caller-controlled.
+    const { SITE_URL } = await import("@/i18n/config");
+    const origin = SITE_URL.replace(/\/$/, "");
 
     const result = await requestEmailChange(token, pending.pendingEmail, `${origin}/member`);
     if (!result.ok) {

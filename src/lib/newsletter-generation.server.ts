@@ -333,10 +333,14 @@ export async function generateBlock(
 export async function refreshNewsletterBlocks(
   supabase: Admin,
   newsletterId: string,
-  opts: { force?: boolean; since?: string } = {},
+  opts: { force?: boolean; since?: string; writer?: Admin } = {},
 ): Promise<string[]> {
   const since = opts.since ?? sinceIso(35);
-  const { data, error } = await supabase
+  // Block reads/writes go through `writer` when given (the caller's RLS-bound
+  // client), so only staff allowed to edit the edition can overwrite it; the
+  // admin client is only used to collect cross-table sources.
+  const writer = opts.writer ?? supabase;
+  const { data, error } = await writer
     .from("newsletter_blocks")
     .select("id, block_type, source_fingerprint")
     .eq("newsletter_id", newsletterId)
@@ -358,7 +362,7 @@ export async function refreshNewsletterBlocks(
 
     const generated = await generateBlock(row.block_type, bundle);
     if (!generated) continue;
-    const { error: writeError } = await supabase
+    const { data: written, error: writeError } = await writer
       .from("newsletter_blocks")
       .update({
         content: generated.content,
@@ -366,8 +370,10 @@ export async function refreshNewsletterBlocks(
         source_fingerprint: generated.fingerprint,
         generated_at: new Date().toISOString(),
       })
-      .eq("id", row.id);
+      .eq("id", row.id)
+      .select("id");
     if (writeError) throw writeError;
+    if (!written?.length) continue;
     updated.push(row.id);
   }
   return updated;
