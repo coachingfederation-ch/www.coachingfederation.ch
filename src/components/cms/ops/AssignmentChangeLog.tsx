@@ -53,6 +53,7 @@ export function AssignmentChangeLog({ projects }: { projects: ProjectRow[] }) {
 
   useEffect(() => {
     const current = ++request.current;
+    let active = true;
     setBusy(true);
     setError(false);
     void loadHistory({
@@ -64,18 +65,18 @@ export function AssignmentChangeLog({ projects }: { projects: ProjectRow[] }) {
       },
     })
       .then((result) => {
-        if (request.current !== current) return;
+        if (!active || request.current !== current) return;
         setEntries(result.entries as Entry[]);
         setTotal(result.total);
       })
       .catch(() => {
-        if (request.current === current) setError(true);
+        if (active && request.current === current) setError(true);
       })
       .finally(() => {
-        if (request.current === current) setBusy(false);
+        if (active && request.current === current) setBusy(false);
       });
     return () => {
-      request.current++;
+      active = false;
     };
   }, [offset, projectId, action, appliedSearch, revision, loadHistory]);
 
