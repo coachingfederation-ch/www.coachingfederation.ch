@@ -654,7 +654,20 @@ function EventEditor() {
         />
 
         <div className="min-w-0">
-          <p className="text-sm text-muted-foreground">{t(`events.stage.hint.${activeStage}`)}</p>
+          <p className="text-xs text-muted-foreground">
+            {t("events.authorship.created", {
+              name: event.created_by_name ?? t("events.authorship.unknown"),
+              date: event.created_at ? new Date(event.created_at).toLocaleDateString() : "—",
+            })}
+            {" · "}
+            {t("events.authorship.edited", {
+              name: event.updated_by_name ?? t("events.authorship.unknown"),
+              date: event.updated_at ? new Date(event.updated_at).toLocaleString() : "—",
+            })}
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {t(`events.stage.hint.${activeStage}`)}
+          </p>
           {message ? <p className="mt-3 text-sm text-teal-foreground">{message}</p> : null}
           {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
 
