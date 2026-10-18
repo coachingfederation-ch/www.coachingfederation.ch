@@ -19,6 +19,22 @@
       "eyebrow": "Protection des données",
       "title": "Politique de confidentialité",
       "lede": "Informations relatives au traitement des données personnelles sur le site web de The Switzerland Chapter of ICF et à vos droits en matière de protection des données."
+    },
+    "summary": {
+      "show": "Afficher le résumé en langage simple",
+      "hide": "Masquer le résumé",
+      "title": "En bref",
+      "note": "Ce résumé sert uniquement d'orientation. Seule la politique de confidentialité complète ci-dessous fait foi.",
+      "points": [
+        "Nous sommes The Switzerland Chapter of ICF, une association basée à Arbon. Vous pouvez nous joindre à office@coachingfederation.ch.",
+        "Nous ne collectons que le nécessaire : par exemple votre nom et votre e-mail lorsque vous nous écrivez, vous inscrivez à un événement, vous abonnez à la newsletter ou avez un compte membre.",
+        "Nous utilisons vos données pour vous répondre, organiser des événements, envoyer les newsletters demandées et afficher les profils de coachs que les membres ont choisi de publier.",
+        "Des prestataires de confiance nous aident, comme notre plateforme web, notre service d'e-mail et Stripe pour les paiements. Certains sont aux États-Unis et liés par des contrats de protection des données.",
+        "Les données des membres nous parviennent chaque nuit d'ICF Global, notre organisation faîtière.",
+        "Nous conservons les données uniquement le temps nécessaire, puis les supprimons. Les justificatifs de paiement sont conservés 10 ans, comme l'exige le droit suisse.",
+        "Nous n'utilisons aucun outil d'analyse ni de suivi. Le seul cookie est un cookie de sécurité de courte durée qui distingue les vrais visiteurs des robots.",
+        "Vous pouvez à tout moment demander l'accès à vos données, leur rectification ou leur suppression. Écrivez-nous simplement."
+      ]
     }
   },
   "nav": {
@@ -27,5 +43,8 @@
   },
   "common": {
     "lastUpdated": "Dernière mise à jour : 18 octobre 2026"
+  },
+  "toc": {
+    "label": "Sur cette page"
   }
 }

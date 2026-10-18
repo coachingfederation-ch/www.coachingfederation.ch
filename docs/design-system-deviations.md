@@ -134,3 +134,7 @@ Add one only when all three hold:
 3. There is a concrete condition that would make the deviation unnecessary.
 
 Otherwise, use the design system.
+
+## html/body `overflow-x: clip` (October 18, 2026)
+
+The design system sets `overflow-x: hidden` on html and body, which breaks every `position: sticky` element. `src/styles.css` overrides it with `overflow-x: clip` (same visual clipping, no scroll container) so the privacy page table of contents can float. Worth upstreaming to the design system.

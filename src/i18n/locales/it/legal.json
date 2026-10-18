@@ -19,6 +19,22 @@
       "eyebrow": "Privacy",
       "title": "Informativa sulla privacy",
       "lede": "Informazioni sul trattamento dei dati personali sul sito web di The Switzerland Chapter of ICF e sui vostri diritti in materia di protezione dei dati."
+    },
+    "summary": {
+      "show": "Mostra il riassunto in linguaggio semplice",
+      "hide": "Nascondi il riassunto",
+      "title": "In breve",
+      "note": "Questo riassunto serve solo come orientamento. Fa fede l'informativa sulla privacy completa qui sotto.",
+      "points": [
+        "Siamo The Switzerland Chapter of ICF, un'associazione con sede ad Arbon. Può contattarci all'indirizzo office@coachingfederation.ch.",
+        "Raccogliamo solo ciò che serve: ad esempio nome ed e-mail quando ci scrive, si iscrive a un evento, si abbona alla newsletter o ha un account da membro.",
+        "Usiamo i Suoi dati per risponderLe, organizzare eventi, inviare le newsletter richieste e mostrare i profili dei coach che i membri hanno scelto di pubblicare.",
+        "Ci aiutano fornitori di fiducia, come la nostra piattaforma web, il servizio e-mail e Stripe per i pagamenti. Alcuni si trovano negli Stati Uniti e sono vincolati da contratti sulla protezione dei dati.",
+        "I dati dei membri ci arrivano ogni notte da ICF Global, la nostra organizzazione mantello.",
+        "Conserviamo i dati solo per il tempo necessario, poi li cancelliamo. Le registrazioni dei pagamenti sono conservate 10 anni, come richiesto dal diritto svizzero.",
+        "Non usiamo strumenti di analisi né di tracciamento. L'unico cookie è un cookie di sicurezza di breve durata che distingue i visitatori reali dai bot.",
+        "Può chiedere in qualsiasi momento di accedere ai Suoi dati, correggerli o cancellarli. Ci scriva semplicemente."
+      ]
     }
   },
   "nav": {
@@ -27,5 +43,8 @@
   },
   "common": {
     "lastUpdated": "Ultimo aggiornamento: 18 ottobre 2026"
+  },
+  "toc": {
+    "label": "In questa pagina"
   }
 }

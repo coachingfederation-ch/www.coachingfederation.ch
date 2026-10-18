@@ -20,3 +20,16 @@
 @theme {
   --color-success: oklch(0.62 0.14 152);
 }
+
+/*
+ * The design system clips horizontal overflow with `overflow-x: hidden` on
+ * html/body, which turns them into scroll containers and silently breaks every
+ * `position: sticky` (e.g. the privacy page table of contents). `clip` hides
+ * the same overflow without creating a scroll container. Same visual result.
+ */
+@layer base {
+  html,
+  body {
+    overflow-x: clip;
+  }
+}
