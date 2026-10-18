@@ -71,6 +71,13 @@
       "when": 1792240337313,
       "tag": "0009_assignment_audit_explicit_read_only_grants",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792318734558,
+      "tag": "0010_event_created_updated_by",
+      "breakpoints": true
     }
   ]
 }
