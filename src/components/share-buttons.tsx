@@ -25,10 +25,6 @@ function shareTargets(url: string, title: string) {
   };
 }
 
-/** One shared reporter so inline and block share actions land as one goal. */
-function reportShare(channel: string) {
-}
-
 const ICON_BTN =
   "inline-flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
@@ -44,7 +40,6 @@ export function ShareInline({ url, title }: { url: string; title: string }) {
         rel="noopener noreferrer"
         aria-label={t("insights.share.linkedin")}
         className={ICON_BTN}
-        onClick={() => reportShare("linkedin")}
       >
         <Linkedin className="h-4 w-4" />
       </a>
@@ -54,7 +49,6 @@ export function ShareInline({ url, title }: { url: string; title: string }) {
         rel="noopener noreferrer"
         aria-label={t("insights.share.x")}
         className={ICON_BTN}
-        onClick={() => reportShare("x")}
       >
         <XIcon className="h-4 w-4" />
       </a>
@@ -63,7 +57,6 @@ export function ShareInline({ url, title }: { url: string; title: string }) {
         target="_top"
         aria-label={t("insights.share.email")}
         className={ICON_BTN}
-        onClick={() => reportShare("email")}
       >
         <Mail className="h-4 w-4" />
       </a>
@@ -85,7 +78,6 @@ export function ShareBlock({ url, title }: { url: string; title: string }) {
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
-      reportShare("copy_link");
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
       /* clipboard blocked — the explicit share links remain available */
@@ -101,7 +93,6 @@ export function ShareBlock({ url, title }: { url: string; title: string }) {
           target="_blank"
           rel="noopener noreferrer"
           className={LABEL_BTN}
-          onClick={() => reportShare("linkedin")}
         >
           <Linkedin className="h-4 w-4" />
           {t("insights.share.linkedin")}
@@ -111,7 +102,6 @@ export function ShareBlock({ url, title }: { url: string; title: string }) {
           target="_blank"
           rel="noopener noreferrer"
           className={LABEL_BTN}
-          onClick={() => reportShare("x")}
         >
           <XIcon className="h-4 w-4" />
           {t("insights.share.x")}
@@ -120,7 +110,6 @@ export function ShareBlock({ url, title }: { url: string; title: string }) {
           href={links.email}
           target="_top"
           className={LABEL_BTN}
-          onClick={() => reportShare("email")}
         >
           <Mail className="h-4 w-4" />
           {t("insights.share.email")}
