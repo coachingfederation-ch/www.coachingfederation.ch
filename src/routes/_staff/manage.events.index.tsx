@@ -16,6 +16,7 @@ import { useCms } from "@/i18n/cms";
 import { listManagedEvents } from "@/lib/events-admin.functions";
 import { displayEventStatus, isLiveEvent } from "@/lib/events";
 import { useNowMinute } from "@/hooks/use-now-minute";
+import { EventsCalendar, currentMonth } from "@/components/cms/EventsCalendar";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -27,6 +28,8 @@ const searchSchema = z.object({
   credits: fallback(z.enum(["", "cce", "certificates", "any"]), "").default(""),
   status: fallback(z.string(), "").default(""),
   page: fallback(z.number().int(), 1).default(1),
+  view: fallback(z.enum(["list", "calendar"]), "list").default("list"),
+  month: fallback(z.string().regex(/^\d{4}-\d{2}$/), "").default(""),
 });
 
 const PAGE_SIZE = 25;
@@ -341,6 +344,8 @@ function ManageEventsPage() {
                       credits: "" as const,
                       status: "",
                       page: 1,
+                      view: search.view,
+                      month: search.month,
                     },
                     replace: true,
                   })
@@ -354,7 +359,61 @@ function ManageEventsPage() {
           </div>
         </div>
 
-        <div className="mt-4 overflow-hidden rounded-2xl border border-border bg-card">
+        <div
+          role="group"
+          aria-label={t("events.calendar.calendar")}
+          className="mt-4 inline-flex rounded-full border border-border bg-card p-1"
+        >
+          {(["list", "calendar"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              aria-pressed={search.view === v}
+              onClick={() =>
+                void navigate({
+                  to: "/manage/events",
+                  search: (prev) => ({ ...prev, view: v }),
+                  replace: true,
+                })
+              }
+              className={`min-h-11 rounded-full px-4 text-sm font-semibold ${
+                search.view === v ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+              }`}
+            >
+              {t(`events.calendar.${v}`)}
+            </button>
+          ))}
+        </div>
+
+        {search.view === "calendar" ? (
+          <EventsCalendar
+            t={t}
+            month={search.month || currentMonth()}
+            onMonthChange={(month) =>
+              void navigate({
+                to: "/manage/events",
+                search: (prev) => ({ ...prev, month }),
+                replace: true,
+              })
+            }
+            onOpen={(id) => void navigate({ to: "/manage/events/$id", params: { id } })}
+            passedHidden={excludedStatuses.includes("passed")}
+            onShowPassed={() =>
+              setFilter({
+                status:
+                  excludedStatuses.filter((s) => s !== "passed").join(",") || STATUS_SHOW_ALL,
+              })
+            }
+            events={filtered.map((row) => ({
+              ...row,
+              statusLabel: t(`events.status.${displayEventStatus(row.status, row.starts_at)}`),
+            }))}
+          />
+        ) : null}
+
+        <div
+          className={`mt-4 overflow-hidden rounded-2xl border border-border bg-card ${search.view === "calendar" ? "hidden" : ""}`}
+        >
           <table className="w-full text-left text-sm">
             <thead className="bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
@@ -464,7 +523,7 @@ function ManageEventsPage() {
           </table>
         </div>
 
-        {filtered.length > PAGE_SIZE ? (
+        {search.view !== "calendar" && filtered.length > PAGE_SIZE ? (
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
             <span className="text-muted-foreground">
               {t("events.pagination.range")
