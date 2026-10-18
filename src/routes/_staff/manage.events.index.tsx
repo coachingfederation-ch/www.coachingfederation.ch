@@ -412,13 +412,15 @@ function ManageEventsPage() {
                       ) : null}
                       {row.updated_at ? (
                         <span className="mt-1 block text-xs font-normal text-muted-foreground">
-                          {t("events.authorship.editedShort", {
-                            date: new Date(row.updated_at).toLocaleDateString(undefined, {
-                              day: "numeric",
-                              month: "short",
-                            }),
-                            name: row.updated_by_name ?? row.created_by_name ?? "—",
-                          })}
+                          {t("events.authorship.editedShort")
+                            .replace(
+                              "{date}",
+                              new Date(row.updated_at).toLocaleDateString(undefined, {
+                                day: "numeric",
+                                month: "short",
+                              }),
+                            )
+                            .replace("{name}", row.updated_by_name ?? row.created_by_name ?? "—")}
                         </span>
                       ) : null}
                     </td>
