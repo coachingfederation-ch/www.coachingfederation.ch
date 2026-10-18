@@ -10,3 +10,4 @@ The draft-review banner is shown only on Privacy. Imprint no longer displays thi
 - The draft banner and the publication appendix were removed at publication; `legal.draftBanner` strings no longer exist.
 - The site runs no analytics or tracking (Plausible was removed on October 18, 2026). Adding any analytics requires updating the Privacy Policy in all four languages and, if cookies are involved, a consent mechanism.
 - The standalone Imprint page (`src/pages/Imprint.tsx`) holds EN/DE/FR/IT copy in `IMPRINT_COPY`, chosen by URL locale.
+- /privacy has a floating table of contents (`src/components/legal/LegalToc.tsx`, built from the page headings) and a plain-language summary (`PlainSummary.tsx`, copy in `legal.privacy.summary`). Update the summary in all four languages whenever the policy changes.

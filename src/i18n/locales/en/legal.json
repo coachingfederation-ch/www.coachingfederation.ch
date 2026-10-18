@@ -19,6 +19,22 @@
       "eyebrow": "Privacy",
       "title": "Privacy Policy",
       "lede": "Information about the processing of personal data on the website of The Switzerland Chapter of ICF and your data protection rights."
+    },
+    "summary": {
+      "show": "Show summary in plain language",
+      "hide": "Hide summary",
+      "title": "In short",
+      "note": "This summary is for orientation only. The full privacy policy below is the binding text.",
+      "points": [
+        "We are The Switzerland Chapter of ICF, an association in Arbon. You can reach us at office@coachingfederation.ch.",
+        "We only collect what we need: for example your name and email when you contact us, register for an event, subscribe to the newsletter, or have a member account.",
+        "We use your data to answer you, run events, send newsletters you asked for, and show coach profiles that members chose to publish.",
+        "Trusted service providers help us, such as our website platform, our email service, and Stripe for payments. Some are in the USA and are bound by data protection contracts.",
+        "Member data comes from ICF Global, our parent organisation, once a night.",
+        "We keep data only as long as needed, then delete it. Payment records are kept for 10 years because Swiss law requires it.",
+        "We use no analytics or tracking. The only cookie is a short-lived security cookie that tells real visitors from bots.",
+        "You can ask to see, correct, or delete your data at any time. Just write to us."
+      ]
     }
   },
   "nav": {
@@ -27,5 +43,8 @@
   },
   "common": {
     "lastUpdated": "Last updated: October 18, 2026"
+  },
+  "toc": {
+    "label": "On this page"
   }
 }
