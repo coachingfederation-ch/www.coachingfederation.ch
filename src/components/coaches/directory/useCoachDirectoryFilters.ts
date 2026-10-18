@@ -4,7 +4,7 @@
  * credentials, specialisations, formats, accepting-only, pagination) are
  * local state that drives the server-side query plus client-side narrowing.
  */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useI18n } from "@/i18n";
