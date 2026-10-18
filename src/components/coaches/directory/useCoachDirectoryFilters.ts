@@ -4,12 +4,11 @@
  * credentials, specialisations, formats, accepting-only, pagination) are
  * local state that drives the server-side query plus client-side narrowing.
  */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useI18n } from "@/i18n";
 import { queryCoachDirectory } from "@/lib/directory.functions";
-import { trackGoal } from "@/lib/plausible";
 import {
   activeFinderModes,
   fetchCoachFinderConfig,
@@ -139,28 +138,6 @@ export function useCoachDirectoryFilters() {
     // No point querying while the finder is closed — nothing is rendered.
     enabled: !finderDisabled,
   });
-
-  // One goal per settled filter set: the effect keys on the serialised filters,
-  // so typing a query or toggling a facet reports once, not per render. Only
-  // non-identifying facets are sent — never the free-text query itself.
-  const searchSignature = JSON.stringify({
-    ...filters,
-    hasQuery: query.trim() !== "",
-    acceptingOnly,
-  });
-  useEffect(() => {
-    if (isPending || !dirty) return;
-    const f = JSON.parse(searchSignature) as Record<string, unknown>;
-    trackGoal("Coach Search", {
-      mode: String(f["mode"] ?? "all"),
-      region: String(f["region"] ?? "all"),
-      language: String(f["language"] ?? "all"),
-      has_query: Boolean(f["hasQuery"]),
-      accepting_only: Boolean(f["acceptingOnly"]),
-    });
-    // Everything reported is derived from the signature above.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchSignature, isPending]);
 
   function clearAll() {
     setQuery("");

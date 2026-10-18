@@ -31,7 +31,6 @@ import {
 import type { EventHost } from "@/lib/event-hosts";
 import type { EventSpeaker } from "@/lib/event-speakers";
 import { eventMap } from "@/lib/event-map";
-import { useTrackView } from "@/lib/plausible";
 import { getMyRegistration } from "@/lib/events.functions";
 import { EventRecap } from "@/components/events/EventRecap";
 import type { PublicRecap } from "@/lib/event-recaps";
@@ -94,9 +93,6 @@ export default function EventDetailPage({
   };
 }) {
   const { t, locale } = useI18n();
-  useTrackView("Event View", event.slug ?? event.id ?? "", {
-    event_slug: event.slug ?? "",
-  });
   const tz = event.timezone ?? "Europe/Zurich";
   const past = isPastEvent(event);
   const now = useNowMinute();
