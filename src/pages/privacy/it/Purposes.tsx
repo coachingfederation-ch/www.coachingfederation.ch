@@ -1,6 +1,6 @@
 import { Table } from "../shared";
 
-export function ScoposSection() {
+export function PurposesSection() {
   return (
     <>
       <div className="space-y-6">
