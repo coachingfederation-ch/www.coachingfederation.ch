@@ -30,7 +30,7 @@ export function LegalPageShell({ pageKey, children }: LegalPageShellProps) {
       <main id="main" className="pb-24">
         {withToc ? (
           <div className="mx-auto max-w-6xl lg:flex lg:gap-12 lg:px-8">
-            <div className="lg:order-2 lg:w-64 lg:shrink-0 lg:pt-16">
+            <div className="max-lg:contents lg:order-2 lg:w-64 lg:shrink-0 lg:pt-16">
               <LegalToc targetRef={articleRef} label={t("legal.toc.label")} contentKey={locale} />
             </div>
             <article
