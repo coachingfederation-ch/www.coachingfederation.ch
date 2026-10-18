@@ -139,21 +139,6 @@ export function useCoachDirectoryFilters() {
     enabled: !finderDisabled,
   });
 
-  // One goal per settled filter set: the effect keys on the serialised filters,
-  // so typing a query or toggling a facet reports once, not per render. Only
-  // non-identifying facets are sent — never the free-text query itself.
-  const searchSignature = JSON.stringify({
-    ...filters,
-    hasQuery: query.trim() !== "",
-    acceptingOnly,
-  });
-  useEffect(() => {
-    if (isPending || !dirty) return;
-    const f = JSON.parse(searchSignature) as Record<string, unknown>;
-    // Everything reported is derived from the signature above.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchSignature, isPending]);
-
   function clearAll() {
     setQuery("");
     setRegion("all");
