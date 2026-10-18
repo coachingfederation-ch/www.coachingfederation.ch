@@ -66,10 +66,11 @@ export function ThirdPartiesSection() {
               <strong>DPO contact:</strong> <MailLink address="dpo@lovable.dev" />
             </li>
             <li>
-              <strong>Role:</strong> Lovable processes Customer Data (website content, user data,
-              application data) as a data processor. Lovable also collects Service Data (usage
-              telemetry, IP addresses, browser data, error logs) as an independent controller for
-              its own security, billing, analytics, and product-improvement purposes.
+              <strong>Role:</strong> For your account, form and profile data (Customer Data),
+              Lovable acts as our processor. For technical log and usage data (such as IP address,
+              browser and device data), Lovable acts as an independent controller under its own
+              privacy policy and may retain this data for as long as it has a legitimate business
+              need.
             </li>
             <li>
               <strong>Hosting infrastructure:</strong> Lovable Cloud stores and processes all
@@ -88,14 +89,14 @@ export function ThirdPartiesSection() {
             </li>
             <li>
               <strong>International transfers:</strong> Lovable may transfer Personal Data to the
-              United States. Lovable safeguards these transfers through EU Standard Contractual
-              Clauses (Module 2, Controller-to-Processor), the UK International Data Transfer
-              Addendum, and a Swiss Addendum adapting the SCCs to the revised Swiss FADP, naming the
-              FDPIC as the competent authority.
+              United States. Lovable safeguards these transfers through the EU Standard Contractual
+              Clauses (Module 2, Controller-to-Processor), applied to transfers from Switzerland,
+              and the UK International Data Transfer Addendum.
             </li>
             <li>
-              <strong>Data retention:</strong> Lovable retains Log Data for up to 90 days; Customer
-              Data is deleted within 30 days after account termination.
+              <strong>Data retention:</strong> Lovable retains Log Data as long as necessary for
+              security and platform purposes; Customer Data is deleted within 30 days after account
+              termination.
             </li>
             <li>
               <strong>Security:</strong> SOC 2 Type II and ISO 27001 certified data centers,
@@ -132,15 +133,7 @@ export function ThirdPartiesSection() {
 
         <div className="space-y-4">
           <h4 className="text-base font-semibold tracking-tight">d) Analytics providers</h4>
-          <p className="text-foreground/80">
-            We use Plausible Analytics (Plausible Insights OÜ, Estonia) to understand how this
-            website is used. Plausible is cookieless and privacy-focused: it records aggregated page
-            views and a small number of goals (for example a deck download, an event registration or
-            an article share) without cookies, without cross-site tracking and without storing
-            personal data or full IP addresses. No individual visitor can be identified, and the
-            data is processed on servers in the European Union. We use no other analytics or
-            tracking tools.
-          </p>
+          <p className="text-foreground/80">We use no analytics or tracking tools.</p>
         </div>
 
         <div className="space-y-4">
@@ -149,7 +142,8 @@ export function ThirdPartiesSection() {
             We receive member data from ICF Global through an automated nightly synchronisation; we
             do not send profile data back. This data is processed by ICF Global in the United
             States, where ICF Global&apos;s member records are administered by its association
-            management company, Associations International (Lexington, Kentucky, USA).
+            management company, Associations International (Lexington, Kentucky, USA). The transfer
+            is governed by our Chapter Agreement and API Agreement with ICF Global.
           </p>
         </div>
 
@@ -187,21 +181,21 @@ export function ThirdPartiesSection() {
           </p>
           <ul className="list-disc space-y-1 pl-5 text-foreground/80">
             <li>
-              <strong>Google Maps</strong> — used to display location and map data on event pages
+              <strong>Google Maps</strong> (Google LLC, USA): displays maps on event pages. When a
+              map loads, your IP address is transmitted to Google.
             </li>
             <li>
-              <strong>Unsplash</strong> — used by the CMS image picker to source images
+              <strong>Unsplash</strong> (Unsplash Inc., USA): used only by staff in the CMS image
+              picker; no visitor data is transmitted.
+            </li>
+            <li>
+              <strong>OpenAI</strong> (via Lovable AI Gateway, USA): processes conversations with
+              the AI assistant on the About page (see Section 3b).
             </li>
           </ul>
           <p className="text-foreground/80">
             We do not use video embeds, social media embeds or plugins, CAPTCHA / bot protection, or
             newsletter tracking pixels.
-          </p>
-          <p className="text-foreground/80">
-            We use Plausible Analytics (see Section 5d), which is cookieless and does not track
-            individuals. We use no other analytics or tracking tools. Lovable&apos;s own platform
-            analytics (PostHog, Google Analytics, TikTok, Facebook/Meta, Google Ads) apply to the
-            Lovable editor at lovable.dev, not to visitors of coachingfederation.ch.
           </p>
           <p className="text-foreground/80">We do not sell personal data to third parties.</p>
         </div>

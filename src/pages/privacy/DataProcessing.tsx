@@ -32,13 +32,11 @@ export function DataProcessingSection() {
           </ul>
           <p className="text-foreground/80">
             This data is processed for the technical operation, security, and stability of the
-            website. Our hosting platform Lovable also processes this data as an independent
-            controller for its own security, analytics, and product-improvement purposes, in
-            accordance with{" "}
-            <ExternalLink href="https://lovable.dev/privacy">
-              Lovable&apos;s Privacy Policy
-            </ExternalLink>
-            . Lovable retains this log data for up to 90 days.
+            website. For your account, form and profile data, Lovable acts as our processor. For
+            technical log and usage data (such as IP address, browser and device data), Lovable acts
+            as an independent controller under its own{" "}
+            <ExternalLink href="https://lovable.dev/privacy">privacy policy</ExternalLink> and may
+            retain this data for as long as it has a legitimate business need.
           </p>
         </div>
 
@@ -54,8 +52,10 @@ export function DataProcessingSection() {
           </ul>
           <p className="text-foreground/80">
             On our About page, you can prepare your enquiry in a conversation with an AI assistant
-            instead of filling in a form. The conversation runs through our AI provider, is not
-            stored by us, and is never used to train a model. When you press &ldquo;Review and
+            instead of filling in a form. The conversation is processed through Lovable&apos;s AI
+            Gateway by OpenAI (USA). It is not stored on our servers, and under our data processing
+            agreement it is never used to train AI models. Your chat history is kept only in your
+            own browser (see Section 8). When you press &ldquo;Review and
             send&rdquo;, the assistant drafts a summary that you can edit — the version you approve
             is the one we receive. We then store your name, email address, subject, and message
             temporarily and send a confirmation link to your email address; your message only
@@ -138,8 +138,9 @@ export function DataProcessingSection() {
           </ul>
           <p className="text-foreground/80">
             Beyond name and email, event registration collects no personal identifiable data.
-            Individual event forms may include further fields, but these do not collect personal
-            data. We do not collect dietary requirements, accessibility needs, or any other category
+            Individual event forms may ask for additional information where an event requires it.
+            Such data is used only for that event and deleted together with the registration data.
+            We do not collect dietary requirements, accessibility needs, or any other category
             of sensitive personal data (Art. 5 lit. c DSG) during event registration.
           </p>
         </div>

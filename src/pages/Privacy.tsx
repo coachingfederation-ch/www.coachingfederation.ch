@@ -15,7 +15,6 @@ import { RetentionSection } from "./privacy/Retention";
 import { CookiesSection } from "./privacy/Cookies";
 import { RightsSection } from "./privacy/Rights";
 import { MiscSection } from "./privacy/Misc";
-import { AppendixSection } from "./privacy/Appendix";
 
 export default function PrivacyPage() {
   return (
@@ -42,10 +41,6 @@ export default function PrivacyPage() {
           <RightsSection />
           <MiscSection />
         </section>
-
-        <hr className="border-border/70" />
-
-        <AppendixSection />
       </div>
     </LegalPageShell>
   );

@@ -32,22 +32,22 @@ export function DataTransfersSection() {
             [
               "Lovable (Lovable Labs Inc.)",
               "United States (Delaware)",
-              "EU SCCs Module 2 (Controller-to-Processor), Swiss Addendum to the revised FADP, UK Addendum. See Lovable Privacy Policy",
+              "EU SCCs Module 2 (Controller-to-Processor), applied to transfers from Switzerland; UK Addendum. See Lovable DPA",
             ],
             [
               "Lovable sub-processors",
               "Various (see trust.lovable.dev)",
-              "Contractual obligations equivalent to Lovable&apos;s DPAs",
+              "Contractual obligations equivalent to Lovable's DPAs",
             ],
             [
               "Supabase (via Lovable Cloud)",
               "Europe (Ireland)",
-              "Sub-processor of Lovable; covered by Lovable&apos;s DPA. EU/EEA recognised as adequate under Swiss DSG",
+              "Sub-processor of Lovable; covered by Lovable's DPA. EU/EEA recognised as adequate under Swiss DSG",
             ],
             [
               "Cloudflare",
               "Global network",
-              "Edge routing, DNS and Workers (CDN). Sub-processor of Lovable; covered by Lovable&apos;s DPA",
+              "Edge routing, DNS and Workers (CDN). Sub-processor of Lovable; covered by Lovable's DPA",
             ],
             [
               "MailerLite",
@@ -62,7 +62,22 @@ export function DataTransfersSection() {
             [
               "ICF Global",
               "United States (administered by Associations International)",
-              "Contractual safeguards / standard contractual clauses",
+              "Chapter Agreement and API Agreement with ICF Global",
+            ],
+            [
+              "Google Maps (Google LLC)",
+              "United States",
+              "EU Standard Contractual Clauses / Swiss-US Data Privacy Framework (Google)",
+            ],
+            [
+              "Unsplash (Unsplash Inc.)",
+              "United States",
+              "Staff use only (CMS image picker); no visitor data",
+            ],
+            [
+              "OpenAI (via Lovable AI Gateway)",
+              "United States",
+              "Sub-processor of Lovable, covered by Lovable's DPA; no use for model training",
             ],
           ]}
         />
@@ -72,10 +87,6 @@ export function DataTransfersSection() {
         </p>
         <ul className="list-disc space-y-1 pl-5 text-foreground/80">
           <li>Standard Contractual Clauses (SCCs) or equivalent contractual guarantees</li>
-          <li>
-            The Swiss Addendum to the SCCs (as used by Lovable, naming the FDPIC as competent
-            authority)
-          </li>
           <li>Binding corporate rules (where applicable)</li>
           <li>Specific exceptions under Art. 16 para. 2 DSG</li>
         </ul>

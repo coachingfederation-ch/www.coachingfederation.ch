@@ -2,7 +2,7 @@
  * Privacy policy sections 1-2: who is responsible and scope of the policy.
  * Exports: ControllerSection. Rendered by src/pages/Privacy.tsx inside the Privacy Policy section.
  */
-import { ExternalLink, InfoCallout, MailLink } from "./shared";
+import { ExternalLink, MailLink } from "./shared";
 
 export function ControllerSection() {
   return (
@@ -31,14 +31,6 @@ export function ControllerSection() {
           For any questions regarding data protection, you may contact us at the email address
           above.
         </p>
-        <InfoCallout>
-          <p>
-            <strong>Item to confirm before publishing:</strong> If The Switzerland Chapter of ICF
-            designates a Data Protection Adviser (Datenschutzberater) under Art. 14 DPO, or a
-            specific contact for data protection matters, their name and contact details should be
-            inserted here.
-          </p>
-        </InfoCallout>
       </div>
 
       <div className="space-y-4">
