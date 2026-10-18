@@ -655,15 +655,19 @@ function EventEditor() {
 
         <div className="min-w-0">
           <p className="text-xs text-muted-foreground">
-            {t("events.authorship.created", {
-              name: event.created_by_name ?? t("events.authorship.unknown"),
-              date: event.created_at ? new Date(event.created_at).toLocaleDateString() : "—",
-            })}
+            {t("events.authorship.created")
+              .replace("{name}", event.created_by_name ?? t("events.authorship.unknown"))
+              .replace(
+                "{date}",
+                event.created_at ? new Date(event.created_at).toLocaleDateString() : "—",
+              )}
             {" · "}
-            {t("events.authorship.edited", {
-              name: event.updated_by_name ?? t("events.authorship.unknown"),
-              date: event.updated_at ? new Date(event.updated_at).toLocaleString() : "—",
-            })}
+            {t("events.authorship.edited")
+              .replace("{name}", event.updated_by_name ?? t("events.authorship.unknown"))
+              .replace(
+                "{date}",
+                event.updated_at ? new Date(event.updated_at).toLocaleString() : "—",
+              )}
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
             {t(`events.stage.hint.${activeStage}`)}
