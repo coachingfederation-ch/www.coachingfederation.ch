@@ -9,3 +9,4 @@ The draft-review banner is shown only on Privacy. Imprint no longer displays thi
 - Any wording change must be made in English first, then mirrored in all three translations.
 - The draft banner and the publication appendix were removed at publication; `legal.draftBanner` strings no longer exist.
 - The policy states that no analytics tools are used. Plausible code still exists in `src/components/plausible-analytics.tsx`; keep it disabled, or update the policy if it is turned on.
+- The standalone Imprint page (`src/pages/Imprint.tsx`) holds EN/DE/FR/IT copy in `IMPRINT_COPY`, chosen by URL locale.
