@@ -1,5 +1,5 @@
 /**
- * Common layout shell for legal pages like Imprint and Privacy with a draft banner.
+ * Common layout shell for legal pages, with a draft banner on Privacy only.
  * Exports: LegalPageShell, DraftBanner. Used as a wrapper by src/pages/Imprint.tsx
  * and src/pages/Privacy.tsx.
  */
@@ -52,7 +52,7 @@ export function LegalPageShell({ pageKey, children }: LegalPageShellProps) {
         title={t(`legal.${pageKey}.hero.title`)}
         lede={t(`legal.${pageKey}.hero.lede`)}
       />
-      <DraftBanner />
+      {pageKey === "privacy" && <DraftBanner />}
       <main id="main" className="pb-24">
         <article className="mx-auto max-w-3xl px-5 pt-16 sm:px-8">{children}</article>
       </main>
