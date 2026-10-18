@@ -2154,9 +2154,9 @@
       "preview": "Preview page"
     },
     "authorship": {
-      "editedShort": "Edited {{date}} by {{name}}",
-      "created": "Created by {{name}} on {{date}}",
-      "edited": "Last edited by {{name}} on {{date}}",
+      "editedShort": "Edited {date} by {name}",
+      "created": "Created by {name} on {date}",
+      "edited": "Last edited by {name} on {date}",
       "unknown": "—"
     }
   },

@@ -2154,9 +2154,9 @@
       "preview": "Vedi la pagina"
     },
     "authorship": {
-      "editedShort": "Modificato il {{date}} da {{name}}",
-      "created": "Creato da {{name}} il {{date}}",
-      "edited": "Ultima modifica di {{name}} il {{date}}",
+      "editedShort": "Modificato il {date} da {name}",
+      "created": "Creato da {name} il {date}",
+      "edited": "Ultima modifica di {name} il {date}",
       "unknown": "—"
     }
   },
