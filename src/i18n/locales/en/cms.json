@@ -908,7 +908,10 @@
           "description": "Build a local hub by hosting events, curating connections, and representing the chapter in your region.",
           "quote": "I joined to grow my network; I stayed because I could shape something that helps the whole profession.",
           "attribution": "Anna M., Community Lead Zürich",
-          "valueTags": ["Build your network", "Offer leadership development"],
+          "valueTags": [
+            "Build your network",
+            "Offer leadership development"
+          ],
           "commitment": "4 to 6 hours a month",
           "responsibilities": [
             "Plan and host regional community gatherings",
@@ -927,7 +930,10 @@
           "description": "Support your regional community lead, co-host local gatherings, and help new members feel at home.",
           "quote": "I help with one gathering a quarter and have met more coaches than in years of working alone.",
           "attribution": "Elena R., Community Team Member",
-          "valueTags": ["Build your network", "Give back to the community"],
+          "valueTags": [
+            "Build your network",
+            "Give back to the community"
+          ],
           "commitment": "2 to 4 hours a month",
           "responsibilities": [
             "Help plan and co-host local community gatherings",
@@ -946,7 +952,10 @@
           "description": "Help run chapter events, from registration desks to speaker support.",
           "quote": "It's a few hours a year, and the energy in the room stays with me for months.",
           "attribution": "Beat M., Event Host",
-          "valueTags": ["Build your network", "Give back to the community"],
+          "valueTags": [
+            "Build your network",
+            "Give back to the community"
+          ],
           "commitment": "A few hours per event",
           "responsibilities": [
             "Welcome participants and manage check-in",
@@ -963,7 +972,10 @@
           "description": "Share your perspective through Insights articles, interviews, or social content.",
           "quote": "Writing for the chapter helped me refine my own point of view.",
           "attribution": "Carla T., Content Contributor",
-          "valueTags": ["Gain continuous learning", "Be an extension of the ICF brand"],
+          "valueTags": [
+            "Gain continuous learning",
+            "Be an extension of the ICF brand"
+          ],
           "commitment": "Flexible, per article",
           "responsibilities": [
             "Write Insights articles or give interviews",
@@ -980,14 +992,20 @@
           "description": "Be the first friendly face for website visitors with questions.",
           "quote": "The questions are often simple, but the conversations can be meaningful.",
           "attribution": "Daniel K., Live Chat Volunteer",
-          "valueTags": ["Give back to the community", "Be an extension of the ICF brand"],
+          "valueTags": [
+            "Give back to the community",
+            "Be an extension of the ICF brand"
+          ],
           "commitment": "1 to 2 hours a week",
           "responsibilities": [
             "Answer visitor questions in the website chat",
             "Point visitors to coaches, events, and membership information",
             "Pass complex requests to the chapter office"
           ],
-          "profile": ["ICF member who knows the chapter well", "Friendly and clear in writing"]
+          "profile": [
+            "ICF member who knows the chapter well",
+            "Friendly and clear in writing"
+          ]
         },
         "details": {
           "cta": "View job description",
@@ -1016,7 +1034,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
+          "items": [
+            "Lead projects",
+            "Be recognized by ICFS for leading initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1809,7 +1830,9 @@
       "allCredits": "All events",
       "cceOnly": "CCE events",
       "certificatesOnly": "Certificate events",
-      "creditsAny": "CCE or certificate events"
+      "creditsAny": "CCE or certificate events",
+      "createdBy": "Created by",
+      "allCreators": "All creators"
     },
     "pagination": {
       "range": "Showing {from}–{to} of {total}",
@@ -2129,6 +2152,12 @@
       "discard": "Discard changes",
       "autoSavedNote": "Hosts, speakers, tickets, translations and the recap save on their own.",
       "preview": "Preview page"
+    },
+    "authorship": {
+      "editedShort": "Edited {{date}} by {{name}}",
+      "created": "Created by {{name}} on {{date}}",
+      "edited": "Last edited by {{name}} on {{date}}",
+      "unknown": "—"
     }
   },
   "eventTranslations": {
@@ -2926,7 +2955,13 @@
     },
     "depthTitle": "Depth (1 too light — 5 too deep)",
     "usefulnessTitle": "Usefulness (1 not for me — 5 I will use this)",
-    "depthScale": ["Too light", "A bit light", "About right", "A bit deep", "Too deep"],
+    "depthScale": [
+      "Too light",
+      "A bit light",
+      "About right",
+      "A bit deep",
+      "Too deep"
+    ],
     "usefulnessScale": [
       "Not for me",
       "Mildly interesting",

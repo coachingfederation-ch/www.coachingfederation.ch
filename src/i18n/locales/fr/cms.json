@@ -908,7 +908,10 @@
           "description": "Créez un hub local en organisant des événements, en tissant des liens et en représentant le chapitre dans votre région.",
           "quote": "Je suis venu pour développer mon réseau ; je suis resté parce que je pouvais façonner quelque chose qui aide toute la profession.",
           "attribution": "Anna M., Responsable communauté Zürich",
-          "valueTags": ["Développer votre réseau", "Développer votre leadership"],
+          "valueTags": [
+            "Développer votre réseau",
+            "Développer votre leadership"
+          ],
           "commitment": "4 à 6 heures par mois",
           "responsibilities": [
             "Planifier et animer des rencontres régionales",
@@ -927,7 +930,10 @@
           "description": "Soutenez votre responsable de communauté régionale, co-animez des rencontres locales et aidez les nouveaux membres à se sentir chez eux.",
           "quote": "J'aide à une rencontre par trimestre et j'ai rencontré plus de coachs qu'en des années seule.",
           "attribution": "Elena R., membre de l'équipe communauté",
-          "valueTags": ["Développer votre réseau", "Redonner à la communauté"],
+          "valueTags": [
+            "Développer votre réseau",
+            "Redonner à la communauté"
+          ],
           "commitment": "2 à 4 heures par mois",
           "responsibilities": [
             "Aider à planifier et co-animer des rencontres locales",
@@ -946,7 +952,10 @@
           "description": "Contribuez à l'organisation des événements du chapitre, de l'accueil au soutien des intervenants.",
           "quote": "Ce n'est que quelques heures par an, et l'énergie dans la salle me reste des mois durant.",
           "attribution": "Beat M., Hôte d'événement",
-          "valueTags": ["Développer votre réseau", "Rendre à la communauté"],
+          "valueTags": [
+            "Développer votre réseau",
+            "Rendre à la communauté"
+          ],
           "commitment": "Quelques heures par événement",
           "responsibilities": [
             "Accueillir les participant·es et gérer l'enregistrement",
@@ -963,7 +972,10 @@
           "description": "Partagez votre perspective à travers des articles Insights, des interviews ou des contenus sociaux.",
           "quote": "Écrire pour le chapitre m'a aidé à affiner mon propre point de vue.",
           "attribution": "Carla T., Contributeur de contenu",
-          "valueTags": ["Apprendre en continu", "Porter la marque ICF"],
+          "valueTags": [
+            "Apprendre en continu",
+            "Porter la marque ICF"
+          ],
           "commitment": "Flexible, par article",
           "responsibilities": [
             "Rédiger des articles Insights ou donner des interviews",
@@ -980,14 +992,20 @@
           "description": "Soyez le premier visage accueillant pour les visiteurs du site qui ont des questions.",
           "quote": "Les questions sont souvent simples, mais les conversations peuvent être significatives.",
           "attribution": "Daniel K., Bénévole du chat en direct",
-          "valueTags": ["Rendre à la communauté", "Porter la marque ICF"],
+          "valueTags": [
+            "Rendre à la communauté",
+            "Porter la marque ICF"
+          ],
           "commitment": "1 à 2 heures par semaine",
           "responsibilities": [
             "Répondre aux questions des visiteurs dans le chat du site",
             "Orienter vers les coachs, les événements et l'adhésion",
             "Transmettre les demandes complexes au secrétariat"
           ],
-          "profile": ["Membre ICF qui connaît bien le chapitre", "Aimable et clair·e à l'écrit"]
+          "profile": [
+            "Membre ICF qui connaît bien le chapitre",
+            "Aimable et clair·e à l'écrit"
+          ]
         },
         "details": {
           "cta": "Voir la description du poste",
@@ -1016,7 +1034,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
+          "items": [
+            "Piloter des projets",
+            "Être reconnu par ICFS pour avoir mené des initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -1809,7 +1830,9 @@
       "allCredits": "Tous les événements",
       "cceOnly": "Événements CCE",
       "certificatesOnly": "Événements avec certificat",
-      "creditsAny": "Événements CCE ou avec certificat"
+      "creditsAny": "Événements CCE ou avec certificat",
+      "createdBy": "Créé par",
+      "allCreators": "Tous les auteurs"
     },
     "pagination": {
       "range": "{from}–{to} sur {total}",
@@ -2129,6 +2152,12 @@
       "discard": "Annuler les modifications",
       "autoSavedNote": "Les hôtes, les intervenants, les billets, les traductions et le compte rendu s’enregistrent tout seuls.",
       "preview": "Voir la page"
+    },
+    "authorship": {
+      "editedShort": "Modifié le {{date}} par {{name}}",
+      "created": "Créé par {{name}} le {{date}}",
+      "edited": "Dernière modification par {{name}} le {{date}}",
+      "unknown": "—"
     }
   },
   "eventTranslations": {
