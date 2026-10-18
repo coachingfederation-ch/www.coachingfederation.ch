@@ -2158,6 +2158,17 @@
       "created": "Created by {name} on {date}",
       "edited": "Last edited by {name} on {date}",
       "unknown": "—"
+    },
+    "calendar": {
+      "list": "List",
+      "calendar": "Calendar",
+      "previous": "Previous month",
+      "next": "Next month",
+      "today": "Today",
+      "more": "+{count} more",
+      "passedHidden": "Passed events are hidden.",
+      "showPassed": "Show them",
+      "noEvents": "No events on this day."
     }
   },
   "eventTranslations": {
