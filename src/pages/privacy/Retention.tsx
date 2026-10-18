@@ -18,7 +18,7 @@ export function RetentionSection() {
           rows={[
             [
               "Technical data (logs)",
-              "In accordance with our data processing agreement: Lovable retains log data for up to 90 days; customer data is deleted within 30 days after termination",
+              "Log data is retained by Lovable as long as necessary for security and platform purposes (see Section 5b)",
             ],
             [
               "Contact enquiries",
@@ -57,6 +57,10 @@ export function RetentionSection() {
             [
               "ICF Global integration data",
               "Synchronised nightly; retained according to membership status",
+            ],
+            [
+              "Payment and invoice records",
+              "10 years, as required by Swiss accounting law (Art. 958f CO)",
             ],
           ]}
         />

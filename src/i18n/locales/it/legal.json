@@ -12,8 +12,8 @@
   },
   "privacy": {
     "meta": {
-      "title": "Informativa sulla privacy — The Switzerland Chapter of ICF",
-      "description": "Come The Switzerland Chapter of ICF tratta e protegge i dati personali su questo sito web."
+      "title": "Informativa sulla privacy | The Switzerland Chapter of ICF",
+      "description": "Come The Switzerland Chapter of ICF tratta e protegge i dati personali su questo sito, quali fornitori utilizziamo e quali sono i Suoi diritti."
     },
     "hero": {
       "eyebrow": "Privacy",
@@ -21,15 +21,11 @@
       "lede": "Informazioni sul trattamento dei dati personali sul sito web di The Switzerland Chapter of ICF e sui vostri diritti in materia di protezione dei dati."
     }
   },
-  "draftBanner": {
-    "title": "Bozza in attesa di revisione legale",
-    "body": "Questa pagina è una bozza per la revisione legale interna e non è ancora stata approvata per la pubblicazione. Il contenuto potrebbe cambiare prima della pubblicazione della versione finale."
-  },
   "nav": {
     "imprint": "Note legali",
     "privacy": "Privacy"
   },
   "common": {
-    "lastUpdated": "Ultimo aggiornamento: [Data di pubblicazione]"
+    "lastUpdated": "Ultimo aggiornamento: 18 ottobre 2026"
   }
 }
