@@ -12,8 +12,8 @@
   },
   "privacy": {
     "meta": {
-      "title": "Privacy Policy — The Switzerland Chapter of ICF",
-      "description": "How The Switzerland Chapter of ICF processes and protects personal data on this website."
+      "title": "Privacy Policy | The Switzerland Chapter of ICF",
+      "description": "How The Switzerland Chapter of ICF processes and protects personal data on this website, which providers we use, and your data protection rights."
     },
     "hero": {
       "eyebrow": "Privacy",
@@ -21,15 +21,11 @@
       "lede": "Information about the processing of personal data on the website of The Switzerland Chapter of ICF and your data protection rights."
     }
   },
-  "draftBanner": {
-    "title": "Draft pending legal review",
-    "body": "This page is a draft for internal legal review and is not yet approved for publication. The content may change before the final version is published."
-  },
   "nav": {
     "imprint": "Imprint",
     "privacy": "Privacy"
   },
   "common": {
-    "lastUpdated": "Last updated: [Date of publication]"
+    "lastUpdated": "Last updated: October 18, 2026"
   }
 }
