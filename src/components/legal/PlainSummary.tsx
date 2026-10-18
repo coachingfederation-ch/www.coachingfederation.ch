@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 export function PlainSummary() {
   const { t, tList } = useI18n();
   const [open, setOpen] = React.useState(false);
-  const points = tList("legal.privacy.summary.points");
+  const points = tList<string>("legal.privacy.summary.points");
 
   return (
     <Collapsible open={open} onOpenChange={setOpen} className="mb-12">
