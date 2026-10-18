@@ -1,22 +1,38 @@
-# Stop syncing member phone numbers from the ICF feed
+# Privacy policy: publication update in four languages
 
-## What changes
-- The nightly ICF sync no longer reads or stores the phone number.
-- All phone numbers already stored for synced members are erased (set empty) once.
-- Staff member detail no longer shows a phone row; the members CSV export no longer has a phone column.
-- Archived member snapshots and import snapshots that contain a phone value are scrubbed too.
+## Summary
+Apply your listed text changes to the Privacy Policy, remove all draft material, set "Last updated" to October 18, 2026, and add full German, French, and Italian versions of the policy body. Today only the page title and intro are translated, and the body is English on every language.
+
+## Changes (English master)
+1. Cleanup: remove the draft banner, "(Draft)" in the main heading, the status/sources block, Section 1's "Item to confirm" note, and the whole Appendix. "Last updated: October 18, 2026".
+2. 3a: Lovable processor / independent-controller sentences as given; the 90-day sentence is removed.
+3. 3b: AI assistant text as given (Lovable AI Gateway, OpenAI USA, history in your own browser).
+4. 3f: event forms text as given.
+5. 5b: Role bullet uses the same processor/controller split; transfers sentence and retention wording as given.
+6. 5d: "We use no analytics or tracking tools."
+7. 5e: Chapter Agreement and API Agreement sentence added.
+8. 5h: Plausible paragraph removed; Google Maps, Unsplash, and OpenAI list as given.
+9. Section 6 table: three new rows; ICF Global and Lovable safeguards changed; Swiss Addendum bullet removed.
+10. Section 7 table: Technical data row changed; "Payment and invoice records, 10 years (Art. 958f CO)" added.
+11. Section 8: the __cf_bm cookie text and the new consent-banner text; every Plausible mention removed.
+No other wording changes and no em dashes in new text.
+
+## Translations
+- German (informal tone kept consistent with existing legal page copy; legal register), French, Italian versions of every section, matching the English structure one to one.
+- Page title, description, and "Last updated" updated in all four languages; the unused draft-banner strings removed.
+
+## Important to know
+The site still contains Plausible visitor statistics code. The new text says "We use no analytics or tracking tools". Either that code should be switched off, or the text should keep a Plausible mention. Please confirm Plausible is turned off (or ask me to remove it as a separate change).
 
 ## Technical details
-- `src/lib/icf-soap.server.ts`: drop the `Phone` / `cst_phn_number_complete_dn` pick; keep `phone: null` in the normalized shape (no schema break).
-- `src/lib/member-sync/diff.server.ts`: remove `phone` from `IMPORTED_FIELDS` so the sync never writes it.
-- `src/lib/members-export.server.ts`, `src/lib/member-admin.server.ts`, `src/components/cms/MemberSyncStatusPanel.tsx`: remove phone column/field/row.
-- Data cleanup (data tool, not migration): `UPDATE members SET phone = NULL WHERE phone IS NOT NULL`; strip `phone` keys from JSON in `member_import_snapshots` / `member_archive_snapshots` / `member_sync_events` payloads where present (inspect first).
-- Migration: `COMMENT ON COLUMN public.members.phone IS 'DEPRECATED: no longer synced (privacy)'` — column kept to avoid a breaking change.
-- Docs: `docs/member-sync.md` and privacy notes updated.
+- Edit `src/pages/privacy/*.tsx` (EN), delete `Appendix.tsx`, drop `DraftBanner` from `LegalPageShell.tsx`.
+- Add `src/pages/privacy/{de,fr,it}/` with translated section components; `Privacy.tsx` picks the set by current locale (EN fallback).
+- `src/i18n/locales/*/legal.json`: meta title/description, `common.lastUpdated`, remove `draftBanner`.
+- Update `docs/legal-pages.md`.
 
 ## PR note
-- Summary: privacy — phone numbers are no longer imported and existing ones are deleted.
-- Backend: column deprecated, data nulled; no new tables.
-- Testing: run sync, confirm `phone` stays null; count of non-null phones = 0; staff detail/export render.
-- Risks/rollback: deletion is irreversible locally, but the next sync could re-import if code is reverted.
-- Follow-up: drop the column later via a breaking-change approval if desired.
+- Summary: publish-ready privacy policy in DE/FR/IT/EN with updated processor, transfer, retention, and cookie statements.
+- Backend/Schema: none.
+- Testing: open /privacy, /de/privacy, /fr/privacy, /it/privacy; confirm no draft banner, no appendix, no Plausible, new table rows, correct date.
+- Risks/rollback: content only; revert files to roll back.
+- Follow-ups: native and legal review of DE/FR/IT; Plausible code status.
