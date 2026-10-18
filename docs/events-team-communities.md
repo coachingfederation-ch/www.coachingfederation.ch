@@ -78,3 +78,7 @@ enforces that only one is.
 - The About page shows the featured community through `CommunitiesPreview`.
 - Description and cadence are translated in the CMS `CommunityPanel`, using the
   same AI-assisted translation flow as articles and events.
+
+## Staff events calendar view
+
+`/manage/events` offers a List | Calendar switch (`view`, `month` search params). The calendar (`src/components/cms/EventsCalendar.tsx`) renders the same filtered rows as the list, keyed by day in each event's timezone; multi-day events appear on every day they span. Clicking a day lists its events with links to the editor.
