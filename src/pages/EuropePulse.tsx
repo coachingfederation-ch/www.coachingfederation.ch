@@ -16,7 +16,6 @@ import {
   type PulseItem,
 } from "@/lib/europe-pulse";
 import { listEuropePulse } from "@/lib/europe-pulse.functions";
-import { useTrackView } from "@/lib/plausible";
 
 function TypeChip({ label }: { label: string }) {
   return (
@@ -158,7 +157,6 @@ function EditionNav({ weeks, current }: { weeks: string[]; current: string }) {
 export default function EuropePulsePage() {
   const { t, locale } = useI18n();
   const { week = "" } = useSearch({ strict: false }) as Partial<EuropePulseSearch>;
-  useTrackView("Europe Pulse View", week, { week: week || "latest" });
   const { data, isPending, isError } = useQuery({
     queryKey: ["europe-pulse", locale, week],
     queryFn: () => listEuropePulse({ data: { locale, week: week || undefined } }),

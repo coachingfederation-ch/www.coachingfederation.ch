@@ -23,7 +23,6 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { LanguageNotice } from "../components/language-notice";
 import { AssistantWidget } from "../components/assistant/AssistantWidget";
 import { Toaster } from "@/design-system/icf-welcome-design-system-a835df";
-import { PlausibleAnalytics } from "../components/plausible-analytics";
 import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 
 function NotFoundComponent() {
@@ -172,7 +171,6 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
-      <PlausibleAnalytics />
       <LanguageNotice />
       {!hideAssistant && <AssistantWidget />}
       {/* Single global toast outlet — refused actions surface here rather than throwing. */}

@@ -16,7 +16,6 @@ import { CARD_SHADOW } from "@/components/site-chrome";
 import { PaymentOverlay } from "@/components/events/PaymentOverlay";
 import { FormQuestionFields } from "@/components/forms/FormQuestionFields";
 import { isPastEvent, type PublicEvent } from "@/lib/events";
-import { trackGoal } from "@/lib/plausible";
 import {
   cancelMyRegistration,
   getMyRegistration,
@@ -278,7 +277,6 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     }).then((result) => {
       setReturned(result.status);
       if (result.status === "paid") {
-        trackGoal("Event Registration Paid", { event_slug: slug });
         void mine.refetch();
       }
     });
@@ -395,7 +393,6 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
       return;
     }
     setState({ kind: "done" });
-    trackGoal("Event Registration", { event_slug: slug, member: membership === "member" });
     if (signedIn) void mine.refetch();
     void ticketing.refetch();
   };

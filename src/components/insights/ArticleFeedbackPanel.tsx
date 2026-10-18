@@ -35,7 +35,6 @@ import {
   feedbackStorageKey,
   topicSlug,
 } from "@/lib/article-feedback";
-import { trackGoal } from "@/lib/plausible";
 
 type Props = { articleId: string; suggestedTopics: string[] };
 
@@ -169,7 +168,6 @@ export function ArticleFeedbackForm({
         return;
       }
       writeFlag(feedbackStorageKey(articleId));
-      trackGoal("Article Feedback", { article_id: articleId });
       onSent();
     } catch {
       setError(t("insights.feedback.failed"));
@@ -353,7 +351,6 @@ export function ArticleFeedbackPanel({ articleId, suggestedTopics }: Props) {
   const openWith = (next: OpenSource) => {
     setSource(next);
     setOpen(true);
-    trackGoal("Article Feedback Open", { article_id: articleId, source: next });
   };
 
   useExitIntent({

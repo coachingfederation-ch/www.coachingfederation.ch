@@ -9,7 +9,6 @@ import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useI18n } from "@/i18n";
 import { queryCoachDirectory } from "@/lib/directory.functions";
-import { trackGoal } from "@/lib/plausible";
 import {
   activeFinderModes,
   fetchCoachFinderConfig,
@@ -151,13 +150,6 @@ export function useCoachDirectoryFilters() {
   useEffect(() => {
     if (isPending || !dirty) return;
     const f = JSON.parse(searchSignature) as Record<string, unknown>;
-    trackGoal("Coach Search", {
-      mode: String(f["mode"] ?? "all"),
-      region: String(f["region"] ?? "all"),
-      language: String(f["language"] ?? "all"),
-      has_query: Boolean(f["hasQuery"]),
-      accepting_only: Boolean(f["acceptingOnly"]),
-    });
     // Everything reported is derived from the signature above.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchSignature, isPending]);

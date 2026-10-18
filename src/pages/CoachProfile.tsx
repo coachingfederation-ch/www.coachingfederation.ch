@@ -23,7 +23,6 @@ import { CoachProfileHero } from "@/components/coaches/profile/CoachProfileHero"
 import { CoachProfileSidebar } from "@/components/coaches/profile/CoachProfileSidebar";
 import { Mark } from "@/components/marks";
 import { Button } from "@/design-system/icf-welcome-design-system-a835df";
-import { useTrackView } from "@/lib/plausible";
 
 export function CoachProfileShell({ children }: { children: React.ReactNode }) {
   return (
@@ -63,9 +62,6 @@ export default function CoachProfilePage({
   demo?: boolean;
 }) {
   const { t, locale } = useI18n();
-  useTrackView("Coach Profile View", profile.profile_id ?? "", {
-    profile_id: profile.profile_id ?? "",
-  });
   const { data: vocab } = useQuery<CoachFinderVocabularies>({
     queryKey: ["coach-finder-vocabularies"],
     queryFn: fetchActiveVocabularies,

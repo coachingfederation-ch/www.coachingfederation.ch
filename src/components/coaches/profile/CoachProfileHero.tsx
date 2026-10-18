@@ -6,7 +6,6 @@ import { CoachAvatar } from "@/components/coaches/directory";
 import { Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { LocaleLink, useI18n } from "@/i18n";
 import type { PublicCoachProfile } from "@/lib/directory.functions";
-import { trackGoal } from "@/lib/plausible";
 
 export function CoachProfileHero({
   profile,
@@ -116,7 +115,6 @@ export function CoachProfileHero({
                       href={bookingUrl}
                       target="_blank"
                       rel="noopener noreferrer nofollow"
-                      onClick={() => trackGoal("Coach Contact", { channel: "booking" })}
                     >
                       {t("directory.detail.book")}
                     </a>
@@ -127,7 +125,6 @@ export function CoachProfileHero({
                     <a
                       href={`mailto:${contactEmail}`}
                       target="_top"
-                      onClick={() => trackGoal("Coach Contact", { channel: "email" })}
                     >
                       {t("directory.detail.message")}
                     </a>

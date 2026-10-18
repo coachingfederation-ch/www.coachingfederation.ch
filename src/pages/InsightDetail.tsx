@@ -21,7 +21,6 @@ import { localizePath, SITE_URL } from "@/i18n/config";
 import { ShareInline, ShareBlock } from "@/components/share-buttons";
 import { ArticleFeedbackPanel } from "@/components/insights/ArticleFeedbackPanel";
 import { readingMinutes } from "@/lib/articles";
-import { useTrackView } from "@/lib/plausible";
 
 export function DetailShell({ children }: { children: React.ReactNode }) {
   return (
@@ -62,7 +61,6 @@ type DetailArticle = Omit<PublicArticle, "is_featured"> & {
 
 export default function InsightDetailPage({ article }: { article: DetailArticle }) {
   const { t, tList, locale } = useI18n();
-  useTrackView("Insight View", article.id, { article_id: article.id });
   const tile = tileFor(article.id);
   // A hand-placed cover arrangement replaces the automatic fallback mark.
   const placedMarks = sanitizeHeroMarks(
