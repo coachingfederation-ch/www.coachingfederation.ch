@@ -330,3 +330,7 @@ Confirmed attendees get three reminder emails. Cancelled, unpaid, and refunded s
 - **Code**: timing lives in `src/lib/event-reminder-timing.ts`, the run in `src/lib/event-reminders.server.ts`, and the copy in `src/lib/email-templates/event-reminder-copy.ts`.
 - **Schedule**: the `event-reminders-5min` cron job runs every 5 minutes inside the database and first evaluates `public.event_reminders_due()` (gatekeeper, mirrors `event-reminder-timing.ts`: open stage window + an eligible seat with that stage unsent and booked before the due time). Only when it returns true does it POST to `/api/public/event-reminders` with the cron token, so idle periods cause no website calls. The app keeps its own window, claim and idempotency checks; the gatekeeper only decides whether to call. If timing rules change, update both the TS helper and this function.
 - **Retired**: the one-week reminder was removed in October 2026. Its column `reminder_7d_sent_at` is kept but no longer written.
+
+## Authorship (created by / last edited by)
+
+`events.created_by` is set once on insert (`auth.uid()`) and is immutable; `events.updated_by` is set on every update made by a signed-in user (service/cron writes keep the previous value). Both are maintained by the `events_authorship` trigger. Pre-existing events were backfilled with `created_by = organizer_id`. The staff list shows "Edited … by …" and offers a "Created by" filter; the editor shows both lines above the stage hint. Names are resolved server-side from `profiles` for rows the caller can already read.

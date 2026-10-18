@@ -3674,6 +3674,7 @@ export type Database = {
           community_id: string | null
           content_updated_at: string
           created_at: string
+          created_by: string | null
           description: string | null
           ends_at: string | null
           guest_passes_allowed: boolean
@@ -3711,6 +3712,7 @@ export type Database = {
           timezone: string
           title: string
           updated_at: string
+          updated_by: string | null
           venue_name: string | null
         }
         Insert: {
@@ -3725,6 +3727,7 @@ export type Database = {
           community_id?: string | null
           content_updated_at?: string
           created_at?: string
+          created_by?: string | null
           description?: string | null
           ends_at?: string | null
           guest_passes_allowed?: boolean
@@ -3762,6 +3765,7 @@ export type Database = {
           timezone?: string
           title: string
           updated_at?: string
+          updated_by?: string | null
           venue_name?: string | null
         }
         Update: {
@@ -3776,6 +3780,7 @@ export type Database = {
           community_id?: string | null
           content_updated_at?: string
           created_at?: string
+          created_by?: string | null
           description?: string | null
           ends_at?: string | null
           guest_passes_allowed?: boolean
@@ -3813,6 +3818,7 @@ export type Database = {
           timezone?: string
           title?: string
           updated_at?: string
+          updated_by?: string | null
           venue_name?: string | null
         }
         Relationships: [
@@ -3845,10 +3851,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "events_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "events_region_id_fkey"
             columns: ["region_id"]
             isOneToOne: false
             referencedRelation: "cf_regions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

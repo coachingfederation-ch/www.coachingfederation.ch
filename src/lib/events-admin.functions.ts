@@ -22,7 +22,7 @@ import {
 } from "./events-series";
 
 const LIST_COLUMNS =
-  "id, series_id, slug, title, summary, language, status, starts_at, ends_at, timezone, location_mode, venue_name, city, capacity, is_featured, is_internal, category_id, region_id, organizer_id, updated_at, cce_enabled, certificates_enabled";
+  "id, series_id, slug, title, summary, language, status, starts_at, ends_at, timezone, location_mode, venue_name, city, capacity, is_featured, is_internal, category_id, region_id, organizer_id, created_by, updated_by, created_at, updated_at, cce_enabled, certificates_enabled";
 
 const EDIT_COLUMNS = `${LIST_COLUMNS}, community_id, series_id, recurrence, series_synced_at, series_source_hash, description, image_url, image_credit_name, image_credit_url, online_url, map_location, registration_mode, registration_opens_at, registration_closes_at, guest_registration_allowed, tickets_enabled, guest_passes_allowed, practical_notes, published_at, content_updated_at, hero_marks, attendance_min_percent`;
 
@@ -54,7 +54,33 @@ export type ListedEvent = {
   category_name: string | null;
   community_name: string | null;
   hosts: { id: string; name: string }[];
+  created_by: string | null;
+  updated_by: string | null;
+  created_at: string | null;
+  created_by_name: string | null;
+  updated_by_name: string | null;
 };
+
+/**
+ * Display names for event authors/editors. Organizers cannot read other
+ * staff profiles under RLS, so names (and only names) are resolved with the
+ * admin client for ids taken from rows the caller was already allowed to read.
+ */
+async function authorNames(ids: (string | null | undefined)[]) {
+  const unique = [...new Set(ids.filter(Boolean))] as string[];
+  const names = new Map<string, string>();
+  if (!unique.length) return names;
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
+    .from("profiles")
+    .select("id, first_name, last_name")
+    .in("id", unique);
+  for (const p of data ?? []) {
+    const name = [p.first_name, p.last_name].filter(Boolean).join(" ").trim();
+    if (name) names.set(p.id, name);
+  }
+  return names;
+}
 
 const recurrenceRule = z.object({
   frequency: z.enum(RECURRENCE_FREQUENCIES),
@@ -247,8 +273,13 @@ export const listManagedEvents = createServerFn({ method: "POST" })
       hostsByEvent.set(link.event_id, list);
     }
 
+    const authors = await authorNames(
+      rows.flatMap((r) => [r.created_by as string | null, r.updated_by as string | null]),
+    );
     return rows.map((row) => ({
       ...row,
+      created_by_name: row.created_by ? (authors.get(row.created_by as string) ?? null) : null,
+      updated_by_name: row.updated_by ? (authors.get(row.updated_by as string) ?? null) : null,
       category_name: row.category_id ? (categoryName.get(row.category_id) ?? null) : null,
       community_name: row.community_id ? (communityName.get(row.community_id) ?? null) : null,
       hosts: hostsByEvent.get(row.id) ?? [],
@@ -266,7 +297,13 @@ export const getManagedEvent = createServerFn({ method: "POST" })
       .eq("id", data.id)
       .maybeSingle();
     if (error) throw new Error(error.message);
-    return row ?? null;
+    if (!row) return null;
+    const authors = await authorNames([row.created_by, row.updated_by]);
+    return {
+      ...row,
+      created_by_name: row.created_by ? (authors.get(row.created_by) ?? null) : null,
+      updated_by_name: row.updated_by ? (authors.get(row.updated_by) ?? null) : null,
+    };
   });
 
 export const createEvent = createServerFn({ method: "POST" })

@@ -22,6 +22,7 @@ const searchSchema = z.object({
   category: fallback(z.string(), "").default(""),
   community: fallback(z.string(), "").default(""),
   host: fallback(z.string(), "").default(""),
+  createdBy: fallback(z.string(), "").default(""),
   city: fallback(z.string(), "").default(""),
   credits: fallback(z.enum(["", "cce", "certificates", "any"]), "").default(""),
   status: fallback(z.string(), "").default(""),
@@ -75,6 +76,7 @@ const isPristine = (s: EventsSearch) =>
   !s.category &&
   !s.community &&
   !s.host &&
+  !s.createdBy &&
   !s.city &&
   !s.credits &&
   !s.status &&
@@ -136,6 +138,7 @@ function ManageEventsPage() {
     const categories = new Map<string, string>();
     const communities = new Map<string, string>();
     const hosts = new Map<string, string>();
+    const creators = new Map<string, string>();
     const cities = new Set<string>();
     let hasOnline = false;
     for (const row of rows ?? []) {
@@ -143,6 +146,7 @@ function ManageEventsPage() {
       if (row.community_id && row.community_name)
         communities.set(row.community_id, row.community_name);
       for (const host of row.hosts) hosts.set(host.id, host.name);
+      if (row.created_by && row.created_by_name) creators.set(row.created_by, row.created_by_name);
       // Events without a city — and the handful typed literally as "Online" —
       // collapse into a single "Online" option so the list has no duplicates.
       if (row.city && row.city.trim().toLowerCase() !== "online") cities.add(row.city);
@@ -153,6 +157,7 @@ function ManageEventsPage() {
       categories: [...categories.entries()].sort(byLabel),
       communities: [...communities.entries()].sort(byLabel),
       hosts: [...hosts.entries()].sort(byLabel),
+      creators: [...creators.entries()].sort(byLabel),
       cities: [...cities].sort((a, b) => a.localeCompare(b)),
       hasOnline,
     };
@@ -176,6 +181,7 @@ function ManageEventsPage() {
         if (search.category && row.category_id !== search.category) return false;
         if (search.community && row.community_id !== search.community) return false;
         if (search.host && !row.hosts.some((h) => h.id === search.host)) return false;
+        if (search.createdBy && row.created_by !== search.createdBy) return false;
         if (search.credits === "cce" && !row.cce_enabled) return false;
         if (search.credits === "certificates" && !row.certificates_enabled) return false;
         if (search.credits === "any" && !row.cce_enabled && !row.certificates_enabled) return false;
@@ -199,6 +205,7 @@ function ManageEventsPage() {
     search.category ||
     search.community ||
     search.host ||
+    search.createdBy ||
     search.city ||
     search.credits ||
     search.status,
@@ -267,6 +274,13 @@ function ManageEventsPage() {
               options={options.hosts}
             />
             <FilterSelect
+              label={t("events.filters.createdBy")}
+              allLabel={t("events.filters.allCreators")}
+              value={search.createdBy}
+              onChange={(v) => setFilter({ createdBy: v })}
+              options={options.creators}
+            />
+            <FilterSelect
               label={t("events.filters.city")}
               allLabel={t("events.filters.allCities")}
               value={search.city}
@@ -322,6 +336,7 @@ function ManageEventsPage() {
                       category: "",
                       community: "",
                       host: "",
+                      createdBy: "",
                       city: "",
                       credits: "" as const,
                       status: "",
@@ -393,6 +408,19 @@ function ManageEventsPage() {
                       {row.hosts.length ? (
                         <span className="mt-1 block text-xs font-normal text-muted-foreground">
                           {row.hosts.map((h) => h.name).join(", ")}
+                        </span>
+                      ) : null}
+                      {row.updated_at ? (
+                        <span className="mt-1 block text-xs font-normal text-muted-foreground">
+                          {t("events.authorship.editedShort")
+                            .replace(
+                              "{date}",
+                              new Date(row.updated_at).toLocaleDateString(undefined, {
+                                day: "numeric",
+                                month: "short",
+                              }),
+                            )
+                            .replace("{name}", row.updated_by_name ?? row.created_by_name ?? "—")}
                         </span>
                       ) : null}
                     </td>
