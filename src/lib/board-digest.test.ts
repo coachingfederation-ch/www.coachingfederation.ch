@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { capList, isDigestDue, normaliseSections } from "./board-digest";
 
-// Monday 20 October 2026... use Monday 19 October 2026, 07:30 Zurich (UTC+2) = 05:30 UTC.
+// Monday, October 19, 2026, 7:30 a.m. Zurich (UTC+2) = 05:30 UTC.
 const MONDAY_7_ZURICH = new Date("2026-10-19T05:30:00Z");
 const base = { enabled: true, cadence: "weekly" as const, weekday: 1, hour: 7, lastSentAt: null };
 
