@@ -743,7 +743,6 @@ function IntegrationPageBody() {
               <h2 className={GROUP}>{t("integration.sectionMembers")}</h2>
               <ClaimCampaignCard key={`claim-${refreshKey}`} t={t} />
               <RetentionCard key={`retention-${refreshKey}`} />
-              <BoardDigestCard />
             </div>
 
             <Collapsible
@@ -786,6 +785,8 @@ function IntegrationPageBody() {
               <ContentOwnershipPanel />
 
               <LinkedInPageSettings />
+
+              <BoardDigestCard />
             </div>
 
             <Collapsible
