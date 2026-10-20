@@ -85,6 +85,13 @@
       "when": 1792491830820,
       "tag": "0011_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792494916363,
+      "tag": "0012_form_templates",
+      "breakpoints": true
     }
   ]
 }
