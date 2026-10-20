@@ -137,6 +137,8 @@ import { Route as StaffManageAdRequestsIdRouteImport } from './routes/_staff/man
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
 import { Route as StaffManageEventsIdRouteImport } from './routes/_staff/manage.events.$id'
 import { Route as StaffManageEventsNewRouteImport } from './routes/_staff/manage.events.new'
+import { Route as StaffManageFormsIndexRouteImport } from './routes/_staff/manage.forms.index'
+import { Route as StaffManageFormsIdRouteImport } from './routes/_staff/manage.forms.$id'
 import { Route as StaffManageGuestPassesIdRouteImport } from './routes/_staff/manage.guest-passes_.$id'
 import { Route as StaffManageNewslettersIndexRouteImport } from './routes/_staff/manage.newsletters.index'
 import { Route as StaffManageNewslettersIdRouteImport } from './routes/_staff/manage.newsletters.$id'
@@ -811,6 +813,16 @@ const StaffManageEventsNewRoute = StaffManageEventsNewRouteImport.update({
   path: '/manage/events/new',
   getParentRoute: () => StaffRouteRoute,
 } as any)
+const StaffManageFormsIndexRoute = StaffManageFormsIndexRouteImport.update({
+  id: '/manage/forms/',
+  path: '/manage/forms/',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
+const StaffManageFormsIdRoute = StaffManageFormsIdRouteImport.update({
+  id: '/manage/forms/$id',
+  path: '/manage/forms/$id',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
 const StaffManageGuestPassesIdRoute =
   StaffManageGuestPassesIdRouteImport.update({
     id: '/manage/guest-passes_/$id',
@@ -1034,6 +1046,7 @@ export interface FileRoutesByFullPath {
   '/manage/ad-requests/$id': typeof StaffManageAdRequestsIdRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/manage/events/new': typeof StaffManageEventsNewRoute
+  '/manage/forms/$id': typeof StaffManageFormsIdRoute
   '/manage/guest-passes/$id': typeof StaffManageGuestPassesIdRoute
   '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
@@ -1046,6 +1059,7 @@ export interface FileRoutesByFullPath {
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/ad-requests/': typeof StaffManageAdRequestsIndexRoute
   '/manage/events/': typeof StaffManageEventsIndexRoute
+  '/manage/forms/': typeof StaffManageFormsIndexRoute
   '/manage/newsletters/': typeof StaffManageNewslettersIndexRoute
   '/manage/ad-requests/$id/contract': typeof StaffManageAdRequestsIdContractRoute
   '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
@@ -1175,6 +1189,7 @@ export interface FileRoutesByTo {
   '/manage/ad-requests/$id': typeof StaffManageAdRequestsIdRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/manage/events/new': typeof StaffManageEventsNewRoute
+  '/manage/forms/$id': typeof StaffManageFormsIdRoute
   '/manage/guest-passes/$id': typeof StaffManageGuestPassesIdRoute
   '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
@@ -1187,6 +1202,7 @@ export interface FileRoutesByTo {
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/manage/ad-requests': typeof StaffManageAdRequestsIndexRoute
   '/manage/events': typeof StaffManageEventsIndexRoute
+  '/manage/forms': typeof StaffManageFormsIndexRoute
   '/manage/newsletters': typeof StaffManageNewslettersIndexRoute
   '/manage/ad-requests/$id/contract': typeof StaffManageAdRequestsIdContractRoute
   '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
@@ -1323,6 +1339,7 @@ export interface FileRoutesById {
   '/_staff/manage/ad-requests/$id': typeof StaffManageAdRequestsIdRoute
   '/_staff/manage/events/$id': typeof StaffManageEventsIdRoute
   '/_staff/manage/events/new': typeof StaffManageEventsNewRoute
+  '/_staff/manage/forms/$id': typeof StaffManageFormsIdRoute
   '/_staff/manage/guest-passes_/$id': typeof StaffManageGuestPassesIdRoute
   '/_staff/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
@@ -1335,6 +1352,7 @@ export interface FileRoutesById {
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/_staff/manage/ad-requests/': typeof StaffManageAdRequestsIndexRoute
   '/_staff/manage/events/': typeof StaffManageEventsIndexRoute
+  '/_staff/manage/forms/': typeof StaffManageFormsIndexRoute
   '/_staff/manage/newsletters/': typeof StaffManageNewslettersIndexRoute
   '/_staff/manage/ad-requests/$id_/contract': typeof StaffManageAdRequestsIdContractRoute
   '/_staff/manage/events/$id_/cce': typeof StaffManageEventsIdCceRoute
@@ -1470,6 +1488,7 @@ export interface FileRouteTypes {
     | '/manage/ad-requests/$id'
     | '/manage/events/$id'
     | '/manage/events/new'
+    | '/manage/forms/$id'
     | '/manage/guest-passes/$id'
     | '/manage/newsletters/$id'
     | '/api/public/calendar/$file'
@@ -1482,6 +1501,7 @@ export interface FileRouteTypes {
     | '/lovable/email/transactional/preview'
     | '/manage/ad-requests/'
     | '/manage/events/'
+    | '/manage/forms/'
     | '/manage/newsletters/'
     | '/manage/ad-requests/$id/contract'
     | '/manage/events/$id/cce'
@@ -1611,6 +1631,7 @@ export interface FileRouteTypes {
     | '/manage/ad-requests/$id'
     | '/manage/events/$id'
     | '/manage/events/new'
+    | '/manage/forms/$id'
     | '/manage/guest-passes/$id'
     | '/manage/newsletters/$id'
     | '/api/public/calendar/$file'
@@ -1623,6 +1644,7 @@ export interface FileRouteTypes {
     | '/lovable/email/transactional/preview'
     | '/manage/ad-requests'
     | '/manage/events'
+    | '/manage/forms'
     | '/manage/newsletters'
     | '/manage/ad-requests/$id/contract'
     | '/manage/events/$id/cce'
@@ -1758,6 +1780,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/ad-requests/$id'
     | '/_staff/manage/events/$id'
     | '/_staff/manage/events/new'
+    | '/_staff/manage/forms/$id'
     | '/_staff/manage/guest-passes_/$id'
     | '/_staff/manage/newsletters/$id'
     | '/api/public/calendar/$file'
@@ -1770,6 +1793,7 @@ export interface FileRouteTypes {
     | '/lovable/email/transactional/preview'
     | '/_staff/manage/ad-requests/'
     | '/_staff/manage/events/'
+    | '/_staff/manage/forms/'
     | '/_staff/manage/newsletters/'
     | '/_staff/manage/ad-requests/$id_/contract'
     | '/_staff/manage/events/$id_/cce'
@@ -2758,6 +2782,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageEventsNewRouteImport
       parentRoute: typeof StaffRouteRoute
     }
+    '/_staff/manage/forms/': {
+      id: '/_staff/manage/forms/'
+      path: '/manage/forms'
+      fullPath: '/manage/forms/'
+      preLoaderRoute: typeof StaffManageFormsIndexRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/forms/$id': {
+      id: '/_staff/manage/forms/$id'
+      path: '/manage/forms/$id'
+      fullPath: '/manage/forms/$id'
+      preLoaderRoute: typeof StaffManageFormsIdRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/_staff/manage/guest-passes_/$id': {
       id: '/_staff/manage/guest-passes_/$id'
       path: '/manage/guest-passes/$id'
@@ -3004,10 +3042,12 @@ interface StaffRouteRouteChildren {
   StaffManageAdRequestsIdRoute: typeof StaffManageAdRequestsIdRoute
   StaffManageEventsIdRoute: typeof StaffManageEventsIdRoute
   StaffManageEventsNewRoute: typeof StaffManageEventsNewRoute
+  StaffManageFormsIdRoute: typeof StaffManageFormsIdRoute
   StaffManageGuestPassesIdRoute: typeof StaffManageGuestPassesIdRoute
   StaffManageNewslettersIdRoute: typeof StaffManageNewslettersIdRoute
   StaffManageAdRequestsIndexRoute: typeof StaffManageAdRequestsIndexRoute
   StaffManageEventsIndexRoute: typeof StaffManageEventsIndexRoute
+  StaffManageFormsIndexRoute: typeof StaffManageFormsIndexRoute
   StaffManageNewslettersIndexRoute: typeof StaffManageNewslettersIndexRoute
   StaffManageAdRequestsIdContractRoute: typeof StaffManageAdRequestsIdContractRoute
   StaffManageEventsIdCceRoute: typeof StaffManageEventsIdCceRoute
@@ -3040,10 +3080,12 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffManageAdRequestsIdRoute: StaffManageAdRequestsIdRoute,
   StaffManageEventsIdRoute: StaffManageEventsIdRoute,
   StaffManageEventsNewRoute: StaffManageEventsNewRoute,
+  StaffManageFormsIdRoute: StaffManageFormsIdRoute,
   StaffManageGuestPassesIdRoute: StaffManageGuestPassesIdRoute,
   StaffManageNewslettersIdRoute: StaffManageNewslettersIdRoute,
   StaffManageAdRequestsIndexRoute: StaffManageAdRequestsIndexRoute,
   StaffManageEventsIndexRoute: StaffManageEventsIndexRoute,
+  StaffManageFormsIndexRoute: StaffManageFormsIndexRoute,
   StaffManageNewslettersIndexRoute: StaffManageNewslettersIndexRoute,
   StaffManageAdRequestsIdContractRoute: StaffManageAdRequestsIdContractRoute,
   StaffManageEventsIdCceRoute: StaffManageEventsIdCceRoute,
