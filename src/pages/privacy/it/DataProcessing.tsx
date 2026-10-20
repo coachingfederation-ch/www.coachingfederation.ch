@@ -112,6 +112,7 @@ export function DataProcessingSection() {
           <p className="text-foreground/80">
             Oltre al nome e all’indirizzo e-mail, l’iscrizione agli eventi non comporta la raccolta di dati personali identificativi. I moduli dei singoli eventi possono richiedere informazioni supplementari qualora l’evento lo richieda. Tali dati sono utilizzati esclusivamente per l’evento in questione ed eliminati unitamente ai dati di iscrizione. Durante l’iscrizione agli eventi non raccogliamo esigenze alimentari, necessità di accessibilità o altre categorie di dati personali degni di particolare protezione (art. 5 lett. c LPD).
           </p>
+          <p className="text-foreground/80">Svolgiamo inoltre sondaggi a cui chiunque può rispondere tramite un link condiviso. Le risposte sono anonime, a meno che un sondaggio non chieda il Suo nome e il Suo indirizzo e-mail, cosa sempre indicata nella pagina del sondaggio. Le risposte sono consultabili solo dal nostro team, vengono utilizzate esclusivamente per valutare il sondaggio in questione e vengono cancellate 12 mesi dopo la chiusura del sondaggio.</p>
         </div>
 
         <div className="space-y-4">

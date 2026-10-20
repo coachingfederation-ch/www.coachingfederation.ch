@@ -81,6 +81,7 @@ export function DataProcessingSection() {
             <li>Anmeldestatus und gegebenenfalls Zahlungsinformationen</li>
           </ul>
           <p className="text-foreground/80">Abgesehen von Name und E-Mail-Adresse werden bei der Veranstaltungsanmeldung keine identifizierenden Personendaten erhoben. Einzelne Veranstaltungsformulare können zusätzliche Angaben abfragen, wenn dies für die Veranstaltung erforderlich ist. Solche Daten werden ausschliesslich für diese Veranstaltung verwendet und zusammen mit den Anmeldedaten gelöscht. Bei der Veranstaltungsanmeldung erheben wir keine Angaben zu Ernährungsanforderungen, zum Bedarf an Barrierefreiheit oder zu anderen Kategorien besonders schützenswerter Personendaten (Art. 5 lit. c DSG).</p>
+          <p className="text-foreground/80">Wir führen zudem Umfragen durch, die über einen geteilten Link von allen beantwortet werden können. Die Antworten sind anonym, es sei denn, eine Umfrage fragt nach Ihrem Namen und Ihrer E-Mail-Adresse; darauf wird auf der Umfrageseite stets hingewiesen. Die Antworten sind nur für unser Team einsehbar, werden ausschliesslich zur Auswertung der jeweiligen Umfrage verwendet und 12 Monate nach Abschluss der Umfrage gelöscht.</p>
         </div>
 
         <div className="space-y-4">

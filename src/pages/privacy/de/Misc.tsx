@@ -27,7 +27,7 @@ export function MiscSection() {
         </div>
       </div>
 
-      <p className="text-sm text-muted-foreground">Zuletzt aktualisiert: 18. Oktober 2026</p>
+      <p className="text-sm text-muted-foreground">Zuletzt aktualisiert: 20. Oktober 2026</p>
     </>
   );
 }

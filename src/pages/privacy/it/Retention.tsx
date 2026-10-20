@@ -37,6 +37,10 @@ export function RetentionSection() {
               "Per la durata dell’evento e per i 12 mesi successivi ai fini della contabilità e del seguito",
             ],
             [
+              "Risposte ai sondaggi",
+              "12 mesi dopo la chiusura del sondaggio",
+            ],
+            [
               "Registrazioni dei Guest Pass",
               "12 mesi dopo la conclusione dell’evento; eliminate mediante una procedura automatica giornaliera, con contestuale anonimizzazione dell’iscrizione gratuita. La revoca del consenso a ulteriori contatti ne interrompe l’invio, ma non anticipa l’eliminazione della registrazione",
             ],

@@ -42,6 +42,10 @@ export function RetentionSection() {
               "For the duration of the event and 12 months thereafter for accounting and follow-up",
             ],
             [
+              "Survey answers",
+              "12 months after the survey closes",
+            ],
+            [
               "Guest Pass records",
               "12 months after the event ends; deleted by an automatic daily job, and the complimentary registration is anonymised at the same time. Withdrawing consent to follow-up stops further contact but does not delete the record earlier",
             ],

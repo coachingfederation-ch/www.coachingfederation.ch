@@ -81,6 +81,7 @@ export function DataProcessingSection() {
             <li> Statut de l’inscription et informations de paiement, le cas échéant </li>
           </ul>
           <p className="text-foreground/80"> Outre le nom et l’adresse électronique, l’inscription aux événements ne collecte aucune donnée permettant d’identifier une personne. Les formulaires de certains événements peuvent demander des informations supplémentaires lorsque l’événement l’exige. Ces données sont utilisées uniquement pour cet événement et sont supprimées avec les données d’inscription. Nous ne collectons ni exigences alimentaires, ni besoins d’accessibilité, ni aucune autre catégorie de données personnelles sensibles (art. 5, let. c, LPD) lors de l’inscription aux événements. </p>
+          <p className="text-foreground/80">Nous réalisons également des sondages auxquels chacun peut répondre via un lien partagé. Les réponses sont anonymes, sauf si un sondage demande votre nom et votre adresse e-mail, ce qui est toujours indiqué sur la page du sondage. Les réponses ne sont consultables que par notre équipe, sont utilisées uniquement pour l’évaluation du sondage concerné et sont supprimées 12 mois après la clôture du sondage.</p>
         </div>
 
         <div className="space-y-4">

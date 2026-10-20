@@ -143,6 +143,7 @@ export function DataProcessingSection() {
             We do not collect dietary requirements, accessibility needs, or any other category
             of sensitive personal data (Art. 5 lit. c DSG) during event registration.
           </p>
+          <p className="text-foreground/80">We also run surveys that anyone can answer through a shared link. Survey answers are anonymous unless a survey asks for your name and email, which is always stated on the survey page. Answers are seen only by our staff, used only to evaluate that survey, and deleted 12 months after the survey closes.</p>
         </div>
 
         <div className="space-y-4">

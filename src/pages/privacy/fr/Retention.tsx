@@ -34,6 +34,10 @@ export function RetentionSection() {
     "Pendant la durée de l’événement et les 12 mois suivants pour la comptabilité et le suivi"
   ],
   [
+    "Réponses aux sondages",
+    "12 mois après la clôture du sondage"
+  ],
+  [
     "Dossiers Guest Pass",
     "12 mois après la fin de l’événement ; suppression par une tâche quotidienne automatique et anonymisation simultanée de l’inscription offerte. Le retrait du consentement au suivi met fin aux contacts ultérieurs, sans entraîner une suppression anticipée du dossier"
   ],

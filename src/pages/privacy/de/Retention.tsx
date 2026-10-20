@@ -35,6 +35,10 @@ export function RetentionSection() {
               "Für die Dauer der Veranstaltung und weitere 12 Monate für Buchhaltung und Nachbearbeitung",
             ],
             [
+              "Umfrageantworten",
+              "12 Monate nach Abschluss der Umfrage",
+            ],
+            [
               "Guest Pass-Datensätze",
               "12 Monate nach Veranstaltungsende; Löschung durch einen automatischen täglichen Vorgang und gleichzeitige Anonymisierung der kostenlosen Anmeldung. Der Widerruf der Einwilligung in weitere Kontakte beendet diese, führt jedoch nicht zur vorzeitigen Löschung des Datensatzes",
             ],
