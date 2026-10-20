@@ -88,3 +88,6 @@ In the "Invited members" section staff can paste emails (comma, semicolon or new
 
 ### Invited guests (`rsvp_invited_open`)
 Same as "Invited members only" but the guest list also accepts non-members: a single-guest form (name, email, language) and, in bulk paste/CSV, unmatched addresses are invited as guests (name from the CSV row, else the part before "@"). Guest rows have `member_id = null`. An address belonging to an active member is always invited as that member. `isInvitedMode()` in `src/lib/events.ts` covers both invite modes.
+
+### Invitations wait for the first publish
+Invitations added (or re-sent) while the event is not published are stored without token and `invited_at` ("Sent on publish" in the list). `setEventStatus(published)` calls `sendQueuedInvitations`, which mints tokens and mails them. Once published, adding sends immediately.

@@ -114,7 +114,7 @@ export async function listInvitations(eventId: string): Promise<InvitationRow[]>
   return (data ?? []) as InvitationRow[];
 }
 
-export type AddResult = { ok: true } | { ok: false; reason: "duplicate" | "email" | "error" };
+export type AddResult = { ok: true; queued?: boolean } | { ok: false; reason: "duplicate" | "email" | "error" };
 
 /** Adds one member to the guest list and sends their personal invitation. */
 export async function addInvitation(
@@ -138,36 +138,20 @@ export async function addInvitation(
     .maybeSingle();
   const locale = normaliseLocale(eventRow?.language ?? "en");
 
-  const token = randomBytes(32).toString("base64url");
-  const id = crypto.randomUUID();
-  const { error } = await supabaseAdmin.from("event_invitations").insert({
-    id,
+  return insertAndSend({
     event_id: eventId,
     member_id: member.id as string,
     user_id: (member.auth_user_id as string | null) ?? null,
     full_name: displayName(member) || String(member.email),
     email: String(member.email).trim().toLowerCase(),
     locale,
-    status: "invited",
-    invite_token_hash: hashToken(token),
-    invited_at: new Date().toISOString(),
     invited_by: actorUserId,
   });
-  if (error) {
-    return { ok: false, reason: error.code === "23505" ? "duplicate" : "error" };
-  }
-
-  try {
-    await sendInvitationEmail(id, token);
-  } catch (e) {
-    console.error("Event invitation email failed", e);
-    return { ok: false, reason: "email" };
-  }
-  return { ok: true };
 }
 
 /** Mints a fresh token — the previous link stops working — and mails it again. */
 export async function resendInvitation(invitationId: string, eventId: string): Promise<AddResult> {
+  if (!(await eventIsPublished(eventId))) return { ok: true, queued: true };
   const token = randomBytes(32).toString("base64url");
   // Scoped to the event the caller proved they manage: an invitation id alone
   // must never be enough to mail out another event's guest links.
@@ -192,6 +176,61 @@ export async function resendInvitation(invitationId: string, eventId: string): P
     return { ok: false, reason: "email" };
   }
   return { ok: true };
+}
+
+/**
+ * Invitations added before the event is first published are queued: stored
+ * without a token or `invited_at`, and mailed by `sendQueuedInvitations` when
+ * the event goes live, so nobody gets a link to a page that does not exist yet.
+ */
+async function eventIsPublished(eventId: string) {
+  const { data } = await supabaseAdmin
+    .from("events")
+    .select("status")
+    .eq("id", eventId)
+    .maybeSingle();
+  return data?.status === "published";
+}
+
+/** Insert a guest-list row and mail it now, or queue it while the event is a draft. */
+async function insertAndSend(row: Record<string, unknown>): Promise<AddResult> {
+  const id = crypto.randomUUID();
+  const live = await eventIsPublished(String(row["event_id"]));
+  const token = randomBytes(32).toString("base64url");
+  const { error } = await supabaseAdmin.from("event_invitations").insert({
+    ...row,
+    id,
+    status: "invited",
+    invite_token_hash: live ? hashToken(token) : null,
+    invited_at: live ? new Date().toISOString() : null,
+  } as never);
+  if (error) return { ok: false, reason: error.code === "23505" ? "duplicate" : "error" };
+  if (!live) return { ok: true, queued: true };
+  try {
+    await sendInvitationEmail(id, token);
+  } catch (e) {
+    console.error("Event invitation email failed", e);
+    return { ok: false, reason: "email" };
+  }
+  return { ok: true };
+}
+
+/** Called on publish: mails every queued invitation of this event. */
+export async function sendQueuedInvitations(eventId: string): Promise<{ sent: number; failed: number }> {
+  const { data } = await supabaseAdmin
+    .from("event_invitations")
+    .select("id")
+    .eq("event_id", eventId)
+    .eq("status", "invited")
+    .is("invited_at", null);
+  let sent = 0;
+  let failed = 0;
+  for (const row of data ?? []) {
+    const r = await resendInvitation(row.id as string, eventId);
+    if (r.ok) sent++;
+    else failed++;
+  }
+  return { sent, failed };
 }
 
 async function sendInvitationEmail(invitationId: string, token: string) {
@@ -392,27 +431,13 @@ export async function addGuestInvitation(
     locale = eventRow?.language ?? "en";
   }
 
-  const token = randomBytes(32).toString("base64url");
-  const id = crypto.randomUUID();
-  const { error } = await supabaseAdmin.from("event_invitations").insert({
-    id,
+  return insertAndSend({
     event_id: eventId,
     member_id: null,
     user_id: null,
     full_name: guest.fullName.trim() || email,
     email,
     locale: normaliseLocale(locale),
-    status: "invited",
-    invite_token_hash: hashToken(token),
-    invited_at: new Date().toISOString(),
     invited_by: actorUserId,
   });
-  if (error) return { ok: false, reason: error.code === "23505" ? "duplicate" : "error" };
-  try {
-    await sendInvitationEmail(id, token);
-  } catch (e) {
-    console.error("Event invitation email failed", e);
-    return { ok: false, reason: "email" };
-  }
-  return { ok: true };
 }

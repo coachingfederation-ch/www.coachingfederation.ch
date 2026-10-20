@@ -365,6 +365,12 @@ export const setEventStatus = createServerFn({ method: "POST" })
     }
     const { error } = await context.supabase.from("events").update(patch).eq("id", data.id);
     if (error) throw new Error(error.message);
+    // Guest-list invitations added while the event was a draft go out now.
+    if (data.status === "published") {
+      const { sendQueuedInvitations } = await import("./event-invitations.server");
+      const invitations = await sendQueuedInvitations(data.id);
+      return { ok: true, invitations };
+    }
     return { ok: true };
   });
 

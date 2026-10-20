@@ -1842,7 +1842,7 @@
     },
     "invitations": {
       "title": "Eingeladene Mitglieder",
-      "hint": "Nur Mitglieder dieser Liste erhalten den persönlichen Link zur Anmeldung.",
+      "hint": "Nur Mitglieder dieser Liste erhalten den persönlichen Link zur Anmeldung. Einladungen werden beim ersten Veröffentlichen versendet; bis dahin warten sie auf dieser Liste.",
       "search": "Aktives Mitglied suchen",
       "searchPlaceholder": "Name oder E-Mail suchen",
       "invite": "Einladen",
@@ -1859,7 +1859,8 @@
         "registered": "Registriert",
         "declined": "Abgelehnt",
         "revoked": "Entfernt",
-        "expired": "Abgelaufen"
+        "expired": "Abgelaufen",
+        "queued": "Wird beim Veröffentlichen gesendet"
       },
       "error": {
         "duplicate": "Mitglied steht bereits auf der Gästeliste.",
@@ -1883,7 +1884,8 @@
       "guestLanguage": "Sprache",
       "bulkGuests": "Wird als Gast eingeladen",
       "kindMember": "Mitglied",
-      "kindGuest": "Gast"
+      "kindGuest": "Gast",
+      "queued": "Gespeichert. Die Einladung wird beim Veröffentlichen des Events versendet."
     },
     "tag": {
       "membersOnly": "Nur für Mitglieder",

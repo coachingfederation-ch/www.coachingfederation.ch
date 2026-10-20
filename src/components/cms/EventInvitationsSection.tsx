@@ -42,13 +42,18 @@ type Invitation = {
 
 type Candidate = { memberId: string; name: string; email: string };
 
-const badge: Record<Invitation["status"], string> = {
+const badge: Record<Invitation["status"] | "queued", string> = {
   invited: "bg-teal-soft text-teal-foreground",
+  queued: "bg-secondary text-muted-foreground",
   registered: "bg-teal-soft text-teal-foreground",
   declined: "bg-secondary text-muted-foreground",
   revoked: "bg-secondary text-muted-foreground",
   expired: "bg-warn-soft text-[color:var(--warn)]",
 };
+
+/** An invitation without `invited_at` is waiting for the first publish. */
+const shown = (row: Invitation) =>
+  row.status === "invited" && !row.invited_at ? "queued" : row.status;
 
 const shortDate = (iso: string | null) =>
   iso ? new Date(iso).toLocaleString(undefined, { dateStyle: "short", timeStyle: "short" }) : "—";
@@ -137,7 +142,7 @@ export function EventInvitationsSection({
         data: { eventId, fullName: guestName, email: guestEmail, locale: guestLocale },
       });
       if (r.ok) {
-        setMessage(t("events.invitations.sent"));
+        setMessage(t(r.queued ? "events.invitations.queued" : "events.invitations.sent"));
         setGuestName("");
         setGuestEmail("");
       } else setError(t(`events.invitations.error.${r.reason}`));
@@ -194,7 +199,7 @@ export function EventInvitationsSection({
     try {
       const result = await addEventInvitation({ data: { eventId, memberId: candidate.memberId } });
       if (result.ok) {
-        setMessage(t("events.invitations.sent"));
+        setMessage(t(result.queued ? "events.invitations.queued" : "events.invitations.sent"));
         setQuery("");
         setCandidates([]);
       } else {
@@ -217,7 +222,7 @@ export function EventInvitationsSection({
         const result = await resendEventInvitation({ data: { eventId, invitationId: id } });
         setMessage(
           result.ok
-            ? t("events.invitations.resent")
+            ? t(result.queued ? "events.invitations.queued" : "events.invitations.resent")
             : t(`events.invitations.error.${result.reason}`),
         );
       } else {
@@ -424,9 +429,9 @@ export function EventInvitationsSection({
                     <td className="py-2 text-muted-foreground">{row.email}</td>
                     <td className="py-2">
                       <span
-                        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${badge[row.status]}`}
+                        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${badge[shown(row)]}`}
                       >
-                        {t(`events.invitations.state.${row.status}`)}
+                        {t(`events.invitations.state.${shown(row)}`)}
                       </span>
                     </td>
                     <td className="py-2 text-muted-foreground">{shortDate(row.invited_at)}</td>

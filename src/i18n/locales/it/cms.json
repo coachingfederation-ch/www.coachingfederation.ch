@@ -1842,7 +1842,7 @@
     },
     "invitations": {
       "title": "Membri invitati",
-      "hint": "Solo i membri di questa lista ricevono un link personale, e solo quel link apre il modulo di iscrizione.",
+      "hint": "Solo i membri di questa lista ricevono un link personale, e solo quel link apre il modulo di iscrizione. Gli inviti partono alla prima pubblicazione; fino ad allora restano in questo elenco.",
       "search": "Cerca un membro attivo",
       "searchPlaceholder": "Cerca per nome o e-mail",
       "invite": "Invita",
@@ -1859,7 +1859,8 @@
         "registered": "Iscritto",
         "declined": "Rifiutato",
         "revoked": "Rimosso",
-        "expired": "Scaduto"
+        "expired": "Scaduto",
+        "queued": "Invio alla pubblicazione"
       },
       "error": {
         "duplicate": "Questo membro è già nella lista degli invitati.",
@@ -1883,7 +1884,8 @@
       "guestLanguage": "Lingua",
       "bulkGuests": "Sarà invitato come ospite",
       "kindMember": "Socio",
-      "kindGuest": "Ospite"
+      "kindGuest": "Ospite",
+      "queued": "Salvato. L'invito sarà inviato alla pubblicazione dell'evento."
     },
     "tag": {
       "membersOnly": "Solo per membri",
