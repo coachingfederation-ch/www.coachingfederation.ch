@@ -153,6 +153,7 @@ import { Route as StaffManageEventsIdCceRouteImport } from './routes/_staff/mana
 import { Route as StaffManageEventsIdCheckInRouteImport } from './routes/_staff/manage.events.$id_.check-in'
 import { Route as StaffManageEventsIdReportingRouteImport } from './routes/_staff/manage.events.$id_.reporting'
 import { Route as StaffManageEventsIdFormsFormIdRouteImport } from './routes/_staff/manage.events.$id_.forms.$formId'
+import { Route as StaffManageEventsIdFormsFormIdEditRouteImport } from './routes/_staff/manage.events.$id_.forms.$formId_.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -901,6 +902,12 @@ const StaffManageEventsIdFormsFormIdRoute =
     path: '/manage/events/$id/forms/$formId',
     getParentRoute: () => StaffRouteRoute,
   } as any)
+const StaffManageEventsIdFormsFormIdEditRoute =
+  StaffManageEventsIdFormsFormIdEditRouteImport.update({
+    id: '/manage/events/$id_/forms/$formId_/edit',
+    path: '/manage/events/$id/forms/$formId/edit',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -1045,6 +1052,7 @@ export interface FileRoutesByFullPath {
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
   '/manage/events/$id/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
+  '/manage/events/$id/forms/$formId/edit': typeof StaffManageEventsIdFormsFormIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -1185,6 +1193,7 @@ export interface FileRoutesByTo {
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
   '/manage/events/$id/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
+  '/manage/events/$id/forms/$formId/edit': typeof StaffManageEventsIdFormsFormIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -1332,6 +1341,7 @@ export interface FileRoutesById {
   '/_staff/manage/events/$id_/check-in': typeof StaffManageEventsIdCheckInRoute
   '/_staff/manage/events/$id_/reporting': typeof StaffManageEventsIdReportingRoute
   '/_staff/manage/events/$id_/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
+  '/_staff/manage/events/$id_/forms/$formId_/edit': typeof StaffManageEventsIdFormsFormIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -1478,6 +1488,7 @@ export interface FileRouteTypes {
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
     | '/manage/events/$id/forms/$formId'
+    | '/manage/events/$id/forms/$formId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1618,6 +1629,7 @@ export interface FileRouteTypes {
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
     | '/manage/events/$id/forms/$formId'
+    | '/manage/events/$id/forms/$formId/edit'
   id:
     | '__root__'
     | '/'
@@ -1764,6 +1776,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/events/$id_/check-in'
     | '/_staff/manage/events/$id_/reporting'
     | '/_staff/manage/events/$id_/forms/$formId'
+    | '/_staff/manage/events/$id_/forms/$formId_/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -2857,6 +2870,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageEventsIdFormsFormIdRouteImport
       parentRoute: typeof StaffRouteRoute
     }
+    '/_staff/manage/events/$id_/forms/$formId_/edit': {
+      id: '/_staff/manage/events/$id_/forms/$formId_/edit'
+      path: '/manage/events/$id/forms/$formId/edit'
+      fullPath: '/manage/events/$id/forms/$formId/edit'
+      preLoaderRoute: typeof StaffManageEventsIdFormsFormIdEditRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
   }
 }
 
@@ -2994,6 +3014,7 @@ interface StaffRouteRouteChildren {
   StaffManageEventsIdCheckInRoute: typeof StaffManageEventsIdCheckInRoute
   StaffManageEventsIdReportingRoute: typeof StaffManageEventsIdReportingRoute
   StaffManageEventsIdFormsFormIdRoute: typeof StaffManageEventsIdFormsFormIdRoute
+  StaffManageEventsIdFormsFormIdEditRoute: typeof StaffManageEventsIdFormsFormIdEditRoute
 }
 
 const StaffRouteRouteChildren: StaffRouteRouteChildren = {
@@ -3029,6 +3050,8 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffManageEventsIdCheckInRoute: StaffManageEventsIdCheckInRoute,
   StaffManageEventsIdReportingRoute: StaffManageEventsIdReportingRoute,
   StaffManageEventsIdFormsFormIdRoute: StaffManageEventsIdFormsFormIdRoute,
+  StaffManageEventsIdFormsFormIdEditRoute:
+    StaffManageEventsIdFormsFormIdEditRoute,
 }
 
 const StaffRouteRouteWithChildren = StaffRouteRoute._addFileChildren(
