@@ -97,7 +97,11 @@ async function profileNames(db: SupabaseClient, ids: string[]): Promise<Map<stri
   const out = new Map<string, string>();
   if (!unique.length) return out;
   const { data } = await db.from("profiles").select("id, first_name, last_name").in("id", unique);
-  for (const p of (data ?? []) as { id: string; first_name: string | null; last_name: string | null }[]) {
+  for (const p of (data ?? []) as {
+    id: string;
+    first_name: string | null;
+    last_name: string | null;
+  }[]) {
     out.set(p.id, [p.first_name, p.last_name].filter(Boolean).join(" ") || "Unknown");
   }
   return out;
@@ -158,25 +162,39 @@ async function membersBlock(db: SupabaseClient, from: string, to: string) {
   for (const r of sendRows) counts.set(r.campaign_key, (counts.get(r.campaign_key) ?? 0) + 1);
 
   const changed: DigestListItem[] = sendRows
-    .filter((r) => r.campaign_key === "credential_upgrade" || r.campaign_key === "credential_specialisation" || r.campaign_key === "grace_reengagement")
-    .map((r) => ({ primary: names.get(r.member_id) ?? "Member", secondary: CHANGE_LABELS[r.campaign_key] }));
+    .filter(
+      (r) =>
+        r.campaign_key === "credential_upgrade" ||
+        r.campaign_key === "credential_specialisation" ||
+        r.campaign_key === "grace_reengagement",
+    )
+    .map((r) => ({
+      primary: names.get(r.member_id) ?? "Member",
+      secondary: CHANGE_LABELS[r.campaign_key],
+    }));
 
   const { loadRetentionSummary } = await import("./member-lifecycle.server");
   const retention = await loadRetentionSummary();
 
   return {
     newMembers: capList(
-      ((created.data ?? []) as { full_name: string | null; city: string | null; credential_slug: string | null }[]).map(
-        (m) => ({
-          primary: m.full_name || "Member",
-          secondary: m.credential_slug ? m.credential_slug.toUpperCase() : undefined,
-          tertiary: m.city ?? undefined,
-        }),
-      ),
+      (
+        (created.data ?? []) as {
+          full_name: string | null;
+          city: string | null;
+          credential_slug: string | null;
+        }[]
+      ).map((m) => ({
+        primary: m.full_name || "Member",
+        secondary: m.credential_slug ? m.credential_slug.toUpperCase() : undefined,
+        tertiary: m.city ?? undefined,
+      })),
     ),
     changes: [...counts.entries()].map(([k, count]) => ({ label: CHANGE_LABELS[k] ?? k, count })),
     changedMembers: capList(changed),
-    deactivated: capList(deRows.map((r) => ({ primary: names.get(r.member_id ?? "") ?? "Member" }))),
+    deactivated: capList(
+      deRows.map((r) => ({ primary: names.get(r.member_id ?? "") ?? "Member" })),
+    ),
     enteredGrace: capList(
       graceRows.map((r) => ({
         primary: names.get(r.member_id) ?? "Member",
@@ -195,8 +213,16 @@ async function articlesBlock(db: SupabaseClient, from: string, to: string) {
     .lte("created_at", to)
     .order("created_at", { ascending: false })
     .limit(500);
-  const rows = (data ?? []) as { title: string; status: string; author_id: string | null; created_by: string | null }[];
-  const names = await profileNames(db, rows.map((r) => r.author_id ?? r.created_by ?? ""));
+  const rows = (data ?? []) as {
+    title: string;
+    status: string;
+    author_id: string | null;
+    created_by: string | null;
+  }[];
+  const names = await profileNames(
+    db,
+    rows.map((r) => r.author_id ?? r.created_by ?? ""),
+  );
   return capList(
     rows.map((r) => ({
       primary: r.title || "Untitled",
@@ -209,7 +235,9 @@ async function articlesBlock(db: SupabaseClient, from: string, to: string) {
 async function eventsBlock(db: SupabaseClient, from: string, to: string) {
   const { data } = await db
     .from("events")
-    .select("title, organizer_id, created_by, community_id, city, venue_name, location_mode, starts_at, status, series_id")
+    .select(
+      "title, organizer_id, created_by, community_id, city, venue_name, location_mode, starts_at, status, series_id",
+    )
     .gte("created_at", from)
     .lte("created_at", to)
     .order("created_at", { ascending: false })
@@ -225,7 +253,10 @@ async function eventsBlock(db: SupabaseClient, from: string, to: string) {
     starts_at: string | null;
     status: string;
   }[];
-  const names = await profileNames(db, rows.map((r) => r.organizer_id ?? r.created_by ?? ""));
+  const names = await profileNames(
+    db,
+    rows.map((r) => r.organizer_id ?? r.created_by ?? ""),
+  );
   const communityIds = [...new Set(rows.map((r) => r.community_id).filter(Boolean))] as string[];
   const communities = new Map<string, string>();
   if (communityIds.length) {
@@ -310,7 +341,9 @@ export async function buildBoardDigest(
 }
 
 /** Sends one digest. `test` sends regardless of schedule and keeps the cadence clock. */
-export async function sendBoardDigest(opts: { test: boolean }): Promise<{ sent: boolean; status: string }> {
+export async function sendBoardDigest(opts: {
+  test: boolean;
+}): Promise<{ sent: boolean; status: string }> {
   const settings = await loadDigestSettings();
   if (!settings.recipient) return { sent: false, status: "No recipient set" };
   const now = new Date();
@@ -336,7 +369,11 @@ export async function sendBoardDigest(opts: { test: boolean }): Promise<{ sent: 
 }
 
 /** Hourly cron entry point. */
-export async function runScheduledDigest(): Promise<{ due: boolean; sent?: boolean; status?: string }> {
+export async function runScheduledDigest(): Promise<{
+  due: boolean;
+  sent?: boolean;
+  status?: string;
+}> {
   const settings = await loadDigestSettings();
   if (!isDigestDue(settings, new Date())) return { due: false };
   const r = await sendBoardDigest({ test: false });

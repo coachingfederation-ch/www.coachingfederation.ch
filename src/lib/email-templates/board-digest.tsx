@@ -85,9 +85,7 @@ const Email = ({ digest, test }: Props) => {
       <Body style={main}>
         <Container style={container}>
           <Section style={banner}>
-            <Text style={bannerText}>
-              {test ? "Board digest · test send" : "Board digest"}
-            </Text>
+            <Text style={bannerText}>{test ? "Board digest · test send" : "Board digest"}</Text>
           </Section>
           <Section style={content}>
             <Heading style={h1}>What happened on the platform</Heading>
@@ -203,15 +201,39 @@ export const template: TemplateEntry = {
       },
       sections: { members: true, articles: true, events: true, assistant: true },
       members: {
-        newMembers: { items: [{ primary: "Anna Muster", secondary: "PCC", tertiary: "Zürich" }], more: 0, total: 1 },
+        newMembers: {
+          items: [{ primary: "Anna Muster", secondary: "PCC", tertiary: "Zürich" }],
+          more: 0,
+          total: 1,
+        },
         changes: [{ label: "Credential upgrades", count: 1 }],
-        changedMembers: { items: [{ primary: "Max Muster", secondary: "Credential upgrades" }], more: 0, total: 1 },
+        changedMembers: {
+          items: [{ primary: "Max Muster", secondary: "Credential upgrades" }],
+          more: 0,
+          total: 1,
+        },
         deactivated: emptyList,
         enteredGrace: emptyList,
         retention: { inGrace: 4, due: 0, pastExpiry: 6 },
       },
-      articles: { items: [{ primary: "Coaching in times of change", secondary: "Anna Muster", tertiary: "draft" }], more: 0, total: 1 },
-      events: { items: [{ primary: "Peer coaching evening", secondary: "Max Muster · Bern", tertiary: "Thursday, November 5 · published" }], more: 0, total: 1 },
+      articles: {
+        items: [
+          { primary: "Coaching in times of change", secondary: "Anna Muster", tertiary: "draft" },
+        ],
+        more: 0,
+        total: 1,
+      },
+      events: {
+        items: [
+          {
+            primary: "Peer coaching evening",
+            secondary: "Max Muster · Bern",
+            tertiary: "Thursday, November 5 · published",
+          },
+        ],
+        more: 0,
+        total: 1,
+      },
       assistant: {
         total: 24,
         successRate: 79.2,
@@ -226,11 +248,29 @@ export const template: TemplateEntry = {
 };
 
 const main = { backgroundColor: "#ffffff", fontFamily: "Helvetica, Arial, sans-serif" };
-const container = { margin: "0 auto", maxWidth: "600px", border: "1px solid #ece4d6", borderRadius: "16px", overflow: "hidden" as const };
+const container = {
+  margin: "0 auto",
+  maxWidth: "600px",
+  border: "1px solid #ece4d6",
+  borderRadius: "16px",
+  overflow: "hidden" as const,
+};
 const banner = { backgroundColor: "#212251", padding: "20px 32px" };
-const bannerText = { color: "#efcb30", fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase" as const, margin: 0 };
+const bannerText = {
+  color: "#efcb30",
+  fontSize: "12px",
+  letterSpacing: "0.08em",
+  textTransform: "uppercase" as const,
+  margin: 0,
+};
 const content = { padding: "28px 32px 32px" };
-const h1 = { fontSize: "22px", color: "#212251", lineHeight: "1.3", margin: "0 0 4px", fontWeight: 400 };
+const h1 = {
+  fontSize: "22px",
+  color: "#212251",
+  lineHeight: "1.3",
+  margin: "0 0 4px",
+  fontWeight: 400,
+};
 const h2 = { fontSize: "17px", color: "#2b379b", margin: "0 0 12px", fontWeight: 600 };
 const h3 = { fontSize: "13px", color: "#212251", fontWeight: 700, margin: "16px 0 6px" };
 const hr = { borderColor: "#ece4d6", margin: "24px 0 16px" };
@@ -239,5 +279,13 @@ const listRow = { fontSize: "14px", color: "#212251", lineHeight: "1.5", margin:
 const kpiLabel = { fontSize: "14px", color: "#212251", width: "55%" };
 const kpiValue = { fontSize: "16px", color: "#212251", fontWeight: 700, width: "15%" };
 const kpiTrend = { fontSize: "12px", color: "#5b5f7a", width: "30%" };
-const button = { backgroundColor: "#2b379b", borderRadius: "999px", color: "#ffffff", fontSize: "14px", fontWeight: 600, padding: "12px 24px", textDecoration: "none" };
+const button = {
+  backgroundColor: "#2b379b",
+  borderRadius: "999px",
+  color: "#ffffff",
+  fontSize: "14px",
+  fontWeight: 600,
+  padding: "12px 24px",
+  textDecoration: "none",
+};
 const muted = { fontSize: "13px", color: "#5b5f7a", lineHeight: "1.5", margin: "8px 0 0" };
