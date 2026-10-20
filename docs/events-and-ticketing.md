@@ -267,20 +267,21 @@ save themselves.
 
 ## Where things live
 
-| Module                                           | Responsibility                                     |
-| ------------------------------------------------ | -------------------------------------------------- |
-| `tickets.ts` / `tickets.functions.ts`            | Client-safe types, public read endpoints           |
-| `tickets.server.ts`                              | Membership, pricing, holds, registration, checkout |
-| `refunds.server.ts`                              | Stripe refunds, idempotent, outcome written to row |
-| `event-confirmation.server.ts`                   | Confirmation email + shared formatting helpers     |
-| `event-cancellation.server.ts`                   | Cancellation notice + chapter copy                 |
-| `event-calendar.ts`, `api/public/calendar.$file` | RFC 5545 `.ics` generation and hosting             |
-| `events-admin.functions.ts`                      | Staff: tiers, attendee list, cancel, retry refund  |
-| `components/events/EventRegistrationPanel.tsx`   | Public registration + member price unlock          |
-| `components/events/PaymentOverlay.tsx`           | Embedded Checkout modal, resume-payment state      |
-| `components/cms/EventEditorSections.tsx`         | Form panels, attendee desk, cancel dialog          |
-| `components/cms/EventEditorChrome.tsx`           | Stage header, section rail, sticky save bar        |
-| `lib/event-editor-stages.ts`                     | Stage list, opening stage, per-session memory      |
+| Module                                           | Responsibility                                                                |
+| ------------------------------------------------ | ----------------------------------------------------------------------------- |
+| `tickets.ts` / `tickets.functions.ts`            | Client-safe types, public read endpoints                                      |
+| `tickets.server.ts`                              | Membership, pricing, holds, registration, checkout                            |
+| `refunds.server.ts`                              | Stripe refunds, idempotent, outcome written to row                            |
+| `event-confirmation.server.ts`                   | Confirmation email + shared formatting helpers                                |
+| `event-cancellation.server.ts`                   | Cancellation notice + chapter copy                                            |
+| `event-calendar.ts`, `api/public/calendar.$file` | RFC 5545 `.ics` generation and hosting                                        |
+| `events-admin.functions.ts`                      | Staff: tiers, attendee list, cancel, retry refund                             |
+| `components/events/EventRegistrationPanel.tsx`   | Public registration + member price unlock                                     |
+| `components/events/PaymentOverlay.tsx`           | Embedded Checkout modal, resume-payment state                                 |
+| `components/cms/EventEditorSections.tsx`         | Form panels, attendee desk, cancel dialog                                     |
+| `components/cms/EventEditorChrome.tsx`           | Stage header, section rail, sticky save bar                                   |
+| `lib/event-editor-stages.ts`                     | Stage list, opening stage, per-session memory                                 |
+| `components/cms/EventFormsSection.tsx`           | Event forms list; building lives in the Forms module (`docs/forms-module.md`) |
 
 ## Security notes
 
@@ -318,11 +319,11 @@ Refunds: a staff cancellation of a paid registration refunds automatically throu
 
 Confirmed attendees get three reminder emails. Cancelled, unpaid, and refunded seats are skipped, as are events that are unpublished or have no registration.
 
-| Stage | Due | Content |
-|---|---|---|
-| `day` | 24 h before the start. If that falls outside 08:00–21:00 Zurich time, it moves to 21:00 the evening before the start date | Full details, ticket and QR, practical notes |
-| `hours2` | 2 h before | When, where, online link, ticket link |
-| `minutes15` | 15 min before | Short notice with a "Join online" button (online/hybrid events) |
+| Stage       | Due                                                                                                                       | Content                                                         |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `day`       | 24 h before the start. If that falls outside 08:00–21:00 Zurich time, it moves to 21:00 the evening before the start date | Full details, ticket and QR, practical notes                    |
+| `hours2`    | 2 h before                                                                                                                | When, where, online link, ticket link                           |
+| `minutes15` | 15 min before                                                                                                             | Short notice with a "Join online" button (online/hybrid events) |
 
 - **Send window**: each stage can only go out between its own due time and the next stage's due time, so a missed reminder is replaced by the next one rather than doubled up.
 - **Late sign-ups**: a seat booked after a stage's due time never gets that stage.
