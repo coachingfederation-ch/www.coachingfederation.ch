@@ -63,3 +63,13 @@ registration form, copied onto the new event at the end of the wizard.
 - Library intro/thank-you translations are not stored; they are produced when
   the copy is saved on an event.
 - No template versioning; "used by events" counts copies, not live links.
+
+## Public surveys
+
+Staff create surveys in the **Surveys** tab of `/manage/forms` (blank or copied from a library form). A survey reuses `FormBuilder` (follow-up texts, template scope) and stores its questions as JSON in the template shape, with translations, in `surveys`. Publishing settings (status Draft/Open/Closed, opening/closing time, response limit, "ask for name and email", "one answer per browser") are saved separately by `SurveyPublishPanel`, which also shows the link and a QR code download.
+
+- Public page: `/survey/$slug` (noindex). Read and submit go through `getPublicSurvey` / `submitSurveyResponse` in `src/lib/surveys.functions.ts`, which use the service-role client only after `surveyAvailability()` (`src/lib/surveys.ts`) passes; submissions are rate-limited (`survey-submit`) and re-validated with `validateSubmission`.
+- Answers live in `survey_responses`; only admin/editor/organizer can read or delete them (RLS). There is no anon table access.
+- Results and CSV: `/manage/surveys/$id/results`.
+- "One answer per browser" is a localStorage flag, not a guarantee.
+- Not yet built: personal invite tokens, sending from the survey, reminders.

@@ -28,3 +28,4 @@ Live member data belongs in the database, behind RLS — not in version control.
 - Feature switches live on integration_config and are read publicly only through feature_flags(). Why: keeps the rest of the config row admin-only.
 - Operational assignment history is captured by a database trigger and read through the caller's RLS-bound client; only platform admins can read it. Why: every assignment write is traceable without exposing private history or coupling volunteer positions to staff access.
 - Custom forms are a standalone module (library `form_templates` + one `FormBuilder`); events receive a copy into `event_forms`, never a live link. Why: editing a reusable form must not change past events or their answers.
+- Public surveys live in `surveys`/`survey_responses` with staff-only RLS; anonymous reads and submits go only through rate-limited server functions that check `surveyAvailability()` first. Why: no anon table access to answers.
