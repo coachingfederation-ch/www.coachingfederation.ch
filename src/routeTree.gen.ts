@@ -77,6 +77,7 @@ import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as InsightsIdRouteImport } from './routes/insights.$id'
 import { Route as NewslettersIndexRouteImport } from './routes/newsletters.index'
 import { Route as NewslettersSlugRouteImport } from './routes/newsletters.$slug'
+import { Route as SurveySlugRouteImport } from './routes/survey.$slug'
 import { Route as TicketTokenRouteImport } from './routes/ticket.$token'
 import { Route as VolunteerLoginIndexRouteImport } from './routes/volunteer-login.index'
 import { Route as VolunteerLoginTokenRouteImport } from './routes/volunteer-login.$token'
@@ -142,6 +143,7 @@ import { Route as StaffManageFormsIdRouteImport } from './routes/_staff/manage.f
 import { Route as StaffManageGuestPassesIdRouteImport } from './routes/_staff/manage.guest-passes_.$id'
 import { Route as StaffManageNewslettersIndexRouteImport } from './routes/_staff/manage.newsletters.index'
 import { Route as StaffManageNewslettersIdRouteImport } from './routes/_staff/manage.newsletters.$id'
+import { Route as StaffManageSurveysIdRouteImport } from './routes/_staff/manage.surveys.$id'
 import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/calendar.$file'
 import { Route as ApiPublicCertificateQrTokenRouteImport } from './routes/api/public/certificate-qr.$token'
 import { Route as ApiPublicEventCalendarFileRouteImport } from './routes/api/public/event-calendar.$file'
@@ -154,6 +156,7 @@ import { Route as StaffManageAdRequestsIdContractRouteImport } from './routes/_s
 import { Route as StaffManageEventsIdCceRouteImport } from './routes/_staff/manage.events.$id_.cce'
 import { Route as StaffManageEventsIdCheckInRouteImport } from './routes/_staff/manage.events.$id_.check-in'
 import { Route as StaffManageEventsIdReportingRouteImport } from './routes/_staff/manage.events.$id_.reporting'
+import { Route as StaffManageSurveysIdResultsRouteImport } from './routes/_staff/manage.surveys.$id_.results'
 import { Route as StaffManageEventsIdFormsFormIdRouteImport } from './routes/_staff/manage.events.$id_.forms.$formId'
 import { Route as StaffManageEventsIdFormsFormIdEditRouteImport } from './routes/_staff/manage.events.$id_.forms.$formId_.edit'
 
@@ -499,6 +502,11 @@ const NewslettersSlugRoute = NewslettersSlugRouteImport.update({
   path: '/newsletters/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SurveySlugRoute = SurveySlugRouteImport.update({
+  id: '/survey/$slug',
+  path: '/survey/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TicketTokenRoute = TicketTokenRouteImport.update({
   id: '/ticket/$token',
   path: '/ticket/$token',
@@ -841,6 +849,11 @@ const StaffManageNewslettersIdRoute =
     path: '/manage/newsletters/$id',
     getParentRoute: () => StaffRouteRoute,
   } as any)
+const StaffManageSurveysIdRoute = StaffManageSurveysIdRouteImport.update({
+  id: '/manage/surveys/$id',
+  path: '/manage/surveys/$id',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
 const ApiPublicCalendarFileRoute = ApiPublicCalendarFileRouteImport.update({
   id: '/api/public/calendar/$file',
   path: '/api/public/calendar/$file',
@@ -906,6 +919,12 @@ const StaffManageEventsIdReportingRoute =
   StaffManageEventsIdReportingRouteImport.update({
     id: '/manage/events/$id_/reporting',
     path: '/manage/events/$id/reporting',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
+const StaffManageSurveysIdResultsRoute =
+  StaffManageSurveysIdResultsRouteImport.update({
+    id: '/manage/surveys/$id_/results',
+    path: '/manage/surveys/$id/results',
     getParentRoute: () => StaffRouteRoute,
   } as any)
 const StaffManageEventsIdFormsFormIdRoute =
@@ -982,6 +1001,7 @@ export interface FileRoutesByFullPath {
   '/guides/$slug': typeof GuidesSlugRoute
   '/insights/$id': typeof InsightsIdRoute
   '/newsletters/$slug': typeof NewslettersSlugRoute
+  '/survey/$slug': typeof SurveySlugRoute
   '/ticket/$token': typeof TicketTokenRoute
   '/volunteer-login/$token': typeof VolunteerLoginTokenRoute
   '/$locale/': typeof LocaleIndexRoute
@@ -1049,6 +1069,7 @@ export interface FileRoutesByFullPath {
   '/manage/forms/$id': typeof StaffManageFormsIdRoute
   '/manage/guest-passes/$id': typeof StaffManageGuestPassesIdRoute
   '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
+  '/manage/surveys/$id': typeof StaffManageSurveysIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/certificate-qr/$token': typeof ApiPublicCertificateQrTokenRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
@@ -1065,6 +1086,7 @@ export interface FileRoutesByFullPath {
   '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
+  '/manage/surveys/$id/results': typeof StaffManageSurveysIdResultsRoute
   '/manage/events/$id/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
   '/manage/events/$id/forms/$formId/edit': typeof StaffManageEventsIdFormsFormIdEditRoute
 }
@@ -1125,6 +1147,7 @@ export interface FileRoutesByTo {
   '/guides/$slug': typeof GuidesSlugRoute
   '/insights/$id': typeof InsightsIdRoute
   '/newsletters/$slug': typeof NewslettersSlugRoute
+  '/survey/$slug': typeof SurveySlugRoute
   '/ticket/$token': typeof TicketTokenRoute
   '/volunteer-login/$token': typeof VolunteerLoginTokenRoute
   '/$locale': typeof LocaleIndexRoute
@@ -1192,6 +1215,7 @@ export interface FileRoutesByTo {
   '/manage/forms/$id': typeof StaffManageFormsIdRoute
   '/manage/guest-passes/$id': typeof StaffManageGuestPassesIdRoute
   '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
+  '/manage/surveys/$id': typeof StaffManageSurveysIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/certificate-qr/$token': typeof ApiPublicCertificateQrTokenRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
@@ -1208,6 +1232,7 @@ export interface FileRoutesByTo {
   '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
+  '/manage/surveys/$id/results': typeof StaffManageSurveysIdResultsRoute
   '/manage/events/$id/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
   '/manage/events/$id/forms/$formId/edit': typeof StaffManageEventsIdFormsFormIdEditRoute
 }
@@ -1275,6 +1300,7 @@ export interface FileRoutesById {
   '/guides/$slug': typeof GuidesSlugRoute
   '/insights/$id': typeof InsightsIdRoute
   '/newsletters/$slug': typeof NewslettersSlugRoute
+  '/survey/$slug': typeof SurveySlugRoute
   '/ticket/$token': typeof TicketTokenRoute
   '/volunteer-login/$token': typeof VolunteerLoginTokenRoute
   '/$locale/': typeof LocaleIndexRoute
@@ -1342,6 +1368,7 @@ export interface FileRoutesById {
   '/_staff/manage/forms/$id': typeof StaffManageFormsIdRoute
   '/_staff/manage/guest-passes_/$id': typeof StaffManageGuestPassesIdRoute
   '/_staff/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
+  '/_staff/manage/surveys/$id': typeof StaffManageSurveysIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/certificate-qr/$token': typeof ApiPublicCertificateQrTokenRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
@@ -1358,6 +1385,7 @@ export interface FileRoutesById {
   '/_staff/manage/events/$id_/cce': typeof StaffManageEventsIdCceRoute
   '/_staff/manage/events/$id_/check-in': typeof StaffManageEventsIdCheckInRoute
   '/_staff/manage/events/$id_/reporting': typeof StaffManageEventsIdReportingRoute
+  '/_staff/manage/surveys/$id_/results': typeof StaffManageSurveysIdResultsRoute
   '/_staff/manage/events/$id_/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
   '/_staff/manage/events/$id_/forms/$formId_/edit': typeof StaffManageEventsIdFormsFormIdEditRoute
 }
@@ -1424,6 +1452,7 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/insights/$id'
     | '/newsletters/$slug'
+    | '/survey/$slug'
     | '/ticket/$token'
     | '/volunteer-login/$token'
     | '/$locale/'
@@ -1491,6 +1520,7 @@ export interface FileRouteTypes {
     | '/manage/forms/$id'
     | '/manage/guest-passes/$id'
     | '/manage/newsletters/$id'
+    | '/manage/surveys/$id'
     | '/api/public/calendar/$file'
     | '/api/public/certificate-qr/$token'
     | '/api/public/event-calendar/$file'
@@ -1507,6 +1537,7 @@ export interface FileRouteTypes {
     | '/manage/events/$id/cce'
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
+    | '/manage/surveys/$id/results'
     | '/manage/events/$id/forms/$formId'
     | '/manage/events/$id/forms/$formId/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -1567,6 +1598,7 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/insights/$id'
     | '/newsletters/$slug'
+    | '/survey/$slug'
     | '/ticket/$token'
     | '/volunteer-login/$token'
     | '/$locale'
@@ -1634,6 +1666,7 @@ export interface FileRouteTypes {
     | '/manage/forms/$id'
     | '/manage/guest-passes/$id'
     | '/manage/newsletters/$id'
+    | '/manage/surveys/$id'
     | '/api/public/calendar/$file'
     | '/api/public/certificate-qr/$token'
     | '/api/public/event-calendar/$file'
@@ -1650,6 +1683,7 @@ export interface FileRouteTypes {
     | '/manage/events/$id/cce'
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
+    | '/manage/surveys/$id/results'
     | '/manage/events/$id/forms/$formId'
     | '/manage/events/$id/forms/$formId/edit'
   id:
@@ -1716,6 +1750,7 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/insights/$id'
     | '/newsletters/$slug'
+    | '/survey/$slug'
     | '/ticket/$token'
     | '/volunteer-login/$token'
     | '/$locale/'
@@ -1783,6 +1818,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/forms/$id'
     | '/_staff/manage/guest-passes_/$id'
     | '/_staff/manage/newsletters/$id'
+    | '/_staff/manage/surveys/$id'
     | '/api/public/calendar/$file'
     | '/api/public/certificate-qr/$token'
     | '/api/public/event-calendar/$file'
@@ -1799,6 +1835,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/events/$id_/cce'
     | '/_staff/manage/events/$id_/check-in'
     | '/_staff/manage/events/$id_/reporting'
+    | '/_staff/manage/surveys/$id_/results'
     | '/_staff/manage/events/$id_/forms/$formId'
     | '/_staff/manage/events/$id_/forms/$formId_/edit'
   fileRoutesById: FileRoutesById
@@ -1844,6 +1881,7 @@ export interface RootRouteChildren {
   GuestPassTokenRoute: typeof GuestPassTokenRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
   NewslettersSlugRoute: typeof NewslettersSlugRoute
+  SurveySlugRoute: typeof SurveySlugRoute
   TicketTokenRoute: typeof TicketTokenRoute
   VolunteerLoginTokenRoute: typeof VolunteerLoginTokenRoute
   CommunitiesIndexRoute: typeof CommunitiesIndexRoute
@@ -2362,6 +2400,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewslettersSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/survey/$slug': {
+      id: '/survey/$slug'
+      path: '/survey/$slug'
+      fullPath: '/survey/$slug'
+      preLoaderRoute: typeof SurveySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ticket/$token': {
       id: '/ticket/$token'
       path: '/ticket/$token'
@@ -2817,6 +2862,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageNewslettersIdRouteImport
       parentRoute: typeof StaffRouteRoute
     }
+    '/_staff/manage/surveys/$id': {
+      id: '/_staff/manage/surveys/$id'
+      path: '/manage/surveys/$id'
+      fullPath: '/manage/surveys/$id'
+      preLoaderRoute: typeof StaffManageSurveysIdRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/api/public/calendar/$file': {
       id: '/api/public/calendar/$file'
       path: '/api/public/calendar/$file'
@@ -2899,6 +2951,13 @@ declare module '@tanstack/react-router' {
       path: '/manage/events/$id/reporting'
       fullPath: '/manage/events/$id/reporting'
       preLoaderRoute: typeof StaffManageEventsIdReportingRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/surveys/$id_/results': {
+      id: '/_staff/manage/surveys/$id_/results'
+      path: '/manage/surveys/$id/results'
+      fullPath: '/manage/surveys/$id/results'
+      preLoaderRoute: typeof StaffManageSurveysIdResultsRouteImport
       parentRoute: typeof StaffRouteRoute
     }
     '/_staff/manage/events/$id_/forms/$formId': {
@@ -3045,6 +3104,7 @@ interface StaffRouteRouteChildren {
   StaffManageFormsIdRoute: typeof StaffManageFormsIdRoute
   StaffManageGuestPassesIdRoute: typeof StaffManageGuestPassesIdRoute
   StaffManageNewslettersIdRoute: typeof StaffManageNewslettersIdRoute
+  StaffManageSurveysIdRoute: typeof StaffManageSurveysIdRoute
   StaffManageAdRequestsIndexRoute: typeof StaffManageAdRequestsIndexRoute
   StaffManageEventsIndexRoute: typeof StaffManageEventsIndexRoute
   StaffManageFormsIndexRoute: typeof StaffManageFormsIndexRoute
@@ -3053,6 +3113,7 @@ interface StaffRouteRouteChildren {
   StaffManageEventsIdCceRoute: typeof StaffManageEventsIdCceRoute
   StaffManageEventsIdCheckInRoute: typeof StaffManageEventsIdCheckInRoute
   StaffManageEventsIdReportingRoute: typeof StaffManageEventsIdReportingRoute
+  StaffManageSurveysIdResultsRoute: typeof StaffManageSurveysIdResultsRoute
   StaffManageEventsIdFormsFormIdRoute: typeof StaffManageEventsIdFormsFormIdRoute
   StaffManageEventsIdFormsFormIdEditRoute: typeof StaffManageEventsIdFormsFormIdEditRoute
 }
@@ -3083,6 +3144,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffManageFormsIdRoute: StaffManageFormsIdRoute,
   StaffManageGuestPassesIdRoute: StaffManageGuestPassesIdRoute,
   StaffManageNewslettersIdRoute: StaffManageNewslettersIdRoute,
+  StaffManageSurveysIdRoute: StaffManageSurveysIdRoute,
   StaffManageAdRequestsIndexRoute: StaffManageAdRequestsIndexRoute,
   StaffManageEventsIndexRoute: StaffManageEventsIndexRoute,
   StaffManageFormsIndexRoute: StaffManageFormsIndexRoute,
@@ -3091,6 +3153,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffManageEventsIdCceRoute: StaffManageEventsIdCceRoute,
   StaffManageEventsIdCheckInRoute: StaffManageEventsIdCheckInRoute,
   StaffManageEventsIdReportingRoute: StaffManageEventsIdReportingRoute,
+  StaffManageSurveysIdResultsRoute: StaffManageSurveysIdResultsRoute,
   StaffManageEventsIdFormsFormIdRoute: StaffManageEventsIdFormsFormIdRoute,
   StaffManageEventsIdFormsFormIdEditRoute:
     StaffManageEventsIdFormsFormIdEditRoute,
@@ -3168,6 +3231,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuestPassTokenRoute: GuestPassTokenRoute,
   GuidesSlugRoute: GuidesSlugRoute,
   NewslettersSlugRoute: NewslettersSlugRoute,
+  SurveySlugRoute: SurveySlugRoute,
   TicketTokenRoute: TicketTokenRoute,
   VolunteerLoginTokenRoute: VolunteerLoginTokenRoute,
   CommunitiesIndexRoute: CommunitiesIndexRoute,

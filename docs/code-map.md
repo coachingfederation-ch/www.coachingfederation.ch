@@ -106,6 +106,7 @@ before adding a new file.
 | `api/public/europe-pulse-scan.ts`                                                                               | Cron trigger for the weekly Europe Pulse scan. Same `x-cron-token` pattern.                                                                             |
 | `europe-pulse`, `_staff/manage.europe-pulse`                                                                    | Public weekly European chapter feed (with `$locale/` mirror) and the admin control room.                                                                |
 | `_staff/manage.forms.index`, `_staff/manage.forms.$id`, `_staff/manage.events.$id_.forms.$formId_.edit` | Forms module: library and preview-first builder (library or event scope). See `docs/forms-module.md`. |
+| `_staff/manage.surveys.$id`, `_staff/manage.surveys.$id_.results`, `survey.$slug` | Public surveys: editor with publishing panel, results/CSV, public answer page. See `docs/forms-module.md`. |
 | `sitemap[.]xml.ts`                                                                                              | Generated sitemap across all four locales.                                                                                                              |
 
 ## Components (`src/components`)

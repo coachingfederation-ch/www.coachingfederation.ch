@@ -6897,6 +6897,127 @@ export type Database = {
         }
         Relationships: []
       }
+      survey_responses: {
+        Row: {
+          answers: Json
+          contact_email: string | null
+          contact_name: string | null
+          created_at: string
+          id: string
+          locale: string
+          survey_id: string
+        }
+        Insert: {
+          answers?: Json
+          contact_email?: string | null
+          contact_name?: string | null
+          created_at?: string
+          id?: string
+          locale?: string
+          survey_id: string
+        }
+        Update: {
+          answers?: Json
+          contact_email?: string | null
+          contact_name?: string | null
+          created_at?: string
+          id?: string
+          locale?: string
+          survey_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "survey_responses_survey_id_fkey"
+            columns: ["survey_id"]
+            isOneToOne: false
+            referencedRelation: "surveys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      surveys: {
+        Row: {
+          closes_at: string | null
+          collect_contact: boolean
+          created_at: string
+          created_by: string | null
+          id: string
+          intro: string | null
+          intro_de: string | null
+          intro_fr: string | null
+          intro_it: string | null
+          max_responses: number | null
+          name: string
+          one_per_browser: boolean
+          opens_at: string | null
+          questions: Json
+          slug: string
+          status: string
+          template_id: string | null
+          thank_you: string | null
+          thank_you_de: string | null
+          thank_you_fr: string | null
+          thank_you_it: string | null
+          updated_at: string
+        }
+        Insert: {
+          closes_at?: string | null
+          collect_contact?: boolean
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          intro?: string | null
+          intro_de?: string | null
+          intro_fr?: string | null
+          intro_it?: string | null
+          max_responses?: number | null
+          name: string
+          one_per_browser?: boolean
+          opens_at?: string | null
+          questions?: Json
+          slug: string
+          status?: string
+          template_id?: string | null
+          thank_you?: string | null
+          thank_you_de?: string | null
+          thank_you_fr?: string | null
+          thank_you_it?: string | null
+          updated_at?: string
+        }
+        Update: {
+          closes_at?: string | null
+          collect_contact?: boolean
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          intro?: string | null
+          intro_de?: string | null
+          intro_fr?: string | null
+          intro_it?: string | null
+          max_responses?: number | null
+          name?: string
+          one_per_browser?: boolean
+          opens_at?: string | null
+          questions?: Json
+          slug?: string
+          status?: string
+          template_id?: string | null
+          thank_you?: string | null
+          thank_you_de?: string | null
+          thank_you_fr?: string | null
+          thank_you_it?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "surveys_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "form_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
