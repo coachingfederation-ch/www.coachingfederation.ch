@@ -11,6 +11,7 @@ describe("parseInviteList", () => {
     const r = parseInviteList('name,email\n"Anna Muster",anna.muster@example.com');
     expect(r.emails).toEqual(["anna.muster@example.com"]);
     expect(r.invalid).toEqual([]);
+    expect(r.names["anna.muster@example.com"]).toBe("Anna Muster");
   });
 
   it("strips Outlook angle brackets and reports broken addresses", () => {

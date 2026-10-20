@@ -1878,7 +1878,12 @@
       "bulkInvalid": "Entrées invalides",
       "bulkNone": "Aucune adresse e-mail trouvée.",
       "bulkTooMany": "Au maximum 500 adresses à la fois.",
-      "bulkDone": "{sent} invitations envoyées, {failed} échecs."
+      "bulkDone": "{sent} invitations envoyées, {failed} échecs.",
+      "guestTitle": "Inviter un·e invité·e (non-membre)",
+      "guestLanguage": "Langue",
+      "bulkGuests": "Sera invité·e comme invité·e",
+      "kindMember": "Membre",
+      "kindGuest": "Invité·e"
     },
     "tag": {
       "membersOnly": "Réservé aux membres",
@@ -1917,7 +1922,8 @@
         "noneHint": "Information seulement — pas d'inscription.",
         "rsvpHint": "Tout le monde peut s'inscrire.",
         "membersHint": "Les membres s'inscrivent en étant connectés.",
-        "invitedHint": "Seuls les membres invités peuvent s'inscrire."
+        "invitedHint": "Seuls les membres invités peuvent s'inscrire.",
+        "invitedOpenHint": "Seules les personnes sur la liste peuvent s'inscrire, membres ou non."
       },
       "extras": {
         "title": "Autre chose ?",
@@ -2076,7 +2082,8 @@
     "audience": {
       "anyone": "Tout le monde",
       "members": "Membres actifs uniquement",
-      "invited": "Membres invités uniquement"
+      "invited": "Membres invités uniquement",
+      "invitedOpen": "Invités (toute personne sur la liste)"
     },
     "fieldTickets": "Proposer des billets",
     "fieldTicketsHelp": "Affiche les catégories de billets et les codes de réduction. Sans catégorie enregistrée, l'inscription reste simple et gratuite.",

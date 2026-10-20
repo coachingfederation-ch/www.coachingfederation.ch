@@ -7378,6 +7378,7 @@ export type Database = {
         | "rsvp_members"
         | "rsvp_tickets"
         | "rsvp_invited"
+        | "rsvp_invited_open"
       event_registration_status: "confirmed" | "cancelled"
       event_status: "draft" | "published" | "cancelled"
       event_tier_segment: "member" | "non_member" | "general"
@@ -7607,6 +7608,7 @@ export const Constants = {
         "rsvp_members",
         "rsvp_tickets",
         "rsvp_invited",
+        "rsvp_invited_open",
       ],
       event_registration_status: ["confirmed", "cancelled"],
       event_status: ["draft", "published", "cancelled"],

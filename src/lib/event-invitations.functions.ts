@@ -93,24 +93,36 @@ export const previewBulkInvitations = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
     eventSchema
-      .extend({ emails: z.array(z.string().trim().toLowerCase().email()).min(1).max(500) })
+      .extend({
+        emails: z.array(z.string().trim().toLowerCase().email()).min(1).max(500),
+        names: z.record(z.string(), z.string().max(160)).optional(),
+      })
       .parse(input),
   )
   .handler(async ({ data, context }) => {
     await assertManagesEvent(context, data.eventId);
     const mod = await import("./event-invitations.server");
-    return mod.previewBulkInvitations(data.eventId, data.emails);
+    return mod.previewBulkInvitations(data.eventId, data.emails, data.names ?? {});
   });
 
 /** Staff: invite many matched members, one email each, sequentially. */
 export const addBulkInvitations = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
-    eventSchema.extend({ memberIds: z.array(z.string().uuid()).min(1).max(500) }).parse(input),
+    eventSchema
+      .extend({
+        memberIds: z.array(z.string().uuid()).max(500).default([]),
+        guests: z
+          .array(z.object({ email: z.string().trim().email(), name: z.string().trim().max(160) }))
+          .max(500)
+          .default([]),
+      })
+      .refine((v) => v.memberIds.length + v.guests.length > 0 && v.memberIds.length + v.guests.length <= 500)
+      .parse(input),
   )
   .handler(async ({ data, context }) => {
     await assertManagesEvent(context, data.eventId);
-    const { addInvitation } = await import("./event-invitations.server");
+    const { addInvitation, addGuestInvitation } = await import("./event-invitations.server");
     let sent = 0;
     let failed = 0;
     for (const memberId of [...new Set(data.memberIds)]) {
@@ -118,7 +130,38 @@ export const addBulkInvitations = createServerFn({ method: "POST" })
       if (r.ok) sent++;
       else failed++;
     }
+    for (const guest of data.guests) {
+      const r = await addGuestInvitation(
+        data.eventId,
+        { fullName: guest.name, email: guest.email },
+        context.userId,
+      );
+      if (r.ok) sent++;
+      else failed++;
+    }
     return { sent, failed };
+  });
+
+/** Staff: invite one non-member (open guest-list events only). */
+export const addGuestEventInvitation = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    eventSchema
+      .extend({
+        fullName: z.string().trim().min(1).max(160),
+        email: z.string().trim().email().max(254),
+        locale: z.enum(["de", "fr", "it", "en"]),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    await assertManagesEvent(context, data.eventId);
+    const { addGuestInvitation } = await import("./event-invitations.server");
+    return addGuestInvitation(
+      data.eventId,
+      { fullName: data.fullName, email: data.email, locale: data.locale },
+      context.userId,
+    );
   });
 
 const tokenSchema = eventSchema.extend({ token: z.string().trim().min(8).max(128) });

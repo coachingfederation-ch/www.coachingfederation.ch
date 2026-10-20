@@ -358,7 +358,7 @@ export async function submitRegistration(
   const mode = eventRow.registration_mode;
   if (mode === "none") return { ok: false, reason: "closed" };
   const membersOnly = mode === "rsvp_members";
-  const invitedOnly = mode === "rsvp_invited";
+  const invitedOnly = mode === "rsvp_invited" || mode === "rsvp_invited_open";
 
   const membership = await resolveMembership(userId, input.memberId, rateSubject);
   if (membersOnly && membership !== "member") return { ok: false, reason: "members_only" };

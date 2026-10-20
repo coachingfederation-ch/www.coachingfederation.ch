@@ -300,6 +300,8 @@ export async function declineInvitation(eventId: string, token: string) {
 
 export type BulkPreview = {
   matched: InvitableMember[];
+  /** Non-members, only on an `rsvp_invited_open` event. */
+  guests: { email: string; name: string }[];
   alreadyInvited: string[];
   notFound: string[];
 };
@@ -311,7 +313,9 @@ export type BulkPreview = {
 export async function previewBulkInvitations(
   eventId: string,
   emails: string[],
+  names: Record<string, string> = {},
 ): Promise<BulkPreview> {
+  const allowGuests = await eventAllowsGuests(eventId);
   const wanted = [...new Set(emails.map((e) => e.trim().toLowerCase()))];
   const { data: already } = await supabaseAdmin
     .from("event_invitations")
@@ -336,11 +340,79 @@ export async function previewBulkInvitations(
     }
   }
 
-  const result: BulkPreview = { matched: [], alreadyInvited: [], notFound: [] };
+  const result: BulkPreview = { matched: [], guests: [], alreadyInvited: [], notFound: [] };
   for (const email of wanted) {
     if (taken.has(email)) result.alreadyInvited.push(email);
     else if (found.has(email)) result.matched.push(found.get(email)!);
+    else if (allowGuests)
+      result.guests.push({ email, name: names[email]?.trim() || email.split("@")[0]! });
     else result.notFound.push(email);
   }
   return result;
+}
+
+async function eventAllowsGuests(eventId: string) {
+  const { data } = await supabaseAdmin
+    .from("events")
+    .select("registration_mode")
+    .eq("id", eventId)
+    .maybeSingle();
+  return data?.registration_mode === "rsvp_invited_open";
+}
+
+/**
+ * Adds a non-member to an open guest list. Refused unless the event is
+ * `rsvp_invited_open`; an address that belongs to an active member is
+ * invited as that member instead, so the list never holds two kinds of row
+ * for the same person.
+ */
+export async function addGuestInvitation(
+  eventId: string,
+  guest: { fullName: string; email: string; locale?: string },
+  actorUserId: string,
+): Promise<AddResult> {
+  if (!(await eventAllowsGuests(eventId))) return { ok: false, reason: "error" };
+  const email = guest.email.trim().toLowerCase();
+  const { data: member } = await supabaseAdmin
+    .from("members")
+    .select("id")
+    .eq("activity_state", "active")
+    .eq("email", email)
+    .limit(1)
+    .maybeSingle();
+  if (member) return addInvitation(eventId, member.id as string, actorUserId);
+
+  let locale = guest.locale;
+  if (!locale) {
+    const { data: eventRow } = await supabaseAdmin
+      .from("events")
+      .select("language")
+      .eq("id", eventId)
+      .maybeSingle();
+    locale = eventRow?.language ?? "en";
+  }
+
+  const token = randomBytes(32).toString("base64url");
+  const id = crypto.randomUUID();
+  const { error } = await supabaseAdmin.from("event_invitations").insert({
+    id,
+    event_id: eventId,
+    member_id: null,
+    user_id: null,
+    full_name: guest.fullName.trim() || email,
+    email,
+    locale: normaliseLocale(locale),
+    status: "invited",
+    invite_token_hash: hashToken(token),
+    invited_at: new Date().toISOString(),
+    invited_by: actorUserId,
+  });
+  if (error) return { ok: false, reason: error.code === "23505" ? "duplicate" : "error" };
+  try {
+    await sendInvitationEmail(id, token);
+  } catch (e) {
+    console.error("Event invitation email failed", e);
+    return { ok: false, reason: "email" };
+  }
+  return { ok: true };
 }
