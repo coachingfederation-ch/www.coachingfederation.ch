@@ -164,3 +164,7 @@ before adding a new file.
 See `docs/advertising.md` for the full flow and diagram. Booking: `ads.functions.ts`, `ads.server.ts`, `ads-pricing.ts`, `ads-eligibility.server.ts`; staff: `ads-admin.functions.ts`; external advertisers: `advertisers.functions.ts`; nightly expiry: `ads-upkeep.server.ts`.
 
 - `src/components/cms/EventsCalendar.tsx` — month calendar view for the staff events list.
+
+## Board digest
+
+- `src/lib/board-digest.ts` / `.server.ts` / `.functions.ts`, `src/lib/email-templates/board-digest.tsx`, `src/components/cms/BoardDigestCard.tsx`, `src/routes/api/public/board-digest.ts`. See `docs/board-digest.md`.
