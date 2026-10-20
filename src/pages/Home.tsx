@@ -443,7 +443,7 @@ function Research() {
         <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
           {t("home.research.subtitle")}
         </p>
-        <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-5">
+        <div className="mt-14 mx-auto grid max-w-5xl grid-cols-2 gap-4 md:auto-cols-fr md:grid-flow-col md:grid-cols-none">
           {partners.map((p) => (
             <div
               key={p}
