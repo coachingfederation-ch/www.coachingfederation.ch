@@ -909,7 +909,10 @@
           "description": "Créez un hub local en organisant des événements, en tissant des liens et en représentant le chapitre dans votre région.",
           "quote": "Je suis venu pour développer mon réseau ; je suis resté parce que je pouvais façonner quelque chose qui aide toute la profession.",
           "attribution": "Anna M., Responsable communauté Zürich",
-          "valueTags": ["Développer votre réseau", "Développer votre leadership"],
+          "valueTags": [
+            "Développer votre réseau",
+            "Développer votre leadership"
+          ],
           "commitment": "4 à 6 heures par mois",
           "responsibilities": [
             "Planifier et animer des rencontres régionales",
@@ -928,7 +931,10 @@
           "description": "Soutenez votre responsable de communauté régionale, co-animez des rencontres locales et aidez les nouveaux membres à se sentir chez eux.",
           "quote": "J'aide à une rencontre par trimestre et j'ai rencontré plus de coachs qu'en des années seule.",
           "attribution": "Elena R., membre de l'équipe communauté",
-          "valueTags": ["Développer votre réseau", "Redonner à la communauté"],
+          "valueTags": [
+            "Développer votre réseau",
+            "Redonner à la communauté"
+          ],
           "commitment": "2 à 4 heures par mois",
           "responsibilities": [
             "Aider à planifier et co-animer des rencontres locales",
@@ -947,7 +953,10 @@
           "description": "Contribuez à l'organisation des événements du chapitre, de l'accueil au soutien des intervenants.",
           "quote": "Ce n'est que quelques heures par an, et l'énergie dans la salle me reste des mois durant.",
           "attribution": "Beat M., Hôte d'événement",
-          "valueTags": ["Développer votre réseau", "Rendre à la communauté"],
+          "valueTags": [
+            "Développer votre réseau",
+            "Rendre à la communauté"
+          ],
           "commitment": "Quelques heures par événement",
           "responsibilities": [
             "Accueillir les participant·es et gérer l'enregistrement",
@@ -964,7 +973,10 @@
           "description": "Partagez votre perspective à travers des articles Insights, des interviews ou des contenus sociaux.",
           "quote": "Écrire pour le chapitre m'a aidé à affiner mon propre point de vue.",
           "attribution": "Carla T., Contributeur de contenu",
-          "valueTags": ["Apprendre en continu", "Porter la marque ICF"],
+          "valueTags": [
+            "Apprendre en continu",
+            "Porter la marque ICF"
+          ],
           "commitment": "Flexible, par article",
           "responsibilities": [
             "Rédiger des articles Insights ou donner des interviews",
@@ -981,14 +993,20 @@
           "description": "Soyez le premier visage accueillant pour les visiteurs du site qui ont des questions.",
           "quote": "Les questions sont souvent simples, mais les conversations peuvent être significatives.",
           "attribution": "Daniel K., Bénévole du chat en direct",
-          "valueTags": ["Rendre à la communauté", "Porter la marque ICF"],
+          "valueTags": [
+            "Rendre à la communauté",
+            "Porter la marque ICF"
+          ],
           "commitment": "1 à 2 heures par semaine",
           "responsibilities": [
             "Répondre aux questions des visiteurs dans le chat du site",
             "Orienter vers les coachs, les événements et l'adhésion",
             "Transmettre les demandes complexes au secrétariat"
           ],
-          "profile": ["Membre ICF qui connaît bien le chapitre", "Aimable et clair·e à l'écrit"]
+          "profile": [
+            "Membre ICF qui connaît bien le chapitre",
+            "Aimable et clair·e à l'écrit"
+          ]
         },
         "details": {
           "cta": "Voir la description du poste",
@@ -1017,7 +1035,10 @@
         },
         "power": {
           "title": "Power",
-          "items": ["Piloter des projets", "Être reconnu par ICFS pour avoir mené des initiatives"]
+          "items": [
+            "Piloter des projets",
+            "Être reconnu par ICFS pour avoir mené des initiatives"
+          ]
         },
         "status": {
           "title": "Status",
@@ -3384,6 +3405,47 @@
       "options": "Les questions à choix demandent au moins deux options."
     },
     "pickLibrary": "Partir d'un formulaire de la bibliothèque",
-    "pickLater": "Décider plus tard dans l'éditeur"
+    "pickLater": "Décider plus tard dans l'éditeur",
+    "surveys": {
+      "tabLibrary": "Formulaires types",
+      "tabSurveys": "Sondages",
+      "hint": "Les sondages ont un lien public à partager dans les newsletters ou les e-mails. Toute personne disposant du lien peut répondre tant que le sondage est ouvert.",
+      "new": "Nouveau sondage",
+      "empty": "Aucun sondage pour l'instant. Créez-en un pour obtenir un lien à partager.",
+      "responses": "réponses",
+      "answers": "réponses",
+      "closes": "clôture",
+      "results": "Résultats",
+      "deleteTitle": "Supprimer ce sondage ?",
+      "deleteBody": "Le sondage et toutes ses réponses seront supprimés. Cette action est irréversible.",
+      "back": "Retour aux sondages",
+      "backToSurvey": "Retour au sondage",
+      "kind": "Sondage",
+      "publishTitle": "Publier et partager",
+      "link": "Lien public",
+      "copyLink": "Copier le lien",
+      "linkCopied": "Lien copié",
+      "qr": "Code QR",
+      "linkInactiveHint": "Le lien n'accepte des réponses que lorsque le statut est Ouvert.",
+      "status": "Statut",
+      "statusLabel": {
+        "draft": "Brouillon",
+        "open": "Ouvert",
+        "closed": "Clos"
+      },
+      "maxResponses": "Limite de réponses",
+      "noLimit": "Aucune limite",
+      "opensAt": "Ouverture (votre heure locale)",
+      "closesAt": "Clôture (votre heure locale)",
+      "collectContact": "Demander nom et e-mail",
+      "collectContactHint": "Désactivé par défaut pour garder les réponses anonymes. Si activé, une courte note explique l'usage des données.",
+      "onePerBrowser": "Une réponse par navigateur",
+      "onePerBrowserHint": "Un contrôle simple qui masque le formulaire après une réponse. Ce n'est pas une garantie.",
+      "savePublishing": "Enregistrer la publication",
+      "saving": "Enregistrement…",
+      "publishSaved": "Paramètres de publication enregistrés",
+      "exportCsv": "Exporter en CSV",
+      "noResponses": "Aucune réponse pour l'instant."
+    }
   }
 }

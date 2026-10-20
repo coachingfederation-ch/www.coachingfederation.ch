@@ -909,7 +909,10 @@
           "description": "Bauen Sie einen lokalen Knotenpunkt auf, organisieren Sie Treffen und vertreten Sie das Chapter in Ihrer Region.",
           "quote": "Ich habe angefangen, um mein Netzwerk zu erweitern — geblieben bin ich, weil ich die Zukunft unseres Berufs mitgestalten kann.",
           "attribution": "Anna M., Community Lead Zürich",
-          "valueTags": ["Netzwerk ausbauen", "Leadership-Erfahrung sammeln"],
+          "valueTags": [
+            "Netzwerk ausbauen",
+            "Leadership-Erfahrung sammeln"
+          ],
           "commitment": "4 bis 6 Stunden pro Monat",
           "responsibilities": [
             "Regionale Community-Treffen planen und leiten",
@@ -928,7 +931,10 @@
           "description": "Unterstützen Sie Ihre regionale Community-Leitung, gestalten Sie Treffen mit und heissen Sie neue Mitglieder willkommen.",
           "quote": "Ich helfe bei einem Treffen pro Quartal und habe mehr Coaches kennengelernt als in Jahren von Einzelarbeit.",
           "attribution": "Elena R., Community Team Member",
-          "valueTags": ["Netzwerk ausbauen", "Der Community etwas zurückgeben"],
+          "valueTags": [
+            "Netzwerk ausbauen",
+            "Der Community etwas zurückgeben"
+          ],
           "commitment": "2 bis 4 Stunden pro Monat",
           "responsibilities": [
             "Bei der Planung und Durchführung lokaler Treffen mithelfen",
@@ -947,7 +953,10 @@
           "description": "Unterstützen Sie die Durchführung von Chapter-Events — vom Empfang bis zur Referentenbetreuung.",
           "quote": "Ein paar Stunden Aufwand im Jahr, und die Energie aus den Begegnungen hält monatelang an.",
           "attribution": "Beat M., Event Host",
-          "valueTags": ["Netzwerk ausbauen", "Der Community etwas zurückgeben"],
+          "valueTags": [
+            "Netzwerk ausbauen",
+            "Der Community etwas zurückgeben"
+          ],
           "commitment": "Einige Stunden pro Event",
           "responsibilities": [
             "Teilnehmer begrüssen und Check-in verwalten",
@@ -964,7 +973,10 @@
           "description": "Teilen Sie Ihre Expertise über Insights-Artikel, Interviews oder Social-Media-Beiträge.",
           "quote": "Das Schreiben für das Chapter hat mir geholfen, meine eigene Haltung schärfer zu formulieren.",
           "attribution": "Carla T., Content Contributor",
-          "valueTags": ["Kontinuierlich lernen", "Botschafter/in der Marke ICF sein"],
+          "valueTags": [
+            "Kontinuierlich lernen",
+            "Botschafter/in der Marke ICF sein"
+          ],
           "commitment": "Flexibel, pro Artikel",
           "responsibilities": [
             "Insights-Artikel verfassen oder Interviews geben",
@@ -981,7 +993,10 @@
           "description": "Seien Sie die erste freundliche Ansprechperson für Fragen von Website-Besuchern.",
           "quote": "Die Fragen sind oft simpel, aber daraus entstehen immer wieder wertvolle Gespräche.",
           "attribution": "Daniel K., Live Chat Volunteer",
-          "valueTags": ["Der Community etwas zurückgeben", "Botschafter/in der Marke ICF sein"],
+          "valueTags": [
+            "Der Community etwas zurückgeben",
+            "Botschafter/in der Marke ICF sein"
+          ],
           "commitment": "1 bis 2 Stunden pro Woche",
           "responsibilities": [
             "Fragen von Besucherinnen und Besuchern im Chat beantworten",
@@ -2977,7 +2992,13 @@
     },
     "depthTitle": "Tiefe (1 zu oberflächlich — 5 zu tief)",
     "usefulnessTitle": "Nutzen (1 nicht relevant — 5 sehr nützlich)",
-    "depthScale": ["Zu oberflächlich", "Etwas knapp", "Genau richtig", "Etwas tief", "Zu tief"],
+    "depthScale": [
+      "Zu oberflächlich",
+      "Etwas knapp",
+      "Genau richtig",
+      "Etwas tief",
+      "Zu tief"
+    ],
     "usefulnessScale": [
       "Nicht relevant",
       "Mässig interessant",
@@ -3384,6 +3405,47 @@
       "options": "Auswahlfragen brauchen mindestens zwei Optionen."
     },
     "pickLibrary": "Mit einem Bibliotheksformular beginnen",
-    "pickLater": "Später im Editor entscheiden"
+    "pickLater": "Später im Editor entscheiden",
+    "surveys": {
+      "tabLibrary": "Formularvorlagen",
+      "tabSurveys": "Umfragen",
+      "hint": "Umfragen haben einen öffentlichen Link, den Sie in Newslettern oder E-Mails teilen können. Solange die Umfrage offen ist, kann jede Person mit dem Link antworten.",
+      "new": "Neue Umfrage",
+      "empty": "Noch keine Umfragen. Erstellen Sie eine, um einen teilbaren Link zu erhalten.",
+      "responses": "Antworten",
+      "answers": "Antworten",
+      "closes": "schliesst",
+      "results": "Ergebnisse",
+      "deleteTitle": "Diese Umfrage löschen?",
+      "deleteBody": "Die Umfrage und alle Antworten werden gelöscht. Dies kann nicht rückgängig gemacht werden.",
+      "back": "Zurück zu den Umfragen",
+      "backToSurvey": "Zurück zur Umfrage",
+      "kind": "Umfrage",
+      "publishTitle": "Veröffentlichen und teilen",
+      "link": "Öffentlicher Link",
+      "copyLink": "Link kopieren",
+      "linkCopied": "Link kopiert",
+      "qr": "QR-Code",
+      "linkInactiveHint": "Der Link nimmt nur Antworten entgegen, wenn der Status Offen ist.",
+      "status": "Status",
+      "statusLabel": {
+        "draft": "Entwurf",
+        "open": "Offen",
+        "closed": "Geschlossen"
+      },
+      "maxResponses": "Maximale Antworten",
+      "noLimit": "Keine Begrenzung",
+      "opensAt": "Öffnet (Ihre Ortszeit)",
+      "closesAt": "Schliesst (Ihre Ortszeit)",
+      "collectContact": "Name und E-Mail abfragen",
+      "collectContactHint": "Standardmässig aus, damit Antworten anonym bleiben. Wenn aktiv, sehen Teilnehmende einen kurzen Hinweis zur Verwendung ihrer Angaben.",
+      "onePerBrowser": "Eine Antwort pro Browser",
+      "onePerBrowserHint": "Eine einfache Prüfung, die das Formular nach einer Antwort ausblendet. Keine Garantie.",
+      "savePublishing": "Veröffentlichung speichern",
+      "saving": "Wird gespeichert…",
+      "publishSaved": "Veröffentlichungseinstellungen gespeichert",
+      "exportCsv": "CSV exportieren",
+      "noResponses": "Noch keine Antworten."
+    }
   }
 }
