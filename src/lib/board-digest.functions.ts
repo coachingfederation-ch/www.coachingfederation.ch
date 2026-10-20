@@ -18,6 +18,7 @@ const settingsSchema = z.object({
     articles: z.boolean(),
     events: z.boolean(),
     assistant: z.boolean(),
+    operations: z.boolean().default(true),
   }),
 });
 
