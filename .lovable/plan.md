@@ -28,7 +28,7 @@ digest is built so a new section is one extra block.
 ## Who receives it
 
 The email goes to **one address** you enter, ideally the board's shared mailing list
-(for example board@coachingfederation.ch). Our email service only allows app emails
+(directors@coachingfederation.ch). Our email service only allows app emails
 to one recipient per send, so we rely on a group mailbox to forward it to every board
 member. Board members who want it individually can be added to that group.
 
