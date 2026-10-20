@@ -7,6 +7,7 @@
  * showing the visitor what the server will do and why. An event with no tiers
  * behaves exactly as it did before ticketing existed.
  */
+import { isInvitedMode } from "@/lib/events";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { LocaleLink, useI18n } from "@/i18n";
@@ -177,7 +178,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const inviteQuery = useQuery({
     queryKey: ["waitlist-invite", eventId, inviteToken],
     queryFn: () => checkWaitlistInvite({ data: { eventId, token: inviteToken! } }),
-    enabled: Boolean(inviteToken) && (event.registration_mode ?? "none") !== "rsvp_invited",
+    enabled: Boolean(inviteToken) && !isInvitedMode(event.registration_mode),
     retry: false,
     staleTime: 60_000,
   });
@@ -190,7 +191,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const guestInviteQuery = useQuery({
     queryKey: ["event-invitation", eventId, inviteToken],
     queryFn: () => checkEventInvitation({ data: { eventId, token: inviteToken! } }),
-    enabled: Boolean(inviteToken) && (event.registration_mode ?? "none") === "rsvp_invited",
+    enabled: Boolean(inviteToken) && isInvitedMode(event.registration_mode),
     retry: false,
     staleTime: 60_000,
   });
@@ -289,7 +290,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const mode = event.registration_mode ?? "none";
   const rsvpMode = mode !== "none";
   const ticketMode = event.tickets_enabled === true;
-  const invitedMode = mode === "rsvp_invited";
+  const invitedMode = isInvitedMode(mode);
   const membersOnly = mode === "rsvp_members";
 
   // A tier only applies on a ticketed event, even if tiers linger from an

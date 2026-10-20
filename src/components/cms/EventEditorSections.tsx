@@ -775,6 +775,7 @@ export function EventRegistrationSettings({
                 <option value="rsvp">{t("events.audience.anyone")}</option>
                 <option value="rsvp_members">{t("events.audience.members")}</option>
                 <option value="rsvp_invited">{t("events.audience.invited")}</option>
+                <option value="rsvp_invited_open">{t("events.audience.invitedOpen")}</option>
               </select>
               <p className="mt-1 text-xs text-muted-foreground">{t("events.fieldAudienceHelp")}</p>
             </Field>

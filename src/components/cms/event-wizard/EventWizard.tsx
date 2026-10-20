@@ -32,7 +32,7 @@ import { rememberWizardExtras } from "@/lib/event-wizard-extras";
 
 type Language = "de" | "fr" | "it" | "en";
 type LocationMode = "in_person" | "online" | "hybrid";
-type RegistrationMode = "none" | "rsvp" | "rsvp_members" | "rsvp_invited";
+type RegistrationMode = "none" | "rsvp" | "rsvp_members" | "rsvp_invited" | "rsvp_invited_open";
 
 type Draft = {
   title: string;
@@ -481,6 +481,12 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
               hint={t("events.wizard.who.invitedHint")}
               onSelect={() => patch({ registrationMode: "rsvp_invited" })}
             />
+            <Choice
+              selected={draft.registrationMode === "rsvp_invited_open"}
+              title={t("events.audience.invitedOpen")}
+              hint={t("events.wizard.who.invitedOpenHint")}
+              onSelect={() => patch({ registrationMode: "rsvp_invited_open" })}
+            />
           </div>
 
           {draft.registrationMode !== "none" ? (
@@ -643,6 +649,7 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
                   rsvp: "events.audience.anyone",
                   rsvp_members: "events.audience.members",
                   rsvp_invited: "events.audience.invited",
+                  rsvp_invited_open: "events.audience.invitedOpen",
                 }[draft.registrationMode],
               )}
             />

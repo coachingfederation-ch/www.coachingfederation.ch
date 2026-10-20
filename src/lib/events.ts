@@ -111,3 +111,8 @@ export function isLiveEvent(
   const end = endsAt ? new Date(endsAt).getTime() : start + LIVE_FALLBACK_MS;
   return now < end;
 }
+
+/** Both invite-only audiences: the guest list is the only way in. */
+export function isInvitedMode(mode: string | null | undefined): boolean {
+  return mode === "rsvp_invited" || mode === "rsvp_invited_open";
+}

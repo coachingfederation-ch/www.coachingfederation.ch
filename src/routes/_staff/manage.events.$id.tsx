@@ -5,6 +5,7 @@
  * and are stored as UTC instants. Swiss staff editing Swiss events see the
  * right thing; a per-event timezone picker would be the complete fix.
  */
+import { isInvitedMode } from "@/lib/events";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
 import * as React from "react";
@@ -476,15 +477,19 @@ function EventEditor() {
         />,
       );
     }
-    if (event.registration_mode === "rsvp_invited") {
+    if (isInvitedMode(event.registration_mode)) {
       addPanel(
         "panel-invitations",
         t("events.invitations.title"),
-        <EventInvitationsSection eventId={event.id} t={t} />,
+        <EventInvitationsSection
+          eventId={event.id}
+          t={t}
+          allowGuests={event.registration_mode === "rsvp_invited_open"}
+        />,
       );
     }
     // A waitlist makes no sense when the guest list is the gate.
-    if (event.registration_mode !== "none" && event.registration_mode !== "rsvp_invited") {
+    if (event.registration_mode !== "none" && !isInvitedMode(event.registration_mode)) {
       addPanel(
         "panel-waitlist",
         t("events.waitlist.title"),
