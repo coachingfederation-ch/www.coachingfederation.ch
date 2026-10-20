@@ -359,37 +359,45 @@ function EventEditor() {
 
   /* The extras toggles keep their meaning: they reveal the optional halves of
      the editor, and they now live in the section rail. */
-  const extrasControls = (
-    <div className="space-y-2 px-3 text-sm">
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          checked={showRepeat}
-          onChange={(e) => setExtras({ ...extras, repeat: e.target.checked })}
-          disabled={Boolean(storedRecurrence)}
-        />
-        <span>{t("events.wizard.extras.repeat")}</span>
-      </label>
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          checked={showCce}
-          onChange={(e) => setExtras({ ...extras, cce: e.target.checked })}
-          disabled={Boolean(event.cce_enabled)}
-        />
-        <span>{t("events.wizard.extras.cce")}</span>
-      </label>
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          checked={showForms}
-          onChange={(e) => setExtras({ ...extras, forms: e.target.checked })}
-          disabled={hasForms}
-        />
-        <span>{t("events.wizard.extras.forms")}</span>
-      </label>
-    </div>
-  );
+  // Each toggle sits only in the stage that holds its panel.
+  const extrasControls =
+    activeStage === "setup" || activeStage === "after" ? null : (
+      <div className="space-y-2 px-3 text-sm">
+        {activeStage === "publish" && (
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={showRepeat}
+              onChange={(e) => setExtras({ ...extras, repeat: e.target.checked })}
+              disabled={Boolean(storedRecurrence)}
+            />
+            <span>{t("events.wizard.extras.repeat")}</span>
+          </label>
+        )}
+        {activeStage === "run" && (
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={showCce}
+              onChange={(e) => setExtras({ ...extras, cce: e.target.checked })}
+              disabled={Boolean(event.cce_enabled)}
+            />
+            <span>{t("events.wizard.extras.cce")}</span>
+          </label>
+        )}
+        {activeStage === "registration" && (
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={showForms}
+              onChange={(e) => setExtras({ ...extras, forms: e.target.checked })}
+              disabled={hasForms}
+            />
+            <span>{t("events.wizard.extras.forms")}</span>
+          </label>
+        )}
+      </div>
+    );
 
   /* One entry per panel rendered in the active stage, in render order, so the
      rail always matches what is on screen. */
