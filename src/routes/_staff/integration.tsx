@@ -625,7 +625,7 @@ function IntegrationPageBody() {
               t={t}
               config={config}
               health={health}
-              latestRun={runs.find((r) => r.status === "success") ?? runs[0] ?? null}
+              latestRun={runs.find((r) => r.status === "succeeded") ?? runs[0] ?? null}
             />
             <TodayQueue
               t={t}
