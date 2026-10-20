@@ -47,7 +47,10 @@ export function BoardDigestCard() {
     try {
       setS(await getBoardDigestSettings());
     } catch (e) {
-      setMessage({ ok: false, text: e instanceof Error ? e.message : t("integration.digestLoadError") });
+      setMessage({
+        ok: false,
+        text: e instanceof Error ? e.message : t("integration.digestLoadError"),
+      });
     }
   };
 
@@ -213,7 +216,9 @@ export function BoardDigestCard() {
       </div>
 
       {message ? (
-        <p className={"mt-3 text-xs " + (message.ok ? "text-muted-foreground" : "text-destructive")}>
+        <p
+          className={"mt-3 text-xs " + (message.ok ? "text-muted-foreground" : "text-destructive")}
+        >
           {message.text}
         </p>
       ) : null}
