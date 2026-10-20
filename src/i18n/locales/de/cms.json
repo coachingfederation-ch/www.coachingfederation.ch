@@ -641,6 +641,7 @@
     "tileEmail": "Mitglieder-E-Mail",
     "tileClaim": "Aktivierung",
     "tileCredentials": "ICF-Login",
+    "tileMembers": "Mitglieder",
     "todayTitle": "Heute",
     "todayEmpty": "Heute ist keine Aktion erforderlich.",
     "todaySyncFailed": "Der letzte Sync ist fehlgeschlagen",
