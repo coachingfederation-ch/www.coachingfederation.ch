@@ -136,7 +136,9 @@ export function FormBuilder({
       dispatch({ type: "replace", form: next });
       setSaved(snapshot(next));
       setSavedForm(next);
-      setMessage(translationFailed ? t("events.forms.savedNoTranslation") : t("events.forms.saved"));
+      setMessage(
+        translationFailed ? t("events.forms.savedNoTranslation") : t("events.forms.saved"),
+      );
     } catch (e) {
       // The draft stays on screen so nothing typed is lost.
       setError(e instanceof Error ? e.message : String(e));
@@ -243,9 +245,7 @@ export function FormBuilder({
                 className="mt-1"
                 rows={3}
                 value={form.thankYou}
-                onChange={(e) =>
-                  dispatch({ type: "setForm", patch: { thankYou: e.target.value } })
-                }
+                onChange={(e) => dispatch({ type: "setForm", patch: { thankYou: e.target.value } })}
               />
             </div>
           </>
@@ -472,7 +472,13 @@ function TypePicker({
   );
 }
 
-function AddBetween({ onAdd, t }: { onAdd: (type: QuestionType) => void; t: (k: string) => string }) {
+function AddBetween({
+  onAdd,
+  t,
+}: {
+  onAdd: (type: QuestionType) => void;
+  t: (k: string) => string;
+}) {
   return (
     <div className="flex items-center gap-2 py-1">
       <span className="h-px flex-1 bg-border" aria-hidden />
@@ -487,7 +493,13 @@ function AddBetween({ onAdd, t }: { onAdd: (type: QuestionType) => void; t: (k: 
   );
 }
 
-function EmptyForm({ onAdd, t }: { onAdd: (type: QuestionType) => void; t: (k: string) => string }) {
+function EmptyForm({
+  onAdd,
+  t,
+}: {
+  onAdd: (type: QuestionType) => void;
+  t: (k: string) => string;
+}) {
   return (
     <div className="py-8 text-center">
       <p className="text-sm text-muted-foreground">{t("forms.emptyForm")}</p>
@@ -583,7 +595,9 @@ function QuestionCard({
           <div className="mb-1 flex flex-wrap items-center gap-2">
             <span className="text-xs font-bold text-muted-foreground">{index + 1}</span>
             <Badge variant="secondary">{typeLabel}</Badge>
-            {question.is_required ? <Badge variant="outline">{t("events.forms.required")}</Badge> : null}
+            {question.is_required ? (
+              <Badge variant="outline">{t("events.forms.required")}</Badge>
+            ) : null}
             {sourceLabel !== null ? (
               <span className="text-xs text-muted-foreground">
                 {t("forms.shownIf")} {sourceLabel || `#`} = {question.condition_value || "…"}
@@ -907,7 +921,10 @@ function CopyQuestions({
       <Select
         value=""
         onOpenChange={(open) => {
-          if (open && list === null) void sources().then(setList).catch(() => setList([]));
+          if (open && list === null)
+            void sources()
+              .then(setList)
+              .catch(() => setList([]));
         }}
         onValueChange={(v) => void onPick(v)}
       >
@@ -944,7 +961,8 @@ function TranslationsPanel({
   busy: boolean;
   t: (k: string) => string;
 }) {
-  const missing = (q: BuilderQuestion, l: TranslatedLocale) => q.label.trim() !== "" && !q[`label_${l}`];
+  const missing = (q: BuilderQuestion, l: TranslatedLocale) =>
+    q.label.trim() !== "" && !q[`label_${l}`];
   return (
     <div className="space-y-4">
       <p className="text-xs text-muted-foreground">{t("events.forms.translationHint")}</p>
@@ -1004,7 +1022,11 @@ function TranslationsPanel({
                     aria-label={`${t("events.forms.questionLabel")} ${l.toUpperCase()}`}
                     value={q[`label_${l}`]}
                     onChange={(e) =>
-                      dispatch({ type: "patch", uid: q.uid, patch: { [`label_${l}`]: e.target.value } })
+                      dispatch({
+                        type: "patch",
+                        uid: q.uid,
+                        patch: { [`label_${l}`]: e.target.value },
+                      })
                     }
                   />
                   {q.help_text ? (

@@ -86,9 +86,7 @@ function LibraryFormPage() {
                 });
               }}
               copySources={async () =>
-                (await copySourcesFor(null, t("forms.library"))).filter(
-                  (s) => s.id !== `tpl:${id}`,
-                )
+                (await copySourcesFor(null, t("forms.library"))).filter((s) => s.id !== `tpl:${id}`)
               }
               copyFrom={copyQuestionsFrom}
               t={t}

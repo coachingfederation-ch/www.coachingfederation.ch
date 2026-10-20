@@ -8,11 +8,7 @@ import {
   listCopyableForms,
   saveEventForm,
 } from "@/lib/event-forms.functions";
-import {
-  createFormTemplate,
-  getFormTemplate,
-  listFormTemplates,
-} from "@/lib/forms.functions";
+import { createFormTemplate, getFormTemplate, listFormTemplates } from "@/lib/forms.functions";
 import {
   emptyForm,
   questionsFromEventRows,

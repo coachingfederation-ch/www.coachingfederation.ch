@@ -21,15 +21,21 @@ export function KindChoice({
         <label className="flex items-start gap-2">
           <RadioGroupItem value="registration" disabled={disableRegistration} className="mt-1" />
           <span>
-            <span className="block text-sm font-semibold">{t("events.forms.kindRegistration")}</span>
-            <span className="block text-xs text-muted-foreground">{t("forms.kindRegistrationHint")}</span>
+            <span className="block text-sm font-semibold">
+              {t("events.forms.kindRegistration")}
+            </span>
+            <span className="block text-xs text-muted-foreground">
+              {t("forms.kindRegistrationHint")}
+            </span>
           </span>
         </label>
         <label className="flex items-start gap-2">
           <RadioGroupItem value="follow_up" className="mt-1" />
           <span>
             <span className="block text-sm font-semibold">{t("events.forms.kindFollowUp")}</span>
-            <span className="block text-xs text-muted-foreground">{t("forms.kindFollowUpHint")}</span>
+            <span className="block text-xs text-muted-foreground">
+              {t("forms.kindFollowUpHint")}
+            </span>
           </span>
         </label>
       </RadioGroup>

@@ -394,5 +394,9 @@ export function toPreviewQuestions(questions: BuilderQuestion[]): PublicFormQues
 
 /** Stable comparison for the "unsaved changes" state; uids are ignored. */
 export function snapshot(form: BuilderForm): string {
-  return JSON.stringify({ ...form, autoSentAt: null, questions: toQuestionPayload(form.questions) });
+  return JSON.stringify({
+    ...form,
+    autoSentAt: null,
+    questions: toQuestionPayload(form.questions),
+  });
 }

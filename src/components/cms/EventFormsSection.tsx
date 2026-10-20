@@ -131,7 +131,9 @@ export function EventFormsSection({ eventId, t }: { eventId: string; t: (k: stri
                   : t("events.forms.kindFollowUp")}
               </Badge>
               <span className="text-sm font-semibold">{form.name}</span>
-              {!form.is_active ? <Badge variant="outline">{t("events.forms.inactive")}</Badge> : null}
+              {!form.is_active ? (
+                <Badge variant="outline">{t("events.forms.inactive")}</Badge>
+              ) : null}
               <span className="text-xs text-muted-foreground">
                 {form.question_count} {t("events.forms.questionsLabel")}
                 {form.kind === "follow_up"
@@ -166,7 +168,10 @@ export function EventFormsSection({ eventId, t }: { eventId: string; t: (k: stri
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem className="text-destructive" onSelect={() => setToDetach(form)}>
+                    <DropdownMenuItem
+                      className="text-destructive"
+                      onSelect={() => setToDetach(form)}
+                    >
                       {t("forms.detach")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
