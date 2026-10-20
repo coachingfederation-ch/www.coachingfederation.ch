@@ -621,7 +621,12 @@ function IntegrationPageBody() {
           <p className="mt-6 text-sm text-muted-foreground">{t("integration.loading")}</p>
         ) : (
           <div className="mt-4 space-y-8">
-            <HealthStrip t={t} config={config} health={health} />
+            <HealthStrip
+              t={t}
+              config={config}
+              health={health}
+              latestRun={runs.find((r) => r.status === "succeeded") ?? runs[0] ?? null}
+            />
             <TodayQueue
               t={t}
               config={config}

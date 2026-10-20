@@ -641,6 +641,7 @@
     "tileEmail": "Member email",
     "tileClaim": "Account claim",
     "tileCredentials": "ICF login",
+    "tileMembers": "Members",
     "todayTitle": "Today",
     "todayEmpty": "Nothing needs action today.",
     "todaySyncFailed": "The last sync failed",

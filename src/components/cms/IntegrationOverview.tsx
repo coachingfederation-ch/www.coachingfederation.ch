@@ -47,10 +47,18 @@ export function HealthStrip({
   t,
   config,
   health,
+  latestRun,
 }: {
   t: T;
   config: IntegrationConfig;
   health: RelayHealth | null;
+  /** Newest successful sync run: member count from the feed and its changes. */
+  latestRun?: {
+    feed_member_count: number | null;
+    created_count: number;
+    updated_count: number;
+    deactivated_count: number;
+  } | null;
 }) {
   const live = config.mode === "live";
   const emailLevel: Level = config.emails_suppressed
@@ -109,19 +117,13 @@ export function HealthStrip({
       target: "section-claim",
     },
     {
-      key: "cred",
-      label: t("integration.tileCredentials"),
-      level: health?.credentials.level ?? null,
-      value: health
-        ? health.credentials.ok === null
-          ? t("integration.healthNever")
-          : `${
-              health.credentials.ok
-                ? t("integration.healthCredentialsOk")
-                : t("integration.healthCredentialsFailed")
-            } · ${formatShort(health.credentials.at)}`
-        : "…",
-      target: "section-diagnostics",
+      key: "members",
+      label: t("integration.tileMembers"),
+      level: latestRun ? "ok" : null,
+      value: latestRun
+        ? `${latestRun.feed_member_count ?? "—"} · +${latestRun.created_count} / ~${latestRun.updated_count} / −${latestRun.deactivated_count}`
+        : t("integration.healthNever"),
+      target: "section-sync",
     },
   ];
 
