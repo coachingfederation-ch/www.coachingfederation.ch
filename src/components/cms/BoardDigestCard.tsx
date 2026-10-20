@@ -127,7 +127,7 @@ export function BoardDigestCard() {
         </div>
       </div>
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <div className="space-y-1.5 sm:col-span-2">
           <Label htmlFor="digest-recipient">{t("integration.digestRecipient")}</Label>
           <Input
@@ -152,7 +152,7 @@ export function BoardDigestCard() {
             </SelectContent>
           </Select>
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:col-span-2">
           <div className="space-y-1.5">
             <Label>{t("integration.digestWeekday")}</Label>
             <Select value={String(s.weekday)} onValueChange={(v) => update({ weekday: Number(v) })}>
