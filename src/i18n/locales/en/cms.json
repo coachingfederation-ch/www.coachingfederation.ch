@@ -1842,7 +1842,7 @@
     },
     "invitations": {
       "title": "Invited members",
-      "hint": "Only the members on this list receive a personal link, and only that link opens the registration form.",
+      "hint": "Only the members on this list receive a personal link, and only that link opens the registration form. Invitations are sent when the event is first published; until then they wait on this list.",
       "search": "Find an active member",
       "searchPlaceholder": "Search by name or email",
       "invite": "Invite",
@@ -1859,7 +1859,8 @@
         "registered": "Registered",
         "declined": "Declined",
         "revoked": "Removed",
-        "expired": "Expired"
+        "expired": "Expired",
+        "queued": "Sent on publish"
       },
       "error": {
         "duplicate": "That member is already on the guest list.",
@@ -1883,7 +1884,8 @@
       "guestLanguage": "Language",
       "bulkGuests": "Will be invited as a guest",
       "kindMember": "Member",
-      "kindGuest": "Guest"
+      "kindGuest": "Guest",
+      "queued": "Saved. The invitation is sent when the event is published."
     },
     "tag": {
       "membersOnly": "Members only",
