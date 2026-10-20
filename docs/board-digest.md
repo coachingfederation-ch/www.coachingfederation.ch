@@ -17,6 +17,8 @@ Covering the days since the previous digest (7 or 14, by cadence):
 - **New events** — title, organizer, community (or city/venue/online), date, status.
 - **Assistant** — conversation count, answer/escalation/helpful rates, top
   categories, and escalated topics (`buildChatInsightReport`).
+- **Operational structure change log** — volunteer assignments and removals
+  (member, community/role, date, who made the change) from `op_assignment_audit_log`.
 
 Lists are capped at 15 items ("and N more"). Member names appear; emails and
 phone numbers never do. Each section can be switched off.

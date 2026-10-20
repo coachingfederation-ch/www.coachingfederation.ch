@@ -7,7 +7,7 @@
  */
 import type { OverviewKpis } from "./chapter-overview";
 
-export const DIGEST_SECTIONS = ["members", "articles", "events", "assistant"] as const;
+export const DIGEST_SECTIONS = ["members", "articles", "events", "assistant", "operations"] as const;
 export type DigestSection = (typeof DIGEST_SECTIONS)[number];
 export type DigestSections = Record<DigestSection, boolean>;
 
@@ -16,6 +16,7 @@ export const DEFAULT_SECTIONS: DigestSections = {
   articles: true,
   events: true,
   assistant: true,
+  operations: true,
 };
 
 export type DigestCadence = "weekly" | "biweekly";
@@ -114,6 +115,8 @@ export type BoardDigestData = {
     topCategories: { label: string; count: number }[];
     escalations: DigestList;
   };
+  /** Operational structure change log: volunteer assignments and removals. */
+  operations?: { assigned: number; unassigned: number; entries: DigestList };
   overviewUrl: string;
 };
 
