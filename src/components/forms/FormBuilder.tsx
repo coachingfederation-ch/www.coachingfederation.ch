@@ -328,6 +328,10 @@ export function FormBuilder({
                       onSelect={() => select(q.uid)}
                       onPatch={(patch) => dispatch({ type: "patch", uid: q.uid, patch })}
                       onMove={(to) => dispatch({ type: "move", uid: q.uid, to })}
+                      onDropFrom={(from) => {
+                        const dragged = form.questions[from];
+                        if (dragged) dispatch({ type: "move", uid: dragged.uid, to: i });
+                      }}
                       t={t}
                     />
                     <AddBetween onAdd={(type) => add(type, i + 1)} t={t} />
@@ -344,32 +348,29 @@ export function FormBuilder({
           </div>
         </section>
 
-        {/* Side panel */}
+        {/* Side panel: a bottom sheet on phones while a question is selected. */}
         {isMobile ? (
-          <Sheet open={selected !== null} onOpenChange={(open) => !open && setSelected(null)}>
-            <SheetContent side="bottom" className="max-h-screen overflow-y-auto">
-              <SheetHeader>
-                <SheetTitle>{t("forms.tab.question")}</SheetTitle>
-              </SheetHeader>
-              <div className="mt-4">{inspector}</div>
-            </SheetContent>
-          </Sheet>
-        ) : null}
-        <aside
-          aria-label={t("forms.panelLabel")}
-          className={
-            "md:col-span-2 md:sticky md:top-6 md:self-start rounded-2xl border border-border bg-card p-4 " +
-            (isMobile ? "hidden" : "")
-          }
-        >
-          {inspector}
-        </aside>
-        {isMobile ? (
-          <div className="rounded-2xl border border-border bg-card p-4">
-            {/* Form settings stay reachable on phones without a selection. */}
+          <>
+            <Sheet open={selected !== null} onOpenChange={(open) => !open && setSelected(null)}>
+              <SheetContent side="bottom" className="max-h-screen overflow-y-auto">
+                <SheetHeader>
+                  <SheetTitle>{t("forms.panelLabel")}</SheetTitle>
+                </SheetHeader>
+                <div className="mt-4">{selected !== null ? inspector : null}</div>
+              </SheetContent>
+            </Sheet>
+            {selected === null ? (
+              <div className="rounded-2xl border border-border bg-card p-4">{inspector}</div>
+            ) : null}
+          </>
+        ) : (
+          <aside
+            aria-label={t("forms.panelLabel")}
+            className="rounded-2xl border border-border bg-card p-4 md:sticky md:top-6 md:col-span-2 md:self-start"
+          >
             {inspector}
-          </div>
-        ) : null}
+          </aside>
+        )}
       </div>
 
       {/* Save bar */}
@@ -527,6 +528,7 @@ function QuestionCard({
   onSelect,
   onPatch,
   onMove,
+  onDropFrom,
   t,
 }: {
   question: BuilderQuestion;
@@ -538,6 +540,7 @@ function QuestionCard({
   onSelect: () => void;
   onPatch: (patch: Partial<BuilderQuestion>) => void;
   onMove: (to: number) => void;
+  onDropFrom: (from: number) => void;
   t: (k: string) => string;
 }) {
   const [dragOver, setDragOver] = React.useState(false);
@@ -562,12 +565,8 @@ function QuestionCard({
         e.preventDefault();
         setDragOver(false);
         const from = Number(e.dataTransfer.getData("text/plain"));
-        if (!Number.isNaN(from) && from !== index) {
-          // The dragged question lands where this one sits.
-          e.currentTarget.dispatchEvent(
-            new CustomEvent("form-builder-drop", { bubbles: true, detail: { from, to: index } }),
-          );
-        }
+        // The dragged question lands where this one sits.
+        if (!Number.isNaN(from) && from !== index) onDropFrom(from);
       }}
     >
       <div className="flex items-start gap-2">
