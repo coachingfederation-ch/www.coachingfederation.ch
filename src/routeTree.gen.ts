@@ -114,6 +114,7 @@ import { Route as StaffMembersIndexRouteImport } from './routes/_staff/members.i
 import { Route as StaffMembersIdRouteImport } from './routes/_staff/members.$id'
 import { Route as ApiPublicAdUpkeepRouteImport } from './routes/api/public/ad-upkeep'
 import { Route as ApiPublicArticleFeedbackRouteImport } from './routes/api/public/article-feedback'
+import { Route as ApiPublicBoardDigestRouteImport } from './routes/api/public/board-digest'
 import { Route as ApiPublicChatSignalRouteImport } from './routes/api/public/chat-signal'
 import { Route as ApiPublicClaimWavesRouteImport } from './routes/api/public/claim-waves'
 import { Route as ApiPublicContactEnquiryPurgeRouteImport } from './routes/api/public/contact-enquiry-purge'
@@ -693,6 +694,11 @@ const ApiPublicArticleFeedbackRoute =
     path: '/api/public/article-feedback',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicBoardDigestRoute = ApiPublicBoardDigestRouteImport.update({
+  id: '/api/public/board-digest',
+  path: '/api/public/board-digest',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicChatSignalRoute = ApiPublicChatSignalRouteImport.update({
   id: '/api/public/chat-signal',
   path: '/api/public/chat-signal',
@@ -1036,6 +1042,7 @@ export interface FileRoutesByFullPath {
   '/members/$id': typeof StaffMembersIdRoute
   '/api/public/ad-upkeep': typeof ApiPublicAdUpkeepRoute
   '/api/public/article-feedback': typeof ApiPublicArticleFeedbackRoute
+  '/api/public/board-digest': typeof ApiPublicBoardDigestRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
   '/api/public/contact-enquiry-purge': typeof ApiPublicContactEnquiryPurgeRoute
@@ -1182,6 +1189,7 @@ export interface FileRoutesByTo {
   '/members/$id': typeof StaffMembersIdRoute
   '/api/public/ad-upkeep': typeof ApiPublicAdUpkeepRoute
   '/api/public/article-feedback': typeof ApiPublicArticleFeedbackRoute
+  '/api/public/board-digest': typeof ApiPublicBoardDigestRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
   '/api/public/contact-enquiry-purge': typeof ApiPublicContactEnquiryPurgeRoute
@@ -1335,6 +1343,7 @@ export interface FileRoutesById {
   '/_staff/members/$id': typeof StaffMembersIdRoute
   '/api/public/ad-upkeep': typeof ApiPublicAdUpkeepRoute
   '/api/public/article-feedback': typeof ApiPublicArticleFeedbackRoute
+  '/api/public/board-digest': typeof ApiPublicBoardDigestRoute
   '/api/public/chat-signal': typeof ApiPublicChatSignalRoute
   '/api/public/claim-waves': typeof ApiPublicClaimWavesRoute
   '/api/public/contact-enquiry-purge': typeof ApiPublicContactEnquiryPurgeRoute
@@ -1487,6 +1496,7 @@ export interface FileRouteTypes {
     | '/members/$id'
     | '/api/public/ad-upkeep'
     | '/api/public/article-feedback'
+    | '/api/public/board-digest'
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
     | '/api/public/contact-enquiry-purge'
@@ -1633,6 +1643,7 @@ export interface FileRouteTypes {
     | '/members/$id'
     | '/api/public/ad-upkeep'
     | '/api/public/article-feedback'
+    | '/api/public/board-digest'
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
     | '/api/public/contact-enquiry-purge'
@@ -1785,6 +1796,7 @@ export interface FileRouteTypes {
     | '/_staff/members/$id'
     | '/api/public/ad-upkeep'
     | '/api/public/article-feedback'
+    | '/api/public/board-digest'
     | '/api/public/chat-signal'
     | '/api/public/claim-waves'
     | '/api/public/contact-enquiry-purge'
@@ -1893,6 +1905,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicAdUpkeepRoute: typeof ApiPublicAdUpkeepRoute
   ApiPublicArticleFeedbackRoute: typeof ApiPublicArticleFeedbackRoute
+  ApiPublicBoardDigestRoute: typeof ApiPublicBoardDigestRoute
   ApiPublicChatSignalRoute: typeof ApiPublicChatSignalRoute
   ApiPublicClaimWavesRoute: typeof ApiPublicClaimWavesRoute
   ApiPublicContactEnquiryPurgeRoute: typeof ApiPublicContactEnquiryPurgeRoute
@@ -2659,6 +2672,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicArticleFeedbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/board-digest': {
+      id: '/api/public/board-digest'
+      path: '/api/public/board-digest'
+      fullPath: '/api/public/board-digest'
+      preLoaderRoute: typeof ApiPublicBoardDigestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/chat-signal': {
       id: '/api/public/chat-signal'
       path: '/api/public/chat-signal'
@@ -3243,6 +3263,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicAdUpkeepRoute: ApiPublicAdUpkeepRoute,
   ApiPublicArticleFeedbackRoute: ApiPublicArticleFeedbackRoute,
+  ApiPublicBoardDigestRoute: ApiPublicBoardDigestRoute,
   ApiPublicChatSignalRoute: ApiPublicChatSignalRoute,
   ApiPublicClaimWavesRoute: ApiPublicClaimWavesRoute,
   ApiPublicContactEnquiryPurgeRoute: ApiPublicContactEnquiryPurgeRoute,

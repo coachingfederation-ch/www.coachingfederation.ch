@@ -23,6 +23,7 @@ import { ClaimCampaignCard } from "@/components/cms/ClaimCampaignCard";
 import { SyncLimitsCard } from "@/components/cms/SyncLimitsCard";
 import { FeatureTogglesCard } from "@/components/cms/FeatureTogglesCard";
 import { RetentionCard } from "@/components/cms/RetentionCard";
+import { BoardDigestCard } from "@/components/cms/BoardDigestCard";
 import { useCms } from "@/i18n/cms";
 import {
   fetchIntegrationConfig,
@@ -742,6 +743,7 @@ function IntegrationPageBody() {
               <h2 className={GROUP}>{t("integration.sectionMembers")}</h2>
               <ClaimCampaignCard key={`claim-${refreshKey}`} t={t} />
               <RetentionCard key={`retention-${refreshKey}`} />
+              <BoardDigestCard />
             </div>
 
             <Collapsible

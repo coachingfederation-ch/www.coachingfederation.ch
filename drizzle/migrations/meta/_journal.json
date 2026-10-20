@@ -99,6 +99,13 @@
       "when": 1792496411807,
       "tag": "0013_surveys",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1792524367199,
+      "tag": "0014_board_digest_settings",
+      "breakpoints": true
     }
   ]
 }
