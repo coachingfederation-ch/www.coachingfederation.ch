@@ -77,7 +77,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 const Email = ({ digest, test }: Props) => {
   if (!digest) return null;
-  const { members, articles, events, assistant } = digest;
+  const { members, articles, events, assistant, operations } = digest;
   return (
     <Html lang="en" dir="ltr">
       <Head />
@@ -158,6 +158,16 @@ const Email = ({ digest, test }: Props) => {
               </>
             ) : null}
 
+            {operations ? (
+              <>
+                <SectionTitle>Operational structure change log</SectionTitle>
+                <Text style={listRow}>
+                  {`${operations.assigned} assigned · ${operations.unassigned} removed`}
+                </Text>
+                <List list={operations.entries} empty="No changes." />
+              </>
+            ) : null}
+
             <Section style={{ margin: "28px 0 0" }}>
               <Button href={digest.overviewUrl} style={button}>
                 Open the chapter overview
@@ -199,7 +209,7 @@ export const template: TemplateEntry = {
         guestPasses: delta(1, 0),
         chatConversations: delta(24, 19),
       },
-      sections: { members: true, articles: true, events: true, assistant: true },
+      sections: { members: true, articles: true, events: true, assistant: true, operations: true },
       members: {
         newMembers: {
           items: [{ primary: "Anna Muster", secondary: "PCC", tertiary: "Zürich" }],
@@ -241,6 +251,21 @@ export const template: TemplateEntry = {
         helpfulRate: 90,
         topCategories: [{ label: "Membership", count: 9 }],
         escalations: emptyList,
+      },
+      operations: {
+        assigned: 1,
+        unassigned: 0,
+        entries: {
+          items: [
+            {
+              primary: "Assigned: Anna Muster",
+              secondary: "Zürich · Lead",
+              tertiary: "Monday, November 2 · by Max Muster",
+            },
+          ],
+          more: 0,
+          total: 1,
+        },
       },
       overviewUrl: "https://new.coachingfederation.ch/manage",
     } satisfies BoardDigestData,

@@ -305,6 +305,35 @@ async function assistantBlock(fromDay: string, toDay: string) {
   };
 }
 
+async function operationsBlock(db: SupabaseClient, from: string, to: string) {
+  const { data } = await db
+    .from("op_assignment_audit_log")
+    .select("created_at, action, member_name, project_name, role_name, actor_name")
+    .gte("created_at", from)
+    .lte("created_at", to)
+    .order("created_at", { ascending: false })
+    .limit(500);
+  const rows = (data ?? []) as {
+    created_at: string;
+    action: string;
+    member_name: string | null;
+    project_name: string | null;
+    role_name: string | null;
+    actor_name: string | null;
+  }[];
+  return {
+    assigned: rows.filter((r) => r.action === "assigned").length,
+    unassigned: rows.filter((r) => r.action === "unassigned").length,
+    entries: capList(
+      rows.map((r) => ({
+        primary: `${r.action === "assigned" ? "Assigned" : "Removed"}: ${r.member_name ?? "Member"}`,
+        secondary: [r.project_name, r.role_name].filter(Boolean).join(" · ") || undefined,
+        tertiary: `${fmtDate(r.created_at)} · by ${r.actor_name ?? "system"}`,
+      })),
+    ),
+  };
+}
+
 /** Builds the digest for the period ending `now`. */
 export async function buildBoardDigest(
   settings: BoardDigestSettings,
@@ -319,11 +348,12 @@ export async function buildBoardDigest(
   const overview = await buildChapterOverview({ from, to });
   const s = settings.sections;
 
-  const [members, articles, events, assistant] = await Promise.all([
+  const [members, articles, events, assistant, operations] = await Promise.all([
     s.members ? membersBlock(db, from, to) : undefined,
     s.articles ? articlesBlock(db, from, to) : undefined,
     s.events ? eventsBlock(db, from, to) : undefined,
     s.assistant ? assistantBlock(from.slice(0, 10), to.slice(0, 10)) : undefined,
+    s.operations ? operationsBlock(db, from, to) : undefined,
   ]);
 
   return {
@@ -336,6 +366,7 @@ export async function buildBoardDigest(
     articles,
     events,
     assistant,
+    operations,
     overviewUrl: `${SITE_URL}/manage`,
   };
 }

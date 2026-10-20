@@ -684,6 +684,7 @@
     "digestSection_articles": "Articles",
     "digestSection_events": "Events",
     "digestSection_assistant": "Assistant",
+    "digestSection_operations": "Operational structure change log",
     "digestTimeZoneNote": "Times are Zurich time. The email covers the days since the previous digest.",
     "digestSave": "Save settings",
     "digestSaving": "Saving…",
