@@ -3382,6 +3382,8 @@
       "name": "Geben Sie dem Formular einen Namen.",
       "label": "Jede Frage braucht einen Wortlaut.",
       "options": "Auswahlfragen brauchen mindestens zwei Optionen."
-    }
+    },
+    "pickLibrary": "Mit einem Bibliotheksformular beginnen",
+    "pickLater": "Später im Editor entscheiden"
   }
 }

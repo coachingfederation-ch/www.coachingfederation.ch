@@ -29,6 +29,8 @@ import { createEvent, listCommunityOptions, setEventStatus } from "@/lib/events-
 import { setEventCceEnabled } from "@/lib/event-cce.functions";
 import { assistWriting } from "@/lib/writing-assist.functions";
 import { rememberWizardExtras } from "@/lib/event-wizard-extras";
+import { listFormTemplates, type FormTemplateRow } from "@/lib/forms.functions";
+import { addEventForm } from "@/components/forms/form-actions";
 
 type Language = "de" | "fr" | "it" | "en";
 type LocationMode = "in_person" | "online" | "hybrid";
@@ -55,6 +57,8 @@ type Draft = {
   repeats: boolean;
   cce: boolean;
   forms: boolean;
+  /** Library registration form to copy onto the new event, if any. */
+  formTemplateId: string;
   summary: string;
   description: string;
   imageUrl: string;
@@ -151,6 +155,7 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
     repeats: false,
     cce: false,
     forms: false,
+    formTemplateId: "",
     summary: "",
     description: "",
     imageUrl: "",
@@ -226,6 +231,14 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
     }
   };
 
+  const [libraryForms, setLibraryForms] = React.useState<FormTemplateRow[]>([]);
+  React.useEffect(() => {
+    if (!draft.forms) return;
+    void listFormTemplates()
+      .then((rows) => setLibraryForms(rows.filter((r) => r.kind === "registration")))
+      .catch(() => setLibraryForms([]));
+  }, [draft.forms]);
+
   const submit = async (publish: boolean) => {
     setBusy(true);
     setError(null);
@@ -238,6 +251,15 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
         // A random tag makes a clash near-impossible; one fresh tag covers the rest.
         if (!(first instanceof Error) || !first.message.includes("slug")) throw first;
         ({ id } = await createEvent({ data: payload(draft, uniqueSlug(base)) }));
+      }
+      const tpl = draft.forms ? libraryForms.find((f) => f.id === draft.formTemplateId) : undefined;
+      if (tpl) {
+        await addEventForm({
+          eventId: id,
+          kind: "registration",
+          name: tpl.name,
+          templateId: tpl.id,
+        });
       }
       if (draft.cce) await setEventCceEnabled({ data: { eventId: id, enabled: true } });
       if (publish) await setEventStatus({ data: { id, status: "published" } });
@@ -541,6 +563,23 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
               onSelect={() => patch({ forms: !draft.forms })}
             />
           </div>
+          {draft.forms && libraryForms.length > 0 ? (
+            <label className="mt-4 block">
+              <span className="text-sm font-medium">{t("forms.pickLibrary")}</span>
+              <select
+                className={inputClass}
+                value={draft.formTemplateId}
+                onChange={(e) => patch({ formTemplateId: e.target.value })}
+              >
+                <option value="">{t("forms.pickLater")}</option>
+                {libraryForms.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {f.name} ({f.question_count})
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
         </StepShell>
       ) : null}
 

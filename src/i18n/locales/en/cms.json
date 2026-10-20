@@ -3376,6 +3376,8 @@
       "name": "Give the form a name.",
       "label": "Every question needs wording.",
       "options": "Choice questions need at least two options."
-    }
+    },
+    "pickLibrary": "Start from a library form",
+    "pickLater": "Decide later in the editor"
   }
 }

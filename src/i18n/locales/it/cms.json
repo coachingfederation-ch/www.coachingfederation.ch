@@ -3376,6 +3376,8 @@
       "name": "Dai un nome al modulo.",
       "label": "Ogni domanda deve avere un testo.",
       "options": "Le domande a scelta richiedono almeno due opzioni."
-    }
+    },
+    "pickLibrary": "Parti da un modulo della libreria",
+    "pickLater": "Decidi più tardi nell'editor"
   }
 }

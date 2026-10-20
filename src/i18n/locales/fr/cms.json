@@ -3382,6 +3382,8 @@
       "name": "Donnez un nom au formulaire.",
       "label": "Chaque question doit avoir un libellé.",
       "options": "Les questions à choix demandent au moins deux options."
-    }
+    },
+    "pickLibrary": "Partir d'un formulaire de la bibliothèque",
+    "pickLater": "Décider plus tard dans l'éditeur"
   }
 }
