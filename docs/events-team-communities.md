@@ -82,3 +82,6 @@ enforces that only one is.
 ## Staff events calendar view
 
 `/manage/events` offers a List | Calendar switch (`view`, `month` search params). The calendar (`src/components/cms/EventsCalendar.tsx`) renders the same filtered rows as the list, keyed by day in each event's timezone; multi-day events appear on every day they span. Clicking a day lists its events with links to the editor.
+
+### Bulk invitations (invited-members events)
+In the "Invited members" section staff can paste emails (comma, semicolon or new line separated) or upload a CSV. "Check list" matches addresses against active members (`previewBulkInvitations`) and shows matched / already invited / not found / invalid; "Send invitations" (`addBulkInvitations`) invites the matched members one by one with the normal personal email. Max 500 per run; non-members are never invited. Parsing lives in `src/lib/invite-list-parse.ts` (tested).

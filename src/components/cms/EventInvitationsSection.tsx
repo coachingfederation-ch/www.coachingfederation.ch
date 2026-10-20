@@ -14,7 +14,18 @@ import {
   removeEventInvitation,
   resendEventInvitation,
   searchInvitableMembers,
+  previewBulkInvitations,
+  addBulkInvitations,
 } from "@/lib/event-invitations.functions";
+import { parseInviteList, MAX_BULK_INVITES } from "@/lib/invite-list-parse";
+import { Button, Textarea } from "@/design-system/icf-welcome-design-system-a835df";
+
+type BulkPreview = {
+  matched: Candidate[];
+  alreadyInvited: string[];
+  notFound: string[];
+  invalid: string[];
+};
 
 type Invitation = {
   id: string;
@@ -52,6 +63,66 @@ export function EventInvitationsSection({
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const [bulkText, setBulkText] = useState("");
+  const [preview, setPreview] = useState<BulkPreview | null>(null);
+
+  const checkBulk = async () => {
+    setMessage(null);
+    setError(null);
+    setPreview(null);
+    const { emails, invalid } = parseInviteList(bulkText);
+    if (emails.length === 0) {
+      setError(t("events.invitations.bulkNone"));
+      return;
+    }
+    if (emails.length > MAX_BULK_INVITES) {
+      setError(t("events.invitations.bulkTooMany"));
+      return;
+    }
+    setBusy("bulk");
+    try {
+      const r = await previewBulkInvitations({ data: { eventId, emails } });
+      setPreview({ ...r, invalid });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const sendBulk = async () => {
+    if (!preview || preview.matched.length === 0) return;
+    setBusy("bulk");
+    setError(null);
+    try {
+      const r = await addBulkInvitations({
+        data: { eventId, memberIds: preview.matched.map((m) => m.memberId) },
+      });
+      setMessage(
+        t("events.invitations.bulkDone")
+          .replace("{sent}", String(r.sent))
+          .replace("{failed}", String(r.failed)),
+      );
+      setPreview(null);
+      setBulkText("");
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const onFile = (file: File | undefined) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setBulkText(String(reader.result ?? ""));
+      setPreview(null);
+    };
+    reader.readAsText(file);
+  };
 
   const load = useCallback(async () => {
     try {
@@ -166,6 +237,80 @@ export function EventInvitationsSection({
                 </li>
               ))}
             </ul>
+          ) : null}
+        </div>
+
+        <div className="space-y-2 rounded-lg border border-border p-3">
+          <label className="block text-xs font-semibold text-muted-foreground" htmlFor="invite-bulk">
+            {t("events.invitations.bulkTitle")}
+          </label>
+          <p className="text-xs text-muted-foreground">{t("events.invitations.bulkHint")}</p>
+          <Textarea
+            id="invite-bulk"
+            rows={4}
+            value={bulkText}
+            onChange={(e) => {
+              setBulkText(e.target.value);
+              setPreview(null);
+            }}
+            placeholder={t("events.invitations.bulkPlaceholder")}
+          />
+          <div className="flex flex-wrap items-center gap-2">
+            <Button type="button" variant="outline" size="sm" asChild>
+              <label className="cursor-pointer">
+                {t("events.invitations.bulkUpload")}
+                <input
+                  type="file"
+                  accept=".csv,text/csv,text/plain"
+                  className="sr-only"
+                  onChange={(e) => {
+                    onFile(e.target.files?.[0]);
+                    e.target.value = "";
+                  }}
+                />
+              </label>
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              disabled={busy === "bulk" || !bulkText.trim()}
+              onClick={() => void checkBulk()}
+            >
+              {t("events.invitations.bulkCheck")}
+            </Button>
+          </div>
+          {preview ? (
+            <div className="space-y-2 text-sm">
+              {(
+                [
+                  ["bulkMatched", preview.matched.map((m) => `${m.name} (${m.email})`)],
+                  ["bulkAlready", preview.alreadyInvited],
+                  ["bulkNotFound", preview.notFound],
+                  ["bulkInvalid", preview.invalid],
+                ] as const
+              ).map(([key, list]) =>
+                list.length > 0 ? (
+                  <div key={key}>
+                    <p className="font-semibold">
+                      {t(`events.invitations.${key}`)} ({list.length})
+                    </p>
+                    <p className="text-muted-foreground">{list.join(", ")}</p>
+                  </div>
+                ) : null,
+              )}
+              {preview.matched.length > 0 ? (
+                <Button
+                  type="button"
+                  size="sm"
+                  disabled={busy === "bulk"}
+                  onClick={() => void sendBulk()}
+                >
+                  {busy === "bulk"
+                    ? t("events.invitations.sending")
+                    : t("events.invitations.bulkSend").replace("{n}", String(preview.matched.length))}
+                </Button>
+              ) : null}
+            </div>
           ) : null}
         </div>
 

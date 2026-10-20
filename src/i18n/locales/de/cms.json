@@ -1865,7 +1865,20 @@
         "duplicate": "Mitglied steht bereits auf der Gästeliste.",
         "email": "Gespeichert, aber E-Mail konnte nicht gesendet werden.",
         "error": "Mitglied konnte nicht eingeladen werden."
-      }
+      },
+      "bulkTitle": "Mehrere auf einmal hinzufügen",
+      "bulkHint": "E-Mail-Adressen getrennt durch Komma, Semikolon oder Zeilenumbruch einfügen oder eine CSV-Datei hochladen.",
+      "bulkPlaceholder": "anna.muster@example.com, max.muster@example.com",
+      "bulkUpload": "CSV hochladen",
+      "bulkCheck": "Liste prüfen",
+      "bulkSend": "{n} Einladungen senden",
+      "bulkMatched": "Wird eingeladen",
+      "bulkAlready": "Bereits auf der Liste",
+      "bulkNotFound": "Kein aktives Mitglied gefunden",
+      "bulkInvalid": "Ungültige Einträge",
+      "bulkNone": "Keine E-Mail-Adressen gefunden.",
+      "bulkTooMany": "Bitte höchstens 500 Adressen auf einmal.",
+      "bulkDone": "{sent} Einladungen gesendet, {failed} fehlgeschlagen."
     },
     "tag": {
       "membersOnly": "Nur für Mitglieder",

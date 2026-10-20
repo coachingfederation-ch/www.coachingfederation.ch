@@ -1865,7 +1865,20 @@
         "duplicate": "Ce membre figure déjà sur la liste des invités.",
         "email": "L'invitation a été enregistrée mais l'e-mail n'a pas pu être envoyé.",
         "error": "Nous n'avons pas pu inviter ce membre."
-      }
+      },
+      "bulkTitle": "Ajouter plusieurs à la fois",
+      "bulkHint": "Collez des adresses e-mail séparées par des virgules, points-virgules ou retours à la ligne, ou importez un fichier CSV.",
+      "bulkPlaceholder": "anna.muster@example.com, max.muster@example.com",
+      "bulkUpload": "Importer un CSV",
+      "bulkCheck": "Vérifier la liste",
+      "bulkSend": "Envoyer {n} invitations",
+      "bulkMatched": "Seront invités",
+      "bulkAlready": "Déjà sur la liste",
+      "bulkNotFound": "Aucun membre actif trouvé",
+      "bulkInvalid": "Entrées invalides",
+      "bulkNone": "Aucune adresse e-mail trouvée.",
+      "bulkTooMany": "Au maximum 500 adresses à la fois.",
+      "bulkDone": "{sent} invitations envoyées, {failed} échecs."
     },
     "tag": {
       "membersOnly": "Réservé aux membres",
