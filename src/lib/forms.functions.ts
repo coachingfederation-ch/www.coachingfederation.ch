@@ -13,6 +13,9 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertOrganizer } from "./authz";
 import { FORM_KINDS } from "./event-forms";
 
+/** One stored question: plain JSON values only. */
+export type TemplateQuestion = { [key: string]: string | number | boolean | null | string[] };
+
 export type FormTemplateRow = {
   id: string;
   kind: "registration" | "follow_up";
@@ -75,7 +78,7 @@ export const getFormTemplate = createServerFn({ method: "POST" })
       name: row.name,
       intro: row.intro,
       thank_you: row.thank_you,
-      questions: (Array.isArray(row.questions) ? row.questions : []) as Record<string, unknown>[],
+      questions: (Array.isArray(row.questions) ? row.questions : []) as TemplateQuestion[],
     };
   });
 

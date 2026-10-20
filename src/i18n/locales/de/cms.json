@@ -28,7 +28,8 @@
     "editorialSignals": "Redaktionelle Signale",
     "guides": "Mitglieder-Leitfäden",
     "adRequests": "Werbung",
-    "adRateCards": "Preisliste Werbung"
+    "adRateCards": "Preisliste Werbung",
+    "forms": "Formulare"
   },
   "auth": {
     "signInSub": "Anmelden, um fortzufahren",
@@ -908,10 +909,7 @@
           "description": "Bauen Sie einen lokalen Knotenpunkt auf, organisieren Sie Treffen und vertreten Sie das Chapter in Ihrer Region.",
           "quote": "Ich habe angefangen, um mein Netzwerk zu erweitern — geblieben bin ich, weil ich die Zukunft unseres Berufs mitgestalten kann.",
           "attribution": "Anna M., Community Lead Zürich",
-          "valueTags": [
-            "Netzwerk ausbauen",
-            "Leadership-Erfahrung sammeln"
-          ],
+          "valueTags": ["Netzwerk ausbauen", "Leadership-Erfahrung sammeln"],
           "commitment": "4 bis 6 Stunden pro Monat",
           "responsibilities": [
             "Regionale Community-Treffen planen und leiten",
@@ -930,10 +928,7 @@
           "description": "Unterstützen Sie Ihre regionale Community-Leitung, gestalten Sie Treffen mit und heissen Sie neue Mitglieder willkommen.",
           "quote": "Ich helfe bei einem Treffen pro Quartal und habe mehr Coaches kennengelernt als in Jahren von Einzelarbeit.",
           "attribution": "Elena R., Community Team Member",
-          "valueTags": [
-            "Netzwerk ausbauen",
-            "Der Community etwas zurückgeben"
-          ],
+          "valueTags": ["Netzwerk ausbauen", "Der Community etwas zurückgeben"],
           "commitment": "2 bis 4 Stunden pro Monat",
           "responsibilities": [
             "Bei der Planung und Durchführung lokaler Treffen mithelfen",
@@ -952,10 +947,7 @@
           "description": "Unterstützen Sie die Durchführung von Chapter-Events — vom Empfang bis zur Referentenbetreuung.",
           "quote": "Ein paar Stunden Aufwand im Jahr, und die Energie aus den Begegnungen hält monatelang an.",
           "attribution": "Beat M., Event Host",
-          "valueTags": [
-            "Netzwerk ausbauen",
-            "Der Community etwas zurückgeben"
-          ],
+          "valueTags": ["Netzwerk ausbauen", "Der Community etwas zurückgeben"],
           "commitment": "Einige Stunden pro Event",
           "responsibilities": [
             "Teilnehmer begrüssen und Check-in verwalten",
@@ -972,10 +964,7 @@
           "description": "Teilen Sie Ihre Expertise über Insights-Artikel, Interviews oder Social-Media-Beiträge.",
           "quote": "Das Schreiben für das Chapter hat mir geholfen, meine eigene Haltung schärfer zu formulieren.",
           "attribution": "Carla T., Content Contributor",
-          "valueTags": [
-            "Kontinuierlich lernen",
-            "Botschafter/in der Marke ICF sein"
-          ],
+          "valueTags": ["Kontinuierlich lernen", "Botschafter/in der Marke ICF sein"],
           "commitment": "Flexibel, pro Artikel",
           "responsibilities": [
             "Insights-Artikel verfassen oder Interviews geben",
@@ -992,10 +981,7 @@
           "description": "Seien Sie die erste freundliche Ansprechperson für Fragen von Website-Besuchern.",
           "quote": "Die Fragen sind oft simpel, aber daraus entstehen immer wieder wertvolle Gespräche.",
           "attribution": "Daniel K., Live Chat Volunteer",
-          "valueTags": [
-            "Der Community etwas zurückgeben",
-            "Botschafter/in der Marke ICF sein"
-          ],
+          "valueTags": ["Der Community etwas zurückgeben", "Botschafter/in der Marke ICF sein"],
           "commitment": "1 bis 2 Stunden pro Woche",
           "responsibilities": [
             "Fragen von Besucherinnen und Besuchern im Chat beantworten",
@@ -2991,13 +2977,7 @@
     },
     "depthTitle": "Tiefe (1 zu oberflächlich — 5 zu tief)",
     "usefulnessTitle": "Nutzen (1 nicht relevant — 5 sehr nützlich)",
-    "depthScale": [
-      "Zu oberflächlich",
-      "Etwas knapp",
-      "Genau richtig",
-      "Etwas tief",
-      "Zu tief"
-    ],
+    "depthScale": ["Zu oberflächlich", "Etwas knapp", "Genau richtig", "Etwas tief", "Zu tief"],
     "usefulnessScale": [
       "Nicht relevant",
       "Mässig interessant",
@@ -3323,6 +3303,85 @@
       "toSignIn": "Schon ein Konto? Anmelden",
       "checkEmail": "Bitte bestätigen Sie Ihre E-Mail-Adresse, um fortzufahren.",
       "memberNote": "ICF-Mitglied?"
+    }
+  },
+  "forms": {
+    "activeHint": "Inaktive Formulare werden Teilnehmenden nicht angezeigt.",
+    "add": "Hinzufügen",
+    "addFirst": "Erste Frage hinzufügen",
+    "addForm": "Formular hinzufügen",
+    "addOption": "Option hinzufügen",
+    "backToEditing": "Zurück zur Bearbeitung",
+    "backToLibrary": "Zurück zu den Formularen",
+    "blank": "Leeres Formular",
+    "cancel": "Abbrechen",
+    "copyEmpty": "Noch nichts zum Kopieren.",
+    "copyPlaceholder": "Formular wählen",
+    "copySuffix": "Kopie",
+    "create": "Erstellen",
+    "createAndOpen": "Erstellen und öffnen",
+    "delete": "Löschen",
+    "deleteBody": "Events, die dieses Formular bereits kopiert haben, behalten ihre eigene Kopie. Das kann nicht rückgängig gemacht werden.",
+    "deleteTitle": "Dieses Bibliotheksformular löschen?",
+    "detach": "Vom Event entfernen",
+    "detachBody": "Das Formular und seine Fragen werden von diesem Event entfernt. Formulare mit Antworten können nicht entfernt werden; schalten Sie sie stattdessen aus.",
+    "detachTitle": "Dieses Formular vom Event entfernen?",
+    "duplicate": "Duplizieren",
+    "editQuestion": "Frage bearbeiten",
+    "emptyForm": "Dieses Formular hat noch keine Fragen.",
+    "helpPlaceholder": "Hilfetext (optional)",
+    "kindFollowUpHint": "Wird nach dem Event an Teilnehmende gesendet.",
+    "kindQuestion": "Wann wird gefragt?",
+    "kindRegistrationHint": "Wird bei der Anmeldung gefragt.",
+    "labelPlaceholder": "Frage eingeben",
+    "library": "Bibliothek",
+    "libraryEditHint": "Änderungen gelten ab jetzt für Events, die dieses Formular verwenden.",
+    "libraryEmpty": "Noch keine Bibliotheksformulare. Erstellen Sie eines oder speichern Sie ein Event-Formular in der Bibliothek.",
+    "libraryHint": "Wiederverwendbare Anmelde- und Nachbefragungsformulare. Jedes Event erhält eine eigene Kopie, Änderungen ändern also nie vergangene Events oder deren Antworten.",
+    "libraryTitle": "Formulare",
+    "loading": "Wird geladen…",
+    "moreActions": "Weitere Aktionen",
+    "moveDown": "Frage nach unten verschieben",
+    "moveUp": "Frage nach oben verschieben",
+    "newForm": "Neues Formular",
+    "noLibraryForKind": "Noch keine Bibliotheksformulare dieser Art.",
+    "option": "Option",
+    "panelLabel": "Formulareinstellungen",
+    "previewLabel": "So sehen es Teilnehmende",
+    "removeOption": "Option entfernen",
+    "saveHint": "Strg oder Cmd und S speichert ebenfalls. Deutsch, Französisch und Italienisch werden beim Speichern übersetzt.",
+    "saveToLibrary": "In Bibliothek speichern",
+    "saveToLibraryFailed": "Speichern in der Bibliothek fehlgeschlagen.",
+    "savedToLibrary": "In der Bibliothek gespeichert.",
+    "selectHint": "Wählen Sie eine Frage in der Vorschau, um Typ, Regeln und weitere Einstellungen zu ändern.",
+    "shownIf": "Angezeigt, wenn",
+    "startFrom": "Ausgangspunkt",
+    "tryIt": "Ausprobieren",
+    "untitled": "Frage ohne Titel",
+    "usedBy": "verwendet von Events:",
+    "tab": {
+      "question": "Frage",
+      "form": "Formular",
+      "translations": "Übersetzungen"
+    },
+    "rule": {
+      "title": "Nur anzeigen, wenn",
+      "none": "Regeln können auf eine frühere Einfachauswahl- oder Ja/Nein-Frage verweisen. Fügen Sie zuerst eine darüber hinzu.",
+      "showIf": "Nur anzeigen, wenn",
+      "pick": "Antwort wählen",
+      "is": "ist"
+    },
+    "translations": {
+      "done": "Übersetzungen aktualisiert. Speichern, um sie zu behalten.",
+      "failed": "Die automatische Übersetzung ist gerade nicht verfügbar.",
+      "missing": "Fehlt",
+      "retranslate": "Jetzt neu übersetzen",
+      "texts": "Einleitungs- und Danketexte"
+    },
+    "issue": {
+      "name": "Geben Sie dem Formular einen Namen.",
+      "label": "Jede Frage braucht einen Wortlaut.",
+      "options": "Auswahlfragen brauchen mindestens zwei Optionen."
     }
   }
 }
