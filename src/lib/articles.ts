@@ -103,6 +103,28 @@ export function slugify(value: string): string {
     .slice(0, 60);
 }
 
+const SLUG_ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+/** Random lowercase a-z0-9 tag; uses Web Crypto so it works in browser and Worker. */
+export function randomSlugSuffix(length = 6): string {
+  const bytes = new Uint8Array(length);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => SLUG_ALPHABET[b % SLUG_ALPHABET.length]).join("");
+}
+
+/**
+ * Base slug plus a random tag, kept within `maxLength`. Why: uniqueness checks run
+ * under RLS and cannot see other organizers' events, so collisions must be avoided
+ * by construction rather than by lookup.
+ */
+export function uniqueSlug(base: string, maxLength = 120): string {
+  const suffix = randomSlugSuffix();
+  const trimmed = (slugify(base) || "event")
+    .slice(0, maxLength - suffix.length - 1)
+    .replace(/-+$/g, "");
+  return `${trimmed}-${suffix}`;
+}
+
 export interface PublicArticle {
   id: string;
   title: string;
