@@ -334,3 +334,7 @@ Confirmed attendees get three reminder emails. Cancelled, unpaid, and refunded s
 ## Authorship (created by / last edited by)
 
 `events.created_by` is set once on insert (`auth.uid()`) and is immutable; `events.updated_by` is set on every update made by a signed-in user (service/cron writes keep the previous value). Both are maintained by the `events_authorship` trigger. Pre-existing events were backfilled with `created_by = organizer_id`. The staff list shows "Edited … by …" and offers a "Created by" filter; the editor shows both lines above the stage hint. Names are resolved server-side from `profiles` for rows the caller can already read.
+
+## Event web addresses
+
+New events (wizard) and duplicated events get a 6-character random tag at the end of their address (`title-k7f3q2`, `address-copy-x9m2ab`) so addresses never collide, even across organizers who cannot see each other's events. Repeating dates keep the predictable `address-YYYY-MM-DD` form; hand-edited addresses stay as typed.

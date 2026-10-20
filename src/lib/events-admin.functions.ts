@@ -975,18 +975,11 @@ export const duplicateEvent = createServerFn({ method: "POST" })
         new Date(source.starts_at as string).getTime()
       : null;
 
-    // A copy keeps the original's web address as its base, with a numbered
-    // suffix so repeated copies never collide.
-    const base = `${source.slug as string}-copy`.slice(0, 110);
-    const candidates = [base, ...Array.from({ length: 30 }, (_, i) => `${base}-${i + 2}`)];
-    const { data: taken, error: takenError } = await context.supabase
-      .from("events")
-      .select("slug")
-      .in("slug", candidates);
-    if (takenError) throw new Error(takenError.message);
-    const used = new Set((taken ?? []).map((r) => r.slug as string));
-    const slug = candidates.find((c) => !used.has(c));
-    if (!slug) throw new Error("Too many copies of this event already exist.");
+    // A copy keeps the original's web address as its base plus a random tag;
+    // a lookup cannot see other organizers' events under RLS, so collisions
+    // are avoided by construction.
+    const { uniqueSlug } = await import("@/lib/articles");
+    const slug = uniqueSlug(`${source.slug as string}-copy`);
 
     const { data: inserted, error: insertError } = await context.supabase
       .from("events")

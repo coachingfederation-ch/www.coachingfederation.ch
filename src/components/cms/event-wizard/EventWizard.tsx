@@ -23,7 +23,7 @@ import {
   addHoursToLocalInput,
 } from "@/components/cms/EventEditorSections";
 
-import { slugify } from "@/lib/articles";
+import { slugify, uniqueSlug } from "@/lib/articles";
 import { fetchVocabulary, vocabLabel, type VocabRow } from "@/lib/vocabularies";
 import { createEvent, listCommunityOptions, setEventStatus } from "@/lib/events-admin.functions";
 import { setEventCceEnabled } from "@/lib/event-cce.functions";
@@ -233,13 +233,11 @@ export function EventWizard({ t }: { t: (k: string) => string }) {
     try {
       let id: string;
       try {
-        ({ id } = await createEvent({ data: payload(draft, base) }));
+        ({ id } = await createEvent({ data: payload(draft, uniqueSlug(base)) }));
       } catch (first) {
-        // A taken slug is the one failure worth retrying automatically.
+        // A random tag makes a clash near-impossible; one fresh tag covers the rest.
         if (!(first instanceof Error) || !first.message.includes("slug")) throw first;
-        ({ id } = await createEvent({
-          data: payload(draft, `${base}-${Date.now().toString(36).slice(-4)}`),
-        }));
+        ({ id } = await createEvent({ data: payload(draft, uniqueSlug(base)) }));
       }
       if (draft.cce) await setEventCceEnabled({ data: { eventId: id, enabled: true } });
       if (publish) await setEventStatus({ data: { id, status: "published" } });
