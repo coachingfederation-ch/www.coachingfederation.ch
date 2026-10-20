@@ -6,6 +6,7 @@
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
 import { ImagePlus, X } from "lucide-react";
+import { Spinner } from "@/design-system/icf-welcome-design-system-a835df";
 import { EventTranslationsPanel } from "@/components/cms/EventTranslationsPanel";
 import { EventHostsPanel } from "@/components/cms/EventHostsPanel";
 import { EventSpeakersPanel } from "@/components/cms/EventSpeakersPanel";
@@ -894,35 +895,48 @@ export function EventLifecycleActions({
   // Derived, not stored: a started event is "passed" and its lifecycle actions
   // (unpublish, cancel) are withdrawn.
   const started = hasEventStarted(event.starts_at);
+  // Publishing can send queued invitations and take a few seconds; show which
+  // action is running and block repeat clicks until it settles.
+  const [pending, setPending] = React.useState<"draft" | "published" | "cancelled" | null>(null);
+  const run = async (status: "draft" | "published" | "cancelled") => {
+    setPending(status);
+    try {
+      await changeStatus(status);
+    } finally {
+      setPending(null);
+    }
+  };
+  const btn =
+    "rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary disabled:opacity-60 inline-flex items-center gap-2";
+  const action = (status: "draft" | "published" | "cancelled", label: string, busy: string) => (
+    <button
+      onClick={() => void run(status)}
+      disabled={pending !== null}
+      aria-busy={pending === status}
+      className={btn}
+    >
+      {pending === status ? (
+        <>
+          <Spinner aria-hidden="true" />
+          {t(busy)}
+        </>
+      ) : (
+        t(label)
+      )}
+    </button>
+  );
   return (
     <Section title={t("events.section.publishing")}>
       <div className="flex flex-wrap items-center gap-3">
         {/* A started event is history: unpublishing or cancelling it would
             rewrite something attendees already lived through. */}
-        {started ? null : event.status === "published" ? (
-          <button
-            onClick={() => void changeStatus("draft")}
-            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
-          >
-            {t("events.unpublish")}
-          </button>
-        ) : (
-          <button
-            onClick={() => void changeStatus("published")}
-            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
-          >
-            {t("events.publish")}
-          </button>
-        )}
-        {started ? null : (
-          <button
-            onClick={() => void changeStatus("cancelled")}
-            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
-          >
-            {t("events.cancelEvent")}
-          </button>
-        )}
-        <span className="text-xs text-muted-foreground">
+        {started
+          ? null
+          : event.status === "published"
+            ? action("draft", "events.unpublish", "events.unpublishing")
+            : action("published", "events.publish", "events.publishing")}
+        {started ? null : action("cancelled", "events.cancelEvent", "events.cancelling")}
+        <span className="text-xs text-muted-foreground" aria-live="polite">
           {t(`events.status.${displayEventStatus(event.status, event.starts_at)}`)}
         </span>
       </div>
