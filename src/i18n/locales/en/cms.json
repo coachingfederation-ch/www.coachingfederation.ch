@@ -28,7 +28,8 @@
     "editorialSignals": "Editorial signals",
     "guides": "Member guides",
     "adRequests": "Advertising",
-    "adRateCards": "Ad rate card"
+    "adRateCards": "Ad rate card",
+    "forms": "Forms"
   },
   "auth": {
     "signInSub": "Sign in to continue",
@@ -908,10 +909,7 @@
           "description": "Build a local hub by hosting events, curating connections, and representing the chapter in your region.",
           "quote": "I joined to grow my network; I stayed because I could shape something that helps the whole profession.",
           "attribution": "Anna M., Community Lead Zürich",
-          "valueTags": [
-            "Build your network",
-            "Offer leadership development"
-          ],
+          "valueTags": ["Build your network", "Offer leadership development"],
           "commitment": "4 to 6 hours a month",
           "responsibilities": [
             "Plan and host regional community gatherings",
@@ -930,10 +928,7 @@
           "description": "Support your regional community lead, co-host local gatherings, and help new members feel at home.",
           "quote": "I help with one gathering a quarter and have met more coaches than in years of working alone.",
           "attribution": "Elena R., Community Team Member",
-          "valueTags": [
-            "Build your network",
-            "Give back to the community"
-          ],
+          "valueTags": ["Build your network", "Give back to the community"],
           "commitment": "2 to 4 hours a month",
           "responsibilities": [
             "Help plan and co-host local community gatherings",
@@ -952,10 +947,7 @@
           "description": "Help run chapter events, from registration desks to speaker support.",
           "quote": "It's a few hours a year, and the energy in the room stays with me for months.",
           "attribution": "Beat M., Event Host",
-          "valueTags": [
-            "Build your network",
-            "Give back to the community"
-          ],
+          "valueTags": ["Build your network", "Give back to the community"],
           "commitment": "A few hours per event",
           "responsibilities": [
             "Welcome participants and manage check-in",
@@ -972,10 +964,7 @@
           "description": "Share your perspective through Insights articles, interviews, or social content.",
           "quote": "Writing for the chapter helped me refine my own point of view.",
           "attribution": "Carla T., Content Contributor",
-          "valueTags": [
-            "Gain continuous learning",
-            "Be an extension of the ICF brand"
-          ],
+          "valueTags": ["Gain continuous learning", "Be an extension of the ICF brand"],
           "commitment": "Flexible, per article",
           "responsibilities": [
             "Write Insights articles or give interviews",
@@ -992,20 +981,14 @@
           "description": "Be the first friendly face for website visitors with questions.",
           "quote": "The questions are often simple, but the conversations can be meaningful.",
           "attribution": "Daniel K., Live Chat Volunteer",
-          "valueTags": [
-            "Give back to the community",
-            "Be an extension of the ICF brand"
-          ],
+          "valueTags": ["Give back to the community", "Be an extension of the ICF brand"],
           "commitment": "1 to 2 hours a week",
           "responsibilities": [
             "Answer visitor questions in the website chat",
             "Point visitors to coaches, events, and membership information",
             "Pass complex requests to the chapter office"
           ],
-          "profile": [
-            "ICF member who knows the chapter well",
-            "Friendly and clear in writing"
-          ]
+          "profile": ["ICF member who knows the chapter well", "Friendly and clear in writing"]
         },
         "details": {
           "cta": "View job description",
@@ -1034,10 +1017,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Lead projects",
-            "Be recognized by ICFS for leading initiatives"
-          ]
+          "items": ["Lead projects", "Be recognized by ICFS for leading initiatives"]
         },
         "status": {
           "title": "Status",
@@ -2991,13 +2971,7 @@
     },
     "depthTitle": "Depth (1 too light — 5 too deep)",
     "usefulnessTitle": "Usefulness (1 not for me — 5 I will use this)",
-    "depthScale": [
-      "Too light",
-      "A bit light",
-      "About right",
-      "A bit deep",
-      "Too deep"
-    ],
+    "depthScale": ["Too light", "A bit light", "About right", "A bit deep", "Too deep"],
     "usefulnessScale": [
       "Not for me",
       "Mildly interesting",
@@ -3324,5 +3298,86 @@
       "checkEmail": "Check your email and confirm your address to continue.",
       "memberNote": "ICF member?"
     }
+  },
+  "forms": {
+    "activeHint": "Inactive forms are not shown to attendees.",
+    "add": "Add",
+    "addFirst": "Add the first question",
+    "addForm": "Add form",
+    "addOption": "Add option",
+    "backToEditing": "Back to editing",
+    "backToLibrary": "Back to forms",
+    "blank": "Blank form",
+    "cancel": "Cancel",
+    "copyEmpty": "Nothing to copy yet.",
+    "copyPlaceholder": "Choose a form",
+    "copySuffix": "copy",
+    "create": "Create",
+    "createAndOpen": "Create and open",
+    "delete": "Delete",
+    "deleteBody": "Events that already copied this form keep their own copy. This cannot be undone.",
+    "deleteTitle": "Delete this library form?",
+    "detach": "Remove from event",
+    "detachBody": "The form and its questions are removed from this event. Forms that already have responses cannot be removed; switch them off instead.",
+    "detachTitle": "Remove this form from the event?",
+    "duplicate": "Duplicate",
+    "editQuestion": "Edit question",
+    "emptyForm": "This form has no questions yet.",
+    "helpPlaceholder": "Help text (optional)",
+    "kindFollowUpHint": "Sent to attendees after the event.",
+    "kindQuestion": "When is it asked?",
+    "kindRegistrationHint": "Asked while people register.",
+    "labelPlaceholder": "Type your question",
+    "library": "Library",
+    "libraryEditHint": "Changes here apply to events that use this form from now on.",
+    "libraryEmpty": "No library forms yet. Create one, or save an event form to the library.",
+    "libraryHint": "Reusable registration and follow-up forms. Each event gets its own copy, so editing a library form never changes past events or their answers.",
+    "libraryTitle": "Forms",
+    "loading": "Loading…",
+    "moreActions": "More actions",
+    "moveDown": "Move down question",
+    "moveUp": "Move up question",
+    "newForm": "New form",
+    "noLibraryForKind": "No library forms of this kind yet.",
+    "option": "Option",
+    "panelLabel": "Form settings",
+    "previewLabel": "What attendees see",
+    "removeOption": "Remove option",
+    "saveHint": "Ctrl or Cmd and S also saves. German, French and Italian are translated on save.",
+    "saveToLibrary": "Save to library",
+    "saveToLibraryFailed": "Could not save to the library.",
+    "savedToLibrary": "Saved to the library.",
+    "selectHint": "Select a question in the preview to change its type, rules and other settings.",
+    "shownIf": "Shown if",
+    "startFrom": "Start from",
+    "tryIt": "Try it",
+    "untitled": "Untitled question",
+    "usedBy": "used by events:",
+    "tab": {
+      "question": "Question",
+      "form": "Form",
+      "translations": "Translations"
+    },
+    "rule": {
+      "title": "Show only if",
+      "none": "Rules can point at an earlier single-choice or yes/no question. Add one above this question first.",
+      "showIf": "Show only if",
+      "pick": "choose an answer",
+      "is": "is"
+    },
+    "translations": {
+      "done": "Translations updated. Save to keep them.",
+      "failed": "The automatic translation is unavailable right now.",
+      "missing": "Missing",
+      "retranslate": "Translate again now",
+      "texts": "Intro and thank-you texts"
+    },
+    "issue": {
+      "name": "Give the form a name.",
+      "label": "Every question needs wording.",
+      "options": "Choice questions need at least two options."
+    },
+    "pickLibrary": "Start from a library form",
+    "pickLater": "Decide later in the editor"
   }
 }

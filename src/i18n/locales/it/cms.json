@@ -28,7 +28,8 @@
     "editorialSignals": "Segnali editoriali",
     "guides": "Guide",
     "adRequests": "Pubblicità",
-    "adRateCards": "Listino pubblicitario"
+    "adRateCards": "Listino pubblicitario",
+    "forms": "Moduli"
   },
   "auth": {
     "signInSub": "Accedi per continuare",
@@ -908,10 +909,7 @@
           "description": "Costruisci un hub locale organizzando eventi, curando i contatti e rappresentando il chapter nella tua regione.",
           "quote": "Sono entrata per espandere la mia rete; sono rimasta perché potevo dare forma a qualcosa che aiuta l'intera professione.",
           "attribution": "Anna M., Community Lead Zürich",
-          "valueTags": [
-            "Costruire la propria rete",
-            "Sviluppare leadership"
-          ],
+          "valueTags": ["Costruire la propria rete", "Sviluppare leadership"],
           "commitment": "Da 4 a 6 ore al mese",
           "responsibilities": [
             "Pianificare e condurre incontri regionali",
@@ -930,10 +928,7 @@
           "description": "Sostieni il tuo community lead regionale, co-organizza incontri locali e aiuta i nuovi membri a sentirsi a casa.",
           "quote": "Aiuto in un incontro a trimestre e ho conosciuto più coach che in anni di lavoro da sola.",
           "attribution": "Elena R., membro del team community",
-          "valueTags": [
-            "Costruire la tua rete",
-            "Restituire alla comunità"
-          ],
+          "valueTags": ["Costruire la tua rete", "Restituire alla comunità"],
           "commitment": "Da 2 a 4 ore al mese",
           "responsibilities": [
             "Aiutare a pianificare e co-condurre incontri locali",
@@ -952,10 +947,7 @@
           "description": "Aiuta a gestire gli eventi del chapter, dall'accoglienza al supporto ai relatori.",
           "quote": "Sono solo poche ore all'anno, e l'energia nella sala resta con me per mesi.",
           "attribution": "Beat M., Host di evento",
-          "valueTags": [
-            "Costruire la propria rete",
-            "Restituire alla comunità"
-          ],
+          "valueTags": ["Costruire la propria rete", "Restituire alla comunità"],
           "commitment": "Alcune ore per evento",
           "responsibilities": [
             "Accogliere i partecipanti e gestire il check-in",
@@ -972,10 +964,7 @@
           "description": "Condividi la tua prospettiva attraverso articoli Insights, interviste o contenuti social.",
           "quote": "Scrivere per il chapter mi ha aiutato a affinare il mio punto di vista.",
           "attribution": "Carla T., Content Contributor",
-          "valueTags": [
-            "Imparare di continuo",
-            "Essere un'estensione del marchio ICF"
-          ],
+          "valueTags": ["Imparare di continuo", "Essere un'estensione del marchio ICF"],
           "commitment": "Flessibile, per articolo",
           "responsibilities": [
             "Scrivere articoli Insights o rilasciare interviste",
@@ -992,20 +981,14 @@
           "description": "Sii il primo volto amichevole per i visitatori del sito con domande.",
           "quote": "Le domande sono spesso semplici, ma le conversazioni possono essere significative.",
           "attribution": "Daniel K., Volontario della chat dal vivo",
-          "valueTags": [
-            "Restituire alla comunità",
-            "Essere un'estensione del marchio ICF"
-          ],
+          "valueTags": ["Restituire alla comunità", "Essere un'estensione del marchio ICF"],
           "commitment": "Da 1 a 2 ore a settimana",
           "responsibilities": [
             "Rispondere alle domande dei visitatori nella chat del sito",
             "Indirizzare verso coach, eventi e adesione",
             "Inoltrare le richieste complesse alla segreteria"
           ],
-          "profile": [
-            "Membro ICF che conosce bene il chapter",
-            "Cordiale e chiaro per iscritto"
-          ]
+          "profile": ["Membro ICF che conosce bene il chapter", "Cordiale e chiaro per iscritto"]
         },
         "details": {
           "cta": "Vedi la descrizione del ruolo",
@@ -1034,10 +1017,7 @@
         },
         "power": {
           "title": "Power",
-          "items": [
-            "Guidare progetti",
-            "Essere riconosciuti da ICFS per aver guidato iniziative"
-          ]
+          "items": ["Guidare progetti", "Essere riconosciuti da ICFS per aver guidato iniziative"]
         },
         "status": {
           "title": "Status",
@@ -2998,13 +2978,7 @@
       "Un po' tecnico",
       "Troppo tecnico"
     ],
-    "usefulnessScale": [
-      "Non fa per me",
-      "Poco interessante",
-      "Interessante",
-      "Utile",
-      "Lo userò"
-    ],
+    "usefulnessScale": ["Non fa per me", "Poco interessante", "Interessante", "Utile", "Lo userò"],
     "topicsTitle": "Temi richiesti",
     "noTopics": "Nessun tema richiesto finora.",
     "themesTitle": "Temi IA",
@@ -3324,5 +3298,86 @@
       "checkEmail": "Confermate il vostro indirizzo e-mail per continuare.",
       "memberNote": "Membri ICF?"
     }
+  },
+  "forms": {
+    "activeHint": "I moduli inattivi non vengono mostrati ai partecipanti.",
+    "add": "Aggiungi",
+    "addFirst": "Aggiungi la prima domanda",
+    "addForm": "Aggiungi modulo",
+    "addOption": "Aggiungi opzione",
+    "backToEditing": "Torna alla modifica",
+    "backToLibrary": "Torna ai moduli",
+    "blank": "Modulo vuoto",
+    "cancel": "Annulla",
+    "copyEmpty": "Ancora niente da copiare.",
+    "copyPlaceholder": "Scegli un modulo",
+    "copySuffix": "copia",
+    "create": "Crea",
+    "createAndOpen": "Crea e apri",
+    "delete": "Elimina",
+    "deleteBody": "Gli eventi che hanno già copiato questo modulo mantengono la propria copia. L'operazione è irreversibile.",
+    "deleteTitle": "Eliminare questo modulo della libreria?",
+    "detach": "Rimuovi dall'evento",
+    "detachBody": "Il modulo e le sue domande vengono rimossi da questo evento. I moduli con risposte non possono essere rimossi; disattivali invece.",
+    "detachTitle": "Rimuovere questo modulo dall'evento?",
+    "duplicate": "Duplica",
+    "editQuestion": "Modifica domanda",
+    "emptyForm": "Questo modulo non ha ancora domande.",
+    "helpPlaceholder": "Testo di aiuto (facoltativo)",
+    "kindFollowUpHint": "Inviato ai partecipanti dopo l'evento.",
+    "kindQuestion": "Quando viene chiesto?",
+    "kindRegistrationHint": "Chiesto durante l'iscrizione.",
+    "labelPlaceholder": "Scrivi la domanda",
+    "library": "Libreria",
+    "libraryEditHint": "Le modifiche valgono da ora per gli eventi che usano questo modulo.",
+    "libraryEmpty": "Nessun modulo nella libreria. Creane uno o salva un modulo di un evento nella libreria.",
+    "libraryHint": "Moduli di iscrizione e di follow-up riutilizzabili. Ogni evento riceve la propria copia, quindi modificare la libreria non cambia mai gli eventi passati né le loro risposte.",
+    "libraryTitle": "Moduli",
+    "loading": "Caricamento…",
+    "moreActions": "Altre azioni",
+    "moveDown": "Sposta giù la domanda",
+    "moveUp": "Sposta su la domanda",
+    "newForm": "Nuovo modulo",
+    "noLibraryForKind": "Nessun modulo di questo tipo nella libreria.",
+    "option": "Opzione",
+    "panelLabel": "Impostazioni del modulo",
+    "previewLabel": "Cosa vedono i partecipanti",
+    "removeOption": "Rimuovi opzione",
+    "saveHint": "Anche Ctrl o Cmd e S salva. Tedesco, francese e italiano vengono tradotti al salvataggio.",
+    "saveToLibrary": "Salva nella libreria",
+    "saveToLibraryFailed": "Impossibile salvare nella libreria.",
+    "savedToLibrary": "Salvato nella libreria.",
+    "selectHint": "Seleziona una domanda nell'anteprima per cambiarne tipo, regole e altre impostazioni.",
+    "shownIf": "Mostrata se",
+    "startFrom": "Parti da",
+    "tryIt": "Prova",
+    "untitled": "Domanda senza titolo",
+    "usedBy": "usato da eventi:",
+    "tab": {
+      "question": "Domanda",
+      "form": "Modulo",
+      "translations": "Traduzioni"
+    },
+    "rule": {
+      "title": "Mostra solo se",
+      "none": "Una regola può riferirsi a una domanda precedente a scelta singola o sì/no. Aggiungine prima una sopra.",
+      "showIf": "Mostra solo se",
+      "pick": "scegli una risposta",
+      "is": "è"
+    },
+    "translations": {
+      "done": "Traduzioni aggiornate. Salva per mantenerle.",
+      "failed": "La traduzione automatica al momento non è disponibile.",
+      "missing": "Mancante",
+      "retranslate": "Traduci di nuovo ora",
+      "texts": "Testi di introduzione e ringraziamento"
+    },
+    "issue": {
+      "name": "Dai un nome al modulo.",
+      "label": "Ogni domanda deve avere un testo.",
+      "options": "Le domande a scelta richiedono almeno due opzioni."
+    },
+    "pickLibrary": "Parti da un modulo della libreria",
+    "pickLater": "Decidi più tardi nell'editor"
   }
 }

@@ -2693,6 +2693,7 @@ export type Database = {
           is_active: boolean
           kind: string
           name: string
+          template_id: string | null
           thank_you: string | null
           thank_you_de: string | null
           thank_you_fr: string | null
@@ -2713,6 +2714,7 @@ export type Database = {
           is_active?: boolean
           kind: string
           name: string
+          template_id?: string | null
           thank_you?: string | null
           thank_you_de?: string | null
           thank_you_fr?: string | null
@@ -2733,6 +2735,7 @@ export type Database = {
           is_active?: boolean
           kind?: string
           name?: string
+          template_id?: string | null
           thank_you?: string | null
           thank_you_de?: string | null
           thank_you_fr?: string | null
@@ -2752,6 +2755,13 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_forms_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "form_templates"
             referencedColumns: ["id"]
           },
         ]
@@ -3872,6 +3882,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      form_templates: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          intro: string | null
+          kind: string
+          name: string
+          questions: Json
+          thank_you: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          intro?: string | null
+          kind?: string
+          name: string
+          questions?: Json
+          thank_you?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          intro?: string | null
+          kind?: string
+          name?: string
+          questions?: Json
+          thank_you?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       governance_documents: {
         Row: {
