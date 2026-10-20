@@ -131,6 +131,8 @@ export const createEventForm = createServerFn({ method: "POST" })
         eventId: z.string().uuid(),
         kind: z.enum(FORM_KINDS),
         name: z.string().trim().min(2).max(120),
+        /** Library form this one was copied from, if any. */
+        templateId: z.string().uuid().nullable().optional(),
       })
       .parse(input),
   )
@@ -138,7 +140,13 @@ export const createEventForm = createServerFn({ method: "POST" })
     await assertOrganizer(context);
     const { data: row, error } = await context.supabase
       .from("event_forms")
-      .insert({ event_id: data.eventId, kind: data.kind, name: data.name, is_active: true })
+      .insert({
+        event_id: data.eventId,
+        kind: data.kind,
+        name: data.name,
+        is_active: true,
+        template_id: data.templateId ?? null,
+      })
       .select("id")
       .maybeSingle();
     if (error || !row) {
