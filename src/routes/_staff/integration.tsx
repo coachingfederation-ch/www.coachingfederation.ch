@@ -654,89 +654,118 @@ function IntegrationPageBody() {
                   </p>
                 ) : null}
               </section>
-              <section className={CARD}>
-                <h2 className="text-sm font-bold">{t("integration.history")}</h2>
-                <div className="mt-3 overflow-x-auto">
-                  <table className="w-full text-left text-xs">
-                    <thead className="text-muted-foreground">
-                      <tr>
-                        <th className="py-1 pr-3">{t("integration.colStarted")}</th>
-                        <th className="py-1 pr-3">{t("integration.colMode")}</th>
-                        <th className="py-1 pr-3">{t("integration.colStatus")}</th>
-                        <th className="py-1 pr-3">{t("integration.colFeed")}</th>
-                        <th className="py-1">{t("integration.colChanges")}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {runs.length === 0 ? (
-                        <tr>
-                          <td colSpan={5} className="py-3 text-muted-foreground">
-                            {t("integration.noRuns")}
-                          </td>
-                        </tr>
-                      ) : (
-                        runs.map((r) => (
-                          <Fragment key={r.id}>
-                            <tr
-                              className="cursor-pointer border-t border-border hover:bg-secondary/60"
-                              onClick={() => setOpenRunId(openRunId === r.id ? null : r.id)}
-                            >
-                              <td className="py-1.5 pr-3">
-                                <button
-                                  type="button"
-                                  className="inline-flex items-center gap-1 text-left font-semibold"
-                                  aria-expanded={openRunId === r.id}
-                                >
-                                  <ChevronRight
-                                    className={
-                                      "h-3.5 w-3.5 transition-transform " +
-                                      (openRunId === r.id ? "rotate-90" : "")
-                                    }
-                                    aria-hidden
-                                  />
-                                  {formatDate(r.started_at)}
-                                </button>
-                              </td>
-                              <td className="py-1.5 pr-3 uppercase">{r.mode}</td>
-                              <td className="py-1.5 pr-3">{r.status}</td>
-                              <td className="py-1.5 pr-3">{r.feed_member_count ?? "—"}</td>
-                              <td className="py-1.5">
-                                +{r.created_count} / ~{r.updated_count} / −{r.deactivated_count}
+              <Collapsible
+                open={diagOpen}
+                onOpenChange={setDiagOpen}
+                id="section-diagnostics"
+                className="scroll-mt-6 space-y-4 pt-2"
+              >
+                <CollapsibleTrigger className={TRIGGER}>
+                  <ChevronRight
+                    className={"h-4 w-4 transition-transform " + (diagOpen ? "rotate-90" : "")}
+                    aria-hidden
+                  />
+                  {t("integration.sectionDiagnostics")}
+                </CollapsibleTrigger>
+                <CollapsibleContent className="space-y-4">
+                  <section className={CARD}>
+                    <h2 className="text-sm font-bold">{t("integration.history")}</h2>
+                    <div className="mt-3 overflow-x-auto">
+                      <table className="w-full text-left text-xs">
+                        <thead className="text-muted-foreground">
+                          <tr>
+                            <th className="py-1 pr-3">{t("integration.colStarted")}</th>
+                            <th className="py-1 pr-3">{t("integration.colMode")}</th>
+                            <th className="py-1 pr-3">{t("integration.colStatus")}</th>
+                            <th className="py-1 pr-3">{t("integration.colFeed")}</th>
+                            <th className="py-1">{t("integration.colChanges")}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {runs.length === 0 ? (
+                            <tr>
+                              <td colSpan={5} className="py-3 text-muted-foreground">
+                                {t("integration.noRuns")}
                               </td>
                             </tr>
-                            {openRunId === r.id ? (
-                              <tr className="border-t border-border/40">
-                                <td colSpan={5} className="pb-4 pt-2">
-                                  <p className="mb-2 text-xs text-muted-foreground">
-                                    {t("integration.runTrigger")}: {r.trigger_source} ·{" "}
-                                    {t("integration.runDuration")}:{" "}
-                                    {r.finished_at
-                                      ? Math.max(
-                                          0,
-                                          Math.round(
-                                            (new Date(r.finished_at).getTime() -
-                                              new Date(r.started_at).getTime()) /
-                                              1000,
-                                          ),
-                                        ) + "s"
-                                      : "—"}
-                                  </p>
-                                  {r.error_message ? (
-                                    <p className="mb-2 rounded-lg bg-card p-2 text-xs text-destructive">
-                                      {r.error_message}
-                                    </p>
-                                  ) : null}
-                                  <SyncRunDetail runId={r.id} />
-                                </td>
-                              </tr>
-                            ) : null}
-                          </Fragment>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
+                          ) : (
+                            runs.map((r) => (
+                              <Fragment key={r.id}>
+                                <tr
+                                  className="cursor-pointer border-t border-border hover:bg-secondary/60"
+                                  onClick={() => setOpenRunId(openRunId === r.id ? null : r.id)}
+                                >
+                                  <td className="py-1.5 pr-3">
+                                    <button
+                                      type="button"
+                                      className="inline-flex items-center gap-1 text-left font-semibold"
+                                      aria-expanded={openRunId === r.id}
+                                    >
+                                      <ChevronRight
+                                        className={
+                                          "h-3.5 w-3.5 transition-transform " +
+                                          (openRunId === r.id ? "rotate-90" : "")
+                                        }
+                                        aria-hidden
+                                      />
+                                      {formatDate(r.started_at)}
+                                    </button>
+                                  </td>
+                                  <td className="py-1.5 pr-3 uppercase">{r.mode}</td>
+                                  <td className="py-1.5 pr-3">{r.status}</td>
+                                  <td className="py-1.5 pr-3">{r.feed_member_count ?? "—"}</td>
+                                  <td className="py-1.5">
+                                    +{r.created_count} / ~{r.updated_count} / −{r.deactivated_count}
+                                  </td>
+                                </tr>
+                                {openRunId === r.id ? (
+                                  <tr className="border-t border-border/40">
+                                    <td colSpan={5} className="pb-4 pt-2">
+                                      <p className="mb-2 text-xs text-muted-foreground">
+                                        {t("integration.runTrigger")}: {r.trigger_source} ·{" "}
+                                        {t("integration.runDuration")}:{" "}
+                                        {r.finished_at
+                                          ? Math.max(
+                                              0,
+                                              Math.round(
+                                                (new Date(r.finished_at).getTime() -
+                                                  new Date(r.started_at).getTime()) /
+                                                  1000,
+                                              ),
+                                            ) + "s"
+                                          : "—"}
+                                      </p>
+                                      {r.error_message ? (
+                                        <p className="mb-2 rounded-lg bg-card p-2 text-xs text-destructive">
+                                          {r.error_message}
+                                        </p>
+                                      ) : null}
+                                      <SyncRunDetail runId={r.id} />
+                                    </td>
+                                  </tr>
+                                ) : null}
+                              </Fragment>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                  <RelayHealthCard
+                    t={t}
+                    health={health}
+                    loading={healthQuery.isFetching}
+                    failure={
+                      healthQuery.error
+                        ? String((healthQuery.error as Error).message ?? healthQuery.error)
+                        : null
+                    }
+                    onRefresh={() => void healthQuery.refetch()}
+                  />
+                  <CredentialCheckCard t={t} />
+                  <OutboundIpCard t={t} />
+                </CollapsibleContent>
+              </Collapsible>
             </div>
 
             <div id="section-claim" className="scroll-mt-6 space-y-4">
@@ -744,36 +773,6 @@ function IntegrationPageBody() {
               <ClaimCampaignCard key={`claim-${refreshKey}`} t={t} />
               <RetentionCard key={`retention-${refreshKey}`} />
             </div>
-
-            <Collapsible
-              open={diagOpen}
-              onOpenChange={setDiagOpen}
-              id="section-diagnostics"
-              className="scroll-mt-6 space-y-4"
-            >
-              <CollapsibleTrigger className={TRIGGER}>
-                <ChevronRight
-                  className={"h-4 w-4 transition-transform " + (diagOpen ? "rotate-90" : "")}
-                  aria-hidden
-                />
-                {t("integration.sectionDiagnostics")}
-              </CollapsibleTrigger>
-              <CollapsibleContent className="space-y-4">
-                <RelayHealthCard
-                  t={t}
-                  health={health}
-                  loading={healthQuery.isFetching}
-                  failure={
-                    healthQuery.error
-                      ? String((healthQuery.error as Error).message ?? healthQuery.error)
-                      : null
-                  }
-                  onRefresh={() => void healthQuery.refetch()}
-                />
-                <CredentialCheckCard t={t} />
-                <OutboundIpCard t={t} />
-              </CollapsibleContent>
-            </Collapsible>
 
             <div className="space-y-4">
               <h2 className={GROUP}>{t("integration.sectionSettings")}</h2>
