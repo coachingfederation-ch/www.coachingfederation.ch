@@ -53,6 +53,7 @@ describe("sections and lists", () => {
       articles: true,
       events: true,
       assistant: true,
+      operations: true,
     });
   });
   it("caps lists at 15 and counts the rest", () => {
