@@ -88,6 +88,39 @@ export const removeEventInvitation = createServerFn({ method: "POST" })
     return { ok: true as const };
   });
 
+/** Staff: match a pasted/CSV email list against active members, no side effects. */
+export const previewBulkInvitations = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    eventSchema
+      .extend({ emails: z.array(z.string().trim().toLowerCase().email()).min(1).max(500) })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    await assertManagesEvent(context, data.eventId);
+    const mod = await import("./event-invitations.server");
+    return mod.previewBulkInvitations(data.eventId, data.emails);
+  });
+
+/** Staff: invite many matched members, one email each, sequentially. */
+export const addBulkInvitations = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    eventSchema.extend({ memberIds: z.array(z.string().uuid()).min(1).max(500) }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    await assertManagesEvent(context, data.eventId);
+    const { addInvitation } = await import("./event-invitations.server");
+    let sent = 0;
+    let failed = 0;
+    for (const memberId of [...new Set(data.memberIds)]) {
+      const r = await addInvitation(data.eventId, memberId, context.userId);
+      if (r.ok) sent++;
+      else failed++;
+    }
+    return { sent, failed };
+  });
+
 const tokenSchema = eventSchema.extend({ token: z.string().trim().min(8).max(128) });
 
 async function tokenRateLimit(bucket: string) {

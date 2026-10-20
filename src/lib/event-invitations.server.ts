@@ -297,3 +297,50 @@ export async function declineInvitation(eventId: string, token: string) {
     .eq("id", invitation.invitationId);
   return { ok: true as const };
 }
+
+export type BulkPreview = {
+  matched: InvitableMember[];
+  alreadyInvited: string[];
+  notFound: string[];
+};
+
+/**
+ * Matches a pasted list of addresses against active members. Matching only
+ * picks invitees; it never binds an account to anybody.
+ */
+export async function previewBulkInvitations(
+  eventId: string,
+  emails: string[],
+): Promise<BulkPreview> {
+  const wanted = [...new Set(emails.map((e) => e.trim().toLowerCase()))];
+  const { data: already } = await supabaseAdmin
+    .from("event_invitations")
+    .select("email")
+    .eq("event_id", eventId);
+  const taken = new Set((already ?? []).map((row) => String(row.email).toLowerCase()));
+
+  const found = new Map<string, InvitableMember>();
+  for (let i = 0; i < wanted.length; i += 100) {
+    const chunk = wanted.slice(i, i + 100);
+    const { data, error } = await supabaseAdmin
+      .from("members")
+      .select("id, full_name, first_name, last_name, email, activity_state")
+      .eq("activity_state", "active")
+      .in("email", chunk);
+    if (error) throw new Error(error.message);
+    for (const row of data ?? []) {
+      const email = String(row.email).trim().toLowerCase();
+      if (!found.has(email)) {
+        found.set(email, { memberId: row.id as string, name: displayName(row) || email, email });
+      }
+    }
+  }
+
+  const result: BulkPreview = { matched: [], alreadyInvited: [], notFound: [] };
+  for (const email of wanted) {
+    if (taken.has(email)) result.alreadyInvited.push(email);
+    else if (found.has(email)) result.matched.push(found.get(email)!);
+    else result.notFound.push(email);
+  }
+  return result;
+}

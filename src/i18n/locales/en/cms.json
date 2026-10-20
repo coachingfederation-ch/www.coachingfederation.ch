@@ -1865,7 +1865,20 @@
         "duplicate": "That member is already on the guest list.",
         "email": "The invitation was saved but the email could not be sent.",
         "error": "We could not invite that member."
-      }
+      },
+      "bulkTitle": "Add several at once",
+      "bulkHint": "Paste email addresses separated by commas, semicolons or new lines, or upload a CSV file.",
+      "bulkPlaceholder": "anna.muster@example.com, max.muster@example.com",
+      "bulkUpload": "Upload CSV",
+      "bulkCheck": "Check list",
+      "bulkSend": "Send {n} invitations",
+      "bulkMatched": "Will be invited",
+      "bulkAlready": "Already on the list",
+      "bulkNotFound": "Not found as an active member",
+      "bulkInvalid": "Invalid entries",
+      "bulkNone": "No email addresses found.",
+      "bulkTooMany": "Please add at most 500 addresses at a time.",
+      "bulkDone": "{sent} invitations sent, {failed} failed."
     },
     "tag": {
       "membersOnly": "Members only",
