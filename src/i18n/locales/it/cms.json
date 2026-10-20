@@ -1878,7 +1878,12 @@
       "bulkInvalid": "Voci non valide",
       "bulkNone": "Nessun indirizzo e-mail trovato.",
       "bulkTooMany": "Al massimo 500 indirizzi alla volta.",
-      "bulkDone": "{sent} inviti inviati, {failed} non riusciti."
+      "bulkDone": "{sent} inviti inviati, {failed} non riusciti.",
+      "guestTitle": "Invita un ospite (non socio)",
+      "guestLanguage": "Lingua",
+      "bulkGuests": "Sarà invitato come ospite",
+      "kindMember": "Socio",
+      "kindGuest": "Ospite"
     },
     "tag": {
       "membersOnly": "Solo per membri",
@@ -1917,7 +1922,8 @@
         "noneHint": "Solo informazione — nessuna iscrizione.",
         "rsvpHint": "Tutti possono iscriversi.",
         "membersHint": "I soci si iscrivono dopo l'accesso.",
-        "invitedHint": "Solo i soci invitati possono iscriversi."
+        "invitedHint": "Solo i soci invitati possono iscriversi.",
+        "invitedOpenHint": "Solo chi è nell'elenco può iscriversi, soci e non soci."
       },
       "extras": {
         "title": "Altro?",
@@ -2076,7 +2082,8 @@
     "audience": {
       "anyone": "Tutti",
       "members": "Solo soci attivi",
-      "invited": "Solo membri invitati"
+      "invited": "Solo membri invitati",
+      "invitedOpen": "Ospiti invitati (chiunque sia nell'elenco)"
     },
     "fieldTickets": "Offri biglietti",
     "fieldTicketsHelp": "Mostra le categorie di biglietti e i codici sconto. Senza una categoria salvata resta una semplice iscrizione gratuita.",

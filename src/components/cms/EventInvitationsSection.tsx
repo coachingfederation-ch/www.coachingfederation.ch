@@ -16,12 +16,14 @@ import {
   searchInvitableMembers,
   previewBulkInvitations,
   addBulkInvitations,
+  addGuestEventInvitation,
 } from "@/lib/event-invitations.functions";
 import { parseInviteList, MAX_BULK_INVITES } from "@/lib/invite-list-parse";
-import { Button, Textarea } from "@/design-system/icf-welcome-design-system-a835df";
+import { Button, Input, Textarea } from "@/design-system/icf-welcome-design-system-a835df";
 
 type BulkPreview = {
   matched: Candidate[];
+  guests: { email: string; name: string }[];
   alreadyInvited: string[];
   notFound: string[];
   invalid: string[];
@@ -29,6 +31,7 @@ type BulkPreview = {
 
 type Invitation = {
   id: string;
+  member_id: string | null;
   full_name: string;
   email: string;
   locale: string;
@@ -53,10 +56,17 @@ const shortDate = (iso: string | null) =>
 export function EventInvitationsSection({
   eventId,
   t,
+  allowGuests = false,
 }: {
   eventId: string;
   t: (k: string) => string;
+  /** Open guest list: non-members may be invited too. */
+  allowGuests?: boolean;
 }) {
+  const [guestName, setGuestName] = useState("");
+  const [guestEmail, setGuestEmail] = useState("");
+  const [guestLocale, setGuestLocale] = useState<"de" | "fr" | "it" | "en">("de");
+
   const [rows, setRows] = useState<Invitation[]>([]);
   const [query, setQuery] = useState("");
   const [candidates, setCandidates] = useState<Candidate[]>([]);
@@ -71,7 +81,7 @@ export function EventInvitationsSection({
     setMessage(null);
     setError(null);
     setPreview(null);
-    const { emails, invalid } = parseInviteList(bulkText);
+    const { emails, invalid, names } = parseInviteList(bulkText);
     if (emails.length === 0) {
       setError(t("events.invitations.bulkNone"));
       return;
@@ -82,7 +92,7 @@ export function EventInvitationsSection({
     }
     setBusy("bulk");
     try {
-      const r = await previewBulkInvitations({ data: { eventId, emails } });
+      const r = await previewBulkInvitations({ data: { eventId, emails, names } });
       setPreview({ ...r, invalid });
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -92,12 +102,16 @@ export function EventInvitationsSection({
   };
 
   const sendBulk = async () => {
-    if (!preview || preview.matched.length === 0) return;
+    if (!preview || preview.matched.length + preview.guests.length === 0) return;
     setBusy("bulk");
     setError(null);
     try {
       const r = await addBulkInvitations({
-        data: { eventId, memberIds: preview.matched.map((m) => m.memberId) },
+        data: {
+          eventId,
+          memberIds: preview.matched.map((m) => m.memberId),
+          guests: preview.guests,
+        },
       });
       setMessage(
         t("events.invitations.bulkDone")
@@ -106,6 +120,27 @@ export function EventInvitationsSection({
       );
       setPreview(null);
       setBulkText("");
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const addGuest = async () => {
+    setBusy("guest");
+    setMessage(null);
+    setError(null);
+    try {
+      const r = await addGuestEventInvitation({
+        data: { eventId, fullName: guestName, email: guestEmail, locale: guestLocale },
+      });
+      if (r.ok) {
+        setMessage(t("events.invitations.sent"));
+        setGuestName("");
+        setGuestEmail("");
+      } else setError(t(`events.invitations.error.${r.reason}`));
       await load();
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -240,6 +275,48 @@ export function EventInvitationsSection({
           ) : null}
         </div>
 
+        {allowGuests ? (
+          <div className="space-y-2 rounded-lg border border-border p-3">
+            <p className="text-xs font-semibold text-muted-foreground">
+              {t("events.invitations.guestTitle")}
+            </p>
+            <div className="grid gap-2 sm:grid-cols-[1fr_1fr_auto_auto]">
+              <Input
+                aria-label={t("events.colName")}
+                placeholder={t("events.colName")}
+                value={guestName}
+                onChange={(e) => setGuestName(e.target.value)}
+              />
+              <Input
+                type="email"
+                aria-label={t("events.colEmail")}
+                placeholder={t("events.colEmail")}
+                value={guestEmail}
+                onChange={(e) => setGuestEmail(e.target.value)}
+              />
+              <select
+                aria-label={t("events.invitations.guestLanguage")}
+                value={guestLocale}
+                onChange={(e) => setGuestLocale(e.target.value as typeof guestLocale)}
+                className="rounded-md border border-input bg-transparent px-2 text-sm"
+              >
+                <option value="de">DE</option>
+                <option value="fr">FR</option>
+                <option value="it">IT</option>
+                <option value="en">EN</option>
+              </select>
+              <Button
+                type="button"
+                size="sm"
+                disabled={busy === "guest" || !guestName.trim() || !guestEmail.includes("@")}
+                onClick={() => void addGuest()}
+              >
+                {t("events.invitations.invite")}
+              </Button>
+            </div>
+          </div>
+        ) : null}
+
         <div className="space-y-2 rounded-lg border border-border p-3">
           <label className="block text-xs font-semibold text-muted-foreground" htmlFor="invite-bulk">
             {t("events.invitations.bulkTitle")}
@@ -284,6 +361,7 @@ export function EventInvitationsSection({
               {(
                 [
                   ["bulkMatched", preview.matched.map((m) => `${m.name} (${m.email})`)],
+                  ["bulkGuests", preview.guests.map((g) => `${g.name} (${g.email})`)],
                   ["bulkAlready", preview.alreadyInvited],
                   ["bulkNotFound", preview.notFound],
                   ["bulkInvalid", preview.invalid],
@@ -298,7 +376,7 @@ export function EventInvitationsSection({
                   </div>
                 ) : null,
               )}
-              {preview.matched.length > 0 ? (
+              {preview.matched.length + preview.guests.length > 0 ? (
                 <Button
                   type="button"
                   size="sm"
@@ -307,7 +385,7 @@ export function EventInvitationsSection({
                 >
                   {busy === "bulk"
                     ? t("events.invitations.sending")
-                    : t("events.invitations.bulkSend").replace("{n}", String(preview.matched.length))}
+                    : t("events.invitations.bulkSend").replace("{n}", String(preview.matched.length + preview.guests.length))}
                 </Button>
               ) : null}
             </div>
@@ -334,7 +412,15 @@ export function EventInvitationsSection({
               <tbody className="divide-y divide-border">
                 {rows.map((row) => (
                   <tr key={row.id}>
-                    <td className="py-2 font-semibold">{row.full_name}</td>
+                    <td className="py-2 font-semibold">
+                      {row.full_name}{" "}
+                      <span className="text-xs font-normal text-muted-foreground">
+                        ·{" "}
+                        {row.member_id
+                          ? t("events.invitations.kindMember")
+                          : t("events.invitations.kindGuest")}
+                      </span>
+                    </td>
                     <td className="py-2 text-muted-foreground">{row.email}</td>
                     <td className="py-2">
                       <span

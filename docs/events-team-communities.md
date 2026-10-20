@@ -85,3 +85,6 @@ enforces that only one is.
 
 ### Bulk invitations (invited-members events)
 In the "Invited members" section staff can paste emails (comma, semicolon or new line separated) or upload a CSV. "Check list" matches addresses against active members (`previewBulkInvitations`) and shows matched / already invited / not found / invalid; "Send invitations" (`addBulkInvitations`) invites the matched members one by one with the normal personal email. Max 500 per run; non-members are never invited. Parsing lives in `src/lib/invite-list-parse.ts` (tested).
+
+### Invited guests (`rsvp_invited_open`)
+Same as "Invited members only" but the guest list also accepts non-members: a single-guest form (name, email, language) and, in bulk paste/CSV, unmatched addresses are invited as guests (name from the CSV row, else the part before "@"). Guest rows have `member_id = null`. An address belonging to an active member is always invited as that member. `isInvitedMode()` in `src/lib/events.ts` covers both invite modes.

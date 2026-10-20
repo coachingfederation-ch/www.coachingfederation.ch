@@ -1878,7 +1878,12 @@
       "bulkInvalid": "Ungültige Einträge",
       "bulkNone": "Keine E-Mail-Adressen gefunden.",
       "bulkTooMany": "Bitte höchstens 500 Adressen auf einmal.",
-      "bulkDone": "{sent} Einladungen gesendet, {failed} fehlgeschlagen."
+      "bulkDone": "{sent} Einladungen gesendet, {failed} fehlgeschlagen.",
+      "guestTitle": "Gast einladen (Nichtmitglied)",
+      "guestLanguage": "Sprache",
+      "bulkGuests": "Wird als Gast eingeladen",
+      "kindMember": "Mitglied",
+      "kindGuest": "Gast"
     },
     "tag": {
       "membersOnly": "Nur für Mitglieder",
@@ -1917,7 +1922,8 @@
         "noneHint": "Nur Information — keine Anmeldung.",
         "rsvpHint": "Offen für alle.",
         "membersHint": "Anmeldung erfordert Login.",
-        "invitedHint": "Nur eingeladene Mitglieder."
+        "invitedHint": "Nur eingeladene Mitglieder.",
+        "invitedOpenHint": "Nur Personen auf der Gästeliste können sich anmelden, Mitglieder wie Nichtmitglieder."
       },
       "extras": {
         "title": "Weitere Optionen?",
@@ -2076,7 +2082,8 @@
     "audience": {
       "anyone": "Alle",
       "members": "Nur aktive Mitglieder",
-      "invited": "Nur eingeladene Mitglieder"
+      "invited": "Nur eingeladene Mitglieder",
+      "invitedOpen": "Eingeladene Gäste (alle auf der Liste)"
     },
     "fieldTickets": "Tickets anbieten",
     "fieldTicketsHelp": "Aktiviert Ticketpreis-Verwaltung.",

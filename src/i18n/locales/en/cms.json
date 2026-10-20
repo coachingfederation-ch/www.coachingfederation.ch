@@ -1878,7 +1878,12 @@
       "bulkInvalid": "Invalid entries",
       "bulkNone": "No email addresses found.",
       "bulkTooMany": "Please add at most 500 addresses at a time.",
-      "bulkDone": "{sent} invitations sent, {failed} failed."
+      "bulkDone": "{sent} invitations sent, {failed} failed.",
+      "guestTitle": "Invite a guest (non-member)",
+      "guestLanguage": "Language",
+      "bulkGuests": "Will be invited as a guest",
+      "kindMember": "Member",
+      "kindGuest": "Guest"
     },
     "tag": {
       "membersOnly": "Members only",
@@ -1917,7 +1922,8 @@
         "noneHint": "Information only — nobody signs up.",
         "rsvpHint": "Anyone can sign up.",
         "membersHint": "Members sign in to register.",
-        "invitedHint": "Only invited members can register."
+        "invitedHint": "Only invited members can register.",
+        "invitedOpenHint": "Only people on the guest list can register, members and non-members alike."
       },
       "extras": {
         "title": "Anything else?",
@@ -2076,7 +2082,8 @@
     "audience": {
       "anyone": "Anyone",
       "members": "Active members only",
-      "invited": "Invited members only"
+      "invited": "Invited members only",
+      "invitedOpen": "Invited guests (anyone on the list)"
     },
     "fieldTickets": "Offer tickets",
     "fieldTicketsHelp": "Shows ticket tiers and discount codes. Without a saved tier the event stays a plain free sign-up.",
