@@ -2191,7 +2191,10 @@
       "passedHidden": "Vergangene Events sind ausgeblendet.",
       "showPassed": "Anzeigen",
       "noEvents": "Keine Events an diesem Tag."
-    }
+    },
+    "publishing": "Wird veröffentlicht…",
+    "unpublishing": "Wird zurückgezogen…",
+    "cancelling": "Wird abgesagt…"
   },
   "eventTranslations": {
     "title": "Übersetzungen",

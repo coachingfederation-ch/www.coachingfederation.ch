@@ -2191,7 +2191,10 @@
       "passedHidden": "Gli eventi passati sono nascosti.",
       "showPassed": "Mostrali",
       "noEvents": "Nessun evento in questo giorno."
-    }
+    },
+    "publishing": "Pubblicazione…",
+    "unpublishing": "Ritiro in corso…",
+    "cancelling": "Annullamento…"
   },
   "eventTranslations": {
     "title": "Traduzioni",

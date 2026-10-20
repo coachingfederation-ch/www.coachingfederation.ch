@@ -2191,7 +2191,10 @@
       "passedHidden": "Passed events are hidden.",
       "showPassed": "Show them",
       "noEvents": "No events on this day."
-    }
+    },
+    "publishing": "Publishing…",
+    "unpublishing": "Unpublishing…",
+    "cancelling": "Cancelling…"
   },
   "eventTranslations": {
     "title": "Translations",
