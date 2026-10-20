@@ -784,10 +784,6 @@ function IntegrationPageBody() {
               {config ? (
                 <FeatureTogglesCard config={config} onChanged={() => void reload()} />
               ) : null}
-              <SyncLimitsCard />
-
-              <ContentOwnershipPanel />
-
               <LinkedInPageSettings />
 
               <BoardDigestCard />
@@ -808,6 +804,8 @@ function IntegrationPageBody() {
               </CollapsibleTrigger>
               <p className="text-xs text-muted-foreground">{t("integration.advancedBody")}</p>
               <CollapsibleContent className="space-y-4">
+                <SyncLimitsCard />
+                <ContentOwnershipPanel />
                 <section className={CARD}>
                   <div className="flex flex-wrap items-center gap-3">
                     <span
