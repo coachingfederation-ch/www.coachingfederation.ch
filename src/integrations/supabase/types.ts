@@ -4514,6 +4514,14 @@ export type Database = {
       integration_config: {
         Row: {
           account_claim_enabled: boolean
+          board_digest_cadence: string
+          board_digest_enabled: boolean
+          board_digest_hour: number
+          board_digest_last_sent_at: string | null
+          board_digest_last_status: string | null
+          board_digest_recipient: string
+          board_digest_sections: Json
+          board_digest_weekday: number
           created_at: string
           cutover_completed_at: string | null
           cutover_completed_by: string | null
@@ -4537,6 +4545,14 @@ export type Database = {
         }
         Insert: {
           account_claim_enabled?: boolean
+          board_digest_cadence?: string
+          board_digest_enabled?: boolean
+          board_digest_hour?: number
+          board_digest_last_sent_at?: string | null
+          board_digest_last_status?: string | null
+          board_digest_recipient?: string
+          board_digest_sections?: Json
+          board_digest_weekday?: number
           created_at?: string
           cutover_completed_at?: string | null
           cutover_completed_by?: string | null
@@ -4560,6 +4576,14 @@ export type Database = {
         }
         Update: {
           account_claim_enabled?: boolean
+          board_digest_cadence?: string
+          board_digest_enabled?: boolean
+          board_digest_hour?: number
+          board_digest_last_sent_at?: string | null
+          board_digest_last_status?: string | null
+          board_digest_recipient?: string
+          board_digest_sections?: Json
+          board_digest_weekday?: number
           created_at?: string
           cutover_completed_at?: string | null
           cutover_completed_by?: string | null
