@@ -26,9 +26,9 @@ import { FormBuilder } from "@/components/forms/FormBuilder";
 import {
   copyQuestionsFrom,
   copySourcesFor,
-  saveEventFormAsTemplateSafe,
   saveEventFormFromBuilder,
-} from "@/components/forms/event-form-page";
+  saveFormAsTemplate,
+} from "@/components/forms/form-actions";
 import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
 import { deleteEventForm, getEventForm } from "@/lib/event-forms.functions";
@@ -123,8 +123,12 @@ function EventFormBuilderPage() {
                     <DropdownMenuItem
                       onSelect={async () => {
                         if (!lastSaved.current) return;
-                        const ok = await saveEventFormAsTemplateSafe(loaded.kind, lastSaved.current);
-                        setNotice(ok ? t("forms.savedToLibrary") : t("forms.saveToLibraryFailed"));
+                        try {
+                          await saveFormAsTemplate(loaded.kind, lastSaved.current);
+                          setNotice(t("forms.savedToLibrary"));
+                        } catch {
+                          setNotice(t("forms.saveToLibraryFailed"));
+                        }
                       }}
                     >
                       {t("forms.saveToLibrary")}
@@ -176,8 +180,8 @@ function EventFormBuilderPage() {
             >
               {t("forms.detach")}
             </AlertDialogAction>
-          </AlertDialogContent>
-        </AlertDialogFooter>
+          </AlertDialogFooter>
+        </AlertDialogContent>
       </AlertDialog>
     </Shell>
   );
