@@ -30,7 +30,12 @@ export const Route = createFileRoute("/_staff/manage/surveys/$id_/results")({
 
 type Data = Awaited<ReturnType<typeof getSurveyResponses>>;
 
-const csvCell = (v: string) => `"${v.replace(/"/g, '""')}"`;
+// Answers are visitor-supplied: prefix formula-leading characters with a quote
+// so spreadsheet apps show them as text instead of evaluating them.
+const csvCell = (v: string) => {
+  const safe = /^[=+\-@\t\r]/.test(v) ? `'${v}` : v;
+  return `"${safe.replace(/"/g, '""')}"`;
+};
 
 function SurveyResultsPage() {
   const { id } = Route.useParams();
