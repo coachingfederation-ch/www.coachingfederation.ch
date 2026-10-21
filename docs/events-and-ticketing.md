@@ -49,9 +49,9 @@ condition; visitors without a registration see the location label only.
 
 - A signed-in visitor is a member when `members.auth_user_id` links to a record
   with `activity_state = 'active'`. Email equality is never used.
-- Anyone may instead type their ICF member number, checked against the same
-  active-record rule. That path is rate limited (5 / 5 min, 30 / day per
-  IP or user) and answers only "confirmed or not".
+- Typing an ICF member number no longer grants member pricing: it never proved
+  the visitor owned that number. Member prices require signing in to a linked
+  member account (changed 2026-10-21 after a security review).
 - The client only ever names a tier id; `resolveChargedTier` re-derives the
   segment, price and currency from `event_ticket_tiers`, and the database
   trigger overwrites `amount_cents` / `currency` from the tier row on insert.
