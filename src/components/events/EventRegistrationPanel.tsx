@@ -450,38 +450,8 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
           </a>
         ) : null}
       </p>
-      <label className="mt-3 block text-xs font-semibold" htmlFor="rsvp-member-id">
-        {t("events.detail.tickets.memberIdLabel")}
-      </label>
-      <div className="mt-1 flex gap-2">
-        <input
-          id="rsvp-member-id"
-          value={memberId}
-          inputMode="numeric"
-          autoComplete="off"
-          placeholder={t("events.detail.tickets.memberIdPlaceholder")}
-          onChange={(e) => {
-            setMemberId(e.target.value);
-            setMemberIdState("idle");
-          }}
-          className={inputClass}
-        />
-        <button
-          type="button"
-          onClick={() => void applyMemberId()}
-          disabled={!memberId.trim() || memberIdState === "checking"}
-          className="shrink-0 rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-background disabled:opacity-50"
-        >
-          {memberIdState === "checking"
-            ? t("events.detail.tickets.memberIdChecking")
-            : t("events.detail.tickets.memberIdApply")}
-        </button>
-      </div>
-      {memberIdState === "failed" ? (
-        <p className="mt-2 text-xs text-[color:var(--warn)]">
-          {t("events.detail.tickets.memberIdFailed")}
-        </p>
-      ) : null}
+      {/* Member pricing requires a signed-in, linked member account; a typed
+          member number is no longer accepted (it never proved ownership). */}
     </div>
   );
 
