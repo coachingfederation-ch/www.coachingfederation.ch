@@ -62,48 +62,23 @@ const isActiveMember = (row: { activity_state: string }) => row.activity_state =
 
 /**
  * Membership as the server sees it. The account link (`members.auth_user_id`)
- * is the only automatic path — never an email match. A signed-in visitor who
- * has not claimed their account yet may name their ICF member id instead,
- * which is verified against an active, unexpired record and grants member
- * pricing for this registration only.
+ * is the only path to member pricing. A typed member number is no longer
+ * accepted: anyone could enter another member's number, so it never proved
+ * the visitor is that member. Unlinked visitors must sign in to the Member Area.
+ * The extra parameters stay for call-site compatibility and are ignored.
  */
 export async function resolveMembership(
   userId: string | null,
-  memberIdInput?: string | null,
-  /** Rate-limit identity for anonymous callers, e.g. `ip:1.2.3.4`. */
-  rateSubject?: string | null,
+  _memberIdInput?: string | null,
+  _rateSubject?: string | null,
 ): Promise<MembershipState> {
-  const candidateId = (memberIdInput ?? "").trim();
-
-  if (userId) {
-    const { data: linked } = await supabaseAdmin
-      .from("members")
-      .select("id, activity_state")
-      .eq("auth_user_id", userId)
-      .maybeSingle();
-    if (linked && isActiveMember(linked)) return "member";
-  } else if (!candidateId) {
-    return "signed_out";
-  }
-
-  const candidate = candidateId;
-  if (!candidate) return "not_member";
-  const subject = userId ? `user:${userId}` : (rateSubject ?? "anonymous");
-
-  const { checkRateLimit } = await import("./rate-limit.server");
-  const verdict = await checkRateLimit("event-member-id", subject, [
-    { windowSeconds: 300, max: 5 },
-    { windowSeconds: 86_400, max: 30 },
-  ]);
-  if (!verdict.allowed) return userId ? "not_member" : "signed_out";
-
-  const { data: byMemberId } = await supabaseAdmin
+  if (!userId) return "signed_out";
+  const { data: linked } = await supabaseAdmin
     .from("members")
     .select("id, activity_state")
-    .eq("cst_recno", candidate)
+    .eq("auth_user_id", userId)
     .maybeSingle();
-  if (byMemberId && isActiveMember(byMemberId)) return "member";
-  return userId ? "not_member" : "signed_out";
+  return linked && isActiveMember(linked) ? "member" : "not_member";
 }
 
 function toPublicTier(row: TierRow, locale: Locale): PublicTier {
