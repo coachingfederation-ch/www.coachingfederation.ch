@@ -91,3 +91,7 @@ Same as "Invited members only" but the guest list also accepts non-members: a si
 
 ### Invitations wait for the first publish
 Invitations added (or re-sent) while the event is not published are stored without token and `invited_at` ("Sent on publish" in the list). `setEventStatus(published)` calls `sendQueuedInvitations`, which mints tokens and mails them. Once published, adding sends immediately.
+
+## Europe Pulse view
+
+`/events?view=europe` swaps the Swiss listing for the Europe Pulse feed (see `docs/europe-pulse.md`). Switching views drops the other view's filters.
