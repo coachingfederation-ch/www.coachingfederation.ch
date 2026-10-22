@@ -4,7 +4,7 @@
  * credentials, specialisations, formats, accepting-only, pagination) are
  * local state that drives the server-side query plus client-side narrowing.
  */
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useI18n } from "@/i18n";
@@ -62,6 +62,16 @@ export function useCoachDirectoryFilters() {
   const [acceptingOnly, setAcceptingOnly] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [page, setPage] = useState(0);
+  // Free text is searched server-side across all coaches; debounce so each
+  // keystroke does not hit the server, and restart paging on a new term.
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      setDebouncedQuery(query.trim());
+      setPage(0);
+    }, 300);
+    return () => window.clearTimeout(id);
+  }, [query]);
   // Stable per mount: keeps React Query from reshuffling on re-render while
   // still producing a fresh showcase on reload or mode change.
   const [shuffleSeed] = useState(() => Math.floor(Math.random() * 1e9));
@@ -107,10 +117,23 @@ export function useCoachDirectoryFilters() {
       credentials: credentials.length ? credentials : undefined,
       specialisations: specializations.length ? specializations : undefined,
       formats: formats.length ? formats : undefined,
+      q: debouncedQuery || undefined,
+      acceptingOnly: acceptingOnly || undefined,
       page,
       locale,
     }),
-    [mode, region, language, credentials, specializations, formats, page, locale],
+    [
+      mode,
+      region,
+      language,
+      credentials,
+      specializations,
+      formats,
+      debouncedQuery,
+      acceptingOnly,
+      page,
+      locale,
+    ],
   );
 
   const dirty =
@@ -150,34 +173,13 @@ export function useCoachDirectoryFilters() {
     setPage(0);
   }
 
-  // Free text and availability narrow the page the server returned; the facet
-  // filters above are what the view is queried with.
-  const results = useMemo(() => {
-    const entries = data?.entries ?? [];
-    const needle = query.trim().toLowerCase();
-    return entries.filter((e) => {
-      if (acceptingOnly && e.availability_slug !== "accepting") return false;
-      if (!needle) return true;
-      const haystack = [
-        e.full_name,
-        e.city,
-        e.country,
-        e.organisation,
-        e.tagline,
-        e.description,
-        ...(e.specialisation_slugs ?? []).map(specialisationLabel),
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-      return haystack.includes(needle);
-    });
-  }, [data, query, acceptingOnly, specialisationLabel]);
+  // Free text and availability are applied server-side with the facets, so
+  // results and counts cover the whole directory, not just the loaded page.
+  const results = useMemo(() => data?.entries ?? [], [data]);
 
   const total = data?.total ?? 0;
   const pageSize = data?.pageSize ?? 12;
-  const narrowed = query.trim() !== "" || acceptingOnly;
-  const shownCount = narrowed ? results.length : total;
+  const shownCount = total;
   const isSample = Boolean(data?.sampled) && sampled;
   // When a mode is resolved the count names it ("3 mentoring coaches"); the
   // generic strings remain the fallback when no mode is configured.
@@ -196,7 +198,7 @@ export function useCoachDirectoryFilters() {
         ? t(`directory.results.${countKey}Mode`).replace("{mode}", modeLabel)
         : t(`directory.results.${countKey}`)
       ).replace("{count}", String(shownCount));
-  const hasMore = !narrowed && (page + 1) * pageSize < total;
+  const hasMore = (page + 1) * pageSize < total;
 
   return {
     t,

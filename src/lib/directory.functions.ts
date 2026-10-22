@@ -29,6 +29,8 @@ const filterSchema = z.object({
   formats: slugList,
   credentials: slugList,
   page: z.number().int().min(0).max(500).optional(),
+  q: z.string().max(120).optional(),
+  acceptingOnly: z.boolean().optional(),
   /** Random showcase size for the unfiltered first view (max 8). */
   sample: z.number().int().min(1).max(8).optional(),
   /**
@@ -127,7 +129,9 @@ export const queryCoachDirectory = createServerFn({ method: "GET" })
       data.languages?.length ||
       data.specialisations?.length ||
       data.formats?.length ||
-      data.credentials?.length,
+      data.credentials?.length ||
+      data.q?.trim() ||
+      data.acceptingOnly,
     );
     if (data.sample && !facetsActive) {
       const samplePageSize = data.sample;

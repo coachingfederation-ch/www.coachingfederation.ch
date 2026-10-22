@@ -4,7 +4,7 @@
  * Data comes from `queryCoachDirectory` (the `coach_directory_public` view),
  * never from local fixtures: only members that are active, credentialed and
  * whose profile is `published` are ever returned. Facet filters are applied
- * server-side; the free-text box narrows the current page client-side.
+ * server-side, including free text (debounced) and "accepting clients only".
  *
  * Implementation is split across `./directory/*`; this file re-exports the
  * public symbols so existing imports keep working unchanged.
