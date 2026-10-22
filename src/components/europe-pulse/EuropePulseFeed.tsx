@@ -1,12 +1,14 @@
 /**
- * Europe Pulse — the weekly, multilingual feed of what other ICF chapters in
- * Europe are doing. Read-only: everything here is curated by the weekly scan
- * and simply links back to the originating chapter's own site.
+ * Europe Pulse feed — the weekly, multilingual list of what other ICF chapters
+ * in Europe are doing. Rendered as the "Across Europe" view of the Events page
+ * (/events?view=europe). Read-only: items are curated by the weekly scan and
+ * link back to the originating chapter's own site.
+ * Exports: EuropePulseFeed.
  */
 import { useQuery } from "@tanstack/react-query";
 import { Link, useSearch } from "@tanstack/react-router";
 import { ArrowUpRight, CalendarDays, ChevronLeft, ChevronRight, Globe2 } from "lucide-react";
-import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
+import { CARD_SHADOW } from "@/components/site-chrome";
 import { useI18n } from "@/i18n";
 import type { Locale } from "@/i18n/config";
 import {
@@ -153,8 +155,7 @@ function EditionNav({ weeks, current }: { weeks: string[]; current: string }) {
     </nav>
   );
 }
-
-export default function EuropePulsePage() {
+export function EuropePulseFeed() {
   const { t, locale } = useI18n();
   const { week = "" } = useSearch({ strict: false }) as Partial<EuropePulseSearch>;
   const { data, isPending, isError } = useQuery({
@@ -166,21 +167,12 @@ export default function EuropePulsePage() {
   const countries = new Set(items.map((i) => i.countryCode)).size;
 
   return (
-    <div className="min-h-dvh bg-background text-foreground">
-      <CompactHero
-        eyebrow={t("europe-pulse.hero.eyebrow")}
-        title={
-          <>
-            {t("europe-pulse.hero.titleLead")}{" "}
-            <span className="text-accent">{t("europe-pulse.hero.titleAccent")}</span>{" "}
-            {t("europe-pulse.hero.titleTail")}
-          </>
-        }
-        lede={t("europe-pulse.hero.lede")}
-      />
-      <main id="main" className="bg-card py-16">
-        <div className="mx-auto max-w-7xl px-8">
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+    <section className="bg-card py-16">
+      <div className="mx-auto max-w-7xl px-8">
+        <p className="max-w-3xl text-base leading-relaxed text-muted-foreground">
+          {t("europe-pulse.hero.lede")}
+        </p>
+        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
             {weekLabel ? (
               <span className="inline-flex items-center gap-2">
                 <CalendarDays className="h-4 w-4 text-primary" />
@@ -250,9 +242,7 @@ export default function EuropePulsePage() {
           <p className="mt-12 max-w-3xl text-xs leading-relaxed text-muted-foreground">
             {t("europe-pulse.disclaimer")}
           </p>
-        </div>
-      </main>
-      <SiteFooter />
-    </div>
+      </div>
+    </section>
   );
 }

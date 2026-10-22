@@ -44,5 +44,10 @@
     "title": "Questa settimana in Europa.",
     "body": "Una selezione settimanale di eventi, webinar e novità dai capitoli ICF di tutta Europa.",
     "cta": "Scopri Europe Pulse"
+  },
+  "view": {
+    "label": "Mostra eventi da",
+    "switzerland": "Svizzera",
+    "europe": "In Europa"
   }
 }
