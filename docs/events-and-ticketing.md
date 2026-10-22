@@ -6,6 +6,16 @@ event content model; this document covers registration, money and email.
 
 ## Registration modes
 
+### Attendance display
+
+The check-in screen's **Open attendance window** and **Show on screen** actions
+open the QR display in a new browser tab, leaving the original desk available.
+The display reuses the authenticated check-in route with `projector=1`; opening
+a display does not create another attendance session. The initial action reserves
+the tab before awaiting the session request to avoid popup blocking. If a tab is
+blocked, the existing in-page display remains the fallback. Closing the display
+tab does not close the attendance session; staff use **Close window** at the desk.
+
 Set per event (`events.registration_mode`), enforced both in
 `submitRegistration` and by `tg_event_registration_guard`:
 
