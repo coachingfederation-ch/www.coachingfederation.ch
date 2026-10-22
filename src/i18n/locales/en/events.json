@@ -8,7 +8,8 @@
     "titlePrefix": "Connect, learn and ",
     "titleAccent": "grow",
     "titleSuffix": " together.",
-    "lede": "Conferences, webinars and community gatherings for coaches and organisations across Switzerland."
+    "lede": "Conferences, webinars and community gatherings for coaches and organisations across Switzerland.",
+    "ledeEurope": "Conferences, webinars and news from ICF chapters across Europe, curated for coaches in Switzerland."
   },
   "featured": {
     "eyebrow": "Featured event"

@@ -314,7 +314,7 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
             {t("events.hero.titleSuffix")}
           </>
         }
-        lede={t("events.hero.lede")}
+        lede={t(europe ? "events.hero.ledeEurope" : "events.hero.lede")}
         actions={
           <SubscribeCalendarDialog
             filters={{
@@ -330,10 +330,15 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
       />
       <main id="main">
         {pulseOn ? (
-          <div className="bg-background pt-10">
+          // Same surface as the view below so the switch reads as part of
+          // that content instead of floating on a separate strip.
+          <div className={(europe ? "bg-card" : "bg-background") + " pt-10"}>
             <div className="mx-auto max-w-7xl px-8">
               <div
-                className="inline-flex rounded-full border border-border bg-card p-1"
+                className={
+                  "inline-flex rounded-full border border-border p-1 " +
+                  (europe ? "bg-background" : "bg-card")
+                }
                 role="group"
                 aria-label={t("europe-pulse.view.label")}
               >

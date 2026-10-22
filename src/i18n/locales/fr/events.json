@@ -8,7 +8,8 @@
     "titlePrefix": "Se connecter, apprendre et ",
     "titleAccent": "grandir",
     "titleSuffix": " ensemble.",
-    "lede": "Conférences, webinaires et rencontres pour coachs et organisations dans toute la Suisse."
+    "lede": "Conférences, webinaires et rencontres pour coachs et organisations dans toute la Suisse.",
+    "ledeEurope": "Conférences, webinaires et actualités des chapitres ICF de toute l'Europe, sélectionnés pour les coachs en Suisse."
   },
   "featured": {
     "eyebrow": "Événement à la une"

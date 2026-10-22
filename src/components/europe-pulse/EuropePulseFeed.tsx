@@ -167,7 +167,7 @@ export function EuropePulseFeed() {
   const countries = new Set(items.map((i) => i.countryCode)).size;
 
   return (
-    <section className="bg-card py-16">
+    <section className="bg-card pb-16 pt-10">
       <div className="mx-auto max-w-7xl px-8">
         <p className="max-w-3xl text-base leading-relaxed text-muted-foreground">
           {t("europe-pulse.hero.lede")}
