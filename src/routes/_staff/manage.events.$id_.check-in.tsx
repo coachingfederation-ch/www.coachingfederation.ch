@@ -28,6 +28,9 @@ import {
 } from "@/lib/check-in.functions";
 
 export const Route = createFileRoute("/_staff/manage/events/$id_/check-in")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    projector: search.projector === "1" || search.projector === 1,
+  }),
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_ROLES),
   head: () => ({
     meta: [
@@ -405,8 +408,26 @@ function AttendanceCard({
 }) {
   const [session, setSession] = useState<AttendanceSession | null>(null);
   const [busy, setBusy] = useState(false);
-  const [projector, setProjector] = useState(false);
+  const { projector: projectorTab } = Route.useSearch();
+  const [projector, setProjector] = useState(projectorTab);
   const [error, setError] = useState<string | null>(null);
+
+  const openDisplayTab = () => {
+    const tab = window.open("about:blank", "_blank");
+    if (tab) tab.opener = null;
+    return tab;
+  };
+
+  const showDisplay = (tab: Window | null) => {
+    if (tab && !tab.closed) {
+      const url = new URL(window.location.href);
+      url.searchParams.set("projector", "1");
+      tab.location.replace(url.href);
+    } else {
+      // Retain the existing display when the browser blocks new tabs.
+      setProjector(true);
+    }
+  };
 
   const refresh = useCallback(async () => {
     try {
@@ -421,13 +442,17 @@ function AttendanceCard({
   }, [refresh]);
 
   const open = async () => {
+    // Reserve the tab during the click, before awaiting the session request,
+    // so browsers do not treat the display as an unsolicited popup.
+    const tab = openDisplayTab();
     setBusy(true);
     setError(null);
     try {
       setSession(await openAttendanceSession({ data: { eventId } }));
-      setProjector(true);
+      showDisplay(tab);
       await onChanged();
     } catch (e) {
+      tab?.close();
       setError(e instanceof Error ? e.message : "Could not open the attendance window");
     } finally {
       setBusy(false);
@@ -472,7 +497,7 @@ function AttendanceCard({
           </p>
           <button
             type="button"
-            onClick={() => setProjector(true)}
+            onClick={() => showDisplay(openDisplayTab())}
             className="min-h-11 w-full rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
           >
             {t("events.attendance.showOnScreen")}
@@ -498,7 +523,14 @@ function AttendanceCard({
       )}
 
       {projector && session ? (
-        <ProjectorView token={session.public_token} t={t} onClose={() => setProjector(false)} />
+        <ProjectorView
+          token={session.public_token}
+          t={t}
+          onClose={() => {
+            if (projectorTab) window.close();
+            setProjector(false);
+          }}
+        />
       ) : null}
     </section>
   );
