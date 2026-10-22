@@ -351,7 +351,7 @@ export default function InsightsPage() {
                 </div>
                 <LocaleLink
                   to="/events"
-                  search={{ view: "europe" }}
+                  search={{ view: "europe" } as never}
                   className="inline-flex h-10 shrink-0 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
                 >
                   {t("europe-pulse.preview.cta")} →
