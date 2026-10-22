@@ -124,9 +124,20 @@ export type DirectoryFacets = {
   specialisations?: string[];
   formats?: string[];
   credentials?: string[];
+  /** Free text, matched server-side across the whole directory. */
+  q?: string;
+  /** Only coaches currently accepting new clients. */
+  acceptingOnly?: boolean;
 };
 
+/** Strips characters that would break a PostgREST `or(...)` expression. */
+export function sanitiseSearchTerm(term: string): string {
+  return term.replace(/[,()*%\\:."']/g, " ").replace(/\s+/g, " ").trim().slice(0, 80);
+}
+
 type FacetQuery<T> = {
+  or(filters: string): T;
+  eq(column: string, value: string): T;
   overlaps(column: string, value: readonly string[]): T;
   in(column: string, value: readonly string[]): T;
 };
@@ -147,6 +158,16 @@ export function applyFacets<T extends FacetQuery<T>>(query: T, data: DirectoryFa
     q = q.in(
       "credential_slug",
       data.credentials.map((c) => c.toUpperCase()),
+    );
+  }
+  if (data.acceptingOnly) q = q.eq("availability_slug", "accepting");
+  const term = data.q ? sanitiseSearchTerm(data.q) : "";
+  if (term) {
+    const like = `*${term}*`;
+    q = q.or(
+      ["full_name", "city", "country", "organisation", "tagline", "description"]
+        .map((c) => `${c}.ilike.${like}`)
+        .join(","),
     );
   }
   return q;
