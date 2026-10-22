@@ -44,5 +44,10 @@
     "title": "This week across Europe.",
     "body": "A curated weekly feed of events, webinars and news from ICF chapters across Europe.",
     "cta": "See Europe Pulse"
+  },
+  "view": {
+    "label": "Show events from",
+    "switzerland": "Switzerland",
+    "europe": "Across Europe"
   }
 }

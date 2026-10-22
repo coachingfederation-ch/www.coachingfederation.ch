@@ -44,5 +44,10 @@
     "title": "Cette semaine en Europe.",
     "body": "Un flux hebdomadaire d'événements, webinaires et actualités des chapitres ICF à travers l'Europe.",
     "cta": "Voir Europe Pulse"
+  },
+  "view": {
+    "label": "Afficher les événements",
+    "switzerland": "Suisse",
+    "europe": "En Europe"
   }
 }

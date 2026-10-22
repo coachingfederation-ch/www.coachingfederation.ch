@@ -44,5 +44,10 @@
     "title": "Diese Woche in ganz Europa.",
     "body": "Ein wöchentlich zusammengestellter Feed mit Events, Webinaren und News von ICF-Chapters aus ganz Europa.",
     "cta": "Europe Pulse ansehen"
+  },
+  "view": {
+    "label": "Veranstaltungen anzeigen aus",
+    "switzerland": "Schweiz",
+    "europe": "Europaweit"
   }
 }

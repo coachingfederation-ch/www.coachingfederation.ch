@@ -16,7 +16,7 @@ Audiences and pages (paths are language-prefixed for de/fr/it, e.g. /de/find-a-c
 - /events — chapter, community, learning and flagship events.
 - /communities — local communities across the language regions.
 - /team — the chapter's operational structure and volunteer roles.
-- /europe-pulse — a weekly digest of activity across European ICF chapters.
+- /events?view=europe (Europe Pulse) — a weekly digest of activity across European ICF chapters.
 - /about, /imprint, /privacy — chapter information and legal pages.
 - /member — the Member Area (sign-in required). Member accounts are set up through an invitation
   link the chapter sends; there is no self-service sign-up page.
