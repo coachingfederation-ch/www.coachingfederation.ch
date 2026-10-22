@@ -139,3 +139,12 @@ attribute set rather than a truncated subset:
   attributes shared by _every_ result on screen and the tile renders those muted, so only
   distinguishing attributes keep full contrast. Unfiltered browsing renders all chips
   normally.
+
+## Free-text search
+
+The search box and the "accepting clients only" switch are applied server-side
+(`applyFacets` in `src/lib/directory-sort.ts`), debounced by 300 ms. Any active
+search leaves the random showcase and searches the full directory across name,
+city, country, organisation, tagline, and description, with exact counts and
+pagination. Before this, the box only filtered the page already loaded, so
+coaches outside the random showcase could never be found.
