@@ -28,8 +28,8 @@ import {
 } from "@/lib/check-in.functions";
 
 export const Route = createFileRoute("/_staff/manage/events/$id_/check-in")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    projector: search.projector === "1" || search.projector === 1,
+  validateSearch: (search: Record<string, unknown>): { projector?: boolean } => ({
+    projector: search.projector === "1" || search.projector === 1 || search.projector === true,
   }),
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_ROLES),
   head: () => ({
