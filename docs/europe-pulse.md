@@ -1,8 +1,14 @@
 # Europe Pulse
 
 A weekly, multilingual digest of what the other ICF chapters in Europe are
-doing. Public feed at `/europe-pulse` (plus the three `$locale/` mirrors),
-staff control room at `/manage/europe-pulse`.
+doing. The public feed is the "Across Europe" view of the Events page
+(`/events?view=europe`, plus `?week=YYYY-MM-DD` for past editions and the
+three `$locale/` mirrors), rendered by
+`src/components/europe-pulse/EuropePulseFeed.tsx`. A Switzerland / Across
+Europe switch above the event filters toggles the views and is hidden when the
+`europe_pulse` feature flag is off. The old `/europe-pulse` addresses redirect
+(301) to the new view, keeping `week`. Staff control room at
+`/manage/europe-pulse`.
 
 Nothing on the page is written by hand. Each item is scraped from a chapter's
 own public website, summarised and translated by AI, and then either published
