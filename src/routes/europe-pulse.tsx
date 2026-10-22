@@ -1,30 +1,19 @@
 /**
- * Europe Pulse page route (/europe-pulse).
- * Exports: Route. Renders the Europe Pulse page with search validation
- * and localized meta tags.
+ * Legacy Europe Pulse address (/europe-pulse).
+ * Exports: Route. The feed now lives on the Events page as the "Across Europe"
+ * view, so this permanently redirects there and keeps any `?week=` edition.
  */
-
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { featureFlagsQueryOptions } from "@/lib/feature-flags";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
-import EuropePulsePage from "@/pages/EuropePulse";
 import { europePulseSearchSchema } from "@/lib/europe-pulse";
-import { localeLinkTags, localeMeta } from "@/i18n";
 
 export const Route = createFileRoute("/europe-pulse")({
   validateSearch: zodValidator(europePulseSearchSchema),
-  loader: async ({ context }) => {
-    const flags = await context.queryClient.ensureQueryData(featureFlagsQueryOptions);
-    if (!flags.europe_pulse) throw notFound();
+  beforeLoad: ({ search }) => {
+    throw redirect({
+      to: "/events",
+      search: { view: "europe", ...(search.week ? { week: search.week } : {}) },
+      statusCode: 301,
+    });
   },
-  head: () => ({
-    meta: localeMeta(
-      "en",
-      "/europe-pulse",
-      "europe-pulse.meta.title",
-      "europe-pulse.meta.description",
-    ),
-    links: localeLinkTags("/europe-pulse", "en"),
-  }),
-  component: EuropePulsePage,
 });

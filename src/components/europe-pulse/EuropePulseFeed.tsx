@@ -173,75 +173,75 @@ export function EuropePulseFeed() {
           {t("europe-pulse.hero.lede")}
         </p>
         <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
-            {weekLabel ? (
-              <span className="inline-flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-primary" />
-                {t("europe-pulse.meta.week").replace("{date}", weekLabel)}
-              </span>
-            ) : null}
-            {items.length ? (
-              <span className="inline-flex items-center gap-2">
-                <Globe2 className="h-4 w-4 text-primary" />
-                {t("europe-pulse.meta.summary")
-                  .replace("{items}", String(items.length))
-                  .replace("{countries}", String(countries))}
-              </span>
-            ) : null}
-          </div>
-
-          {data?.weeks?.length ? <EditionNav weeks={data.weeks} current={data.weekOf!} /> : null}
-
-          {data && !data.isCurrent ? (
-            <p className="mt-4 text-xs text-muted-foreground">{t("europe-pulse.archive.note")}</p>
+          {weekLabel ? (
+            <span className="inline-flex items-center gap-2">
+              <CalendarDays className="h-4 w-4 text-primary" />
+              {t("europe-pulse.meta.week").replace("{date}", weekLabel)}
+            </span>
           ) : null}
+          {items.length ? (
+            <span className="inline-flex items-center gap-2">
+              <Globe2 className="h-4 w-4 text-primary" />
+              {t("europe-pulse.meta.summary")
+                .replace("{items}", String(items.length))
+                .replace("{countries}", String(countries))}
+            </span>
+          ) : null}
+        </div>
 
-          {isPending ? (
-            <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className={
-                    "h-52 animate-pulse rounded-2xl border border-border/70 bg-secondary/60 " +
-                    CARD_SHADOW
-                  }
-                />
-              ))}
-            </div>
-          ) : isError ? (
-            <div
-              className={
-                "mt-10 rounded-2xl border border-border/70 bg-card px-8 py-20 text-center " +
-                CARD_SHADOW
-              }
-            >
-              <h2 className="text-xl font-bold tracking-tight">{t("europe-pulse.error.title")}</h2>
-              <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-                {t("europe-pulse.error.body")}
-              </p>
-            </div>
-          ) : !items.length ? (
-            <div
-              className={
-                "mt-10 rounded-2xl border border-border/70 bg-card px-8 py-20 text-center " +
-                CARD_SHADOW
-              }
-            >
-              <h2 className="text-xl font-bold tracking-tight">{t("europe-pulse.empty.title")}</h2>
-              <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-                {t("europe-pulse.empty.body")}
-              </p>
-            </div>
-          ) : (
-            <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {items.map((item) => (
-                <PulseCard key={item.id} item={item} />
-              ))}
-            </div>
-          )}
+        {data?.weeks?.length ? <EditionNav weeks={data.weeks} current={data.weekOf!} /> : null}
 
-          <p className="mt-12 max-w-3xl text-xs leading-relaxed text-muted-foreground">
-            {t("europe-pulse.disclaimer")}
-          </p>
+        {data && !data.isCurrent ? (
+          <p className="mt-4 text-xs text-muted-foreground">{t("europe-pulse.archive.note")}</p>
+        ) : null}
+
+        {isPending ? (
+          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className={
+                  "h-52 animate-pulse rounded-2xl border border-border/70 bg-secondary/60 " +
+                  CARD_SHADOW
+                }
+              />
+            ))}
+          </div>
+        ) : isError ? (
+          <div
+            className={
+              "mt-10 rounded-2xl border border-border/70 bg-card px-8 py-20 text-center " +
+              CARD_SHADOW
+            }
+          >
+            <h2 className="text-xl font-bold tracking-tight">{t("europe-pulse.error.title")}</h2>
+            <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
+              {t("europe-pulse.error.body")}
+            </p>
+          </div>
+        ) : !items.length ? (
+          <div
+            className={
+              "mt-10 rounded-2xl border border-border/70 bg-card px-8 py-20 text-center " +
+              CARD_SHADOW
+            }
+          >
+            <h2 className="text-xl font-bold tracking-tight">{t("europe-pulse.empty.title")}</h2>
+            <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
+              {t("europe-pulse.empty.body")}
+            </p>
+          </div>
+        ) : (
+          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {items.map((item) => (
+              <PulseCard key={item.id} item={item} />
+            ))}
+          </div>
+        )}
+
+        <p className="mt-12 max-w-3xl text-xs leading-relaxed text-muted-foreground">
+          {t("europe-pulse.disclaimer")}
+        </p>
       </div>
     </section>
   );

@@ -29,6 +29,9 @@ import {
   type EventFacetOption,
   type PublicEvent,
 } from "@/lib/events";
+import { useQuery } from "@tanstack/react-query";
+import { featureFlagsQueryOptions } from "@/lib/feature-flags";
+import { EuropePulseFeed } from "@/components/europe-pulse/EuropePulseFeed";
 import { useNowMinute } from "@/hooks/use-now-minute";
 import type { EventsSearch } from "@/lib/events-search";
 
@@ -155,6 +158,15 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
   const navigate = useNavigate();
   const search = useSearch({ strict: false }) as EventsSearch;
   const { featured, upcoming, past, categories, regions } = data;
+
+  const pulseOn = useQuery(featureFlagsQueryOptions).data?.europe_pulse !== false;
+  const europe = pulseOn && search.view === "europe";
+  /** Each view keeps its own filters; switching drops the other view's ones. */
+  const setView = (next: "" | "europe") =>
+    void navigate({
+      search: (() => (next ? { view: next } : {})) as never,
+      replace: false,
+    });
 
   const when = search.when === "past" ? "past" : "upcoming";
   const category = search.category ?? "";
@@ -317,251 +329,288 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
         }
       />
       <main id="main">
-        <section className="bg-background py-10">
-          <div className="mx-auto max-w-7xl px-8">
-            <div className="flex flex-wrap items-end gap-4">
-              <div>
-                <span className="section-label mb-1.5 block">{t("events.filters.when")}</span>
-                <div
-                  className="inline-flex rounded-full border border-border bg-card p-1"
-                  role="group"
-                  aria-label={t("events.filters.when")}
-                >
-                  {(["upcoming", "past"] as const).map((v) => (
+        {pulseOn ? (
+          <div className="bg-background pt-10">
+            <div className="mx-auto max-w-7xl px-8">
+              <div
+                className="inline-flex rounded-full border border-border bg-card p-1"
+                role="group"
+                aria-label={t("europe-pulse.view.label")}
+              >
+                {(["", "europe"] as const).map((v) => {
+                  const active = (v === "europe") === europe;
+                  return (
                     <button
-                      key={v}
+                      key={v || "ch"}
                       type="button"
-                      aria-pressed={when === v}
-                      onClick={() => setFilter("when", v === "upcoming" ? "" : v)}
+                      aria-pressed={active}
+                      onClick={() => setView(v)}
                       className={
-                        "h-10 rounded-full px-4 text-sm font-semibold transition sm:h-8 " +
-                        (when === v
+                        "h-11 rounded-full px-5 text-sm font-semibold transition " +
+                        (active
                           ? "bg-primary text-primary-foreground"
                           : "text-muted-foreground hover:text-foreground")
                       }
                     >
-                      {t(`events.filters.${v}`)}
+                      {t(v ? "europe-pulse.view.europe" : "europe-pulse.view.switzerland")}
                     </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Mobile: the five facets live in a bottom sheet so the list stays
-                  visible; desktop keeps the inline grid. */}
-              <div className="lg:hidden">
-                <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
-                  <SheetTrigger asChild>
-                    <Button variant="outline" size="pill">
-                      <SlidersHorizontal aria-hidden />
-                      {t("events.filters.mobileTrigger")}
-                      {activeFilterCount > 0 ? <Badge>{activeFilterCount}</Badge> : null}
-                    </Button>
-                  </SheetTrigger>
-
-                  <SheetContent side="bottom" className="max-h-dvh overflow-y-auto">
-                    <SheetHeader>
-                      <SheetTitle>{t("events.filters.mobileTitle")}</SheetTitle>
-                    </SheetHeader>
-                    <div className="grid gap-4 py-4 sm:grid-cols-2">{facetFields}</div>
-                    <SheetFooter className="flex-row gap-3">
-                      {hasFacetFilters ? (
-                        <Button variant="outline" size="pill" onClick={resetFilters}>
-                          {t("events.filters.reset")}
-                        </Button>
-                      ) : null}
-                      <Button size="pill" onClick={() => setFiltersOpen(false)}>
-                        {t("events.filters.apply")}
-                      </Button>
-                    </SheetFooter>
-                  </SheetContent>
-                </Sheet>
-              </div>
-
-              <div className="hidden flex-1 gap-3 lg:grid lg:grid-cols-5">{facetFields}</div>
-            </div>
-            {hasFacetFilters ? (
-              <div className="mt-4 flex flex-wrap items-center gap-4">
-                <button
-                  type="button"
-                  onClick={resetFilters}
-                  className="min-h-11 text-sm font-semibold text-primary hover:underline"
-                >
-                  {t("events.filters.reset")}
-                </button>
-              </div>
-            ) : null}
-          </div>
-        </section>
-
-        {showFeaturedCard && featured ? (
-          <section className="bg-background pb-12">
-            <div className="mx-auto max-w-7xl px-8">
-              <p className="eyebrow">{t("events.featured.eyebrow")}</p>
-              <LocaleLink
-                to={`/events/${featured.slug}`}
-                className={
-                  "group mt-6 grid overflow-hidden rounded-2xl border border-border/70 bg-card transition hover:-translate-y-0.5 md:grid-cols-2 " +
-                  CARD_SHADOW
-                }
-              >
-                <div
-                  className={
-                    "relative grid aspect-[4/3] w-full place-items-center overflow-hidden md:aspect-auto " +
-                    visualFor(featured.slug ?? "").bg +
-                    " " +
-                    visualFor(featured.slug ?? "").fg
-                  }
-                >
-                  {featured.image_url ? (
-                    <img
-                      src={featured.image_url}
-                      alt=""
-                      className="absolute inset-0 h-full w-full object-cover"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <Mark name={visualFor(featured.slug ?? "").mark} className="h-1/2 w-1/2" />
-                  )}
-                </div>
-                <div className="flex flex-col justify-center p-10">
-                  <p className="btn-mono !text-muted-foreground">{dateLine(featured)}</p>
-                  {categoryLabel(featured.category_slug) ? (
-                    <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-primary">
-                      {categoryLabel(featured.category_slug)}
-                    </p>
-                  ) : null}
-                  <h2 className="mt-3 text-2xl font-bold leading-tight tracking-tight md:text-3xl">
-                    {featured.title}
-                  </h2>
-                  {featured.summary ? (
-                    <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                      {featured.summary}
-                    </p>
-                  ) : null}
-                  <div className="mt-6 flex flex-wrap items-center gap-2">
-                    {tagsFor(featured).map((tag) => (
-                      <span
-                        key={tag}
-                        className="inline-flex items-center rounded-full border border-border/70 bg-chip px-2.5 py-1 text-xs font-semibold text-chip-foreground"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                    {now !== null && isLiveEvent(featured.starts_at, featured.ends_at, now) ? (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
-                        <span className="h-1.5 w-1.5 rounded-full bg-warn-foreground" />
-                        {t("events.tag.live")}
-                      </span>
-                    ) : null}
-                    {featured.is_internal ? (
-                      <span className="inline-flex items-center rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
-                        {t("events.tag.membersOnly")}
-                      </span>
-                    ) : null}
-                    {featured.is_full ? (
-                      <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
-                        {t("events.tag.full")}
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              </LocaleLink>
-            </div>
-          </section>
-        ) : null}
-
-        <section className="bg-card py-24">
-          <div className="mx-auto max-w-7xl px-8">
-            <p className="eyebrow">
-              {when === "past" ? t("events.past.eyebrow") : t("events.upcoming.eyebrow")}
-            </p>
-            <h2 className="mt-3 max-w-2xl display-lg">
-              {when === "past" ? t("events.past.title") : t("events.upcoming.title")}
-            </h2>
-            {results.length === 0 ? (
-              <p className="mt-8 text-base text-muted-foreground">
-                {hasFacetFilters
-                  ? t("events.filters.noMatches")
-                  : when === "past"
-                    ? t("events.past.empty")
-                    : t("events.upcoming.empty")}
-              </p>
-            ) : (
-              <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {results.map((e) => {
-                  const v = visualFor(e.slug ?? "");
-                  return (
-                    <LocaleLink
-                      key={e.id}
-                      to={`/events/${e.slug}`}
-                      className={
-                        "group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-0.5 " +
-                        CARD_SHADOW
-                      }
-                    >
-                      <div
-                        className={
-                          "relative h-44 w-full shrink-0 overflow-hidden grid place-items-center " +
-                          v.bg +
-                          " " +
-                          v.fg
-                        }
-                      >
-                        {e.image_url ? (
-                          <img
-                            src={e.image_url}
-                            alt=""
-                            className="absolute inset-0 h-full w-full object-cover"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <Mark name={v.mark} className="h-3/5 w-3/5" />
-                        )}
-                      </div>
-                      <div className="flex flex-1 flex-col p-6">
-                        <p className="btn-mono !text-muted-foreground">{dateLine(e)}</p>
-                        {categoryLabel(e.category_slug) ? (
-                          <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-primary">
-                            {categoryLabel(e.category_slug)}
-                          </p>
-                        ) : null}
-                        <h3 className="mt-3 text-lg font-semibold leading-snug tracking-tight">
-                          {e.title}
-                        </h3>
-                        <div className="mt-5 flex flex-wrap items-center gap-2">
-                          {tagsFor(e).map((tag) => (
-                            <span
-                              key={tag}
-                              className="inline-flex items-center rounded-full border border-border/70 bg-chip px-2.5 py-1 text-xs font-semibold text-chip-foreground"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                          {now !== null && isLiveEvent(e.starts_at, e.ends_at, now) ? (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
-                              <span className="h-1.5 w-1.5 rounded-full bg-warn-foreground" />
-                              {t("events.tag.live")}
-                            </span>
-                          ) : null}
-                          {e.is_internal ? (
-                            <span className="inline-flex items-center rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
-                              {t("events.tag.membersOnly")}
-                            </span>
-                          ) : null}
-                          {e.is_full ? (
-                            <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
-                              {t("events.tag.full")}
-                            </span>
-                          ) : null}
-                        </div>
-                      </div>
-                    </LocaleLink>
                   );
                 })}
               </div>
-            )}
+            </div>
           </div>
-        </section>
+        ) : null}
+        {europe ? (
+          <EuropePulseFeed />
+        ) : (
+          <>
+            <section className="bg-background py-10">
+              <div className="mx-auto max-w-7xl px-8">
+                <div className="flex flex-wrap items-end gap-4">
+                  <div>
+                    <span className="section-label mb-1.5 block">{t("events.filters.when")}</span>
+                    <div
+                      className="inline-flex rounded-full border border-border bg-card p-1"
+                      role="group"
+                      aria-label={t("events.filters.when")}
+                    >
+                      {(["upcoming", "past"] as const).map((v) => (
+                        <button
+                          key={v}
+                          type="button"
+                          aria-pressed={when === v}
+                          onClick={() => setFilter("when", v === "upcoming" ? "" : v)}
+                          className={
+                            "h-10 rounded-full px-4 text-sm font-semibold transition sm:h-8 " +
+                            (when === v
+                              ? "bg-primary text-primary-foreground"
+                              : "text-muted-foreground hover:text-foreground")
+                          }
+                        >
+                          {t(`events.filters.${v}`)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Mobile: the five facets live in a bottom sheet so the list stays
+                  visible; desktop keeps the inline grid. */}
+                  <div className="lg:hidden">
+                    <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
+                      <SheetTrigger asChild>
+                        <Button variant="outline" size="pill">
+                          <SlidersHorizontal aria-hidden />
+                          {t("events.filters.mobileTrigger")}
+                          {activeFilterCount > 0 ? <Badge>{activeFilterCount}</Badge> : null}
+                        </Button>
+                      </SheetTrigger>
+
+                      <SheetContent side="bottom" className="max-h-dvh overflow-y-auto">
+                        <SheetHeader>
+                          <SheetTitle>{t("events.filters.mobileTitle")}</SheetTitle>
+                        </SheetHeader>
+                        <div className="grid gap-4 py-4 sm:grid-cols-2">{facetFields}</div>
+                        <SheetFooter className="flex-row gap-3">
+                          {hasFacetFilters ? (
+                            <Button variant="outline" size="pill" onClick={resetFilters}>
+                              {t("events.filters.reset")}
+                            </Button>
+                          ) : null}
+                          <Button size="pill" onClick={() => setFiltersOpen(false)}>
+                            {t("events.filters.apply")}
+                          </Button>
+                        </SheetFooter>
+                      </SheetContent>
+                    </Sheet>
+                  </div>
+
+                  <div className="hidden flex-1 gap-3 lg:grid lg:grid-cols-5">{facetFields}</div>
+                </div>
+                {hasFacetFilters ? (
+                  <div className="mt-4 flex flex-wrap items-center gap-4">
+                    <button
+                      type="button"
+                      onClick={resetFilters}
+                      className="min-h-11 text-sm font-semibold text-primary hover:underline"
+                    >
+                      {t("events.filters.reset")}
+                    </button>
+                  </div>
+                ) : null}
+              </div>
+            </section>
+
+            {showFeaturedCard && featured ? (
+              <section className="bg-background pb-12">
+                <div className="mx-auto max-w-7xl px-8">
+                  <p className="eyebrow">{t("events.featured.eyebrow")}</p>
+                  <LocaleLink
+                    to={`/events/${featured.slug}`}
+                    className={
+                      "group mt-6 grid overflow-hidden rounded-2xl border border-border/70 bg-card transition hover:-translate-y-0.5 md:grid-cols-2 " +
+                      CARD_SHADOW
+                    }
+                  >
+                    <div
+                      className={
+                        "relative grid aspect-[4/3] w-full place-items-center overflow-hidden md:aspect-auto " +
+                        visualFor(featured.slug ?? "").bg +
+                        " " +
+                        visualFor(featured.slug ?? "").fg
+                      }
+                    >
+                      {featured.image_url ? (
+                        <img
+                          src={featured.image_url}
+                          alt=""
+                          className="absolute inset-0 h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <Mark name={visualFor(featured.slug ?? "").mark} className="h-1/2 w-1/2" />
+                      )}
+                    </div>
+                    <div className="flex flex-col justify-center p-10">
+                      <p className="btn-mono !text-muted-foreground">{dateLine(featured)}</p>
+                      {categoryLabel(featured.category_slug) ? (
+                        <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-primary">
+                          {categoryLabel(featured.category_slug)}
+                        </p>
+                      ) : null}
+                      <h2 className="mt-3 text-2xl font-bold leading-tight tracking-tight md:text-3xl">
+                        {featured.title}
+                      </h2>
+                      {featured.summary ? (
+                        <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                          {featured.summary}
+                        </p>
+                      ) : null}
+                      <div className="mt-6 flex flex-wrap items-center gap-2">
+                        {tagsFor(featured).map((tag) => (
+                          <span
+                            key={tag}
+                            className="inline-flex items-center rounded-full border border-border/70 bg-chip px-2.5 py-1 text-xs font-semibold text-chip-foreground"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                        {now !== null && isLiveEvent(featured.starts_at, featured.ends_at, now) ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
+                            <span className="h-1.5 w-1.5 rounded-full bg-warn-foreground" />
+                            {t("events.tag.live")}
+                          </span>
+                        ) : null}
+                        {featured.is_internal ? (
+                          <span className="inline-flex items-center rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
+                            {t("events.tag.membersOnly")}
+                          </span>
+                        ) : null}
+                        {featured.is_full ? (
+                          <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
+                            {t("events.tag.full")}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                  </LocaleLink>
+                </div>
+              </section>
+            ) : null}
+
+            <section className="bg-card py-24">
+              <div className="mx-auto max-w-7xl px-8">
+                <p className="eyebrow">
+                  {when === "past" ? t("events.past.eyebrow") : t("events.upcoming.eyebrow")}
+                </p>
+                <h2 className="mt-3 max-w-2xl display-lg">
+                  {when === "past" ? t("events.past.title") : t("events.upcoming.title")}
+                </h2>
+                {results.length === 0 ? (
+                  <p className="mt-8 text-base text-muted-foreground">
+                    {hasFacetFilters
+                      ? t("events.filters.noMatches")
+                      : when === "past"
+                        ? t("events.past.empty")
+                        : t("events.upcoming.empty")}
+                  </p>
+                ) : (
+                  <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    {results.map((e) => {
+                      const v = visualFor(e.slug ?? "");
+                      return (
+                        <LocaleLink
+                          key={e.id}
+                          to={`/events/${e.slug}`}
+                          className={
+                            "group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-0.5 " +
+                            CARD_SHADOW
+                          }
+                        >
+                          <div
+                            className={
+                              "relative h-44 w-full shrink-0 overflow-hidden grid place-items-center " +
+                              v.bg +
+                              " " +
+                              v.fg
+                            }
+                          >
+                            {e.image_url ? (
+                              <img
+                                src={e.image_url}
+                                alt=""
+                                className="absolute inset-0 h-full w-full object-cover"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <Mark name={v.mark} className="h-3/5 w-3/5" />
+                            )}
+                          </div>
+                          <div className="flex flex-1 flex-col p-6">
+                            <p className="btn-mono !text-muted-foreground">{dateLine(e)}</p>
+                            {categoryLabel(e.category_slug) ? (
+                              <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-primary">
+                                {categoryLabel(e.category_slug)}
+                              </p>
+                            ) : null}
+                            <h3 className="mt-3 text-lg font-semibold leading-snug tracking-tight">
+                              {e.title}
+                            </h3>
+                            <div className="mt-5 flex flex-wrap items-center gap-2">
+                              {tagsFor(e).map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="inline-flex items-center rounded-full border border-border/70 bg-chip px-2.5 py-1 text-xs font-semibold text-chip-foreground"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                              {now !== null && isLiveEvent(e.starts_at, e.ends_at, now) ? (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
+                                  <span className="h-1.5 w-1.5 rounded-full bg-warn-foreground" />
+                                  {t("events.tag.live")}
+                                </span>
+                              ) : null}
+                              {e.is_internal ? (
+                                <span className="inline-flex items-center rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
+                                  {t("events.tag.membersOnly")}
+                                </span>
+                              ) : null}
+                              {e.is_full ? (
+                                <span className="inline-flex items-center rounded-full bg-warn-soft px-2.5 py-1 text-xs font-semibold text-warn-foreground">
+                                  {t("events.tag.full")}
+                                </span>
+                              ) : null}
+                            </div>
+                          </div>
+                        </LocaleLink>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </section>
+          </>
+        )}
 
         <section className="bg-hero text-hero-foreground">
           <div className="mx-auto max-w-7xl px-8 py-20 text-center">

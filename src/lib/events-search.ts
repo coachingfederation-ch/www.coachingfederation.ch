@@ -17,6 +17,9 @@ export const eventsSearchSchema = z.object({
   format: z.string().optional().catch(undefined),
   // "members" | "open" — who the event is for, independent of its category.
   audience: z.string().optional().catch(undefined),
+  // "europe" switches to the Europe Pulse view; `week` picks one of its editions.
+  view: z.string().optional().catch(undefined),
+  week: z.string().optional().catch(undefined),
 });
 
 export type EventsSearch = z.infer<typeof eventsSearchSchema>;
