@@ -147,6 +147,46 @@ const nav = [
   allowedRoles: readonly AppRole[];
 }>;
 
+/** Sidebar sections; items keep the order of `nav` within their group. */
+const GROUPS = [
+  { key: "nav.groupOverview", routes: ["/manage"] },
+  {
+    key: "nav.groupContent",
+    routes: [
+      "/articles",
+      "/manage/newsletters",
+      "/articles/categories",
+      "/manage/editorial-signals",
+      "/manage/guides",
+    ],
+  },
+  { key: "nav.groupEvents", routes: ["/manage/events", "/manage/forms", "/manage/guest-passes"] },
+  {
+    key: "nav.groupMembers",
+    routes: [
+      "/members",
+      "/manage/member-engagement",
+      "/manage/votes",
+      "/operational-structure",
+      "/manage/governance",
+    ],
+  },
+  {
+    key: "nav.groupWebsite",
+    routes: [
+      "/coach-finder",
+      "/manage/europe-pulse",
+      "/manage/ad-requests",
+      "/manage/ad-rate-cards",
+    ],
+  },
+  {
+    key: "nav.groupAssistant",
+    routes: ["/manage/chat-insights", "/manage/knowledge", "/manage/live-chat"],
+  },
+  { key: "nav.groupSystem", routes: ["/vocabularies", "/integration", "/roles"] },
+] as const;
+
 function Logo({ title }: { title: string }) {
   return (
     <div className="flex items-center gap-3 px-5 py-5">
@@ -186,6 +226,11 @@ export function Shell({
     (item) => roles.isAdmin || item.allowedRoles.some((r) => roles.roles.includes(r)),
   );
 
+  const groups = GROUPS.map((g) => ({
+    key: g.key,
+    items: items.filter((i) => (g.routes as readonly string[]).includes(i.to)),
+  })).filter((g) => g.items.length > 0);
+
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
   }, []);
@@ -207,26 +252,33 @@ export function Shell({
       >
         <div>
           <Logo title={t("nav.workspace")} />
-          <nav className="mt-2 flex flex-col gap-1 px-3">
-            {items.map(({ to, key, icon: Icon }) => {
-              const active =
-                to === "/articles" || to === "/manage" ? pathname === to : pathname.startsWith(to);
-              return (
-                <Link
-                  key={to}
-                  to={to}
-                  className={
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors " +
-                    (active
-                      ? "bg-secondary font-semibold text-primary"
-                      : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground")
-                  }
-                >
-                  <Icon className="h-4 w-4" />
-                  <span>{t(key)}</span>
-                </Link>
-              );
-            })}
+          <nav className="mt-2 flex flex-col gap-4 px-3 pb-4">
+            {groups.map((group) => (
+              <div key={group.key} className="flex flex-col gap-1">
+                <div className="eyebrow px-3 text-muted-foreground">{t(group.key)}</div>
+                {group.items.map(({ to, key, icon: Icon }) => {
+                  const active =
+                    to === "/articles" || to === "/manage"
+                      ? pathname === to
+                      : pathname.startsWith(to);
+                  return (
+                    <Link
+                      key={to}
+                      to={to}
+                      className={
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors " +
+                        (active
+                          ? "bg-secondary font-semibold text-primary"
+                          : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground")
+                      }
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span>{t(key)}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            ))}
           </nav>
         </div>
         <div>
@@ -297,13 +349,18 @@ export function Shell({
                   <SheetTitle>{t("nav.workspace")}</SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col gap-2 overflow-y-auto px-4">
-                  {items.map(({ to, key, icon: Icon }) => (
-                    <Button key={to} asChild variant="ghost">
-                      <Link to={to} onClick={() => setMobileOpen(false)}>
-                        <Icon aria-hidden />
-                        {t(key)}
-                      </Link>
-                    </Button>
+                  {groups.map((group) => (
+                    <div key={group.key} className="flex flex-col gap-1">
+                      <div className="eyebrow px-3 text-muted-foreground">{t(group.key)}</div>
+                      {group.items.map(({ to, key, icon: Icon }) => (
+                        <Button key={to} asChild variant="ghost">
+                          <Link to={to} onClick={() => setMobileOpen(false)}>
+                            <Icon aria-hidden />
+                            {t(key)}
+                          </Link>
+                        </Button>
+                      ))}
+                    </div>
                   ))}
                 </nav>
               </SheetContent>
