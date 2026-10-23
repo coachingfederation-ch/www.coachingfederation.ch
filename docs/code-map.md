@@ -79,6 +79,8 @@ before adding a new file.
 | `europe-pulse.server.ts`    | The weekly scan engine: Firecrawl pacing and retries, AI extraction, curation and multilingual writing, failure classification. |
 | `europe-pulse.functions.ts` | Public feed read, the admin "scan now" trigger and the failed-chapter retry. See `docs/europe-pulse.md`.                        |
 
+- `ballot-question.ts` / `.functions.ts`: question validation, frozen-language comparison, and manager-only proposal-based AI suggestion for member votes. See `docs/member-votes.md`.
+
 ### Shared infrastructure
 
 | Module                        | Responsibility                                                                                                                         |

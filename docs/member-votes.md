@@ -29,9 +29,13 @@ Turnout denominator: `votes.eligible_count`, frozen on the first ballot (active 
 
 ## Editor and translation
 
+The Ballot tab starts with an editable ballot question. “Suggest from proposal” extracts one neutral English question from buffered title, summary, description, and choices through Lovable AI. It requires proposal text and never saves or publishes; replacing an existing question requires confirmation. Staff refine the suggestion, translate, and save. The question appears above member choices and in confirmation, including saved staff previews. Empty legacy questions retain the previous ballot display.
+
+Question fields (`ballot_question`, `_de`, `_fr`, `_it`) are nullable, with a 600-character limit. The same vote-manager guard protects suggestions, limited to 20 per hour. Server validation and the database trigger in `0018_vote_ballot_question.sql` freeze every language version once published voting starts, including direct writes and concurrent opening. Existing RLS and ballot secrecy remain unchanged.
+
 The editor has Proposal, Ballot, and Publishing tabs and a shared DE / FR / IT / EN language selector. Proposal uses the existing `MarkdownEditor`; the member page and staff preview render the same safe Markdown. Downloads stay with Proposal, options and rationale settings with Ballot, and schedule, status, and email controls with Publishing. Compact navigation applies only to this editor on narrow screens.
 
-Translate to DE, FR, IT translates the current English draft, including title, summary, description, and option labels, in one authenticated, manager-only action (20 requests per hour). Translation never saves or publishes. Existing translations require overwrite confirmation; failures preserve all buffered edits. Review machine translations, then use Save. English fallback remains available for missing labels.
+Translate to DE, FR, IT translates the current English draft, including title, summary, description, ballot question, and option labels, in one authenticated, manager-only action (20 requests per hour). Translation never saves or publishes. Existing translations require overwrite confirmation; failures preserve all buffered edits. Review machine translations, then use Save. English fallback remains available for missing labels.
 
 `VoteOption` keeps `key` and English `label`, plus optional `label_de`, `label_fr`, and `label_it` within the existing JSON column. No schema or RLS changes are needed. Validation checks that every translated option key matches the source; labels are merged by key, not position. Existing post-opening option freezing also covers translated wording. Member ballots, confirmation, results, rationale headings, and staff CSV labels use the selected language; AI rationale summaries remain English.
 

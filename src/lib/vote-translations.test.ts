@@ -3,6 +3,7 @@ import { parseVoteTranslations, translatedOptionSchema } from "./vote-translatio
 import { voteOptionLabel } from "./votes";
 
 const translated = () => ({
+  ballot_question: "Approve the project?",
   title: "Proposal",
   summary: "",
   description: "**Proposal**",
@@ -14,6 +15,13 @@ const translated = () => ({
 const result = () => ({ de: translated(), fr: translated(), it: translated() });
 
 describe("vote translations", () => {
+  it("preserves the ballot question in each translated draft", () => {
+    const value = result();
+    value.de.ballot_question = "Projekt genehmigen?";
+    expect(parseVoteTranslations(value, ["yes", "no"]).de.ballot_question).toBe(
+      "Projekt genehmigen?",
+    );
+  });
   it("preserves all three localized labels during save validation", () => {
     expect(
       translatedOptionSchema.parse({
