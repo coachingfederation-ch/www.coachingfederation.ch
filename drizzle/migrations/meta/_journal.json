@@ -120,6 +120,13 @@
       "when": 1792743503207,
       "tag": "0016_member_votes_flags_storage_cron",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1792745079205,
+      "tag": "0017_fix_vote_participation_ownership",
+      "breakpoints": true
     }
   ]
 }
