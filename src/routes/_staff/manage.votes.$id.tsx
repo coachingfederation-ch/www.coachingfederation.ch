@@ -31,7 +31,13 @@ import {
   removeVoteAttachment,
   saveVote,
 } from "@/lib/votes.functions";
-import { DEFAULT_OPTIONS, optionKey, votePhase, type VoteOption, type VoteStatus } from "@/lib/votes";
+import {
+  DEFAULT_OPTIONS,
+  optionKey,
+  votePhase,
+  type VoteOption,
+  type VoteStatus,
+} from "@/lib/votes";
 
 export const Route = createFileRoute("/_staff/manage/votes/$id")({
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, VOTE_ROLES),
@@ -216,7 +222,13 @@ function VoteEditorPage() {
     const label = `Option ${form.options.length + 1}`;
     set("options", [
       ...form.options,
-      { key: optionKey(label, form.options.map((o) => o.key)), label },
+      {
+        key: optionKey(
+          label,
+          form.options.map((o) => o.key),
+        ),
+        label,
+      },
     ]);
   };
 
@@ -327,9 +339,7 @@ function VoteEditorPage() {
                 {(["draft", "published", "archived"] as const).map((st) => (
                   <Label key={st} className="flex items-center gap-2 font-normal">
                     <RadioGroupItem value={st} />
-                    {t(
-                      `votes.admin.status${st.charAt(0).toUpperCase()}${st.slice(1)}`,
-                    )}
+                    {t(`votes.admin.status${st.charAt(0).toUpperCase()}${st.slice(1)}`)}
                   </Label>
                 ))}
               </RadioGroup>

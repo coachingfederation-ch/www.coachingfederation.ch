@@ -9,7 +9,10 @@ export const Route = createFileRoute("/_staff/manage/votes/preview/$slug")({
       { title: "Vote preview — The Switzerland Chapter of ICF" },
       { name: "description", content: "Preview the saved member proposal without casting a vote." },
       { property: "og:title", content: "Vote preview — The Switzerland Chapter of ICF" },
-      { property: "og:description", content: "Preview the saved member proposal without casting a vote." },
+      {
+        property: "og:description",
+        content: "Preview the saved member proposal without casting a vote.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

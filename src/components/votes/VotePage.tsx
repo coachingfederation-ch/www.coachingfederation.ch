@@ -27,13 +27,7 @@ import { MemberShell } from "@/components/member/MemberShell";
 import { VoteResults } from "@/components/votes/VoteResults";
 import { useCms } from "@/i18n/cms";
 import { castVote, getMemberVote } from "@/lib/votes.functions";
-import {
-  RATIONALE_MAX,
-  castErrorKey,
-  localized,
-  votePhase,
-  type VoteOption,
-} from "@/lib/votes";
+import { RATIONALE_MAX, castErrorKey, localized, votePhase, type VoteOption } from "@/lib/votes";
 
 export function VotePage({ slug, preview = false }: { slug: string; preview?: boolean }) {
   const { t, locale } = useCms();
@@ -218,7 +212,11 @@ export function VotePage({ slug, preview = false }: { slug: string; preview?: bo
                   {error}
                 </p>
               ) : null}
-              <Button size="pill" disabled={preview || !choice || busy} onClick={() => setConfirming(true)}>
+              <Button
+                size="pill"
+                disabled={preview || !choice || busy}
+                onClick={() => setConfirming(true)}
+              >
                 {t("votes.page.submit")}
               </Button>
             </div>

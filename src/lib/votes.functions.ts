@@ -154,7 +154,9 @@ const saveSchema = z.object({
   opens_at: z.string().datetime(),
   closes_at: z.string().datetime(),
   options: z
-    .array(z.object({ key: z.string().trim().min(1).max(40), label: z.string().trim().min(1).max(120) }))
+    .array(
+      z.object({ key: z.string().trim().min(1).max(40), label: z.string().trim().min(1).max(120) }),
+    )
     .min(2)
     .max(10),
   results_mode: z.enum(["after_vote", "after_close"]),
@@ -378,10 +380,7 @@ export const getMemberVote = createServerFn({ method: "POST" })
   )
   .handler(async ({ context, data }) => {
     if (data.preview) await assertMembership(context);
-    let query = context.supabase
-      .from("votes")
-      .select(VOTE_COLUMNS)
-      .eq("slug", data.slug);
+    let query = context.supabase.from("votes").select(VOTE_COLUMNS).eq("slug", data.slug);
     if (!data.preview) query = query.in("status", ["published", "archived"]);
     const { data: row } = await query.maybeSingle();
     if (!row) return null;
