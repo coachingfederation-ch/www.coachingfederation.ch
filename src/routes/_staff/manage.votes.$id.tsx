@@ -316,7 +316,7 @@ function VoteEditorPage() {
           modes={["write", "preview"]}
           rows={14}
           value={form[`description${suffix}` as keyof Form] as string}
-          onChange={(e) => set(`description${suffix}` as keyof Form, e.target.value as never)}
+          onChange={(value) => set(`description${suffix}` as keyof Form, value)}
         />
       </div>
     </div>
