@@ -13,6 +13,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertMembership } from "./authz";
 import { slugify, uniqueSlug } from "./articles";
+import { translatedOptionSchema } from "./vote-translations";
 import {
   DEFAULT_OPTIONS,
   RATIONALE_MAX,
@@ -155,7 +156,7 @@ const saveSchema = z.object({
   closes_at: z.string().datetime(),
   options: z
     .array(
-      z.object({ key: z.string().trim().min(1).max(40), label: z.string().trim().min(1).max(120) }),
+      translatedOptionSchema,
     )
     .min(2)
     .max(10),
