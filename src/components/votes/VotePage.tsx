@@ -27,6 +27,7 @@ import { Markdown } from "@/components/markdown";
 import { MemberShell } from "@/components/member/MemberShell";
 import { VoteResults } from "@/components/votes/VoteResults";
 import { useCms } from "@/i18n/cms";
+import { featureFlagsQueryOptions } from "@/lib/feature-flags";
 import { castVote, getMemberVote } from "@/lib/votes.functions";
 import {
   RATIONALE_MAX,
@@ -61,8 +62,10 @@ export function VotePage({ slug, preview = false }: { slug: string; preview?: bo
       timeZone: "Europe/Zurich",
     });
 
+  const votesOn = useQuery(featureFlagsQueryOptions).data?.votes !== false;
+
   if (isLoading) return <MemberShell>{null}</MemberShell>;
-  if (!data) {
+  if (!data || (!preview && !votesOn)) {
     return (
       <MemberShell>
         <div className="mx-auto max-w-3xl px-6 py-16">
