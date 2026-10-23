@@ -27,11 +27,11 @@ Once a published vote has opened, `saveVote` refuses option or start-date change
 
 Turnout denominator: `votes.eligible_count`, frozen on the first ballot (active + grace members with a linked account).
 
-## Files
-
 ## Staff preview
 
 The editor's Preview link opens `/manage/votes/preview/:slug` in a new tab. It displays the saved proposal, translations, downloads, and ballot using the same `VotePage` renderer as the Member Area. Save edits before previewing. Draft access requires the same server-side vote-manager check as the editor, even for a direct preview request. Preview voting is disabled and the submit handler is guarded; no tally or rationales are returned in preview mode. Normal member access and voting rules are unchanged.
+
+Verified with a signed-in vote manager: the link opened a separate tab, saved draft content appeared, and selecting an option left the vote-submit button disabled. Existing voting and database access-contract tests passed. Attachment downloads and cross-role preview denial have not been browser-tested.
 
 ## Files
 
