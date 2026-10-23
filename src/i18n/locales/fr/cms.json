@@ -3553,6 +3553,8 @@
       "archived": "Archivé"
     },
     "admin": {
+      "preview": "Aperçu",
+      "previewNotice": "Aperçu de la proposition enregistrée. Le vote est désactivé.",
       "title": "Votes des membres",
       "intro": "Faites voter les membres sur les décisions et projets importants. Le vote est secret.",
       "new": "Nouveau vote",

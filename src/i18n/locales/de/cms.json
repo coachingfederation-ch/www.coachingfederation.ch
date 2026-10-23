@@ -3553,6 +3553,8 @@
       "archived": "Archiviert"
     },
     "admin": {
+      "preview": "Vorschau",
+      "previewNotice": "Vorschau des gespeicherten Vorschlags. Die Stimmabgabe ist deaktiviert.",
       "title": "Mitgliederabstimmungen",
       "intro": "Lassen Sie Mitglieder über grössere Entscheidungen und Projekte abstimmen. Die Stimmabgabe ist geheim.",
       "new": "Neue Abstimmung",

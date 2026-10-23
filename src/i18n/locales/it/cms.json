@@ -3553,6 +3553,8 @@
       "archived": "Archiviata"
     },
     "admin": {
+      "preview": "Anteprima",
+      "previewNotice": "Anteprima della proposta salvata. Il voto è disabilitato.",
       "title": "Votazioni dei membri",
       "intro": "Fai votare i membri su decisioni e progetti importanti. Il voto è segreto.",
       "new": "Nuova votazione",
