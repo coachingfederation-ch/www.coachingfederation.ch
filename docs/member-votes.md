@@ -17,6 +17,8 @@ Staff (Membership & Engagement, Administrators, Super Admins) publish a proposal
 
 Both rows are written only by `cast_vote()` (security definer), which checks: linked member in `active`/`grace`, vote `published`, inside the window, valid option, reason at most 500 characters, and not already voted (primary key). Only the day is stored, so ballots cannot be matched to participations by time.
 
+Participation ownership is checked through `private.owns_vote_participation(member_id)`, a caller-bound security-definer boolean. The policy must not directly query `members.auth_user_id`: that private column is intentionally unavailable to Data API callers. Managers retain read access; members see only participation linked to their own account. No member-column grants are widened.
+
 Members read results only through `vote_tally()` and `vote_rationales()`, which return data when the caller is a vote manager, or the vote has closed, or the caller voted and `results_mode = 'after_vote'`.
 
 Once a published vote has opened, `saveVote` refuses option or start-date changes and only allows extending the end date. Only drafts can be deleted.
