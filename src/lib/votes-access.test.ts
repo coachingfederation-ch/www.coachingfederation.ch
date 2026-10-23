@@ -37,14 +37,16 @@ describe.skipIf(!db)("vote participation access", () => {
       where n.nspname = 'private' and p.proname = 'owns_vote_participation'
     `;
     expect(helper?.prosecdef).toBe(true);
-    expect(helper?.proconfig).toContain('search_path=pg_catalog');
-    expect(helper?.prosrc).toMatch(/m\.id\s*=\s*_member_id\s+AND\s+m\.auth_user_id\s*=\s*auth\.uid\(\)/i);
+    expect(helper?.proconfig).toContain("search_path=pg_catalog");
+    expect(helper?.prosrc).toMatch(
+      /m\.id\s*=\s*_member_id\s+AND\s+m\.auth_user_id\s*=\s*auth\.uid\(\)/i,
+    );
     const [policy] = await db`
       select qual from pg_policies where schemaname = 'public'
       and tablename = 'vote_participations' and policyname = 'Members read own participation'
     `;
-    expect(policy?.qual).toContain('private.owns_vote_participation(member_id)');
-    expect(policy?.qual).toContain('private.is_vote_manager(auth.uid())');
-    expect(policy?.qual).not.toContain('auth_user_id');
+    expect(policy?.qual).toContain("private.owns_vote_participation(member_id)");
+    expect(policy?.qual).toContain("private.is_vote_manager(auth.uid())");
+    expect(policy?.qual).not.toContain("auth_user_id");
   });
 });
