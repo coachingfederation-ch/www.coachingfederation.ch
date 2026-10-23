@@ -19,6 +19,8 @@ Both rows are written only by `cast_vote()` (security definer), which checks: li
 
 Participation ownership is checked through `private.owns_vote_participation(member_id)`, a caller-bound security-definer boolean. The policy must not directly query `members.auth_user_id`: that private column is intentionally unavailable to Data API callers. Managers retain read access; members see only participation linked to their own account. No member-column grants are widened.
 
+Regression checks: `src/lib/votes-access.test.ts` checks the deployed private-column grant, anonymous helper denial, caller-bound ownership predicate, and participation policy (requires `SUPABASE_DB_URL`). The sandbox SQL role cannot impersonate authenticated roles, so these are access-contract checks rather than cross-member behavioral tests. The original staff list error was reproduced in the authenticated browser; after migration `0017_fix_vote_participation_ownership.sql`, the list and existing vote editor loaded successfully. Cross-member browser isolation remains unverified.
+
 Members read results only through `vote_tally()` and `vote_rationales()`, which return data when the caller is a vote manager, or the vote has closed, or the caller voted and `results_mode = 'after_vote'`.
 
 Once a published vote has opened, `saveVote` refuses option or start-date changes and only allows extending the end date. Only drafts can be deleted.
