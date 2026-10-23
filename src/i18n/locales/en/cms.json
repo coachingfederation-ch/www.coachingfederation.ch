@@ -30,7 +30,14 @@
     "adRequests": "Advertising",
     "adRateCards": "Ad rate card",
     "forms": "Forms",
-    "votes": "Member votes"
+    "votes": "Member votes",
+    "groupOverview": "Overview",
+    "groupContent": "Content",
+    "groupEvents": "Events",
+    "groupMembers": "Members",
+    "groupWebsite": "Website",
+    "groupAssistant": "Assistant",
+    "groupSystem": "System"
   },
   "auth": {
     "signInSub": "Sign in to continue",

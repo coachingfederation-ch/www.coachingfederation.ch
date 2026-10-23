@@ -30,7 +30,14 @@
     "adRequests": "Pubblicità",
     "adRateCards": "Listino pubblicitario",
     "forms": "Moduli",
-    "votes": "Votazioni dei membri"
+    "votes": "Votazioni dei membri",
+    "groupOverview": "Panoramica",
+    "groupContent": "Contenuti",
+    "groupEvents": "Eventi",
+    "groupMembers": "Membri",
+    "groupWebsite": "Sito web",
+    "groupAssistant": "Assistente",
+    "groupSystem": "Sistema"
   },
   "auth": {
     "signInSub": "Accedi per continuare",

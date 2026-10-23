@@ -30,7 +30,14 @@
     "adRequests": "Werbung",
     "adRateCards": "Preisliste Werbung",
     "forms": "Formulare",
-    "votes": "Mitgliederabstimmungen"
+    "votes": "Mitgliederabstimmungen",
+    "groupOverview": "Übersicht",
+    "groupContent": "Inhalte",
+    "groupEvents": "Veranstaltungen",
+    "groupMembers": "Mitglieder",
+    "groupWebsite": "Website",
+    "groupAssistant": "Assistent",
+    "groupSystem": "System"
   },
   "auth": {
     "signInSub": "Anmelden, um fortzufahren",
