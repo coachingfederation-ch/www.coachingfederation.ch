@@ -10,6 +10,7 @@ import { FormQuestionFields } from "@/components/forms/FormQuestionFields";
 import { getPublicSurvey, submitSurveyResponse } from "@/lib/surveys.functions";
 import { surveyQuestions, type SurveyAvailability } from "@/lib/surveys";
 import { useLocale } from "@/i18n";
+import { supabase } from "@/integrations/supabase/client";
 
 const inputClass =
   "mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring";
@@ -18,6 +19,9 @@ type Lang = "en" | "de" | "fr" | "it";
 
 const COPY: Record<Lang, Record<string, string>> = {
   en: {
+    membersOnly: "This survey is for members of The Switzerland Chapter of ICF. Please sign in to answer.",
+    signIn: "Sign in",
+    alreadyMember: "You have already answered this survey. Thank you.",
     eyebrow: "Survey",
     thanks: "Thank you",
     thanksBody: "Your answers have been recorded.",
@@ -37,6 +41,9 @@ const COPY: Record<Lang, Record<string, string>> = {
       "We use your name and email only to follow up on this survey. See our privacy policy for details.",
   },
   de: {
+    membersOnly: "Diese Umfrage richtet sich an Mitglieder von The Switzerland Chapter of ICF. Bitte melden Sie sich an, um zu antworten.",
+    signIn: "Anmelden",
+    alreadyMember: "Sie haben diese Umfrage bereits beantwortet. Vielen Dank.",
     eyebrow: "Umfrage",
     thanks: "Vielen Dank",
     thanksBody: "Ihre Antworten wurden gespeichert.",
@@ -56,6 +63,9 @@ const COPY: Record<Lang, Record<string, string>> = {
       "Wir verwenden Ihren Namen und Ihre E-Mail nur für Rückfragen zu dieser Umfrage. Details in unserer Datenschutzerklärung.",
   },
   fr: {
+    membersOnly: "Ce sondage s'adresse aux membres de The Switzerland Chapter of ICF. Veuillez vous connecter pour répondre.",
+    signIn: "Se connecter",
+    alreadyMember: "Vous avez déjà répondu à ce sondage. Merci.",
     eyebrow: "Sondage",
     thanks: "Merci",
     thanksBody: "Vos réponses ont été enregistrées.",
@@ -75,6 +85,9 @@ const COPY: Record<Lang, Record<string, string>> = {
       "Nous utilisons votre nom et votre e-mail uniquement pour le suivi de ce sondage. Voir notre politique de confidentialité.",
   },
   it: {
+    membersOnly: "Questo sondaggio è riservato ai membri di The Switzerland Chapter of ICF. Acceda per rispondere.",
+    signIn: "Accedi",
+    alreadyMember: "Ha già risposto a questo sondaggio. Grazie.",
     eyebrow: "Sondaggio",
     thanks: "Grazie",
     thanksBody: "Le sue risposte sono state registrate.",
@@ -149,7 +162,13 @@ function SurveyRoute() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [state, setState] = useState<"idle" | "sending" | "done" | "already">("idle");
+  const [state, setState] = useState<"idle" | "sending" | "done" | "already" | "already_member">("idle");
+  const [signedIn, setSignedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!survey.membersOnly) return;
+    void supabase.auth.getSession().then(({ data }) => setSignedIn(Boolean(data.session)));
+  }, [survey.membersOnly]);
   const [blocked, setBlocked] = useState<SurveyAvailability | "unavailable" | null>(
     survey.availability === "open" ? null : survey.availability,
   );
@@ -180,6 +199,8 @@ function SurveyRoute() {
       }
       setState("idle");
       if (result.reason === "unavailable") setBlocked("unavailable");
+      else if (result.reason === "already") setState("already_member");
+      else if (result.reason === "members_only") setSignedIn(false);
       else setMessage(result.reason === "rate_limited" ? c.rate : c.invalid);
     } catch {
       setState("idle");
@@ -192,6 +213,8 @@ function SurveyRoute() {
   const notice =
     state === "already"
       ? c.already
+      : state === "already_member"
+        ? c.alreadyMember
       : blocked
         ? (c[blocked === "draft" ? "unavailable" : blocked] ?? c.unavailable)
         : null;
@@ -210,6 +233,13 @@ function SurveyRoute() {
             <p className="text-sm text-muted-foreground">
               {pick(survey.texts.thankYou) ?? c.thanksBody}
             </p>
+          </div>
+        ) : !notice && survey.membersOnly && signedIn === false ? (
+          <div className={panel}>
+            <p className="text-sm text-muted-foreground">{c.membersOnly}</p>
+            <Button asChild className="mt-4">
+              <a href={`/auth?next=${encodeURIComponent(`/survey/${survey.slug}`)}`}>{c.signIn}</a>
+            </Button>
           </div>
         ) : notice ? (
           <div className={panel}>

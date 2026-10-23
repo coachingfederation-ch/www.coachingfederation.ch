@@ -73,3 +73,7 @@ Staff create surveys in the **Surveys** tab of `/manage/forms` (blank or copied 
 - Results and CSV: `/manage/surveys/$id/results`.
 - "One answer per browser" is a localStorage flag, not a guarantee.
 - Not yet built: personal invite tokens, sending from the survey, reminders.
+
+## Members-only surveys
+
+A survey can be limited to signed-in members (active or grace). The submit function verifies the session server-side, records one participation per member in `survey_participations` (no link to the answer row, day-only date) and rejects a second answer. Signed-out visitors see a sign-in prompt.

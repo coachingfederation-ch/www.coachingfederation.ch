@@ -59,6 +59,7 @@ function SurveyEditorPage() {
             max_responses: row.max_responses,
             collect_contact: row.collect_contact,
             one_per_browser: row.one_per_browser,
+            members_only: row.members_only,
           },
           form: {
             ...emptyForm(row.name),

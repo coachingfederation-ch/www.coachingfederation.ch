@@ -25,7 +25,7 @@ export type SurveyRow = {
 };
 
 const SURVEY_COLUMNS =
-  "id, slug, name, status, opens_at, closes_at, max_responses, collect_contact, one_per_browser, intro, intro_de, intro_fr, intro_it, thank_you, thank_you_de, thank_you_fr, thank_you_it, questions";
+  "id, slug, name, status, opens_at, closes_at, max_responses, collect_contact, one_per_browser, members_only, intro, intro_de, intro_fr, intro_it, thank_you, thank_you_de, thank_you_fr, thank_you_it, questions";
 
 const nullableText = z.string().trim().max(1000).nullable().optional();
 
@@ -149,6 +149,7 @@ export const saveSurveyPublishing = createServerFn({ method: "POST" })
         max_responses: z.number().int().positive().max(100_000).nullable(),
         collect_contact: z.boolean(),
         one_per_browser: z.boolean(),
+        members_only: z.boolean(),
       })
       .parse(input),
   )
@@ -239,6 +240,7 @@ export const getPublicSurvey = createServerFn({ method: "POST" })
       availability,
       collectContact: row.collect_contact,
       onePerBrowser: row.one_per_browser,
+      membersOnly: row.members_only,
       texts: {
         intro: { en: row.intro, de: row.intro_de, fr: row.intro_fr, it: row.intro_it },
         thankYou: {
@@ -297,6 +299,29 @@ export const submitSurveyResponse = createServerFn({ method: "POST" })
         return { ok: false as const, reason: "invalid" as const };
       }
     }
+    // Members-only surveys: verify the signed-in account belongs to an active
+    // or grace member, and record participation in a separate table so the
+    // answer itself stays unlinked from the member.
+    let participantId: string | null = null;
+    if (row.members_only) {
+      const auth = getRequest().headers.get("authorization") ?? "";
+      const token = auth.toLowerCase().startsWith("bearer ") ? auth.slice(7) : "";
+      if (!token) return { ok: false as const, reason: "members_only" as const };
+      const { data: user } = await supabaseAdmin.auth.getUser(token);
+      if (!user.user) return { ok: false as const, reason: "members_only" as const };
+      const { data: member } = await supabaseAdmin
+        .from("members")
+        .select("id")
+        .eq("auth_user_id", user.user.id)
+        .in("activity_state", ["active", "grace"])
+        .maybeSingle();
+      if (!member) return { ok: false as const, reason: "members_only" as const };
+      const { error: pErr } = await supabaseAdmin
+        .from("survey_participations")
+        .insert({ survey_id: row.id, member_id: member.id as string });
+      if (pErr) return { ok: false as const, reason: "already" as const };
+      participantId = member.id as string;
+    }
     const { error } = await supabaseAdmin.from("survey_responses").insert({
       survey_id: row.id,
       answers: checked.answers,
@@ -304,6 +329,15 @@ export const submitSurveyResponse = createServerFn({ method: "POST" })
       contact_email: email,
       locale: data.locale,
     });
-    if (error) return { ok: false as const, reason: "unavailable" as const };
+    if (error) {
+      if (participantId) {
+        await supabaseAdmin
+          .from("survey_participations")
+          .delete()
+          .eq("survey_id", row.id)
+          .eq("member_id", participantId);
+      }
+      return { ok: false as const, reason: "unavailable" as const };
+    }
     return { ok: true as const };
   });

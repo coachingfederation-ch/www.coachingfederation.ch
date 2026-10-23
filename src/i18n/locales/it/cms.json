@@ -3453,6 +3453,8 @@
       "collectContactHint": "Disattivato di default, così le risposte restano anonime. Se attivo, chi risponde vede una breve nota sull'uso dei dati.",
       "onePerBrowser": "Una risposta per browser",
       "onePerBrowserHint": "Un controllo semplice che nasconde il modulo dopo una risposta. Non è una garanzia.",
+      "membersOnly": "Solo membri",
+      "membersOnlyHint": "Possono rispondere solo i membri connessi con un'adesione attiva. Ogni membro risponde una volta e le risposte restano anonime.",
       "savePublishing": "Salva pubblicazione",
       "saving": "Salvataggio…",
       "publishSaved": "Impostazioni di pubblicazione salvate",

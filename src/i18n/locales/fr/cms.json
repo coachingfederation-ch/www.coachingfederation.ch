@@ -3459,6 +3459,8 @@
       "collectContactHint": "Désactivé par défaut pour garder les réponses anonymes. Si activé, une courte note explique l'usage des données.",
       "onePerBrowser": "Une réponse par navigateur",
       "onePerBrowserHint": "Un contrôle simple qui masque le formulaire après une réponse. Ce n'est pas une garantie.",
+      "membersOnly": "Réservé aux membres",
+      "membersOnlyHint": "Seuls les membres connectés avec une adhésion active peuvent répondre. Chaque membre répond une fois et les réponses restent anonymes.",
       "savePublishing": "Enregistrer la publication",
       "saving": "Enregistrement…",
       "publishSaved": "Paramètres de publication enregistrés",

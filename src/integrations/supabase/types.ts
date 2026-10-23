@@ -6924,6 +6924,32 @@ export type Database = {
         }
         Relationships: []
       }
+      survey_participations: {
+        Row: {
+          member_id: string
+          participated_on: string
+          survey_id: string
+        }
+        Insert: {
+          member_id: string
+          participated_on?: string
+          survey_id: string
+        }
+        Update: {
+          member_id?: string
+          participated_on?: string
+          survey_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "survey_participations_survey_id_fkey"
+            columns: ["survey_id"]
+            isOneToOne: false
+            referencedRelation: "surveys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       survey_responses: {
         Row: {
           answers: Json
@@ -6974,6 +7000,7 @@ export type Database = {
           intro_fr: string | null
           intro_it: string | null
           max_responses: number | null
+          members_only: boolean
           name: string
           one_per_browser: boolean
           opens_at: string | null
@@ -6998,6 +7025,7 @@ export type Database = {
           intro_fr?: string | null
           intro_it?: string | null
           max_responses?: number | null
+          members_only?: boolean
           name: string
           one_per_browser?: boolean
           opens_at?: string | null
@@ -7022,6 +7050,7 @@ export type Database = {
           intro_fr?: string | null
           intro_it?: string | null
           max_responses?: number | null
+          members_only?: boolean
           name?: string
           one_per_browser?: boolean
           opens_at?: string | null

@@ -3453,6 +3453,8 @@
       "collectContactHint": "Off by default, so answers stay anonymous. When on, respondents see a short note on how we use their details.",
       "onePerBrowser": "One answer per browser",
       "onePerBrowserHint": "A soft check that hides the form after someone has answered. It is not a guarantee.",
+      "membersOnly": "Members only",
+      "membersOnlyHint": "Only signed-in members with an active membership can answer. Each member can answer once, and answers stay anonymous.",
       "savePublishing": "Save publishing settings",
       "saving": "Saving…",
       "publishSaved": "Publishing settings saved",
