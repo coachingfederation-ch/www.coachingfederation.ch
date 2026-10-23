@@ -33,6 +33,7 @@ export type PublishSettings = {
   max_responses: number | null;
   collect_contact: boolean;
   one_per_browser: boolean;
+  members_only: boolean;
 };
 
 /** ISO → value for <input type="datetime-local"> in the browser's time zone. */
@@ -179,6 +180,19 @@ export function SurveyPublishPanel({
               <Label htmlFor="sv-contact">{t("forms.surveys.collectContact")}</Label>
               <p className="text-xs text-muted-foreground">
                 {t("forms.surveys.collectContactHint")}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <Switch
+              id="sv-members"
+              checked={s.members_only}
+              onCheckedChange={(v) => patch({ members_only: v })}
+            />
+            <div>
+              <Label htmlFor="sv-members">{t("forms.surveys.membersOnly")}</Label>
+              <p className="text-xs text-muted-foreground">
+                {t("forms.surveys.membersOnlyHint")}
               </p>
             </div>
           </div>
