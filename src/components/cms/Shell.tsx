@@ -32,6 +32,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { useCms } from "@/i18n/cms";
 import { LOCALE_LABELS, LOCALE_ORDER } from "@/i18n/config";
+import { Button, Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/design-system/icf-welcome-design-system-a835df";
+import { Menu } from "lucide-react";
 import { useMyRoles } from "@/lib/roles";
 import type { AppRole } from "@/lib/role-model";
 
@@ -156,7 +158,8 @@ function Logo({ title }: { title: string }) {
   );
 }
 
-export function Shell({ children }: { children: ReactNode }) {
+export function Shell({ children, compactNavigation = false }: { children: ReactNode; compactNavigation?: boolean }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [email, setEmail] = useState<string | null>(null);
   const { t, locale, setLocale } = useCms();
@@ -178,7 +181,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
-      <aside className="flex w-64 shrink-0 flex-col justify-between border-r border-border bg-card">
+      <aside className={(compactNavigation ? "hidden md:flex" : "flex") + " w-64 shrink-0 flex-col justify-between border-r border-border bg-card"}>
         <div>
           <Logo title={t("nav.workspace")} />
           <nav className="mt-2 flex flex-col gap-1 px-3">
@@ -256,7 +259,17 @@ export function Shell({ children }: { children: ReactNode }) {
           </div>
         </div>
       </aside>
-      <main className="flex-1 min-w-0">{children}</main>
+      <main className="flex-1 min-w-0">
+        {compactNavigation ? <div className="border-b border-border bg-card px-4 py-3 md:hidden">
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetTrigger asChild><Button variant="outline"><Menu aria-hidden />{t("nav.workspace")}</Button></SheetTrigger>
+            <SheetContent side="left"><SheetHeader><SheetTitle>{t("nav.workspace")}</SheetTitle></SheetHeader>
+              <nav className="flex flex-col gap-2 overflow-y-auto px-4">{items.map(({ to, key, icon: Icon }) => <Button key={to} asChild variant="ghost"><Link to={to} onClick={() => setMobileOpen(false)}><Icon aria-hidden />{t(key)}</Link></Button>)}</nav>
+            </SheetContent>
+          </Sheet>
+        </div> : null}
+        {children}
+      </main>
     </div>
   );
 }

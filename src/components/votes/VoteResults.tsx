@@ -5,7 +5,9 @@
  */
 import { Progress } from "@/design-system/icf-welcome-design-system-a835df";
 import type { Tally } from "@/lib/votes.functions";
-import { turnoutPercent, type VoteOption } from "@/lib/votes";
+import { turnoutPercent, voteOptionLabel, type VoteOption } from "@/lib/votes";
+
+import { useCms } from "@/i18n/cms";
 
 export function VoteResults({
   tally,
@@ -18,6 +20,7 @@ export function VoteResults({
   closed: boolean;
   t: (k: string) => string;
 }) {
+  const { locale } = useCms();
   if (!tally) {
     return (
       <section>
@@ -45,12 +48,12 @@ export function VoteResults({
           return (
             <li key={o.key}>
               <div className="flex justify-between text-sm">
-                <span className="font-semibold">{o.label}</span>
+                <span className="font-semibold">{voteOptionLabel(o, locale)}</span>
                 <span className="font-bold">
                   {pct}% · {t("votes.page.votesCount").replace("{n}", String(n))}
                 </span>
               </div>
-              <Progress value={pct} className="mt-2" aria-label={o.label} />
+              <Progress value={pct} className="mt-2" aria-label={voteOptionLabel(o, locale)} />
             </li>
           );
         })}

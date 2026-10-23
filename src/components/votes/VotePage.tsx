@@ -23,11 +23,12 @@ import {
   RadioGroupItem,
   Textarea,
 } from "@/design-system/icf-welcome-design-system-a835df";
+import { Markdown } from "@/components/markdown";
 import { MemberShell } from "@/components/member/MemberShell";
 import { VoteResults } from "@/components/votes/VoteResults";
 import { useCms } from "@/i18n/cms";
 import { castVote, getMemberVote } from "@/lib/votes.functions";
-import { RATIONALE_MAX, castErrorKey, localized, votePhase, type VoteOption } from "@/lib/votes";
+import { RATIONALE_MAX, castErrorKey, localized, voteOptionLabel, votePhase, type VoteOption } from "@/lib/votes";
 
 export function VotePage({ slug, preview = false }: { slug: string; preview?: boolean }) {
   const { t, locale } = useCms();
@@ -69,7 +70,7 @@ export function VotePage({ slug, preview = false }: { slug: string; preview?: bo
 
   const { vote, voted, attachments, tally, rationales } = data;
   const phase = votePhase(vote);
-  const options = vote.options as VoteOption[];
+  const options = (vote.options as VoteOption[]).map((option) => ({ ...option, label: voteOptionLabel(option, locale) }));
   const labelOf = (k: string) => options.find((o) => o.key === k)?.label ?? k;
   const description = localized(vote, "description", locale);
 
@@ -126,8 +127,8 @@ export function VotePage({ slug, preview = false }: { slug: string; preview?: bo
 
       <div className="mx-auto max-w-3xl space-y-10 px-6 py-10 sm:px-10">
         {description ? (
-          <section className="whitespace-pre-line leading-relaxed text-foreground">
-            {description}
+          <section className="text-foreground">
+            <Markdown>{description}</Markdown>
           </section>
         ) : null}
 
