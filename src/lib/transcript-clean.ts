@@ -15,7 +15,11 @@ export function cleanTranscript(raw: string): string {
   text = text.replace(/!\[[^\]]*\]\[[^\]]*\]|!\[[^\]]*\]\([^)]*\)/g, "");
   text = text.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1");
   text = text.replace(/https?:\/\/\S+/g, "");
-  text = text.replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, "");
+  // Token-wise email removal: a single regex backtracks badly on long runs.
+  text = text
+    .split("\n")
+    .map((line) => (line.includes("@") ? line.split(/(\s+)/).filter((w) => !w.includes("@")).join("") : line))
+    .join("\n");
   text = text.replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
   return text.slice(0, TRANSCRIPT_MAX_CHARS);
 }
