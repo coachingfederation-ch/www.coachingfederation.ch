@@ -5,7 +5,7 @@
  */
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Trash2, Upload } from "lucide-react";
+import { Eye, Trash2, Upload } from "lucide-react";
 import {
   Badge,
   Button,
@@ -265,6 +265,17 @@ function VoteEditorPage() {
             <Badge variant="outline">{t("votes.admin.announced")}</Badge>
           ) : null}
           <span className="flex-1" />
+          <Button asChild variant="outline">
+            <Link
+              to="/manage/votes/preview/$slug"
+              params={{ slug: loaded.vote.slug }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Eye aria-hidden />
+              {t("votes.admin.preview")}
+            </Link>
+          </Button>
           <Button asChild variant="outline">
             <Link to="/manage/votes/$id/results" params={{ id }}>
               {t("votes.admin.results")}
