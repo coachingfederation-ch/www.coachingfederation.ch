@@ -164,6 +164,7 @@ import { Route as StaffManageEventsIdCheckInRouteImport } from './routes/_staff/
 import { Route as StaffManageEventsIdReportingRouteImport } from './routes/_staff/manage.events.$id_.reporting'
 import { Route as StaffManageSurveysIdResultsRouteImport } from './routes/_staff/manage.surveys.$id_.results'
 import { Route as StaffManageVotesIdResultsRouteImport } from './routes/_staff/manage.votes.$id_.results'
+import { Route as StaffManageVotesPreviewSlugRouteImport } from './routes/_staff/manage.votes.preview.$slug'
 import { Route as StaffManageEventsIdFormsFormIdRouteImport } from './routes/_staff/manage.events.$id_.forms.$formId'
 import { Route as StaffManageEventsIdFormsFormIdEditRouteImport } from './routes/_staff/manage.events.$id_.forms.$formId_.edit'
 
@@ -970,6 +971,12 @@ const StaffManageVotesIdResultsRoute =
     path: '/manage/votes/$id/results',
     getParentRoute: () => StaffRouteRoute,
   } as any)
+const StaffManageVotesPreviewSlugRoute =
+  StaffManageVotesPreviewSlugRouteImport.update({
+    id: '/manage/votes/preview/$slug',
+    path: '/manage/votes/preview/$slug',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
 const StaffManageEventsIdFormsFormIdRoute =
   StaffManageEventsIdFormsFormIdRouteImport.update({
     id: '/manage/events/$id_/forms/$formId',
@@ -1137,6 +1144,7 @@ export interface FileRoutesByFullPath {
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
   '/manage/surveys/$id/results': typeof StaffManageSurveysIdResultsRoute
   '/manage/votes/$id/results': typeof StaffManageVotesIdResultsRoute
+  '/manage/votes/preview/$slug': typeof StaffManageVotesPreviewSlugRoute
   '/manage/events/$id/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
   '/manage/events/$id/forms/$formId/edit': typeof StaffManageEventsIdFormsFormIdEditRoute
 }
@@ -1290,6 +1298,7 @@ export interface FileRoutesByTo {
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
   '/manage/surveys/$id/results': typeof StaffManageSurveysIdResultsRoute
   '/manage/votes/$id/results': typeof StaffManageVotesIdResultsRoute
+  '/manage/votes/preview/$slug': typeof StaffManageVotesPreviewSlugRoute
   '/manage/events/$id/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
   '/manage/events/$id/forms/$formId/edit': typeof StaffManageEventsIdFormsFormIdEditRoute
 }
@@ -1450,6 +1459,7 @@ export interface FileRoutesById {
   '/_staff/manage/events/$id_/reporting': typeof StaffManageEventsIdReportingRoute
   '/_staff/manage/surveys/$id_/results': typeof StaffManageSurveysIdResultsRoute
   '/_staff/manage/votes/$id_/results': typeof StaffManageVotesIdResultsRoute
+  '/_staff/manage/votes/preview/$slug': typeof StaffManageVotesPreviewSlugRoute
   '/_staff/manage/events/$id_/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
   '/_staff/manage/events/$id_/forms/$formId_/edit': typeof StaffManageEventsIdFormsFormIdEditRoute
 }
@@ -1609,6 +1619,7 @@ export interface FileRouteTypes {
     | '/manage/events/$id/reporting'
     | '/manage/surveys/$id/results'
     | '/manage/votes/$id/results'
+    | '/manage/votes/preview/$slug'
     | '/manage/events/$id/forms/$formId'
     | '/manage/events/$id/forms/$formId/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -1762,6 +1773,7 @@ export interface FileRouteTypes {
     | '/manage/events/$id/reporting'
     | '/manage/surveys/$id/results'
     | '/manage/votes/$id/results'
+    | '/manage/votes/preview/$slug'
     | '/manage/events/$id/forms/$formId'
     | '/manage/events/$id/forms/$formId/edit'
   id:
@@ -1921,6 +1933,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/events/$id_/reporting'
     | '/_staff/manage/surveys/$id_/results'
     | '/_staff/manage/votes/$id_/results'
+    | '/_staff/manage/votes/preview/$slug'
     | '/_staff/manage/events/$id_/forms/$formId'
     | '/_staff/manage/events/$id_/forms/$formId_/edit'
   fileRoutesById: FileRoutesById
@@ -3096,6 +3109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageVotesIdResultsRouteImport
       parentRoute: typeof StaffRouteRoute
     }
+    '/_staff/manage/votes/preview/$slug': {
+      id: '/_staff/manage/votes/preview/$slug'
+      path: '/manage/votes/preview/$slug'
+      fullPath: '/manage/votes/preview/$slug'
+      preLoaderRoute: typeof StaffManageVotesPreviewSlugRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/_staff/manage/events/$id_/forms/$formId': {
       id: '/_staff/manage/events/$id_/forms/$formId'
       path: '/manage/events/$id/forms/$formId'
@@ -3257,6 +3277,7 @@ interface StaffRouteRouteChildren {
   StaffManageEventsIdReportingRoute: typeof StaffManageEventsIdReportingRoute
   StaffManageSurveysIdResultsRoute: typeof StaffManageSurveysIdResultsRoute
   StaffManageVotesIdResultsRoute: typeof StaffManageVotesIdResultsRoute
+  StaffManageVotesPreviewSlugRoute: typeof StaffManageVotesPreviewSlugRoute
   StaffManageEventsIdFormsFormIdRoute: typeof StaffManageEventsIdFormsFormIdRoute
   StaffManageEventsIdFormsFormIdEditRoute: typeof StaffManageEventsIdFormsFormIdEditRoute
 }
@@ -3300,6 +3321,7 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffManageEventsIdReportingRoute: StaffManageEventsIdReportingRoute,
   StaffManageSurveysIdResultsRoute: StaffManageSurveysIdResultsRoute,
   StaffManageVotesIdResultsRoute: StaffManageVotesIdResultsRoute,
+  StaffManageVotesPreviewSlugRoute: StaffManageVotesPreviewSlugRoute,
   StaffManageEventsIdFormsFormIdRoute: StaffManageEventsIdFormsFormIdRoute,
   StaffManageEventsIdFormsFormIdEditRoute:
     StaffManageEventsIdFormsFormIdEditRoute,

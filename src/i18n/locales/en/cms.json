@@ -3553,6 +3553,8 @@
       "archived": "Archived"
     },
     "admin": {
+      "preview": "Preview",
+      "previewNotice": "Preview of the saved proposal. Voting is disabled.",
       "title": "Member votes",
       "intro": "Ask members to vote on larger decisions and projects. Ballots are secret.",
       "new": "New vote",

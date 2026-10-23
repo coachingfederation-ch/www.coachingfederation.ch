@@ -5,7 +5,7 @@
  */
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Trash2, Upload } from "lucide-react";
+import { Eye, Trash2, Upload } from "lucide-react";
 import {
   Badge,
   Button,
@@ -31,7 +31,13 @@ import {
   removeVoteAttachment,
   saveVote,
 } from "@/lib/votes.functions";
-import { DEFAULT_OPTIONS, optionKey, votePhase, type VoteOption, type VoteStatus } from "@/lib/votes";
+import {
+  DEFAULT_OPTIONS,
+  optionKey,
+  votePhase,
+  type VoteOption,
+  type VoteStatus,
+} from "@/lib/votes";
 
 export const Route = createFileRoute("/_staff/manage/votes/$id")({
   beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, VOTE_ROLES),
@@ -216,7 +222,13 @@ function VoteEditorPage() {
     const label = `Option ${form.options.length + 1}`;
     set("options", [
       ...form.options,
-      { key: optionKey(label, form.options.map((o) => o.key)), label },
+      {
+        key: optionKey(
+          label,
+          form.options.map((o) => o.key),
+        ),
+        label,
+      },
     ]);
   };
 
@@ -265,6 +277,17 @@ function VoteEditorPage() {
             <Badge variant="outline">{t("votes.admin.announced")}</Badge>
           ) : null}
           <span className="flex-1" />
+          <Button asChild variant="outline">
+            <Link
+              to="/manage/votes/preview/$slug"
+              params={{ slug: loaded.vote.slug }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Eye aria-hidden />
+              {t("votes.admin.preview")}
+            </Link>
+          </Button>
           <Button asChild variant="outline">
             <Link to="/manage/votes/$id/results" params={{ id }}>
               {t("votes.admin.results")}
@@ -316,9 +339,7 @@ function VoteEditorPage() {
                 {(["draft", "published", "archived"] as const).map((st) => (
                   <Label key={st} className="flex items-center gap-2 font-normal">
                     <RadioGroupItem value={st} />
-                    {t(
-                      `votes.admin.status${st.charAt(0).toUpperCase()}${st.slice(1)}`,
-                    )}
+                    {t(`votes.admin.status${st.charAt(0).toUpperCase()}${st.slice(1)}`)}
                   </Label>
                 ))}
               </RadioGroup>

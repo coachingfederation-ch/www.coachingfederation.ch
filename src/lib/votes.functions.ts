@@ -154,7 +154,9 @@ const saveSchema = z.object({
   opens_at: z.string().datetime(),
   closes_at: z.string().datetime(),
   options: z
-    .array(z.object({ key: z.string().trim().min(1).max(40), label: z.string().trim().min(1).max(120) }))
+    .array(
+      z.object({ key: z.string().trim().min(1).max(40), label: z.string().trim().min(1).max(120) }),
+    )
     .min(2)
     .max(10),
   results_mode: z.enum(["after_vote", "after_close"]),
@@ -373,14 +375,14 @@ export const listMemberVotes = createServerFn({ method: "POST" })
 
 export const getMemberVote = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => z.object({ slug: z.string().min(1).max(200) }).parse(input))
+  .inputValidator((input: unknown) =>
+    z.object({ slug: z.string().min(1).max(200), preview: z.boolean().optional() }).parse(input),
+  )
   .handler(async ({ context, data }) => {
-    const { data: row } = await context.supabase
-      .from("votes")
-      .select(VOTE_COLUMNS)
-      .eq("slug", data.slug)
-      .in("status", ["published", "archived"])
-      .maybeSingle();
+    if (data.preview) await assertMembership(context);
+    let query = context.supabase.from("votes").select(VOTE_COLUMNS).eq("slug", data.slug);
+    if (!data.preview) query = query.in("status", ["published", "archived"]);
+    const { data: row } = await query.maybeSingle();
     if (!row) return null;
     const vote = asVote(row);
     const { data: mine } = await context.supabase
@@ -400,15 +402,17 @@ export const getMemberVote = createServerFn({ method: "POST" })
         return { id: f.id, name: f.file_name, size: f.size_bytes, url: signed?.signedUrl ?? null };
       }),
     );
-    const { data: tally } = await context.supabase.rpc("vote_tally", { _vote_id: vote.id });
-    const { data: rationales } = await context.supabase.rpc("vote_rationales", {
-      _vote_id: vote.id,
-    });
+    const { data: tally } = data.preview
+      ? { data: null }
+      : await context.supabase.rpc("vote_tally", { _vote_id: vote.id });
+    const { data: rationales } = data.preview
+      ? { data: [] }
+      : await context.supabase.rpc("vote_rationales", { _vote_id: vote.id });
     // Board-only fields stay out of the member payload.
     const { ai_summary: _a, announce_enabled: _b, announced_at: _c, ...publicVote } = vote;
     return {
       vote: publicVote,
-      voted: (mine ?? []).length > 0,
+      voted: !data.preview && (mine ?? []).length > 0,
       attachments,
       tally: (tally as unknown as Tally | null) ?? null,
       rationales: (rationales ?? []) as { option_key: string; rationale: string }[],
