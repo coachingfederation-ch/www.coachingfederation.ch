@@ -3459,6 +3459,8 @@
       "collectContactHint": "Standardmässig aus, damit Antworten anonym bleiben. Wenn aktiv, sehen Teilnehmende einen kurzen Hinweis zur Verwendung ihrer Angaben.",
       "onePerBrowser": "Eine Antwort pro Browser",
       "onePerBrowserHint": "Eine einfache Prüfung, die das Formular nach einer Antwort ausblendet. Keine Garantie.",
+      "membersOnly": "Nur für Mitglieder",
+      "membersOnlyHint": "Nur angemeldete Mitglieder mit aktiver Mitgliedschaft können antworten. Jedes Mitglied antwortet einmal, die Antworten bleiben anonym.",
       "savePublishing": "Veröffentlichung speichern",
       "saving": "Wird gespeichert…",
       "publishSaved": "Veröffentlichungseinstellungen gespeichert",
