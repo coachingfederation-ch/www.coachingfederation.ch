@@ -14,6 +14,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertMembership } from "./authz";
 import { slugify, uniqueSlug } from "./articles";
 import { translatedOptionSchema } from "./vote-translations";
+import { ballotQuestionChanged, ballotQuestionSchema } from "./ballot-question";
 import {
   DEFAULT_OPTIONS,
   RATIONALE_MAX,
@@ -32,9 +33,13 @@ export type Tally = {
 };
 
 const VOTE_COLUMNS =
-  "id, slug, title, title_de, title_fr, title_it, summary, summary_de, summary_fr, summary_it, description, description_de, description_fr, description_it, category, status, opens_at, closes_at, options, results_mode, rationale_enabled, announce_enabled, announced_at, eligible_count, ai_summary, updated_at";
+  "id, slug, title, title_de, title_fr, title_it, summary, summary_de, summary_fr, summary_it, description, description_de, description_fr, description_it, ballot_question, ballot_question_de, ballot_question_fr, ballot_question_it, category, status, opens_at, closes_at, options, results_mode, rationale_enabled, announce_enabled, announced_at, eligible_count, ai_summary, updated_at";
 
 type VoteRecord = {
+  ballot_question: string | null;
+  ballot_question_de: string | null;
+  ballot_question_fr: string | null;
+  ballot_question_it: string | null;
   id: string;
   slug: string;
   title: string;
@@ -137,6 +142,10 @@ export const getVoteAdmin = createServerFn({ method: "POST" })
   });
 
 const saveSchema = z.object({
+  ballot_question: ballotQuestionSchema.nullable(),
+  ballot_question_de: ballotQuestionSchema.nullable(),
+  ballot_question_fr: ballotQuestionSchema.nullable(),
+  ballot_question_it: ballotQuestionSchema.nullable(),
   id: z.string().uuid(),
   title: z.string().trim().min(3).max(160),
   title_de: short,
@@ -171,7 +180,9 @@ export const saveVote = createServerFn({ method: "POST" })
     }
     const { data: current, error: readErr } = await context.supabase
       .from("votes")
-      .select("status, opens_at, closes_at, options")
+      .select(
+        "status, opens_at, closes_at, options, ballot_question, ballot_question_de, ballot_question_fr, ballot_question_it",
+      )
       .eq("id", data.id)
       .single();
     if (readErr) throw new Error(readErr.message);
@@ -180,6 +191,9 @@ export const saveVote = createServerFn({ method: "POST" })
     // opening date stay as members saw them, and the end can only move later.
     const started = current.status !== "draft" && new Date(current.opens_at) <= new Date();
     if (started) {
+      if (ballotQuestionChanged(current, data)) {
+        throw new Error("The ballot question cannot change after voting has started.");
+      }
       if (JSON.stringify(current.options) !== JSON.stringify(data.options)) {
         throw new Error("Options cannot change after voting has started.");
       }

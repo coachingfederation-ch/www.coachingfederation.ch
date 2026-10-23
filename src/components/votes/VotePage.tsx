@@ -83,6 +83,7 @@ export function VotePage({ slug, preview = false }: { slug: string; preview?: bo
   }));
   const labelOf = (k: string) => options.find((o) => o.key === k)?.label ?? k;
   const description = localized(vote, "description", locale);
+  const question = localized(vote, "ballot_question", locale);
 
   const submit = async () => {
     if (preview) return;
@@ -165,6 +166,11 @@ export function VotePage({ slug, preview = false }: { slug: string; preview?: bo
 
         <section className="rounded-3xl border border-border bg-card p-6">
           <h2 className="font-heading text-2xl text-primary">{t("votes.page.ballotTitle")}</h2>
+          {question ? (
+            <p id="ballot-question" className="mt-4 text-lg font-semibold">
+              {question}
+            </p>
+          ) : null}
           {voted || receipt ? (
             <div className="mt-4 flex items-start gap-3">
               <Check className="mt-0.5 h-5 w-5 text-primary" aria-hidden />
@@ -191,7 +197,12 @@ export function VotePage({ slug, preview = false }: { slug: string; preview?: bo
                 <Lock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
                 {t("votes.page.ballotHint")}
               </p>
-              <RadioGroup value={choice} onValueChange={setChoice} className="gap-3">
+              <RadioGroup
+                value={choice}
+                onValueChange={setChoice}
+                className="gap-3"
+                aria-labelledby={question ? "ballot-question" : undefined}
+              >
                 {options.map((o) => (
                   <Label
                     key={o.key}
@@ -286,6 +297,12 @@ export function VotePage({ slug, preview = false }: { slug: string; preview?: bo
           <AlertDialogHeader>
             <AlertDialogTitle>{t("votes.page.confirmTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
+              {question ? (
+                <>
+                  {question}
+                  <br />
+                </>
+              ) : null}
               {t("votes.page.confirmBody").replace("{option}", labelOf(choice))}
             </AlertDialogDescription>
           </AlertDialogHeader>

@@ -35,3 +35,5 @@ Live member data belongs in the database, behind RLS — not in version control.
 - Vote-participation RLS uses a private caller-bound ownership helper, never a direct read of `members.auth_user_id`. Why: member linkage is intentionally excluded from Data API column grants.
 - Staff vote previews reuse the member-page renderer and require the vote-manager guard for draft reads; preview mode never submits ballots or returns results. Why: previews match the member experience without changing eligibility or revealing ballots.
 - Vote translation is a manager-only, rate-limited draft transformation; localized option labels stay inside the existing options JSON and preserve keys and the existing post-opening freeze. Why: translation must not change vote meaning, tally identities, or publishing state.
+
+- Ballot questions are nullable localized vote fields; suggestions transform buffered proposal text without saving, and all question languages freeze at voting start in server validation and the database. Why: staff can refine drafts without changing the question already answered by members.

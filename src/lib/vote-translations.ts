@@ -8,12 +8,14 @@ export const translatedOptionSchema = z.object({
   label_it: z.string().trim().max(120).optional(),
 });
 export const voteTranslationInput = z.object({
+  ballot_question: z.string().trim().max(600).default(""),
   title: z.string().trim().min(3).max(160),
   summary: z.string().trim().max(600),
   description: z.string().trim().max(20000),
   options: z.array(translatedOptionSchema).min(2).max(10),
 });
 const translatedText = z.object({
+  ballot_question: z.string().trim().max(600),
   title: z.string().trim().min(1).max(160),
   summary: z.string().trim().max(600),
   description: z.string().trim().max(20000),

@@ -948,10 +948,7 @@
           "description": "Bauen Sie einen lokalen Knotenpunkt auf, organisieren Sie Treffen und vertreten Sie das Chapter in Ihrer Region.",
           "quote": "Ich habe angefangen, um mein Netzwerk zu erweitern — geblieben bin ich, weil ich die Zukunft unseres Berufs mitgestalten kann.",
           "attribution": "Anna M., Community Lead Zürich",
-          "valueTags": [
-            "Netzwerk ausbauen",
-            "Leadership-Erfahrung sammeln"
-          ],
+          "valueTags": ["Netzwerk ausbauen", "Leadership-Erfahrung sammeln"],
           "commitment": "4 bis 6 Stunden pro Monat",
           "responsibilities": [
             "Regionale Community-Treffen planen und leiten",
@@ -970,10 +967,7 @@
           "description": "Unterstützen Sie Ihre regionale Community-Leitung, gestalten Sie Treffen mit und heissen Sie neue Mitglieder willkommen.",
           "quote": "Ich helfe bei einem Treffen pro Quartal und habe mehr Coaches kennengelernt als in Jahren von Einzelarbeit.",
           "attribution": "Elena R., Community Team Member",
-          "valueTags": [
-            "Netzwerk ausbauen",
-            "Der Community etwas zurückgeben"
-          ],
+          "valueTags": ["Netzwerk ausbauen", "Der Community etwas zurückgeben"],
           "commitment": "2 bis 4 Stunden pro Monat",
           "responsibilities": [
             "Bei der Planung und Durchführung lokaler Treffen mithelfen",
@@ -992,10 +986,7 @@
           "description": "Unterstützen Sie die Durchführung von Chapter-Events — vom Empfang bis zur Referentenbetreuung.",
           "quote": "Ein paar Stunden Aufwand im Jahr, und die Energie aus den Begegnungen hält monatelang an.",
           "attribution": "Beat M., Event Host",
-          "valueTags": [
-            "Netzwerk ausbauen",
-            "Der Community etwas zurückgeben"
-          ],
+          "valueTags": ["Netzwerk ausbauen", "Der Community etwas zurückgeben"],
           "commitment": "Einige Stunden pro Event",
           "responsibilities": [
             "Teilnehmer begrüssen und Check-in verwalten",
@@ -1012,10 +1003,7 @@
           "description": "Teilen Sie Ihre Expertise über Insights-Artikel, Interviews oder Social-Media-Beiträge.",
           "quote": "Das Schreiben für das Chapter hat mir geholfen, meine eigene Haltung schärfer zu formulieren.",
           "attribution": "Carla T., Content Contributor",
-          "valueTags": [
-            "Kontinuierlich lernen",
-            "Botschafter/in der Marke ICF sein"
-          ],
+          "valueTags": ["Kontinuierlich lernen", "Botschafter/in der Marke ICF sein"],
           "commitment": "Flexibel, pro Artikel",
           "responsibilities": [
             "Insights-Artikel verfassen oder Interviews geben",
@@ -1032,10 +1020,7 @@
           "description": "Seien Sie die erste freundliche Ansprechperson für Fragen von Website-Besuchern.",
           "quote": "Die Fragen sind oft simpel, aber daraus entstehen immer wieder wertvolle Gespräche.",
           "attribution": "Daniel K., Live Chat Volunteer",
-          "valueTags": [
-            "Der Community etwas zurückgeben",
-            "Botschafter/in der Marke ICF sein"
-          ],
+          "valueTags": ["Der Community etwas zurückgeben", "Botschafter/in der Marke ICF sein"],
           "commitment": "1 bis 2 Stunden pro Woche",
           "responsibilities": [
             "Fragen von Besucherinnen und Besuchern im Chat beantworten",
@@ -3031,13 +3016,7 @@
     },
     "depthTitle": "Tiefe (1 zu oberflächlich — 5 zu tief)",
     "usefulnessTitle": "Nutzen (1 nicht relevant — 5 sehr nützlich)",
-    "depthScale": [
-      "Zu oberflächlich",
-      "Etwas knapp",
-      "Genau richtig",
-      "Etwas tief",
-      "Zu tief"
-    ],
+    "depthScale": ["Zu oberflächlich", "Etwas knapp", "Genau richtig", "Etwas tief", "Zu tief"],
     "usefulnessScale": [
       "Nicht relevant",
       "Mässig interessant",
@@ -3594,10 +3573,14 @@
       "fOpens": "Öffnet",
       "fCloses": "Schliesst",
       "fOptions": "Optionen",
+      "fQuestion": "Abstimmungsfrage",
+      "suggestQuestion": "Aus Vorschlag ableiten",
+      "suggestingQuestion": "Wird vorgeschlagen…",
+      "questionOverwrite": "Die aktuelle englische Abstimmungsfrage durch einen neuen Vorschlag ersetzen?",
       "addOption": "Option hinzufügen",
       "removeOption": "Entfernen",
       "useYesNo": "Ja / Nein / Enthaltung verwenden",
-      "lockedHint": "Die Abstimmung läuft: Optionen und Startdatum sind gesperrt. Sie können nur das Enddatum verlängern.",
+      "lockedHint": "Die Abstimmung läuft: Abstimmungsfrage, Optionen und Startdatum sind gesperrt. Sie können nur das Enddatum verlängern.",
       "fResults": "Live-Ergebnisse für Mitglieder",
       "resultsAfterVote": "Nach ihrer Stimmabgabe",
       "resultsAfterClose": "Erst nach Ende der Abstimmung",

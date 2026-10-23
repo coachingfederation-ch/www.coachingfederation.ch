@@ -7184,6 +7184,10 @@ export type Database = {
           ai_summary: string | null
           announce_enabled: boolean
           announced_at: string | null
+          ballot_question: string | null
+          ballot_question_de: string | null
+          ballot_question_fr: string | null
+          ballot_question_it: string | null
           category: string | null
           closes_at: string
           created_at: string
@@ -7215,6 +7219,10 @@ export type Database = {
           ai_summary?: string | null
           announce_enabled?: boolean
           announced_at?: string | null
+          ballot_question?: string | null
+          ballot_question_de?: string | null
+          ballot_question_fr?: string | null
+          ballot_question_it?: string | null
           category?: string | null
           closes_at: string
           created_at?: string
@@ -7246,6 +7254,10 @@ export type Database = {
           ai_summary?: string | null
           announce_enabled?: boolean
           announced_at?: string | null
+          ballot_question?: string | null
+          ballot_question_de?: string | null
+          ballot_question_fr?: string | null
+          ballot_question_it?: string | null
           category?: string | null
           closes_at?: string
           created_at?: string

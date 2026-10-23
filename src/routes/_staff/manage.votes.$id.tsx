@@ -5,7 +5,7 @@
  */
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Eye, Languages, Loader2, Trash2, Upload } from "lucide-react";
+import { Eye, Languages, Loader2, Sparkles, Trash2, Upload } from "lucide-react";
 import {
   Badge,
   Button,
@@ -21,6 +21,8 @@ import {
   Textarea,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
+import { useServerFn } from "@tanstack/react-start";
+import { suggestBallotQuestion } from "@/lib/ballot-question.functions";
 import { translateVoteDraft } from "@/lib/vote-translations.functions";
 import { LOCALE_ORDER, type Locale } from "@/i18n/config";
 import { Shell } from "@/components/cms/Shell";
@@ -60,6 +62,10 @@ export const Route = createFileRoute("/_staff/manage/votes/$id")({
 
 type Loaded = Awaited<ReturnType<typeof getVoteAdmin>>;
 type Form = {
+  ballot_question: string;
+  ballot_question_de: string;
+  ballot_question_fr: string;
+  ballot_question_it: string;
   title: string;
   title_de: string;
   title_fr: string;
@@ -93,6 +99,10 @@ const n = (v: string) => (v.trim() === "" ? null : v.trim());
 
 function toForm(v: Loaded["vote"]): Form {
   return {
+    ballot_question: s(v.ballot_question),
+    ballot_question_de: s(v.ballot_question_de),
+    ballot_question_fr: s(v.ballot_question_fr),
+    ballot_question_it: s(v.ballot_question_it),
     title: v.title,
     title_de: s(v.title_de),
     title_fr: s(v.title_fr),
@@ -127,6 +137,8 @@ function VoteEditorPage() {
   const [busy, setBusy] = useState(false);
   const [editingLocale, setEditingLocale] = useState<Locale>("en");
   const [translating, setTranslating] = useState(false);
+  const [suggesting, setSuggesting] = useState(false);
+  const suggestQuestion = useServerFn(suggestBallotQuestion);
   const [translationNote, setTranslationNote] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -157,6 +169,9 @@ function VoteEditorPage() {
   }
 
   const phase = votePhase(loaded.vote);
+  const questionField:
+    "ballot_question" | "ballot_question_de" | "ballot_question_fr" | "ballot_question_it" =
+    editingLocale === "en" ? "ballot_question" : `ballot_question_${editingLocale}`;
   const locked = loaded.vote.status !== "draft" && new Date(loaded.vote.opens_at) <= new Date();
   const set = <K extends keyof Form>(k: K, v: Form[K]) => {
     setSaved(false);
@@ -171,6 +186,10 @@ function VoteEditorPage() {
       await saveVote({
         data: {
           id,
+          ballot_question: n(form.ballot_question),
+          ballot_question_de: n(form.ballot_question_de),
+          ballot_question_fr: n(form.ballot_question_fr),
+          ballot_question_it: n(form.ballot_question_it),
           title: form.title.trim(),
           title_de: n(form.title_de),
           title_fr: n(form.title_fr),
@@ -227,7 +246,12 @@ function VoteEditorPage() {
   const translate = async () => {
     if (form.title.trim().length < 3 || locked) return;
     if (
-      (form.title_de || form.title_fr || form.title_it) &&
+      (form.title_de ||
+        form.title_fr ||
+        form.title_it ||
+        form.ballot_question_de ||
+        form.ballot_question_fr ||
+        form.ballot_question_it) &&
       !window.confirm(t("votes.admin.translateOverwrite"))
     )
       return;
@@ -237,6 +261,7 @@ function VoteEditorPage() {
     try {
       const translated = await translateVoteDraft({
         data: {
+          ballot_question: form.ballot_question,
           title: form.title,
           summary: form.summary,
           description: form.description,
@@ -245,6 +270,7 @@ function VoteEditorPage() {
       });
       const fields: Partial<Form> = {};
       for (const locale of ["de", "fr", "it"] as const) {
+        fields[`ballot_question_${locale}`] = translated[locale].ballot_question;
         fields[`title_${locale}`] = translated[locale].title;
         fields[`summary_${locale}`] = translated[locale].summary;
         fields[`description_${locale}`] = translated[locale].description;
@@ -266,6 +292,29 @@ function VoteEditorPage() {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
       setTranslating(false);
+    }
+  };
+
+  const suggest = async () => {
+    if (locked || suggesting || editingLocale !== "en") return;
+    if (form.ballot_question.trim() && !window.confirm(t("votes.admin.questionOverwrite"))) return;
+    setSuggesting(true);
+    setError(null);
+    try {
+      const result = await suggestQuestion({
+        data: {
+          title: form.title,
+          summary: form.summary,
+          description: form.description,
+          options: form.options.map(({ label }) => ({ label })),
+        },
+      });
+      set("ballot_question", result.question);
+      setTranslationNote(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setSuggesting(false);
     }
   };
 
@@ -351,7 +400,7 @@ function VoteEditorPage() {
               {t("votes.admin.results")}
             </Link>
           </Button>
-          <Button onClick={() => void save()} disabled={busy || translating}>
+          <Button onClick={() => void save()} disabled={busy || translating || suggesting}>
             {busy ? <Loader2 className="animate-spin" aria-hidden /> : null}
             {saved ? t("votes.admin.saved") : t("votes.admin.save")}
           </Button>
@@ -374,7 +423,7 @@ function VoteEditorPage() {
           </Tabs>
           <Button
             variant="outline"
-            disabled={translating || busy || locked || form.title.trim().length < 3}
+            disabled={translating || busy || suggesting || locked || form.title.trim().length < 3}
             onClick={() => void translate()}
           >
             {translating ? (
@@ -394,7 +443,7 @@ function VoteEditorPage() {
             )}
           </span>
         </div>
-        <fieldset disabled={translating || busy}>
+        <fieldset disabled={translating || busy || suggesting}>
           <Tabs defaultValue="proposal">
             <TabsList>
               <TabsTrigger value="proposal">{t("votes.admin.content")}</TabsTrigger>
@@ -462,6 +511,43 @@ function VoteEditorPage() {
             </TabsContent>
             <TabsContent value="ballot">
               <section className="py-5">
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <Label htmlFor="ballot-question-input">{t("votes.admin.fQuestion")}</Label>
+                    {editingLocale === "en" ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={
+                          locked ||
+                          suggesting ||
+                          form.title.trim().length < 3 ||
+                          !(form.description.trim() || form.summary.trim())
+                        }
+                        onClick={() => void suggest()}
+                      >
+                        {suggesting ? (
+                          <Loader2 className="animate-spin" aria-hidden />
+                        ) : (
+                          <Sparkles aria-hidden />
+                        )}
+                        {t(
+                          suggesting
+                            ? "votes.admin.suggestingQuestion"
+                            : "votes.admin.suggestQuestion",
+                        )}
+                      </Button>
+                    ) : null}
+                  </div>
+                  <Textarea
+                    id="ballot-question-input"
+                    rows={3}
+                    maxLength={600}
+                    disabled={locked}
+                    value={form[questionField]}
+                    onChange={(e) => set(questionField, e.target.value)}
+                  />
+                </div>
                 <div className="mt-6 space-y-2">
                   <Label>{t("votes.admin.fOptions")}</Label>
                   <ul className="space-y-2">
