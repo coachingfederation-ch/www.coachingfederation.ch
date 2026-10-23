@@ -32,7 +32,8 @@ describe.skipIf(!db)("vote participation access", () => {
     const linked = await db`
       select id, auth_user_id from public.members where auth_user_id is not null limit 2
     `;
-    if (linked.length < 2) throw new Error("Two linked accounts are needed for isolation verification.");
+    if (linked.length < 2)
+      throw new Error("Two linked accounts are needed for isolation verification.");
     const own = linked[0];
     const other = linked[1];
     if (!own || !other) throw new Error("Linked-account fixtures unavailable.");
@@ -49,7 +50,11 @@ describe.skipIf(!db)("vote participation access", () => {
       const [unlinked] = await tx`
         select count(*)::int as visible from public.vote_participations
       `;
-      return { ownsSelf: ownership?.owns_self, ownsOther: ownership?.owns_other, visible: unlinked?.visible };
+      return {
+        ownsSelf: ownership?.owns_self,
+        ownsOther: ownership?.owns_other,
+        visible: unlinked?.visible,
+      };
     });
     expect(result.ownsSelf).toBe(true);
     expect(result.ownsOther).toBe(false);
