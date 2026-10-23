@@ -107,6 +107,7 @@ export function MemberShell({ children }: { children: ReactNode }) {
     { to: "/member", label: t("member.nav.home") },
     { to: "/my-profile", label: t("member.nav.profile") },
     { to: "/member/certificates", label: t("member.nav.credits") },
+    { to: "/member/votes", label: t("member.nav.votes") },
     { to: "/volunteering", label: t("member.nav.volunteering") },
     { to: "/guides", label: t("nav.guides") },
   ];

@@ -4530,6 +4530,7 @@ export type Database = {
           emails_suppressed: boolean
           feature_advertising_enabled: boolean
           feature_europe_pulse_enabled: boolean
+          feature_votes_enabled: boolean
           features_updated_at: string | null
           features_updated_by: string | null
           feed_drop_threshold_pct: number
@@ -4561,6 +4562,7 @@ export type Database = {
           emails_suppressed?: boolean
           feature_advertising_enabled?: boolean
           feature_europe_pulse_enabled?: boolean
+          feature_votes_enabled?: boolean
           features_updated_at?: string | null
           features_updated_by?: string | null
           feed_drop_threshold_pct?: number
@@ -4592,6 +4594,7 @@ export type Database = {
           emails_suppressed?: boolean
           feature_advertising_enabled?: boolean
           feature_europe_pulse_enabled?: boolean
+          feature_votes_enabled?: boolean
           features_updated_at?: string | null
           features_updated_by?: string | null
           feed_drop_threshold_pct?: number
@@ -7063,6 +7066,215 @@ export type Database = {
         }
         Relationships: []
       }
+      vote_attachments: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_path: string
+          id: string
+          size_bytes: number | null
+          vote_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_path: string
+          id?: string
+          size_bytes?: number | null
+          vote_id: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          id?: string
+          size_bytes?: number | null
+          vote_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vote_attachments_vote_id_fkey"
+            columns: ["vote_id"]
+            isOneToOne: false
+            referencedRelation: "votes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vote_ballots: {
+        Row: {
+          cast_on: string
+          hidden: boolean
+          id: string
+          option_key: string
+          rationale: string | null
+          receipt: string
+          vote_id: string
+        }
+        Insert: {
+          cast_on?: string
+          hidden?: boolean
+          id?: string
+          option_key: string
+          rationale?: string | null
+          receipt: string
+          vote_id: string
+        }
+        Update: {
+          cast_on?: string
+          hidden?: boolean
+          id?: string
+          option_key?: string
+          rationale?: string | null
+          receipt?: string
+          vote_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vote_ballots_vote_id_fkey"
+            columns: ["vote_id"]
+            isOneToOne: false
+            referencedRelation: "votes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vote_participations: {
+        Row: {
+          member_id: string
+          vote_id: string
+          voted_on: string
+        }
+        Insert: {
+          member_id: string
+          vote_id: string
+          voted_on?: string
+        }
+        Update: {
+          member_id?: string
+          vote_id?: string
+          voted_on?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vote_participations_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "coach_directory_public"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "vote_participations_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vote_participations_vote_id_fkey"
+            columns: ["vote_id"]
+            isOneToOne: false
+            referencedRelation: "votes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      votes: {
+        Row: {
+          ai_summary: string | null
+          announce_enabled: boolean
+          announced_at: string | null
+          category: string | null
+          closes_at: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          description_de: string | null
+          description_fr: string | null
+          description_it: string | null
+          eligible_count: number | null
+          id: string
+          opens_at: string
+          options: Json
+          rationale_enabled: boolean
+          reminded_at: string | null
+          results_mode: string
+          slug: string
+          status: string
+          summary: string | null
+          summary_de: string | null
+          summary_fr: string | null
+          summary_it: string | null
+          title: string
+          title_de: string | null
+          title_fr: string | null
+          title_it: string | null
+          updated_at: string
+        }
+        Insert: {
+          ai_summary?: string | null
+          announce_enabled?: boolean
+          announced_at?: string | null
+          category?: string | null
+          closes_at: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          description_de?: string | null
+          description_fr?: string | null
+          description_it?: string | null
+          eligible_count?: number | null
+          id?: string
+          opens_at: string
+          options?: Json
+          rationale_enabled?: boolean
+          reminded_at?: string | null
+          results_mode?: string
+          slug: string
+          status?: string
+          summary?: string | null
+          summary_de?: string | null
+          summary_fr?: string | null
+          summary_it?: string | null
+          title: string
+          title_de?: string | null
+          title_fr?: string | null
+          title_it?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ai_summary?: string | null
+          announce_enabled?: boolean
+          announced_at?: string | null
+          category?: string | null
+          closes_at?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          description_de?: string | null
+          description_fr?: string | null
+          description_it?: string | null
+          eligible_count?: number | null
+          id?: string
+          opens_at?: string
+          options?: Json
+          rationale_enabled?: boolean
+          reminded_at?: string | null
+          results_mode?: string
+          slug?: string
+          status?: string
+          summary?: string | null
+          summary_de?: string | null
+          summary_fr?: string | null
+          summary_it?: string | null
+          title?: string
+          title_de?: string | null
+          title_fr?: string | null
+          title_it?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       coach_directory_public: {
@@ -7421,6 +7633,10 @@ export type Database = {
         Args: { _session_token: string }
         Returns: Json
       }
+      cast_vote: {
+        Args: { _option_key: string; _rationale: string; _vote_id: string }
+        Returns: string
+      }
       check_in_registration: {
         Args: { _actor: string; _registration_id: string }
         Returns: Json
@@ -7489,6 +7705,15 @@ export type Database = {
         Args: { _actor: string; _registration_id: string }
         Returns: Json
       }
+      vote_eligible_count: { Args: never; Returns: number }
+      vote_rationales: {
+        Args: { _vote_id: string }
+        Returns: {
+          option_key: string
+          rationale: string
+        }[]
+      }
+      vote_tally: { Args: { _vote_id: string }; Returns: Json }
     }
     Enums: {
       ad_eligibility_tier: "icfs_member" | "icf_global"
