@@ -11,11 +11,7 @@ import { Shell } from "@/components/cms/Shell";
 import { VoteResults } from "@/components/votes/VoteResults";
 import { requireStaffAccess, VOTE_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
-import {
-  getVoteResults,
-  setRationaleHidden,
-  summariseRationales,
-} from "@/lib/votes.functions";
+import { getVoteResults, setRationaleHidden, summariseRationales } from "@/lib/votes.functions";
 import { csvCell, votePhase, voteOptionLabel } from "@/lib/votes";
 
 export const Route = createFileRoute("/_staff/manage/votes/$id_/results")({
@@ -42,7 +38,10 @@ function VoteResultsPage() {
   const { t, locale } = useCms();
   const queryClient = useQueryClient();
   const key = ["vote-results", id];
-  const { data, error } = useQuery({ queryKey: key, queryFn: () => getVoteResults({ data: { id } }) });
+  const { data, error } = useQuery({
+    queryKey: key,
+    queryFn: () => getVoteResults({ data: { id } }),
+  });
   const [summarising, setSummarising] = useState(false);
   const [summaryError, setSummaryError] = useState<string | null>(null);
 
@@ -65,7 +64,9 @@ function VoteResultsPage() {
   const exportCsv = () => {
     const lines = [
       [csvCell("option"), csvCell("votes")].join(","),
-      ...vote.options.map((o) => [csvCell(voteOptionLabel(o, locale)), String(tally.counts[o.key] ?? 0)].join(",")),
+      ...vote.options.map((o) =>
+        [csvCell(voteOptionLabel(o, locale)), String(tally.counts[o.key] ?? 0)].join(","),
+      ),
       "",
       [csvCell("option"), csvCell("reason")].join(","),
       ...rationales
