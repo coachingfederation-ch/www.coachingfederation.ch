@@ -1,8 +1,8 @@
 import { afterAll, describe, expect, it } from "vitest";
 import postgres from "postgres";
 
-// Opt-in database regression tests; read-only, with caller state scoped to a
-// transaction. No identities or member data are written to disk or logged.
+// Opt-in, read-only database access-contract tests. The sandbox connection
+// cannot impersonate authenticated roles, so behavioral checks use the browser.
 const databaseUrl = process.env["SUPABASE_DB_URL"];
 const db = databaseUrl ? postgres(databaseUrl, { max: 1, prepare: false }) : null;
 
@@ -22,42 +22,29 @@ describe.skipIf(!db)("vote participation access", () => {
   it("denies anonymous execution of the private ownership helper", async () => {
     if (!db) return;
     const [row] = await db`
-      select has_function_privilege('anon', 'private.owns_vote_participation(uuid)', 'EXECUTE') as allowed
+      select has_function_privilege('anon', p.oid, 'EXECUTE') as allowed
+      from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+      where n.nspname = 'private' and p.proname = 'owns_vote_participation'
     `;
     expect(row?.allowed).toBe(false);
   });
 
-  it("checks only the caller's explicit member linkage and filters other participations", async () => {
+  it("resolves ownership privately against the caller's explicit member linkage", async () => {
     if (!db) return;
-    const linked = await db`
-      select id, auth_user_id from public.members where auth_user_id is not null limit 2
+    const [helper] = await db`
+      select p.prosecdef, p.prosrc, p.proconfig
+      from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+      where n.nspname = 'private' and p.proname = 'owns_vote_participation'
     `;
-    if (linked.length < 2)
-      throw new Error("Two linked accounts are needed for isolation verification.");
-    const own = linked[0];
-    const other = linked[1];
-    if (!own || !other) throw new Error("Linked-account fixtures unavailable.");
-    const result = await db.begin(async (tx) => {
-      await tx`select set_config('request.jwt.claim.sub', ${own.auth_user_id}, true)`;
-      // A synthetic caller without staff roles exercises the policy's member
-      // branch while a second query verifies the actual linkage predicate.
-      await tx`set local role authenticated`;
-      const [ownership] = await tx`
-        select private.owns_vote_participation(${own.id}::uuid) as owns_self,
-               private.owns_vote_participation(${other.id}::uuid) as owns_other
-      `;
-      await tx`select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-000000000000', true)`;
-      const [unlinked] = await tx`
-        select count(*)::int as visible from public.vote_participations
-      `;
-      return {
-        ownsSelf: ownership?.owns_self,
-        ownsOther: ownership?.owns_other,
-        visible: unlinked?.visible,
-      };
-    });
-    expect(result.ownsSelf).toBe(true);
-    expect(result.ownsOther).toBe(false);
-    expect(result.visible).toBe(0);
+    expect(helper?.prosecdef).toBe(true);
+    expect(helper?.proconfig).toContain('search_path=pg_catalog');
+    expect(helper?.prosrc).toMatch(/m\.id\s*=\s*_member_id\s+AND\s+m\.auth_user_id\s*=\s*auth\.uid\(\)/i);
+    const [policy] = await db`
+      select qual from pg_policies where schemaname = 'public'
+      and tablename = 'vote_participations' and policyname = 'Members read own participation'
+    `;
+    expect(policy?.qual).toContain('private.owns_vote_participation(member_id)');
+    expect(policy?.qual).toContain('private.is_vote_manager(auth.uid())');
+    expect(policy?.qual).not.toContain('auth_user_id');
   });
 });
