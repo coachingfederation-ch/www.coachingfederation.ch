@@ -394,6 +394,7 @@ function VoteEditorPage() {
             )}
           </span>
         </div>
+        <fieldset disabled={translating || busy}>
         <Tabs defaultValue="proposal">
           <TabsList>
             <TabsTrigger value="proposal">{t("votes.admin.content")}</TabsTrigger>
@@ -611,6 +612,7 @@ function VoteEditorPage() {
             ) : null}
           </TabsContent>
         </Tabs>
+        </fieldset>
       </div>
     </Shell>
   );

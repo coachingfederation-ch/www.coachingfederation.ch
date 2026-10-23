@@ -27,8 +27,6 @@ Once a published vote has opened, `saveVote` refuses option or start-date change
 
 Turnout denominator: `votes.eligible_count`, frozen on the first ballot (active + grace members with a linked account).
 
-## Staff preview
-
 ## Editor and translation
 
 The editor has Proposal, Ballot, and Publishing tabs and a shared DE / FR / IT / EN language selector. Proposal uses the existing `MarkdownEditor`; the member page and staff preview render the same safe Markdown. Downloads stay with Proposal, options and rationale settings with Ballot, and schedule, status, and email controls with Publishing. Compact navigation applies only to this editor on narrow screens.
@@ -42,7 +40,7 @@ Translate to DE, FR, IT translates the current English draft, including title, s
 - Summary: reorganizes the editor around writing, ballot setup, and publishing while reusing formatting tools and adding coordinated translation.
 - UI: three sections, shared languages, read-only preview retained, save/translation feedback, compact editor navigation on phones.
 - Backend/schema: one guarded draft-translation server function; optional labels in existing JSON validation; no migration or permissions change.
-- Testing: localization and option-key regression tests; authenticated browser verification of translation, saved readback, preview formatting, keyboard access, and phone layout.
+- Testing: 20 tests passed. A temporary draft was translated through the real AI connection, saved, reloaded, and previewed with rendered Markdown. Desktop and phone screenshots verified the layout; phone inputs retain usable width and navigation opens as a drawer. The temporary draft was deleted. Full contrast and assistive-technology review remains pending.
 - Risks/rollback: additive labels remain safe for old consumers; revert editor/rendering and translator changes to restore the previous flow. Machine translations need review.
 - Follow-ups: automatic stale-translation detection is not implemented.
 

@@ -1,5 +1,5 @@
 # Assignments change log
-- [ ] Restructure vote editing into Proposal, Ballot, and Publishing with Markdown, draft translation, localized option labels, and mobile verification.
+- [x] Restructure vote editing into Proposal, Ballot, and Publishing with Markdown, draft translation, localized option labels, and mobile verification.
 - [x] Add a staff-only saved vote preview link, reuse the member page, and verify read-only behavior.
 - [x] Fix member-vote participation access without widening member-column grants; verify staff and access-contract checks.
 - [x] Add private, automatic assignment/removal audit capture.
