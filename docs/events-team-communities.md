@@ -95,3 +95,7 @@ Invitations added (or re-sent) while the event is not published are stored witho
 ## Europe Pulse view
 
 `/events?view=europe` swaps the Swiss listing for the Europe Pulse feed (see `docs/europe-pulse.md`). Switching views drops the other view's filters.
+
+## Recap draft from a transcript
+
+In the After event recap, "Draft from transcript" accepts a `.md`/`.txt` transcript (for example Google Meet "Notes by Gemini") or pasted text. The browser strips embedded images, links and email addresses (`src/lib/transcript-clean.ts`) and caps the length; `draftRecapFromTranscript` (`src/lib/recap-transcript.functions.ts`, organizer-gated, 20 per hour per user) returns a suggested headline and Markdown story. Nothing is stored; staff apply the draft and then save the recap. `.docx` and Google Docs links are not supported yet.

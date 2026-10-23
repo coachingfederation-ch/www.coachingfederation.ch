@@ -14,6 +14,7 @@ import { ArrowDown, ArrowUp, Loader2, Trash2 } from "lucide-react";
 import { Badge, Button } from "@/design-system/icf-welcome-design-system-a835df";
 import { Section } from "./EventEditorSections";
 import { MarkdownEditor } from "./MarkdownEditor";
+import { TranscriptDraftPanel } from "./TranscriptDraftPanel";
 import { supabase } from "@/integrations/supabase/client";
 import { EVENT_MEDIA_BUCKET } from "@/lib/storage";
 import { RECAP_AUDIENCES, formatFileSize, recapAssetPath } from "@/lib/event-recaps";
@@ -307,6 +308,17 @@ export function EventRecapEditor({
 
       {/* Status and the publish/withdraw action live with "Save recap" in the
           action bar below the fields, so the panel reads top-down: edit, then act. */}
+
+      <TranscriptDraftPanel
+        eventId={eventId}
+        language={language}
+        hasContent={Boolean(headline.trim() || body.trim())}
+        onApply={(h, s) => {
+          setHeadline(h);
+          setBody(s);
+        }}
+        t={t}
+      />
 
       <label className="mt-5 block text-sm font-medium">
         {t("recap.fieldHeadline")}
