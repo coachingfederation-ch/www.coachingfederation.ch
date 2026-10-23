@@ -3553,6 +3553,13 @@
       "archived": "Archivé"
     },
     "admin": {
+      "ballot": "Bulletin",
+      "publishing": "Publication",
+      "translateAll": "Traduire en DE, FR, IT",
+      "translating": "Traduction en cours…",
+      "translateOverwrite": "Remplacer les traductions existantes par de nouvelles traductions du texte anglais et des options ?",
+      "translationReview": "Traductions prêtes à relire. Enregistrez pour les conserver.",
+      "unsaved": "Modifications non enregistrées",
       "preview": "Aperçu",
       "previewNotice": "Aperçu de la proposition enregistrée. Le vote est désactivé.",
       "title": "Votes des membres",

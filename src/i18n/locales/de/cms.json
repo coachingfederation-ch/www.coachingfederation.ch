@@ -3553,6 +3553,13 @@
       "archived": "Archiviert"
     },
     "admin": {
+      "ballot": "Stimmzettel",
+      "publishing": "Veröffentlichung",
+      "translateAll": "Nach DE, FR, IT übersetzen",
+      "translating": "Wird übersetzt…",
+      "translateOverwrite": "Vorhandene Übersetzungen durch neue Übersetzungen des englischen Texts und der Optionen ersetzen?",
+      "translationReview": "Übersetzungen zur Prüfung bereit. Zum Übernehmen speichern.",
+      "unsaved": "Ungespeicherte Änderungen",
       "preview": "Vorschau",
       "previewNotice": "Vorschau des gespeicherten Vorschlags. Die Stimmabgabe ist deaktiviert.",
       "title": "Mitgliederabstimmungen",
