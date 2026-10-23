@@ -83,3 +83,6 @@ export const EVENT_ROLES: AppRole[] = ["organizer"];
  * count as M&E, and Super Admins pass through the admin bypass.
  */
 export const MEMBERSHIP_ROLES: AppRole[] = ["membership", "administrator"];
+
+/** Member votes: Membership & Engagement plus both admin levels. */
+export const VOTE_ROLES: AppRole[] = ["administrator", "membership"];

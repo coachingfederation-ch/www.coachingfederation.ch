@@ -128,12 +128,15 @@ import { Route as ApiPublicLiveChatPurgeRouteImport } from './routes/api/public/
 import { Route as ApiPublicMemberLifecycleRouteImport } from './routes/api/public/member-lifecycle'
 import { Route as ApiPublicMemberSyncRouteImport } from './routes/api/public/member-sync'
 import { Route as ApiPublicMemberSyncRetryRouteImport } from './routes/api/public/member-sync-retry'
+import { Route as ApiPublicMemberVotesRouteImport } from './routes/api/public/member-votes'
 import { Route as ApiPublicNewsletterRefreshRouteImport } from './routes/api/public/newsletter-refresh'
 import { Route as ApiPublicOpStructureRouteImport } from './routes/api/public/op-structure'
 import { Route as ApiPublicRoleDirectoryRouteImport } from './routes/api/public/role-directory'
 import { Route as ApiPublicRoleGrantsArchiveRouteImport } from './routes/api/public/role-grants-archive'
 import { Route as ContactConfirmTokenRouteImport } from './routes/contact.confirm.$token'
 import { Route as VerifyCertificateTokenRouteImport } from './routes/verify.certificate.$token'
+import { Route as MemberMemberVotesIndexRouteImport } from './routes/_member/member.votes.index'
+import { Route as MemberMemberVotesSlugRouteImport } from './routes/_member/member.votes.$slug'
 import { Route as StaffManageAdRequestsIndexRouteImport } from './routes/_staff/manage.ad-requests.index'
 import { Route as StaffManageAdRequestsIdRouteImport } from './routes/_staff/manage.ad-requests.$id'
 import { Route as StaffManageEventsIndexRouteImport } from './routes/_staff/manage.events.index'
@@ -145,6 +148,8 @@ import { Route as StaffManageGuestPassesIdRouteImport } from './routes/_staff/ma
 import { Route as StaffManageNewslettersIndexRouteImport } from './routes/_staff/manage.newsletters.index'
 import { Route as StaffManageNewslettersIdRouteImport } from './routes/_staff/manage.newsletters.$id'
 import { Route as StaffManageSurveysIdRouteImport } from './routes/_staff/manage.surveys.$id'
+import { Route as StaffManageVotesIndexRouteImport } from './routes/_staff/manage.votes.index'
+import { Route as StaffManageVotesIdRouteImport } from './routes/_staff/manage.votes.$id'
 import { Route as ApiPublicCalendarFileRouteImport } from './routes/api/public/calendar.$file'
 import { Route as ApiPublicCertificateQrTokenRouteImport } from './routes/api/public/certificate-qr.$token'
 import { Route as ApiPublicEventCalendarFileRouteImport } from './routes/api/public/event-calendar.$file'
@@ -158,6 +163,7 @@ import { Route as StaffManageEventsIdCceRouteImport } from './routes/_staff/mana
 import { Route as StaffManageEventsIdCheckInRouteImport } from './routes/_staff/manage.events.$id_.check-in'
 import { Route as StaffManageEventsIdReportingRouteImport } from './routes/_staff/manage.events.$id_.reporting'
 import { Route as StaffManageSurveysIdResultsRouteImport } from './routes/_staff/manage.surveys.$id_.results'
+import { Route as StaffManageVotesIdResultsRouteImport } from './routes/_staff/manage.votes.$id_.results'
 import { Route as StaffManageEventsIdFormsFormIdRouteImport } from './routes/_staff/manage.events.$id_.forms.$formId'
 import { Route as StaffManageEventsIdFormsFormIdEditRouteImport } from './routes/_staff/manage.events.$id_.forms.$formId_.edit'
 
@@ -769,6 +775,11 @@ const ApiPublicMemberSyncRetryRoute =
     path: '/api/public/member-sync-retry',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicMemberVotesRoute = ApiPublicMemberVotesRouteImport.update({
+  id: '/api/public/member-votes',
+  path: '/api/public/member-votes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicNewsletterRefreshRoute =
   ApiPublicNewsletterRefreshRouteImport.update({
     id: '/api/public/newsletter-refresh',
@@ -800,6 +811,16 @@ const VerifyCertificateTokenRoute = VerifyCertificateTokenRouteImport.update({
   id: '/verify/certificate/$token',
   path: '/verify/certificate/$token',
   getParentRoute: () => rootRouteImport,
+} as any)
+const MemberMemberVotesIndexRoute = MemberMemberVotesIndexRouteImport.update({
+  id: '/member/votes/',
+  path: '/member/votes/',
+  getParentRoute: () => MemberRouteRoute,
+} as any)
+const MemberMemberVotesSlugRoute = MemberMemberVotesSlugRouteImport.update({
+  id: '/member/votes/$slug',
+  path: '/member/votes/$slug',
+  getParentRoute: () => MemberRouteRoute,
 } as any)
 const StaffManageAdRequestsIndexRoute =
   StaffManageAdRequestsIndexRouteImport.update({
@@ -858,6 +879,16 @@ const StaffManageNewslettersIdRoute =
 const StaffManageSurveysIdRoute = StaffManageSurveysIdRouteImport.update({
   id: '/manage/surveys/$id',
   path: '/manage/surveys/$id',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
+const StaffManageVotesIndexRoute = StaffManageVotesIndexRouteImport.update({
+  id: '/manage/votes/',
+  path: '/manage/votes/',
+  getParentRoute: () => StaffRouteRoute,
+} as any)
+const StaffManageVotesIdRoute = StaffManageVotesIdRouteImport.update({
+  id: '/manage/votes/$id',
+  path: '/manage/votes/$id',
   getParentRoute: () => StaffRouteRoute,
 } as any)
 const ApiPublicCalendarFileRoute = ApiPublicCalendarFileRouteImport.update({
@@ -931,6 +962,12 @@ const StaffManageSurveysIdResultsRoute =
   StaffManageSurveysIdResultsRouteImport.update({
     id: '/manage/surveys/$id_/results',
     path: '/manage/surveys/$id/results',
+    getParentRoute: () => StaffRouteRoute,
+  } as any)
+const StaffManageVotesIdResultsRoute =
+  StaffManageVotesIdResultsRouteImport.update({
+    id: '/manage/votes/$id_/results',
+    path: '/manage/votes/$id/results',
     getParentRoute: () => StaffRouteRoute,
   } as any)
 const StaffManageEventsIdFormsFormIdRoute =
@@ -1056,6 +1093,7 @@ export interface FileRoutesByFullPath {
   '/api/public/member-lifecycle': typeof ApiPublicMemberLifecycleRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/api/public/member-sync-retry': typeof ApiPublicMemberSyncRetryRoute
+  '/api/public/member-votes': typeof ApiPublicMemberVotesRoute
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/op-structure': typeof ApiPublicOpStructureRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
@@ -1070,6 +1108,7 @@ export interface FileRoutesByFullPath {
   '/articles/': typeof StaffArticlesIndexRoute
   '/manage/': typeof StaffManageIndexRoute
   '/members/': typeof StaffMembersIndexRoute
+  '/member/votes/$slug': typeof MemberMemberVotesSlugRoute
   '/manage/ad-requests/$id': typeof StaffManageAdRequestsIdRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/manage/events/new': typeof StaffManageEventsNewRoute
@@ -1077,6 +1116,7 @@ export interface FileRoutesByFullPath {
   '/manage/guest-passes/$id': typeof StaffManageGuestPassesIdRoute
   '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/manage/surveys/$id': typeof StaffManageSurveysIdRoute
+  '/manage/votes/$id': typeof StaffManageVotesIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/certificate-qr/$token': typeof ApiPublicCertificateQrTokenRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
@@ -1085,15 +1125,18 @@ export interface FileRoutesByFullPath {
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/member/votes/': typeof MemberMemberVotesIndexRoute
   '/manage/ad-requests/': typeof StaffManageAdRequestsIndexRoute
   '/manage/events/': typeof StaffManageEventsIndexRoute
   '/manage/forms/': typeof StaffManageFormsIndexRoute
   '/manage/newsletters/': typeof StaffManageNewslettersIndexRoute
+  '/manage/votes/': typeof StaffManageVotesIndexRoute
   '/manage/ad-requests/$id/contract': typeof StaffManageAdRequestsIdContractRoute
   '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
   '/manage/surveys/$id/results': typeof StaffManageSurveysIdResultsRoute
+  '/manage/votes/$id/results': typeof StaffManageVotesIdResultsRoute
   '/manage/events/$id/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
   '/manage/events/$id/forms/$formId/edit': typeof StaffManageEventsIdFormsFormIdEditRoute
 }
@@ -1203,6 +1246,7 @@ export interface FileRoutesByTo {
   '/api/public/member-lifecycle': typeof ApiPublicMemberLifecycleRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/api/public/member-sync-retry': typeof ApiPublicMemberSyncRetryRoute
+  '/api/public/member-votes': typeof ApiPublicMemberVotesRoute
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/op-structure': typeof ApiPublicOpStructureRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
@@ -1217,6 +1261,7 @@ export interface FileRoutesByTo {
   '/articles': typeof StaffArticlesIndexRoute
   '/manage': typeof StaffManageIndexRoute
   '/members': typeof StaffMembersIndexRoute
+  '/member/votes/$slug': typeof MemberMemberVotesSlugRoute
   '/manage/ad-requests/$id': typeof StaffManageAdRequestsIdRoute
   '/manage/events/$id': typeof StaffManageEventsIdRoute
   '/manage/events/new': typeof StaffManageEventsNewRoute
@@ -1224,6 +1269,7 @@ export interface FileRoutesByTo {
   '/manage/guest-passes/$id': typeof StaffManageGuestPassesIdRoute
   '/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/manage/surveys/$id': typeof StaffManageSurveysIdRoute
+  '/manage/votes/$id': typeof StaffManageVotesIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/certificate-qr/$token': typeof ApiPublicCertificateQrTokenRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
@@ -1232,15 +1278,18 @@ export interface FileRoutesByTo {
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/member/votes': typeof MemberMemberVotesIndexRoute
   '/manage/ad-requests': typeof StaffManageAdRequestsIndexRoute
   '/manage/events': typeof StaffManageEventsIndexRoute
   '/manage/forms': typeof StaffManageFormsIndexRoute
   '/manage/newsletters': typeof StaffManageNewslettersIndexRoute
+  '/manage/votes': typeof StaffManageVotesIndexRoute
   '/manage/ad-requests/$id/contract': typeof StaffManageAdRequestsIdContractRoute
   '/manage/events/$id/cce': typeof StaffManageEventsIdCceRoute
   '/manage/events/$id/check-in': typeof StaffManageEventsIdCheckInRoute
   '/manage/events/$id/reporting': typeof StaffManageEventsIdReportingRoute
   '/manage/surveys/$id/results': typeof StaffManageSurveysIdResultsRoute
+  '/manage/votes/$id/results': typeof StaffManageVotesIdResultsRoute
   '/manage/events/$id/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
   '/manage/events/$id/forms/$formId/edit': typeof StaffManageEventsIdFormsFormIdEditRoute
 }
@@ -1357,6 +1406,7 @@ export interface FileRoutesById {
   '/api/public/member-lifecycle': typeof ApiPublicMemberLifecycleRoute
   '/api/public/member-sync': typeof ApiPublicMemberSyncRoute
   '/api/public/member-sync-retry': typeof ApiPublicMemberSyncRetryRoute
+  '/api/public/member-votes': typeof ApiPublicMemberVotesRoute
   '/api/public/newsletter-refresh': typeof ApiPublicNewsletterRefreshRoute
   '/api/public/op-structure': typeof ApiPublicOpStructureRoute
   '/api/public/role-directory': typeof ApiPublicRoleDirectoryRoute
@@ -1371,6 +1421,7 @@ export interface FileRoutesById {
   '/_staff/articles/': typeof StaffArticlesIndexRoute
   '/_staff/manage/': typeof StaffManageIndexRoute
   '/_staff/members/': typeof StaffMembersIndexRoute
+  '/_member/member/votes/$slug': typeof MemberMemberVotesSlugRoute
   '/_staff/manage/ad-requests/$id': typeof StaffManageAdRequestsIdRoute
   '/_staff/manage/events/$id': typeof StaffManageEventsIdRoute
   '/_staff/manage/events/new': typeof StaffManageEventsNewRoute
@@ -1378,6 +1429,7 @@ export interface FileRoutesById {
   '/_staff/manage/guest-passes_/$id': typeof StaffManageGuestPassesIdRoute
   '/_staff/manage/newsletters/$id': typeof StaffManageNewslettersIdRoute
   '/_staff/manage/surveys/$id': typeof StaffManageSurveysIdRoute
+  '/_staff/manage/votes/$id': typeof StaffManageVotesIdRoute
   '/api/public/calendar/$file': typeof ApiPublicCalendarFileRoute
   '/api/public/certificate-qr/$token': typeof ApiPublicCertificateQrTokenRoute
   '/api/public/event-calendar/$file': typeof ApiPublicEventCalendarFileRoute
@@ -1386,15 +1438,18 @@ export interface FileRoutesById {
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/_member/member/votes/': typeof MemberMemberVotesIndexRoute
   '/_staff/manage/ad-requests/': typeof StaffManageAdRequestsIndexRoute
   '/_staff/manage/events/': typeof StaffManageEventsIndexRoute
   '/_staff/manage/forms/': typeof StaffManageFormsIndexRoute
   '/_staff/manage/newsletters/': typeof StaffManageNewslettersIndexRoute
+  '/_staff/manage/votes/': typeof StaffManageVotesIndexRoute
   '/_staff/manage/ad-requests/$id_/contract': typeof StaffManageAdRequestsIdContractRoute
   '/_staff/manage/events/$id_/cce': typeof StaffManageEventsIdCceRoute
   '/_staff/manage/events/$id_/check-in': typeof StaffManageEventsIdCheckInRoute
   '/_staff/manage/events/$id_/reporting': typeof StaffManageEventsIdReportingRoute
   '/_staff/manage/surveys/$id_/results': typeof StaffManageSurveysIdResultsRoute
+  '/_staff/manage/votes/$id_/results': typeof StaffManageVotesIdResultsRoute
   '/_staff/manage/events/$id_/forms/$formId': typeof StaffManageEventsIdFormsFormIdRoute
   '/_staff/manage/events/$id_/forms/$formId_/edit': typeof StaffManageEventsIdFormsFormIdEditRoute
 }
@@ -1510,6 +1565,7 @@ export interface FileRouteTypes {
     | '/api/public/member-lifecycle'
     | '/api/public/member-sync'
     | '/api/public/member-sync-retry'
+    | '/api/public/member-votes'
     | '/api/public/newsletter-refresh'
     | '/api/public/op-structure'
     | '/api/public/role-directory'
@@ -1524,6 +1580,7 @@ export interface FileRouteTypes {
     | '/articles/'
     | '/manage/'
     | '/members/'
+    | '/member/votes/$slug'
     | '/manage/ad-requests/$id'
     | '/manage/events/$id'
     | '/manage/events/new'
@@ -1531,6 +1588,7 @@ export interface FileRouteTypes {
     | '/manage/guest-passes/$id'
     | '/manage/newsletters/$id'
     | '/manage/surveys/$id'
+    | '/manage/votes/$id'
     | '/api/public/calendar/$file'
     | '/api/public/certificate-qr/$token'
     | '/api/public/event-calendar/$file'
@@ -1539,15 +1597,18 @@ export interface FileRouteTypes {
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
+    | '/member/votes/'
     | '/manage/ad-requests/'
     | '/manage/events/'
     | '/manage/forms/'
     | '/manage/newsletters/'
+    | '/manage/votes/'
     | '/manage/ad-requests/$id/contract'
     | '/manage/events/$id/cce'
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
     | '/manage/surveys/$id/results'
+    | '/manage/votes/$id/results'
     | '/manage/events/$id/forms/$formId'
     | '/manage/events/$id/forms/$formId/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -1657,6 +1718,7 @@ export interface FileRouteTypes {
     | '/api/public/member-lifecycle'
     | '/api/public/member-sync'
     | '/api/public/member-sync-retry'
+    | '/api/public/member-votes'
     | '/api/public/newsletter-refresh'
     | '/api/public/op-structure'
     | '/api/public/role-directory'
@@ -1671,6 +1733,7 @@ export interface FileRouteTypes {
     | '/articles'
     | '/manage'
     | '/members'
+    | '/member/votes/$slug'
     | '/manage/ad-requests/$id'
     | '/manage/events/$id'
     | '/manage/events/new'
@@ -1678,6 +1741,7 @@ export interface FileRouteTypes {
     | '/manage/guest-passes/$id'
     | '/manage/newsletters/$id'
     | '/manage/surveys/$id'
+    | '/manage/votes/$id'
     | '/api/public/calendar/$file'
     | '/api/public/certificate-qr/$token'
     | '/api/public/event-calendar/$file'
@@ -1686,15 +1750,18 @@ export interface FileRouteTypes {
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
+    | '/member/votes'
     | '/manage/ad-requests'
     | '/manage/events'
     | '/manage/forms'
     | '/manage/newsletters'
+    | '/manage/votes'
     | '/manage/ad-requests/$id/contract'
     | '/manage/events/$id/cce'
     | '/manage/events/$id/check-in'
     | '/manage/events/$id/reporting'
     | '/manage/surveys/$id/results'
+    | '/manage/votes/$id/results'
     | '/manage/events/$id/forms/$formId'
     | '/manage/events/$id/forms/$formId/edit'
   id:
@@ -1810,6 +1877,7 @@ export interface FileRouteTypes {
     | '/api/public/member-lifecycle'
     | '/api/public/member-sync'
     | '/api/public/member-sync-retry'
+    | '/api/public/member-votes'
     | '/api/public/newsletter-refresh'
     | '/api/public/op-structure'
     | '/api/public/role-directory'
@@ -1824,6 +1892,7 @@ export interface FileRouteTypes {
     | '/_staff/articles/'
     | '/_staff/manage/'
     | '/_staff/members/'
+    | '/_member/member/votes/$slug'
     | '/_staff/manage/ad-requests/$id'
     | '/_staff/manage/events/$id'
     | '/_staff/manage/events/new'
@@ -1831,6 +1900,7 @@ export interface FileRouteTypes {
     | '/_staff/manage/guest-passes_/$id'
     | '/_staff/manage/newsletters/$id'
     | '/_staff/manage/surveys/$id'
+    | '/_staff/manage/votes/$id'
     | '/api/public/calendar/$file'
     | '/api/public/certificate-qr/$token'
     | '/api/public/event-calendar/$file'
@@ -1839,15 +1909,18 @@ export interface FileRouteTypes {
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
+    | '/_member/member/votes/'
     | '/_staff/manage/ad-requests/'
     | '/_staff/manage/events/'
     | '/_staff/manage/forms/'
     | '/_staff/manage/newsletters/'
+    | '/_staff/manage/votes/'
     | '/_staff/manage/ad-requests/$id_/contract'
     | '/_staff/manage/events/$id_/cce'
     | '/_staff/manage/events/$id_/check-in'
     | '/_staff/manage/events/$id_/reporting'
     | '/_staff/manage/surveys/$id_/results'
+    | '/_staff/manage/votes/$id_/results'
     | '/_staff/manage/events/$id_/forms/$formId'
     | '/_staff/manage/events/$id_/forms/$formId_/edit'
   fileRoutesById: FileRoutesById
@@ -1919,6 +1992,7 @@ export interface RootRouteChildren {
   ApiPublicMemberLifecycleRoute: typeof ApiPublicMemberLifecycleRoute
   ApiPublicMemberSyncRoute: typeof ApiPublicMemberSyncRoute
   ApiPublicMemberSyncRetryRoute: typeof ApiPublicMemberSyncRetryRoute
+  ApiPublicMemberVotesRoute: typeof ApiPublicMemberVotesRoute
   ApiPublicNewsletterRefreshRoute: typeof ApiPublicNewsletterRefreshRoute
   ApiPublicOpStructureRoute: typeof ApiPublicOpStructureRoute
   ApiPublicRoleDirectoryRoute: typeof ApiPublicRoleDirectoryRoute
@@ -2770,6 +2844,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMemberSyncRetryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/member-votes': {
+      id: '/api/public/member-votes'
+      path: '/api/public/member-votes'
+      fullPath: '/api/public/member-votes'
+      preLoaderRoute: typeof ApiPublicMemberVotesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/newsletter-refresh': {
       id: '/api/public/newsletter-refresh'
       path: '/api/public/newsletter-refresh'
@@ -2811,6 +2892,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/verify/certificate/$token'
       preLoaderRoute: typeof VerifyCertificateTokenRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_member/member/votes/': {
+      id: '/_member/member/votes/'
+      path: '/member/votes'
+      fullPath: '/member/votes/'
+      preLoaderRoute: typeof MemberMemberVotesIndexRouteImport
+      parentRoute: typeof MemberRouteRoute
+    }
+    '/_member/member/votes/$slug': {
+      id: '/_member/member/votes/$slug'
+      path: '/member/votes/$slug'
+      fullPath: '/member/votes/$slug'
+      preLoaderRoute: typeof MemberMemberVotesSlugRouteImport
+      parentRoute: typeof MemberRouteRoute
     }
     '/_staff/manage/ad-requests/': {
       id: '/_staff/manage/ad-requests/'
@@ -2887,6 +2982,20 @@ declare module '@tanstack/react-router' {
       path: '/manage/surveys/$id'
       fullPath: '/manage/surveys/$id'
       preLoaderRoute: typeof StaffManageSurveysIdRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/votes/': {
+      id: '/_staff/manage/votes/'
+      path: '/manage/votes'
+      fullPath: '/manage/votes/'
+      preLoaderRoute: typeof StaffManageVotesIndexRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
+    '/_staff/manage/votes/$id': {
+      id: '/_staff/manage/votes/$id'
+      path: '/manage/votes/$id'
+      fullPath: '/manage/votes/$id'
+      preLoaderRoute: typeof StaffManageVotesIdRouteImport
       parentRoute: typeof StaffRouteRoute
     }
     '/api/public/calendar/$file': {
@@ -2980,6 +3089,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffManageSurveysIdResultsRouteImport
       parentRoute: typeof StaffRouteRoute
     }
+    '/_staff/manage/votes/$id_/results': {
+      id: '/_staff/manage/votes/$id_/results'
+      path: '/manage/votes/$id/results'
+      fullPath: '/manage/votes/$id/results'
+      preLoaderRoute: typeof StaffManageVotesIdResultsRouteImport
+      parentRoute: typeof StaffRouteRoute
+    }
     '/_staff/manage/events/$id_/forms/$formId': {
       id: '/_staff/manage/events/$id_/forms/$formId'
       path: '/manage/events/$id/forms/$formId'
@@ -3066,6 +3182,8 @@ interface MemberRouteRouteChildren {
   MemberVolunteeringRoute: typeof MemberVolunteeringRoute
   MemberMemberCertificatesRoute: typeof MemberMemberCertificatesRoute
   MemberMemberIndexRoute: typeof MemberMemberIndexRoute
+  MemberMemberVotesSlugRoute: typeof MemberMemberVotesSlugRoute
+  MemberMemberVotesIndexRoute: typeof MemberMemberVotesIndexRoute
 }
 
 const MemberRouteRouteChildren: MemberRouteRouteChildren = {
@@ -3074,6 +3192,8 @@ const MemberRouteRouteChildren: MemberRouteRouteChildren = {
   MemberVolunteeringRoute: MemberVolunteeringRoute,
   MemberMemberCertificatesRoute: MemberMemberCertificatesRoute,
   MemberMemberIndexRoute: MemberMemberIndexRoute,
+  MemberMemberVotesSlugRoute: MemberMemberVotesSlugRoute,
+  MemberMemberVotesIndexRoute: MemberMemberVotesIndexRoute,
 }
 
 const MemberRouteRouteWithChildren = MemberRouteRoute._addFileChildren(
@@ -3125,15 +3245,18 @@ interface StaffRouteRouteChildren {
   StaffManageGuestPassesIdRoute: typeof StaffManageGuestPassesIdRoute
   StaffManageNewslettersIdRoute: typeof StaffManageNewslettersIdRoute
   StaffManageSurveysIdRoute: typeof StaffManageSurveysIdRoute
+  StaffManageVotesIdRoute: typeof StaffManageVotesIdRoute
   StaffManageAdRequestsIndexRoute: typeof StaffManageAdRequestsIndexRoute
   StaffManageEventsIndexRoute: typeof StaffManageEventsIndexRoute
   StaffManageFormsIndexRoute: typeof StaffManageFormsIndexRoute
   StaffManageNewslettersIndexRoute: typeof StaffManageNewslettersIndexRoute
+  StaffManageVotesIndexRoute: typeof StaffManageVotesIndexRoute
   StaffManageAdRequestsIdContractRoute: typeof StaffManageAdRequestsIdContractRoute
   StaffManageEventsIdCceRoute: typeof StaffManageEventsIdCceRoute
   StaffManageEventsIdCheckInRoute: typeof StaffManageEventsIdCheckInRoute
   StaffManageEventsIdReportingRoute: typeof StaffManageEventsIdReportingRoute
   StaffManageSurveysIdResultsRoute: typeof StaffManageSurveysIdResultsRoute
+  StaffManageVotesIdResultsRoute: typeof StaffManageVotesIdResultsRoute
   StaffManageEventsIdFormsFormIdRoute: typeof StaffManageEventsIdFormsFormIdRoute
   StaffManageEventsIdFormsFormIdEditRoute: typeof StaffManageEventsIdFormsFormIdEditRoute
 }
@@ -3165,15 +3288,18 @@ const StaffRouteRouteChildren: StaffRouteRouteChildren = {
   StaffManageGuestPassesIdRoute: StaffManageGuestPassesIdRoute,
   StaffManageNewslettersIdRoute: StaffManageNewslettersIdRoute,
   StaffManageSurveysIdRoute: StaffManageSurveysIdRoute,
+  StaffManageVotesIdRoute: StaffManageVotesIdRoute,
   StaffManageAdRequestsIndexRoute: StaffManageAdRequestsIndexRoute,
   StaffManageEventsIndexRoute: StaffManageEventsIndexRoute,
   StaffManageFormsIndexRoute: StaffManageFormsIndexRoute,
   StaffManageNewslettersIndexRoute: StaffManageNewslettersIndexRoute,
+  StaffManageVotesIndexRoute: StaffManageVotesIndexRoute,
   StaffManageAdRequestsIdContractRoute: StaffManageAdRequestsIdContractRoute,
   StaffManageEventsIdCceRoute: StaffManageEventsIdCceRoute,
   StaffManageEventsIdCheckInRoute: StaffManageEventsIdCheckInRoute,
   StaffManageEventsIdReportingRoute: StaffManageEventsIdReportingRoute,
   StaffManageSurveysIdResultsRoute: StaffManageSurveysIdResultsRoute,
+  StaffManageVotesIdResultsRoute: StaffManageVotesIdResultsRoute,
   StaffManageEventsIdFormsFormIdRoute: StaffManageEventsIdFormsFormIdRoute,
   StaffManageEventsIdFormsFormIdEditRoute:
     StaffManageEventsIdFormsFormIdEditRoute,
@@ -3277,6 +3403,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicMemberLifecycleRoute: ApiPublicMemberLifecycleRoute,
   ApiPublicMemberSyncRoute: ApiPublicMemberSyncRoute,
   ApiPublicMemberSyncRetryRoute: ApiPublicMemberSyncRetryRoute,
+  ApiPublicMemberVotesRoute: ApiPublicMemberVotesRoute,
   ApiPublicNewsletterRefreshRoute: ApiPublicNewsletterRefreshRoute,
   ApiPublicOpStructureRoute: ApiPublicOpStructureRoute,
   ApiPublicRoleDirectoryRoute: ApiPublicRoleDirectoryRoute,

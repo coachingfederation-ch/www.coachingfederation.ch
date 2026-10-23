@@ -26,6 +26,7 @@ import {
   Gauge,
   Megaphone,
   ClipboardList,
+  Vote,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
@@ -73,6 +74,7 @@ const nav = [
     icon: Mail,
     allowedRoles: ["membership", "administrator"],
   },
+  { to: "/manage/votes", key: "nav.votes", icon: Vote, allowedRoles: ["administrator", "membership"] },
   { to: "/vocabularies", key: "nav.vocabularies", icon: ListTree, allowedRoles: PLATFORM_ADMIN },
   {
     to: "/coach-finder",

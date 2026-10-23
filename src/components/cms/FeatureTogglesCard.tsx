@@ -27,6 +27,7 @@ const CARD = "rounded-2xl border border-border bg-card p-5";
 const FEATURES: { name: FeatureName; key: string }[] = [
   { name: "europe_pulse", key: "featureEuropePulse" },
   { name: "advertising", key: "featureAdvertising" },
+  { name: "votes", key: "featureVotes" },
 ];
 
 export function FeatureTogglesCard({

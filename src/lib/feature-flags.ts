@@ -9,15 +9,16 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-export type FeatureName = "europe_pulse" | "advertising";
+export type FeatureName = "europe_pulse" | "advertising" | "votes";
 export type FeatureFlags = Record<FeatureName, boolean>;
 
-export const FEATURE_DEFAULTS: FeatureFlags = { europe_pulse: true, advertising: true };
+export const FEATURE_DEFAULTS: FeatureFlags = { europe_pulse: true, advertising: true, votes: true };
 
 /** Column on integration_config that stores each switch. */
 export const FEATURE_COLUMNS: Record<FeatureName, string> = {
   europe_pulse: "feature_europe_pulse_enabled",
   advertising: "feature_advertising_enabled",
+  votes: "feature_votes_enabled",
 };
 
 export function parseFeatureFlags(raw: unknown): FeatureFlags {
@@ -25,6 +26,7 @@ export function parseFeatureFlags(raw: unknown): FeatureFlags {
   return {
     europe_pulse: value.europe_pulse !== false,
     advertising: value.advertising !== false,
+    votes: value.votes !== false,
   };
 }
 

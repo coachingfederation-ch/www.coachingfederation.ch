@@ -33,6 +33,7 @@ import { listPublicEvents } from "@/lib/events.functions";
 import { eventPlace, formatEventDate } from "@/lib/events";
 import { GuestPassesCard } from "./GuestPassesCard";
 import { EmailChangeNotice } from "./EmailChangeNotice";
+import { OpenVotesCard } from "./OpenVotesCard";
 
 const ENGAGE_URL =
   "https://engage.coachingfederation.org/communities/community-home?CommunityKey=230cb83a-26a7-4ffb-a2c4-fd9309091489";
@@ -218,6 +219,7 @@ export function MemberHome() {
 
       <div className="mx-auto max-w-6xl px-6 py-12 sm:px-10">
         <EmailChangeNotice />
+        <OpenVotesCard />
 
         {/* Whole card is the link — the icon tile carries the hover state. */}
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
