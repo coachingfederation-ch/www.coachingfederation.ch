@@ -27,6 +27,8 @@ import { LOCALE_LABELS, LOCALE_ORDER } from "@/i18n/config";
 import { CARD_SHADOW, useDismissable } from "@/components/chrome/constants";
 import { useMyRoles } from "@/lib/roles";
 import { hasExactRole } from "@/lib/role-model";
+import { useQuery } from "@tanstack/react-query";
+import { featureFlagsQueryOptions } from "@/lib/feature-flags";
 
 const UTILITY_PILL =
   "inline-flex h-10 items-center gap-1.5 rounded-full border border-hero-foreground/25 px-3 text-xs font-semibold uppercase tracking-wider text-hero-foreground transition hover:border-hero-foreground/60 hover:bg-hero-foreground/10";
@@ -87,6 +89,7 @@ function MemberLanguageMenu() {
 export function MemberShell({ children }: { children: ReactNode }) {
   const { t } = useCms();
   const { roles } = useMyRoles();
+  const votesOn = useQuery(featureFlagsQueryOptions).data?.votes !== false;
 
   // Exact grants, not the inherited `isEditor` / `isOrganizer` flags: the CMS
   // route guards use exact checks too, so the link must agree with them.
@@ -107,7 +110,7 @@ export function MemberShell({ children }: { children: ReactNode }) {
     { to: "/member", label: t("member.nav.home") },
     { to: "/my-profile", label: t("member.nav.profile") },
     { to: "/member/certificates", label: t("member.nav.credits") },
-    { to: "/member/votes", label: t("member.nav.votes") },
+    ...(votesOn ? [{ to: "/member/votes", label: t("member.nav.votes") }] : []),
     { to: "/volunteering", label: t("member.nav.volunteering") },
     { to: "/guides", label: t("nav.guides") },
   ];
