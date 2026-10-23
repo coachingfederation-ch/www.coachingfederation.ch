@@ -16,6 +16,7 @@
     "baseline:verify": "bash scripts/verify-baseline.sh"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^4.0.99",
     "@ai-sdk/openai-compatible": "^3.0.23",
     "@ai-sdk/react": "^4.0.55",
     "@block65/webcrypto-web-push": "^1.0.2",

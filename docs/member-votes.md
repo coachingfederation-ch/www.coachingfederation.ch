@@ -27,6 +27,23 @@ Once a published vote has opened, `saveVote` refuses option or start-date change
 
 Turnout denominator: `votes.eligible_count`, frozen on the first ballot (active + grace members with a linked account).
 
+## Editor and translation
+
+The editor has Proposal, Ballot, and Publishing tabs and a shared DE / FR / IT / EN language selector. Proposal uses the existing `MarkdownEditor`; the member page and staff preview render the same safe Markdown. Downloads stay with Proposal, options and rationale settings with Ballot, and schedule, status, and email controls with Publishing. Compact navigation applies only to this editor on narrow screens.
+
+Translate to DE, FR, IT translates the current English draft, including title, summary, description, and option labels, in one authenticated, manager-only action (20 requests per hour). Translation never saves or publishes. Existing translations require overwrite confirmation; failures preserve all buffered edits. Review machine translations, then use Save. English fallback remains available for missing labels.
+
+`VoteOption` keeps `key` and English `label`, plus optional `label_de`, `label_fr`, and `label_it` within the existing JSON column. No schema or RLS changes are needed. Validation checks that every translated option key matches the source; labels are merged by key, not position. Existing post-opening option freezing also covers translated wording. Member ballots, confirmation, results, rationale headings, and staff CSV labels use the selected language; AI rationale summaries remain English.
+
+### PR note
+
+- Summary: reorganizes the editor around writing, ballot setup, and publishing while reusing formatting tools and adding coordinated translation.
+- UI: three sections, shared languages, read-only preview retained, save/translation feedback, compact editor navigation on phones.
+- Backend/schema: one guarded draft-translation server function; optional labels in existing JSON validation; no migration or permissions change.
+- Testing: 20 tests passed. A temporary draft was translated through the real AI connection, saved, reloaded, and previewed with rendered Markdown. Desktop and phone screenshots verified the layout; phone inputs retain usable width and navigation opens as a drawer. The temporary draft was deleted. Full contrast and assistive-technology review remains pending.
+- Risks/rollback: additive labels remain safe for old consumers; revert editor/rendering and translator changes to restore the previous flow. Machine translations need review.
+- Follow-ups: automatic stale-translation detection is not implemented.
+
 ## Staff preview
 
 The editor's Preview link opens `/manage/votes/preview/:slug` in a new tab. It displays the saved proposal, translations, downloads, and ballot using the same `VotePage` renderer as the Member Area. Save edits before previewing. Draft access requires the same server-side vote-manager check as the editor, even for a direct preview request. Preview voting is disabled and the submit handler is guarded; no tally or rationales are returned in preview mode. Normal member access and voting rules are unchanged.

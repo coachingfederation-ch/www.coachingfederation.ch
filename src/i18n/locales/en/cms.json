@@ -3553,6 +3553,13 @@
       "archived": "Archived"
     },
     "admin": {
+      "ballot": "Ballot",
+      "publishing": "Publishing",
+      "translateAll": "Translate to DE, FR, IT",
+      "translating": "Translating…",
+      "translateOverwrite": "Replace existing translations with new translations of the English text and options?",
+      "translationReview": "Translations ready for review. Save to keep them.",
+      "unsaved": "Unsaved changes",
       "preview": "Preview",
       "previewNotice": "Preview of the saved proposal. Voting is disabled.",
       "title": "Member votes",
