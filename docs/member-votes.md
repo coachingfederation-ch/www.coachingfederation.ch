@@ -29,6 +29,12 @@ Turnout denominator: `votes.eligible_count`, frozen on the first ballot (active 
 
 ## Files
 
+## Staff preview
+
+The editor's Preview link opens `/manage/votes/preview/:slug` in a new tab. It displays the saved proposal, translations, downloads, and ballot using the same `VotePage` renderer as the Member Area. Save edits before previewing. Draft access requires the same server-side vote-manager check as the editor, even for a direct preview request. Preview voting is disabled and the submit handler is guarded; no tally or rationales are returned in preview mode. Normal member access and voting rules are unchanged.
+
+## Files
+
 Downloads live in the private `vote-files` bucket under `<vote id>/…`. Managers upload; members get one-hour signed links from `getMemberVote`.
 
 ## Emails
