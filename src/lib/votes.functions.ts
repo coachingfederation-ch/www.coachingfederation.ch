@@ -154,12 +154,7 @@ const saveSchema = z.object({
   status: z.enum(["draft", "published", "archived"]),
   opens_at: z.string().datetime(),
   closes_at: z.string().datetime(),
-  options: z
-    .array(
-      translatedOptionSchema,
-    )
-    .min(2)
-    .max(10),
+  options: z.array(translatedOptionSchema).min(2).max(10),
   results_mode: z.enum(["after_vote", "after_close"]),
   rationale_enabled: z.boolean(),
   announce_enabled: z.boolean(),

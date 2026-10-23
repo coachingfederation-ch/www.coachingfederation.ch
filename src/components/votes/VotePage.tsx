@@ -28,7 +28,14 @@ import { MemberShell } from "@/components/member/MemberShell";
 import { VoteResults } from "@/components/votes/VoteResults";
 import { useCms } from "@/i18n/cms";
 import { castVote, getMemberVote } from "@/lib/votes.functions";
-import { RATIONALE_MAX, castErrorKey, localized, voteOptionLabel, votePhase, type VoteOption } from "@/lib/votes";
+import {
+  RATIONALE_MAX,
+  castErrorKey,
+  localized,
+  voteOptionLabel,
+  votePhase,
+  type VoteOption,
+} from "@/lib/votes";
 
 export function VotePage({ slug, preview = false }: { slug: string; preview?: boolean }) {
   const { t, locale } = useCms();
@@ -70,7 +77,10 @@ export function VotePage({ slug, preview = false }: { slug: string; preview?: bo
 
   const { vote, voted, attachments, tally, rationales } = data;
   const phase = votePhase(vote);
-  const options = (vote.options as VoteOption[]).map((option) => ({ ...option, label: voteOptionLabel(option, locale) }));
+  const options = (vote.options as VoteOption[]).map((option) => ({
+    ...option,
+    label: voteOptionLabel(option, locale),
+  }));
   const labelOf = (k: string) => options.find((o) => o.key === k)?.label ?? k;
   const description = localized(vote, "description", locale);
 

@@ -10,7 +10,13 @@ import type { Locale } from "@/i18n/config";
 export type VoteStatus = "draft" | "published" | "archived";
 export type VotePhase = "draft" | "scheduled" | "open" | "closed" | "archived";
 export type ResultsMode = "after_vote" | "after_close";
-export type VoteOption = { key: string; label: string; label_de?: string; label_fr?: string; label_it?: string };
+export type VoteOption = {
+  key: string;
+  label: string;
+  label_de?: string;
+  label_fr?: string;
+  label_it?: string;
+};
 
 export function voteOptionLabel(option: VoteOption, locale: Locale): string {
   return (locale === "en" ? "" : option[`label_${locale}`]?.trim()) || option.label;

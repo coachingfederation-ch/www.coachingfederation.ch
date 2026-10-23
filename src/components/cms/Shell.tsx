@@ -32,7 +32,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { useCms } from "@/i18n/cms";
 import { LOCALE_LABELS, LOCALE_ORDER } from "@/i18n/config";
-import { Button, Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/design-system/icf-welcome-design-system-a835df";
+import {
+  Button,
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/design-system/icf-welcome-design-system-a835df";
 import { Menu } from "lucide-react";
 import { useMyRoles } from "@/lib/roles";
 import type { AppRole } from "@/lib/role-model";
@@ -76,7 +83,12 @@ const nav = [
     icon: Mail,
     allowedRoles: ["membership", "administrator"],
   },
-  { to: "/manage/votes", key: "nav.votes", icon: Vote, allowedRoles: ["administrator", "membership"] },
+  {
+    to: "/manage/votes",
+    key: "nav.votes",
+    icon: Vote,
+    allowedRoles: ["administrator", "membership"],
+  },
   { to: "/vocabularies", key: "nav.vocabularies", icon: ListTree, allowedRoles: PLATFORM_ADMIN },
   {
     to: "/coach-finder",
@@ -158,7 +170,13 @@ function Logo({ title }: { title: string }) {
   );
 }
 
-export function Shell({ children, compactNavigation = false }: { children: ReactNode; compactNavigation?: boolean }) {
+export function Shell({
+  children,
+  compactNavigation = false,
+}: {
+  children: ReactNode;
+  compactNavigation?: boolean;
+}) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [email, setEmail] = useState<string | null>(null);
@@ -181,7 +199,12 @@ export function Shell({ children, compactNavigation = false }: { children: React
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
-      <aside className={(compactNavigation ? "hidden md:flex" : "flex") + " w-64 shrink-0 flex-col justify-between border-r border-border bg-card"}>
+      <aside
+        className={
+          (compactNavigation ? "hidden md:flex" : "flex") +
+          " w-64 shrink-0 flex-col justify-between border-r border-border bg-card"
+        }
+      >
         <div>
           <Logo title={t("nav.workspace")} />
           <nav className="mt-2 flex flex-col gap-1 px-3">
@@ -260,14 +283,33 @@ export function Shell({ children, compactNavigation = false }: { children: React
         </div>
       </aside>
       <main className="flex-1 min-w-0">
-        {compactNavigation ? <div className="border-b border-border bg-card px-4 py-3 md:hidden">
-          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger asChild><Button variant="outline"><Menu aria-hidden />{t("nav.workspace")}</Button></SheetTrigger>
-            <SheetContent side="left"><SheetHeader><SheetTitle>{t("nav.workspace")}</SheetTitle></SheetHeader>
-              <nav className="flex flex-col gap-2 overflow-y-auto px-4">{items.map(({ to, key, icon: Icon }) => <Button key={to} asChild variant="ghost"><Link to={to} onClick={() => setMobileOpen(false)}><Icon aria-hidden />{t(key)}</Link></Button>)}</nav>
-            </SheetContent>
-          </Sheet>
-        </div> : null}
+        {compactNavigation ? (
+          <div className="border-b border-border bg-card px-4 py-3 md:hidden">
+            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline">
+                  <Menu aria-hidden />
+                  {t("nav.workspace")}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left">
+                <SheetHeader>
+                  <SheetTitle>{t("nav.workspace")}</SheetTitle>
+                </SheetHeader>
+                <nav className="flex flex-col gap-2 overflow-y-auto px-4">
+                  {items.map(({ to, key, icon: Icon }) => (
+                    <Button key={to} asChild variant="ghost">
+                      <Link to={to} onClick={() => setMobileOpen(false)}>
+                        <Icon aria-hidden />
+                        {t(key)}
+                      </Link>
+                    </Button>
+                  ))}
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
+        ) : null}
         {children}
       </main>
     </div>

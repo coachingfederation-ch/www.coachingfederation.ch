@@ -5,7 +5,7 @@
  */
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Eye, Trash2, Upload } from "lucide-react";
+import { Eye, Languages, Loader2, Trash2, Upload } from "lucide-react";
 import {
   Badge,
   Button,
@@ -20,6 +20,9 @@ import {
   TabsTrigger,
   Textarea,
 } from "@/design-system/icf-welcome-design-system-a835df";
+import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
+import { translateVoteDraft } from "@/lib/vote-translations.functions";
+import { LOCALE_ORDER, type Locale } from "@/i18n/config";
 import { Shell } from "@/components/cms/Shell";
 import { supabase } from "@/integrations/supabase/client";
 import { requireStaffAccess, VOTE_ROLES } from "@/lib/staff-guard";
@@ -122,6 +125,10 @@ function VoteEditorPage() {
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [editingLocale, setEditingLocale] = useState<Locale>("en");
+  const [translating, setTranslating] = useState(false);
+  const [translationNote, setTranslationNote] = useState(false);
+  const [dirty, setDirty] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -141,7 +148,7 @@ function VoteEditorPage() {
 
   if (!form || !loaded) {
     return (
-      <Shell>
+      <Shell compactNavigation>
         <div className="mx-auto max-w-4xl px-6 py-8">
           {error ? <p className="text-sm text-destructive">{error}</p> : null}
         </div>
@@ -153,6 +160,7 @@ function VoteEditorPage() {
   const locked = loaded.vote.status !== "draft" && new Date(loaded.vote.opens_at) <= new Date();
   const set = <K extends keyof Form>(k: K, v: Form[K]) => {
     setSaved(false);
+    setDirty(true);
     setForm({ ...form, [k]: v });
   };
 
@@ -186,6 +194,7 @@ function VoteEditorPage() {
         },
       });
       setSaved(true);
+      setDirty(false);
       await load();
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -205,7 +214,8 @@ function VoteEditorPage() {
       await addVoteAttachment({
         data: { voteId: id, filePath: path, fileName: file.name, size: file.size },
       });
-      await load();
+      const row = await getVoteAdmin({ data: { id } });
+      setLoaded(row);
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -214,8 +224,55 @@ function VoteEditorPage() {
     }
   };
 
+  const translate = async () => {
+    if (form.title.trim().length < 3 || locked) return;
+    if (
+      (form.title_de || form.title_fr || form.title_it) &&
+      !window.confirm(t("votes.admin.translateOverwrite"))
+    )
+      return;
+    setTranslating(true);
+    setError(null);
+    setTranslationNote(false);
+    try {
+      const translated = await translateVoteDraft({
+        data: {
+          title: form.title,
+          summary: form.summary,
+          description: form.description,
+          options: form.options,
+        },
+      });
+      const fields: Partial<Form> = {};
+      for (const locale of ["de", "fr", "it"] as const) {
+        fields[`title_${locale}`] = translated[locale].title;
+        fields[`summary_${locale}`] = translated[locale].summary;
+        fields[`description_${locale}`] = translated[locale].description;
+      }
+      setForm({
+        ...form,
+        ...fields,
+        options: form.options.map((option) => ({
+          ...option,
+          label_de: translated.de.options.find((o) => o.key === option.key)?.label,
+          label_fr: translated.fr.options.find((o) => o.key === option.key)?.label,
+          label_it: translated.it.options.find((o) => o.key === option.key)?.label,
+        })),
+      });
+      setDirty(true);
+      setSaved(false);
+      setTranslationNote(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setTranslating(false);
+    }
+  };
+
   const updateOption = (i: number, label: string) => {
-    const next = form.options.map((o, j) => (j === i ? { ...o, label } : o));
+    const next = form.options.map((o, j) =>
+      j === i ? { ...o, [editingLocale === "en" ? "label" : `label_${editingLocale}`]: label } : o,
+    );
     set("options", next);
   };
   const addOption = () => {
@@ -254,9 +311,10 @@ function VoteEditorPage() {
       </div>
       <div className="space-y-2">
         <Label htmlFor={`description${suffix}`}>{t("votes.admin.fDescription")}</Label>
-        <Textarea
-          id={`description${suffix}`}
-          rows={10}
+        <MarkdownEditor
+          language={editingLocale}
+          modes={["write", "preview"]}
+          rows={14}
           value={form[`description${suffix}` as keyof Form] as string}
           onChange={(e) => set(`description${suffix}` as keyof Form, e.target.value as never)}
         />
@@ -265,7 +323,7 @@ function VoteEditorPage() {
   );
 
   return (
-    <Shell>
+    <Shell compactNavigation>
       <div className="mx-auto max-w-4xl px-6 py-8">
         <Link to="/manage/votes" className="text-sm font-semibold text-primary">
           ← {t("votes.admin.back")}
@@ -293,7 +351,8 @@ function VoteEditorPage() {
               {t("votes.admin.results")}
             </Link>
           </Button>
-          <Button onClick={() => void save()} disabled={busy}>
+          <Button onClick={() => void save()} disabled={busy || translating}>
+            {busy ? <Loader2 className="animate-spin" aria-hidden /> : null}
             {saved ? t("votes.admin.saved") : t("votes.admin.save")}
           </Button>
         </div>
@@ -303,209 +362,255 @@ function VoteEditorPage() {
           </p>
         ) : null}
 
-        <section className="rounded-2xl border border-border bg-card p-5">
-          <h2 className="text-sm font-bold">{t("votes.admin.content")}</h2>
-          <Tabs defaultValue="en" className="mt-4">
+        <div className="mb-6 flex flex-wrap items-center gap-3">
+          <Tabs value={editingLocale} onValueChange={(value) => setEditingLocale(value as Locale)}>
             <TabsList>
-              <TabsTrigger value="en">EN</TabsTrigger>
-              <TabsTrigger value="de">DE</TabsTrigger>
-              <TabsTrigger value="fr">FR</TabsTrigger>
-              <TabsTrigger value="it">IT</TabsTrigger>
-            </TabsList>
-            <TabsContent value="en">{textFields("")}</TabsContent>
-            <TabsContent value="de">{textFields("_de")}</TabsContent>
-            <TabsContent value="fr">{textFields("_fr")}</TabsContent>
-            <TabsContent value="it">{textFields("_it")}</TabsContent>
-          </Tabs>
-          <div className="mt-4 max-w-sm space-y-2">
-            <Label htmlFor="category">{t("votes.admin.fCategory")}</Label>
-            <Input
-              id="category"
-              value={form.category}
-              onChange={(e) => set("category", e.target.value)}
-            />
-          </div>
-        </section>
-
-        <section className="mt-6 rounded-2xl border border-border bg-card p-5">
-          <h2 className="text-sm font-bold">{t("votes.admin.settings")}</h2>
-          {locked ? (
-            <p className="mt-2 text-xs text-muted-foreground">{t("votes.admin.lockedHint")}</p>
-          ) : null}
-          <div className="mt-4 grid gap-4 sm:grid-cols-3">
-            <div className="space-y-2">
-              <Label>{t("votes.admin.fStatus")}</Label>
-              <RadioGroup value={form.status} onValueChange={(v) => set("status", v as VoteStatus)}>
-                {(["draft", "published", "archived"] as const).map((st) => (
-                  <Label key={st} className="flex items-center gap-2 font-normal">
-                    <RadioGroupItem value={st} />
-                    {t(`votes.admin.status${st.charAt(0).toUpperCase()}${st.slice(1)}`)}
-                  </Label>
-                ))}
-              </RadioGroup>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="opens">{t("votes.admin.fOpens")}</Label>
-              <Input
-                id="opens"
-                type="datetime-local"
-                value={form.opens}
-                disabled={locked}
-                onChange={(e) => set("opens", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="closes">{t("votes.admin.fCloses")}</Label>
-              <Input
-                id="closes"
-                type="datetime-local"
-                value={form.closes}
-                onChange={(e) => set("closes", e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="mt-6 space-y-2">
-            <Label>{t("votes.admin.fOptions")}</Label>
-            <ul className="space-y-2">
-              {form.options.map((o, i) => (
-                <li key={o.key} className="flex items-center gap-2">
-                  <Input
-                    value={o.label}
-                    disabled={locked}
-                    aria-label={`${t("votes.admin.fOptions")} ${i + 1}`}
-                    onChange={(e) => updateOption(i, e.target.value)}
-                  />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    disabled={locked || form.options.length <= 2}
-                    aria-label={t("votes.admin.removeOption")}
-                    onClick={() =>
-                      set(
-                        "options",
-                        form.options.filter((_, j) => j !== i),
-                      )
-                    }
-                  >
-                    <Trash2 aria-hidden />
-                  </Button>
-                </li>
+              {LOCALE_ORDER.map((locale) => (
+                <TabsTrigger key={locale} value={locale}>
+                  {locale.toUpperCase()}
+                </TabsTrigger>
               ))}
-            </ul>
-            <div className="flex flex-wrap gap-2">
+            </TabsList>
+          </Tabs>
+          <Button
+            variant="outline"
+            disabled={translating || busy || locked || form.title.trim().length < 3}
+            onClick={() => void translate()}
+          >
+            {translating ? (
+              <Loader2 className="animate-spin" aria-hidden />
+            ) : (
+              <Languages aria-hidden />
+            )}
+            {t(translating ? "votes.admin.translating" : "votes.admin.translateAll")}
+          </Button>
+          <span role="status" className="text-sm text-muted-foreground">
+            {t(
+              translationNote
+                ? "votes.admin.translationReview"
+                : dirty
+                  ? "votes.admin.unsaved"
+                  : "votes.admin.saved",
+            )}
+          </span>
+        </div>
+        <Tabs defaultValue="proposal">
+          <TabsList>
+            <TabsTrigger value="proposal">{t("votes.admin.content")}</TabsTrigger>
+            <TabsTrigger value="ballot">{t("votes.admin.ballot")}</TabsTrigger>
+            <TabsTrigger value="publishing">{t("votes.admin.publishing")}</TabsTrigger>
+          </TabsList>
+          <TabsContent value="proposal">
+            <section className="py-5">
+              <h2 className="text-sm font-bold">{t("votes.admin.content")}</h2>
+              {textFields(editingLocale === "en" ? "" : `_${editingLocale}`)}
+              <div className="mt-4 max-w-sm space-y-2">
+                <Label htmlFor="category">{t("votes.admin.fCategory")}</Label>
+                <Input
+                  id="category"
+                  value={form.category}
+                  onChange={(e) => set("category", e.target.value)}
+                />
+              </div>
+            </section>
+
+            <section className="border-t border-border py-5">
+              <h2 className="text-sm font-bold">{t("votes.admin.attachments")}</h2>
+              {loaded.attachments.length === 0 ? (
+                <p className="mt-2 text-sm text-muted-foreground">{t("votes.admin.noFiles")}</p>
+              ) : (
+                <ul className="mt-3 divide-y divide-border">
+                  {loaded.attachments.map((f) => (
+                    <li key={f.id} className="flex items-center justify-between py-2 text-sm">
+                      {f.file_name}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={async () => {
+                          await removeVoteAttachment({ data: { id: f.id } });
+                          setLoaded(await getVoteAdmin({ data: { id } }));
+                        }}
+                      >
+                        {t("votes.admin.remove")}
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <input
+                ref={fileRef}
+                type="file"
+                className="sr-only"
+                id="vote-file"
+                accept=".pdf,.ppt,.pptx,.key,.doc,.docx,.xlsx,.png,.jpg"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) void upload(f);
+                }}
+              />
               <Button
                 variant="outline"
-                size="sm"
-                disabled={locked || form.options.length >= 10}
-                onClick={addOption}
+                className="mt-3"
+                disabled={uploading}
+                onClick={() => fileRef.current?.click()}
               >
-                {t("votes.admin.addOption")}
+                <Upload aria-hidden />
+                {uploading ? t("votes.admin.uploading") : t("votes.admin.upload")}
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                disabled={locked}
-                onClick={() => set("options", DEFAULT_OPTIONS)}
-              >
-                {t("votes.admin.useYesNo")}
-              </Button>
-            </div>
-          </div>
-
-          <div className="mt-6 space-y-2">
-            <Label>{t("votes.admin.fResults")}</Label>
-            <RadioGroup
-              value={form.results_mode}
-              onValueChange={(v) => set("results_mode", v as Form["results_mode"])}
-            >
-              <Label className="flex items-center gap-2 font-normal">
-                <RadioGroupItem value="after_vote" />
-                {t("votes.admin.resultsAfterVote")}
-              </Label>
-              <Label className="flex items-center gap-2 font-normal">
-                <RadioGroupItem value="after_close" />
-                {t("votes.admin.resultsAfterClose")}
-              </Label>
-            </RadioGroup>
-          </div>
-
-          <div className="mt-6 space-y-3">
-            <Label className="flex items-center gap-3 font-normal">
-              <Switch
-                checked={form.rationale_enabled}
-                onCheckedChange={(v) => set("rationale_enabled", v)}
-              />
-              {t("votes.admin.fRationale")}
-            </Label>
-            <Label className="flex items-center gap-3 font-normal">
-              <Switch
-                checked={form.announce_enabled}
-                onCheckedChange={(v) => set("announce_enabled", v)}
-              />
-              {t("votes.admin.fAnnounce")}
-            </Label>
-          </div>
-        </section>
-
-        <section className="mt-6 rounded-2xl border border-border bg-card p-5">
-          <h2 className="text-sm font-bold">{t("votes.admin.attachments")}</h2>
-          {loaded.attachments.length === 0 ? (
-            <p className="mt-2 text-sm text-muted-foreground">{t("votes.admin.noFiles")}</p>
-          ) : (
-            <ul className="mt-3 divide-y divide-border">
-              {loaded.attachments.map((f) => (
-                <li key={f.id} className="flex items-center justify-between py-2 text-sm">
-                  {f.file_name}
+            </section>
+          </TabsContent>
+          <TabsContent value="ballot">
+            <section className="py-5">
+              <div className="mt-6 space-y-2">
+                <Label>{t("votes.admin.fOptions")}</Label>
+                <ul className="space-y-2">
+                  {form.options.map((o, i) => (
+                    <li key={o.key} className="flex items-center gap-2">
+                      <Input
+                        value={
+                          editingLocale === "en" ? o.label : (o[`label_${editingLocale}`] ?? "")
+                        }
+                        disabled={locked || translating}
+                        aria-label={`${t("votes.admin.fOptions")} ${i + 1}`}
+                        onChange={(e) => updateOption(i, e.target.value)}
+                      />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        disabled={
+                          locked ||
+                          translating ||
+                          editingLocale !== "en" ||
+                          form.options.length <= 2
+                        }
+                        aria-label={t("votes.admin.removeOption")}
+                        onClick={() =>
+                          set(
+                            "options",
+                            form.options.filter((_, j) => j !== i),
+                          )
+                        }
+                      >
+                        <Trash2 aria-hidden />
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={
+                      locked || translating || editingLocale !== "en" || form.options.length >= 10
+                    }
+                    onClick={addOption}
+                  >
+                    {t("votes.admin.addOption")}
+                  </Button>
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={async () => {
-                      await removeVoteAttachment({ data: { id: f.id } });
-                      await load();
-                    }}
+                    disabled={editingLocale !== "en" || locked || translating}
+                    onClick={() => set("options", DEFAULT_OPTIONS)}
                   >
-                    {t("votes.admin.remove")}
+                    {t("votes.admin.useYesNo")}
                   </Button>
-                </li>
-              ))}
-            </ul>
-          )}
-          <input
-            ref={fileRef}
-            type="file"
-            className="sr-only"
-            id="vote-file"
-            accept=".pdf,.ppt,.pptx,.key,.doc,.docx,.xlsx,.png,.jpg"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) void upload(f);
-            }}
-          />
-          <Button
-            variant="outline"
-            className="mt-3"
-            disabled={uploading}
-            onClick={() => fileRef.current?.click()}
-          >
-            <Upload aria-hidden />
-            {uploading ? t("votes.admin.uploading") : t("votes.admin.upload")}
-          </Button>
-        </section>
+                </div>
+              </div>
 
-        {loaded.vote.status === "draft" ? (
-          <Button
-            variant="destructive"
-            className="mt-6"
-            onClick={async () => {
-              if (!window.confirm(t("votes.admin.deleteConfirm"))) return;
-              await deleteVote({ data: { id } });
-              void navigate({ to: "/manage/votes" });
-            }}
-          >
-            {t("votes.admin.delete")}
-          </Button>
-        ) : null}
+              <div className="mt-6 space-y-2">
+                <Label>{t("votes.admin.fResults")}</Label>
+                <RadioGroup
+                  value={form.results_mode}
+                  onValueChange={(v) => set("results_mode", v as Form["results_mode"])}
+                >
+                  <Label className="flex items-center gap-2 font-normal">
+                    <RadioGroupItem value="after_vote" />
+                    {t("votes.admin.resultsAfterVote")}
+                  </Label>
+                  <Label className="flex items-center gap-2 font-normal">
+                    <RadioGroupItem value="after_close" />
+                    {t("votes.admin.resultsAfterClose")}
+                  </Label>
+                </RadioGroup>
+              </div>
+
+              <div className="mt-6 space-y-3">
+                <Label className="flex items-center gap-3 font-normal">
+                  <Switch
+                    checked={form.rationale_enabled}
+                    onCheckedChange={(v) => set("rationale_enabled", v)}
+                  />
+                  {t("votes.admin.fRationale")}
+                </Label>
+              </div>
+            </section>
+          </TabsContent>
+          <TabsContent value="publishing">
+            <section className="py-5">
+              <h2 className="text-sm font-bold">{t("votes.admin.settings")}</h2>
+              {locked ? (
+                <p className="mt-2 text-xs text-muted-foreground">{t("votes.admin.lockedHint")}</p>
+              ) : null}
+              <div className="mt-4 grid gap-4 sm:grid-cols-3">
+                <div className="space-y-2">
+                  <Label>{t("votes.admin.fStatus")}</Label>
+                  <RadioGroup
+                    value={form.status}
+                    onValueChange={(v) => set("status", v as VoteStatus)}
+                  >
+                    {(["draft", "published", "archived"] as const).map((st) => (
+                      <Label key={st} className="flex items-center gap-2 font-normal">
+                        <RadioGroupItem value={st} />
+                        {t(`votes.admin.status${st.charAt(0).toUpperCase()}${st.slice(1)}`)}
+                      </Label>
+                    ))}
+                  </RadioGroup>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="opens">{t("votes.admin.fOpens")}</Label>
+                  <Input
+                    id="opens"
+                    type="datetime-local"
+                    value={form.opens}
+                    disabled={locked}
+                    onChange={(e) => set("opens", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="closes">{t("votes.admin.fCloses")}</Label>
+                  <Input
+                    id="closes"
+                    type="datetime-local"
+                    value={form.closes}
+                    onChange={(e) => set("closes", e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <Label className="flex items-center gap-3 font-normal">
+                <Switch
+                  checked={form.announce_enabled}
+                  onCheckedChange={(v) => set("announce_enabled", v)}
+                />
+                {t("votes.admin.fAnnounce")}
+              </Label>
+            </section>
+            {loaded.vote.status === "draft" ? (
+              <Button
+                variant="destructive"
+                className="mt-6"
+                onClick={async () => {
+                  if (!window.confirm(t("votes.admin.deleteConfirm"))) return;
+                  await deleteVote({ data: { id } });
+                  void navigate({ to: "/manage/votes" });
+                }}
+              >
+                {t("votes.admin.delete")}
+              </Button>
+            ) : null}
+          </TabsContent>
+        </Tabs>
       </div>
     </Shell>
   );
