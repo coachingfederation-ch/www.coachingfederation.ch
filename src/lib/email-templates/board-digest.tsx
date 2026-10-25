@@ -7,15 +7,7 @@
  * emails. Report-specific inline styles remain compatible with email clients.
  */
 import * as React from "react";
-import {
-  Button,
-  Column,
-  Heading,
-  Hr,
-  Row,
-  Section,
-  Text,
-} from "@react-email/components";
+import { Button, Column, Heading, Hr, Row, Section, Text } from "@react-email/components";
 import type { EmailTemplateData, TemplateEntry } from "./registry";
 import type { BoardDigestData, DigestList } from "../board-digest";
 import type { Delta } from "../chapter-overview";
@@ -81,94 +73,94 @@ const Email = ({ digest, test }: Props) => {
       tag={test ? "Board digest · test send" : "Board digest"}
       heading="What happened on the platform"
     >
-            <Text style={paragraph}>{digest.periodLabel}</Text>
+      <Text style={paragraph}>{digest.periodLabel}</Text>
 
-            <SectionTitle>At a glance</SectionTitle>
-            {KPI_LABELS.map(([key, label]) => (
-              <Row key={key} style={{ marginBottom: "6px" }}>
-                <Column style={kpiLabel}>{label}</Column>
-                <Column style={kpiValue}>{digest.kpis[key].current}</Column>
-                <Column style={kpiTrend}>{trend(digest.kpis[key])}</Column>
-              </Row>
-            ))}
+      <SectionTitle>At a glance</SectionTitle>
+      {KPI_LABELS.map(([key, label]) => (
+        <Row key={key} style={{ marginBottom: "6px" }}>
+          <Column style={kpiLabel}>{label}</Column>
+          <Column style={kpiValue}>{digest.kpis[key].current}</Column>
+          <Column style={kpiTrend}>{trend(digest.kpis[key])}</Column>
+        </Row>
+      ))}
 
-            {members ? (
-              <>
-                <SectionTitle>Members</SectionTitle>
-                <Text style={h3}>{`New members (${members.newMembers.total})`}</Text>
-                <List list={members.newMembers} empty="No new members." />
-                <Text style={h3}>Changes</Text>
-                {members.changes.length ? (
-                  members.changes.map((c) => (
-                    <Text key={c.label} style={listRow}>{`${c.label}: ${c.count}`}</Text>
-                  ))
-                ) : (
-                  <Text style={muted}>No member changes recorded.</Text>
-                )}
-                <List list={members.changedMembers} empty="" />
-                <Text style={h3}>{`Entered the grace period (${members.enteredGrace.total})`}</Text>
-                <List list={members.enteredGrace} empty="Nobody entered the grace period." />
-                <Text style={h3}>{`Left the chapter (${members.deactivated.total})`}</Text>
-                <List list={members.deactivated} empty="Nobody left." />
-                <Text style={h3}>Retention right now</Text>
-                <Text style={listRow}>
-                  {`${members.retention.pastExpiry} past expiry · ${members.retention.inGrace} in grace period · ${members.retention.due} due for removal`}
-                </Text>
-              </>
-            ) : null}
+      {members ? (
+        <>
+          <SectionTitle>Members</SectionTitle>
+          <Text style={h3}>{`New members (${members.newMembers.total})`}</Text>
+          <List list={members.newMembers} empty="No new members." />
+          <Text style={h3}>Changes</Text>
+          {members.changes.length ? (
+            members.changes.map((c) => (
+              <Text key={c.label} style={listRow}>{`${c.label}: ${c.count}`}</Text>
+            ))
+          ) : (
+            <Text style={muted}>No member changes recorded.</Text>
+          )}
+          <List list={members.changedMembers} empty="" />
+          <Text style={h3}>{`Entered the grace period (${members.enteredGrace.total})`}</Text>
+          <List list={members.enteredGrace} empty="Nobody entered the grace period." />
+          <Text style={h3}>{`Left the chapter (${members.deactivated.total})`}</Text>
+          <List list={members.deactivated} empty="Nobody left." />
+          <Text style={h3}>Retention right now</Text>
+          <Text style={listRow}>
+            {`${members.retention.pastExpiry} past expiry · ${members.retention.inGrace} in grace period · ${members.retention.due} due for removal`}
+          </Text>
+        </>
+      ) : null}
 
-            {articles ? (
-              <>
-                <SectionTitle>{`New articles (${articles.total})`}</SectionTitle>
-                <List list={articles} empty="No new articles." />
-              </>
-            ) : null}
+      {articles ? (
+        <>
+          <SectionTitle>{`New articles (${articles.total})`}</SectionTitle>
+          <List list={articles} empty="No new articles." />
+        </>
+      ) : null}
 
-            {events ? (
-              <>
-                <SectionTitle>{`New events (${events.total})`}</SectionTitle>
-                <List list={events} empty="No new events." />
-              </>
-            ) : null}
+      {events ? (
+        <>
+          <SectionTitle>{`New events (${events.total})`}</SectionTitle>
+          <List list={events} empty="No new events." />
+        </>
+      ) : null}
 
-            {assistant ? (
-              <>
-                <SectionTitle>Assistant</SectionTitle>
-                <Text style={listRow}>
-                  {`${assistant.total} conversations · ${pct(assistant.successRate)} answered · ${pct(assistant.escalationRate)} passed to the office · ${pct(assistant.helpfulRate)} rated helpful`}
-                </Text>
-                {assistant.topCategories.length ? (
-                  <>
-                    <Text style={h3}>Most asked about</Text>
-                    {assistant.topCategories.map((c) => (
-                      <Text key={c.label} style={listRow}>{`${c.label}: ${c.count}`}</Text>
-                    ))}
-                  </>
-                ) : null}
-                <Text style={h3}>Passed to the office</Text>
-                <List list={assistant.escalations} empty="None." />
-              </>
-            ) : null}
+      {assistant ? (
+        <>
+          <SectionTitle>Assistant</SectionTitle>
+          <Text style={listRow}>
+            {`${assistant.total} conversations · ${pct(assistant.successRate)} answered · ${pct(assistant.escalationRate)} passed to the office · ${pct(assistant.helpfulRate)} rated helpful`}
+          </Text>
+          {assistant.topCategories.length ? (
+            <>
+              <Text style={h3}>Most asked about</Text>
+              {assistant.topCategories.map((c) => (
+                <Text key={c.label} style={listRow}>{`${c.label}: ${c.count}`}</Text>
+              ))}
+            </>
+          ) : null}
+          <Text style={h3}>Passed to the office</Text>
+          <List list={assistant.escalations} empty="None." />
+        </>
+      ) : null}
 
-            {operations ? (
-              <>
-                <SectionTitle>Operational structure change log</SectionTitle>
-                <Text style={listRow}>
-                  {`${operations.assigned} assigned · ${operations.unassigned} removed`}
-                </Text>
-                <List list={operations.entries} empty="No changes." />
-              </>
-            ) : null}
+      {operations ? (
+        <>
+          <SectionTitle>Operational structure change log</SectionTitle>
+          <Text style={listRow}>
+            {`${operations.assigned} assigned · ${operations.unassigned} removed`}
+          </Text>
+          <List list={operations.entries} empty="No changes." />
+        </>
+      ) : null}
 
-            <Section style={{ margin: "28px 0 0" }}>
-              <Button href={digest.overviewUrl} style={button}>
-                Open the chapter overview
-              </Button>
-            </Section>
-            <Text style={muted}>
-              Sent to the board mailbox configured on the Integration page. Member names are
-              included for board use only; please do not forward.
-            </Text>
+      <Section style={{ margin: "28px 0 0" }}>
+        <Button href={digest.overviewUrl} style={button}>
+          Open the chapter overview
+        </Button>
+      </Section>
+      <Text style={muted}>
+        Sent to the board mailbox configured on the Integration page. Member names are included for
+        board use only; please do not forward.
+      </Text>
     </AuthEmailShell>
   );
 };
