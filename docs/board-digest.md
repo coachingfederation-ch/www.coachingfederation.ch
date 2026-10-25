@@ -30,6 +30,11 @@ Bone background, and Deep Blue logo/copyright footer as the other chapter emails
 The overview link, confidentiality notice, section contents, and test-send label
 are unchanged. Both More → Emails and Integration previews render this template.
 
+Verification: rendered the registered placeholder preview on desktop and phone,
+confirmed both logo images load, checked the overview link and phone overflow,
+and ran all 10 digest unit tests. No email was sent; inbox-client rendering is
+not verified by these browser checks.
+
 - One recipient only: a group mailbox (default `directors@coachingfederation.ch`).
   App emails go to one address per send; the mailbox fans out to the board.
 - pg_cron job `icf-board-digest-hourly` (minute 17) posts to
