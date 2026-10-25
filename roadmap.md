@@ -1,4 +1,5 @@
 # Assignments change log
+- [x] Match Board digest to shared email header/footer and verify its rendered preview.
 - [x] Add an editable ballot question, proposal-based suggestion, translation, saved member display, and verification.
 - [x] Restructure vote editing into Proposal, Ballot, and Publishing with Markdown, draft translation, localized option labels, and mobile verification.
 - [x] Add a staff-only saved vote preview link, reuse the member page, and verify read-only behavior.
