@@ -25,6 +25,11 @@ phone numbers never do. Each section can be switched off.
 
 ## Sending
 
+The email reuses `AuthEmailShell` for the same approved chapter-logo header,
+Bone background, and Deep Blue logo/copyright footer as the other chapter emails.
+The overview link, confidentiality notice, section contents, and test-send label
+are unchanged. Both More → Emails and Integration previews render this template.
+
 - One recipient only: a group mailbox (default `directors@coachingfederation.ch`).
   App emails go to one address per send; the mailbox fans out to the board.
 - pg_cron job `icf-board-digest-hourly` (minute 17) posts to

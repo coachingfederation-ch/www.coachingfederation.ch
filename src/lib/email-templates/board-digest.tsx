@@ -3,19 +3,15 @@
  * mailbox. Staff-facing and English-only, like the other internal notices.
  * Exports: template. Registered in registry.ts.
  *
- * Email clients need inline hex colours; these mirror the ICF palette tokens.
+ * Shared email chrome comes from AuthEmailShell, matching the chapter's other
+ * emails. Report-specific inline styles remain compatible with email clients.
  */
 import * as React from "react";
 import {
-  Body,
   Button,
   Column,
-  Container,
-  Head,
   Heading,
   Hr,
-  Html,
-  Preview,
   Row,
   Section,
   Text,
@@ -23,6 +19,7 @@ import {
 import type { EmailTemplateData, TemplateEntry } from "./registry";
 import type { BoardDigestData, DigestList } from "../board-digest";
 import type { Delta } from "../chapter-overview";
+import { AuthEmailShell } from "./auth-shell";
 
 interface Props {
   digest?: BoardDigestData;
@@ -79,16 +76,11 @@ const Email = ({ digest, test }: Props) => {
   if (!digest) return null;
   const { members, articles, events, assistant, operations } = digest;
   return (
-    <Html lang="en" dir="ltr">
-      <Head />
-      <Preview>{`Platform update for ${digest.periodLabel}`}</Preview>
-      <Body style={main}>
-        <Container style={container}>
-          <Section style={banner}>
-            <Text style={bannerText}>{test ? "Board digest · test send" : "Board digest"}</Text>
-          </Section>
-          <Section style={content}>
-            <Heading style={h1}>What happened on the platform</Heading>
+    <AuthEmailShell
+      preview={`Platform update for ${digest.periodLabel}`}
+      tag={test ? "Board digest · test send" : "Board digest"}
+      heading="What happened on the platform"
+    >
             <Text style={paragraph}>{digest.periodLabel}</Text>
 
             <SectionTitle>At a glance</SectionTitle>
@@ -177,10 +169,7 @@ const Email = ({ digest, test }: Props) => {
               Sent to the board mailbox configured on the Integration page. Member names are
               included for board use only; please do not forward.
             </Text>
-          </Section>
-        </Container>
-      </Body>
-    </Html>
+    </AuthEmailShell>
   );
 };
 
@@ -272,30 +261,6 @@ export const template: TemplateEntry = {
   },
 };
 
-const main = { backgroundColor: "#ffffff", fontFamily: "Helvetica, Arial, sans-serif" };
-const container = {
-  margin: "0 auto",
-  maxWidth: "600px",
-  border: "1px solid #ece4d6",
-  borderRadius: "16px",
-  overflow: "hidden" as const,
-};
-const banner = { backgroundColor: "#212251", padding: "20px 32px" };
-const bannerText = {
-  color: "#efcb30",
-  fontSize: "12px",
-  letterSpacing: "0.08em",
-  textTransform: "uppercase" as const,
-  margin: 0,
-};
-const content = { padding: "28px 32px 32px" };
-const h1 = {
-  fontSize: "22px",
-  color: "#212251",
-  lineHeight: "1.3",
-  margin: "0 0 4px",
-  fontWeight: 400,
-};
 const h2 = { fontSize: "17px", color: "#2b379b", margin: "0 0 12px", fontWeight: 600 };
 const h3 = { fontSize: "13px", color: "#212251", fontWeight: 700, margin: "16px 0 6px" };
 const hr = { borderColor: "#ece4d6", margin: "24px 0 16px" };
