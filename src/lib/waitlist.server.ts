@@ -78,7 +78,12 @@ export async function joinWaitlist(input: JoinWaitlistInput): Promise<JoinWaitli
   const match = (existing.data ?? []).length > 0;
   if (match) return { ok: true, alreadyOn: true };
 
-  const { error } = await supabaseAdmin.from("event_waitlist_entries").insert({
+  // Insert through the RLS-bound publishable client, not the admin client, so
+  // the "anyone joins a full waitlist" policy (private.event_waitlist_open)
+  // decides: the event/tier must actually be full and the tier must belong to
+  // the event. No `.select()` — anon cannot read waitlist rows back.
+  const { publicSupabaseClient } = await import("./supabase-public.server");
+  const { error } = await publicSupabaseClient().from("event_waitlist_entries").insert({
     event_id: input.eventId,
     tier_id: input.tierId,
     user_id: input.userId,
@@ -88,6 +93,9 @@ export async function joinWaitlist(input: JoinWaitlistInput): Promise<JoinWaitli
     note: input.note?.trim() ? input.note.trim().slice(0, 500) : null,
     status: "waiting",
   });
+  if (error && (error.code === "42501" || /row-level security/i.test(error.message))) {
+    return { ok: false, reason: "closed" };
+  }
   if (error) {
     console.error("Waitlist join failed", error.message);
     return { ok: false, reason: "error" };

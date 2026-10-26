@@ -32,13 +32,13 @@ export const GOVERNANCE_DOCUMENT_BUCKET = "governance-documents";
 export const GOVERNANCE_DOCUMENT_TTL_SECONDS = 60 * 60;
 
 /**
- * Public directory listings: 24h.
+ * Public directory listings: 1h.
  *
  * The URL only ever leaves the server for rows `coach_directory_public`
- * already cleared as published + eligible, and a day-long window keeps
- * re-signing cost off every page view.
+ * already cleared as published + eligible. Kept short so a photo stops being
+ * reachable soon after a profile is unpublished or withdrawn.
  */
-export const PROFILE_IMAGE_TTL_SECONDS = 60 * 60 * 24;
+export const PROFILE_IMAGE_TTL_SECONDS = 60 * 60;
 
 /**
  * A member previewing their own photo in the editor: 1h.
