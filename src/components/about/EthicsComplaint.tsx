@@ -11,14 +11,14 @@ const ICF_ETHICS_URL = "https://coachingfederation.org/credentialing/coaching-et
 export function EthicsComplaint() {
   const { t } = useI18n();
   return (
-    <section id="ethics" className="bg-card py-24">
+    <section id="ethics" className="bg-hero py-24 text-hero-foreground">
       <div className="mx-auto max-w-7xl px-8">
-        <p className="eyebrow text-primary">{t("about.ethics.eyebrow")}</p>
+        <p className="eyebrow-accent">{t("about.ethics.eyebrow")}</p>
         <h2 className="mt-3 max-w-2xl display-lg">{t("about.ethics.title")}</h2>
-        <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-hero-foreground">
           {t("about.ethics.body")}
         </p>
-        <Button asChild variant="default" size="pill" className="mt-8">
+        <Button asChild variant="inverse" size="pill" className="mt-8">
           <a href={ICF_ETHICS_URL} target="_blank" rel="noopener noreferrer">
             {t("about.ethics.cta")}
             <ExternalLink aria-hidden="true" />
