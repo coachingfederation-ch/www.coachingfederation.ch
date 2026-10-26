@@ -194,5 +194,11 @@
     "title": "Join us in shaping the future of coaching.",
     "join": "Become a member",
     "contact": "Contact us"
+  },
+  "ethics": {
+    "eyebrow": "Ethics and complaints",
+    "title": "Raising an ethics concern",
+    "body": "Every ICF member and credentialed coach commits to the ICF Code of Ethics. If you believe a coach has not met these standards, you can file a complaint with ICF Global. Their independent ethics process reviews every case confidentially.",
+    "cta": "Report an ethics concern"
   }
 }

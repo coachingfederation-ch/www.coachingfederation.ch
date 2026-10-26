@@ -194,5 +194,11 @@
     "title": "Gestalten Sie mit uns die Zukunft des Coachings.",
     "join": "Mitglied werden",
     "contact": "Kontaktieren Sie uns"
+  },
+  "ethics": {
+    "eyebrow": "Ethik und Beschwerden",
+    "title": "Ein ethisches Anliegen melden",
+    "body": "Alle ICF-Mitglieder und Coaches mit ICF Credential verpflichten sich dem ICF Ethikkodex. Wenn Sie glauben, dass ein Coach diese Standards nicht eingehalten hat, können Sie bei ICF Global eine Beschwerde einreichen. Das unabhängige Ethikverfahren prüft jeden Fall vertraulich.",
+    "cta": "Ethisches Anliegen melden"
   }
 }

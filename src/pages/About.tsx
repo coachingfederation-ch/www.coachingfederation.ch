@@ -8,6 +8,7 @@ import { CompactHero, SiteFooter, CARD_SHADOW } from "@/components/site-chrome";
 import { DeibCommitment } from "@/components/about/DeibCommitment";
 import { ContactAgent } from "@/components/about/ContactAgent";
 import { Governance } from "@/components/about/Governance";
+import { EthicsComplaint } from "@/components/about/EthicsComplaint";
 import { TeamPreview } from "@/components/team/TeamPreview";
 import { CommunitiesPreview } from "@/components/communities/CommunitiesPreview";
 import { useI18n } from "@/i18n";
@@ -59,6 +60,8 @@ export default function AboutPage() {
         <TeamPreview />
 
         <Governance />
+
+        <EthicsComplaint />
 
         <CommunitiesPreview />
 

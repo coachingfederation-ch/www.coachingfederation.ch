@@ -194,5 +194,11 @@
     "title": "Unisciti a noi per plasmare il futuro del coaching.",
     "join": "Diventa membro",
     "contact": "Contattaci"
+  },
+  "ethics": {
+    "eyebrow": "Etica e reclami",
+    "title": "Segnalare una questione etica",
+    "body": "Ogni membro ICF e ogni coach con ICF Credential si impegna a rispettare il Codice etico ICF. Se ritieni che un coach non abbia rispettato questi standard, puoi presentare un reclamo a ICF Global. Il suo processo etico indipendente esamina ogni caso in modo riservato.",
+    "cta": "Segnala una questione etica"
   }
 }
