@@ -586,7 +586,13 @@ export const declineGuestPass = createServerFn({ method: "POST" })
             invitingMemberName: pass.inviting_member_name ?? "",
             guestName: pass.guest_full_name,
             eventTitle: event?.title ?? "",
-            decisionNote: data.note,
+            // Plain text only: strip links and control characters so a
+            // staff note can't turn the chapter's email into a phishing lure.
+            decisionNote:
+              data.note
+                .replace(/[\u0000-\u0008\u000B-\u001F\u007F]/g, "")
+                .replace(/\b(?:https?:\/\/|www\.)\S+/gi, "[link removed]")
+                .trim() || null,
           },
         });
       } catch (err) {
