@@ -171,3 +171,4 @@ See `docs/advertising.md` for the full flow and diagram. Booking: `ads.functions
 ## Board digest
 
 - `src/lib/board-digest.ts` / `.server.ts` / `.functions.ts`, `src/lib/email-templates/board-digest.tsx`, `src/components/cms/BoardDigestCard.tsx`, `src/routes/api/public/board-digest.ts`. See `docs/board-digest.md`.
+- `src/components/about/EthicsComplaint.tsx` — About page section linking to ICF Global ethics complaint process.

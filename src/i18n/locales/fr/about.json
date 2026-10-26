@@ -194,5 +194,11 @@
     "title": "Façonnez avec nous l'avenir du coaching.",
     "join": "Devenir membre",
     "contact": "Nous contacter"
+  },
+  "ethics": {
+    "eyebrow": "Éthique et plaintes",
+    "title": "Signaler un problème éthique",
+    "body": "Chaque membre de l'ICF et chaque coach titulaire d'un ICF Credential s'engage à respecter le Code de déontologie de l'ICF. Si vous pensez qu'un coach n'a pas respecté ces normes, vous pouvez déposer une plainte auprès d'ICF Global. Son processus éthique indépendant examine chaque cas en toute confidentialité.",
+    "cta": "Signaler un problème éthique"
   }
 }
