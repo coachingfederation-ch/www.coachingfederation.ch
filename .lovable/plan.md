@@ -1,29 +1,24 @@
-# Board digest: activity graphs
+# About page: report an ethics concern
 
-## Summary
-Add an "Activity at a glance" section to the board digest, with simple bar graphs. The app can't read Lovable's own visitor analytics, so the graphs use data the platform already holds. This means no new tracking and no change to the privacy policy.
+## What we build
+A short section on /about, placed after Governance, explaining that ethics complaints about ICF members or credentialed coaches are handled by ICF Global's Independent Review Board, with one button "Report an ethics concern" opening https://coachingfederation.org/credentialing/coaching-ethics/ in a new tab.
 
-## What the board sees
-- Bars for each day of the reporting period: new members, event registrations, assistant conversations and survey responses.
-- A total for each metric, compared with the previous period.
-- The bars are built from text and colour, so they show in every email app, including Outlook, with no images.
+Copy (EN, translated to DE/FR/IT):
+- Eyebrow: Ethics and complaints
+- Title: Raising an ethics concern
+- Body: Every ICF member and credentialed coach commits to the ICF Code of Ethics. If you believe a coach has not met these standards, you can file a complaint with ICF Global. Their independent ethics process reviews every case confidentially.
+- Button: Report an ethics concern
 
-## Changes
-- **Data:** a new aggregation that reuses the existing Overview and assistant-insights queries and groups the results by day. The email and the dashboards always show the same numbers.
-- **Email:** a new "Activity at a glance" section in the board digest. It uses the brand colour tokens that the email shell already uses.
-- **Integration settings:** a switch for this section next to the other section switches. It's on by default.
-- **Translations:** labels in EN, DE, FR and IT.
-- **Docs:** update docs/board-digest.md.
+## Technical details
+- New `src/components/about/EthicsComplaint.tsx` using the design system `Button` (variant default, size pill, asChild, external anchor with `rel="noopener noreferrer"` and an ExternalLink icon), surface `bg-card` to keep the bone/white rhythm next to its neighbours.
+- New `about.ethics.*` keys in en/de/fr/it `about.json`.
+- Render in `src/pages/About.tsx` after `<Governance />`; adjust neighbouring surface if alternation breaks.
+- Update `docs/code-map.md`.
 
-## Backend / Schema Changes
-- One config column for the new section switch (boolean, default true). No new tables and no changes to RLS.
-
-## Testing and Verification
-- Unit tests for daily grouping, including empty days and how period edges fall in Zurich time.
-- Check the email preview on desktop and phone, then send a test email to the configured mailbox.
-
-## Risks and Rollback
-- Low risk, because the change only adds a section. To roll back, turn the section off. The new column can stay in place if the code is reverted.
-
-## Follow-ups / Known Debt
-- Website visit numbers are not included. That would need the app to count its own visits, plus an update to the privacy policy.
+## PR note
+- Summary: Adds a link to ICF Global's ethics complaint process on /about.
+- Changes: UI section + translations; docs.
+- Backend / Schema: None.
+- Testing: Check /about in all four locales, link opens in new tab, keyboard focus.
+- Risks & Rollback: Isolated component; remove the render line to revert.
+- Follow-ups: DE/FR/IT copy needs native review.
