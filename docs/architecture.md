@@ -22,6 +22,8 @@ in the browser directly against Supabase, because RLS is the boundary.
 
 ## Enforcement lives in the database
 
+Whole-event cancellation email delivery starts only after an event update through the caller's RLS-bound client returns an affected row. Privileged recipient reads reuse the existing cancellation delivery claims; no queue, cron, or email schema is introduced. Whole-event cancellation does not change payment/refund rules.
+
 This is the single most important thing to understand before changing access
 behaviour. The UI hides things; the database refuses them. Every rule below is
 enforced in Postgres, and the TypeScript merely mirrors it for a better user

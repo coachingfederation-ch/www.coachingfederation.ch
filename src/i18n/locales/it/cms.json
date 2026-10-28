@@ -1380,6 +1380,8 @@
     "publish": "Pubblica",
     "unpublish": "Riporta a bozza",
     "cancelEvent": "Annulla evento",
+    "cancelNoticesDone": "Evento annullato. Le notifiche di annullamento per le persone iscritte sono state elaborate.",
+    "cancelNoticesFailed": "Evento annullato, ma alcune notifiche non sono state inviate. Annulla nuovamente per riprovare le notifiche non inviate.",
     "fieldTitle": "Titolo",
     "fieldSlug": "Indirizzo web (slug)",
     "fieldLanguage": "Lingua",

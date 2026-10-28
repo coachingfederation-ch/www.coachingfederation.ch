@@ -156,6 +156,14 @@ actually succeeded; otherwise it says the chapter will be in touch.
 
 ## Hosts
 
+### Whole-event cancellation
+
+`setEventStatus(cancelled)` first updates the event through the caller's RLS-bound client and requires an affected row. It then automatically sends the existing cancellation template's whole-event variant to every confirmed free or paid registration, including registered non-member guests. Unpaid/expired checkout holds, cancelled registrations, waitlists, and invitations without registration are excluded.
+
+Recipients receive their registration language (EN, DE, FR, IT), localized event details, and organizer contact. The message says the event itself is cancelled; it does not apply the individual 48-hour refund policy. Payments, refunds, and registration status are unchanged. Existing reminder jobs already exclude cancelled events.
+
+Delivery uses stable-id pagination and sequential per-recipient sends. Existing cancellation delivery fields claim each send; repeating cancellation retries failed/unsent notices without repeating sent notices. Suppression is a normal skipped outcome, not retried. Whole-event notices do not create an office copy per attendee. Failures do not undo the cancellation: the editor reports partial failure and lets staff repeat Cancel. The existing cancelling spinner remains active while notices are submitted. Managed API acceptance does not establish inbox delivery.
+
 Hosts are published directory profiles linked through `event_hosts` (ordered,
 cascade-deleted with the event). There is no product limit on the number of
 hosts; `MAX_EVENT_HOSTS` (30, in `lib/event-hosts.ts`) is only a guard rail on
