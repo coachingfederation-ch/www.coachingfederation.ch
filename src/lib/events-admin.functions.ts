@@ -363,8 +363,22 @@ export const setEventStatus = createServerFn({ method: "POST" })
         .maybeSingle();
       if (!existing?.published_at) patch.published_at = new Date().toISOString();
     }
-    const { error } = await context.supabase.from("events").update(patch).eq("id", data.id);
+    const { data: updated, error } = await context.supabase.from("events")
+      .update(patch).eq("id", data.id).select("id").maybeSingle();
     if (error) throw new Error(error.message);
+    if (!updated) throw new Error("Event not found or not allowed.");
+    // Only after the caller's RLS-bound write succeeds may privileged email
+    // delivery read the attendee addresses. Cancelling again retries failures.
+    if (data.status === "cancelled") {
+      try {
+        const { sendEventCancellationNotices } = await import("./event-cancellation.server");
+        const cancellations = await sendEventCancellationNotices(data.id);
+        return { ok: true, cancellations };
+      } catch (error) {
+        console.error("Event cancellation notices failed", error);
+        return { ok: true, cancellations: { sent: 0, skipped: 0, failed: 1 } };
+      }
+    }
     // Guest-list invitations added while the event was a draft go out now.
     if (data.status === "published") {
       const { sendQueuedInvitations } = await import("./event-invitations.server");

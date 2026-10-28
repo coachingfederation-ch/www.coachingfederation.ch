@@ -38,6 +38,7 @@ type RegistrationRow = {
   currency: string;
   stripe_session_id: string | null;
   refund_status: string;
+  status: string;
 };
 
 /** Single conditional update: only one caller can win the send. */
@@ -60,18 +61,23 @@ async function claimSend(registrationId: string, force: boolean) {
  */
 export async function sendCancellationNotice(
   registrationId: string,
-  options: { force?: boolean } = {},
+  options: { force?: boolean; eventCancelled?: boolean } = {},
 ): Promise<CancellationOutcome> {
   const force = options.force === true;
 
   const { data: registration } = await supabaseAdmin
     .from("event_registrations")
     .select(
-      "id, event_id, email, full_name, locale, tier_id, payment_status, amount_cents, currency, stripe_session_id, refund_status",
+      "id, event_id, email, full_name, locale, tier_id, payment_status, amount_cents, currency, stripe_session_id, refund_status, status",
     )
     .eq("id", registrationId)
     .maybeSingle<RegistrationRow>();
   if (!registration) return { status: "skipped", reason: "not_found" };
+  if (options.eventCancelled &&
+      (registration.status !== "confirmed" ||
+       !["paid", "not_required"].includes(registration.payment_status))) {
+    return { status: "skipped", reason: "not_registered" };
+  }
   if (!(await claimSend(registrationId, force))) {
     return { status: "skipped", reason: "already_sent" };
   }
@@ -83,11 +89,14 @@ export async function sendCancellationNotice(
     const { data: eventRow } = await supabaseAdmin
       .from("events")
       .select(
-        "id, slug, title, summary, description, language, timezone, starts_at, ends_at, location_mode, venue_name, city, online_url, community_id",
+        "id, slug, title, summary, description, language, timezone, starts_at, ends_at, location_mode, venue_name, city, online_url, community_id, status",
       )
       .eq("id", registration.event_id)
       .maybeSingle<EventRow>();
     if (!eventRow) throw new Error("Event not found");
+    if (options.eventCancelled && (eventRow as EventRow & { status: string }).status !== "cancelled") {
+      throw new Error("Event is not cancelled");
+    }
 
     const content = await loadLocalisedEvent(eventRow, locale);
     const eventUrl = `${SITE_URL}${localizePath(`/events/${eventRow.slug}`, locale)}`;
@@ -124,6 +133,7 @@ export async function sendCancellationNotice(
           : "none";
 
     const templateData = {
+      eventCancelled: options.eventCancelled === true,
       locale,
       attendeeName: registration.full_name,
       eventTitle: content.title,
@@ -147,16 +157,18 @@ export async function sendCancellationNotice(
       replyTo: organiserEmail,
       templateData,
     });
-    if (!result.sent) throw new Error("recipient_suppressed");
-
     await supabaseAdmin
       .from("event_registrations")
       .update({
         cancellation_status: "sent",
         cancellation_sent_at: new Date().toISOString(),
-        cancellation_error: null,
+        cancellation_error: result.sent ? null : "recipient_suppressed",
       })
       .eq("id", registrationId);
+    if (!result.sent) return { status: "skipped", reason: "recipient_suppressed" };
+    // One notice per expected attendee event. Whole-event cancellation does
+    // not generate an office copy for every attendee or alter their payments.
+    if (options.eventCancelled) return { status: "sent" };
 
     // The office copy is informational: a failure here must not mark the
     // attendee's notice as failed.
@@ -183,4 +195,34 @@ export async function sendCancellationNotice(
       .eq("id", registrationId);
     return { status: "failed", error: message };
   }
+}
+
+/** Page by stable id so events exceeding the Data API row cap are fully covered.
+ * Sequential dispatch bounds outbound connections and isolates recipient failures.
+ * Existing per-registration claims make repeated cancellation requests safe.
+ */
+export async function sendEventCancellationNotices(eventId: string) {
+  const totals = { sent: 0, skipped: 0, failed: 0 };
+  let after: string | null = null;
+  const pageSize = 100;
+  while (true) {
+    let query = supabaseAdmin.from("event_registrations")
+      .select("id")
+      .eq("event_id", eventId)
+      .eq("status", "confirmed")
+      .in("payment_status", ["paid", "not_required"])
+      .order("id", { ascending: true })
+      .limit(pageSize);
+    if (after) query = query.gt("id", after);
+    const { data: rows, error } = await query;
+    if (error) throw new Error(error.message);
+    if (!rows?.length) break;
+    for (const row of rows) {
+      const outcome = await sendCancellationNotice(row.id, { eventCancelled: true });
+      totals[outcome.status]++;
+    }
+    after = rows[rows.length - 1]?.id ?? null;
+    if (rows.length < pageSize) break;
+  }
+  return totals;
 }

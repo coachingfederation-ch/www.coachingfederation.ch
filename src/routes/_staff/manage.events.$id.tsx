@@ -255,8 +255,12 @@ function EventEditor() {
 
   const changeStatus = async (status: "draft" | "published" | "cancelled") => {
     try {
-      await setEventStatus({ data: { id: event.id, status } });
+      const result = await setEventStatus({ data: { id: event.id, status } });
       await load();
+      if (status === "cancelled") {
+        if (result.cancellations?.failed) setError(t("events.cancelNoticesFailed"));
+        else setMessage(t("events.cancelNoticesDone"));
+      }
     } catch {
       setError(t("events.saveError"));
     }

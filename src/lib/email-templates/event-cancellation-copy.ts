@@ -13,6 +13,10 @@ export type CancellationCopy = {
   heading: string;
   greeting: string;
   intro: string;
+  eventSubject: string;
+  eventHeading: string;
+  eventIntro: string;
+  eventPaymentNote: string;
   detailsTitle: string;
   whenLabel: string;
   locationLabel: string;
@@ -38,6 +42,10 @@ export const CANCELLATION_COPY: Record<Locale, CancellationCopy> = {
     heading: "Your registration was cancelled",
     greeting: "Hello {name}",
     intro: "Your place at this event has been cancelled and your seat released.",
+    eventSubject: "Event cancelled: {title}",
+    eventHeading: "This event has been cancelled",
+    eventIntro: "We are sorry to let you know that this event has been cancelled. Please do not attend.",
+    eventPaymentNote: "For questions about your payment or a refund, please contact the organizer below.",
     detailsTitle: "Event details",
     whenLabel: "When",
     locationLabel: "Where",
@@ -63,6 +71,10 @@ export const CANCELLATION_COPY: Record<Locale, CancellationCopy> = {
     heading: "Ihre Anmeldung wurde storniert",
     greeting: "Hallo {name}",
     intro: "Ihr Platz an dieser Veranstaltung wurde storniert und wieder freigegeben.",
+    eventSubject: "Veranstaltung abgesagt: {title}",
+    eventHeading: "Diese Veranstaltung wurde abgesagt",
+    eventIntro: "Leider müssen wir Ihnen mitteilen, dass diese Veranstaltung abgesagt wurde. Bitte kommen Sie nicht zur Veranstaltung.",
+    eventPaymentNote: "Bei Fragen zu Ihrer Zahlung oder einer Rückerstattung wenden Sie sich bitte an die unten genannte Kontaktperson.",
     detailsTitle: "Veranstaltungsdetails",
     whenLabel: "Wann",
     locationLabel: "Wo",
@@ -89,6 +101,10 @@ export const CANCELLATION_COPY: Record<Locale, CancellationCopy> = {
     heading: "Votre inscription a été annulée",
     greeting: "Bonjour {name}",
     intro: "Votre place à cet événement a été annulée et libérée.",
+    eventSubject: "Événement annulé : {title}",
+    eventHeading: "Cet événement a été annulé",
+    eventIntro: "Nous sommes désolés de vous informer que cet événement a été annulé. Merci de ne pas vous y rendre.",
+    eventPaymentNote: "Pour toute question concernant votre paiement ou un remboursement, contactez l’organisateur ci-dessous.",
     detailsTitle: "Détails de l’événement",
     whenLabel: "Quand",
     locationLabel: "Où",
@@ -114,6 +130,10 @@ export const CANCELLATION_COPY: Record<Locale, CancellationCopy> = {
     heading: "La tua iscrizione è stata annullata",
     greeting: "Ciao {name}",
     intro: "Il tuo posto a questo evento è stato annullato e reso nuovamente disponibile.",
+    eventSubject: "Evento annullato: {title}",
+    eventHeading: "Questo evento è stato annullato",
+    eventIntro: "Ci dispiace informarti che questo evento è stato annullato. Ti preghiamo di non presentarti all’evento.",
+    eventPaymentNote: "Per domande sul pagamento o su un rimborso, contatta l’organizzatore indicato qui sotto.",
     detailsTitle: "Dettagli dell’evento",
     whenLabel: "Quando",
     locationLabel: "Dove",

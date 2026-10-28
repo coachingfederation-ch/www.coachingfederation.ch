@@ -1380,6 +1380,8 @@
     "publish": "Publish",
     "unpublish": "Move back to draft",
     "cancelEvent": "Cancel event",
+    "cancelNoticesDone": "Event cancelled. Cancellation notices have been processed for registered attendees.",
+    "cancelNoticesFailed": "Event cancelled, but some cancellation notices could not be sent. Cancel again to retry unsent notices.",
     "fieldTitle": "Title",
     "fieldSlug": "Web address (slug)",
     "fieldLanguage": "Language",

@@ -46,6 +46,8 @@ export interface EventCancellationProps {
   organiserEmail?: string;
   /** Set on the chapter's own copy so staff can tell it apart at a glance. */
   staffCopy?: boolean;
+  /** Whole-event notice, not an individual seat cancellation or refund decision. */
+  eventCancelled?: boolean;
 }
 
 const INK = "#212251";
@@ -185,6 +187,7 @@ const Email = ({
   refund = "none",
   organiserEmail = "office@coachingfederation.ch",
   staffCopy = false,
+  eventCancelled = false,
 }: EventCancellationProps) => {
   const copy = CANCELLATION_COPY[locale] ?? CANCELLATION_COPY.en;
   const [signoffLine, signoffName] = copy.signoff.split("\n");
@@ -200,7 +203,7 @@ const Email = ({
   return (
     <Html lang={locale} dir="ltr">
       <Head />
-      <Preview>{copy.preview}</Preview>
+      <Preview>{eventCancelled ? copy.eventHeading : copy.preview}</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section style={banner}>
@@ -218,12 +221,12 @@ const Email = ({
 
           <Section style={content}>
             {staffCopy ? <Text style={staffNotice}>{copy.copyNotice}</Text> : null}
-            <Heading style={heading}>{copy.heading}</Heading>
+            <Heading style={heading}>{eventCancelled ? copy.eventHeading : copy.heading}</Heading>
             <div style={{ marginBottom: "24px" }}>
               <BrushUnderline />
             </div>
             <Text style={paragraph}>{fill(copy.greeting, { name: attendeeName })},</Text>
-            <Text style={paragraph}>{copy.intro}</Text>
+            <Text style={paragraph}>{eventCancelled ? copy.eventIntro : copy.intro}</Text>
 
             <Section style={panel}>
               <Text style={sectionTitle}>{copy.detailsTitle}</Text>
@@ -238,7 +241,9 @@ const Email = ({
               <>
                 <Hr style={rule} />
                 <Text style={sectionTitle}>{copy.refundTitle}</Text>
-                <Text style={paragraph}>{refundLine}</Text>
+                <Text style={paragraph}>
+                  {eventCancelled && refund === "none" ? copy.eventPaymentNote : refundLine}
+                </Text>
                 {refund === "refunded" ? (
                   <Text style={paragraph}>{copy.refundIssuedNote}</Text>
                 ) : null}
@@ -289,7 +294,9 @@ export const template = {
   subject: (data: Record<string, unknown>) => {
     const locale = (data["locale"] as Locale) ?? "en";
     const copy = CANCELLATION_COPY[locale] ?? CANCELLATION_COPY.en;
-    return fill(copy.subject, { title: String(data["eventTitle"] ?? "") });
+    return fill(data["eventCancelled"] === true ? copy.eventSubject : copy.subject, {
+      title: String(data["eventTitle"] ?? ""),
+    });
   },
   displayName: "Event registration cancellation",
   previewData: {

@@ -1380,6 +1380,8 @@
     "publish": "Publier",
     "unpublish": "Remettre en brouillon",
     "cancelEvent": "Annuler l'événement",
+    "cancelNoticesDone": "Événement annulé. Les notifications d’annulation pour les personnes inscrites ont été traitées.",
+    "cancelNoticesFailed": "Événement annulé, mais certaines notifications n’ont pas pu être envoyées. Annulez à nouveau pour réessayer les notifications non envoyées.",
     "fieldTitle": "Titre",
     "fieldSlug": "Adresse web (slug)",
     "fieldLanguage": "Langue",

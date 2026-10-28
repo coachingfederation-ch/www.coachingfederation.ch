@@ -1386,6 +1386,8 @@
     "publish": "Veröffentlichen",
     "unpublish": "Zurück zum Entwurf",
     "cancelEvent": "Event absagen",
+    "cancelNoticesDone": "Veranstaltung abgesagt. Die Absagebenachrichtigungen für angemeldete Teilnehmende wurden verarbeitet.",
+    "cancelNoticesFailed": "Veranstaltung abgesagt, aber einige Benachrichtigungen konnten nicht gesendet werden. Sagen Sie die Veranstaltung erneut ab, um ausstehende Benachrichtigungen erneut zu senden.",
     "fieldTitle": "Titel",
     "fieldSlug": "Web-Adresse (Slug)",
     "fieldLanguage": "Sprache",

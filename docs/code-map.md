@@ -51,6 +51,8 @@ before adding a new file.
 
 ### Events
 
+`event-cancellation.server.ts` owns individual cancellation notices and paginated whole-event attendee notification. The latter is called only after `setEventStatus` completes an authorized cancellation write; it does not change refund decisions.
+
 | Module                            | Responsibility                                                                                   |
 | --------------------------------- | ------------------------------------------------------------------------------------------------ |
 | `events.ts`                       | Shared event types, status/registration helpers and date formatting.                             |

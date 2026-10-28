@@ -13,6 +13,8 @@
 
 ## Personal data hygiene
 
+- Whole-event cancellation sends expected attendee notices only after the caller's RLS-bound event update succeeds, reusing per-registration delivery claims without altering refunds. Why: private addresses and duplicate protection stay behind the existing trusted boundary.
+
 Never put real member data into files that live in this repository — plans
 (`.lovable/`), docs, migrations, code comments, or commit messages. That
 includes names, private email addresses, phone numbers, ICF member numbers
