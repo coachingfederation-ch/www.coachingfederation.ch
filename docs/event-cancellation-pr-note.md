@@ -17,7 +17,7 @@ None. Reuse existing cancellation delivery fields and managed delivery; no email
 
 ## Testing & Verification
 
-Verified: cancellation delivery tests cover registered free/paid attendees and guests, excluded unpaid/cancelled rows, 205 recipients over multiple pages, concurrent calls, retries, suppression, reopening, and preservation of individual notices. Signed-in browser verification created a temporary private empty event, cancelled it through Publish, saw confirmation, reloaded and read back its cancelled status, then removed the draft. No real attendees were emailed. Authorization-trigger tests and final app checks are run alongside this change.
+Verified: all 12 tests pass with `bunx vitest run --config vitest.cancellation.config.ts`. These cover registered free/paid attendees and guests, excluded unpaid/cancelled rows, 205 recipients over multiple pages, concurrent calls, retries, suppression, reopening, individual notices, and authorization before dispatch. The isolated test configuration bypasses TanStack's RPC compiler for mocked handler tests. Signed-in browser verification created a temporary private empty event, cancelled it through Publish, saw confirmation, reloaded and read back its cancelled status, then removed the draft. No real attendees were emailed. The latest app build check passed.
 
 ## Risks & Rollback
 

@@ -14,6 +14,7 @@
 ## Personal data hygiene
 
 - Whole-event cancellation sends expected attendee notices only after the caller's RLS-bound event update succeeds, reusing per-registration delivery claims without altering refunds. Why: private addresses and duplicate protection stay behind the existing trusted boundary.
+- Cancellation handler unit tests use the isolated cancellation Vitest config; real request boundaries are verified in the browser. Why: TanStack's RPC transform otherwise replaces the mocked handlers under test.
 
 Never put real member data into files that live in this repository — plans
 (`.lovable/`), docs, migrations, code comments, or commit messages. That
