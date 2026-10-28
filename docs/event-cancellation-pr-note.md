@@ -17,7 +17,7 @@ None. Reuse existing cancellation delivery fields and managed delivery; no email
 
 ## Testing & Verification
 
-Pending: focused tests for recipient selection, paging, duplicate prevention, suppression, partial failure, authorization gating, and whole-event versus individual notices. Verify the signed-in event flow using a temporary empty draft, without sending to real attendees.
+Verified: cancellation delivery tests cover registered free/paid attendees and guests, excluded unpaid/cancelled rows, 205 recipients over multiple pages, concurrent calls, retries, suppression, reopening, and preservation of individual notices. Signed-in browser verification created a temporary private empty event, cancelled it through Publish, saw confirmation, reloaded and read back its cancelled status, then removed the draft. No real attendees were emailed. Authorization-trigger tests and final app checks are run alongside this change.
 
 ## Risks & Rollback
 
@@ -26,3 +26,4 @@ Only the event cancellation path and shared cancellation email variant change. R
 ## Follow-ups / Known Debt
 
 Actual inbox delivery and rendering cannot be verified without sending an email. Automatic refunds on whole-event cancellation are outside this request.
+Lint reports three existing Fast Refresh warnings in the shared cancellation template, with no errors. No styling changes or design-system deviations were introduced.

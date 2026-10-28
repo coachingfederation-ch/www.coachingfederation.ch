@@ -45,11 +45,12 @@ async function claimSend(registrationId: string, force: boolean) {
     .from("event_registrations")
     .update({ cancellation_status: "sending", cancellation_error: null })
     .eq("id", registrationId);
-  const { data } = await (
+  const { data, error } = await (
     force
       ? query.in("cancellation_status", ["not_sent", "failed", "sent"])
       : query.in("cancellation_status", ["not_sent", "failed"])
   ).select("id");
+  if (error) throw new Error(error.message);
   return (data ?? []).length > 0;
 }
 
@@ -63,13 +64,14 @@ export async function sendCancellationNotice(
 ): Promise<CancellationOutcome> {
   const force = options.force === true;
 
-  const { data: registration } = await supabaseAdmin
+  const { data: registration, error: registrationError } = await supabaseAdmin
     .from("event_registrations")
     .select(
       "id, event_id, email, full_name, locale, tier_id, payment_status, amount_cents, currency, stripe_session_id, refund_status, status",
     )
     .eq("id", registrationId)
     .maybeSingle<RegistrationRow>();
+  if (registrationError) return { status: "failed", error: registrationError.message };
   if (!registration) return { status: "skipped", reason: "not_found" };
   if (
     options.eventCancelled &&
@@ -222,8 +224,14 @@ export async function sendEventCancellationNotices(eventId: string) {
     if (error) throw new Error(error.message);
     if (!rows?.length) break;
     for (const row of rows) {
-      const outcome = await sendCancellationNotice(row.id, { eventCancelled: true });
-      totals[outcome.status]++;
+      try {
+        const outcome = await sendCancellationNotice(row.id, { eventCancelled: true });
+        totals[outcome.status]++;
+      } catch (error) {
+        // A failed claim/read must not abort notifications for other attendees.
+        console.error("Event cancellation attendee notice failed", error);
+        totals.failed++;
+      }
     }
     after = rows[rows.length - 1]?.id ?? null;
     if (rows.length < pageSize) break;
