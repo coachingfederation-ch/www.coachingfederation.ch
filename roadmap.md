@@ -1,4 +1,5 @@
 # Assignments change log
+
 - [ ] Send automatic, localized cancellation notices to registered event attendees; verify and document.
 - [x] Match Board digest to shared email header/footer and verify its rendered preview.
 - [x] Add an editable ballot question, proposal-based suggestion, translation, saved member display, and verification.

@@ -130,7 +130,14 @@ const eventInput = z.object({
   image_credit_name: z.string().trim().max(200).nullable().optional().or(z.literal("")),
   image_credit_url: z.string().trim().url().max(1000).nullable().optional().or(z.literal("")),
   capacity: z.number().int().positive().max(100000).nullable().optional(),
-  registration_mode: z.enum(["none", "rsvp", "rsvp_members", "rsvp_tickets", "rsvp_invited", "rsvp_invited_open"]),
+  registration_mode: z.enum([
+    "none",
+    "rsvp",
+    "rsvp_members",
+    "rsvp_tickets",
+    "rsvp_invited",
+    "rsvp_invited_open",
+  ]),
   registration_opens_at: z.string().min(1).nullable().optional(),
   registration_closes_at: z.string().min(1).nullable().optional(),
   guest_registration_allowed: z.boolean(),
@@ -363,8 +370,12 @@ export const setEventStatus = createServerFn({ method: "POST" })
         .maybeSingle();
       if (!existing?.published_at) patch.published_at = new Date().toISOString();
     }
-    const { data: updated, error } = await context.supabase.from("events")
-      .update(patch).eq("id", data.id).select("id").maybeSingle();
+    const { data: updated, error } = await context.supabase
+      .from("events")
+      .update(patch)
+      .eq("id", data.id)
+      .select("id")
+      .maybeSingle();
     if (error) throw new Error(error.message);
     if (!updated) throw new Error("Event not found or not allowed.");
     // Only after the caller's RLS-bound write succeeds may privileged email

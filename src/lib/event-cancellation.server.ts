@@ -22,9 +22,7 @@ import { CANCELLATION_COPY } from "./email-templates/event-cancellation-copy";
 import { fill } from "./email-templates/event-confirmation-copy";
 
 export type CancellationOutcome =
-  | { status: "sent" }
-  | { status: "skipped"; reason: string }
-  | { status: "failed"; error: string };
+  { status: "sent" } | { status: "skipped"; reason: string } | { status: "failed"; error: string };
 
 type RegistrationRow = {
   id: string;
@@ -73,9 +71,11 @@ export async function sendCancellationNotice(
     .eq("id", registrationId)
     .maybeSingle<RegistrationRow>();
   if (!registration) return { status: "skipped", reason: "not_found" };
-  if (options.eventCancelled &&
-      (registration.status !== "confirmed" ||
-       !["paid", "not_required"].includes(registration.payment_status))) {
+  if (
+    options.eventCancelled &&
+    (registration.status !== "confirmed" ||
+      !["paid", "not_required"].includes(registration.payment_status))
+  ) {
     return { status: "skipped", reason: "not_registered" };
   }
   if (!(await claimSend(registrationId, force))) {
@@ -94,7 +94,10 @@ export async function sendCancellationNotice(
       .eq("id", registration.event_id)
       .maybeSingle<EventRow>();
     if (!eventRow) throw new Error("Event not found");
-    if (options.eventCancelled && (eventRow as EventRow & { status: string }).status !== "cancelled") {
+    if (
+      options.eventCancelled &&
+      (eventRow as EventRow & { status: string }).status !== "cancelled"
+    ) {
       throw new Error("Event is not cancelled");
     }
 
@@ -206,7 +209,8 @@ export async function sendEventCancellationNotices(eventId: string) {
   let after: string | null = null;
   const pageSize = 100;
   while (true) {
-    let query = supabaseAdmin.from("event_registrations")
+    let query = supabaseAdmin
+      .from("event_registrations")
       .select("id")
       .eq("event_id", eventId)
       .eq("status", "confirmed")
