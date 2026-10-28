@@ -139,8 +139,11 @@ describe("whole-event cancellation", () => {
       ),
     ).toBe(true);
     expect(state.rows.find((row) => row["id"] === "paid")?.["refund_status"]).toBe("none");
-    expect(state.rows.filter((row) => ["free", "paid", "guest"].includes(String(row["id"])))
-      .map((row) => row["status"])).toEqual(["confirmed", "confirmed", "confirmed"]);
+    expect(
+      state.rows
+        .filter((row) => ["free", "paid", "guest"].includes(String(row["id"])))
+        .map((row) => row["status"]),
+    ).toEqual(["confirmed", "confirmed", "confirmed"]);
   });
   it("covers all registrations across multiple pages", async () => {
     state.rows = Array.from({ length: 205 }, (_, i) => attendee(String(i).padStart(4, "0")));

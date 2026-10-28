@@ -29,7 +29,9 @@ const handler = setEventStatus as unknown as (input: {
 
 function context(row: unknown, error: unknown = null) {
   const query = {
-    update: vi.fn(() => query), eq: vi.fn(() => query), select: vi.fn(() => query),
+    update: vi.fn(() => query),
+    eq: vi.fn(() => query),
+    select: vi.fn(() => query),
     maybeSingle: vi.fn(async () => ({ data: row, error })),
   };
   return { supabase: { from: vi.fn(() => query) }, userId: "test-staff" };
@@ -44,29 +46,44 @@ beforeEach(() => {
 
 describe("authorized event cancellation trigger", () => {
   it("notifies attendees only after an allowed event write returns a row", async () => {
-    expect(await handler({ data: { id: "event", status: "cancelled" }, context: context({ id: "event" }) }))
-      .toEqual({ ok: true, cancellations: { sent: 2, skipped: 0, failed: 0 } });
+    expect(
+      await handler({
+        data: { id: "event", status: "cancelled" },
+        context: context({ id: "event" }),
+      }),
+    ).toEqual({ ok: true, cancellations: { sent: 2, skipped: 0, failed: 0 } });
     expect(mock.notify).toHaveBeenCalledWith("event");
   });
   it("does not expose recipients when RLS allows no event update", async () => {
-    await expect(handler({ data: { id: "event", status: "cancelled" }, context: context(null) })).rejects.toThrow("not allowed");
+    await expect(
+      handler({ data: { id: "event", status: "cancelled" }, context: context(null) }),
+    ).rejects.toThrow("not allowed");
     expect(mock.notify).not.toHaveBeenCalled();
   });
   it("does not send when the caller has no event-management role", async () => {
     mock.authorize.mockRejectedValue(new Error("Forbidden"));
-    await expect(handler({ data: { id: "event", status: "cancelled" }, context: context({ id: "event" }) })).rejects.toThrow("Forbidden");
+    await expect(
+      handler({ data: { id: "event", status: "cancelled" }, context: context({ id: "event" }) }),
+    ).rejects.toThrow("Forbidden");
     expect(mock.notify).not.toHaveBeenCalled();
   });
   it("does not send cancellation notices on publish or unpublish", async () => {
     for (const status of ["published", "draft"]) {
-      await handler({ data: { id: "event", status }, context: context({ id: "event", published_at: "2026-10-01" }) });
+      await handler({
+        data: { id: "event", status },
+        context: context({ id: "event", published_at: "2026-10-01" }),
+      });
     }
     expect(mock.notify).not.toHaveBeenCalled();
     expect(mock.invitations).toHaveBeenCalledTimes(1);
   });
   it("preserves successful cancellation if notification dispatch fails", async () => {
     mock.notify.mockRejectedValue(new Error("temporary failure"));
-    expect(await handler({ data: { id: "event", status: "cancelled" }, context: context({ id: "event" }) }))
-      .toEqual({ ok: true, cancellations: { sent: 0, skipped: 0, failed: 1 } });
+    expect(
+      await handler({
+        data: { id: "event", status: "cancelled" },
+        context: context({ id: "event" }),
+      }),
+    ).toEqual({ ok: true, cancellations: { sent: 0, skipped: 0, failed: 1 } });
   });
 });
