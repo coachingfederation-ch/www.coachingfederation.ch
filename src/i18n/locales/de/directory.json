@@ -70,6 +70,8 @@
     "loading": "Coaches werden geladen…",
     "errorTitle": "Das Verzeichnis ist vorübergehend nicht verfügbar",
     "errorBody": "Bitte versuchen Sie es in einem kurzen Moment erneut.",
+    "throttledTitle": "Sie haben in kurzer Zeit sehr viele Suchen durchgeführt",
+    "throttledBody": "Bitte warten Sie einige Minuten und versuchen Sie es dann erneut.",
     "prev": "Zurück",
     "next": "Weiter",
     "sampleRange": "Coaches {from}–{to} von {total} angezeigt",

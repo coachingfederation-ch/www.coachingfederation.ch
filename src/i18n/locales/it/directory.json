@@ -70,6 +70,8 @@
     "loading": "Caricamento dei coach in corso…",
     "errorTitle": "L'elenco è temporaneamente non disponibile",
     "errorBody": "Si prega di riprovare tra un momento.",
+    "throttledTitle": "Hai effettuato molte ricerche in poco tempo",
+    "throttledBody": "Attendi qualche minuto, poi riprova.",
     "prev": "Precedente",
     "next": "Successivo",
     "sampleRange": "Coach {from}–{to} su {total} mostrati",

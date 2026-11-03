@@ -177,6 +177,7 @@ export function useCoachDirectoryFilters() {
   // results and counts cover the whole directory, not just the loaded page.
   const results = useMemo(() => data?.entries ?? [], [data]);
 
+  const rateLimited = Boolean(data?.rateLimited);
   const total = data?.total ?? 0;
   const pageSize = data?.pageSize ?? 12;
   const shownCount = total;
@@ -236,6 +237,7 @@ export function useCoachDirectoryFilters() {
     clearAll,
     isPending,
     isError,
+    rateLimited,
     results,
     specialisationLabel,
     formatLabel,

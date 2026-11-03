@@ -24,6 +24,7 @@ function sharedAttributeSlugs(results: DirectoryEntry[]): Set<string> {
 
 export function CoachResultsGrid({
   isError,
+  rateLimited = false,
   isPending,
   results,
   specialisationLabel,
@@ -36,6 +37,8 @@ export function CoachResultsGrid({
   emphasiseDifferences = false,
 }: {
   isError: boolean;
+  /** Scraping throttle hit: show a calm notice instead of results. */
+  rateLimited?: boolean;
   isPending: boolean;
   results: DirectoryEntry[];
   specialisationLabel: LabelLookup;
@@ -54,6 +57,15 @@ export function CoachResultsGrid({
     () => (emphasiseDifferences ? sharedAttributeSlugs(results) : new Set<string>()),
     [results, emphasiseDifferences],
   );
+
+  if (rateLimited) {
+    return (
+      <div className="rounded-2xl border border-border/70 bg-card px-8 py-16 text-center" role="status">
+        <p className="text-base font-bold text-foreground">{t("directory.results.throttledTitle")}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{t("directory.results.throttledBody")}</p>
+      </div>
+    );
+  }
 
   if (isError) {
     return (
