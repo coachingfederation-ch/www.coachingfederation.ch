@@ -174,3 +174,4 @@ See `docs/advertising.md` for the full flow and diagram. Booking: `ads.functions
 
 - `src/lib/board-digest.ts` / `.server.ts` / `.functions.ts`, `src/lib/email-templates/board-digest.tsx`, `src/components/cms/BoardDigestCard.tsx`, `src/routes/api/public/board-digest.ts`. See `docs/board-digest.md`.
 - `src/components/about/EthicsComplaint.tsx` — About page section linking to ICF Global ethics complaint process.
+- `src/lib/member-access-log.server.ts` — staff member-data audit log + per-user limits; `src/components/cms/MemberAccessLogCard.tsx` — admin view; `src/hooks/use-idle-sign-out.ts` — staff idle sign-out.

@@ -68,11 +68,36 @@ export type DirectoryPage = {
   pageSize: number;
   /** True when `entries` is a random showcase rather than a ranged page. */
   sampled?: boolean;
+  /** True when this caller's IP hit the scraping throttle; entries are empty. */
+  rateLimited?: boolean;
 };
+
+/**
+ * Per-IP scraping throttle for the public directory. Normal browsing stays far
+ * below these; bulk harvesting of coach profiles does not.
+ */
+async function directoryThrottle(bucket: "directory_search" | "directory_profile"): Promise<boolean> {
+  const { checkRateLimit, clientIp } = await import("./rate-limit.server");
+  const { getRequest } = await import("@tanstack/react-start/server");
+  const request = getRequest();
+  const ip = request ? clientIp(request) : "unknown";
+  const rules =
+    bucket === "directory_search"
+      ? [
+          { windowSeconds: 600, max: 60 },
+          { windowSeconds: 86_400, max: 250 },
+        ]
+      : [{ windowSeconds: 600, max: 100 }];
+  const verdict = await checkRateLimit(bucket, ip, rules);
+  return verdict.allowed;
+}
 
 export const queryCoachDirectory = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) => filterSchema.parse(input ?? {}))
   .handler(async ({ data }): Promise<DirectoryPage> => {
+    if (!(await directoryThrottle("directory_search"))) {
+      return { entries: [], total: 0, page: data.page ?? 0, pageSize: 12, rateLimited: true };
+    }
     const { publicSupabaseClient } = await import("./supabase-public.server");
     const { signProfileImages } = await import("./storage.server");
     const supabasePublic = publicSupabaseClient();
@@ -233,6 +258,7 @@ export const getPublicCoachProfile = createServerFn({ method: "GET" })
     z.object({ profileId: z.string().uuid(), locale: localeSchema.optional() }).parse(input ?? {}),
   )
   .handler(async ({ data }): Promise<PublicCoachProfile | null> => {
+    if (!(await directoryThrottle("directory_profile"))) return null;
     const { publicSupabaseClient } = await import("./supabase-public.server");
     const { signProfileImages } = await import("./storage.server");
     const supabasePublic = publicSupabaseClient();

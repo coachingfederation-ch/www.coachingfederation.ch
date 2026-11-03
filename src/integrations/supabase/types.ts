@@ -4939,6 +4939,39 @@ export type Database = {
           },
         ]
       }
+      member_access_log: {
+        Row: {
+          action: string
+          actor_user_id: string
+          created_at: string
+          id: string
+          ip: string | null
+          row_count: number | null
+          subject_member_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          actor_user_id: string
+          created_at?: string
+          id?: string
+          ip?: string | null
+          row_count?: number | null
+          subject_member_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string
+          created_at?: string
+          id?: string
+          ip?: string | null
+          row_count?: number | null
+          subject_member_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       member_archive_snapshots: {
         Row: {
           created_at: string

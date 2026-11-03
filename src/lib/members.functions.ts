@@ -13,8 +13,16 @@ export const listMembers = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertStaff(context);
+    const { guardMemberAccess, logMemberAccess } = await import("./member-access-log.server");
+    await guardMemberAccess(context.userId, "members_list");
     const { listMembersForStaff } = await import("./member-admin.server");
-    return await listMembersForStaff();
+    const rows = await listMembersForStaff();
+    await logMemberAccess({
+      actorUserId: context.userId,
+      action: "members_list",
+      rowCount: Array.isArray(rows) ? rows.length : null,
+    });
+    return rows;
   });
 
 /**
@@ -149,8 +157,16 @@ export const exportMembersCsv = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context);
+    const { guardMemberAccess, logMemberAccess } = await import("./member-access-log.server");
+    await guardMemberAccess(context.userId, "members_export");
     const { buildMembersCsv } = await import("./members-export.server");
-    return await buildMembersCsv();
+    const result = await buildMembersCsv();
+    await logMemberAccess({
+      actorUserId: context.userId,
+      action: "members_export",
+      rowCount: result.rows,
+    });
+    return result;
   });
 
 /** Admin member detail: imported ICF reference data + local directory fields. */
@@ -159,8 +175,17 @@ export const getMemberDetail = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context, data }) => {
     await assertAdmin(context);
+    const { guardMemberAccess, logMemberAccess } = await import("./member-access-log.server");
+    await guardMemberAccess(context.userId, "member_detail", data.memberId);
     const { loadMemberDetail } = await import("./member-admin.server");
-    return await loadMemberDetail(data.memberId);
+    const detail = await loadMemberDetail(data.memberId);
+    await logMemberAccess({
+      actorUserId: context.userId,
+      action: "member_detail",
+      subjectMemberId: data.memberId,
+      rowCount: 1,
+    });
+    return detail;
   });
 
 /**
@@ -379,4 +404,35 @@ export const setClaimPilotMember = createServerFn({ method: "POST" })
     const { setPilotMember } = await import("./member-claim/waves.server");
     await setPilotMember(userId, data.memberId, data.pilot);
     return { ok: true };
+  });
+
+/**
+ * Admin view of the member-data access trail. Read through the caller's
+ * RLS-bound client (admin-only SELECT policy); actor emails are resolved
+ * server-side so the browser never queries auth users.
+ */
+export const listMemberAccessLog = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { data, error } = await context.supabase
+      .from("member_access_log")
+      .select("id, actor_user_id, action, row_count, created_at")
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (error) throw new Error("Could not load access log");
+    const rows = (data ?? []) as {
+      id: string;
+      actor_user_id: string;
+      action: string;
+      row_count: number | null;
+      created_at: string;
+    }[];
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const emails = new Map<string, string | null>();
+    for (const id of new Set(rows.map((r) => r.actor_user_id))) {
+      const { data: u } = await supabaseAdmin.auth.admin.getUserById(id);
+      emails.set(id, u?.user?.email ?? null);
+    }
+    return rows.map((r) => ({ ...r, actor_email: emails.get(r.actor_user_id) ?? null }));
   });

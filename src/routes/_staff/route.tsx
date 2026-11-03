@@ -12,6 +12,19 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { myRolesQueryOptions } from "@/lib/roles";
+import { useCallback } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/design-system/icf-welcome-design-system-a835df";
+import { useIdleSignOut } from "@/hooks/use-idle-sign-out";
+import { useCms } from "@/i18n/cms";
 
 export const Route = createFileRoute("/_staff")({
   ssr: false,
@@ -29,5 +42,30 @@ export const Route = createFileRoute("/_staff")({
 });
 
 function StaffShell() {
-  return <Outlet />;
+  const { t } = useCms();
+  const signOut = useCallback(() => {
+    const next = window.location.pathname + window.location.search;
+    void supabase.auth.signOut().finally(() => {
+      window.location.assign(`/auth?next=${encodeURIComponent(next)}`);
+    });
+  }, []);
+  const { phase, stay } = useIdleSignOut(signOut);
+
+  return (
+    <>
+      <Outlet />
+      <AlertDialog open={phase === "warning"}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("staffIdle.title")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("staffIdle.body")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={signOut}>{t("staffIdle.signOut")}</AlertDialogCancel>
+            <AlertDialogAction onClick={stay}>{t("staffIdle.stay")}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  );
 }

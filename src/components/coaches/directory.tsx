@@ -63,6 +63,7 @@ export function CoachDirectory() {
     clearAll,
     isPending,
     isError,
+    rateLimited,
     results,
     specialisationLabel,
     formatLabel,
@@ -180,6 +181,7 @@ export function CoachDirectory() {
 
             <CoachResultsGrid
               isError={isError}
+              rateLimited={rateLimited}
               isPending={isPending}
               results={results}
               specialisationLabel={specialisationLabel}

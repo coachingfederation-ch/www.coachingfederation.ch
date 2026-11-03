@@ -70,6 +70,8 @@
     "loading": "Loading coaches…",
     "errorTitle": "The directory is temporarily unavailable",
     "errorBody": "Please try again in a moment.",
+    "throttledTitle": "You have searched a lot in a short time",
+    "throttledBody": "Please wait a few minutes, then try again.",
     "prev": "Previous",
     "next": "Next",
     "sampleRange": "Showing {from}–{to} of {total} coaches",

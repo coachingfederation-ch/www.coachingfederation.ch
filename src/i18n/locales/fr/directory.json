@@ -70,6 +70,8 @@
     "loading": "Chargement des coachs…",
     "errorTitle": "L'annuaire est temporairement indisponible",
     "errorBody": "Veuillez réessayer dans quelques instants.",
+    "throttledTitle": "Vous avez effectué beaucoup de recherches en peu de temps",
+    "throttledBody": "Veuillez patienter quelques minutes, puis réessayer.",
     "prev": "Précédent",
     "next": "Suivant",
     "sampleRange": "Coachs {from}–{to} sur {total} affichés",

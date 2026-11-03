@@ -196,3 +196,10 @@ Admins switch whole features on or off on the Integration page (Settings → Fea
 - Europe Pulse off: public page returns not found, Insights teaser hidden, the scan endpoint skips with `{ skipped: "feature_disabled" }`.
 - Advertising off: `/advertise` and advertiser sign-in show a paused notice (platform admins still see the flow), the member home card is hidden, draft/submit server functions reject, `/goto/:placementId` redirects to `/`.
 - Staff screens stay reachable and show a notice.
+
+## Member data protection (access log, throttles, idle sign-out)
+
+- `member_access_log` is an append-only trail of staff reads of member PII: member list (`listMembers`), CSV export (`exportMembersCsv`) and member details (`getMemberDetail`). It records actor, action, row count, IP and user agent. Only server code inserts (service role); admins read via RLS; rows older than 12 months are pruned opportunistically. Shown in Integration → Advanced and Setup → "Member data access".
+- Per-user limits (`src/lib/member-access-log.server.ts`, `STAFF_MEMBER_LIMITS`): export 3/hour and 5/day, list 60/15 min, detail 120/15 min. Blocked calls are logged as `*_blocked` and return "Too many requests".
+- Public Coach Finder throttle (`src/lib/directory.functions.ts`): per IP, search 60/10 min and 250/day, profile 100/10 min. A throttled search returns `rateLimited: true` and the finder shows a calm notice.
+- Staff idle sign-out (`src/hooks/use-idle-sign-out.ts`, mounted in `/_staff` shell): warning at 28 minutes, sign-out at 30 minutes, activity shared across tabs. Client-enforced only; token lifetime is unchanged. Member Area is unaffected.
