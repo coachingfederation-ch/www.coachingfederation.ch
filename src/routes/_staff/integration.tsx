@@ -24,6 +24,7 @@ import { SyncLimitsCard } from "@/components/cms/SyncLimitsCard";
 import { FeatureTogglesCard } from "@/components/cms/FeatureTogglesCard";
 import { RetentionCard } from "@/components/cms/RetentionCard";
 import { BoardDigestCard } from "@/components/cms/BoardDigestCard";
+import { MemberAccessLogCard } from "@/components/cms/MemberAccessLogCard";
 import { useCms } from "@/i18n/cms";
 import {
   fetchIntegrationConfig,
@@ -806,6 +807,7 @@ function IntegrationPageBody() {
               <CollapsibleContent className="space-y-4">
                 <SyncLimitsCard />
                 <ContentOwnershipPanel />
+                <MemberAccessLogCard />
                 <section className={CARD}>
                   <div className="flex flex-wrap items-center gap-3">
                     <span
