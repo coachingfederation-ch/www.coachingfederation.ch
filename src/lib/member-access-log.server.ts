@@ -63,6 +63,11 @@ export async function logMemberAccess(entry: {
       user_agent: meta.userAgent,
     });
     if (error) console.error("member_access_log insert failed", error.message);
+    // Opportunistic retention: ~2% of writes prune entries older than 12 months.
+    if (Math.random() < 0.02) {
+      const cutoff = new Date(Date.now() - 365 * 86_400_000).toISOString();
+      await supabaseAdmin.from("member_access_log").delete().lt("created_at", cutoff);
+    }
   } catch (err) {
     console.error("member_access_log insert failed", err);
   }
