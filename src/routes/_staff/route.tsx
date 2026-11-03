@@ -22,7 +22,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from "@/design-system/icf-welcome-design-system-a835df";
 import { useIdleSignOut } from "@/hooks/use-idle-sign-out";
 import { useCms } from "@/i18n/cms";
 
