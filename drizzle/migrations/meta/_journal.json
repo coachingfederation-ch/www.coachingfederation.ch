@@ -141,6 +141,13 @@
       "when": 1792756219764,
       "tag": "0019_survey_members_only",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1793689279595,
+      "tag": "0020_member_access_log",
+      "breakpoints": true
     }
   ]
 }
