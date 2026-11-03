@@ -41,3 +41,4 @@ Live member data belongs in the database, behind RLS — not in version control.
 - Vote translation is a manager-only, rate-limited draft transformation; localized option labels stay inside the existing options JSON and preserve keys and the existing post-opening freeze. Why: translation must not change vote meaning, tally identities, or publishing state.
 
 - Ballot questions are nullable localized vote fields; suggestions transform buffered proposal text without saving, and all question languages freeze at voting start in server validation and the database. Why: staff can refine drafts without changing the question already answered by members.
+- Every server function that returns member PII in bulk or per record calls `guardMemberAccess` then `logMemberAccess`. Why: mass extraction by a compromised staff account must be throttled and traceable.
