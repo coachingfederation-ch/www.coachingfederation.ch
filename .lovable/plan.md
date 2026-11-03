@@ -11,13 +11,13 @@ Make every bulk read of member data traceable, slow down mass extraction (by sta
 
 ## 2. Rate limits on staff member endpoints (Tier 1, item 2)
 Uses the existing `checkRateLimit`, keyed per user id:
-- `exportMembersCsv`: 3 per hour, 10 per day.
+- `exportMembersCsv`: 3 per hour, 5 per day.
 - `listMembers`: 60 per 15 minutes.
 - `getMemberDetail`: 120 per 15 minutes.
 - Blocked calls return a localized "Too many requests, try again later" message and are also written to the audit log as `*_blocked`.
 
 ## 4. Coach Finder scraping throttle (Tier 1, item 4)
-- `queryCoachDirectory` and `getPublicCoachProfile` get per-IP limits: 120 per 10 minutes and 1,000 per day for search; 200 per 10 minutes for profiles. Normal browsing stays far below this.
+- `queryCoachDirectory` and `getPublicCoachProfile` get per-IP limits: 60 per 10 minutes and 250 per day for search; 100 per 10 minutes for profiles. Normal browsing stays far below this.
 - When blocked, the Coach Finder shows a calm localized notice instead of results; no error page.
 - The page size cap stays server-side (already enforced by config).
 
