@@ -4,6 +4,7 @@
  * Kept out of `*.functions.ts` module scope on purpose: that scope is bundled
  * for the browser, and this file reaches for the server Supabase client.
  */
+import { toPublicMediaUrl } from "./media";
 import type { Locale } from "@/i18n/config";
 import { localizedName, type TeamMember } from "./team";
 import type { CommunityDetail, CommunitySummary } from "./communities";
@@ -62,7 +63,7 @@ export async function buildCommunities(locale: Locale): Promise<CommunitySummary
         signupUrl: p.signup_url,
         languages: (p.language_slugs ?? []).map((s) => languages.get(s) ?? s),
         isFeatured: p.is_featured_community,
-        coverImageUrl: p.cover_image_url,
+        coverImageUrl: toPublicMediaUrl(p.cover_image_url),
         coverImageAlt: p.cover_image_alt,
         imageSource: p.image_source,
         imageCreditName: p.image_credit_name,
@@ -96,7 +97,7 @@ export async function buildCommunityDetail(
     signupUrl: project.signup_url,
     languages: (project.language_slugs ?? []).map((s) => languages.get(s) ?? s),
     isFeatured: project.is_featured_community,
-    coverImageUrl: project.cover_image_url,
+    coverImageUrl: toPublicMediaUrl(project.cover_image_url),
     coverImageAlt: project.cover_image_alt,
     imageSource: project.image_source,
     imageCreditName: project.image_credit_name,

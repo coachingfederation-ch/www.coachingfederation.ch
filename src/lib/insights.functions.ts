@@ -23,11 +23,15 @@ export const getPublishedArticle = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     if (!row) return null;
 
-    const { translations, ...article } = row as typeof row & {
+    const { translations, ...stored } = row as typeof row & {
       translations?:
         | { locale: string; title: string; excerpt: string; content: string | null }[]
         | null;
     };
+    // Never hand out a stored legacy signed URL: the media reference is
+    // re-checked against publication on every request (src/lib/media.ts).
+    const { toPublicMediaUrl } = await import("./media");
+    const article = { ...stored, featured_image_url: toPublicMediaUrl(stored.featured_image_url) };
     const available = [article.language, ...(translations ?? []).map((tr) => tr.locale)];
 
     if (article.language === data.locale) {
