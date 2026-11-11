@@ -7353,6 +7353,7 @@ export type Database = {
     Views: {
       coach_directory_public: {
         Row: {
+          actc_awarded_on: string | null
           approach: string | null
           availability_note: string | null
           availability_slug: string | null
@@ -7369,6 +7370,7 @@ export type Database = {
           fees_note: string | null
           format_slugs: string[] | null
           full_name: string | null
+          has_actc: boolean | null
           has_directory_credential: boolean | null
           is_active_member: boolean | null
           is_directory_eligible: boolean | null
