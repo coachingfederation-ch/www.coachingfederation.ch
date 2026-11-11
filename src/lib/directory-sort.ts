@@ -128,6 +128,8 @@ export type DirectoryFacets = {
   q?: string;
   /** Only coaches currently accepting new clients. */
   acceptingOnly?: boolean;
+  /** Only coaches holding a valid ACTC team coaching credential. */
+  actcOnly?: boolean;
 };
 
 /** Strips characters that would break a PostgREST `or(...)` expression. */
@@ -161,6 +163,7 @@ export function applyFacets<T extends FacetQuery<T>>(query: T, data: DirectoryFa
     );
   }
   if (data.acceptingOnly) q = q.eq("availability_slug", "accepting");
+  if (data.actcOnly) q = q.eq("has_actc", true);
   const term = data.q ? sanitiseSearchTerm(data.q) : "";
   if (term) {
     const like = `*${term}*`;

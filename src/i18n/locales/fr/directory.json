@@ -52,6 +52,7 @@
     "specializationLabel": "Spécialisation",
     "formatLabel": "Format",
     "acceptingLabel": "Accepte de nouveaux clients",
+    "actcLabel": "Credential de coaching d’équipe (ACTC)",
     "clear": "Réinitialiser les filtres",
     "toggle": "Filtres",
     "apply": "Afficher les résultats"
