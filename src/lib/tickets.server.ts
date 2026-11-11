@@ -40,8 +40,8 @@ type TierRow = {
 
 /**
  * Releases seats held by checkouts that were abandoned or never completed.
- * Called before anything reads or writes seat counts, so an expired hold never
- * blocks the next buyer.
+ * Called on the registration write path only. Public reads never call it:
+ * seat counts already exclude expired holds in the database.
  */
 export async function releaseExpiredHolds(eventId: string) {
   await supabaseAdmin
@@ -113,7 +113,9 @@ export async function loadEventTicketing(
   locale: Locale,
   userId: string | null,
 ): Promise<EventTicketing> {
-  await releaseExpiredHolds(eventId);
+  // Read-only: no hold cleanup here. Seat counts already ignore expired holds
+  // (private.registration_holds_seat), and the durable release runs on the
+  // registration write path, so an anonymous read never writes.
   const { publicSupabaseClient } = await import("./supabase-public.server");
   const supabase = publicSupabaseClient();
 

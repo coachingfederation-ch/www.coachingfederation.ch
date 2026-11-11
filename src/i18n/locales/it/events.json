@@ -278,7 +278,9 @@
       "not_member": "I pass ospite sono riservati ai membri attivi.",
       "event_closed": "Le iscrizioni per questo evento sono chiuse.",
       "not_allowed": "Questo evento non offre pass ospite.",
-      "error": "Qualcosa è andato storto. Riprova."
+      "error": "Qualcosa è andato storto. Riprova.",
+      "member_limit": "Hai già richiesto un pass ospite per questo evento.",
+      "rate_limited": "Hai inviato di recente diversi inviti pass ospite. Riprova più tardi o scrivi a office@coachingfederation.ch."
     },
     "claim": {
       "eyebrow": "Pass ospite",
