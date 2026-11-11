@@ -116,6 +116,19 @@ update: the Stripe webhook at `/api/public/payments/webhook?env=…` (signature
 verified; authority) and `confirmCheckoutSession`, used when the visitor
 returns before the webhook lands. Expired or failed sessions release the seat.
 
+Expired holds are marked `expired` only on the registration write path
+(`submitRegistration`). The public ticketing read (`getEventTicketing`) never
+writes: seat counts already ignore expired holds through
+`private.registration_holds_seat`, so stale rows cannot block a buyer.
+
+## Guest passes
+
+`submitGuestPassRequest` emails the guest at the address the member types, so
+it is capped server-side: one guest per member per event (`member_limit`), and
+per account at most three invitations a day and 10 in 30 days through
+`checkRateLimit("guest-pass-invite")` (`rate_limited`). The limiter counts only
+requests that passed every other check.
+
 ## Confirmation email
 
 `event-confirmation.server.ts` sends in the attendee's stored `locale`, with a
