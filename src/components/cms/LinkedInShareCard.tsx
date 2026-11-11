@@ -19,6 +19,7 @@ import {
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { LinkedInCard } from "@/components/cms/LinkedInCard";
 import { toDataUrl } from "@/lib/linkedin-image";
+import { resolveStaffMediaSrc } from "@/hooks/use-media-src";
 import {
   linkedInVariantIndex,
   sanitizeMarkLayout,
@@ -73,9 +74,10 @@ export function LinkedInShareCard({
       setDraft(data);
       setCommentary(data.commentary);
       setLatest(data.latest);
-      const photo = data.article.featured_image_url
-        ? await toDataUrl(data.article.featured_image_url)
-        : null;
+      // Media references only resolve publicly while published; sign through
+      // staff storage access so the card works for any article state.
+      const photoSrc = await resolveStaffMediaSrc(data.article.featured_image_url);
+      const photo = photoSrc ? await toDataUrl(photoSrc) : null;
       setImageDataUrl(photo);
       setMode(photo ? "feature" : "marks");
       const seed = linkedInVariantIndex(articleId);
