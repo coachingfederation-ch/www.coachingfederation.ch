@@ -15,7 +15,11 @@
 /** Member profile photos. Private; read via short-lived signed URLs. */
 export const PROFILE_IMAGE_BUCKET = "member-profile-images";
 
-/** CMS article images. Private; the signed URL is persisted on the article. */
+/**
+ * CMS images (article, community and newsletter covers, speaker photos).
+ * Private. Rows store a media reference (`/api/public/media/<path>`, see
+ * `media.ts`) that is re-checked against publication on every request.
+ */
 export const ARTICLE_IMAGE_BUCKET = "article-images";
 
 /**
@@ -49,11 +53,12 @@ export const PROFILE_IMAGE_TTL_SECONDS = 60 * 60;
 export const PROFILE_IMAGE_PREVIEW_TTL_SECONDS = 60 * 60;
 
 /**
- * Article images: 10 years.
+ * Speaker photo links: 10 years.
  *
- * Known debt. The signed URL is written into `articles.featured_image_url` and
- * rendered on the public site, so it must outlive the article; a long TTL is
- * the stand-in for a public bucket or an image proxy. See docs/tech-debt.md.
+ * Only event speaker photos still use this lifetime (re-signed on every render
+ * from the stored path). Article, community and newsletter images no longer
+ * store signed URLs at all: they go through the media route, which mints a
+ * 10-minute link only while the owning row is public (see media.ts).
  */
 export const ARTICLE_IMAGE_TTL_SECONDS = 60 * 60 * 24 * 365 * 10;
 
