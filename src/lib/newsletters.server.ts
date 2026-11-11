@@ -316,7 +316,16 @@ export async function deleteNewsletter(client: Client, id: string) {
 export async function renderNewsletterEmail(
   client: Client,
   id: string,
-  options: { unsubscribeUrl?: string; locale?: string } = {},
+  options: {
+    unsubscribeUrl?: string;
+    locale?: string;
+    /**
+     * "send" (default): bucket images use the absolute media route, which
+     * re-checks that the edition is still public on every open. "preview":
+     * staff-only render, so images are signed for one hour and drafts show.
+     */
+    media?: "send" | "preview";
+  } = {},
 ): Promise<string> {
   const { newsletter, blocks } = await loadNewsletterEditorData(client, id);
   if (!newsletter) throw new Error("newsletter not found");
@@ -361,11 +370,33 @@ export async function renderNewsletterEmail(
       });
   }
 
-  const [{ render }, { NewsletterEditionEmail }, { formatIssueDate }] = await Promise.all([
-    import("@react-email/render"),
-    import("./email-templates/newsletter-edition"),
-    import("./newsletters"),
-  ]);
+  const [{ render }, { NewsletterEditionEmail }, { formatIssueDate }, media, { SITE_URL }] =
+    await Promise.all([
+      import("@react-email/render"),
+      import("./email-templates/newsletter-edition"),
+      import("./newsletters"),
+      import("./media"),
+      import("@/i18n/config"),
+    ]);
+
+  // Never embed a long-lived signed URL in an email (src/lib/media.ts).
+  let previewSigned = new Map<string, string>();
+  if (options.media === "preview") {
+    const [{ signStoragePaths }, { ARTICLE_IMAGE_BUCKET }] = await Promise.all([
+      import("./storage.server"),
+      import("./storage"),
+    ]);
+    previewSigned = await signStoragePaths(
+      ARTICLE_IMAGE_BUCKET,
+      blocks.map((b) => media.mediaPathOf(b.featured_image_url)).filter((p): p is string => !!p),
+      60 * 60,
+    );
+  }
+  const imageFor = (value: string | null): string | null => {
+    const path = media.mediaPathOf(value);
+    if (path && options.media === "preview") return previewSigned.get(path) ?? null;
+    return media.toAbsoluteMediaUrl(value, SITE_URL);
+  };
 
   return render(
     NewsletterEditionEmail({
@@ -381,7 +412,7 @@ export async function renderNewsletterEmail(
             id: b.id,
             title: translated?.title || b.title,
             content: translated?.content || b.content || "",
-            featuredImageUrl: b.featured_image_url,
+            featuredImageUrl: imageFor(b.featured_image_url),
             imageAlt: translated?.imageAlt ?? b.image_alt,
             imageSource: b.image_source,
             imageCreditName: b.image_credit_name,
