@@ -130,6 +130,8 @@ export function demoCoachProfile(locale: Locale): PublicCoachProfile {
     mentor_accredited: false,
     supervision_accredited: false,
     has_directory_credential: true,
+    has_actc: false,
+    actc_awarded_on: null,
     is_active_member: true,
     is_directory_eligible: true,
     is_directory_visible: true,

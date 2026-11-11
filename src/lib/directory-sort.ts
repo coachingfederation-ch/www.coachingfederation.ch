@@ -139,7 +139,7 @@ export function sanitiseSearchTerm(term: string): string {
 
 type FacetQuery<T> = {
   or(filters: string): T;
-  eq(column: string, value: string): T;
+  eq(column: string, value: string | boolean): T;
   overlaps(column: string, value: readonly string[]): T;
   in(column: string, value: readonly string[]): T;
 };
