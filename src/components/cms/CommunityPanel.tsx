@@ -18,7 +18,9 @@ import { useCms } from "@/i18n/cms";
 import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import { UnsplashPicker } from "@/components/cms/UnsplashPicker";
 import { AiBadge } from "@/design-system/icf-welcome-design-system-a835df";
-import { ARTICLE_IMAGE_BUCKET, ARTICLE_IMAGE_TTL_SECONDS } from "@/lib/storage";
+import { ARTICLE_IMAGE_BUCKET } from "@/lib/storage";
+import { mediaRefForPath } from "@/lib/media";
+import { useMediaSrc } from "@/hooks/use-media-src";
 import { translateCommunity } from "@/lib/community-translations.functions";
 import { generateCommunityImageFn } from "@/lib/community-images.functions";
 import { fetchVocabulary, type VocabRow } from "@/lib/vocabularies";
@@ -275,7 +277,8 @@ export function CommunityPanel({
     const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
     const path = `communities/${project.id}/${Date.now()}.${ext}`;
     // The upload stays on the browser client (RLS on storage.objects is the
-    // boundary), mirroring the article cover image.
+    // boundary), mirroring the article cover image. The row stores a media
+    // reference that the public media route re-checks on every request.
     const { error: upErr } = await supabase.storage
       .from(ARTICLE_IMAGE_BUCKET)
       .upload(path, file, { upsert: true, contentType: file.type });
@@ -283,13 +286,9 @@ export function CommunityPanel({
       setUploading(false);
       return setError(upErr.message);
     }
-    const { data: signed, error: signErr } = await supabase.storage
-      .from(ARTICLE_IMAGE_BUCKET)
-      .createSignedUrl(path, ARTICLE_IMAGE_TTL_SECONDS);
     setUploading(false);
-    if (signErr || !signed) return setError(signErr?.message ?? "Upload failed");
     await savePatch({
-      cover_image_url: signed.signedUrl,
+      cover_image_url: mediaRefForPath(path),
       image_source: "upload",
       image_credit_name: null,
       image_credit_url: null,

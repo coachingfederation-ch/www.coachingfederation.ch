@@ -3,7 +3,7 @@
  *
  * Server-only. Generates one image from the block's own text through the
  * Lovable AI gateway, stores it in the private article-images bucket and
- * returns a signed URL. Non-streaming on purpose: nothing renders progressive
+ * returns its media reference. Non-streaming on purpose: nothing renders progressive
  * previews here, the caller just waits for the finished PNG.
  *
  * Every image produced here is written back with `image_source = 'ai'`, which

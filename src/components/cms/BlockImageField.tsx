@@ -15,7 +15,9 @@ import { Crop, ImagePlus, Sparkles, Upload, X } from "lucide-react";
 import { UnsplashPicker } from "@/components/cms/UnsplashPicker";
 import { ImageFrameEditor } from "@/components/cms/ImageFrameEditor";
 import { supabase } from "@/integrations/supabase/client";
-import { ARTICLE_IMAGE_BUCKET, ARTICLE_IMAGE_TTL_SECONDS } from "@/lib/storage";
+import { ARTICLE_IMAGE_BUCKET } from "@/lib/storage";
+import { mediaRefForPath } from "@/lib/media";
+import { useMediaSrc } from "@/hooks/use-media-src";
 import { renderBlockImage } from "@/lib/block-image-render";
 import {
   DEFAULT_BLOCK_ASPECT,
@@ -90,11 +92,9 @@ export function BlockImageField({
       .from(ARTICLE_IMAGE_BUCKET)
       .upload(path, body, { upsert: true, contentType });
     if (error) throw error;
-    const { data: signed, error: signError } = await supabase.storage
-      .from(ARTICLE_IMAGE_BUCKET)
-      .createSignedUrl(path, ARTICLE_IMAGE_TTL_SECONDS);
-    if (signError || !signed) throw signError ?? new Error("Could not create an image link.");
-    return signed.signedUrl as string;
+    // A media reference, not a signed URL: the public media route re-checks
+    // that the edition is still public on every request (src/lib/media.ts).
+    return mediaRefForPath(path);
   };
 
   const upload = async (file: File) => {
