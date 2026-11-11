@@ -3,7 +3,7 @@
  *
  * Server-only. Draws one illustration from the article's own title and excerpt
  * (or an explicit art-direction brief) through the Lovable AI gateway, stores
- * it in the private article-images bucket and returns the signed URL.
+ * it in the private article-images bucket and returns its media reference.
  *
  * Unlike the community variant this helper does NOT write the row: the article
  * editor autosaves its local state 800ms after every change, so a server-side
@@ -11,7 +11,8 @@
  * state with `image_source = 'ai'`, which is what makes the mandatory
  * "AI generated" disclosure appear in the editor and on the public article.
  */
-import { ARTICLE_IMAGE_BUCKET, ARTICLE_IMAGE_TTL_SECONDS } from "./storage";
+import { ARTICLE_IMAGE_BUCKET } from "./storage";
+import { mediaRefForPath } from "./media";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Client = any;
@@ -92,13 +93,10 @@ export async function generateArticleImage(
     .upload(path, bytes, { contentType: "image/png", upsert: true });
   if (uploadError) throw uploadError;
 
-  const { data: signed, error: signError } = await client.storage
-    .from(ARTICLE_IMAGE_BUCKET)
-    .createSignedUrl(path, ARTICLE_IMAGE_TTL_SECONDS);
-  if (signError || !signed) throw signError ?? new Error("Could not create an image link.");
-
+  // A stable media reference, not a signed URL: the media route re-checks
+  // publication on every request (see src/lib/media.ts).
   return {
-    url: signed.signedUrl as string,
+    url: mediaRefForPath(path),
     alt: `AI generated illustration for the article “${article.title ?? ""}”`.trim(),
   };
 }
