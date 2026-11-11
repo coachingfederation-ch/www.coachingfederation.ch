@@ -3,14 +3,15 @@
  *
  * Server-only. Generates one image from the block's own text through the
  * Lovable AI gateway, stores it in the private article-images bucket and
- * returns a signed URL. Non-streaming on purpose: nothing renders progressive
+ * returns its media reference. Non-streaming on purpose: nothing renders progressive
  * previews here, the caller just waits for the finished PNG.
  *
  * Every image produced here is written back with `image_source = 'ai'`, which
  * is what makes the mandatory "AI generated" disclosure appear in the editor,
  * the email and the public archive.
  */
-import { ARTICLE_IMAGE_BUCKET, ARTICLE_IMAGE_TTL_SECONDS } from "./storage";
+import { ARTICLE_IMAGE_BUCKET } from "./storage";
+import { mediaRefForPath } from "./media";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Client = any;
@@ -86,12 +87,9 @@ export async function generateBlockImage(client: Client, blockId: string) {
     .upload(path, bytes, { contentType: "image/png", upsert: true });
   if (uploadError) throw uploadError;
 
-  const { data: signed, error: signError } = await client.storage
-    .from(ARTICLE_IMAGE_BUCKET)
-    .createSignedUrl(path, ARTICLE_IMAGE_TTL_SECONDS);
-  if (signError || !signed) throw signError ?? new Error("Could not create an image link.");
-
-  const url = signed.signedUrl as string;
+  // A stable media reference, not a signed URL: the media route re-checks that
+  // the edition is still public on every request (see src/lib/media.ts).
+  const url = mediaRefForPath(path);
   const { error: saveError } = await client
     .from("newsletter_blocks")
     .update({

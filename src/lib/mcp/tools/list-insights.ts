@@ -4,6 +4,8 @@
  */
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
+import { SITE_URL } from "@/i18n/config";
+import { toAbsoluteMediaUrl } from "@/lib/media";
 import { errorResult, sanitiseSearchText, supabaseForUser, textResult } from "../supabase";
 
 export default defineTool({
@@ -30,9 +32,14 @@ export default defineTool({
 
     const { data, error } = await q.limit(input.limit ?? 10);
     if (error) return errorResult("Could not list insights articles.");
+    // Stored bucket images become the publication-checked media route.
+    const articles = (data ?? []).map((a) => ({
+      ...a,
+      featured_image_url: toAbsoluteMediaUrl(a.featured_image_url, SITE_URL),
+    }));
     return {
-      ...textResult({ count: data?.length ?? 0, articles: data ?? [] }),
-      structuredContent: { articles: data ?? [] },
+      ...textResult({ count: articles.length, articles }),
+      structuredContent: { articles },
     };
   },
 });

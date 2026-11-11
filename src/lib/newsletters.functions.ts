@@ -323,6 +323,7 @@ export const previewNewsletterFn = createServerFn({ method: "GET" })
       html: await renderNewsletterEmail(client, data.id, {
         unsubscribeUrl: "#",
         locale: data.locale ?? "en",
+        media: "preview",
       }),
     };
   });

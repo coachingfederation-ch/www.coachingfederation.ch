@@ -15,7 +15,9 @@ import { Crop, ImagePlus, Sparkles, Upload, X } from "lucide-react";
 import { UnsplashPicker } from "@/components/cms/UnsplashPicker";
 import { ImageFrameEditor } from "@/components/cms/ImageFrameEditor";
 import { supabase } from "@/integrations/supabase/client";
-import { ARTICLE_IMAGE_BUCKET, ARTICLE_IMAGE_TTL_SECONDS } from "@/lib/storage";
+import { ARTICLE_IMAGE_BUCKET } from "@/lib/storage";
+import { mediaRefForPath } from "@/lib/media";
+import { resolveStaffMediaSrc, useMediaSrc } from "@/hooks/use-media-src";
 import { renderBlockImage } from "@/lib/block-image-render";
 import {
   DEFAULT_BLOCK_ASPECT,
@@ -67,6 +69,10 @@ export function BlockImageField({
   // Framing works off the untouched original when we have one; images saved
   // before framing existed fall back to the displayed picture.
   const source = block.image_original_url ?? block.featured_image_url;
+  // Stored values are media references; staff screens sign them in the
+  // browser so draft images load (see use-media-src).
+  const displaySrc = useMediaSrc(block.featured_image_url);
+  const sourceSrc = useMediaSrc(source);
   const preset = blockImagePreset(block.image_aspect);
 
   const [aspect, setAspect] = useState<BlockImageAspect>(
@@ -85,16 +91,14 @@ export function BlockImageField({
     setFrameError(null);
   }, [source, block.image_aspect, block.image_crop, block.image_marks]);
 
-  const signedUpload = async (path: string, body: Blob | File, contentType: string) => {
+  const uploadImageFile = async (path: string, body: Blob | File, contentType: string) => {
     const { error } = await supabase.storage
       .from(ARTICLE_IMAGE_BUCKET)
       .upload(path, body, { upsert: true, contentType });
     if (error) throw error;
-    const { data: signed, error: signError } = await supabase.storage
-      .from(ARTICLE_IMAGE_BUCKET)
-      .createSignedUrl(path, ARTICLE_IMAGE_TTL_SECONDS);
-    if (signError || !signed) throw signError ?? new Error("Could not create an image link.");
-    return signed.signedUrl as string;
+    // A media reference, not a signed URL: the public media route re-checks
+    // that the edition is still public on every request (src/lib/media.ts).
+    return mediaRefForPath(path);
   };
 
   const upload = async (file: File) => {
@@ -104,7 +108,7 @@ export function BlockImageField({
     const path = `newsletters/${block.newsletter_id}/${block.id}-${Date.now()}.${ext}`;
     try {
       // Bytes stay on the browser client; storage RLS is the boundary.
-      const url = await signedUpload(path, file, file.type);
+      const url = await uploadImageFile(path, file, file.type);
       onSave({
         featured_image_url: url,
         image_original_url: url,
@@ -125,14 +129,16 @@ export function BlockImageField({
     setFrameError(null);
     setApplying(true);
     try {
+      const sourceUrl = sourceSrc ?? (await resolveStaffMediaSrc(source));
+      if (!sourceUrl) throw new Error("Could not load the original image.");
       const blob = await renderBlockImage({
-        sourceUrl: source,
+        sourceUrl,
         preset: blockImagePreset(aspect),
         crop,
         marks,
       });
       const path = `newsletters/${block.newsletter_id}/${block.id}-framed-${Date.now()}.jpg`;
-      const url = await signedUpload(path, blob, "image/jpeg");
+      const url = await uploadImageFile(path, blob, "image/jpeg");
       onSave({
         featured_image_url: url,
         image_original_url: source,
@@ -161,7 +167,7 @@ export function BlockImageField({
       {block.featured_image_url ? (
         <div className="relative overflow-hidden rounded-2xl border border-border">
           <img
-            src={block.featured_image_url}
+            src={displaySrc ?? undefined}
             alt={block.image_alt ?? ""}
             width={preset.width}
             height={preset.height}
@@ -263,10 +269,10 @@ export function BlockImageField({
         ) : null}
       </div>
 
-      {framing && source ? (
+      {framing && sourceSrc ? (
         <div className="space-y-3 rounded-2xl border border-border bg-card p-4">
           <ImageFrameEditor
-            sourceUrl={source}
+            sourceUrl={sourceSrc}
             aspect={aspect}
             crop={crop}
             marks={marks}

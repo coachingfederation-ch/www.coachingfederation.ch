@@ -131,6 +131,26 @@ pattern:
    returning. This is the one place the admin client appears on a public path,
    and it is scoped to signing paths that the view already deemed public.
 
+## CMS images
+
+Article covers, community covers and newsletter block images live in the
+private `article-images` bucket. Rows store a media reference
+(`/api/public/media/<path>`), not a signed URL. On every request the media
+route re-reads the owning row with the anonymous client and only redirects to
+a 10-minute signed URL while it is public: the article is published, the
+community is active, or the edition is published (or already pushed to
+MailerLite and not withdrawn). Unpublishing therefore stops the image loading
+within about five minutes (the redirect cache). Emails and `og:image` use the
+absolute form built from `SITE_URL`; the staff newsletter preview signs images
+for one hour instead. Staff editors sign references in the browser through
+storage RLS (`useMediaSrc`).
+
+Rows written before this change still hold 10-year signed URLs. Every public
+reader maps them onto the media reference, so the token is never rendered
+again, but the stored value and any copy captured earlier stay valid until the
+row is rewritten and the file moved (see `docs/tech-debt.md`). Speaker photos
+still use the long TTL and are out of this scope.
+
 ## Internationalisation
 
 Locale is a path prefix, chosen for SEO: English is unprefixed, the other three

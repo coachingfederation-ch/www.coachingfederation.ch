@@ -3,6 +3,7 @@
  * Exports: NewsletterEditionPage (default). Renders the enabled blocks of a
  * published edition in order; RLS hides everything else.
  */
+import { toPublicMediaUrl } from "@/lib/media";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
 import { Markdown } from "@/components/markdown";
@@ -160,7 +161,7 @@ export default function NewsletterEditionPage() {
               {block.featured_image_url ? (
                 block.image_source === "ai" ? (
                   <AiPhoto
-                    src={block.featured_image_url}
+                    src={toPublicMediaUrl(block.featured_image_url) ?? undefined}
                     alt={block.image_alt ?? block.title}
                     width={blockImagePreset(block.image_aspect).width}
                     height={blockImagePreset(block.image_aspect).height}
@@ -169,7 +170,7 @@ export default function NewsletterEditionPage() {
                 ) : (
                   <figure className="mt-4">
                     <img
-                      src={block.featured_image_url}
+                      src={toPublicMediaUrl(block.featured_image_url) ?? undefined}
                       alt={block.image_alt ?? ""}
                       loading="lazy"
                       width={blockImagePreset(block.image_aspect).width}

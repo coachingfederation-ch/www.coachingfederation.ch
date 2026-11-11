@@ -23,7 +23,8 @@ import {
   type ProfileRow,
 } from "@/lib/articles";
 
-import { ARTICLE_IMAGE_BUCKET, ARTICLE_IMAGE_TTL_SECONDS } from "@/lib/storage";
+import { ARTICLE_IMAGE_BUCKET } from "@/lib/storage";
+import { mediaRefForPath } from "@/lib/media";
 import {
   changeArticleStatus,
   getArticleEditorData,
@@ -176,8 +177,9 @@ function EditorPage() {
     const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
     const path = `${article.id}/${Date.now()}.${ext}`;
     // The upload stays on the browser client (RLS on storage.objects is the
-    // boundary) so the file bytes never cross the server-function RPC. Bucket
-    // and TTL come from @/lib/storage so they are declared in one place.
+    // boundary) so the file bytes never cross the server-function RPC. The row
+    // stores a media reference, never a signed URL: the public media route
+    // re-checks publication on every request (src/lib/media.ts).
     const { error } = await supabase.storage
       .from(ARTICLE_IMAGE_BUCKET)
       .upload(path, file, { upsert: true, contentType: file.type });
@@ -186,16 +188,9 @@ function EditorPage() {
       setUploading(false);
       return;
     }
-    const { data: signed, error: signErr } = await supabase.storage
-      .from(ARTICLE_IMAGE_BUCKET)
-      .createSignedUrl(path, ARTICLE_IMAGE_TTL_SECONDS);
     setUploading(false);
-    if (signErr || !signed) {
-      setUploadError(signErr?.message ?? t("editor.imageError"));
-      return;
-    }
     update({
-      featured_image_url: signed.signedUrl,
+      featured_image_url: mediaRefForPath(path),
       image_source: "upload",
       image_credit_name: null,
       image_credit_url: null,

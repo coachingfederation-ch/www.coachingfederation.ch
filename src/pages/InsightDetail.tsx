@@ -3,6 +3,7 @@
  * Exports: InsightDetailPage (default), DetailShell, ArticleFallback. Rendered by
  * src/routes/insights.$id.tsx and the locale-prefixed equivalent.
  */
+import { toPublicMediaUrl } from "@/lib/media";
 import { Mark } from "@/components/marks";
 import { HeroMarks } from "@/components/HeroMarks";
 import { HERO_ARTICLE_PLACEMENT, sanitizeHeroMarks } from "@/lib/hero-design";
@@ -113,7 +114,7 @@ export default function InsightDetailPage({ article }: { article: DetailArticle 
         <div className="relative mt-10 overflow-hidden rounded-2xl border border-border/70">
           {article.featured_image_url ? (
             <img
-              src={article.featured_image_url}
+              src={toPublicMediaUrl(article.featured_image_url) ?? undefined}
               alt=""
               className="aspect-[16/9] w-full object-cover"
             />

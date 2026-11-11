@@ -163,6 +163,12 @@ before adding a new file.
 
 - **Buckets** `member-profile-images` and `article-images` — both private;
   access is always via signed URLs.
+- **CMS media route** — `src/lib/media.ts` (stored references, legacy-URL
+  mapping), `src/lib/media.server.ts` (publication check, 10-minute signing),
+  `src/routes/api/public/media/$.ts`, and `src/hooks/use-media-src.ts` (staff
+  editors sign references through storage RLS so drafts display). Article,
+  community and newsletter images store `/api/public/media/<path>`, never a
+  signed URL. See `docs/architecture.md` → CMS images.
 
 ### Advertise with us
 

@@ -12,6 +12,7 @@ import { MarkdownEditor } from "@/components/cms/MarkdownEditor";
 import { UnsplashPicker } from "@/components/cms/UnsplashPicker";
 import { HeroDesignSection } from "@/components/cms/HeroDesignSection";
 import { sanitizeHeroMarks } from "@/lib/hero-design";
+import { useMediaSrc } from "@/hooks/use-media-src";
 import type { ArticleLang, ArticleRow } from "@/lib/articles";
 
 type Lang = ArticleLang;
@@ -91,6 +92,9 @@ export function ArticleEditorPane({
   // excerpt field back through the same `update` the manual field uses.
   const runAssist = useServerFn(assistWriting);
   const [leadBusy, setLeadBusy] = useState(false);
+  // The stored cover is a media reference; staff sign it in the browser so a
+  // draft's image shows here (see use-media-src).
+  const coverSrc = useMediaSrc(article.featured_image_url);
   const [leadError, setLeadError] = useState<string | null>(null);
 
   async function generateLead() {
@@ -171,7 +175,7 @@ export function ArticleEditorPane({
 
       <HeroDesignSection
         kind="article"
-        imageUrl={article.featured_image_url}
+        imageUrl={coverSrc}
         title={article.title}
         summary={article.excerpt}
         marks={sanitizeHeroMarks("article", article.hero_marks) ?? []}
@@ -182,7 +186,7 @@ export function ArticleEditorPane({
           {article.featured_image_url ? (
             <div className="relative overflow-hidden rounded-2xl border border-border">
               <img
-                src={article.featured_image_url}
+                src={coverSrc ?? undefined}
                 alt="Featured"
                 className="h-64 w-full object-cover"
               />

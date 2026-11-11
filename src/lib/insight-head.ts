@@ -4,6 +4,7 @@
  */
 import { localizePath, SITE_URL, type Locale } from "@/i18n/config";
 import { makeT } from "@/i18n";
+import { toAbsoluteMediaUrl } from "./media";
 
 type ArticleLike = {
   title: string;
@@ -37,9 +38,12 @@ export function articleHead(
     { property: "og:url", content: url },
     { name: "twitter:card", content: "summary_large_image" },
   ];
-  if (a.featured_image_url?.startsWith("https://")) {
-    meta.push({ property: "og:image", content: a.featured_image_url });
-    meta.push({ name: "twitter:image", content: a.featured_image_url });
+  // Bucket images are served through the media route, which re-checks that
+  // the article is still published; crawlers need its absolute form.
+  const image = toAbsoluteMediaUrl(a.featured_image_url, SITE_URL);
+  if (image?.startsWith("https://")) {
+    meta.push({ property: "og:image", content: image });
+    meta.push({ name: "twitter:image", content: image });
   }
   return { meta, links: [{ rel: "canonical", href: url }] };
 }

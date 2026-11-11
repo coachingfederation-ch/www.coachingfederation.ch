@@ -144,3 +144,17 @@ The `/articles` and `/manage/newsletters` route guards admit publishers, but
 `Shell.tsx` shows those menu links to editors only, so publishers reach them
 only by direct link.
 See the access matrix in `docs/auth-and-claim-flow.md`.
+
+## Legacy 10-year image links
+
+New article, community and newsletter images store a publication-checked media
+reference (see `docs/architecture.md` → CMS images). About a dozen rows written
+earlier still hold 10-year signed URLs. Public readers no longer render them,
+but the stored token (readable for published rows) and any copy captured
+before stays valid.
+
+_Ideal:_ once the media route is live on the published site, rewrite those
+columns to media references and move each file to a new path, which voids the
+old tokens. Deferred so the live site keeps showing these images until the new
+code is published. Already-sent emails that embedded an old link lose that
+image when the file moves.

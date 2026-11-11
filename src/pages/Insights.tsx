@@ -3,6 +3,7 @@
  * Exports: InsightsPage (default). Rendered by src/routes/insights.index.tsx and
  * the locale-prefixed equivalent in src/routes/$locale/insights.index.tsx.
  */
+import { toPublicMediaUrl } from "@/lib/media";
 import { Link } from "@tanstack/react-router";
 import {
   AiBadge,
@@ -60,7 +61,7 @@ function CardVisual({ article, className }: { article: PublicArticle; className:
     return (
       <div className="relative">
         <img
-          src={article.featured_image_url}
+          src={toPublicMediaUrl(article.featured_image_url) ?? undefined}
           alt=""
           loading="lazy"
           className={"w-full object-cover " + className}
