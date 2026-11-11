@@ -148,3 +148,15 @@ search leaves the random showcase and searches the full directory across name,
 city, country, organisation, tagline, and description, with exact counts and
 pagination. Before this, the box only filtered the page already loaded, so
 coaches outside the random showcase could never be found.
+
+## ACTC team coaching credential
+
+`coach_directory_public` exposes `has_actc` and `actc_awarded_on`, derived by the
+security-definer helper `private.directory_actc_awarded_on(member_id)` from the
+ICF feed fields already synced into `members.diagnostics`
+(`actc_credential`, `actc_credential_award_date`, `actc_credential_expire_date`).
+Only unexpired ACTC credentials on published profiles count; expiry dates are
+never exposed. Cards and the profile hero show an extra "ACTC" pill next to the
+ACC/PCC/MCC pill, and the filter sidebar has an "ACTC" checkbox (`actcOnly`)
+applied server-side in `applyFacets` (AND with other facets). ACTC does not
+affect directory eligibility.

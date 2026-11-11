@@ -80,6 +80,11 @@ export function CoachProfileHero({
                   {t("directory.card.noAccreditation")}
                 </span>
               )}
+              {profile.has_actc && (
+                <span className="inline-flex h-6 items-center rounded-full bg-hero-foreground/15 px-2.5 text-xs font-bold tracking-wider">
+                  ACTC
+                </span>
+              )}
             </div>
             {profile.tagline && (
               <p className="mt-3 max-w-2xl text-lg font-semibold leading-relaxed text-hero-foreground/90">

@@ -60,6 +60,7 @@ export function useCoachDirectoryFilters() {
   const [specializations, setSpecializations] = useState<string[]>([]);
   const [formats, setFormats] = useState<string[]>([]);
   const [acceptingOnly, setAcceptingOnly] = useState(false);
+  const [actcOnly, setActcOnly] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [page, setPage] = useState(0);
   // Free text is searched server-side across all coaches; debounce so each
@@ -119,6 +120,7 @@ export function useCoachDirectoryFilters() {
       formats: formats.length ? formats : undefined,
       q: debouncedQuery || undefined,
       acceptingOnly: acceptingOnly || undefined,
+      actcOnly: actcOnly || undefined,
       page,
       locale,
     }),
@@ -131,6 +133,7 @@ export function useCoachDirectoryFilters() {
       formats,
       debouncedQuery,
       acceptingOnly,
+      actcOnly,
       page,
       locale,
     ],
@@ -143,7 +146,8 @@ export function useCoachDirectoryFilters() {
     credentials.length > 0 ||
     specializations.length > 0 ||
     formats.length > 0 ||
-    acceptingOnly;
+    acceptingOnly ||
+    actcOnly;
 
   // Unfiltered view: a seeded random ordering paged 8 at a time. The seed
   // travels with every request so a randomly sorted directory keeps one order
@@ -170,6 +174,7 @@ export function useCoachDirectoryFilters() {
     setSpecializations([]);
     setFormats([]);
     setAcceptingOnly(false);
+    setActcOnly(false);
     setPage(0);
   }
 
@@ -228,6 +233,8 @@ export function useCoachDirectoryFilters() {
     setFormats,
     acceptingOnly,
     setAcceptingOnly,
+    actcOnly,
+    setActcOnly,
     showFilters,
     setShowFilters,
     page,

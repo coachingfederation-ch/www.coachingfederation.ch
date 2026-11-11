@@ -116,6 +116,8 @@ export function CoachFilters({
   setFormats,
   acceptingOnly,
   setAcceptingOnly,
+  actcOnly,
+  setActcOnly,
   label,
   toggle,
   setPage,
@@ -139,6 +141,8 @@ export function CoachFilters({
   setFormats: (v: string[]) => void;
   acceptingOnly: boolean;
   setAcceptingOnly: (v: boolean) => void;
+  actcOnly: boolean;
+  setActcOnly: (v: boolean) => void;
   label: (row: VocabRow) => string;
   toggle: (list: string[], set: (v: string[]) => void, value: string) => void;
   setPage: (v: number) => void;
@@ -264,6 +268,19 @@ export function CoachFilters({
           className="h-4 w-4 accent-[var(--color-primary)]"
         />
         {t("directory.filters.acceptingLabel")}
+      </label>
+
+      <label className="inline-flex cursor-pointer items-center gap-2.5 text-sm text-foreground">
+        <input
+          type="checkbox"
+          checked={actcOnly}
+          onChange={(e) => {
+            setActcOnly(e.target.checked);
+            setPage(0);
+          }}
+          className="h-4 w-4 accent-[var(--color-primary)]"
+        />
+        {t("directory.filters.actcLabel")}
       </label>
 
       <div className={"rounded-2xl border border-border bg-background p-5 " + CARD_SHADOW}>

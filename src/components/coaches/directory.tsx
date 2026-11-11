@@ -54,6 +54,8 @@ export function CoachDirectory() {
     setFormats,
     acceptingOnly,
     setAcceptingOnly,
+    actcOnly,
+    setActcOnly,
     showFilters,
     setShowFilters,
     page,
@@ -95,6 +97,8 @@ export function CoachDirectory() {
       setFormats={setFormats}
       acceptingOnly={acceptingOnly}
       setAcceptingOnly={setAcceptingOnly}
+      actcOnly={actcOnly}
+      setActcOnly={setActcOnly}
       label={label}
       toggle={toggle}
       setPage={setPage}
@@ -109,7 +113,8 @@ export function CoachDirectory() {
     credentials.length +
     specializations.length +
     formats.length +
-    (acceptingOnly ? 1 : 0);
+    (acceptingOnly ? 1 : 0) +
+    (actcOnly ? 1 : 0);
 
   return (
     <section className="bg-card py-16">

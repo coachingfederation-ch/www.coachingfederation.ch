@@ -179,6 +179,17 @@ export function CoachCard({
               {t("directory.card.noAccreditation")}
             </span>
           )}
+          {entry.has_actc && (
+            // ACTC is an additional team coaching credential, shown beside the
+            // main ACC/PCC/MCC pill rather than replacing it.
+            <span className="inline-flex h-6 items-center rounded-full border border-primary px-2.5 text-xs font-bold tracking-wider text-primary">
+              {entry.actc_awarded_on
+                ? t("directory.card.credentialPill")
+                    .replace("{credential}", "ACTC")
+                    .replace("{year}", String(new Date(entry.actc_awarded_on).getFullYear()))
+                : "ACTC"}
+            </span>
+          )}
         </div>
       </div>
 
