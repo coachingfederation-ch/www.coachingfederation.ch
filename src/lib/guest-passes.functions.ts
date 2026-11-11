@@ -20,6 +20,8 @@ export type GuestPassOutcome =
   | "not_member"
   | "event_closed"
   | "not_allowed"
+  | "member_limit"
+  | "rate_limited"
   | "error";
 
 export type GuestPassContext = {
@@ -131,6 +133,25 @@ export const submitGuestPassRequest = createServerFn({ method: "POST" })
       .eq("auth_user_id", context.userId)
       .maybeSingle();
     if (!member) return { outcome: "not_member" };
+
+    // The invitation goes to an address the member types, from our sending
+    // domain. Cap it server-side: one guest per member per event (the rule the
+    // form already shows), and a per-account send budget across events, so a
+    // signed-in account cannot turn this into a bulk mailer.
+    const { count: ownRequests } = await supabaseAdmin
+      .from("guest_passes")
+      .select("id", { count: "exact", head: true })
+      .eq("event_id", data.eventId)
+      .eq("inviting_member_id", member.id);
+    if ((ownRequests ?? 0) > 0) return { outcome: "member_limit" };
+
+    const { checkRateLimit } = await import("./rate-limit.server");
+    const verdict = await checkRateLimit("guest-pass-invite", `user:${context.userId}`, [
+      { windowSeconds: 24 * 60 * 60, max: 3 },
+      { windowSeconds: 30 * 24 * 60 * 60, max: 10 },
+    ]);
+    if (!verdict.allowed) return { outcome: "rate_limited" };
+
     const inviterName =
       [member.first_name, member.last_name].filter(Boolean).join(" ").trim() ||
       (member.full_name ?? "");

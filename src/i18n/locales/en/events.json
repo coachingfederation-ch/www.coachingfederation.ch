@@ -278,7 +278,9 @@
       "not_member": "Guest Passes are for active members.",
       "event_closed": "Registration is closed for this event.",
       "not_allowed": "This event does not offer Guest Passes.",
-      "error": "Something went wrong. Please try again."
+      "error": "Something went wrong. Please try again.",
+      "member_limit": "You already requested a Guest Pass for this event.",
+      "rate_limited": "You have sent several Guest Pass invitations recently. Please try again later or contact office@coachingfederation.ch."
     },
     "claim": {
       "eyebrow": "Guest pass",

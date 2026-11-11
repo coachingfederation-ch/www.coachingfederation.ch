@@ -278,7 +278,9 @@
       "not_member": "Les pass invité sont réservés aux membres actifs.",
       "event_closed": "Les inscriptions sont closes pour cet événement.",
       "not_allowed": "Cet événement ne propose pas de pass invité.",
-      "error": "Une erreur s'est produite. Veuillez réessayer."
+      "error": "Une erreur s'est produite. Veuillez réessayer.",
+      "member_limit": "Vous avez déjà demandé un pass invité pour cet événement.",
+      "rate_limited": "Vous avez envoyé plusieurs invitations pass invité récemment. Veuillez réessayer plus tard ou écrire à office@coachingfederation.ch."
     },
     "claim": {
       "eyebrow": "Pass invité",
