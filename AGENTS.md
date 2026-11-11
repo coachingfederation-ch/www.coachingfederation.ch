@@ -42,3 +42,4 @@ Live member data belongs in the database, behind RLS — not in version control.
 
 - Ballot questions are nullable localized vote fields; suggestions transform buffered proposal text without saving, and all question languages freeze at voting start in server validation and the database. Why: staff can refine drafts without changing the question already answered by members.
 - Every server function that returns member PII in bulk or per record calls `guardMemberAccess` then `logMemberAccess`. Why: mass extraction by a compromised staff account must be throttled and traceable.
+- Article, community and newsletter images store a `/api/public/media/<path>` reference, never a signed URL; the route re-checks publication per request and staff editors sign through storage RLS. Why: withdrawing content must cut off its images.
