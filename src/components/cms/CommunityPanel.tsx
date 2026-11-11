@@ -130,6 +130,8 @@ export function CommunityPanel({
   const [generating, setGenerating] = useState(false);
   const [brief, setBrief] = useState("");
 
+  const coverSrc = useMediaSrc(row.cover_image_url);
+
   const pending = changedFields(row, saved);
   const dirty = Object.keys(pending).length > 0;
 
@@ -461,7 +463,7 @@ export function CommunityPanel({
               {row.cover_image_url ? (
                 <div className="relative overflow-hidden rounded-2xl border border-border">
                   <img
-                    src={row.cover_image_url}
+                    src={coverSrc ?? undefined}
                     alt={row.cover_image_alt ?? ""}
                     className="h-56 w-full object-cover"
                   />

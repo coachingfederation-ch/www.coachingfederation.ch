@@ -171,7 +171,7 @@ export function ArticleEditorPane({
 
       <HeroDesignSection
         kind="article"
-        imageUrl={article.featured_image_url}
+        imageUrl={coverSrc}
         title={article.title}
         summary={article.excerpt}
         marks={sanitizeHeroMarks("article", article.hero_marks) ?? []}
@@ -182,7 +182,7 @@ export function ArticleEditorPane({
           {article.featured_image_url ? (
             <div className="relative overflow-hidden rounded-2xl border border-border">
               <img
-                src={article.featured_image_url}
+                src={coverSrc ?? undefined}
                 alt="Featured"
                 className="h-64 w-full object-cover"
               />
