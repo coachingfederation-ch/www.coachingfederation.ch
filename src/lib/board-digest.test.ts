@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { capList, isDigestDue, normaliseSections } from "./board-digest";
+import {
+  capList,
+  detectIdChanges,
+  isDigestDue,
+  normaliseName,
+  normaliseSections,
+} from "./board-digest";
 
 // Monday, October 19, 2026, 7:30 a.m. Zurich (UTC+2) = 05:30 UTC.
 const MONDAY_7_ZURICH = new Date("2026-10-19T05:30:00Z");
@@ -60,5 +66,45 @@ describe("sections and lists", () => {
     const list = capList(Array.from({ length: 23 }, (_, i) => ({ primary: String(i) })));
     expect(list.items).toHaveLength(15);
     expect(list.more).toBe(8);
+  });
+});
+
+describe("ICF ID changes in the members section", () => {
+  const oldRecord = {
+    id: "old",
+    fullName: "Anna Muster",
+    activityState: "grace",
+    createdAt: "2025-01-10T08:00:00Z",
+  };
+  const newRecord = {
+    id: "new",
+    fullName: "anna  muster",
+    activityState: "active",
+    createdAt: "2026-11-06T08:00:00Z",
+  };
+  const grace = [{ memberId: "old", enteredGraceAt: "2026-11-07T08:00:00Z" }];
+
+  it("pairs a new record with a same-name record that entered grace a day later", () => {
+    expect(detectIdChanges(["new"], grace, [oldRecord, newRecord])).toEqual([
+      { newId: "new", oldId: "old", name: "anna  muster" },
+    ]);
+  });
+
+  it("pairs once even when both rules match", () => {
+    expect(detectIdChanges(["new"], grace, [oldRecord, newRecord])).toHaveLength(1);
+  });
+
+  it("does not pair when the active record is older than 30 days before grace", () => {
+    const longStanding = { ...newRecord, createdAt: "2026-09-01T08:00:00Z" };
+    expect(detectIdChanges([], grace, [oldRecord, longStanding])).toEqual([]);
+  });
+
+  it("does not pair people with different names", () => {
+    const other = { ...newRecord, fullName: "Max Muster" };
+    expect(detectIdChanges(["new"], grace, [oldRecord, other])).toEqual([]);
+  });
+
+  it("ignores accents when comparing names", () => {
+    expect(normaliseName("Zoë  Müller")).toBe("zoe muller");
   });
 });
