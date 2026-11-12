@@ -11,8 +11,21 @@ Covering the days since the previous digest (7 or 14, by cadence):
   change against the preceding equal period.
 - **Members** — new members (name, credential, city), member changes (engagement
   campaign sends: credential upgrades, specialisations, returns from grace),
-  members who entered the grace period, members deactivated by the sync, and the
-  current retention counts (`loadRetentionSummary`).
+  and three exclusive categories, so one person is never counted twice:
+  - **Entered the grace period** — absent from the ICF feed, moved into the
+    grace window (`member_lifecycle_queue.entered_grace_at`). Not yet removed.
+  - **Possible ICF ID changes** — shown only when non-empty. `detectIdChanges`
+    pairs an active record with a same-name record in grace when the active one
+    was created within 30 days of the other entering grace (or is new this
+    period while the other is in grace). Paired records are left out of
+    "New members" and "Entered the grace period". Display-only: nothing is
+    merged or rebound; staff check the account link in Members.
+  - **Left the chapter** — records actually removed after the grace window
+    (`member_lifecycle_queue.resolution = 'anonymized'` in the period). Names
+    are erased on removal, so only the removal date is listed.
+  The sync's `member_deactivated` event marks grace entry and is no longer
+  counted as "left" (it double-counted every grace entry before November 2026).
+  Then the current retention counts (`loadRetentionSummary`).
 - **New articles** — title, author, status.
 - **New events** — title, organizer, community (or city/venue/online), date, status.
 - **Assistant** — conversation count, answer/escalation/helpful rates, top

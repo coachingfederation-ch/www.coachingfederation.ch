@@ -99,9 +99,23 @@ const Email = ({ digest, test }: Props) => {
           )}
           <List list={members.changedMembers} empty="" />
           <Text style={h3}>{`Entered the grace period (${members.enteredGrace.total})`}</Text>
+          <Text style={muted}>
+            No longer in the ICF feed, usually a renewal still pending. Not yet removed.
+          </Text>
           <List list={members.enteredGrace} empty="Nobody entered the grace period." />
-          <Text style={h3}>{`Left the chapter (${members.deactivated.total})`}</Text>
-          <List list={members.deactivated} empty="Nobody left." />
+          {members.idChanges.total ? (
+            <>
+              <Text style={h3}>{`Possible ICF ID changes (${members.idChanges.total})`}</Text>
+              <Text style={muted}>
+                Counted once here, not as new or in grace: a new ICF record arrived under the
+                same name as a record that left the feed.
+              </Text>
+              <List list={members.idChanges} empty="" />
+            </>
+          ) : null}
+          <Text style={h3}>{`Left the chapter (${members.left.total})`}</Text>
+          <Text style={muted}>Removed after the grace period ended.</Text>
+          <List list={members.left} empty="Nobody left." />
           <Text style={h3}>Retention right now</Text>
           <Text style={listRow}>
             {`${members.retention.pastExpiry} past expiry · ${members.retention.inGrace} in grace period · ${members.retention.due} due for removal`}
@@ -203,8 +217,9 @@ export const template: TemplateEntry = {
           more: 0,
           total: 1,
         },
-        deactivated: emptyList,
         enteredGrace: emptyList,
+        left: emptyList,
+        idChanges: emptyList,
         retention: { inGrace: 4, due: 0, pastExpiry: 6 },
       },
       articles: {

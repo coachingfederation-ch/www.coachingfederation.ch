@@ -14,6 +14,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   capList,
   cadenceDays,
+  detectIdChanges,
   isDigestDue,
   normaliseSections,
   type BoardDigestData,
@@ -119,10 +120,10 @@ async function memberNames(db: SupabaseClient, ids: string[]): Promise<Map<strin
 }
 
 async function membersBlock(db: SupabaseClient, from: string, to: string) {
-  const [created, sends, deactivated, grace] = await Promise.all([
+  const [created, sends, removed, grace] = await Promise.all([
     db
       .from("members")
-      .select("full_name, city, credential_slug, created_at")
+      .select("id, full_name, city, credential_slug, created_at, activity_state")
       .gte("created_at", from)
       .lte("created_at", to)
       .is("anonymized_at", null)
@@ -134,29 +135,80 @@ async function membersBlock(db: SupabaseClient, from: string, to: string) {
       .gte("created_at", from)
       .lte("created_at", to)
       .limit(2000),
+    // "Left" means removed after the grace window expired. A feed absence alone
+    // only starts the grace window (the sync's `member_deactivated` event) and
+    // is reported under "Entered the grace period", never here.
     db
-      .from("member_sync_events")
-      .select("member_id, created_at")
-      .eq("event_type", "member_deactivated")
-      .gte("created_at", from)
-      .lte("created_at", to)
+      .from("member_lifecycle_queue")
+      .select("member_id, resolved_at")
+      .eq("resolution", "anonymized")
+      .gte("resolved_at", from)
+      .lte("resolved_at", to)
       .limit(500),
     db
       .from("member_lifecycle_queue")
-      .select("member_id, scheduled_deletion_at")
+      .select("member_id, entered_grace_at, scheduled_deletion_at")
       .gte("entered_grace_at", from)
       .lte("entered_grace_at", to)
       .limit(500),
   ]);
 
+  type NewRow = {
+    id: string;
+    full_name: string | null;
+    city: string | null;
+    credential_slug: string | null;
+    created_at: string;
+    activity_state: string;
+  };
+  const newRows = (created.data ?? []) as NewRow[];
   const sendRows = (sends.data ?? []) as { campaign_key: string; member_id: string }[];
-  const deRows = (deactivated.data ?? []) as { member_id: string | null }[];
-  const graceRows = (grace.data ?? []) as { member_id: string; scheduled_deletion_at: string }[];
+  const removedRows = (removed.data ?? []) as { member_id: string; resolved_at: string }[];
+  const graceRows = (grace.data ?? []) as {
+    member_id: string;
+    entered_grace_at: string;
+    scheduled_deletion_at: string;
+  }[];
   const names = await memberNames(db, [
     ...sendRows.map((r) => r.member_id),
-    ...deRows.map((r) => r.member_id ?? ""),
     ...graceRows.map((r) => r.member_id),
   ]);
+
+  // Likely ICF ID changes: fetch every record sharing a name with someone new
+  // or newly in grace, then pair them with the pure rule.
+  const nameList = [
+    ...new Set(
+      [...newRows.map((r) => r.full_name), ...graceRows.map((r) => names.get(r.member_id))].filter(
+        (n): n is string => Boolean(n),
+      ),
+    ),
+  ];
+  const { data: sameName } = nameList.length
+    ? await db
+        .from("members")
+        .select("id, full_name, activity_state, created_at")
+        .in("full_name", nameList.slice(0, 500))
+        .is("anonymized_at", null)
+        .limit(1000)
+    : { data: [] };
+  const pairs = detectIdChanges(
+    newRows.map((r) => r.id),
+    graceRows.map((r) => ({ memberId: r.member_id, enteredGraceAt: r.entered_grace_at })),
+    (
+      (sameName ?? []) as {
+        id: string;
+        full_name: string | null;
+        activity_state: string;
+        created_at: string;
+      }[]
+    ).map((m) => ({
+      id: m.id,
+      fullName: m.full_name,
+      activityState: m.activity_state,
+      createdAt: m.created_at,
+    })),
+  );
+  const pairedIds = new Set(pairs.flatMap((p) => [p.newId, p.oldId]));
 
   const counts = new Map<string, number>();
   for (const r of sendRows) counts.set(r.campaign_key, (counts.get(r.campaign_key) ?? 0) + 1);
@@ -178,27 +230,36 @@ async function membersBlock(db: SupabaseClient, from: string, to: string) {
 
   return {
     newMembers: capList(
-      (
-        (created.data ?? []) as {
-          full_name: string | null;
-          city: string | null;
-          credential_slug: string | null;
-        }[]
-      ).map((m) => ({
-        primary: m.full_name || "Member",
-        secondary: m.credential_slug ? m.credential_slug.toUpperCase() : undefined,
-        tertiary: m.city ?? undefined,
-      })),
+      newRows
+        .filter((m) => !pairedIds.has(m.id))
+        .map((m) => ({
+          primary: m.full_name || "Member",
+          secondary: m.credential_slug ? m.credential_slug.toUpperCase() : undefined,
+          tertiary: m.city ?? undefined,
+        })),
     ),
     changes: [...counts.entries()].map(([k, count]) => ({ label: CHANGE_LABELS[k] ?? k, count })),
     changedMembers: capList(changed),
-    deactivated: capList(
-      deRows.map((r) => ({ primary: names.get(r.member_id ?? "") ?? "Member" })),
-    ),
     enteredGrace: capList(
-      graceRows.map((r) => ({
-        primary: names.get(r.member_id) ?? "Member",
-        secondary: `Removal due ${fmtDate(r.scheduled_deletion_at)}`,
+      graceRows
+        .filter((r) => !pairedIds.has(r.member_id))
+        .map((r) => ({
+          primary: names.get(r.member_id) ?? "Member",
+          secondary: `Removal due ${fmtDate(r.scheduled_deletion_at)}`,
+        })),
+    ),
+    // Names are erased on removal, so only the date remains to show.
+    left: capList(
+      removedRows.map((r) => ({
+        primary: "Former member",
+        secondary: `Removed ${fmtDate(r.resolved_at)}`,
+      })),
+    ),
+    idChanges: capList(
+      pairs.map((p) => ({
+        primary: p.name,
+        secondary: "New ICF record; the previous record is in the grace period",
+        tertiary: "Check in Members whether the account should move to the new record",
       })),
     ),
     retention: { inGrace: retention.inGrace, due: retention.due, pastExpiry: retention.pastExpiry },
