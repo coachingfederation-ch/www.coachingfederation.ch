@@ -405,7 +405,6 @@ export async function sendResetForMember(
   return { ok: true };
 }
 
-
 export type { MemberClaimStatus } from "./member-claim-status";
 
 /** Data API caps each request at 1,000 rows; page below that. */
