@@ -405,43 +405,54 @@ export async function sendResetForMember(
   return { ok: true };
 }
 
+export type { MemberClaimStatus } from "./member-claim-status";
+
+/** Data API caps each request at 1,000 rows; page below that. */
+const CLAIM_PAGE_SIZE = 1000;
 
 /**
- * Claim readiness for the members list.
- *
- * Derived, never stored: a member is `claimed` once the explicit `auth_user_id`
- * binding exists (never by email equality), `invited` while an unconsumed link
- * is still inside its TTL, `expired` when the last link lapsed unused, and
- * `never` when no link was ever issued. Operators use this to chase the tail of
- * an invitation wave.
+ * Claim readiness for every member, read in full. Both reads page with a
+ * stable order (id tiebreaker) because `member_profile_links` grows with every
+ * invitation and reminder wave — an unpaged read stopped at 1,000 rows and
+ * showed freshly invited members as "Not invited".
  */
-export type MemberClaimStatus = "claimed" | "invited" | "expired" | "never";
+export async function loadClaimStatuses(): Promise<
+  Record<string, import("./member-claim-status").MemberClaimStatus>
+> {
+  const { deriveClaimStatuses } = await import("./member-claim-status");
 
-export async function loadClaimStatuses(): Promise<Record<string, MemberClaimStatus>> {
-  const status: Record<string, MemberClaimStatus> = {};
-
-  const { data: bound, error: boundError } = await supabaseAdmin
-    .from("members")
-    .select("id, auth_user_id")
-    .not("auth_user_id", "is", null);
-  if (boundError) throw boundError;
-  for (const row of bound ?? []) status[row.id as string] = "claimed";
-
-  // Oldest first, so the newest link for a member overwrites earlier ones — a
-  // freshly issued link supersedes a lapsed one in the operator's view too.
-  const { data: links, error: linkError } = await supabaseAdmin
-    .from("member_profile_links")
-    .select("member_id, consumed_at, expires_at")
-    .order("requested_at", { ascending: true });
-  if (linkError) throw linkError;
-
-  const now = Date.now();
-  for (const link of links ?? []) {
-    const memberId = link.member_id as string;
-    if (status[memberId] === "claimed") continue;
-    const expired = link.expires_at ? new Date(link.expires_at as string).getTime() < now : true;
-    status[memberId] = link.consumed_at ? "claimed" : expired ? "expired" : "invited";
+  const boundIds: string[] = [];
+  for (let from = 0; ; from += CLAIM_PAGE_SIZE) {
+    const { data, error } = await supabaseAdmin
+      .from("members")
+      .select("id")
+      .not("auth_user_id", "is", null)
+      .order("id", { ascending: true })
+      .range(from, from + CLAIM_PAGE_SIZE - 1);
+    if (error) throw error;
+    for (const row of data ?? []) boundIds.push(row.id as string);
+    if (!data || data.length < CLAIM_PAGE_SIZE) break;
   }
 
-  return status;
+  const links: import("./member-claim-status").ClaimLinkRow[] = [];
+  for (let from = 0; ; from += CLAIM_PAGE_SIZE) {
+    const { data, error } = await supabaseAdmin
+      .from("member_profile_links")
+      .select("member_id, requested_at, consumed_at, expires_at")
+      .order("requested_at", { ascending: true })
+      .order("id", { ascending: true })
+      .range(from, from + CLAIM_PAGE_SIZE - 1);
+    if (error) throw error;
+    for (const row of data ?? []) {
+      links.push({
+        member_id: row.member_id as string,
+        requested_at: (row.requested_at as string | null) ?? null,
+        consumed_at: (row.consumed_at as string | null) ?? null,
+        expires_at: (row.expires_at as string | null) ?? null,
+      });
+    }
+    if (!data || data.length < CLAIM_PAGE_SIZE) break;
+  }
+
+  return deriveClaimStatuses(boundIds, links);
 }

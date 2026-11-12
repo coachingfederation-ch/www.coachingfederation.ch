@@ -153,6 +153,17 @@ While claiming is closed, staff can still issue a token manually from the
 member detail page. This is how the flow was verified end to end without
 opening it to the public.
 
+### Claim column in the members list
+
+The members list shows a derived claim status per member (`loadClaimStatuses`
+in `member-admin.server.ts`, rules in `member-claim-status.ts`): **claimed**
+(bound account or a consumed link), **invited** (newest link still valid),
+**expired** (newest link lapsed unused) or **not invited** (no link ever
+issued). `member_profile_links` gains a row for every invitation and reminder,
+so both reads page through the table in 1,000-row steps with a stable order.
+An earlier unpaged read stopped at the Data API's 1,000-row cap and showed
+recently invited members as "Not invited" while their detail page was correct.
+
 ## Email is currently inert
 
 No email is delivered. `member-email.server.ts` records every intended send in
