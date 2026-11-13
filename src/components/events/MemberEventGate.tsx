@@ -1,6 +1,6 @@
 /**
  * Not-found fallback for event pages. Invite-only events are invisible to the
- * server render, so a signed-in member gets one client-side retry through
+ * server render, so a signed-in reader (guest list, attendee or manager) gets one client-side retry through
  * their own session before the "not found" message is shown.
  */
 import { useQuery } from "@tanstack/react-query";
