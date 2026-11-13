@@ -162,6 +162,13 @@
       "when": 1794413014157,
       "tag": "0022_coach_directory_actc_scope",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1794583830985,
+      "tag": "0023_hide_invite_only_events",
+      "breakpoints": true
     }
   ]
 }
