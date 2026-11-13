@@ -370,3 +370,21 @@ Confirmed attendees get three reminder emails. Cancelled, unpaid, and refunded s
 ## Event web addresses
 
 New events (wizard) and duplicated events get a 6-character random tag at the end of their address (`title-k7f3q2`, `address-copy-x9m2ab`) so addresses never collide, even across organizers who cannot see each other's events. Repeating dates keep the predictable `address-YYYY-MM-DD` form; hand-edited addresses stay as typed.
+
+## Invite-only visibility
+
+Events in the `rsvp_invited` / `rsvp_invited_open` audiences are not public.
+The `events` SELECT policy (and therefore the security-invoker `events_public`
+view) hides them from anonymous readers; `private.can_view_invite_only_event`
+lets signed-in members (`can_view_internal_events`) and invited accounts see
+them. Admin-client readers (public calendar `.ics`, events feed, newsletter
+"upcoming events") filter them out explicitly.
+
+- **Members:** the Events list merges `listMemberInviteOnlyEvents` after
+  hydration; the event page's not-found fallback (`MemberEventGate`) retries
+  through `getMemberEvent` with the member's session.
+- **Invitees:** `getPublicEvent` accepts the `?invite=<token>` from the
+  invitation email; the token must hash to an invitation for that event
+  (rate-limited, outcome-neutral null otherwise).
+- Invite-only pages render generic, `noindex` metadata.
+- Plain links without a token show "not found" to non-members.
