@@ -310,7 +310,8 @@ export const getPublicEvent = createServerFn({ method: "GET" })
 
 /**
  * The same detail for a signed-in reader, read through their own RLS-bound
- * client: active members (and invited accounts) see invite-only events.
+ * client: invite-only events open only to people on that event's guest list
+ * (by account or linked member record), confirmed attendees and its managers.
  */
 export const getMemberEvent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -321,7 +322,7 @@ export const getMemberEvent = createServerFn({ method: "POST" })
     loadEventDetail(context.supabase, data.slug, data.locale ?? "en"),
   );
 
-/** Invite-only upcoming events a signed-in member may see in the listing. */
+/** Invite-only upcoming events the signed-in caller is invited to, for the listing. */
 export const listMemberInviteOnlyEvents = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
@@ -333,9 +334,19 @@ export const listMemberInviteOnlyEvents = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const locale = data?.locale ?? "en";
     const supabase = context.supabase;
+    // Only events the caller is personally on the guest list for (or already
+    // registered to). Staff can read every invite-only event through RLS, but
+    // the public listing must not show them events they were not invited to.
+    const { data: invitedIds, error: idsError } = await supabase.rpc("my_invite_only_event_ids");
+    if (idsError) throw new Error(idsError.message);
+    const guestListIds = ((invitedIds ?? []) as unknown[]).filter(
+      (id): id is string => typeof id === "string",
+    );
+    if (guestListIds.length === 0) return [];
     const { data: list, error } = await supabase
       .from("events_public")
       .select(PUBLIC_EVENT_COLUMNS)
+      .in("id", guestListIds)
       .in("registration_mode", ["rsvp_invited", "rsvp_invited_open"])
       .gte("starts_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
       .order("starts_at", { ascending: true });

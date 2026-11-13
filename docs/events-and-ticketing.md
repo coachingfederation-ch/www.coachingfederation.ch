@@ -375,16 +375,31 @@ New events (wizard) and duplicated events get a 6-character random tag at the en
 
 Events in the `rsvp_invited` / `rsvp_invited_open` audiences are not public.
 The `events` SELECT policy (and therefore the security-invoker `events_public`
-view) hides them from anonymous readers; `private.can_view_invite_only_event`
-lets signed-in members (`can_view_internal_events`) and invited accounts see
-them. Admin-client readers (public calendar `.ics`, events feed, newsletter
+view) hides them from everyone except:
+
+- people on that event's guest list (`private.is_on_event_guest_list`):
+  an `event_invitations` row that is not `revoked`, matched by `user_id` or by
+  the caller's linked member record (`member_id` → `members.auth_user_id`), so
+  members invited before claiming their account are recognised;
+- anyone with a confirmed registration for the event (a removed invitee keeps
+  access to the event they registered for);
+- the event's managers (`private.event_is_managed_by`: admins/editors and the
+  owning organizer).
+
+Membership alone does **not** grant visibility (since migration 0025).
+Admin-client readers (public calendar `.ics`, events feed, newsletter
 "upcoming events") filter them out explicitly.
 
-- **Members:** the Events list merges `listMemberInviteOnlyEvents` after
-  hydration; the event page's not-found fallback (`MemberEventGate`) retries
-  through `getMemberEvent` with the member's session.
+- **Listing:** the Events list merges `listMemberInviteOnlyEvents` after
+  hydration. It reads only ids from `public.my_invite_only_event_ids()`
+  (guest list or registration, never manager access), so staff do not see
+  every invite-only event in the public list; they use the CMS or a direct link.
+- **Direct links:** the event page's not-found fallback (`MemberEventGate`)
+  retries through `getMemberEvent` with the reader's session; an uninvited
+  member gets the same "not found" as an anonymous visitor.
 - **Invitees:** `getPublicEvent` accepts the `?invite=<token>` from the
   invitation email; the token must hash to an invitation for that event
   (rate-limited, outcome-neutral null otherwise).
 - Invite-only pages render generic, `noindex` metadata.
-- Plain links without a token show "not found" to non-members.
+- Access contract: `src/lib/invite-only-access.test.ts` (opt-in, needs
+  `SUPABASE_DB_URL`).
