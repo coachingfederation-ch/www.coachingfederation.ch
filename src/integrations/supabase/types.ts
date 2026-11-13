@@ -7761,6 +7761,7 @@ export type Database = {
         Args: { _member_id: string }
         Returns: boolean
       }
+      my_invite_only_event_ids: { Args: never; Returns: string[] }
       open_event_attendance_session: {
         Args: { _actor?: string; _event_id: string; _grace_minutes?: number }
         Returns: Json

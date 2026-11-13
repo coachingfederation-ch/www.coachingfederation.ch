@@ -176,6 +176,13 @@
       "when": 1794584004047,
       "tag": "0024_grant_invite_only_helper_anon",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1794585144842,
+      "tag": "0025_invite_only_guest_list_visibility",
+      "breakpoints": true
     }
   ]
 }
