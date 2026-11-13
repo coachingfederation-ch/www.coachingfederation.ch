@@ -215,6 +215,7 @@ export async function collectSources(
         .from("events")
         .select("id, slug, title, summary, starts_at, city, location_mode")
         .eq("status", "published")
+        .not("registration_mode", "in", "(rsvp_invited,rsvp_invited_open)")
         .gte("starts_at", new Date().toISOString())
         .order("starts_at", { ascending: true })
         .limit(6);

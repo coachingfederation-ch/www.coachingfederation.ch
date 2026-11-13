@@ -32,6 +32,8 @@ export async function buildPublicEventIcs(
     .from("events_public")
     .select(PUBLIC_EVENT_COLUMNS)
     .eq("id", eventId)
+    // Invite-only events never leave through a public calendar download.
+    .not("registration_mode", "in", "(rsvp_invited,rsvp_invited_open)")
     .maybeSingle();
   if (!event || !event.starts_at) return null;
 
