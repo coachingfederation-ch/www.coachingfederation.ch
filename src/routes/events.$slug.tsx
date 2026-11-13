@@ -6,12 +6,18 @@
 
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import EventDetailPage, { EventFallback } from "@/pages/EventDetail";
+import { MemberEventGate } from "@/components/events/MemberEventGate";
 import { getPublicEvent } from "@/lib/events.functions";
 import { eventHead } from "@/lib/event-head";
 
 export const Route = createFileRoute("/events/$slug")({
-  loader: async ({ params }) => {
-    const event = await getPublicEvent({ data: { slug: params.slug, locale: "en" } });
+  // `?invite=<token>` from an invitation email unlocks an invite-only event.
+  validateSearch: (search: Record<string, unknown>) => ({
+    invite: typeof search["invite"] === "string" ? (search["invite"] as string) : undefined,
+  }),
+  loaderDeps: ({ search }) => ({ invite: search.invite }),
+  loader: async ({ params, deps }) => {
+    const event = await getPublicEvent({ data: { slug: params.slug, locale: "en", invite: deps.invite ?? null } });
     if (!event) throw notFound();
     return { event };
   },
@@ -19,9 +25,7 @@ export const Route = createFileRoute("/events/$slug")({
   errorComponent: () => (
     <EventFallback titleKey="events.detail.errorTitle" bodyKey="events.detail.errorBody" />
   ),
-  notFoundComponent: () => (
-    <EventFallback titleKey="events.detail.notFoundTitle" bodyKey="events.detail.notFoundBody" />
-  ),
+  notFoundComponent: () => <MemberEventGate />,
   component: EventDetailRoute,
 });
 
