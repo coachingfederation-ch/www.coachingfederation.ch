@@ -56,6 +56,7 @@ interface SourceQuery extends PromiseLike<SourceResult> {
   select(columns: string, options?: { count?: "exact"; head?: boolean }): SourceQuery;
   update(values: Record<string, unknown>): SourceQuery;
   eq(column: string, value: unknown): SourceQuery;
+  not(column: string, operator: string, value: unknown): SourceQuery;
   gte(column: string, value: unknown): SourceQuery;
   order(column: string, options?: { ascending?: boolean }): SourceQuery;
   limit(count: number): SourceQuery;
@@ -215,6 +216,7 @@ export async function collectSources(
         .from("events")
         .select("id, slug, title, summary, starts_at, city, location_mode")
         .eq("status", "published")
+        .not("registration_mode", "in", "(rsvp_invited,rsvp_invited_open)")
         .gte("starts_at", new Date().toISOString())
         .order("starts_at", { ascending: true })
         .limit(6);

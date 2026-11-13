@@ -216,50 +216,146 @@ export const listCommunityEvents = createServerFn({ method: "GET" })
     };
   });
 
-/** One published event by slug, or null. */
+/**
+ * Loads one event row from `events_public` through the given client and
+ * attaches hosts, speakers, recap and translation. What the client may see is
+ * decided by RLS: anonymous callers never see invite-only events.
+ */
+async function loadEventDetail(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
+  slug: string,
+  locale: "en" | "de" | "fr" | "it",
+) {
+  const { data: row, error } = await supabase
+    .from("events_public")
+    .select(PUBLIC_EVENT_COLUMNS)
+    .eq("slug", slug)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  const event = (row as PublicEvent | null) ?? null;
+  if (!event) return null;
+
+  const { loadEventHosts } = await import("./event-hosts.server");
+  const { loadEventSpeakers } = await import("./event-speakers.server");
+  const { loadPublicRecap } = await import("./event-recaps.server");
+  // The recap travels with the event so the "after event" story is server
+  // rendered — it is editorial content and has to be indexable.
+  const [hosts, speakers, recap] = await Promise.all([
+    event.id ? loadEventHosts(event.id) : Promise.resolve([]),
+    event.id ? loadEventSpeakers(event.id) : Promise.resolve([]),
+    event.id ? loadPublicRecap(supabase, event.id, locale) : Promise.resolve(null),
+  ]);
+
+  if (!event.id || event.language === locale) {
+    return { ...event, hosts, speakers, recap, resolvedLocale: event.language ?? locale };
+  }
+  const { data: tr } = await supabase
+    .from("event_translations")
+    .select("event_id, locale, title, summary, description")
+    .eq("event_id", event.id)
+    .eq("locale", locale)
+    .maybeSingle();
+  return {
+    ...applyTranslation(event, (tr as EventTranslation | null) ?? undefined),
+    hosts,
+    speakers,
+    recap,
+  };
+}
+
+/**
+ * One published event by slug, or null.
+ *
+ * Invite-only events are hidden from anonymous readers by RLS. A visitor who
+ * arrives with the personal `?invite=<token>` link from their invitation email
+ * still gets the page: the token must hash to an invitation for this very
+ * event. The answer is outcome-neutral (null) for unknown or foreign tokens.
+ */
 export const getPublicEvent = createServerFn({ method: "GET" })
+  .inputValidator((input: unknown) =>
+    slugSchema
+      .extend({
+        locale: localeSchema.optional(),
+        invite: z.string().trim().min(16).max(128).optional().nullable(),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const locale = data.locale ?? "en";
+    const { publicSupabaseClient } = await import("./supabase-public.server");
+    const visible = await loadEventDetail(publicSupabaseClient(), data.slug, locale);
+    if (visible || !data.invite) return visible;
+
+    const { checkRateLimit, clientIp } = await import("./rate-limit.server");
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const verdict = await checkRateLimit("event-invite-view", `ip:${clientIp(getRequest())}`, [
+      { windowSeconds: 600, max: 60 },
+    ]);
+    if (!verdict.allowed) return null;
+
+    const { createHash } = await import("node:crypto");
+    const hash = createHash("sha256").update(data.invite).digest("hex");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: invitation } = await supabaseAdmin
+      .from("event_invitations")
+      .select("event_id, events!inner(slug, status)")
+      .eq("invite_token_hash", hash)
+      .eq("events.slug", data.slug)
+      .eq("events.status", "published")
+      .maybeSingle();
+    if (!invitation) return null;
+    return loadEventDetail(supabaseAdmin, data.slug, locale);
+  });
+
+/**
+ * The same detail for a signed-in reader, read through their own RLS-bound
+ * client: active members (and invited accounts) see invite-only events.
+ */
+export const getMemberEvent = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
     slugSchema.extend({ locale: localeSchema.optional() }).parse(input),
   )
-  .handler(async ({ data }) => {
-    const { publicSupabaseClient } = await import("./supabase-public.server");
-    const supabase = publicSupabaseClient();
-    const { data: row, error } = await supabase
+  .handler(async ({ data, context }) =>
+    loadEventDetail(context.supabase, data.slug, data.locale ?? "en"),
+  );
+
+/** Invite-only upcoming events a signed-in member may see in the listing. */
+export const listMemberInviteOnlyEvents = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z
+      .object({ locale: localeSchema.optional() })
+      .optional()
+      .parse(input ?? {}),
+  )
+  .handler(async ({ data, context }) => {
+    const locale = data?.locale ?? "en";
+    const supabase = context.supabase;
+    const { data: list, error } = await supabase
       .from("events_public")
       .select(PUBLIC_EVENT_COLUMNS)
-      .eq("slug", data.slug)
-      .maybeSingle();
+      .in("registration_mode", ["rsvp_invited", "rsvp_invited_open"])
+      .gte("starts_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+      .order("starts_at", { ascending: true });
     if (error) throw new Error(error.message);
-    const event = (row as PublicEvent | null) ?? null;
-    if (!event) return null;
-
-    const { loadEventHosts } = await import("./event-hosts.server");
-    const { loadEventSpeakers } = await import("./event-speakers.server");
-    const { loadPublicRecap } = await import("./event-recaps.server");
-    const locale = data.locale ?? "en";
-    // The recap travels with the event so the "after event" story is server
-    // rendered — it is editorial content and has to be indexable.
-    const [hosts, speakers, recap] = await Promise.all([
-      event.id ? loadEventHosts(event.id) : Promise.resolve([]),
-      event.id ? loadEventSpeakers(event.id) : Promise.resolve([]),
-      event.id ? loadPublicRecap(supabase, event.id, locale) : Promise.resolve(null),
-    ]);
-
-    if (!event.id || event.language === locale) {
-      return { ...event, hosts, speakers, recap, resolvedLocale: event.language ?? locale };
-    }
-    const { data: tr } = await supabase
+    const source = ((list ?? []) as PublicEvent[]).filter(
+      (e) => new Date(e.ends_at ?? e.starts_at!).getTime() >= Date.now(),
+    );
+    const ids = source.map((e) => e.id).filter((id): id is string => Boolean(id));
+    if (ids.length === 0) return [];
+    const { data: translations } = await supabase
       .from("event_translations")
       .select("event_id, locale, title, summary, description")
-      .eq("event_id", event.id)
       .eq("locale", locale)
-      .maybeSingle();
-    return {
-      ...applyTranslation(event, (tr as EventTranslation | null) ?? undefined),
-      hosts,
-      speakers,
-      recap,
-    };
+      .in("event_id", ids);
+    const byEvent = new Map(
+      ((translations ?? []) as EventTranslation[]).map((tr) => [tr.event_id, tr]),
+    );
+    return source.map((e) =>
+      e.language === locale ? { ...e, resolvedLocale: locale } : applyTranslation(e, byEvent.get(e.id!)),
+    );
   });
 
 /**

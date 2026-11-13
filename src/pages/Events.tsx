@@ -33,6 +33,7 @@ import { useQuery } from "@tanstack/react-query";
 import { featureFlagsQueryOptions } from "@/lib/feature-flags";
 import { EuropePulseFeed } from "@/components/europe-pulse/EuropePulseFeed";
 import { useNowMinute } from "@/hooks/use-now-minute";
+import { useMemberInviteEvents } from "@/hooks/use-member-invite-events";
 import type { EventsSearch } from "@/lib/events-search";
 
 /**
@@ -157,7 +158,15 @@ export default function EventsPage({ data }: { data: EventsPageData }) {
   const now = useNowMinute();
   const navigate = useNavigate();
   const search = useSearch({ strict: false }) as EventsSearch;
-  const { featured, upcoming, past, categories, regions } = data;
+  const { featured, past, categories, regions } = data;
+  // Signed-in members also see invite-only events, merged in date order.
+  const inviteOnly = useMemberInviteEvents(locale as "en" | "de" | "fr" | "it").data ?? [];
+  const known = new Set([featured?.id, ...data.upcoming.map((e) => e.id)]);
+  const upcoming = inviteOnly.some((e) => !known.has(e.id))
+    ? [...data.upcoming, ...inviteOnly.filter((e) => !known.has(e.id))].sort(
+        (a, b) => new Date(a.starts_at!).getTime() - new Date(b.starts_at!).getTime(),
+      )
+    : data.upcoming;
 
   const pulseOn = useQuery(featureFlagsQueryOptions).data?.europe_pulse !== false;
   const europe = pulseOn && search.view === "europe";

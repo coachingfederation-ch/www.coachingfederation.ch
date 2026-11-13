@@ -9,6 +9,7 @@ import type { PublicEvent } from "./events";
 type EventLike = Pick<
   PublicEvent,
   | "title"
+  | "registration_mode"
   | "summary"
   | "image_url"
   | "starts_at"
@@ -33,6 +34,21 @@ export function eventHead(
     };
   }
   const e = loaderData.event;
+  // Invite-only pages are reached only by members or a personal link: keep
+  // their details out of search engines and link previews.
+  if (e.registration_mode === "rsvp_invited" || e.registration_mode === "rsvp_invited_open") {
+    return {
+      meta: [
+        { title: "Invitation — The Switzerland Chapter of ICF" },
+        { name: "description", content: t("events.meta.description") },
+        { property: "og:title", content: "The Switzerland Chapter of ICF" },
+        { property: "og:description", content: t("events.meta.description") },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary" },
+        { name: "robots", content: "noindex, nofollow" },
+      ],
+    };
+  }
   const title = e.title ?? t("events.detail.notFoundTitle");
   const desc = e.summary || t("events.meta.description");
   const url = `${SITE_URL}${localizePath(`/events/${slug}`, locale)}`;

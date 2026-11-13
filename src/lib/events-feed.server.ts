@@ -158,6 +158,8 @@ export async function buildEventsFeedIcs(
     .select(PUBLIC_EVENT_COLUMNS)
     .gte("starts_at", from.toISOString())
     .lte("starts_at", to.toISOString())
+    // Invite-only events stay off the public feed; the admin client bypasses RLS.
+    .not("registration_mode", "in", "(rsvp_invited,rsvp_invited_open)")
     .order("starts_at", { ascending: true })
     .limit(500);
 
