@@ -1,0 +1,1 @@
+GRANT EXECUTE ON FUNCTION private.can_view_invite_only_event(uuid, uuid) TO anon;
