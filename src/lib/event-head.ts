@@ -9,6 +9,7 @@ import type { PublicEvent } from "./events";
 type EventLike = Pick<
   PublicEvent,
   | "title"
+  | "registration_mode"
   | "summary"
   | "image_url"
   | "starts_at"

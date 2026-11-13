@@ -12,9 +12,8 @@ import { eventHead } from "@/lib/event-head";
 
 export const Route = createFileRoute("/events/$slug")({
   // `?invite=<token>` from an invitation email unlocks an invite-only event.
-  validateSearch: (search: Record<string, unknown>) => ({
-    invite: typeof search["invite"] === "string" ? (search["invite"] as string) : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { invite?: string } =>
+    typeof search["invite"] === "string" ? { invite: search["invite"] } : {},
   loaderDeps: ({ search }) => ({ invite: search.invite }),
   loader: async ({ params, deps }) => {
     const event = await getPublicEvent({ data: { slug: params.slug, locale: "en", invite: deps.invite ?? null } });
