@@ -1,6 +1,6 @@
 /**
  * Invite-only events are hidden from the public listing by RLS. Signed-in
- * readers (active members, invited accounts) fetch them after hydration —
+ * readers fetch the ones they are on the guest list for after hydration —
  * the session lives in the browser, so SSR can never include them.
  */
 import { useQuery } from "@tanstack/react-query";
