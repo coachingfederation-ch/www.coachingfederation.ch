@@ -7,6 +7,7 @@
  * never be assembled from arbitrary email addresses.
  */
 import { useCallback, useEffect, useState } from "react";
+import { useEventReadOnly } from "./EventReadOnly";
 import { Section } from "./EventEditorSections";
 import {
   addEventInvitation,
@@ -68,6 +69,7 @@ export function EventInvitationsSection({
   /** Open guest list: non-members may be invited too. */
   allowGuests?: boolean;
 }) {
+  const readOnly = useEventReadOnly();
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
   const [guestLocale, setGuestLocale] = useState<"de" | "fr" | "it" | "en">("de");
@@ -239,6 +241,9 @@ export function EventInvitationsSection({
   return (
     <Section title={t("events.invitations.title")} hint={t("events.invitations.hint")}>
       <div className="space-y-4">
+        {/* Adding people is an organizer action; read-only viewers see the list. */}
+        {readOnly ? null : (
+          <>
         <div>
           <label
             className="mb-1 block text-xs font-semibold text-muted-foreground"
@@ -396,6 +401,8 @@ export function EventInvitationsSection({
             </div>
           ) : null}
         </div>
+          </>
+        )}
 
         {message ? <p className="text-sm text-teal-foreground">{message}</p> : null}
         {error ? <p className="text-sm text-destructive">{error}</p> : null}
