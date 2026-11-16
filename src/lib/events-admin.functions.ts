@@ -618,7 +618,7 @@ export const listEventHosts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
     const { loadEventHosts } = await import("./event-hosts.server");
     // CMS reads use the caller's client: drafts are invisible to the anon reader.
     return loadEventHosts(data.eventId, context.supabase);
@@ -682,7 +682,7 @@ export const listEventSpeakers = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
     const { loadEventSpeakers } = await import("./event-speakers.server");
     return loadEventSpeakers(data.eventId, context.supabase);
   });
