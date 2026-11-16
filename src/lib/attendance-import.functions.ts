@@ -11,7 +11,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertOrganizer } from "./authz";
+import { assertEventViewer, assertOrganizer } from "./authz";
 import { EVENT_ATTENDANCE_IMPORT_BUCKET, EVENT_ATTENDANCE_IMPORT_TTL_SECONDS } from "./storage";
 
 export type AttendanceImportStats = {
@@ -267,7 +267,7 @@ export const listAttendanceImports = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }): Promise<AttendanceImport[]> => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
     const { data: rows, error } = await context.supabase
       .from("event_attendance_imports")
       .select("*")
@@ -284,7 +284,7 @@ export const loadAttendanceImport = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ importId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }): Promise<AttendancePreview> => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
     const { data: row, error } = await context.supabase
       .from("event_attendance_imports")
       .select("*")

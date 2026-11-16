@@ -9,7 +9,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertOrganizer } from "./authz";
+import { assertEventViewer, assertOrganizer } from "./authz";
 import { FORM_KINDS, QUESTION_TYPES } from "./event-forms";
 
 const FORM_COLUMNS =
@@ -69,7 +69,7 @@ export const listEventForms = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
     const { data: forms, error } = await context.supabase
       .from("event_forms")
       .select(FORM_COLUMNS)
@@ -107,7 +107,7 @@ export const getEventForm = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ formId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
     const { data: form, error } = await context.supabase
       .from("event_forms")
       .select(FORM_COLUMNS)
@@ -321,7 +321,7 @@ export const listCopyableForms = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ exceptFormId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
     const { data: rows } = await context.supabase
       .from("event_forms")
       .select("id, name, kind, event_id, events(title)")
@@ -341,7 +341,7 @@ export const getFormResults = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ formId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
     const { data: form, error } = await context.supabase
       .from("event_forms")
       .select("id, event_id, kind, name")
@@ -441,7 +441,7 @@ export const exportFormResponses = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ formId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
     const { data: form, error } = await context.supabase
       .from("event_forms")
       .select("id")

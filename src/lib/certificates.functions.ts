@@ -9,7 +9,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertOrganizer } from "./authz";
+import { assertEventViewer, assertOrganizer } from "./authz";
 import type { CertificateView } from "./certificates.server";
 
 const tokenSchema = z.object({
@@ -58,7 +58,7 @@ export const loadCertificateBoard = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => eventSchema.parse(input))
   .handler(async ({ context, data }): Promise<CertificateBoard> => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
 
     const [
       { data: event, error: eventError },

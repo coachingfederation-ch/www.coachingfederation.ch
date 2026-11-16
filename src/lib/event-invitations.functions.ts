@@ -9,14 +9,15 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertOrganizer } from "./authz";
+import { assertEventViewer, assertOrganizer } from "./authz";
 
 const eventSchema = z.object({ eventId: z.string().uuid() });
 
 /** Proves the caller may manage this event before any admin-side read/write. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function assertManagesEvent(context: any, eventId: string) {
-  await assertOrganizer(context);
+async function assertManagesEvent(context: any, eventId: string, readOnly = false) {
+  if (readOnly) await assertEventViewer(context);
+  else await assertOrganizer(context);
   const { data, error } = await context.supabase
     .from("events")
     .select("id")
@@ -30,7 +31,7 @@ export const listEventInvitations = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => eventSchema.parse(input))
   .handler(async ({ data, context }) => {
-    await assertManagesEvent(context, data.eventId);
+    await assertManagesEvent(context, data.eventId, true);
     const { listInvitations } = await import("./event-invitations.server");
     return listInvitations(data.eventId);
   });
