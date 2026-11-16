@@ -96,7 +96,6 @@ export function MemberShell({ children }: { children: ReactNode }) {
   const organizerOnly =
     (hasExactRole(roles.roles, "organizer") ||
       hasExactRole(roles.roles, "organizer_readonly")) &&
-    !hasExactRole(roles.roles, "publisher") &&
     !hasExactRole(roles.roles, "editor") &&
     !roles.isAdmin;
   const staffLink = organizerOnly
