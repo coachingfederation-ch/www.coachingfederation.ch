@@ -125,7 +125,7 @@ function FormLibraryPage() {
 
         <Tabs
           className="mt-8"
-          value={tab ?? "library"}
+          value={readOnly ? "library" : (tab ?? "library")}
           onValueChange={(v) =>
             void navigate({
               to: "/manage/forms",
@@ -139,9 +139,11 @@ function FormLibraryPage() {
               <TabsTrigger value="surveys">{t("forms.surveys.tabSurveys")}</TabsTrigger>
             )}
           </TabsList>
-          <TabsContent value="surveys" className="mt-6">
-            <SurveyList t={t} />
-          </TabsContent>
+          {readOnly ? null : (
+            <TabsContent value="surveys" className="mt-6">
+              <SurveyList t={t} />
+            </TabsContent>
+          )}
           <TabsContent value="library" className="mt-6">
             {readOnly ? null : (
             <div className="flex justify-end">
@@ -204,6 +206,7 @@ function FormLibraryPage() {
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
+                      )}
                     </li>
                   ))}
                 </ul>
