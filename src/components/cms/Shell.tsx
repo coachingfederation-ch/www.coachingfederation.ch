@@ -42,6 +42,7 @@ import {
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { Menu } from "lucide-react";
 import { useMyRoles } from "@/lib/roles";
+import { Alert, AlertDescription } from "@/design-system/icf-welcome-design-system-a835df";
 import type { AppRole } from "@/lib/role-model";
 
 /**
@@ -365,6 +366,14 @@ export function Shell({
                 </nav>
               </SheetContent>
             </Sheet>
+          </div>
+        ) : null}
+        {roles.isEventReadOnly &&
+        (pathname.startsWith("/manage/events") || pathname.startsWith("/manage/forms")) ? (
+          <div className="mx-auto max-w-6xl px-10 pt-6">
+            <Alert>
+              <AlertDescription>{t("events.readOnlyNotice")}</AlertDescription>
+            </Alert>
           </div>
         ) : null}
         {children}
