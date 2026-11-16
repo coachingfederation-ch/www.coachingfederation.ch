@@ -66,9 +66,9 @@ const nav = [
     allowedRoles: ["editor", "publisher"],
   },
   // Organizers see only this item; the shell itself is open to all staff roles.
-  { to: "/manage/events", key: "nav.events", icon: CalendarDays, allowedRoles: ["organizer"] },
+  { to: "/manage/events", key: "nav.events", icon: CalendarDays, allowedRoles: ["organizer", "organizer_readonly"] },
   // Reusable event forms; same audience as Events.
-  { to: "/manage/forms", key: "nav.forms", icon: ClipboardList, allowedRoles: ["organizer"] },
+  { to: "/manage/forms", key: "nav.forms", icon: ClipboardList, allowedRoles: ["organizer", "organizer_readonly"] },
   // Membership & Engagement decides guest passes chapter-wide.
   {
     to: "/manage/guest-passes",

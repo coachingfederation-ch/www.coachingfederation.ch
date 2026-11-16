@@ -7,7 +7,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
+import { requireStaffAccess, EVENT_VIEW_ROLES } from "@/lib/staff-guard";
 import { useEffect, useMemo, useState } from "react";
 import { CalendarDays, Plus, X } from "lucide-react";
 import { Checkbox } from "@/design-system/icf-welcome-design-system-a835df";
@@ -38,7 +38,7 @@ const STATUS_SHOW_ALL = "all";
 const ONLINE_CITY = "__online__";
 
 export const Route = createFileRoute("/_staff/manage/events/")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_ROLES),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_VIEW_ROLES),
   validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [

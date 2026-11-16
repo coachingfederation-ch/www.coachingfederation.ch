@@ -36,6 +36,7 @@ function fallbackFor(
   if (hasExactRole(roles.roles, "editor")) return "/articles";
   if (hasExactRole(roles.roles, "publisher")) return "/articles";
   if (hasExactRole(roles.roles, "organizer")) return "/manage/events";
+  if (hasExactRole(roles.roles, "organizer_readonly")) return "/manage/events";
   if (hasExactRole(roles.roles, "administrator")) return "/manage";
   if (hasExactRole(roles.roles, "membership")) return "/manage/guest-passes";
   if (roles.isMember) return "/member";
@@ -78,6 +79,8 @@ export const ARTICLE_ROLES: AppRole[] = ["editor", "publisher"];
 export const CATEGORY_ROLES: AppRole[] = ["editor"];
 /** Event management screens (`/manage/events/*`). */
 export const EVENT_ROLES: AppRole[] = ["organizer"];
+/** Event and form screens that only display data: adds the read-only grant. */
+export const EVENT_VIEW_ROLES: AppRole[] = ["organizer", "organizer_readonly"];
 /**
  * Membership & Engagement screens (`/manage/guest-passes`). Administrators
  * count as M&E, and Super Admins pass through the admin bypass.

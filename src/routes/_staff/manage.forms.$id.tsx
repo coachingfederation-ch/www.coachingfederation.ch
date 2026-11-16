@@ -13,13 +13,13 @@ import {
   loadTemplateAsForm,
   templateQuestions,
 } from "@/components/forms/form-actions";
-import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
+import { requireStaffAccess, EVENT_VIEW_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
 import { saveFormTemplate } from "@/lib/forms.functions";
 import type { BuilderForm } from "@/lib/forms/builder-state";
 
 export const Route = createFileRoute("/_staff/manage/forms/$id")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_ROLES),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_VIEW_ROLES),
   head: () => ({
     meta: [
       { title: "Edit library form — The Switzerland Chapter of ICF CMS" },

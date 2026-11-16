@@ -35,7 +35,7 @@ import { Shell } from "@/components/cms/Shell";
 import { SurveyList } from "@/components/forms/SurveyList";
 import { KindChoice } from "@/components/forms/KindChoice";
 import { loadTemplateAsForm, saveFormAsTemplate } from "@/components/forms/form-actions";
-import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
+import { requireStaffAccess, EVENT_VIEW_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
 import {
   createFormTemplate,
@@ -47,7 +47,7 @@ import {
 export const Route = createFileRoute("/_staff/manage/forms/")({
   validateSearch: (search: Record<string, unknown>): { tab?: "surveys" } =>
     search["tab"] === "surveys" ? { tab: "surveys" } : {},
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_ROLES),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_VIEW_ROLES),
   head: () => ({
     meta: [
       { title: "Forms — The Switzerland Chapter of ICF CMS" },

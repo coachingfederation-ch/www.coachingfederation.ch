@@ -88,6 +88,18 @@ export async function assertOrganizer(context: AuthedContext): Promise<string> {
 }
 
 /**
+ * Throws unless the caller may VIEW event management data: anyone who may
+ * manage events, plus the `organizer_readonly` grant (all events, read-only;
+ * RLS grants it SELECT only). Use this only on functions that change nothing.
+ */
+export async function assertEventViewer(context: AuthedContext): Promise<string> {
+  const roles = await rolesOf(context);
+  const allowed: AppRole[] = ["admin", "editor", "organizer", "organizer_readonly"];
+  if (!roles.some((r) => allowed.includes(r))) throw new Error("Forbidden");
+  return context.userId;
+}
+
+/**
  * Throws unless the caller may do Membership & Engagement work: the M&E grant
  * (`membership`) or either admin level. Guest pass decisions run through this.
  */

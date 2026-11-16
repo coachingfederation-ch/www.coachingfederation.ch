@@ -9,7 +9,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import QRCode from "qrcode";
 import { QrCode, Radio, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
+import { requireStaffAccess, EVENT_VIEW_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
 import { parseScannedTicket, type CheckInOutcome } from "@/lib/check-in";
 import { TicketScanner } from "@/components/events/TicketScanner";
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/_staff/manage/events/$id_/check-in")({
   validateSearch: (search: Record<string, unknown>): { projector?: boolean } => ({
     projector: search.projector === "1" || search.projector === 1 || search.projector === true,
   }),
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_ROLES),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_VIEW_ROLES),
   head: () => ({
     meta: [
       { title: "Check-in — The Switzerland Chapter of ICF CMS" },

@@ -9,7 +9,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Shell } from "@/components/cms/Shell";
-import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
+import { requireStaffAccess, EVENT_VIEW_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
 import {
   EMPTY_REPORT_FILTERS,
@@ -25,7 +25,7 @@ import { ReportTierTable } from "@/components/cms/reporting/ReportTierTable";
 import { ReportTrends } from "@/components/cms/reporting/ReportTrends";
 
 export const Route = createFileRoute("/_staff/manage/events/$id_/reporting")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_ROLES),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_VIEW_ROLES),
   head: () => ({
     meta: [
       { title: "Event reporting — The Switzerland Chapter of ICF CMS" },

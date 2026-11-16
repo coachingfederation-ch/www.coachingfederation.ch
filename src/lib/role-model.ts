@@ -27,6 +27,8 @@ export type AppRole =
   | "administrator"
   | "editor"
   | "organizer"
+  /** Sees every event, its attendees and forms; changes nothing. */
+  | "organizer_readonly"
   | "publisher"
   | "membership"
   | "member"
@@ -40,6 +42,7 @@ export const STAFF_ROLES: AppRole[] = [
   "administrator",
   "editor",
   "organizer",
+  "organizer_readonly",
   "publisher",
   // Membership & Engagement work (guest passes) lives inside the CMS shell.
   "membership",
@@ -50,6 +53,7 @@ export const MANAGED_ROLES = [
   "administrator",
   "editor",
   "organizer",
+  "organizer_readonly",
   "publisher",
   "membership",
 ] as const;
@@ -73,6 +77,10 @@ export type RoleSet = {
   isPlatformAdmin: boolean;
   isEditor: boolean;
   isOrganizer: boolean;
+  /** May open event screens: organizers plus the read-only grant. */
+  isEventViewer: boolean;
+  /** Holds only the read-only event grant: edit controls are disabled. */
+  isEventReadOnly: boolean;
   isPublisher: boolean;
   /** Membership & Engagement: guest passes and member engagement work. */
   isMembership: boolean;
@@ -88,6 +96,8 @@ export const EMPTY_ROLES: RoleSet = {
   isPlatformAdmin: false,
   isEditor: false,
   isOrganizer: false,
+  isEventViewer: false,
+  isEventReadOnly: false,
   isPublisher: false,
   isMembership: false,
   isStaff: false,
@@ -106,6 +116,10 @@ export function toRoleSet(roles: AppRole[]): RoleSet {
     isEditor: has("admin") || has("editor"),
     // Editors and admins manage every event, so they are organizers too.
     isOrganizer: has("admin") || has("editor") || has("organizer"),
+    isEventViewer:
+      has("admin") || has("editor") || has("organizer") || has("organizer_readonly"),
+    isEventReadOnly:
+      has("organizer_readonly") && !(has("admin") || has("editor") || has("organizer")),
     // Publishing rights are an explicit grant; only admin overrides it.
     isPublisher: has("admin") || has("publisher"),
     // Membership & Engagement work is also open to the two admin levels.

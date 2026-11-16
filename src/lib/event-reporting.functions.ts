@@ -9,7 +9,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertOrganizer } from "./authz";
+import { assertEventViewer } from "./authz";
 
 const filterSchema = z.object({
   tier: z.string().max(64).default("all"),
@@ -38,7 +38,7 @@ async function assertEventAccess(
   context: { supabase: any; userId: string },
   eventId: string,
 ) {
-  await assertOrganizer(context);
+  await assertEventViewer(context);
   const { data, error } = await context.supabase
     .from("events")
     .select("id")
