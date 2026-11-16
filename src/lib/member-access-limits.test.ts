@@ -11,3 +11,8 @@ describe("staff member-data limits", () => {
   it("allows 120 member detail views per 15 minutes", () =>
     expect(rule("member_detail", 900)).toBe(120));
 });
+
+describe("event CSV download limits", () => {
+  it("allows 20 event downloads per hour", () => expect(rule("event_export", 3600)).toBe(20));
+  it("allows 60 event downloads per day", () => expect(rule("event_export", 86400)).toBe(60));
+});

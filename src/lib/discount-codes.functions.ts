@@ -8,7 +8,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertOrganizer } from "./authz";
+import { assertEventViewer, assertOrganizer } from "./authz";
 import type { DiscountVerdict } from "./discount-codes";
 
 const codeText = z
@@ -97,7 +97,7 @@ export const listEventDiscountCodes = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }): Promise<ManagedDiscountCode[]> => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
     const { data: rows, error } = await context.supabase
       .from("event_discount_codes")
       .select(CODE_COLUMNS)

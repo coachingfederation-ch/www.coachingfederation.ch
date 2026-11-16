@@ -11,6 +11,7 @@ import { requireStaffAccess, EVENT_VIEW_ROLES } from "@/lib/staff-guard";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Shell } from "@/components/cms/Shell";
+import { ReadOnlyRegion, useEventReadOnly } from "@/components/cms/EventReadOnly";
 import { UnsplashPicker, type UnsplashPick } from "@/components/cms/UnsplashPicker";
 import {
   EventDetailsSection,
@@ -97,6 +98,8 @@ export const Route = createFileRoute("/_staff/manage/events/$id")({
   component: EventEditor,
 });
 
+const READ_ONLY_HIDDEN_PANELS = new Set(["panel-repeat", "panel-series", "panel-duplicate"]);
+
 function EventEditor() {
   const { id } = Route.useParams();
   const { t } = useCms();
@@ -107,6 +110,7 @@ function EventEditor() {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const readOnly = useEventReadOnly();
   const [saving, setSaving] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   // Category and region are the public filter facets, so the editor reads the
@@ -365,7 +369,7 @@ function EventEditor() {
      the editor, and they now live in the section rail. */
   // Each toggle sits only in the stage that holds its panel.
   const extrasControls =
-    activeStage === "setup" || activeStage === "after" ? null : (
+    readOnly || activeStage === "setup" || activeStage === "after" ? null : (
       <div className="space-y-2 px-3 text-sm">
         {activeStage === "publish" && (
           <label className="flex items-center gap-2">
@@ -408,10 +412,15 @@ function EventEditor() {
   const sections: EditorSection[] = [];
   const panels: React.ReactNode[] = [];
   const addPanel = (id: string, label: string, node: React.ReactNode) => {
+    // Panels that only exist to create something have nothing to show a
+    // read-only viewer.
+    if (readOnly && READ_ONLY_HIDDEN_PANELS.has(id)) return;
     sections.push({ id, label });
     panels.push(
       <div key={id} id={id} className="scroll-mt-56">
-        {node}
+        {/* The attendee desk handles read-only itself: its row toggles and
+            CSV download must stay usable. */}
+        <ReadOnlyRegion readOnly={readOnly && id !== "panel-attendees"}>{node}</ReadOnlyRegion>
       </div>,
     );
   };
@@ -612,6 +621,7 @@ function EventEditor() {
         retryRefund={retryRefund}
         tiers={tiers}
         reloadRegistrations={() => load().catch(() => setError(t("events.loadError")))}
+        readOnly={readOnly}
         t={t}
       />,
     );
@@ -700,6 +710,7 @@ function EventEditor() {
         </div>
       </div>
 
+      {readOnly ? null : (
       <EventSaveBar
         dirty={dirty}
         saving={saving}
@@ -709,6 +720,7 @@ function EventEditor() {
         }}
         t={t}
       />
+      )}
 
       <UnsplashPicker
         open={pickerOpen}

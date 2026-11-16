@@ -955,6 +955,7 @@ export function EventAttendeeDesk({
   retryRefund,
   tiers,
   reloadRegistrations,
+  readOnly = false,
   t,
 }: {
   event: Managed;
@@ -970,6 +971,8 @@ export function EventAttendeeDesk({
   retryRefund: (r: Registration) => void | Promise<void>;
   tiers: { id: string; name: string }[];
   reloadRegistrations: () => void | Promise<void>;
+  /** Read-only event grant: view and download only, no attendee actions. */
+  readOnly?: boolean;
   t: (k: string) => string;
 }) {
   // Attendee desk filters. Local UI state only — the underlying list is
@@ -1028,7 +1031,7 @@ export function EventAttendeeDesk({
         confirmed={confirmed}
         checkedIn={checkedInCount}
         capacity={event.capacity}
-        onAdd={() => setAddOpen(true)}
+        onAdd={readOnly ? undefined : () => setAddOpen(true)}
         onExport={exportCsv}
         exporting={exporting}
         t={t}
@@ -1125,6 +1128,8 @@ export function EventAttendeeDesk({
                       </td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex flex-wrap justify-end gap-2">
+                          {readOnly ? null : (
+                          <>
                           {r.status !== "cancelled" ? (
                             <button
                               onClick={() => void resendConfirmation(r)}
@@ -1151,6 +1156,8 @@ export function EventAttendeeDesk({
                               ? t("events.reinstate")
                               : t("events.cancelRsvp")}
                           </button>
+                          </>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -1182,7 +1189,7 @@ export function EventAttendeeDesk({
                               )}
                               note={r.refund_error}
                             >
-                              {r.refund_status === "failed" ? (
+                              {r.refund_status === "failed" && !readOnly ? (
                                 <button
                                   onClick={() => void retryRefund(r)}
                                   className="mt-1 text-xs font-semibold text-primary underline"

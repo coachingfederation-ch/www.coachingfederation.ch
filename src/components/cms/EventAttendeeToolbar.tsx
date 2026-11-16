@@ -56,7 +56,8 @@ export function EventAttendeeToolbar({
   confirmed: number;
   checkedIn: number;
   capacity: number | null;
-  onAdd: () => void;
+  /** Omitted for read-only viewers: hides "Add attendee". */
+  onAdd?: () => void;
   onExport: () => void | Promise<void>;
   exporting: boolean;
   t: (k: string) => string;
@@ -74,6 +75,7 @@ export function EventAttendeeToolbar({
           {capacity ? ` · ${t("events.fieldCapacityShort")} ${capacity}` : ""}
         </p>
         <div className="ml-auto flex flex-wrap gap-2">
+          {onAdd ? (
           <button
             type="button"
             onClick={onAdd}
@@ -81,6 +83,7 @@ export function EventAttendeeToolbar({
           >
             {t("events.staffAdd.open")}
           </button>
+          ) : null}
           <button
             type="button"
             onClick={() => void onExport()}

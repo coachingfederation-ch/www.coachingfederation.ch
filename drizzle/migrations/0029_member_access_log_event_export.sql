@@ -1,0 +1,2 @@
+ALTER TABLE public.member_access_log DROP CONSTRAINT IF EXISTS member_access_log_action_check;
+ALTER TABLE public.member_access_log ADD CONSTRAINT member_access_log_action_check CHECK (action = ANY (ARRAY['members_list','members_export','member_detail','event_export','members_list_blocked','members_export_blocked','member_detail_blocked','event_export_blocked']::text[]));

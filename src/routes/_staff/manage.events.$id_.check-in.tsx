@@ -11,6 +11,8 @@ import { QrCode, Radio, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { requireStaffAccess, EVENT_VIEW_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
+import { useEventReadOnly } from "@/components/cms/EventReadOnly";
+import { Alert, AlertDescription } from "@/design-system/icf-welcome-design-system-a835df";
 import { parseScannedTicket, type CheckInOutcome } from "@/lib/check-in";
 import { TicketScanner } from "@/components/events/TicketScanner";
 import { AttendanceImportCard } from "@/components/events/AttendanceImportCard";
@@ -54,6 +56,8 @@ type Board = { event: { id: string; title: string }; attendees: CheckInAttendee[
 function CheckInPage() {
   const { id } = Route.useParams();
   const { t } = useCms();
+  // Read-only viewers see who is checked in, without any door actions.
+  const readOnly = useEventReadOnly();
   const [board, setBoard] = useState<Board | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<CheckInOutcome | null>(null);
@@ -166,8 +170,16 @@ function CheckInPage() {
 
         {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
+        {readOnly ? (
+          <Alert>
+            <AlertDescription>{t("events.readOnlyNotice")}</AlertDescription>
+          </Alert>
+        ) : null}
+
         <ResultCard result={result} onDismiss={() => setResult(null)} t={t} />
 
+        {readOnly ? null : (
+          <>
         <HandOffCard eventId={id} t={t} />
 
         <AttendanceCard eventId={id} t={t} onChanged={reload} />
@@ -220,6 +232,8 @@ function CheckInPage() {
             </button>
           ) : null}
         </section>
+          </>
+        )}
 
         <section className="rounded-2xl border border-border bg-card p-4">
           <label className="block">
@@ -244,7 +258,13 @@ function CheckInPage() {
                     {a.tier_name ? ` · ${a.tier_name}` : ""}
                   </p>
                 </div>
-                {a.checked_in_at ? (
+                {readOnly ? (
+                  <span className="text-xs font-semibold text-muted-foreground">
+                    {a.checked_in_at
+                      ? t("events.checkIn.filterIn")
+                      : t("events.checkIn.filterOut")}
+                  </span>
+                ) : a.checked_in_at ? (
                   <button
                     type="button"
                     disabled={busy}
