@@ -67,9 +67,14 @@ const nav = [
     allowedRoles: ["editor", "publisher"],
   },
   // Organizers see only this item; the shell itself is open to all staff roles.
-  { to: "/manage/events", key: "nav.events", icon: CalendarDays, allowedRoles: ["organizer", "organizer_readonly"] },
-  // Reusable event forms; same audience as Events.
-  { to: "/manage/forms", key: "nav.forms", icon: ClipboardList, allowedRoles: ["organizer", "organizer_readonly"] },
+  {
+    to: "/manage/events",
+    key: "nav.events",
+    icon: CalendarDays,
+    allowedRoles: ["organizer", "organizer_readonly"],
+  },
+  // Reusable event forms: full organizers only (hidden from the read-only grant).
+  { to: "/manage/forms", key: "nav.forms", icon: ClipboardList, allowedRoles: ["organizer"] },
   // Membership & Engagement decides guest passes chapter-wide.
   {
     to: "/manage/guest-passes",
@@ -368,8 +373,7 @@ export function Shell({
             </Sheet>
           </div>
         ) : null}
-        {roles.isEventReadOnly &&
-        (pathname.startsWith("/manage/events") || pathname.startsWith("/manage/forms")) ? (
+        {roles.isEventReadOnly && pathname.startsWith("/manage/events") ? (
           <div className="mx-auto max-w-6xl px-10 pt-6">
             <Alert>
               <AlertDescription>{t("events.readOnlyNotice")}</AlertDescription>

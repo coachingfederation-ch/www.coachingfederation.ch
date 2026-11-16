@@ -8,14 +8,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { Shell } from "@/components/cms/Shell";
-import { requireStaffAccess, EVENT_VIEW_ROLES } from "@/lib/staff-guard";
+import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
-import { useEventReadOnly } from "@/components/cms/EventReadOnly";
 import { displayAnswer, type PublicFormQuestion } from "@/lib/event-forms";
 import { exportFormResponses, getFormResults, sendFollowUpForm } from "@/lib/event-forms.functions";
 
 export const Route = createFileRoute("/_staff/manage/events/$id_/forms/$formId")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_VIEW_ROLES),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_ROLES),
   head: () => ({
     meta: [
       { title: "Form results — The Switzerland Chapter of ICF CMS" },
@@ -50,7 +49,6 @@ const buttonClass =
 function FormResultsPage() {
   const { id, formId } = Route.useParams();
   const { t } = useCms();
-  const readOnly = useEventReadOnly();
   const [data, setData] = useState<Results | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -124,7 +122,7 @@ function FormResultsPage() {
         {message ? <p className="mt-3 text-sm text-muted-foreground">{message}</p> : null}
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {isRegistration || readOnly ? null : (
+          {isRegistration ? null : (
             <>
               <button
                 type="button"
