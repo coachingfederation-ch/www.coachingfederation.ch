@@ -538,12 +538,12 @@ export const draftRecapPost = createServerFn({ method: "POST" })
       .maybeSingle();
     if (!row) throw new Error("Event not found.");
     const recap = (Array.isArray(row.event_recaps) ? row.event_recaps[0] : row.event_recaps) as
-      | { headline: string | null; body: string | null; language: string | null }
-      | null
-      | undefined;
+      { headline: string | null; body: string | null; language: string | null } | null | undefined;
 
     const { SITE_URL, localizePath, isLocale } = await import("@/i18n/config");
-    const locale = isLocale(recap?.language ?? "en") ? (recap?.language as "de" | "fr" | "it" | "en") : "en";
+    const locale = isLocale(recap?.language ?? "en")
+      ? (recap?.language as "de" | "fr" | "it" | "en")
+      : "en";
     const recapUrl = `${SITE_URL}${localizePath(`/events/${row.slug as string}`, locale)}#recap`;
 
     const { draftRecapCommentary } = await import("./event-recap-linkedin.server");

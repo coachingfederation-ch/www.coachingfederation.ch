@@ -9,6 +9,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp, Pencil, Trash2, X } from "lucide-react";
 import { useCms } from "@/i18n/cms";
+import { useEventReadOnly } from "./EventReadOnly";
 import { supabase } from "@/integrations/supabase/client";
 import { ARTICLE_IMAGE_BUCKET } from "@/lib/storage";
 import { MAX_SPEAKER_BIO, type EventSpeaker } from "@/lib/event-speakers";
@@ -31,6 +32,7 @@ const emptyDraft: Draft = { name: "", bio: "", url: "", imagePath: null };
 
 export function EventSpeakersPanel({ eventId }: { eventId: string }) {
   const { t } = useCms();
+  const readOnly = useEventReadOnly();
   const [speakers, setSpeakers] = useState<EventSpeaker[]>([]);
   const [candidates, setCandidates] = useState<EventSpeaker[]>([]);
   const [search, setSearch] = useState("");
@@ -52,13 +54,14 @@ export function EventSpeakersPanel({ eventId }: { eventId: string }) {
 
   // Debounced library search; an empty term simply lists the first entries.
   useEffect(() => {
+    if (readOnly) return;
     const timer = setTimeout(() => {
       void searchEventSpeakers({ data: { term: search.trim() } })
         .then((rows) => setCandidates(rows as EventSpeaker[]))
         .catch(() => setCandidates([]));
     }, 250);
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [search, readOnly]);
 
   // Debounced search over published member profiles (same source as hosts).
   useEffect(() => {
@@ -260,220 +263,230 @@ export function EventSpeakersPanel({ eventId }: { eventId: string }) {
         ) : null}
       </ul>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-2">
-        {/* Chapter members with a published coach profile */}
-        <div className="rounded-2xl border border-border p-3">
-          <p className="text-xs font-semibold text-muted-foreground">
-            {t("events.speakers.memberTitle")}
-          </p>
-          <input
-            value={memberSearch}
-            onChange={(e) => setMemberSearch(e.target.value)}
-            placeholder={t("events.speakers.memberSearch")}
-            aria-label={t("events.speakers.memberSearch")}
-            className={inputClass + " mt-2"}
-          />
-          <ul className="mt-2 divide-y divide-border">
-            {members.map((m) => {
-              const attached = speakers.some((s) => s.profileId === m.profileId);
-              return (
-                <li key={m.profileId} className="flex items-center gap-2 py-1.5">
-                  <span className="min-w-0 flex-1 truncate text-sm">{m.fullName}</span>
-                  <button
-                    type="button"
-                    disabled={busy || attached}
-                    onClick={() => void addMember(m.profileId)}
-                    className="rounded-full border border-border px-3 py-1 text-xs font-semibold hover:bg-secondary disabled:opacity-50"
-                  >
-                    {attached ? t("events.speakers.added") : t("events.speakers.add")}
-                  </button>
-                </li>
-              );
-            })}
-            {memberSearch.trim().length >= 2 && members.length === 0 ? (
-              <li className="py-1.5 text-xs text-muted-foreground">
-                {t("events.speakers.noMatches")}
-              </li>
-            ) : null}
-          </ul>
-          <p className="mt-2 text-xs text-muted-foreground">{t("events.speakers.memberHint")}</p>
-        </div>
+      {/* Adding, editing and deleting speakers is an organizer action. */}
+      {readOnly ? null : (
+        <>
+          <div className="mt-4 grid gap-4 lg:grid-cols-2">
+            {/* Chapter members with a published coach profile */}
+            <div className="rounded-2xl border border-border p-3">
+              <p className="text-xs font-semibold text-muted-foreground">
+                {t("events.speakers.memberTitle")}
+              </p>
+              <input
+                value={memberSearch}
+                onChange={(e) => setMemberSearch(e.target.value)}
+                placeholder={t("events.speakers.memberSearch")}
+                aria-label={t("events.speakers.memberSearch")}
+                className={inputClass + " mt-2"}
+              />
+              <ul className="mt-2 divide-y divide-border">
+                {members.map((m) => {
+                  const attached = speakers.some((s) => s.profileId === m.profileId);
+                  return (
+                    <li key={m.profileId} className="flex items-center gap-2 py-1.5">
+                      <span className="min-w-0 flex-1 truncate text-sm">{m.fullName}</span>
+                      <button
+                        type="button"
+                        disabled={busy || attached}
+                        onClick={() => void addMember(m.profileId)}
+                        className="rounded-full border border-border px-3 py-1 text-xs font-semibold hover:bg-secondary disabled:opacity-50"
+                      >
+                        {attached ? t("events.speakers.added") : t("events.speakers.add")}
+                      </button>
+                    </li>
+                  );
+                })}
+                {memberSearch.trim().length >= 2 && members.length === 0 ? (
+                  <li className="py-1.5 text-xs text-muted-foreground">
+                    {t("events.speakers.noMatches")}
+                  </li>
+                ) : null}
+              </ul>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {t("events.speakers.memberHint")}
+              </p>
+            </div>
 
-        {/* Saved external speakers: three most recently used, or search results */}
-        <div className="rounded-2xl border border-border p-3">
-          <p className="text-xs font-semibold text-muted-foreground">
-            {t("events.speakers.libraryTitle")}
-          </p>
-          <div className="mt-2 flex gap-2">
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={t("events.speakers.search")}
-              aria-label={t("events.speakers.search")}
-              className={inputClass}
-            />
-            <button
-              type="button"
-              onClick={() => setDraft({ ...emptyDraft })}
-              disabled={busy || draft !== null}
-              className="shrink-0 rounded-full border border-border px-3 py-1 text-xs font-semibold hover:bg-secondary disabled:opacity-50"
-            >
-              {t("events.speakers.new")}
-            </button>
+            {/* Saved external speakers: three most recently used, or search results */}
+            <div className="rounded-2xl border border-border p-3">
+              <p className="text-xs font-semibold text-muted-foreground">
+                {t("events.speakers.libraryTitle")}
+              </p>
+              <div className="mt-2 flex gap-2">
+                <input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder={t("events.speakers.search")}
+                  aria-label={t("events.speakers.search")}
+                  className={inputClass}
+                />
+                <button
+                  type="button"
+                  onClick={() => setDraft({ ...emptyDraft })}
+                  disabled={busy || draft !== null}
+                  className="shrink-0 rounded-full border border-border px-3 py-1 text-xs font-semibold hover:bg-secondary disabled:opacity-50"
+                >
+                  {t("events.speakers.new")}
+                </button>
+              </div>
+              <ul className="mt-2 divide-y divide-border">
+                {candidates.map((c) => {
+                  const attached = speakers.some((s) => s.id === c.id);
+                  return (
+                    <li key={c.id} className="flex items-center gap-2 py-1.5">
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm">{c.name}</span>
+                        <span className="block text-xs text-muted-foreground">
+                          {c.profileId
+                            ? t("events.speakers.kindMember")
+                            : t("events.speakers.kindExternal")}
+                          {" · "}
+                          {t("events.speakers.usedIn").replace(
+                            "{count}",
+                            String(c.usageCount ?? 0),
+                          )}
+                        </span>
+                      </span>
+                      <button
+                        type="button"
+                        disabled={busy || attached}
+                        onClick={() => void commit([...speakers, c])}
+                        className="rounded-full border border-border px-3 py-1 text-xs font-semibold hover:bg-secondary disabled:opacity-50"
+                      >
+                        {attached ? t("events.speakers.added") : t("events.speakers.add")}
+                      </button>
+                      <button
+                        type="button"
+                        disabled={busy}
+                        onClick={() => setConfirmDelete(c)}
+                        aria-label={t("events.speakers.deleteFromLibrary")}
+                        title={t("events.speakers.deleteFromLibrary")}
+                        className="rounded p-1 text-muted-foreground hover:text-destructive disabled:opacity-50"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
-          <ul className="mt-2 divide-y divide-border">
-            {candidates.map((c) => {
-              const attached = speakers.some((s) => s.id === c.id);
-              return (
-                <li key={c.id} className="flex items-center gap-2 py-1.5">
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm">{c.name}</span>
-                    <span className="block text-xs text-muted-foreground">
-                      {c.profileId
-                        ? t("events.speakers.kindMember")
-                        : t("events.speakers.kindExternal")}
-                      {" · "}
-                      {t("events.speakers.usedIn").replace("{count}", String(c.usageCount ?? 0))}
-                    </span>
+
+          {confirmDelete ? (
+            <div
+              role="alertdialog"
+              aria-label={t("events.speakers.deleteFromLibrary")}
+              className="mt-4 rounded-2xl border border-destructive p-4"
+            >
+              <p className="text-sm">
+                {t("events.speakers.deleteConfirm")
+                  .replace("{name}", confirmDelete.name)
+                  .replace("{count}", String(confirmDelete.usageCount ?? 0))}
+              </p>
+              <div className="mt-3 flex gap-2">
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => void removeFromLibrary(confirmDelete)}
+                  className="rounded-full bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground disabled:opacity-50"
+                >
+                  {t("events.speakers.deleteAction")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmDelete(null)}
+                  className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
+                >
+                  {t("events.speakers.cancel")}
+                </button>
+              </div>
+            </div>
+          ) : null}
+
+          {draft ? (
+            <div className="mt-4 rounded-2xl border border-border bg-background p-4">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="block">
+                  <span className="mb-1 block text-xs font-semibold text-muted-foreground">
+                    {t("events.speakers.fieldName")}
                   </span>
-                  <button
-                    type="button"
-                    disabled={busy || attached}
-                    onClick={() => void commit([...speakers, c])}
-                    className="rounded-full border border-border px-3 py-1 text-xs font-semibold hover:bg-secondary disabled:opacity-50"
-                  >
-                    {attached ? t("events.speakers.added") : t("events.speakers.add")}
-                  </button>
-                  <button
-                    type="button"
-                    disabled={busy}
-                    onClick={() => setConfirmDelete(c)}
-                    aria-label={t("events.speakers.deleteFromLibrary")}
-                    title={t("events.speakers.deleteFromLibrary")}
-                    className="rounded p-1 text-muted-foreground hover:text-destructive disabled:opacity-50"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
+                  <input
+                    className={inputClass}
+                    value={draft.name}
+                    onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-1 block text-xs font-semibold text-muted-foreground">
+                    {t("events.speakers.fieldUrl")}
+                  </span>
+                  <input
+                    className={inputClass}
+                    value={draft.url}
+                    placeholder="https://"
+                    onChange={(e) => setDraft({ ...draft, url: e.target.value })}
+                  />
+                </label>
+              </div>
+              <label className="mt-3 block">
+                <span className="mb-1 block text-xs font-semibold text-muted-foreground">
+                  {t("events.speakers.fieldBio")}
+                </span>
+                <textarea
+                  className={inputClass + " min-h-20"}
+                  maxLength={MAX_SPEAKER_BIO}
+                  value={draft.bio}
+                  onChange={(e) => setDraft({ ...draft, bio: e.target.value })}
+                />
+              </label>
+              <div className="mt-3 flex flex-wrap items-center gap-3">
+                <span className="text-xs font-semibold text-muted-foreground">
+                  {t("events.speakers.fieldImage")}
+                </span>
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept="image/*"
+                  aria-label={t("events.speakers.fieldImage")}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) void upload(file);
+                  }}
+                  className="text-xs"
+                />
+                {uploading ? (
+                  <span className="text-xs text-muted-foreground">
+                    {t("events.speakers.uploading")}
+                  </span>
+                ) : draft.imagePath ? (
+                  <span className="text-xs text-muted-foreground">
+                    {t("events.speakers.imageReady")}
+                  </span>
+                ) : null}
+              </div>
+              <div className="mt-4 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => void saveDraft()}
+                  disabled={busy || uploading || draft.name.trim().length < 2}
+                  className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+                >
+                  {t("events.speakers.save")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDraft(null)}
+                  className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
+                >
+                  {t("events.speakers.cancel")}
+                </button>
+              </div>
+            </div>
+          ) : null}
 
-      {confirmDelete ? (
-        <div
-          role="alertdialog"
-          aria-label={t("events.speakers.deleteFromLibrary")}
-          className="mt-4 rounded-2xl border border-destructive p-4"
-        >
-          <p className="text-sm">
-            {t("events.speakers.deleteConfirm")
-              .replace("{name}", confirmDelete.name)
-              .replace("{count}", String(confirmDelete.usageCount ?? 0))}
-          </p>
-          <div className="mt-3 flex gap-2">
-            <button
-              type="button"
-              disabled={busy}
-              onClick={() => void removeFromLibrary(confirmDelete)}
-              className="rounded-full bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground disabled:opacity-50"
-            >
-              {t("events.speakers.deleteAction")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setConfirmDelete(null)}
-              className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
-            >
-              {t("events.speakers.cancel")}
-            </button>
-          </div>
-        </div>
-      ) : null}
-
-      {draft ? (
-        <div className="mt-4 rounded-2xl border border-border bg-background p-4">
-          <div className="grid gap-3 sm:grid-cols-2">
-            <label className="block">
-              <span className="mb-1 block text-xs font-semibold text-muted-foreground">
-                {t("events.speakers.fieldName")}
-              </span>
-              <input
-                className={inputClass}
-                value={draft.name}
-                onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-              />
-            </label>
-            <label className="block">
-              <span className="mb-1 block text-xs font-semibold text-muted-foreground">
-                {t("events.speakers.fieldUrl")}
-              </span>
-              <input
-                className={inputClass}
-                value={draft.url}
-                placeholder="https://"
-                onChange={(e) => setDraft({ ...draft, url: e.target.value })}
-              />
-            </label>
-          </div>
-          <label className="mt-3 block">
-            <span className="mb-1 block text-xs font-semibold text-muted-foreground">
-              {t("events.speakers.fieldBio")}
-            </span>
-            <textarea
-              className={inputClass + " min-h-20"}
-              maxLength={MAX_SPEAKER_BIO}
-              value={draft.bio}
-              onChange={(e) => setDraft({ ...draft, bio: e.target.value })}
-            />
-          </label>
-          <div className="mt-3 flex flex-wrap items-center gap-3">
-            <span className="text-xs font-semibold text-muted-foreground">
-              {t("events.speakers.fieldImage")}
-            </span>
-            <input
-              ref={fileRef}
-              type="file"
-              accept="image/*"
-              aria-label={t("events.speakers.fieldImage")}
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) void upload(file);
-              }}
-              className="text-xs"
-            />
-            {uploading ? (
-              <span className="text-xs text-muted-foreground">
-                {t("events.speakers.uploading")}
-              </span>
-            ) : draft.imagePath ? (
-              <span className="text-xs text-muted-foreground">
-                {t("events.speakers.imageReady")}
-              </span>
-            ) : null}
-          </div>
-          <div className="mt-4 flex gap-2">
-            <button
-              type="button"
-              onClick={() => void saveDraft()}
-              disabled={busy || uploading || draft.name.trim().length < 2}
-              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
-            >
-              {t("events.speakers.save")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setDraft(null)}
-              className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
-            >
-              {t("events.speakers.cancel")}
-            </button>
-          </div>
-        </div>
-      ) : null}
-
-      <p className="mt-2 text-xs text-muted-foreground">{t("events.speakers.hint")}</p>
+          <p className="mt-2 text-xs text-muted-foreground">{t("events.speakers.hint")}</p>
+        </>
+      )}
       {error ? <p className="mt-2 text-xs text-destructive">{error}</p> : null}
     </div>
   );
