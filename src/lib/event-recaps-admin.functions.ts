@@ -12,7 +12,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertOrganizer } from "./authz";
+import { assertEventViewer, assertOrganizer } from "./authz";
 import { EVENT_MEDIA_BUCKET, EVENT_RECAP_PHOTO_TTL_SECONDS } from "./storage";
 
 const eventInput = z.object({ eventId: z.string().uuid() });
@@ -115,8 +115,47 @@ export const getManagedRecap = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => eventInput.parse(data))
   .handler(async ({ data, context }) => {
-    await assertOrganizer(context);
-    const recapId = await ensureRecap(context.supabase, data.eventId, context.userId);
+    await assertEventViewer(context);
+    // Read-only viewers must not create the recap row as a side effect of
+    // looking at it: they read an existing one or get an empty draft.
+    const canWrite = await assertOrganizer(context).then(
+      () => true,
+      () => false,
+    );
+    let recapId: string | null;
+    if (canWrite) {
+      recapId = await ensureRecap(context.supabase, data.eventId, context.userId);
+    } else {
+      const { data: existing } = await context.supabase
+        .from("event_recaps")
+        .select("id")
+        .eq("event_id", data.eventId)
+        .maybeSingle();
+      recapId = (existing?.id as string | undefined) ?? null;
+    }
+    if (!recapId) {
+      const { recapThanksAudience } = await import("./event-recap-email.server");
+      return {
+        recap: {
+          id: null,
+          event_id: data.eventId,
+          status: "draft",
+          language: "en",
+          headline: null,
+          body: null,
+          downloads_audience: "attendees",
+          published_at: null,
+          content_updated_at: null,
+          recap_email_last_sent_at: null,
+          linkedin_draft: null,
+        },
+        photos: [],
+        files: [],
+        translations: [],
+        linkedin: null,
+        thanks: await recapThanksAudience(data.eventId),
+      };
+    }
 
     const [{ data: recap }, { data: photos }, { data: files }, { data: translations }] =
       await Promise.all([
