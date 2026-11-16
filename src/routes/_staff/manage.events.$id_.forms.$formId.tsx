@@ -8,14 +8,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { Shell } from "@/components/cms/Shell";
-import { requireStaffAccess, EVENT_VIEW_ROLES } from "@/lib/staff-guard";
+import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
 import { useEventReadOnly } from "@/components/cms/EventReadOnly";
 import { displayAnswer, type PublicFormQuestion } from "@/lib/event-forms";
 import { exportFormResponses, getFormResults, sendFollowUpForm } from "@/lib/event-forms.functions";
 
 export const Route = createFileRoute("/_staff/manage/events/$id_/forms/$formId")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_VIEW_ROLES),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_ROLES),
   head: () => ({
     meta: [
       { title: "Form results — The Switzerland Chapter of ICF CMS" },

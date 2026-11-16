@@ -98,7 +98,13 @@ export const Route = createFileRoute("/_staff/manage/events/$id")({
   component: EventEditor,
 });
 
-const READ_ONLY_HIDDEN_PANELS = new Set(["panel-repeat", "panel-series", "panel-duplicate"]);
+const READ_ONLY_HIDDEN_PANELS = new Set([
+  "panel-repeat",
+  "panel-series",
+  "panel-duplicate",
+  // Forms are hidden from the read-only grant entirely.
+  "panel-forms",
+]);
 
 function EventEditor() {
   const { id } = Route.useParams();

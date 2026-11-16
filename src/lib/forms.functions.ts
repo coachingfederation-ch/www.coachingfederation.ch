@@ -10,7 +10,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertEventViewer, assertOrganizer } from "./authz";
+import { assertOrganizer } from "./authz";
 import { FORM_KINDS } from "./event-forms";
 
 /** One stored question: plain JSON values only. */
@@ -37,7 +37,7 @@ const templateInput = z.object({
 export const listFormTemplates = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<FormTemplateRow[]> => {
-    await assertEventViewer(context);
+    await assertOrganizer(context);
     const { data, error } = await context.supabase
       .from("form_templates")
       .select("id, kind, name, questions, updated_at")
@@ -65,7 +65,7 @@ export const getFormTemplate = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
-    await assertEventViewer(context);
+    await assertOrganizer(context);
     const { data: row, error } = await context.supabase
       .from("form_templates")
       .select("id, kind, name, intro, thank_you, questions")
