@@ -409,7 +409,7 @@ Admin-client readers (public calendar `.ics`, events feed, newsletter
 `organizer_readonly` is an assignable staff grant (Roles screen) for people who need to see event work without changing it.
 
 - Sees **all** events, registrations, waitlists, invitations, check-in, CCE, certificates and reporting, and may download CSV exports.
-- Forms are hidden entirely: no Forms menu item, no Custom forms panel on events, and the form library and form results routes (`EVENT_ROLES`) redirect. Form server functions use `assertOrganizer`, and the role has no RLS read access to `form_templates` or `event_form*` tables (migration `0030`).
+- Forms are hidden entirely: no Forms menu item, no Custom forms panel on events, and the form library and form results routes (`EVENT_ROLES`) redirect. Form server functions use `assertOrganizer`, and the role has no RLS read access to `form_templates` or `event_form*` tables (migration `0030`). The attendee CSV omits registration-form answer columns for this role.
 - Cannot create, edit, publish, cancel, check in or invite.
 - Enforced twice: SELECT-only RLS policies (`private.is_event_viewer`) on event tables, and server functions — view functions use `assertEventViewer`, every write keeps `assertOrganizer`, which rejects this role.
 - Routes that only display data use `EVENT_VIEW_ROLES`; create/edit-only routes (new event wizard) and all form routes keep `EVENT_ROLES`.

@@ -57,6 +57,9 @@ function cell(value: unknown): string {
 
 export async function buildRegistrationsCsv(
   eventId: string,
+  // Registration-form answers are form data; the read-only event grant does
+  // not see forms, so its export leaves those columns out.
+  { includeFormAnswers = true }: { includeFormAnswers?: boolean } = {},
 ): Promise<{ filename: string; csv: string; rows: number }> {
   const { data: event } = await supabaseAdmin
     .from("events")
@@ -64,7 +67,7 @@ export async function buildRegistrationsCsv(
     .eq("id", eventId)
     .maybeSingle();
 
-  const formId = await activeRegistrationFormId(eventId);
+  const formId = includeFormAnswers ? await activeRegistrationFormId(eventId) : null;
   const [{ data: rows }, { data: tiers }, questions] = await Promise.all([
     supabaseAdmin
       .from("event_registrations")

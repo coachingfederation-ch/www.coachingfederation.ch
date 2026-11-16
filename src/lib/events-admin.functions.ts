@@ -1449,7 +1449,14 @@ export const exportEventRegistrations = createServerFn({ method: "POST" })
 
     const { buildRegistrationsCsv } = await import("./registrations-export.server");
     const { loggedEventExport } = await import("./member-access-log.server");
-    return loggedEventExport(context.userId, () => buildRegistrationsCsv(data.eventId));
+    // Full organizers get the registration-form answers; read-only viewers do not.
+    const includeFormAnswers = await assertOrganizer(context).then(
+      () => true,
+      () => false,
+    );
+    return loggedEventExport(context.userId, () =>
+      buildRegistrationsCsv(data.eventId, { includeFormAnswers }),
+    );
   });
 
 /**
