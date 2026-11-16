@@ -1382,7 +1382,9 @@
     "revokeAccountAdminHint": "Turn off Super Admin before revoking this account.",
     "searchEmpty": "No claimed member matches this search.",
     "tableHint": "Only members holding a role beyond ordinary member are listed. Removing the last role returns them to ordinary member. To unlink an account from a member record, use the member detail page.",
-    "searchHint": "Showing every claimed member that matches. Open Manage to grant a role."
+    "searchHint": "Showing every claimed member that matches. Open Manage to grant a role.",
+    "organizerReadOnlyBadge": "Organizer (Read-Only)",
+    "organizerReadOnlyDesc": "View all events, attendees and forms without changing anything"
   },
   "events": {
     "title": "Events",
@@ -2268,7 +2270,8 @@
     },
     "publishing": "Publishing…",
     "unpublishing": "Unpublishing…",
-    "cancelling": "Cancelling…"
+    "cancelling": "Cancelling…",
+    "readOnlyNotice": "Read-only access: you can view and download, but not change this event."
   },
   "eventTranslations": {
     "title": "Translations",

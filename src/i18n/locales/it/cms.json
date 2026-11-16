@@ -1382,7 +1382,9 @@
     "revokeAccountAdminHint": "Disattiva Super Admin prima di revocare questo account.",
     "searchEmpty": "Nessun socio collegato corrisponde a questa ricerca.",
     "tableHint": "Sono elencati solo i soci con un ruolo oltre a quello ordinario. Rimuovendo l'ultimo ruolo tornano soci ordinari. Per scollegare un account usa la pagina di dettaglio del socio.",
-    "searchHint": "Vengono mostrati tutti i soci collegati corrispondenti. Apri «Gestisci» per assegnare un ruolo."
+    "searchHint": "Vengono mostrati tutti i soci collegati corrispondenti. Apri «Gestisci» per assegnare un ruolo.",
+    "organizerReadOnlyBadge": "Organizzatore (sola lettura)",
+    "organizerReadOnlyDesc": "Visualizzare tutti gli eventi, i partecipanti e i moduli senza modificare nulla"
   },
   "events": {
     "title": "Eventi",
@@ -2268,7 +2270,8 @@
     },
     "publishing": "Pubblicazione…",
     "unpublishing": "Ritiro in corso…",
-    "cancelling": "Annullamento…"
+    "cancelling": "Annullamento…",
+    "readOnlyNotice": "Accesso in sola lettura: puoi visualizzare e scaricare, ma non modificare."
   },
   "eventTranslations": {
     "title": "Traduzioni",

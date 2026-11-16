@@ -1382,7 +1382,9 @@
     "revokeAccountAdminHint": "Désactivez Super Admin avant de révoquer ce compte.",
     "searchEmpty": "Aucun membre lié ne correspond à cette recherche.",
     "tableHint": "Seuls les membres détenant un rôle au-delà du statut de membre ordinaire figurent ici. Le retrait du dernier rôle les ramène au statut ordinaire. Pour dissocier un compte, utilisez la fiche du membre.",
-    "searchHint": "Tous les membres liés correspondants sont affichés. Ouvrez « Gérer » pour attribuer un rôle."
+    "searchHint": "Tous les membres liés correspondants sont affichés. Ouvrez « Gérer » pour attribuer un rôle.",
+    "organizerReadOnlyBadge": "Organisateur (lecture seule)",
+    "organizerReadOnlyDesc": "Voir tous les événements, participants et formulaires sans rien modifier"
   },
   "events": {
     "title": "Événements",
@@ -2268,7 +2270,8 @@
     },
     "publishing": "Publication…",
     "unpublishing": "Dépublication…",
-    "cancelling": "Annulation…"
+    "cancelling": "Annulation…",
+    "readOnlyNotice": "Accès en lecture seule : vous pouvez consulter et télécharger, mais pas modifier."
   },
   "eventTranslations": {
     "title": "Traductions",

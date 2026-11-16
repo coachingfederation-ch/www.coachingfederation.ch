@@ -274,6 +274,7 @@ const ROLE_LABELS: Record<string, string> = {
   administrator: "Administrator",
   editor: "Editor",
   organizer: "Event organizer",
+  organizer_readonly: "Event organizer (read-only)",
   publisher: "Publisher",
   membership: "Membership & Engagement",
 };

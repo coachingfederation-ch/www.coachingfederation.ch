@@ -108,6 +108,8 @@ function RolesPage() {
             ? row.isEditor
             : role === "organizer"
               ? row.isOrganizer
+              : role === "organizer_readonly"
+                ? (row.isOrganizerReadOnly ?? false)
               : role === "publisher"
                 ? row.isPublisher
                 : row.isMembership;
@@ -265,6 +267,7 @@ function RolesPage() {
       isAdministrator: m.isAdministrator,
       isEditor: m.isEditor,
       isOrganizer: m.isOrganizer,
+      isOrganizerReadOnly: m.isOrganizerReadOnly,
       isPublisher: m.isPublisher,
       isMembership: m.isMembership,
     };
@@ -285,6 +288,7 @@ function RolesPage() {
       isAdministrator: has("administrator"),
       isEditor: has("editor"),
       isOrganizer: has("organizer"),
+      isOrganizerReadOnly: has("organizer_readonly"),
       isPublisher: has("publisher"),
       isMembership: has("membership"),
     };
@@ -549,7 +553,11 @@ function RolesPage() {
                           </div>
                         ) : null}
                         {a.roles.some(
-                          (r: string) => r === "editor" || r === "organizer" || r === "publisher",
+                          (r: string) =>
+                            r === "editor" ||
+                            r === "organizer" ||
+                            r === "organizer_readonly" ||
+                            r === "publisher",
                         ) ? (
                           <button
                             onClick={() =>
