@@ -15,6 +15,7 @@ import { Badge, Button } from "@/design-system/icf-welcome-design-system-a835df"
 import { Section } from "./EventEditorSections";
 import { MarkdownEditor } from "./MarkdownEditor";
 import { TranscriptDraftPanel } from "./TranscriptDraftPanel";
+import { useEventReadOnly } from "./EventReadOnly";
 import { supabase } from "@/integrations/supabase/client";
 import { EVENT_MEDIA_BUCKET } from "@/lib/storage";
 import { RECAP_AUDIENCES, formatFileSize, recapAssetPath } from "@/lib/event-recaps";
@@ -90,6 +91,8 @@ export function EventRecapEditor({
   // The recap is post-event editorial work, so the panel stays collapsed
   // (title-only) until the event date has passed. Staff can expand it early.
   const eventPassed = new Date(eventStartsAt).getTime() < Date.now();
+  // Read-only viewers see the recap but get no drafting or upload controls.
+  const readOnly = useEventReadOnly();
   const [expanded, setExpanded] = useState(eventPassed);
 
   const [loading, setLoading] = useState(true);
@@ -309,16 +312,18 @@ export function EventRecapEditor({
       {/* Status and the publish/withdraw action live with "Save recap" in the
           action bar below the fields, so the panel reads top-down: edit, then act. */}
 
-      <TranscriptDraftPanel
-        eventId={eventId}
-        language={language}
-        hasContent={Boolean(headline.trim() || body.trim())}
-        onApply={(h, s) => {
-          setHeadline(h);
-          setBody(s);
-        }}
-        t={t}
-      />
+      {readOnly ? null : (
+        <TranscriptDraftPanel
+          eventId={eventId}
+          language={language}
+          hasContent={Boolean(headline.trim() || body.trim())}
+          onApply={(h, s) => {
+            setHeadline(h);
+            setBody(s);
+          }}
+          t={t}
+        />
+      )}
 
       <label className="mt-5 block text-sm font-medium">
         {t("recap.fieldHeadline")}
@@ -410,21 +415,23 @@ export function EventRecapEditor({
           {t("recap.gallery")}
         </h3>
         <p className="mt-1 text-xs text-muted-foreground">{t("recap.galleryHint")}</p>
-        <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium">
-          {busy === "photos" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-          {busy === "photos" ? t("recap.uploading") : t("recap.addPhotos")}
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            className="hidden"
-            disabled={busy !== null}
-            onChange={(e) => {
-              if (e.target.files?.length) void addPhotos(e.target.files);
-              e.target.value = "";
-            }}
-          />
-        </label>
+        {readOnly ? null : (
+          <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium">
+            {busy === "photos" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+            {busy === "photos" ? t("recap.uploading") : t("recap.addPhotos")}
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              disabled={busy !== null}
+              onChange={(e) => {
+                if (e.target.files?.length) void addPhotos(e.target.files);
+                e.target.value = "";
+              }}
+            />
+          </label>
+        )}
 
         <ul className="mt-4 space-y-3">
           {photos.map((photo, index) => (
@@ -512,20 +519,22 @@ export function EventRecapEditor({
           {t("recap.files")}
         </h3>
         <p className="mt-1 text-xs text-muted-foreground">{t("recap.filesHint")}</p>
-        <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium">
-          {busy === "files" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-          {busy === "files" ? t("recap.uploading") : t("recap.addFiles")}
-          <input
-            type="file"
-            multiple
-            className="hidden"
-            disabled={busy !== null}
-            onChange={(e) => {
-              if (e.target.files?.length) void addFiles(e.target.files);
-              e.target.value = "";
-            }}
-          />
-        </label>
+        {readOnly ? null : (
+          <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium">
+            {busy === "files" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+            {busy === "files" ? t("recap.uploading") : t("recap.addFiles")}
+            <input
+              type="file"
+              multiple
+              className="hidden"
+              disabled={busy !== null}
+              onChange={(e) => {
+                if (e.target.files?.length) void addFiles(e.target.files);
+                e.target.value = "";
+              }}
+            />
+          </label>
+        )}
         <ul className="mt-4 space-y-2">
           {files.map((file, index) => (
             <li key={file.id ?? file.path} className="flex items-center gap-3">
@@ -710,10 +719,7 @@ export function EventRecapEditor({
                     eventId,
                     personalNote: personalNote.trim() || null,
                     locale: (["de", "fr", "it", "en"].includes(language) ? language : "en") as
-                      | "de"
-                      | "fr"
-                      | "it"
-                      | "en",
+                      "de" | "fr" | "it" | "en",
                   },
                 });
                 setMessage(t("recap.thanksPreviewSent").replace("{email}", result.to));
