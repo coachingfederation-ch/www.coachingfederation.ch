@@ -727,7 +727,8 @@
     "accessLogAction": {
       "members_list": "Elenco membri",
       "members_export": "Export CSV",
-      "member_detail": "Dettagli membro"
+      "member_detail": "Dettagli membro",
+      "event_export": "Download CSV evento"
     }
   },
   "member": {

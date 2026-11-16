@@ -449,7 +449,8 @@ export const exportFormResponses = createServerFn({ method: "POST" })
       .maybeSingle();
     if (error || !form) throw new Error("This form is not available.");
     const { buildFormResponsesCsv } = await import("./event-forms.server");
-    return buildFormResponsesCsv(data.formId);
+    const { loggedEventExport } = await import("./member-access-log.server");
+    return loggedEventExport(context.userId, () => buildFormResponsesCsv(data.formId));
   });
 
 /** Public: resolve an emailed follow-up link. Unknown tokens return null. */

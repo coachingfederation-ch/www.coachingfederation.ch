@@ -10,7 +10,12 @@
  */
 import { checkRateLimit, clientIp, type RateLimitRule } from "./rate-limit.server";
 
-export type MemberAccessAction = "members_list" | "members_export" | "member_detail";
+export type MemberAccessAction =
+  | "members_list"
+  | "members_export"
+  | "member_detail"
+  /** Event attendee list, event report or form answers downloaded as CSV. */
+  | "event_export";
 
 const HOUR = 3600;
 const QUARTER = 900;
@@ -23,12 +28,17 @@ export const STAFF_MEMBER_LIMITS: Record<MemberAccessAction, RateLimitRule[]> = 
   ],
   members_list: [{ windowSeconds: QUARTER, max: 60 }],
   member_detail: [{ windowSeconds: QUARTER, max: 120 }],
+  event_export: [
+    { windowSeconds: HOUR, max: 20 },
+    { windowSeconds: 24 * HOUR, max: 60 },
+  ],
 };
 
 const BUCKETS: Record<MemberAccessAction, string> = {
   members_export: "staff_members_export",
   members_list: "staff_members_list",
   member_detail: "staff_member_detail",
+  event_export: "staff_event_export",
 };
 
 async function requestMeta(): Promise<{ ip: string | null; userAgent: string | null }> {
@@ -83,4 +93,20 @@ export async function guardMemberAccess(
   if (verdict.allowed) return;
   await logMemberAccess({ actorUserId, action: `${action}_blocked`, subjectMemberId });
   throw new Error("RATE_LIMITED: Too many requests. Please try again later.");
+}
+
+/**
+ * Wraps an event CSV download (attendees, report, form answers): throttles,
+ * builds the file, then records who downloaded how many rows.
+ */
+export async function loggedEventExport<T>(actorUserId: string, build: () => Promise<T>): Promise<T> {
+  await guardMemberAccess(actorUserId, "event_export");
+  const file = await build();
+  const rows = (file as { rows?: unknown } | null)?.rows;
+  await logMemberAccess({
+    actorUserId,
+    action: "event_export",
+    rowCount: typeof rows === "number" ? rows : null,
+  });
+  return file;
 }

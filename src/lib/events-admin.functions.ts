@@ -1439,7 +1439,7 @@ export const exportEventRegistrations = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
     const { data: event, error } = await context.supabase
       .from("events")
       .select("id")
@@ -1448,7 +1448,8 @@ export const exportEventRegistrations = createServerFn({ method: "POST" })
     if (error || !event) throw new Error("Event not found");
 
     const { buildRegistrationsCsv } = await import("./registrations-export.server");
-    return buildRegistrationsCsv(data.eventId);
+    const { loggedEventExport } = await import("./member-access-log.server");
+    return loggedEventExport(context.userId, () => buildRegistrationsCsv(data.eventId));
   });
 
 /**

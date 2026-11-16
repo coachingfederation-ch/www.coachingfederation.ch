@@ -66,7 +66,10 @@ export const exportEventReportCsv = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     await assertEventAccess(context, data.eventId);
     const { buildEventReportCsv } = await import("./event-reporting.server");
-    const file = await buildEventReportCsv(data.eventId, data.filters);
-    if (!file) throw new Error("Event not found");
-    return file;
+    const { loggedEventExport } = await import("./member-access-log.server");
+    return loggedEventExport(context.userId, async () => {
+      const file = await buildEventReportCsv(data.eventId, data.filters);
+      if (!file) throw new Error("Event not found");
+      return file;
+    });
   });
