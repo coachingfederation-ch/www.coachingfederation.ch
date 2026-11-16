@@ -7823,6 +7823,7 @@ export type Database = {
         | "administrator"
         | "membership"
         | "advertiser"
+        | "organizer_readonly"
       article_lang: "en" | "fr" | "de" | "it"
       article_status:
         | "draft"
@@ -8048,6 +8049,7 @@ export const Constants = {
         "administrator",
         "membership",
         "advertiser",
+        "organizer_readonly",
       ],
       article_lang: ["en", "fr", "de", "it"],
       article_status: [

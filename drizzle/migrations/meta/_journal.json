@@ -183,6 +183,13 @@
       "when": 1794585144842,
       "tag": "0025_invite_only_guest_list_visibility",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1794848462012,
+      "tag": "0026_add_organizer_readonly_role",
+      "breakpoints": true
     }
   ]
 }
