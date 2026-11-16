@@ -98,6 +98,8 @@ export const Route = createFileRoute("/_staff/manage/events/$id")({
   component: EventEditor,
 });
 
+const READ_ONLY_HIDDEN_PANELS = new Set(["panel-repeat", "panel-series", "panel-duplicate"]);
+
 function EventEditor() {
   const { id } = Route.useParams();
   const { t } = useCms();
@@ -410,6 +412,9 @@ function EventEditor() {
   const sections: EditorSection[] = [];
   const panels: React.ReactNode[] = [];
   const addPanel = (id: string, label: string, node: React.ReactNode) => {
+    // Panels that only exist to create something have nothing to show a
+    // read-only viewer.
+    if (readOnly && READ_ONLY_HIDDEN_PANELS.has(id)) return;
     sections.push({ id, label });
     panels.push(
       <div key={id} id={id} className="scroll-mt-56">
