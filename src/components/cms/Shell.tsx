@@ -373,8 +373,7 @@ export function Shell({
             </Sheet>
           </div>
         ) : null}
-        {roles.isEventReadOnly &&
-        (pathname.startsWith("/manage/events") || pathname.startsWith("/manage/forms")) ? (
+        {roles.isEventReadOnly && pathname.startsWith("/manage/events") ? (
           <div className="mx-auto max-w-6xl px-10 pt-6">
             <Alert>
               <AlertDescription>{t("events.readOnlyNotice")}</AlertDescription>
