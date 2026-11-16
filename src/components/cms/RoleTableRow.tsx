@@ -53,6 +53,12 @@ export function RoleTableRow({
               {t("roles.organizerBadge")}
             </span>
           ) : null}
+          {m.isOrganizerReadOnly ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+              <CalendarDays className="h-3.5 w-3.5" />
+              {t("roles.organizerReadOnlyBadge")}
+            </span>
+          ) : null}
           {m.isPublisher ? (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/25 px-2.5 py-1 text-xs font-semibold text-foreground">
               <Megaphone className="h-3.5 w-3.5" />
