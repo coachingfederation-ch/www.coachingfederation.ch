@@ -211,6 +211,13 @@
       "when": 1794849731012,
       "tag": "0029_member_access_log_event_export",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1794850765784,
+      "tag": "0030_hide_forms_from_organizer_readonly",
+      "breakpoints": true
     }
   ]
 }
