@@ -7,12 +7,13 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
+import { requireStaffAccess, EVENT_VIEW_ROLES } from "@/lib/staff-guard";
 import { useEffect, useMemo, useState } from "react";
 import { CalendarDays, Plus, X } from "lucide-react";
 import { Checkbox } from "@/design-system/icf-welcome-design-system-a835df";
 import { Shell } from "@/components/cms/Shell";
 import { useCms } from "@/i18n/cms";
+import { useMyRoles } from "@/lib/roles";
 import { listManagedEvents } from "@/lib/events-admin.functions";
 import { displayEventStatus, isLiveEvent } from "@/lib/events";
 import { useNowMinute } from "@/hooks/use-now-minute";
@@ -38,7 +39,7 @@ const STATUS_SHOW_ALL = "all";
 const ONLINE_CITY = "__online__";
 
 export const Route = createFileRoute("/_staff/manage/events/")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_ROLES),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_VIEW_ROLES),
   validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
@@ -89,6 +90,7 @@ function ManageEventsPage() {
   const { t } = useCms();
   const now = useNowMinute();
   const navigate = useNavigate();
+  const canCreate = !useMyRoles().roles.isEventReadOnly;
   const search = Route.useSearch();
   const [rows, setRows] = useState<Row[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -225,6 +227,7 @@ function ManageEventsPage() {
             <h1 className="text-3xl font-bold tracking-tight">{t("events.title")}</h1>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("events.intro")}</p>
           </div>
+          {canCreate ? (
           <button
             onClick={() => void navigate({ to: "/manage/events/new" })}
             className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] disabled:opacity-50"
@@ -232,6 +235,7 @@ function ManageEventsPage() {
             <Plus className="h-4 w-4" />
             {t("events.new")}
           </button>
+          ) : null}
         </header>
 
         {error ? (

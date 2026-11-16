@@ -11,7 +11,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Copy, ExternalLink, Printer } from "lucide-react";
 import { Shell } from "@/components/cms/Shell";
-import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
+import { requireStaffAccess, EVENT_VIEW_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
 import { useMyRoles } from "@/lib/roles";
 import { getEventCce, recordEventCceOutcome, setEventCceStatus } from "@/lib/event-cce.functions";
@@ -26,7 +26,7 @@ import { JOTFORM_MANUAL_FIELDS, jotformUrl } from "@/lib/event-cce-jotform";
 import type { CceApplication, CceScheduleRow, CceStatus } from "@/lib/event-cce";
 
 export const Route = createFileRoute("/_staff/manage/events/$id_/cce")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_ROLES),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_VIEW_ROLES),
   head: () => ({
     meta: [
       { title: "CCE application — The Switzerland Chapter of ICF CMS" },

@@ -42,6 +42,7 @@ export type RoleSubject = {
   isAdministrator: boolean;
   isEditor: boolean;
   isOrganizer: boolean;
+  isOrganizerReadOnly?: boolean;
   isPublisher: boolean;
   isMembership: boolean;
 };
@@ -67,6 +68,12 @@ const RIGHTS: { role: ManagedRole; labelKey: string; descKey: string; icon: type
       icon: CalendarDays,
     },
     {
+      role: "organizer_readonly",
+      labelKey: "roles.organizerReadOnlyBadge",
+      descKey: "roles.organizerReadOnlyDesc",
+      icon: CalendarDays,
+    },
+    {
       role: "publisher",
       labelKey: "roles.publisherBadge",
       descKey: "roles.publisherDesc",
@@ -84,6 +91,7 @@ function holds(member: RoleSubject, role: ManagedRole): boolean {
   if (role === "administrator") return member.isAdministrator;
   if (role === "editor") return member.isEditor;
   if (role === "organizer") return member.isOrganizer;
+  if (role === "organizer_readonly") return member.isOrganizerReadOnly ?? false;
   if (role === "publisher") return member.isPublisher;
   return member.isMembership;
 }

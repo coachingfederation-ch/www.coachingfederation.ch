@@ -9,7 +9,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertOrganizer } from "./authz";
+import { assertEventViewer, assertOrganizer } from "./authz";
 import type { CheckInOutcome } from "./check-in";
 
 const BOARD_COLUMNS =
@@ -35,7 +35,7 @@ export const loadCheckInBoard = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
 
     const { data: event, error: eventError } = await context.supabase
       .from("events")
@@ -246,7 +246,7 @@ export const loadAttendanceSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }): Promise<AttendanceSession | null> => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: result, error } = await supabaseAdmin.rpc("get_event_attendance_session", {
       _event_id: data.eventId,

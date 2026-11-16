@@ -403,3 +403,14 @@ Admin-client readers (public calendar `.ics`, events feed, newsletter
 - Invite-only pages render generic, `noindex` metadata.
 - Access contract: `src/lib/invite-only-access.test.ts` (opt-in, needs
   `SUPABASE_DB_URL`).
+
+## Organizer (Read-Only) role
+
+`organizer_readonly` is an assignable staff grant (Roles screen) for people who need to see event work without changing it.
+
+- Sees **all** events, registrations, waitlists, invitations, forms and answers, check-in, CCE, certificates and reporting, and may download CSV exports.
+- Cannot create, edit, publish, cancel, check in, invite or change forms.
+- Enforced twice: SELECT-only RLS policies (`private.is_event_viewer`) on event/form tables, and server functions — view functions use `assertEventViewer`, every write keeps `assertOrganizer`, which rejects this role.
+- Routes that only display data use `EVENT_VIEW_ROLES`; create/edit-only routes (new event wizard, form editor) keep `EVENT_ROLES`. The CMS shows a read-only notice and hides "New event".
+- Roles are additive: holding `organizer` as well restores full organizer rights.
+- Known gap: CSV downloads by this role are not yet written to the member access log.

@@ -7,7 +7,7 @@
  */
 import { isInvitedMode } from "@/lib/events";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
+import { requireStaffAccess, EVENT_VIEW_ROLES } from "@/lib/staff-guard";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Shell } from "@/components/cms/Shell";
@@ -74,7 +74,7 @@ import {
 } from "@/lib/events-admin.functions";
 
 export const Route = createFileRoute("/_staff/manage/events/$id")({
-  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_ROLES),
+  beforeLoad: ({ context }) => requireStaffAccess(context.queryClient, EVENT_VIEW_ROLES),
   head: () => ({
     meta: [
       { title: "Edit event — The Switzerland Chapter of ICF CMS" },

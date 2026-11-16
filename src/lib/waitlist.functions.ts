@@ -8,7 +8,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertOrganizer } from "./authz";
+import { assertEventViewer, assertOrganizer } from "./authz";
 
 const localeSchema = z.enum(["en", "de", "fr", "it"]);
 
@@ -73,7 +73,7 @@ export const listEventWaitlist = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ eventId: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
     const { expireLapsedInvites } = await import("./waitlist.server");
     await expireLapsedInvites(data.eventId);
     const { data: rows, error } = await context.supabase

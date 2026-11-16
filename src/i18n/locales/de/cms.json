@@ -1382,7 +1382,9 @@
     "revokeAccountAdminHint": "Deaktivieren Sie Super Admin, bevor Sie dieses Konto löschen.",
     "searchEmpty": "Kein aktiviertes Mitglied entspricht der Suche.",
     "tableHint": "Listet Mitglieder mit erweiterten Rechten auf. Das Entfernen der letzten Rolle setzt den Status auf normales Mitglied zurück.",
-    "searchHint": "Zeigt alle treffenden aktivierten Mitglieder. Öffnen Sie Verwalten zur Rollenvergabe."
+    "searchHint": "Zeigt alle treffenden aktivierten Mitglieder. Öffnen Sie Verwalten zur Rollenvergabe.",
+    "organizerReadOnlyBadge": "Organizer (nur Lesen)",
+    "organizerReadOnlyDesc": "Alle Events, Teilnehmende und Formulare ansehen, ohne etwas zu ändern"
   },
   "events": {
     "title": "Events",
@@ -2268,7 +2270,8 @@
     },
     "publishing": "Wird veröffentlicht…",
     "unpublishing": "Wird zurückgezogen…",
-    "cancelling": "Wird abgesagt…"
+    "cancelling": "Wird abgesagt…",
+    "readOnlyNotice": "Nur-Lese-Zugriff: Du kannst ansehen und herunterladen, aber nichts ändern."
   },
   "eventTranslations": {
     "title": "Übersetzungen",

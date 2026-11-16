@@ -1,0 +1,2 @@
+DROP POLICY IF EXISTS "organizer read-only views all" ON public.event_registrations;
+CREATE POLICY "organizer read-only views all" ON public.event_registrations FOR SELECT TO authenticated USING (private.is_event_viewer(auth.uid()));

@@ -10,7 +10,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertEditor, assertOrganizer } from "./authz";
+import { assertEditor, assertEventViewer, assertOrganizer } from "./authz";
 import type { Database } from "@/integrations/supabase/types";
 
 type ScheduleRowRecord = Database["public"]["Tables"]["event_cce_schedule_rows"]["Row"];
@@ -59,7 +59,7 @@ export const getEventCce = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => z.object({ eventId: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
-    await assertOrganizer(context);
+    await assertEventViewer(context);
 
     const { data: event, error: eventError } = await context.supabase
       .from("events")

@@ -42,6 +42,7 @@ import {
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { Menu } from "lucide-react";
 import { useMyRoles } from "@/lib/roles";
+import { Alert, AlertDescription } from "@/design-system/icf-welcome-design-system-a835df";
 import type { AppRole } from "@/lib/role-model";
 
 /**
@@ -66,9 +67,9 @@ const nav = [
     allowedRoles: ["editor", "publisher"],
   },
   // Organizers see only this item; the shell itself is open to all staff roles.
-  { to: "/manage/events", key: "nav.events", icon: CalendarDays, allowedRoles: ["organizer"] },
+  { to: "/manage/events", key: "nav.events", icon: CalendarDays, allowedRoles: ["organizer", "organizer_readonly"] },
   // Reusable event forms; same audience as Events.
-  { to: "/manage/forms", key: "nav.forms", icon: ClipboardList, allowedRoles: ["organizer"] },
+  { to: "/manage/forms", key: "nav.forms", icon: ClipboardList, allowedRoles: ["organizer", "organizer_readonly"] },
   // Membership & Engagement decides guest passes chapter-wide.
   {
     to: "/manage/guest-passes",
@@ -365,6 +366,14 @@ export function Shell({
                 </nav>
               </SheetContent>
             </Sheet>
+          </div>
+        ) : null}
+        {roles.isEventReadOnly &&
+        (pathname.startsWith("/manage/events") || pathname.startsWith("/manage/forms")) ? (
+          <div className="mx-auto max-w-6xl px-10 pt-6">
+            <Alert>
+              <AlertDescription>{t("events.readOnlyNotice")}</AlertDescription>
+            </Alert>
           </div>
         ) : null}
         {children}
