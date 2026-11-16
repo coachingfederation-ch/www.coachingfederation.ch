@@ -34,7 +34,14 @@ function setup() {
       tracker.tick();
     }
   };
-  return { tracker, advance, phases, onExpire, setStored: (v: number) => (stored = v), now: () => clock };
+  return {
+    tracker,
+    advance,
+    phases,
+    onExpire,
+    setStored: (v: number) => (stored = v),
+    now: () => clock,
+  };
 }
 
 describe("staff idle tracker", () => {
