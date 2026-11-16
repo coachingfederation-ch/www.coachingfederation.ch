@@ -197,6 +197,13 @@
       "when": 1794848498717,
       "tag": "0027_organizer_readonly_access",
       "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1794848566116,
+      "tag": "0028_organizer_readonly_registrations",
+      "breakpoints": true
     }
   ]
 }
