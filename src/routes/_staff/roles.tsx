@@ -238,6 +238,7 @@ function RolesPage() {
     m.isAdministrator ||
     m.isEditor ||
     m.isOrganizer ||
+    m.isOrganizerReadOnly ||
     m.isPublisher ||
     m.isMembership;
 

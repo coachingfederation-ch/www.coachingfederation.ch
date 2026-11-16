@@ -94,7 +94,8 @@ export function MemberShell({ children }: { children: ReactNode }) {
   // Exact grants, not the inherited `isEditor` / `isOrganizer` flags: the CMS
   // route guards use exact checks too, so the link must agree with them.
   const organizerOnly =
-    hasExactRole(roles.roles, "organizer") &&
+    (hasExactRole(roles.roles, "organizer") ||
+      hasExactRole(roles.roles, "organizer_readonly")) &&
     !hasExactRole(roles.roles, "editor") &&
     !roles.isAdmin;
   const staffLink = organizerOnly

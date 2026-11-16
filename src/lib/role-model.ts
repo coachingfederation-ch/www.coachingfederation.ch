@@ -161,7 +161,7 @@ export function landingPath(
   // guard would bounce them straight back out.
   if (
     roles.isStaff &&
-    hasExactRole(roles.roles, "organizer") &&
+    (hasExactRole(roles.roles, "organizer") || hasExactRole(roles.roles, "organizer_readonly")) &&
     !hasExactRole(roles.roles, "editor") &&
     !hasExactRole(roles.roles, "publisher") &&
     !roles.isAdmin

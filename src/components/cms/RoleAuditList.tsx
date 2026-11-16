@@ -18,6 +18,7 @@ const ROLE_OPTIONS: { value: GrantableRole; labelKey: string }[] = [
   { value: "administrator", labelKey: "roles.administratorBadge" },
   { value: "editor", labelKey: "roles.editorBadge" },
   { value: "organizer", labelKey: "roles.organizerBadge" },
+  { value: "organizer_readonly", labelKey: "roles.organizerReadOnlyBadge" },
   { value: "publisher", labelKey: "roles.publisherBadge" },
 ];
 
