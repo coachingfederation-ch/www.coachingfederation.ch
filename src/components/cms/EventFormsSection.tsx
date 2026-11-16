@@ -36,7 +36,6 @@ import {
   SelectValue,
 } from "@/design-system/icf-welcome-design-system-a835df";
 import { Section } from "./EventEditorSections";
-import { useEventReadOnly } from "./EventReadOnly";
 import { KindChoice } from "@/components/forms/KindChoice";
 import { addEventForm } from "@/components/forms/form-actions";
 import { deleteEventForm, listEventForms } from "@/lib/event-forms.functions";
@@ -58,7 +57,6 @@ const BLANK = "__blank__";
 
 export function EventFormsSection({ eventId, t }: { eventId: string; t: (k: string) => string }) {
   const navigate = useNavigate();
-  const readOnly = useEventReadOnly();
   const [forms, setForms] = useState<FormRow[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
@@ -143,7 +141,6 @@ export function EventFormsSection({ eventId, t }: { eventId: string; t: (k: stri
                   : ""}
               </span>
               <div className="ml-auto flex items-center gap-2">
-                {readOnly ? null : (
                 <Button size="sm" asChild>
                   <Link
                     to="/manage/events/$id/forms/$formId/edit"
@@ -152,7 +149,6 @@ export function EventFormsSection({ eventId, t }: { eventId: string; t: (k: stri
                     {t("events.forms.edit")}
                   </Link>
                 </Button>
-                )}
                 <Button variant="outline" size="sm" asChild>
                   <Link
                     to="/manage/events/$id/forms/$formId"

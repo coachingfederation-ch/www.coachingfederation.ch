@@ -15,9 +15,6 @@ import {
 } from "@/components/forms/form-actions";
 import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
-import { useEventReadOnly } from "@/components/cms/EventReadOnly";
-import { FormQuestionFields } from "@/components/forms/FormQuestionFields";
-import { toPreviewQuestions } from "@/lib/forms/builder-state";
 import { saveFormTemplate } from "@/lib/forms.functions";
 import type { BuilderForm } from "@/lib/forms/builder-state";
 
@@ -40,8 +37,6 @@ export const Route = createFileRoute("/_staff/manage/forms/$id")({
 function LibraryFormPage() {
   const { id } = Route.useParams();
   const { t } = useCms();
-  // Read-only viewers get the attendee view of the form, not the builder.
-  const readOnly = useEventReadOnly();
   const [loaded, setLoaded] = useState<{
     kind: "registration" | "follow_up";
     form: BuilderForm;
@@ -73,28 +68,8 @@ function LibraryFormPage() {
                   ? t("events.forms.kindRegistration")
                   : t("events.forms.kindFollowUp")}
               </Badge>
-              {readOnly ? null : (
-                <span className="text-xs text-muted-foreground">{t("forms.libraryEditHint")}</span>
-              )}
+              <span className="text-xs text-muted-foreground">{t("forms.libraryEditHint")}</span>
             </div>
-            {readOnly ? (
-              <section
-                aria-label={t("forms.previewLabel")}
-                className="max-w-2xl rounded-2xl border border-border bg-card p-6"
-              >
-                {loaded.form.intro ? (
-                  <p className="mb-4 text-sm text-muted-foreground">{loaded.form.intro}</p>
-                ) : null}
-                <FormQuestionFields
-                  questions={toPreviewQuestions(loaded.form.questions)}
-                  answers={{}}
-                  onChange={() => undefined}
-                  idPrefix="view"
-                  inputClass="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
-                  disabled
-                />
-              </section>
-            ) : (
             <FormBuilder
               kind={loaded.kind}
               initial={loaded.form}

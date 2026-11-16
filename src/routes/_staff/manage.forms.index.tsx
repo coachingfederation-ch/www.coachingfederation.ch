@@ -37,7 +37,6 @@ import { KindChoice } from "@/components/forms/KindChoice";
 import { loadTemplateAsForm, saveFormAsTemplate } from "@/components/forms/form-actions";
 import { requireStaffAccess, EVENT_ROLES } from "@/lib/staff-guard";
 import { useCms } from "@/i18n/cms";
-import { useEventReadOnly } from "@/components/cms/EventReadOnly";
 import {
   createFormTemplate,
   deleteFormTemplate,
@@ -70,8 +69,6 @@ type Kind = "registration" | "follow_up";
 
 function FormLibraryPage() {
   const { t } = useCms();
-  // Read-only viewers browse the library only; surveys are outside this role.
-  const readOnly = useEventReadOnly();
   const navigate = useNavigate();
   const { tab } = Route.useSearch();
   const [rows, setRows] = useState<FormTemplateRow[] | null>(null);
@@ -125,7 +122,7 @@ function FormLibraryPage() {
 
         <Tabs
           className="mt-8"
-          value={readOnly ? "library" : (tab ?? "library")}
+          value={tab ?? "library"}
           onValueChange={(v) =>
             void navigate({
               to: "/manage/forms",
@@ -135,24 +132,18 @@ function FormLibraryPage() {
         >
           <TabsList>
             <TabsTrigger value="library">{t("forms.surveys.tabLibrary")}</TabsTrigger>
-            {readOnly ? null : (
-              <TabsTrigger value="surveys">{t("forms.surveys.tabSurveys")}</TabsTrigger>
-            )}
+            <TabsTrigger value="surveys">{t("forms.surveys.tabSurveys")}</TabsTrigger>
           </TabsList>
-          {readOnly ? null : (
-            <TabsContent value="surveys" className="mt-6">
-              <SurveyList t={t} />
-            </TabsContent>
-          )}
+          <TabsContent value="surveys" className="mt-6">
+            <SurveyList t={t} />
+          </TabsContent>
           <TabsContent value="library" className="mt-6">
-            {readOnly ? null : (
             <div className="flex justify-end">
               <Button size="pill" onClick={() => setCreating(true)}>
                 <Plus />
                 {t("forms.newForm")}
               </Button>
             </div>
-            )}
 
             {error ? <p className="mt-6 text-sm text-destructive">{error}</p> : null}
 
@@ -183,7 +174,6 @@ function FormLibraryPage() {
                         {row.question_count} {t("events.forms.questionsLabel")} ·{" "}
                         {t("forms.usedBy")} {row.event_count}
                       </span>
-                      {readOnly ? null : (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
@@ -206,7 +196,6 @@ function FormLibraryPage() {
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-                      )}
                     </li>
                   ))}
                 </ul>
