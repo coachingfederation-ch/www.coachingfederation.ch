@@ -717,15 +717,15 @@ function EventEditor() {
       </div>
 
       {readOnly ? null : (
-      <EventSaveBar
-        dirty={dirty}
-        saving={saving}
-        onSave={() => void save()}
-        onDiscard={() => {
-          if (baseline) setEvent(JSON.parse(baseline) as Managed);
-        }}
-        t={t}
-      />
+        <EventSaveBar
+          dirty={dirty}
+          saving={saving}
+          onSave={() => void save()}
+          onDiscard={() => {
+            if (baseline) setEvent(JSON.parse(baseline) as Managed);
+          }}
+          t={t}
+        />
       )}
 
       <UnsplashPicker

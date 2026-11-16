@@ -91,7 +91,6 @@ function LibraryFormPage() {
               copyFrom={copyQuestionsFrom}
               t={t}
             />
-            )}
           </>
         ) : null}
       </div>
