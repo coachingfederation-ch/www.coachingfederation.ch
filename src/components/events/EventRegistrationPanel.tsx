@@ -25,6 +25,7 @@ import {
 } from "@/lib/events.functions";
 import {
   getEventTicketing,
+  getMyEventTicketing,
   getMyMembershipState,
   getMyRegistrationIdentity,
   confirmCheckoutSession,
@@ -84,7 +85,7 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const past = isPastEvent(event);
 
   const session = useQuery({
-    queryKey: ["auth-user-id"],
+    queryKey: ["auth-user-id", "access-token"],
     queryFn: async () => (await supabase.auth.getSession()).data.session?.access_token ?? null,
     staleTime: 5 * 60_000,
   });
@@ -97,9 +98,28 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     retry: false,
   });
 
+  // A waitlist or guest-list invitation arrives as ?invite=<token>.
+  const [inviteToken, setInviteToken] = useState<string | null>(null);
+  const [inviteRead, setInviteRead] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const token = new URLSearchParams(window.location.search).get("invite");
+    if (token) setInviteToken(token);
+    setInviteRead(true);
+  }, []);
+
+  // Invite-only events are hidden from the anonymous reader, so their tiers
+  // and questions load through the visitor's own session or their personal
+  // invitation token. Every other event keeps the plain public read.
+  const invitedOnly = isInvitedMode(event.registration_mode);
   const ticketing = useQuery({
-    queryKey: ["event-ticketing", eventId, locale],
-    queryFn: () => getEventTicketing({ data: { eventId, locale } }),
+    queryKey: ["event-ticketing", eventId, locale, invitedOnly ? [signedIn, inviteToken] : null],
+    queryFn: () => {
+      if (!invitedOnly) return getEventTicketing({ data: { eventId, locale } });
+      const data = { eventId, locale, invite: inviteToken };
+      return signedIn ? getMyEventTicketing({ data }) : getEventTicketing({ data });
+    },
+    enabled: !invitedOnly || (inviteRead && session.isFetched),
     staleTime: 30_000,
   });
 
@@ -167,14 +187,8 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
   const [state, setState] = useState<FormState>({ kind: "idle" });
   const [returned, setReturned] = useState<ReturnState>(null);
 
-  // A waitlist invitation arrives as ?invite=<token>. The server decides
-  // whether it is still live; this only prefills and unlocks the form.
-  const [inviteToken, setInviteToken] = useState<string | null>(null);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const token = new URLSearchParams(window.location.search).get("invite");
-    if (token) setInviteToken(token);
-  }, []);
+  // A waitlist invitation (`inviteToken`, read above) is checked by the
+  // server; this only prefills and unlocks the form.
   const inviteQuery = useQuery({
     queryKey: ["waitlist-invite", eventId, inviteToken],
     queryFn: () => checkWaitlistInvite({ data: { eventId, token: inviteToken! } }),

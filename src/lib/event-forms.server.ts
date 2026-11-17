@@ -93,9 +93,13 @@ const QUESTION_COLUMNS =
 export async function loadPublicRegistrationForm(
   eventId: string,
   locale: Locale,
+  // Reader allowed to see the event (see `resolveTicketingReader`); the
+  // public views inherit `events` RLS, so invite-only events need one.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  client?: any,
 ): Promise<PublicForm | null> {
   const { publicSupabaseClient } = await import("./supabase-public.server");
-  const supabase = publicSupabaseClient();
+  const supabase = client ?? publicSupabaseClient();
   const { data: form } = await supabase
     .from("event_forms_public")
     .select("id, kind, thank_you, thank_you_de, thank_you_fr, thank_you_it")

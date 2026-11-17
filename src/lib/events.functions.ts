@@ -242,8 +242,11 @@ async function loadEventDetail(
   // The recap travels with the event so the "after event" story is server
   // rendered — it is editorial content and has to be indexable.
   const [hosts, speakers, recap] = await Promise.all([
-    event.id ? loadEventHosts(event.id) : Promise.resolve([]),
-    event.id ? loadEventSpeakers(event.id) : Promise.resolve([]),
+    // Same reader as the event row: hosts and speakers inherit `events` RLS,
+    // so an invite-only event read by its guest (or via a valid invitation
+    // token) must not fall back to the anonymous reader here.
+    event.id ? loadEventHosts(event.id, supabase) : Promise.resolve([]),
+    event.id ? loadEventSpeakers(event.id, supabase) : Promise.resolve([]),
     event.id ? loadPublicRecap(supabase, event.id, locale) : Promise.resolve(null),
   ]);
 

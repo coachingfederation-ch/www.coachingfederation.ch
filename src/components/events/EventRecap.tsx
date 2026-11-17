@@ -66,8 +66,10 @@ export function EventRecap({
 
   const downloads = useQuery({
     queryKey: ["event-recap-downloads", eventId, signedIn],
+    // Signed-in visitors always use their own session: the recap inherits its
+    // event's visibility, and invite-only events are hidden from anon.
     queryFn: () =>
-      gated
+      gated || signedIn
         ? getRecapDownloads({ data: { eventId } })
         : getRecapDownloadsPublic({ data: { eventId } }),
     enabled: hasDownloads && (!gated || signedIn),

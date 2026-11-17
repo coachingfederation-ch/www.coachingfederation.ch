@@ -116,7 +116,7 @@ export default function EventDetailPage({
   const map = eventMap(event.map_location);
 
   const session = useQuery({
-    queryKey: ["auth-user-id"],
+    queryKey: ["auth-user-id", "access-token"],
     // The bearer attacher reads the *session*, so gate the protected call on the
     // same source: a user with no access token would 500 the server function.
     queryFn: async () => (await supabase.auth.getSession()).data.session?.access_token ?? null,

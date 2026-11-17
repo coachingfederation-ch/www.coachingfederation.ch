@@ -12,7 +12,8 @@ import { useState, type FormEvent, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
-import { getEventTicketing } from "@/lib/tickets.functions";
+import { getEventTicketing, getMyEventTicketing } from "@/lib/tickets.functions";
+import { isInvitedMode } from "@/lib/events";
 import { Button, Checkbox, Input, Label } from "@/design-system/icf-welcome-design-system-a835df";
 import { CARD_SHADOW } from "@/components/site-chrome";
 import {
@@ -33,16 +34,25 @@ export function GuestPassPanel({ event }: { event: PublicEvent }) {
   const eventId = event.id!;
 
   const session = useQuery({
-    queryKey: ["auth-user-id"],
+    queryKey: ["auth-user-id", "access-token"],
     queryFn: async () => (await supabase.auth.getSession()).data.session?.access_token ?? null,
     staleTime: 5 * 60_000,
   });
   const signedIn = Boolean(session.data);
 
   // The organiser's toggle is the gate; it lives on the public ticketing read.
+  // Invite-only events are hidden from the anonymous reader, so the member's
+  // own session decides whether the toggle can be read.
+  const invitedOnly = isInvitedMode(event.registration_mode);
   const ticketing = useQuery({
-    queryKey: ["event-ticketing", eventId, locale],
-    queryFn: () => getEventTicketing({ data: { eventId, locale } }),
+    queryKey: invitedOnly
+      ? ["event-ticketing", eventId, locale, "guest-pass", signedIn]
+      : ["event-ticketing", eventId, locale],
+    queryFn: () =>
+      invitedOnly && signedIn
+        ? getMyEventTicketing({ data: { eventId, locale } })
+        : getEventTicketing({ data: { eventId, locale } }),
+    enabled: !invitedOnly || session.isFetched,
     staleTime: 30_000,
   });
 
