@@ -13,10 +13,15 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const input = z.object({ eventId: z.string().uuid() });
 
-/** Loads a published recap's audience setting through the anonymous client. */
-async function publishedRecap(eventId: string) {
+/**
+ * Loads a published recap's audience setting. Defaults to the anonymous
+ * client; signed-in callers pass their own RLS-bound client, because a recap
+ * inherits its event's visibility and invite-only events are hidden from anon.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function publishedRecap(eventId: string, client?: any) {
   const { publicSupabaseClient } = await import("./supabase-public.server");
-  const { data } = await publicSupabaseClient()
+  const { data } = await (client ?? publicSupabaseClient())
     .from("event_recaps")
     .select("id, downloads_audience")
     .eq("event_id", eventId)
@@ -38,12 +43,15 @@ export const getRecapDownloadsPublic = createServerFn({ method: "POST" })
     return { entitled: true, items: await signRecapDownloads(recap.id) };
   });
 
-/** Downloads for a signed-in attendee or member, after the entitlement check. */
+/**
+ * Downloads for a signed-in visitor, after the entitlement check. Also serves
+ * `public` recaps to signed-in visitors, so invite-only events work for guests.
+ */
 export const getRecapDownloads = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => input.parse(data))
   .handler(async ({ data, context }) => {
-    const recap = await publishedRecap(data.eventId);
+    const recap = await publishedRecap(data.eventId, context.supabase);
     if (!recap) return { entitled: false, items: [] };
     const { recapEntitlement, signRecapDownloads } = await import("./event-recaps.server");
     const entitled = await recapEntitlement(
