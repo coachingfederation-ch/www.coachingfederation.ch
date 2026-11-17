@@ -9,7 +9,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const state = vi.hoisted(() => ({
-  anonSees: false,
   validToken: "valid-token-0123456789",
   rateAllowed: true,
 }));
@@ -45,7 +44,6 @@ import { resolveTicketingReader } from "./tickets.server";
 const EVENT = "00000000-0000-0000-0000-000000000001";
 
 beforeEach(() => {
-  state.anonSees = false;
   state.rateAllowed = true;
   anon.client = fakeClient(false);
 });
