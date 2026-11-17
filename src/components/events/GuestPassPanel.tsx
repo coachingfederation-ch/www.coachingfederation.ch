@@ -34,7 +34,7 @@ export function GuestPassPanel({ event }: { event: PublicEvent }) {
   const eventId = event.id!;
 
   const session = useQuery({
-    queryKey: ["auth-user-id"],
+    queryKey: ["auth-user-id", "access-token"],
     queryFn: async () => (await supabase.auth.getSession()).data.session?.access_token ?? null,
     staleTime: 5 * 60_000,
   });
