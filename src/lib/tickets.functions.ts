@@ -11,14 +11,37 @@ import type { EventTicketing, MembershipState } from "./tickets";
 
 const localeSchema = z.enum(["en", "de", "fr", "it"]);
 
+const ticketingInput = z.object({
+  eventId: z.string().uuid(),
+  locale: localeSchema,
+  // Personal `?invite=` token: opens an invite-only event's tiers and questions.
+  invite: z.string().trim().min(16).max(128).optional().nullable(),
+});
+
 /** Active tiers and registration questions for one published event. */
 export const getEventTicketing = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) =>
-    z.object({ eventId: z.string().uuid(), locale: localeSchema }).parse(input),
-  )
+  .inputValidator((input: unknown) => ticketingInput.parse(input))
   .handler(async ({ data }): Promise<EventTicketing> => {
-    const { loadEventTicketing } = await import("./tickets.server");
-    return loadEventTicketing(data.eventId, data.locale, null);
+    const { loadEventTicketing, resolveTicketingReader } = await import("./tickets.server");
+    const reader = await resolveTicketingReader(data.eventId, { inviteToken: data.invite });
+    return loadEventTicketing(data.eventId, data.locale, null, reader);
+  });
+
+/**
+ * The same, for a signed-in caller: invite-only events are read through the
+ * caller's own RLS-bound client, so guest-list members, confirmed attendees
+ * and managers see the tiers and questions without a token.
+ */
+export const getMyEventTicketing = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => ticketingInput.parse(input))
+  .handler(async ({ data, context }): Promise<EventTicketing> => {
+    const { loadEventTicketing, resolveTicketingReader } = await import("./tickets.server");
+    const reader = await resolveTicketingReader(data.eventId, {
+      userClient: context.supabase,
+      inviteToken: data.invite,
+    });
+    return loadEventTicketing(data.eventId, data.locale, null, reader);
   });
 
 /** Whether the signed-in visitor's membership is active right now. */

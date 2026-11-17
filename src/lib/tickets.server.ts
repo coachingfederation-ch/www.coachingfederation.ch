@@ -107,17 +107,85 @@ export function defaultTierFor(tiers: PublicTier[], membership: MembershipState)
   return general?.id ?? tiers[0]?.id ?? null;
 }
 
-/** Tiers, questions and the viewer's pricing state for one published event. */
+/**
+ * Which client may read an event's tiers and questions for this caller.
+ *
+ * The public views are `security_invoker`, so they inherit the `events` RLS:
+ * invite-only events are invisible to the anonymous reader. Visibility is
+ * therefore decided the same way as the event page itself:
+ * 1. the anonymous reader sees the event -> anon client;
+ * 2. the signed-in caller's own RLS-bound client sees it (guest list,
+ *    confirmed attendee, manager) -> that client;
+ * 3. a live personal invitation token for this very event -> trusted reader,
+ *    exactly like the `?invite=` path of `getPublicEvent`.
+ * Otherwise `null`: the caller gets the empty ticketing they got before.
+ */
+export async function resolveTicketingReader(
+  eventId: string,
+  opts: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    userClient?: any;
+    inviteToken?: string | null;
+  } = {},
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any | null> {
+  const { publicSupabaseClient } = await import("./supabase-public.server");
+  const anon = publicSupabaseClient();
+  const sees = async (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    client: any,
+  ) => {
+    const { data } = await client.from("events_public").select("id").eq("id", eventId).maybeSingle();
+    return Boolean(data);
+  };
+  if (await sees(anon)) return anon;
+  if (opts.userClient && (await sees(opts.userClient))) return opts.userClient;
+  if (opts.inviteToken) {
+    const { checkRateLimit, clientIp } = await import("./rate-limit.server");
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const verdict = await checkRateLimit(
+      "event-invitation-ticketing",
+      `ip:${clientIp(getRequest())}`,
+      [
+        { windowSeconds: 300, max: 20 },
+        { windowSeconds: 86_400, max: 200 },
+      ],
+    );
+    if (!verdict.allowed) return null;
+    const { resolveInvitationToken } = await import("./event-invitations.server");
+    if (await resolveInvitationToken(eventId, opts.inviteToken)) return supabaseAdmin;
+  }
+  return null;
+}
+
+const EMPTY_TICKETING = (membership: MembershipState): EventTicketing => ({
+  tiers: [],
+  formId: null,
+  questions: [],
+  membership,
+  defaultTierId: null,
+  guestPassesAllowed: false,
+});
+
+/**
+ * Tiers, questions and the viewer's pricing state for one published event.
+ *
+ * `reader` is the client chosen by `resolveTicketingReader`; it defaults to
+ * the anonymous reader, and `null` means the caller may not see the event.
+ */
 export async function loadEventTicketing(
   eventId: string,
   locale: Locale,
   userId: string | null,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  reader?: any | null,
 ): Promise<EventTicketing> {
   // Read-only: no hold cleanup here. Seat counts already ignore expired holds
   // (private.registration_holds_seat), and the durable release runs on the
   // registration write path, so an anonymous read never writes.
+  if (reader === null) return EMPTY_TICKETING(await resolveMembership(userId));
   const { publicSupabaseClient } = await import("./supabase-public.server");
-  const supabase = publicSupabaseClient();
+  const supabase = reader ?? publicSupabaseClient();
 
   const { loadPublicRegistrationForm } = await import("./event-forms.server");
   const [{ data: tierRows }, form, membership, { data: eventRow }] = await Promise.all([
@@ -128,7 +196,7 @@ export async function loadEventTicketing(
       )
       .eq("event_id", eventId)
       .order("sort_order", { ascending: true }),
-    loadPublicRegistrationForm(eventId, locale),
+    loadPublicRegistrationForm(eventId, locale, supabase),
     resolveMembership(userId),
     supabase.from("events_public").select("guest_passes_allowed").eq("id", eventId).maybeSingle(),
   ]);
