@@ -411,6 +411,17 @@ Admin-client readers (public calendar `.ics`, events feed, newsletter
   invited guest saw no tiers or questions and the server then rejected the
   registration (`tier_required` / `answers`). Covered by
   `src/lib/tickets-reader.test.ts`.
+- The same rule covers the rest of the page: the guest-pass panel reads its
+  switch through `getMyEventTicketing` on invite-only events; signed-in
+  visitors always fetch recap downloads through `getRecapDownloads` (their own
+  session reads the recap row); and "Add to calendar" builds the Apple/.ics
+  file in the browser for invite-only events, because the public
+  `/api/public/event-calendar/<id>.ics` download deliberately refuses them.
+  Token holders who are signed out still get no `public` recap downloads
+  (known gap).
+- The event page caches the sign-in access token under
+  `["auth-user-id", "access-token"]`, never the bare `["auth-user-id"]` key,
+  which holds the user id for the role lookups in the header.
 - Invite-only pages render generic, `noindex` metadata.
 - Access contract: `src/lib/invite-only-access.test.ts` (opt-in, needs
   `SUPABASE_DB_URL`).
