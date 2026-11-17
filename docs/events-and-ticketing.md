@@ -400,6 +400,17 @@ Admin-client readers (public calendar `.ics`, events feed, newsletter
 - **Invitees:** `getPublicEvent` accepts the `?invite=<token>` from the
   invitation email; the token must hash to an invitation for that event
   (rate-limited, outcome-neutral null otherwise).
+- **Hosts, speakers, tickets and questions** sit behind the same `events`
+  RLS (their public views are `security_invoker`), so they must be read with
+  the same reader that saw the event row. `loadEventDetail` passes its client
+  to `loadEventHosts`/`loadEventSpeakers`. The registration panel loads
+  ticketing for invite-only events through `getMyEventTicketing` (signed in,
+  caller's RLS-bound client) or `getEventTicketing` with the `?invite=` token;
+  `resolveTicketingReader` picks anon → caller session → trusted reader for a
+  live invitation token (rate-limited), else empty ticketing. Without this an
+  invited guest saw no tiers or questions and the server then rejected the
+  registration (`tier_required` / `answers`). Covered by
+  `src/lib/tickets-reader.test.ts`.
 - Invite-only pages render generic, `noindex` metadata.
 - Access contract: `src/lib/invite-only-access.test.ts` (opt-in, needs
   `SUPABASE_DB_URL`).
