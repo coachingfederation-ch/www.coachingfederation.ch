@@ -117,7 +117,9 @@ Settlement runs only from the signature-verified Stripe webhook at
 expired or failed sessions. `confirmCheckoutSession` is read-only: on the
 checkout return it reports the registration's stored status (paid, pending, or
 failed) and the panel polls it for about 30 seconds while the webhook lands. It
-never calls Stripe or writes, so a client call cannot mark a seat paid.
+never calls Stripe or writes, so a client call cannot mark a seat paid. It
+accepts only a Stripe Checkout id (`cs_test_…` / `cs_live_…`) and no
+environment, so it cannot be used to query Stripe records of the caller's choosing.
 
 Expired holds are marked `expired` only on the registration write path
 (`submitRegistration`). The public ticketing read (`getEventTicketing`) never

@@ -86,14 +86,17 @@ export const verifyMemberId = createServerFn({ method: "POST" })
  * confirmation email) runs only from the signature-verified webhook; this just
  * reports what the database already says, so the visitor sees "pending" until
  * the webhook lands and the panel polls briefly. The session id is an
- * unguessable Stripe identifier and the answer is a single status word.
+ * unguessable Stripe identifier and the answer is a single status word. It
+ * never calls Stripe.
  */
 export const confirmCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) =>
     z
       .object({
-        sessionId: z.string().min(10).max(200),
-        environment: z.enum(["sandbox", "live"]),
+        // Only a Stripe Checkout id is accepted; the lookup is against our own
+        // registrations, never the Stripe API, so the caller cannot pick an
+        // account, environment or external record to query.
+        sessionId: z.string().regex(/^cs_(test|live)_[A-Za-z0-9]{10,190}$/),
       })
       .parse(input),
   )

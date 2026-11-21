@@ -293,16 +293,20 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
     let timer: ReturnType<typeof setTimeout> | undefined;
     const check = (attempt: number) => {
       void confirmCheckoutSession({
-        data: { sessionId, environment: getStripeEnvironment() },
-      }).then((result) => {
-        if (cancelled) return;
-        setReturned(result.status);
-        if (result.status === "paid") {
-          void mine.refetch();
-        } else if (result.status === "pending" && attempt < 10) {
-          timer = setTimeout(() => check(attempt + 1), 3000);
-        }
-      });
+        data: { sessionId },
+      })
+        .then((result) => {
+          if (cancelled) return;
+          setReturned(result.status);
+          if (result.status === "paid") {
+            void mine.refetch();
+          } else if (result.status === "pending" && attempt < 10) {
+            timer = setTimeout(() => check(attempt + 1), 3000);
+          }
+        })
+        .catch(() => {
+          if (!cancelled) setReturned("failed");
+        });
     };
     check(1);
     return () => {
