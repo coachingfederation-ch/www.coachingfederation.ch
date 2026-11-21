@@ -287,14 +287,28 @@ export function EventRegistrationPanel({ event }: { event: PublicEvent }) {
       setReturned("failed");
       return;
     }
-    void confirmCheckoutSession({
-      data: { sessionId, environment: getStripeEnvironment() },
-    }).then((result) => {
-      setReturned(result.status);
-      if (result.status === "paid") {
-        void mine.refetch();
-      }
-    });
+    // Only the verified payment webhook marks the seat paid; this read-only
+    // check polls briefly so the visitor sees the outcome once it lands.
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const check = (attempt: number) => {
+      void confirmCheckoutSession({
+        data: { sessionId, environment: getStripeEnvironment() },
+      }).then((result) => {
+        if (cancelled) return;
+        setReturned(result.status);
+        if (result.status === "paid") {
+          void mine.refetch();
+        } else if (result.status === "pending" && attempt < 10) {
+          timer = setTimeout(() => check(attempt + 1), 3000);
+        }
+      });
+    };
+    check(1);
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
     // Runs once per mount: the return parameters are consumed immediately.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -286,6 +286,25 @@ export async function finalizePaidRegistration(sessionId: string, amountTotal?: 
   return { updated: rows.length };
 }
 
+/**
+ * What the database records for a Checkout session — never written here. Only
+ * the verified webhook moves a registration to `paid` or releases it.
+ */
+export async function readCheckoutStatus(
+  sessionId: string,
+): Promise<"paid" | "pending" | "failed"> {
+  const { data } = await supabaseAdmin
+    .from("event_registrations")
+    .select("payment_status, status")
+    .eq("stripe_session_id", sessionId)
+    .limit(1)
+    .maybeSingle();
+  if (!data) return "failed";
+  if (data.payment_status === "paid") return "paid";
+  if (data.payment_status === "pending" && data.status !== "cancelled") return "pending";
+  return "failed";
+}
+
 /** Releases the seat behind an expired or abandoned checkout session. */
 export async function releaseCheckoutSession(sessionId: string) {
   await supabaseAdmin

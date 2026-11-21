@@ -82,9 +82,11 @@ export const verifyMemberId = createServerFn({ method: "POST" })
   });
 
 /**
- * Reconciles a Stripe Checkout return. The webhook is the authority; this only
- * catches the case where the visitor is back before the event arrives, and it
- * runs the same idempotent `pending -> paid` update.
+ * Read-only status of a Stripe Checkout return. Fulfillment (`pending -> paid`,
+ * confirmation email) runs only from the signature-verified webhook; this just
+ * reports what the database already says, so the visitor sees "pending" until
+ * the webhook lands and the panel polls briefly. The session id is an
+ * unguessable Stripe identifier and the answer is a single status word.
  */
 export const confirmCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) =>
@@ -96,22 +98,11 @@ export const confirmCheckoutSession = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data }): Promise<{ status: "paid" | "pending" | "failed" }> => {
-    const { createStripeClient } = await import("./stripe.server");
-    const { finalizePaidRegistration, releaseCheckoutSession } = await import("./tickets.server");
+    const { readCheckoutStatus } = await import("./tickets.server");
     try {
-      const stripe = createStripeClient(data.environment);
-      const session = await stripe.checkout.sessions.retrieve(data.sessionId);
-      if (session.payment_status && session.payment_status !== "unpaid") {
-        await finalizePaidRegistration(session.id, session.amount_total);
-        return { status: "paid" };
-      }
-      if (session.status === "expired") {
-        await releaseCheckoutSession(session.id);
-        return { status: "failed" };
-      }
-      return { status: "pending" };
+      return { status: await readCheckoutStatus(data.sessionId) };
     } catch (e) {
-      console.error("Checkout confirmation failed", e);
+      console.error("Checkout status lookup failed", e);
       return { status: "failed" };
     }
   });
